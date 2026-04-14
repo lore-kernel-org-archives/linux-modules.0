@@ -1,405 +1,155 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C273E5564
-	for <linux-modules@vger.kernel.org>; Tue, 14 Apr 2026 14:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BE222332E;
+	Tue, 14 Apr 2026 20:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776177217; cv=none; b=D7gwnyFDzQld2/YfSup8cZgDSW4kUWmq2ZFZX9u5r5ElDZYmqpIk9Qw+NoZn00QJiRU8h438HjXPEOe+RybrYFWUAZnDYdKAMHzRk78qmbMHluPKd15LRDVjjjFPS7JLld9JL2PnQjIDymT3/XytKJFKDiOBvfxxhN20lBrHmsc=
+	t=1776198866; cv=none; b=bPGu7s2EgvLQOqQMPcPhPI2P8Kl4OENmfnslyaC33HHhX+LeHKozCpOm4wVVkfxScTA/incZfZHrhLf1Y1s6IOhfK1vzYMKPET5eTTrVTOz7k1jUSUwcth1w36m+agZZEaUXsaz7bEO+nxG9+kh3he11Ge8iXLE2kKGOg3izYLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776177217; c=relaxed/simple;
-	bh=Nw8cBmmH7vxfiWNqiq8CyDvGGD1xyD0qs9zhurR1ZIk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tLr0tJlMe/Mwy0XIU0YATHt+Gxa6/GmXf5tAhHROaOkEQE0skGIrvxiLkYRE1Zrbo/713yToUC01XF0Y5xJ5fFmxq9DoRgklJVxsotgVBas2ANlNdOkS3YB9Kx5ouC+x8qKjE3zcrDAltzJUv7MKEarh81BdkK6NkLFY6sIyMTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=csX3ImIg; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1776198866; c=relaxed/simple;
+	bh=XYHZBZZq/WlKpnfk8V8nvtrvlc9gsMQNaF0WcYETyqA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cue/pNAKowuF4W16OQOYwmIpHARygNiWuD/1qkHZD7NmeIt8yidRThnTBAvd4zeDFLrMzAnmZDeJhYM1faAYjSFoKQ79lK78Vh+NYa8Yvk9JkcEjHm4N1DCdi6v+3pJggP9vHm6G+c35d/m62sFF3KI5bycaOfkHKcyNwWoW9vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=as5O93zt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="csX3ImIg"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43cf8fe9c2aso3532409f8f.2
-        for <linux-modules@vger.kernel.org>; Tue, 14 Apr 2026 07:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776177213; x=1776782013; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ELLPgP8F2+Og4+n8Ds04pnwfQ38UDYTElLkIo6rrsKM=;
-        b=csX3ImIgVJ3bv9XD4JOBHQE8R/HX1u4JHADlRr/UG+jMjc3TICB/1iDlmiZqdZITdt
-         dFpIV0YnNDRg14GGanRAk3IKYi8KdJuWvTn11PTpb2nizuQAwP0x4FaCzx9m4io/2ah/
-         4TE/O7KTVfu46WAUYFIZWtKKyJrgMvPYcPs+n3QAItEDmNkMoOYjXbKe0l968utmnWAR
-         FFAU47TY3vBBDI/5yBY1XMwoY6Ib//AP804Lm53KHeiyZVal2/Br7c1llMhgmgN3v6Gx
-         YmGq+X5Kbkbt5f8w95TRfQVI6gvHKN6VIo9IBWY1wMVMhZGZODRETSD6V62kAQa9csoj
-         sRYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776177213; x=1776782013;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ELLPgP8F2+Og4+n8Ds04pnwfQ38UDYTElLkIo6rrsKM=;
-        b=SdrIWCFb4T34OpFh1LElFLiqmyJyPrOcF0i1auhXb3yY6QOKrhKkkcDsDAAATERwTd
-         6J5WvnACoXqmqQ+o7utOfF75HWFlFie2rkgbE9FWdAhgj9jpe7AnsMBgyPDSKajG5csU
-         FOPyOyPu2r8ehMzFV6xtGPBfUL5/4Xhlw7o1R3cpzB0F/+8mIoKqtJ6hRbb5R/a440pW
-         Mum/PvYx4419v1I+hj8Zmgp7I+DMU66nt8P5a1+D6CejlmLHc3Q+b3wX7lNTuJpqGxKu
-         SyKy6Ac0Iiy4JKDIok/s1zxebDC40amfAV4FNb65D3r2ZierwuOZ647UOFS5ozXJlYjR
-         QVRQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8VxdX+4UOQWkska8D1XqlHR33xwQtegI0Q1/HamrBP4ujgEuf87dJUHc0WDb8XtWzOT2gWVxuJj/hr754d@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywbt6VkkrzPLM91qaKLIj/auh/CG7EFxtb6uaP5XD22D03NdoAn
-	aQMNqCXoYVXzeQLuUZecUhlk/MdfXSJ03CzV87EAowQH4hYWuOw6MmB1N/4iq5MWy3E=
-X-Gm-Gg: AeBDiesmRvrFvK8xGXuw4P+BGoY1dT1KmPw7m8tlJXeoxWPr0IQGvgxocwrgx+CiRuN
-	8q8xJv+EmThsE1GUPSC3APJ40KTJp61ilwQ0qiZ4jEM8XCNlQo3mYUmBxMUUh5tkl98MFiwAl8N
-	9+CndAq7z3PYOxIpTMZy3rxME+bhozWyfY2v0YrT7KGMPikPTmiWedNZbBoe1iT6GR1RSzhWzRl
-	6dpGie823zcT/o3qN1eLSn/ghpvctQkaUTy0dqy8wtKbrjTkCbvJeJavAovXA2s8glt3z3K6XBW
-	ZVQdmJRmtc1TaYYk2fBYX05tmN4Z2hYwfG/lf+zXq/txZ8FJuT0IjzXDp1GBaMXpzAyX1a1tbeN
-	l5BP6f/0mXk4Ut/FsvqSjqBI3yp/j2CkdpeVPqyLKT2kvt9wRaL6kO/OpH08JUZgsY11WlSUBuq
-	dk3WU0RqLxwhE2IxK+y6XFO5s0G41XwspBUnshqBf2A7wl
-X-Received: by 2002:a05:6000:2305:b0:43d:775b:c9bd with SMTP id ffacd0b85a97d-43d775bcb1bmr13224241f8f.10.1776177212871;
-        Tue, 14 Apr 2026 07:33:32 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d7ba57e72sm14650537f8f.0.2026.04.14.07.33.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2026 07:33:32 -0700 (PDT)
-Message-ID: <1191caf5-6a61-4622-a15e-854d3701f4fc@suse.com>
-Date: Tue, 14 Apr 2026 16:33:31 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="as5O93zt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781CBC19425;
+	Tue, 14 Apr 2026 20:34:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776198866;
+	bh=XYHZBZZq/WlKpnfk8V8nvtrvlc9gsMQNaF0WcYETyqA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=as5O93ztneTN0G6XdHqJvjzPW88jPn4thvhZqK2fpeqnxRIbjEtqiL5BTUJzXVEvQ
+	 OXHsmNV6+s61r1x6ViUiMdaJ1yXwPOKJHabD6VxNnvW5kt3jI8cga9KBIXnaEZxzfm
+	 8EVdyH5fbZuUm4fy7gjeclQ4JzndkIspECCZVMAkCzsqUx2fdSMgqDcjAFyxd8Nj5X
+	 SnyWNdgL56bz45xrfLk5J9RUbB4BEy3912lGi6MaRC08ssl/EZSvhvGNFXwLeQh0LF
+	 6NQ58fVtuIzclzZkYlaGGO1WSjYbL5E5YGhg4Ul6bVIDVNkfbarSrV93nP0qUuDc9b
+	 KAhIncF4Lrfog==
+Date: Tue, 14 Apr 2026 13:34:18 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Nicolas Schier <nsc@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Sasha Levin <sashal@kernel.org>, linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kbuild/btf: Remove broken module relinking exclusion
+Message-ID: <20260414203418.GA1022044@ax162>
+References: <20260410131343.2519532-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 2/2] kernel/module: Decouple klp and ftrace from
- load_module
-To: chensong_2000@189.cn
-Cc: rafael@kernel.org, lenb@kernel.org, mturquette@baylibre.com,
- sboyd@kernel.org, viresh.kumar@linaro.org, agk@redhat.com,
- snitzer@kernel.org, mpatocka@redhat.com, bmarzins@redhat.com,
- song@kernel.org, yukuai@fnnas.com, linan122@huawei.com,
- jason.wessel@windriver.com, danielt@kernel.org, dianders@chromium.org,
- horms@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, paulmck@kernel.org, frederic@kernel.org,
- mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
- atomlin@atomlin.com, jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
- pmladek@suse.com, joe.lawrence@redhat.com, rostedt@goodmis.org,
- mhiramat@kernel.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- live-patching@vger.kernel.org, dm-devel@lists.linux.dev,
- linux-raid@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
- netdev@vger.kernel.org
-References: <20260413080701.180976-1-chensong_2000@189.cn>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260413080701.180976-1-chensong_2000@189.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260410131343.2519532-1-petr.pavlu@suse.com>
 
-On 4/13/26 10:07 AM, chensong_2000@189.cn wrote:
-> From: Song Chen <chensong_2000@189.cn>
+On Fri, Apr 10, 2026 at 03:13:29PM +0200, Petr Pavlu wrote:
+> Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
+> and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
+> to enable generation of split BTF for kernel modules. This change required
+> the %.ko Makefile rule to additionally depend on vmlinux, which is used as
+> a base for deduplication. The regular ld_ko_o command executed by the rule
+> was then modified to be skipped if only vmlinux changes. This was done by
+> introducing a new if_changed_except command and updating the original call
+> to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
 > 
-> ftrace and livepatch currently have their module load/unload callbacks
-> hard-coded in the module loader as direct function calls to
-> ftrace_module_enable(), klp_module_coming(), klp_module_going()
-> and ftrace_release_mod(). This tight coupling was originally introduced
-> to enforce strict call ordering that could not be guaranteed by the
-> module notifier chain, which only supported forward traversal. Their
-> notifiers were moved in and out back and forth. see [1] and [2].
-
-I'm unclear about what is meant by the notifiers being moved back and
-forth. The links point to patches that converted ftrace+klp from using
-module notifiers to explicit callbacks due to ordering issues, but this
-switch occurred only once. Have there been other attempts to use
-notifiers again?
-
+> Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
+> in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
+> from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
+> previous logic to skip relinking modules if only vmlinux changes. The issue
+> is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
+> prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
+> retains the raw './vmlinux'. As a result, if_changed_except doesn't
+> correctly filter out vmlinux. Consequently, with
+> CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
+> changes.
 > 
-> Now that the notifier chain supports reverse traversal via
-> blocking_notifier_call_chain_reverse(), the ordering can be enforced
-> purely through notifier priority. As a result, the module loader is now
-> decoupled from the implementation details of ftrace and livepatch.
-> What's more, adding a new subsystem with symmetric setup/teardown ordering
-> requirements during module load/unload no longer requires modifying
-> kernel/module/main.c; it only needs to register a notifier_block with an
-> appropriate priority.
+> It is possible to fix this Makefile issue. However, having the %.ko rule
+> update the resulting file in place without starting from the original
+> inputs is rather fragile. The logic is harder to debug if something breaks
+> during a subsequent .ko update because the old input is lost due to the
+> overwrite. Additionally, it requires that the BTF processing is idempotent.
+> For example, sorting id+flags BTF_SET8 pairs in .BTF_ids by resolve_btfids
+> currently doesn't have this property.
 > 
-> [1]:https://lore.kernel.org/all/
-> 	alpine.LNX.2.00.1602172216491.22700@cbobk.fhfr.pm/
-> [2]:https://lore.kernel.org/all/
-> 	20160301030034.GC12120@packer-debian-8-amd64.digitalocean.com/
-
-Nit: Avoid wrapping URLs, as it breaks autolinking and makes the links
-harder to copy.
-
-Better links would be:
-[1] https://lore.kernel.org/all/1455661953-15838-1-git-send-email-jeyu@redhat.com/
-[2] https://lore.kernel.org/all/1458176139-17455-1-git-send-email-jeyu@redhat.com/
-
-The first link is the final version of what landed as commit
-7dcd182bec27 ("ftrace/module: remove ftrace module notifier"). The
-second is commit 7e545d6eca20 ("livepatch/module: remove livepatch
-module notifier").
-
+> One option is to split the %.ko target into two rules: the first for
+> partial linking and the second one for generating the BTF data. However,
+> this approach runs into an issue with requiring additional intermediate
+> files, which increases the size of the build directory. On my system, when
+> using a large distribution config with ~5500 modules, the size of the build
+> directory with debuginfo enabled is already ~25 GB, with .ko files
+> occupying ~8 GB. Duplicating these .ko files doesn't seem practical.
 > 
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> Measuring the speed of the %.ko processing shows that the link step is
+> actually relatively fast. It takes about 20% of the overall rule time,
+> while the BTF processing accounts for 80%. Moreover, skipping the link part
+> becomes relevant only during local development. In such cases, developers
+> typically use configs that enable a limited number of modules, so having
+> the %.ko rule slightly slower doesn't significantly impact the total
+> rebuild time. This is supported by the fact that no one has complained
+> about this optimization being broken for the past two years.
+> 
+> Therefore, remove the logic that prevents module relinking when only
+> vmlinux changes and simplify Makefile.modfinal.
+> 
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+
+If the BPF folks want to take this since it deals with BTF:
+
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+
+Otherwise, either Nicolas can take this for 7.1 or I will pick it up for
+7.2 when 7.1-rc1 is out.
+
 > ---
->  include/linux/module.h  |  8 ++++++++
->  kernel/livepatch/core.c | 29 ++++++++++++++++++++++++++++-
->  kernel/module/main.c    | 34 +++++++++++++++-------------------
->  kernel/trace/ftrace.c   | 38 ++++++++++++++++++++++++++++++++++++++
->  4 files changed, 89 insertions(+), 20 deletions(-)
+> My previous attempt to fix this logic can be found at
+> https://lore.kernel.org/linux-modules/20260402141911.1577711-1-petr.pavlu@suse.com/
+> ---
+>  scripts/Makefile.modfinal | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
 > 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 14f391b186c6..0bdd56f9defd 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -308,6 +308,14 @@ enum module_state {
->  	MODULE_STATE_COMING,	/* Full formed, running module_init. */
->  	MODULE_STATE_GOING,	/* Going away. */
->  	MODULE_STATE_UNFORMED,	/* Still setting it up. */
-> +	MODULE_STATE_FORMED,
-
-I don't see a reason to add a new module state. Why is it necessary and
-how does it fit with the existing states?
-
-> +};
-> +
-> +enum module_notifier_prio {
-> +	MODULE_NOTIFIER_PRIO_LOW = INT_MIN,	/* Low prioroty, coming last, going first */
-> +	MODULE_NOTIFIER_PRIO_MID = 0,	/* Normal priority. */
-> +	MODULE_NOTIFIER_PRIO_SECOND_HIGH = INT_MAX - 1,	/* Second high priorigy, coming second*/
-> +	MODULE_NOTIFIER_PRIO_HIGH = INT_MAX,	/* High priorigy, coming first, going late. */
-
-I suggest being explicit about how the notifiers are ordered. For
-example:
-
-enum module_notifier_prio {
-	MODULE_NOTIFIER_PRIO_NORMAL,	/* Normal priority, coming last, going first. */
-	MODULE_NOTIFIER_PRIO_LIVEPATCH,
-	MODULE_NOTIFIER_PRIO_FTRACE,	/* High priority, coming first, going late. */
-};
-
->  };
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index adcbcde16a07..01a37ec872b9 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -46,17 +46,9 @@ quiet_cmd_btf_ko = BTF [M] $@
+>  		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
+>  	fi;
 >  
->  struct mod_tree_node {
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 28d15ba58a26..ce78bb23e24b 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -1375,13 +1375,40 @@ void *klp_find_section_by_name(const struct module *mod, const char *name,
->  }
->  EXPORT_SYMBOL_GPL(klp_find_section_by_name);
->  
-> +static int klp_module_callback(struct notifier_block *nb, unsigned long op,
-> +			void *module)
-> +{
-> +	struct module *mod = module;
-> +	int err = 0;
-> +
-> +	switch (op) {
-> +	case MODULE_STATE_COMING:
-> +		err = klp_module_coming(mod);
-> +		break;
-> +	case MODULE_STATE_LIVE:
-> +		break;
-> +	case MODULE_STATE_GOING:
-> +		klp_module_going(mod);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-
-klp_module_coming() and klp_module_going() are now used only in
-kernel/livepatch/core.c where they are also defined. This means the
-functions can be static and their declarations removed from
-include/linux/livepatch.h.
-
-Nit: The MODULE_STATE_LIVE and default cases in the switch can be
-removed.
-
-> +
-> +	return notifier_from_errno(err);
-> +}
-> +
-> +static struct notifier_block klp_module_nb = {
-> +	.notifier_call = klp_module_callback,
-> +	.priority = MODULE_NOTIFIER_PRIO_SECOND_HIGH
-> +};
-> +
->  static int __init klp_init(void)
->  {
->  	klp_root_kobj = kobject_create_and_add("livepatch", kernel_kobj);
->  	if (!klp_root_kobj)
->  		return -ENOMEM;
->  
-> -	return 0;
-> +	return register_module_notifier(&klp_module_nb);
->  }
->  
->  module_init(klp_init);
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index c3ce106c70af..226dd5b80997 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -833,10 +833,8 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->  	/* Final destruction now no one is using it. */
->  	if (mod->exit != NULL)
->  		mod->exit();
-> -	blocking_notifier_call_chain(&module_notify_list,
-> +	blocking_notifier_call_chain_reverse(&module_notify_list,
->  				     MODULE_STATE_GOING, mod);
-> -	klp_module_going(mod);
-> -	ftrace_release_mod(mod);
->  
->  	async_synchronize_full();
->  
-> @@ -3135,10 +3133,8 @@ static noinline int do_init_module(struct module *mod)
->  	mod->state = MODULE_STATE_GOING;
->  	synchronize_rcu();
->  	module_put(mod);
-> -	blocking_notifier_call_chain(&module_notify_list,
-> +	blocking_notifier_call_chain_reverse(&module_notify_list,
->  				     MODULE_STATE_GOING, mod);
-> -	klp_module_going(mod);
-> -	ftrace_release_mod(mod);
->  	free_module(mod);
->  	wake_up_all(&module_wq);
->  
-
-The patch unexpectedly leaves a call to ftrace_free_mem() in
-do_init_module().
-
-> @@ -3281,20 +3277,14 @@ static int complete_formation(struct module *mod, struct load_info *info)
->  	return err;
->  }
->  
-> -static int prepare_coming_module(struct module *mod)
-> +static int prepare_module_state_transaction(struct module *mod,
-> +			unsigned long val_up, unsigned long val_down)
->  {
->  	int err;
->  
-> -	ftrace_module_enable(mod);
-> -	err = klp_module_coming(mod);
-> -	if (err)
-> -		return err;
+> -# Same as newer-prereqs, but allows to exclude specified extra dependencies
+> -newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
 > -
->  	err = blocking_notifier_call_chain_robust(&module_notify_list,
-> -			MODULE_STATE_COMING, MODULE_STATE_GOING, mod);
-> +			val_up, val_down, mod);
->  	err = notifier_to_errno(err);
-> -	if (err)
-> -		klp_module_going(mod);
->  
->  	return err;
->  }
-> @@ -3468,14 +3458,21 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	init_build_id(mod, info);
->  
->  	/* Ftrace init must be called in the MODULE_STATE_UNFORMED state */
-> -	ftrace_module_init(mod);
-> +	err = prepare_module_state_transaction(mod,
-> +				MODULE_STATE_UNFORMED, MODULE_STATE_FORMED);
-
-I believe val_down should be MODULE_STATE_GOING to reverse the
-operation. Why is the new state MODULE_STATE_FORMED needed here?
-
-> +	if (err)
-> +		goto ddebug_cleanup;
->  
->  	/* Finally it's fully formed, ready to start executing. */
->  	err = complete_formation(mod, info);
-> -	if (err)
-> +	if (err) {
-> +		blocking_notifier_call_chain_reverse(&module_notify_list,
-> +				MODULE_STATE_FORMED, mod);
->  		goto ddebug_cleanup;
-> +	}
->  
-> -	err = prepare_coming_module(mod);
-> +	err = prepare_module_state_transaction(mod,
-> +				MODULE_STATE_COMING, MODULE_STATE_GOING);
->  	if (err)
->  		goto bug_cleanup;
->  
-> @@ -3522,7 +3519,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	destroy_params(mod->kp, mod->num_kp);
->  	blocking_notifier_call_chain(&module_notify_list,
->  				     MODULE_STATE_GOING, mod);
-
-My understanding is that all notifier chains for MODULE_STATE_GOING
-should be reversed.
-
-> -	klp_module_going(mod);
->   bug_cleanup:
->  	mod->state = MODULE_STATE_GOING;
->  	/* module_bug_cleanup needs module_mutex protection */
-
-The patch removes the klp_module_going() cleanup call in load_module().
-Similarly, the ftrace_release_mod() call under the ddebug_cleanup label
-should be removed and appropriately replaced with a cleanup via
-a notifier.
-
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 8df69e702706..efedb98d3db4 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -5241,6 +5241,44 @@ static int __init ftrace_mod_cmd_init(void)
->  }
->  core_initcall(ftrace_mod_cmd_init);
->  
-> +static int ftrace_module_callback(struct notifier_block *nb, unsigned long op,
-> +			void *module)
-> +{
-> +	struct module *mod = module;
-> +
-> +	switch (op) {
-> +	case MODULE_STATE_UNFORMED:
-> +		ftrace_module_init(mod);
-> +		break;
-> +	case MODULE_STATE_COMING:
-> +		ftrace_module_enable(mod);
-> +		break;
-> +	case MODULE_STATE_LIVE:
-> +		ftrace_free_mem(mod, mod->mem[MOD_INIT_TEXT].base,
-> +				mod->mem[MOD_INIT_TEXT].base + mod->mem[MOD_INIT_TEXT].size);
-> +		break;
-> +	case MODULE_STATE_GOING:
-> +	case MODULE_STATE_FORMED:
-> +		ftrace_release_mod(mod);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-
-ftrace_module_init(), ftrace_module_enable(), ftrace_free_mem() and
-ftrace_release_mod() should be newly used only in kernel/trace/ftrace.c
-where they are also defined. The functions can then be made static and
-removed from include/linux/ftrace.h.
-
-Nit: The default case in the switch can be removed.
-
-> +
-> +	return notifier_from_errno(0);
-
-Nit: This can be simply "return NOTIFY_OK;".
-
-> +}
-> +
-> +static struct notifier_block ftrace_module_nb = {
-> +	.notifier_call = ftrace_module_callback,
-> +	.priority = MODULE_NOTIFIER_PRIO_HIGH
-> +};
-> +
-> +static int __init ftrace_register_module_notifier(void)
-> +{
-> +	return register_module_notifier(&ftrace_module_nb);
-> +}
-> +core_initcall(ftrace_register_module_notifier);
-> +
->  static void function_trace_probe_call(unsigned long ip, unsigned long parent_ip,
->  				      struct ftrace_ops *op, struct ftrace_regs *fregs)
->  {
-
--- 
-Thanks,
-Petr
+> -# Same as if_changed, but allows to exclude specified extra dependencies
+> -if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+> -	$(cmd);                                                              \
+> -	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+> -
+>  # Re-generate module BTFs if either module's .ko or vmlinux changed
+>  %.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+> -	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
+> +	+$(call if_changed,ld_ko_o)
+>  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+>  endif
+> 
+> base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
+> -- 
+> 2.53.0
+> 
