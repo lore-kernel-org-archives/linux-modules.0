@@ -1,155 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BE222332E;
-	Tue, 14 Apr 2026 20:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F5B282F14;
+	Wed, 15 Apr 2026 00:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776198866; cv=none; b=bPGu7s2EgvLQOqQMPcPhPI2P8Kl4OENmfnslyaC33HHhX+LeHKozCpOm4wVVkfxScTA/incZfZHrhLf1Y1s6IOhfK1vzYMKPET5eTTrVTOz7k1jUSUwcth1w36m+agZZEaUXsaz7bEO+nxG9+kh3he11Ge8iXLE2kKGOg3izYLM=
+	t=1776214743; cv=none; b=Qov2qgt9vATgThqUWUkmF3QXpIaD4TxLJ/I+ANwPCzQidodWuiw7cHgXyzQ9pU1Y4wzNCQIVZJ88jog22wp+NpSJT285yPJJc5WpMG+/vPvbXfPM2HqjT00Q9EQojDOv8DrMBbwI6IWSHUfPys/JhJ5W4yB0K0SptbdXamC378g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776198866; c=relaxed/simple;
-	bh=XYHZBZZq/WlKpnfk8V8nvtrvlc9gsMQNaF0WcYETyqA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cue/pNAKowuF4W16OQOYwmIpHARygNiWuD/1qkHZD7NmeIt8yidRThnTBAvd4zeDFLrMzAnmZDeJhYM1faAYjSFoKQ79lK78Vh+NYa8Yvk9JkcEjHm4N1DCdi6v+3pJggP9vHm6G+c35d/m62sFF3KI5bycaOfkHKcyNwWoW9vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=as5O93zt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776214743; c=relaxed/simple;
+	bh=fXEv8Cnu3aFdp2BoURxMPIn9dosOQUIpsWriZEpDDZE=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=dFe1nl/ZMqU0b54IXMYKGDXEeMDh3TI3C0yzEiAsjvHoUCAvJp3ghp0zG2PEsnANBM22r+cdvnkXuJLyJKSlbIWMmFYEEDWXuvLZEGX2yg0weDzu7dCRITUFOuN7PJXWqZKYh0cjJVdI0S4YZLtNoTmrxy+OEwKWl9qqz0CJNA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pVE8vzzP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="as5O93zt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781CBC19425;
-	Tue, 14 Apr 2026 20:34:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pVE8vzzP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6ACDC2BCB5;
+	Wed, 15 Apr 2026 00:59:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776198866;
-	bh=XYHZBZZq/WlKpnfk8V8nvtrvlc9gsMQNaF0WcYETyqA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=as5O93ztneTN0G6XdHqJvjzPW88jPn4thvhZqK2fpeqnxRIbjEtqiL5BTUJzXVEvQ
-	 OXHsmNV6+s61r1x6ViUiMdaJ1yXwPOKJHabD6VxNnvW5kt3jI8cga9KBIXnaEZxzfm
-	 8EVdyH5fbZuUm4fy7gjeclQ4JzndkIspECCZVMAkCzsqUx2fdSMgqDcjAFyxd8Nj5X
-	 SnyWNdgL56bz45xrfLk5J9RUbB4BEy3912lGi6MaRC08ssl/EZSvhvGNFXwLeQh0LF
-	 6NQ58fVtuIzclzZkYlaGGO1WSjYbL5E5YGhg4Ul6bVIDVNkfbarSrV93nP0qUuDc9b
-	 KAhIncF4Lrfog==
-Date: Tue, 14 Apr 2026 13:34:18 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Nicolas Schier <nsc@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Sasha Levin <sashal@kernel.org>, linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kbuild/btf: Remove broken module relinking exclusion
-Message-ID: <20260414203418.GA1022044@ax162>
-References: <20260410131343.2519532-1-petr.pavlu@suse.com>
+	s=k20201202; t=1776214743;
+	bh=fXEv8Cnu3aFdp2BoURxMPIn9dosOQUIpsWriZEpDDZE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=pVE8vzzPgAmd2Pyw/TpV5GV0hxgthg8+E+jSYGKUYbxr0nOi3jBNqvTIllF+eI7lk
+	 8wpEhmKpa86IhK5FsKEg16PIwZbOGkCvant5R8i1yQ25wO2aAjUhjPtXqC2L5KPSj2
+	 LpCVQY5MmQe+tsPQo6qutV7lqwCem5grcLlMC0EdkDg0yStOadf9QXkXjf322qptC6
+	 0vOW3wVoIUkAeClJl3ZDbRIpk3/pClYI77udUabi2JPuZAYErrW+C7V33lgZtloLvF
+	 OJnZDz5Cf/9CCDRWcvti4/BiJ8rTXtlQFcHgydHSpoi3qhbLTA3S2PlbUcYQ2MftUo
+	 W+o8aG4pgRONg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02F5A3809A29;
+	Wed, 15 Apr 2026 00:58:35 +0000 (UTC)
+Subject: Re: [GIT PULL] Modules changes for v7.1-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20260413002616.1966468-2-samitolvanen@google.com>
+References: <20260413002616.1966468-2-samitolvanen@google.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20260413002616.1966468-2-samitolvanen@google.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.1-rc1
+X-PR-Tracked-Commit-Id: 663385f9155f27892a97a5824006f806a32eb8dc
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 88b29f3f579987fff0d2bd726d5fa95a53f857fa
+Message-Id: <177621471356.1543667.18442675068721489916.pr-tracker-bot@kernel.org>
+Date: Wed, 15 Apr 2026 00:58:33 +0000
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Daniel Gomez <da.gomez@kernel.org>, Joe Lawrence <joe.lawrence@redhat.com>, linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, Lucas De Marchi <demarchi@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Nicholas Sielicki <linux@opensource.nslick.com>, Petr Pavlu <petr.pavlu@suse.com>, Siddharth Nayyar <sidnayyar@google.com>, =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260410131343.2519532-1-petr.pavlu@suse.com>
 
-On Fri, Apr 10, 2026 at 03:13:29PM +0200, Petr Pavlu wrote:
-> Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
-> and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
-> to enable generation of split BTF for kernel modules. This change required
-> the %.ko Makefile rule to additionally depend on vmlinux, which is used as
-> a base for deduplication. The regular ld_ko_o command executed by the rule
-> was then modified to be skipped if only vmlinux changes. This was done by
-> introducing a new if_changed_except command and updating the original call
-> to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
-> 
-> Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
-> in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
-> from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
-> previous logic to skip relinking modules if only vmlinux changes. The issue
-> is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
-> prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
-> retains the raw './vmlinux'. As a result, if_changed_except doesn't
-> correctly filter out vmlinux. Consequently, with
-> CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
-> changes.
-> 
-> It is possible to fix this Makefile issue. However, having the %.ko rule
-> update the resulting file in place without starting from the original
-> inputs is rather fragile. The logic is harder to debug if something breaks
-> during a subsequent .ko update because the old input is lost due to the
-> overwrite. Additionally, it requires that the BTF processing is idempotent.
-> For example, sorting id+flags BTF_SET8 pairs in .BTF_ids by resolve_btfids
-> currently doesn't have this property.
-> 
-> One option is to split the %.ko target into two rules: the first for
-> partial linking and the second one for generating the BTF data. However,
-> this approach runs into an issue with requiring additional intermediate
-> files, which increases the size of the build directory. On my system, when
-> using a large distribution config with ~5500 modules, the size of the build
-> directory with debuginfo enabled is already ~25 GB, with .ko files
-> occupying ~8 GB. Duplicating these .ko files doesn't seem practical.
-> 
-> Measuring the speed of the %.ko processing shows that the link step is
-> actually relatively fast. It takes about 20% of the overall rule time,
-> while the BTF processing accounts for 80%. Moreover, skipping the link part
-> becomes relevant only during local development. In such cases, developers
-> typically use configs that enable a limited number of modules, so having
-> the %.ko rule slightly slower doesn't significantly impact the total
-> rebuild time. This is supported by the fact that no one has complained
-> about this optimization being broken for the past two years.
-> 
-> Therefore, remove the logic that prevents module relinking when only
-> vmlinux changes and simplify Makefile.modfinal.
-> 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+The pull request you sent on Mon, 13 Apr 2026 00:26:14 +0000:
 
-If the BPF folks want to take this since it deals with BTF:
+> git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.1-rc1
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/88b29f3f579987fff0d2bd726d5fa95a53f857fa
 
-Otherwise, either Nicolas can take this for 7.1 or I will pick it up for
-7.2 when 7.1-rc1 is out.
+Thank you!
 
-> ---
-> My previous attempt to fix this logic can be found at
-> https://lore.kernel.org/linux-modules/20260402141911.1577711-1-petr.pavlu@suse.com/
-> ---
->  scripts/Makefile.modfinal | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index adcbcde16a07..01a37ec872b9 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -46,17 +46,9 @@ quiet_cmd_btf_ko = BTF [M] $@
->  		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
->  	fi;
->  
-> -# Same as newer-prereqs, but allows to exclude specified extra dependencies
-> -newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
-> -
-> -# Same as if_changed, but allows to exclude specified extra dependencies
-> -if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
-> -	$(cmd);                                                              \
-> -	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
-> -
->  # Re-generate module BTFs if either module's .ko or vmlinux changed
->  %.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
-> -	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
-> +	+$(call if_changed,ld_ko_o)
->  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
->  endif
-> 
-> base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
-> -- 
-> 2.53.0
-> 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
