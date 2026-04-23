@@ -1,496 +1,474 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8F53033F7
-	for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 14:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E64833F5A4
+	for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 20:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776952811; cv=none; b=NfW1Pk52GCwpMYUOkUbCx01iBv+h+IB+kjJnFdmn+3l952p/ZqdIN5cZ4OnQ2ocuyuCMjT03SaPdQ6P7HKIuJ40184IuC9UPatg5K8afUzwcFCB3hYeZFEL2zhU42XX8E7zgRlfOW5Jdmie5hH3iOJEt2wJrCRKkuRI3nB5nnIc=
+	t=1776977647; cv=none; b=aTJAUt+OIrY12DiKiaSl9RsTh7o17MxBZ8th3FqYCXHkHYubU2yCrBW0xX6AmwtU1OUF8poq3CgACFocfv44grUlkVS/PdFOBM9pUfgmz/iMX80ZrsLzyDhbNfrxeNIAgXMgmHSmDuTQ94OQ87jsxJqzpr4m/fX/Aejn+L8FGNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776952811; c=relaxed/simple;
-	bh=e6wZXuQNZj/lX9I9qWia7hKXHCqhnnmYtXf6RYXsHNg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UW9uyX/GUMOwrJTJcrf1oUTW3ZfIqE2wtnRiTIk6HVUMUYKTDsxIQ0TtS1fbTwtL8mqflsTnHRz3ey9dXkMW7ymGhytPJNY2s7x2rqqLL6n+ZWsnYEAB7yM1kg3vMKZCuG3/glH2mvnbCLeHRzoTfYFo9GeRrBh5bOjQ+IERSAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FMpo88C1; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1776977647; c=relaxed/simple;
+	bh=BH8wXuQqXu29++/ajdsAj++rfYFfjEnbi/imDFni8vQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=q98/3w5+2UiLu/YGbbRuOO7o2NHfxwsVMp0QGh8onezBmJU+J3XNak09d2Z6by5GbVz2BQ9WvKCQuIdKC+WFx/c/PDqIKtWEZ/jhlNyXA4I1/OLZs0CgCz9KvAdF2C5BJSSYIoY0IXqZyNw3Fc9vtfiMieyz9lDjmpeF9FAa4nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FppV3ZlV; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FMpo88C1"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43fde5b81a1so5026559f8f.0
-        for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 07:00:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FppV3ZlV"
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-479f7e75a6bso1324775b6e.2
+        for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 13:54:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776952807; x=1777557607; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XRQ+3xe0xHI/qgQNJnJ3B7Leq+8E0R1UPebMSgZhgzM=;
-        b=FMpo88C1KZXh+i0ReTiYxHQn+drFez/cF1qEd6tWtMJhU5VqricSWUO5RAUiDVqz3C
-         cAk6AVO81wJz9tcHUfDsVOyvcPkQcXoRWnurtgfm5vv1SkHL/dSSVQ5BRbWMS5f0yn0m
-         aXTNq9kCFmUJoxRPGliUc4oGanUifw4sZcNrbUPiKQmAoLIZPqZIIjvHJGZ2yy5VVpns
-         j5dpf+7ZD/N4dqruc1KPxdh1NE3kDLYhQwkjJEFVI/hCmoiZli2N48wqSHsBhyooseTj
-         coeBxSln9/PAGyC/hqBq2A3WkUjaFHDDElCZcezBjeW7x+5XuwOnnOK0PAOvTDcH72yp
-         /37Q==
+        d=gmail.com; s=20251104; t=1776977643; x=1777582443; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/iIzHr8OgSixjrC6X8omEPuSZti0HDks3sOTg/JIH9Y=;
+        b=FppV3ZlVcB8+eM19kILnCdLep55kD9yyeZ06xepze+TwMbMupaZoDj4zF8Epe76AFd
+         FX13LaGE3gF1tw+04JuBBFjSWdOyAP12SwEPYPe4/teQgDVDbM2Q2aeq4ufE0BYaxALk
+         wR2vnh113JCo2mIX+x++cEsJ2grobiMlWmzsWjsP6Zax7huHEdPi4JxlfKk6gJ/MA14q
+         iC6LNzmUJ5wKP8FFeQtF51iwhipuylEKxOv6tjE6Pk+BguK/aas5VSNnJr20YDbl73X/
+         OaK++ZHrWY8NP6sto6aOzxeZc6+R4I8g5MrD6ZSwCh1zCNemadS9A4U1ta3P55+DKpXY
+         PFNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776952807; x=1777557607;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XRQ+3xe0xHI/qgQNJnJ3B7Leq+8E0R1UPebMSgZhgzM=;
-        b=QpBg63s7MN2iu59FUwsU/rvv1mA36uxMF9XAZxDVnnzb37QPOzd893CwjHv80UhYkk
-         5wig3Ki2oJt6XZJI8nb7IvAT2aTWDqJyX01YbU5xA2pXCW2OnwlLPIEqMdERtx4Tkp9i
-         j72VFE2/dSRM4sLLM5kTFOYqu5qOXdusn+Mrv7dK4+O5bxTSJPLGKkzdhMq911ZQUHiw
-         GANc64kO/R+6s35OjJnGIUL51Y3NXZjwaGoYJk5eVLW8sLbSKvPOXqA2mpees/sVcv8j
-         P4Gn4+fGW/Gpq9dY/m8Pdga7Dy7RGxL0ew8Nhw/ejkAlv0+j4CfsAfTQHc50uNZbrqLQ
-         hnLw==
-X-Gm-Message-State: AOJu0YyukOORhxT0Tro9njTjMp8jtIkqc/X63Ml/HvE29E3emXyVMTjI
-	kiDnYuRWemVqcxqdAD+w3myVVwVfB54XVej1+Z2on6SmHf7p6BbO1MEzqV2Oe5rpkoM=
-X-Gm-Gg: AeBDieu0a7pxbxvrjxQ0cyhrH7vlfm04zTAG0DJHpsk/i7ogQVTHR4Vstt+Hx7fnblw
-	J6nILndXA0py+oUjYWQiuUZnU2UEHnSwrJ/kVKWShT41uRP0kBCx5RjE4VleLhjg1bQRC4Jtxy2
-	9hSwJYYys1Oj8GsSD9Ot90PV0z84xccS0J+fPRlyQUq8SwX+IRGjFhscIalUUB99Eb7DBE3i++s
-	xPH0YpqoMBfSgyz/EoL+FeAD1OiPCtgsvd/OZCx8D02PyBInjGgj8twYQYavZdLu5/X6vatL7xp
-	ntjUU6Jh/0dbN6HCaeqOIFTPweLn18MAvR56lOC6Ad1MCGXuRP5i8MYMm+twgV7/8BV9NX0fM02
-	2NHkskbjx1z4pnnsvjXQWyDjbcApA5GkchF+5PjauOX1WCL9ZpTQk0TAa5U0xK78mg3zhInXXt7
-	UV2OfCDudu7ySHLntNx0Yzq79Bb9BVDiTwW16qr891AYbBUh5BqjISW+o=
-X-Received: by 2002:a5d:5f92:0:b0:43b:9c73:2933 with SMTP id ffacd0b85a97d-43fe3dc1795mr42546195f8f.15.1776952806300;
-        Thu, 23 Apr 2026 07:00:06 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb1176sm54804409f8f.3.2026.04.23.07.00.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Apr 2026 07:00:05 -0700 (PDT)
-Message-ID: <11c8e139-f9f3-4b22-863a-4e021a3947e7@suse.com>
-Date: Thu, 23 Apr 2026 16:00:04 +0200
+        d=1e100.net; s=20251104; t=1776977643; x=1777582443;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/iIzHr8OgSixjrC6X8omEPuSZti0HDks3sOTg/JIH9Y=;
+        b=NeCUm1HrFy32C4hwOW6U2BJ4kyk9wHvIERC1MGBTZAVtr96qx8GGVWhpkhcUyXPG3f
+         Q6z3RfHCXujka0hpYOsbhttunbf5x3USlmlB9tmhWINnSiGuWW962x+rTQAzgdff56SJ
+         ERdM11tkNfkLTPu6WXxSUq6mP4DzAX7IaL3gg55IuuIFS2zo27OKy9PGAnzCqdfbBLb4
+         R4cfr8SOTt9ltt8tWKV1Hs4OpeyiUAKnoC9jFezyIDw5ZIuFwWuPXC0h3qgTIawEEUWs
+         +eN8Y+lmAtRXFq5jyHCToHINBVr7R2r8xw/RqO/uOxhckiY6Js2HwfCdIBsdZShYsAgH
+         o8mA==
+X-Forwarded-Encrypted: i=1; AFNElJ+bu5TbpI6NUQpgXxD2Y4CGLXqJOL9Msqt3fOyGz+K/AZpKABDqIesg8dNgS4zS8X3hLLe9aGKfHHV/nfFU@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyd1GAIGvBejLJz3IdU9aIBx3uuwzip16Akf9bTMu2HGtKq2Gpi
+	tYHx62Fd2xlpUV0nwqUdVjVzZwJVaK2GEfFbrvwPh824zi+w3Br45K7V
+X-Gm-Gg: AeBDieuINL0PKbuuldu45IRuUefq1YHvsegPo+9qrMpWBIsXENNPjupgVtuwbXAVQui
+	Wh7iAFyEEtnxkoyBB37SFBM40f6ipatFQOacwyWPmCNB57QX4OJo2nIdz6AF5PAx/e5Tyu+q5/A
+	fn+O6EzrU9w6SffrMJ4HQrUfhpzRO5zTRBEWCttvIPb4qhsg/Gay/Ti3HgfoUSRZVoXz+eJwei0
+	1vCN4wMqfCMwVfDTS4Q5ggxCjj4kpFGnWedKg/JpUonlgrKBohpVLJyChtM4aIfq+8VTE6Ny/5a
+	VoUVkPdxazq4TYWlFcv2NYctTRjbaD9cZt/hb2AuARDqYMmplcbsfaNdxAnEUeDDX7XT9YBz8I3
+	CzSQIDZk0xZvoTsgjHvI8JqwW73vlamg7YrndxCqahM43s2I5Mce5iRUAukgMZBYiDJJLhhRW2X
+	cmyXgUFFkus2p6JdjMv5irGjRvNCGSwCNPqoTD/mzBtmKnNaZ4s/01GUQf2Dn946oWMp5GMej1
+X-Received: by 2002:a05:6808:1508:b0:479:ded7:485 with SMTP id 5614622812f47-479ded70961mr9559100b6e.1.1776977642773;
+        Thu, 23 Apr 2026 13:54:02 -0700 (PDT)
+Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
+        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.53.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 13:54:02 -0700 (PDT)
+From: Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v14 00/92] dyndbg: enable 0-off-cost for all of __drm_debug
+Date: Thu, 23 Apr 2026 14:53:41 -0600
+Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] module/kallsyms: sort function symbols and use
- binary search
-To: Stanislaw Gruszka <stf_xl@wp.pl>
-Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
- Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
- Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Jordan Rome <linux@jordanrome.com>,
- Viktor Malik <vmalik@redhat.com>
-References: <20260327110005.16499-1-stf_xl@wp.pl>
- <20260327110005.16499-2-stf_xl@wp.pl>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260327110005.16499-2-stf_xl@wp.pl>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2NQQqDMBBFryKz7kBMo6JXKS7GZNQBjZLR0iLev
+ aHL/+C9f4FyElboigsSv0Vli3mU7lGAnylOjBIyAGtsbVzZop7DKgeGbwzDhH4h1ZV2HLczBjq
+ yjvT0TVNX1pvKQe7siUf5/E9e/X3/AJLFcnh0AAAA
+X-Change-ID: 20260419-submit-dyndbg-classmap-foundation-a3c77652c054
+To: Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Jani Nikula <jani.nikula@linux.intel.com>, 
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+ Tvrtko Ursulin <tursulin@ursulin.net>, 
+ Alex Deucher <alexander.deucher@amd.com>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ David Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>, 
+ Dmitry Osipenko <dmitry.osipenko@collabora.com>, 
+ Gurchetan Singh <gurchetansingh@chromium.org>, 
+ Chia-I Wu <olvaffe@gmail.com>, Matthew Brost <matthew.brost@intel.com>, 
+ =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+ Lyude Paul <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>, 
+ Patrik Jakobsson <patrik.r.jakobsson@gmail.com>, 
+ Zack Rusin <zack.rusin@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>, 
+ Haneen Mohammed <hamohammed.sa@gmail.com>, 
+ Melissa Wen <melissa.srw@gmail.com>, Sean Paul <sean@poorly.run>, 
+ Jocelyn Falempe <jfalempe@redhat.com>, Ruben Wauters <rubenru09@aol.com>, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+ =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
+ Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, 
+ Rob Clark <robin.clark@oss.qualcomm.com>, 
+ Dmitry Baryshkov <lumag@kernel.org>, 
+ Abhinav Kumar <abhinav.kumar@linux.dev>, 
+ Jessica Zhang <jesszhan0024@gmail.com>, 
+ Marijn Suijten <marijn.suijten@somainline.org>, 
+ Xinliang Liu <xinliang.liu@linaro.org>, Tian Tao <tiantao6@hisilicon.com>, 
+ Xinwei Kong <kong.kongxinwei@hisilicon.com>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ Yongqin Liu <yongqin.liu@linaro.org>, John Stultz <jstultz@google.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Sandy Huang <hjc@rock-chips.com>, 
+ =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
+ Andy Yan <andy.yan@rock-chips.com>, Alain Volmat <alain.volmat@foss.st.com>, 
+ Raphael Gallais-Pou <rgallaispou@gmail.com>, 
+ Yannick Fertre <yannick.fertre@foss.st.com>, 
+ Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>, 
+ Philippe Cornu <philippe.cornu@foss.st.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Oded Gabbay <ogabbay@kernel.org>, 
+ Maciej Falkowski <maciej.falkowski@linux.intel.com>, 
+ Karol Wachowski <karol.wachowski@linux.intel.com>, 
+ "Rob Herring (Arm)" <robh@kernel.org>, Tomeu Vizoso <tomeu@tomeuvizoso.net>, 
+ Liviu Dudau <liviu.dudau@arm.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Liu Ying <victor.liu@nxp.com>, 
+ Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>, 
+ Lucas Stach <l.stach@pengutronix.de>, Paul Kocialkowski <paulk@sys-base.io>, 
+ Jianmin Lv <lvjianmin@loongson.cn>, Qianhai Wu <wuqianhai@loongson.cn>, 
+ Huacai Chen <chenhuacai@kernel.org>, Mingcong Bai <jeffbai@aosc.io>, 
+ Xi Ruoyao <xry111@xry111.site>, Icenowy Zheng <zhengxingda@iscas.ac.cn>, 
+ Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, 
+ Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>, 
+ Javier Martinez Canillas <javierm@redhat.com>, 
+ Huang Rui <ray.huang@amd.com>, Matthew Auld <matthew.auld@intel.com>, 
+ Jani Nikula <jani.nikula@intel.com>, Luca Coelho <luciano.coelho@intel.com>, 
+ Russell King <linux+etnaviv@armlinux.org.uk>, 
+ Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org, 
+ virtualization@lists.linux.dev, intel-xe@lists.freedesktop.org, 
+ nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org, 
+ linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org, 
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ linux-stm32@st-md-mailman.stormreply.com, linux-renesas-soc@vger.kernel.org, 
+ etnaviv@lists.freedesktop.org, Jim Cromie <jim.cromie@gmail.com>, 
+ kernel test robot <oliver.sang@intel.com>, 
+ =?utf-8?q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>, 
+ Philipp Hahn <phahn-oss@avm.de>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977636; l=14130;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=BH8wXuQqXu29++/ajdsAj++rfYFfjEnbi/imDFni8vQ=;
+ b=F3TJzCpsLXGArXdimSSTkn3lXLE1c78Zxw+4CZae/xRQMNtVde5YECs4TJSxvXxcDCCikwh8x
+ H8EC6hFeEMLB4EwqQ0w4YliBYUeUv1Yv5FFT8ivc7Kvy+iFCdJTTnwx
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-On 3/27/26 12:00 PM, Stanislaw Gruszka wrote:
-> Module symbol lookup via find_kallsyms_symbol() performs a linear scan
-> over the entire symtab when resolving an address. The number of symbols
-> in module symtabs has grown over the years, largely due to additional
-> metadata in non-standard sections, making this lookup very slow.
-> 
-> Improve this by separating function symbols during module load, placing
-> them at the beginning of the symtab, sorting them by address, and using
-> binary search when resolving addresses in module text.
-> 
-> This also should improve times for linear symbol name lookups, as valid
-> function symbols are now located at the beginning of the symtab.
-> 
-> The cost of sorting is small relative to module load time. In repeated
-> module load tests [1], depending on .config options, this change
-> increases load time between 2% and 4%. With cold caches, the difference
-> is not measurable, as memory access latency dominates.
-> 
-> The sorting theoretically could be done in compile time, but much more
-> complicated as we would have to simulate kernel addresses resolution
-> for symbols, and then correct relocation entries. That would be risky
-> if get out of sync.
-> 
-> The improvement can be observed when listing ftrace filter functions.
-> 
-> Before:
-> 
-> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
-> 74908
-> 
-> real	0m1.315s
-> user	0m0.000s
-> sys	0m1.312s
-> 
-> After:
-> 
-> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
-> 74911
-> 
-> real	0m0.167s
-> user	0m0.004s
-> sys	0m0.175s
-> 
-> (there are three more symbols introduced by the patch)
-> 
-> For livepatch modules, the symtab layout is preserved and the existing
-> linear search is used. For this case, it should be possible to keep
-> the original ELF symtab instead of copying it 1:1, but that is outside
-> the scope of this patch.
-> 
-> Link: https://gist.github.com/sgruszka/09f3fb1dad53a97b1aad96e1927ab117 [1]
-> Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
+Since Feb 2023, DRM_USE_DYNAMIC_DEBUG has been marked BROKEN [1].
+Although classmaps worked in normal operation (via sysfs), the "v1"
+POC implementation failed to propagate drm.debug boot-args to built-in
+drivers and helpers.
 
-Sorry for the delay reviewing this patch.
+The API Fix:
 
-> ---
-> v1 -> v2: 
->  - fix searching data symbols for CONFIG_KALLSYMS_ALL
->  - use kallsyms_symbol_value() in elf_sym_cmp()
-> 
->  include/linux/module.h   |   1 +
->  kernel/module/internal.h |   1 +
->  kernel/module/kallsyms.c | 171 +++++++++++++++++++++++++++++----------
->  3 files changed, 130 insertions(+), 43 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index ac254525014c..67c053afa882 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -379,6 +379,7 @@ struct module_memory {
->  struct mod_kallsyms {
->  	Elf_Sym *symtab;
->  	unsigned int num_symtab;
-> +	unsigned int num_func_syms;
->  	char *strtab;
->  	char *typetab;
->  };
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index 618202578b42..6a4d498619b1 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -73,6 +73,7 @@ struct load_info {
->  	bool sig_ok;
->  #ifdef CONFIG_KALLSYMS
->  	unsigned long mod_kallsyms_init_off;
-> +	unsigned long num_func_syms;
->  #endif
->  #ifdef CONFIG_MODULE_DECOMPRESS
->  #ifdef CONFIG_MODULE_STATS
-> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index f23126d804b2..d69e99e67707 100644
-> --- a/kernel/module/kallsyms.c
-> +++ b/kernel/module/kallsyms.c
-> @@ -10,6 +10,7 @@
->  #include <linux/kallsyms.h>
->  #include <linux/buildid.h>
->  #include <linux/bsearch.h>
-> +#include <linux/sort.h>
->  #include "internal.h"
->  
->  /* Lookup exported symbol in given range of kernel_symbols */
-> @@ -103,6 +104,95 @@ static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
->  	return true;
->  }
->  
-> +static inline bool is_func_symbol(const Elf_Sym *sym)
-> +{
-> +	return sym->st_shndx != SHN_UNDEF && sym->st_size != 0 &&
-> +	       ELF_ST_TYPE(sym->st_info) == STT_FUNC;
-> +}
-> +
-> +static unsigned int bsearch_func_symbol(struct mod_kallsyms *kallsyms,
-> +					unsigned long addr,
-> +					unsigned long *bestval,
-> +					unsigned long *nextval)
-> +
-> +{
-> +	unsigned int mid, low = 1, high = kallsyms->num_func_syms + 1;
-> +	unsigned int best = 0;
-> +	unsigned long thisval;
-> +
-> +	while (low < high) {
-> +		mid = low + (high - low) / 2;
-> +		thisval = kallsyms_symbol_value(&kallsyms->symtab[mid]);
-> +
-> +		if (thisval <= addr) {
-> +			*bestval = thisval;
-> +			best = mid;
-> +			low = mid + 1;
+The root cause was a "Define vs Refer" design error. By using
+DECLARE_DYNDBG_CLASSMAP in both core and drivers, the implementation
+lacked the formal linkage required for dyndbg to associate driver
+callsites with the core's controlling parameter during early boot
+init.
 
-If thisval == addr, the search moves to the right and finds the last
-symbol with the same address. I believe it should do the opposite and
-return the first symbol to match the behavior of
-search_kallsyms_symbol().
+This series introduces a proper module-scoped API:
+- DYNDBG_CLASSMAP_DEFINE: Invoked once in drm_print.c (exported by drm.ko).
+- DYNDBG_CLASSMAP_USE: Invoked by 20+ DRM/Accel modules to reference the core.
 
-> +		} else {
-> +			*nextval = thisval;
-> +			high = mid;
-> +		}
-> +	}
-> +
-> +	return best;
-> +}
-> +
-> +static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms,
-> +					unsigned int symnum)
-> +{
-> +	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
-> +}
-> +
-> +static unsigned int search_kallsyms_symbol(struct mod_kallsyms *kallsyms,
-> +					   unsigned long addr,
-> +					   unsigned long *bestval,
-> +					   unsigned long *nextval)
-> +{
-> +	unsigned int i, best = 0;
-> +
-> +	/*
-> +	 * Scan for closest preceding symbol and next symbol. (ELF starts
-> +	 * real symbols at 1). Skip the initial function symbols range
-> +	 * if num_func_syms is non-zero, those are handled separately for
-> +	 * the core TEXT segment lookup.
-> +	 */
-> +	for (i = 1 + kallsyms->num_func_syms; i < kallsyms->num_symtab; i++) {
-> +		const Elf_Sym *sym = &kallsyms->symtab[i];
-> +		unsigned long thisval = kallsyms_symbol_value(sym);
-> +
-> +		if (sym->st_shndx == SHN_UNDEF)
-> +			continue;
-> +
-> +		/*
-> +		 * We ignore unnamed symbols: they're uninformative
-> +		 * and inserted at a whim.
-> +		 */
-> +		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
-> +		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
-> +			continue;
-> +
-> +		if (thisval <= addr && thisval > *bestval) {
-> +			best = i;
-> +			*bestval = thisval;
-> +		}
-> +		if (thisval > addr && thisval < *nextval)
-> +			*nextval = thisval;
-> +	}
-> +
-> +	return best;
-> +}
-> +
-> +static int elf_sym_cmp(const void *a, const void *b)
-> +{
-> +	unsigned long val_a = kallsyms_symbol_value((const Elf_Sym *)a);
-> +	unsigned long val_b = kallsyms_symbol_value((const Elf_Sym *)b);
-> +
-> +	if (val_a < val_b)
-> +		return -1;
-> +
-> +	return val_a > val_b;
+This linkage allows dyndbg to trace a driver's USE back to the core's
+DEFINE. At boot-time, dyndbg can now correctly apply drm.debug
+settings to all referencing modules as they are initialized, restoring
+full functionality for built-in drivers.
 
-Does this comparison function and the sort() call result in stable
-sorting? If val_a and val_b are the same, the sorting should preserve
-the original order.
+The Benefit and Evidence (+c flag):
 
-> +}
-> +
->  /*
->   * We only allocate and copy the strings needed by the parts of symtab
->   * we keep.  This is simple, but has the effect of making multiple
-> @@ -115,9 +205,10 @@ void layout_symtab(struct module *mod, struct load_info *info)
->  	Elf_Shdr *symsect = info->sechdrs + info->index.sym;
->  	Elf_Shdr *strsect = info->sechdrs + info->index.str;
->  	const Elf_Sym *src;
-> -	unsigned int i, nsrc, ndst, strtab_size = 0;
-> +	unsigned int i, nsrc, ndst, nfunc, strtab_size = 0;
->  	struct module_memory *mod_mem_data = &mod->mem[MOD_DATA];
->  	struct module_memory *mod_mem_init_data = &mod->mem[MOD_INIT_DATA];
-> +	bool is_lp_mod = is_livepatch_module(mod);
->  
->  	/* Put symbol section at end of init part of module. */
->  	symsect->sh_flags |= SHF_ALLOC;
-> @@ -129,12 +220,14 @@ void layout_symtab(struct module *mod, struct load_info *info)
->  	nsrc = symsect->sh_size / sizeof(*src);
->  
->  	/* Compute total space required for the core symbols' strtab. */
-> -	for (ndst = i = 0; i < nsrc; i++) {
-> -		if (i == 0 || is_livepatch_module(mod) ||
-> +	for (ndst = nfunc = i = 0; i < nsrc; i++) {
-> +		if (i == 0 || is_lp_mod ||
->  		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
->  				   info->index.pcpu)) {
->  			strtab_size += strlen(&info->strtab[src[i].st_name]) + 1;
->  			ndst++;
-> +			if (!is_lp_mod && is_func_symbol(src + i))
-> +				nfunc++;
->  		}
->  	}
->  
-> @@ -156,6 +249,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
->  	mod_mem_init_data->size = ALIGN(mod_mem_init_data->size,
->  					__alignof__(struct mod_kallsyms));
->  	info->mod_kallsyms_init_off = mod_mem_init_data->size;
-> +	info->num_func_syms = nfunc;
->  
->  	mod_mem_init_data->size += sizeof(struct mod_kallsyms);
->  	info->init_typeoffs = mod_mem_init_data->size;
-> @@ -169,7 +263,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
->   */
->  void add_kallsyms(struct module *mod, const struct load_info *info)
->  {
-> -	unsigned int i, ndst;
-> +	unsigned int i, di, nfunc, ndst;
->  	const Elf_Sym *src;
->  	Elf_Sym *dst;
->  	char *s;
-> @@ -178,6 +272,7 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
->  	void *data_base = mod->mem[MOD_DATA].base;
->  	void *init_data_base = mod->mem[MOD_INIT_DATA].base;
->  	struct mod_kallsyms *kallsyms;
-> +	bool is_lp_mod = is_livepatch_module(mod);
->  
->  	kallsyms = init_data_base + info->mod_kallsyms_init_off;
+While the instructions saved by replacing bit-tests with NOOPs are
+individually small, the scale of DRM's debug activity makes the
+aggregate impact substantial.  In particular, dyndbg elides the fetch
+of __drm_debug for every drm_debug_enabled() bit test, eliminating the
+fetch from main memory and cache-line thrashing.
 
-This code is followed by the initialization of kallsyms:
+To measure the call-counts, the final patch in this series adds +c
+flag to dyndbg, whereby enabled pr_debug* callsites increment a
+per-cpu counter.
 
-	kallsyms->symtab = (void *)symsec->sh_addr;
-	kallsyms->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
-	/* Make sure we get permanent strtab: don't use info->strtab. */
-	kallsyms->strtab = (void *)info->sechdrs[info->index.str].sh_addr;
-	kallsyms->typetab = init_data_base + info->init_typeoffs;
+The benchmark (in last patch) sets +c flag on all drm_dbg_*s,
+and runs 12 vkcubes for 30 sec:
 
-I suggest adding 'kallsyms->num_func_syms = 0;' after the initialization
-of kallsyms->num_symtab.
+  root@frodo:/home/jimc/projects/lx# count_hits 30 hammer_vk --
+  Banging on: hammer_vk (&)
+  [1] 100847
+  [1]+  Done                       hammer_vk
+  #: total hits: 2295401
 
->  
-> @@ -194,19 +289,28 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
->  	mod->core_kallsyms.symtab = dst = data_base + info->symoffs;
->  	mod->core_kallsyms.strtab = s = data_base + info->stroffs;
->  	mod->core_kallsyms.typetab = data_base + info->core_typeoffs;
-> +
->  	strtab_size = info->core_typeoffs - info->stroffs;
->  	src = kallsyms->symtab;
-> -	for (ndst = i = 0; i < kallsyms->num_symtab; i++) {
-> +	ndst = info->num_func_syms + 1;
-> +
-> +	for (nfunc = i = 0; i < kallsyms->num_symtab; i++) {
->  		kallsyms->typetab[i] = elf_type(src + i, info);
-> -		if (i == 0 || is_livepatch_module(mod) ||
-> +		if (i == 0 || is_lp_mod ||
->  		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
->  				   info->index.pcpu)) {
->  			ssize_t ret;
->  
-> -			mod->core_kallsyms.typetab[ndst] =
-> -				kallsyms->typetab[i];
-> -			dst[ndst] = src[i];
-> -			dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
-> +			if (i == 0)
-> +				di = 0;
-> +			else if (!is_lp_mod && is_func_symbol(src + i))
-> +				di = 1 + nfunc++;
-> +			else
-> +				di = ndst++;
-> +
-> +			mod->core_kallsyms.typetab[di] = kallsyms->typetab[i];
-> +			dst[di] = src[i];
-> +			dst[di].st_name = s - mod->core_kallsyms.strtab;
->  			ret = strscpy(s, &kallsyms->strtab[src[i].st_name],
->  				      strtab_size);
->  			if (ret < 0)
-> @@ -216,9 +320,13 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
->  		}
->  	}
->  
-> +	WARN_ON_ONCE(nfunc != info->num_func_syms);
-> +	sort(dst + 1, nfunc, sizeof(Elf_Sym), elf_sym_cmp, NULL);
-> +
+This ran 1 vkcube for 10sec each, counting 1 DRM_UT_* class at a time:
 
-The code sorts mod->core_kallsyms.symtab but mod->core_kallsyms.typetab
-is not reordered accordingly.
+root@frodo:/home/jimc/projects/lx# isolate_drm_hits 2> /dev/null
+Starting isolation study: 10s per class using vkcube
+----------------------------------------------------------
+DRM CLASS            | TOTAL HITS
+----------------------------------------------------------
+DRM_UT_CORE          | 85305
+DRM_UT_DRIVER        | 0
+DRM_UT_KMS           | 1435
+DRM_UT_PRIME         | 0
+DRM_UT_ATOMIC        | 13645
+DRM_UT_VBL           | 4071
+DRM_UT_STATE         | 1780
+DRM_UT_LEASE         | 0
+DRM_UT_DP            | 0
+DRM_UT_DRMRES        | 0
+FOO                  | 0
 
->  	/* Set up to point into init section. */
->  	rcu_assign_pointer(mod->kallsyms, kallsyms);
->  	mod->core_kallsyms.num_symtab = ndst;
-> +	mod->core_kallsyms.num_func_syms = nfunc;
->  }
->  
->  #if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> @@ -241,11 +349,6 @@ void init_build_id(struct module *mod, const struct load_info *info)
->  }
->  #endif
->  
-> -static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms, unsigned int symnum)
-> -{
-> -	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
-> -}
-> -
->  /*
->   * Given a module and address, find the corresponding symbol and return its name
->   * while providing its size and offset if needed.
-> @@ -255,7 +358,10 @@ static const char *find_kallsyms_symbol(struct module *mod,
->  					unsigned long *size,
->  					unsigned long *offset)
->  {
-> -	unsigned int i, best = 0;
-> +	unsigned int (*search)(struct mod_kallsyms *kallsyms,
-> +			       unsigned long addr, unsigned long *bestval,
-> +			       unsigned long *nextval);
-> +	unsigned int best;
->  	unsigned long nextval, bestval;
->  	struct mod_kallsyms *kallsyms = rcu_dereference(mod->kallsyms);
->  	struct module_memory *mod_mem = NULL;
-> @@ -266,6 +372,11 @@ static const char *find_kallsyms_symbol(struct module *mod,
->  			continue;
->  #endif
->  		if (within_module_mem_type(addr, mod, type)) {
-> +			if (type == MOD_TEXT && kallsyms->num_func_syms > 0)
-> +				search = bsearch_func_symbol;
+Replacing this frequent memory fetch & bit-test with static-key NOOPs
+could save approximately 200 peta-instructions per year across the
+Steam Deck install base alone.
 
-I'm not sure if it is ok to limit the search only to function symbols
-when the address lies in MOD_TEXT. The text can theoretically contain
-non-function symbols. Could this optimization be adjusted to sort all
-MOD_TEXT symbols (excluding anonymous and mapping symbols) and move them
-to the front of the symbol table?
+Series Organization:
 
-> +			else
-> +				search = search_kallsyms_symbol;
-> +
->  			mod_mem = &mod->mem[type];
->  			break;
->  		}
-> @@ -278,33 +389,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
->  	nextval = (unsigned long)mod_mem->base + mod_mem->size;
->  	bestval = (unsigned long)mod_mem->base - 1;
->  
-> -	/*
-> -	 * Scan for closest preceding symbol, and next symbol. (ELF
-> -	 * starts real symbols at 1).
-> -	 */
-> -	for (i = 1; i < kallsyms->num_symtab; i++) {
-> -		const Elf_Sym *sym = &kallsyms->symtab[i];
-> -		unsigned long thisval = kallsyms_symbol_value(sym);
-> -
-> -		if (sym->st_shndx == SHN_UNDEF)
-> -			continue;
-> -
-> -		/*
-> -		 * We ignore unnamed symbols: they're uninformative
-> -		 * and inserted at a whim.
-> -		 */
-> -		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
-> -		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
-> -			continue;
-> -
-> -		if (thisval <= addr && thisval > bestval) {
-> -			best = i;
-> -			bestval = thisval;
-> -		}
-> -		if (thisval > addr && thisval < nextval)
-> -			nextval = thisval;
-> -	}
-> -
-> +	best = search(kallsyms, addr, &bestval, &nextval);
->  	if (!best)
->  		return NULL;
->  
+1. vmlinux.lds.h fix and cleanup (patches 1-4)
+   fix section alignment of 32 bit arches
 
+2. dyndbg internal refactorings (5-24)
+   internal callchaing grooming,
+   struct refactoring, __section renames
+   drop linked-list, use existing vector/array
+
+3. core API fix (25-30)
+   replace flawed DECLARE_DYNDBG_CLASSMAP with the DEFINE/USE model.
+   fix boot-time propagation of drm.debug to built-in drivers/helpers.
+   add compile-time validation of classmaps
+
+4. interface improvements, documentation (31-38)
+   query improvments: commas as token separators, % as query separators
+   control-file epilogue
+
+5. apply API to DRM
+   call DYNAMIC_DEBUG_CLASSMAP_DEFINE(drm_debug_classes ...) in drm_drv.c
+   call DYNAMIC_DEBUG_CLASSMAP_USE(drm_debug_classes) in drivers, helpers
+
+6. New additions in v14
+   add +c flag for benchmarking
+   add DYNAMIC_DEBUG_CLASSMAP_USEs to more drivers, helpers
+   drm/nouveau: Fix NULL pointer dereferences in GETPARAM ioctl (RFC)
+
+In v13, to focus the review, I sent only the dyndbg core, and skipped
+the DRM uses.  But the value of the optimization is best seen in
+context; it presented GregKH a "maze with no cheese".
+
+For v14, I've recombined them to show the full scale of the benefit.
+While the performance gains accrue to DRM, the infrastructure resides
+in dyndbg.
+
+So Id like to add some "cheese" (later); ie patchsets to:
+
+1. reduce __dyndbg_* .data by 40%.
+
+This uses 3 maple trees to store module, filename, function, which
+collapses 1st 2 columns by 90%.  Looped `cat control` tests indicate
+a minor cost increase.
+
+2. cache dynamic-prefixes, to avoid repeated work.
+
+This assembles the prefix from maple trees, and stores the prefix into
+another maple tree.  The cache is minimal; for +m callsites, it keeps
+just 1 prefix per enabled module, for +mf prefixes just 1 per function.
+
+Preliminary benchmarking suggests positive ROI on these.
+
+Fixes: bb2ff6c27bc9 ("drm: Disable dynamic debug as broken")
+
+Assisted-by: google gemini
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+Jim Cromie (91):
+      dyndbg: fix NULL ptr on i386 due to section mis-alignment
+      vmlinux.lds.h: move BOUNDED_SECTION_* macros to reuse later
+      dyndbg.lds.S: fix lost dyndbg sections in modules
+      vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+      dyndbg: factor ddebug_match_desc out from ddebug_change
+      dyndbg: add stub macro for DECLARE_DYNDBG_CLASSMAP
+      docs/dyndbg: update examples \012 to \n
+      docs/dyndbg: explain flags parse 1st
+      test-dyndbg: fixup CLASSMAP usage error
+      dyndbg: reword "class unknown," to "class:_UNKNOWN_"
+      dyndbg: make ddebug_class_param union members same size
+      dyndbg: drop NUM_TYPE_ARRAY
+      dyndbg: tweak pr_fmt to avoid expansion conflicts
+      dyndbg: reduce verbose/debug clutter
+      dyndbg: refactor param_set_dyndbg_classes and below
+      dyndbg: tighten fn-sig of ddebug_apply_class_bitmap
+      dyndbg: replace classmap list with a vector
+      dyndbg: macrofy a 2-index for-loop pattern
+      dyndbg,module: make proper substructs in _ddebug_info
+      dyndbg: move mod_name down from struct ddebug_table to _ddebug_info
+      dyndbg: hoist classmap-filter-by-modname up to ddebug_add_module
+      dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
+      selftests-dyndbg: add a dynamic_debug run_tests target
+      dyndbg: change __dynamic_func_call_cls* macros into expressions
+      dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
+      dyndbg: detect class_id reservation conflicts
+      dyndbg: check DYNAMIC_DEBUG_CLASSMAP_{DEFINE,USE_} args at compile-time
+      dyndbg-test: change do_prints testpoint to accept a loopct
+      dyndbg-API: promote DYNAMIC_DEBUG_CLASSMAP_PARAM to API
+      dyndbg: treat comma as a token separator
+      dyndbg: split multi-query strings with %
+      selftests-dyndbg: add test_mod_submod
+      dyndbg: resolve "protection" of class'd pr_debug
+      dyndbg: harden classmap and descriptor validation
+      docs/dyndbg: add classmap info to howto
+      dyndbg: add epilogue to dynamic_debug/control file
+      drm: use correct ccflags-y spelling
+      drm-dyndbg: adapt drm core to use dyndbg classmaps-v2
+      drm-dyndbg: adapt DRM to invoke DYNAMIC_DEBUG_CLASSMAP_PARAM
+      drm/i915: Register DRM_CLASSMAP_USE(drm_debug_classes)
+      drm-dyndbg: DRM_CLASSMAP_USE in amdgpu driver
+      drm-dyndbg: add DRM_CLASSMAP_USE to virtio_gpu
+      drm-dyndbg: add DRM_CLASSMAP_USE to Xe
+      drm/drm_crtc_helper: Register DRM_CLASSMAP_USE(drm_debug_classes)
+      drm/drm_dp_helper: Register DRM_CLASSMAP_USE(drm_debug_classes)
+      drm/nouveau: Register DRM_CLASSMAP_USE(drm_debug_classes)
+      drm/gma500: Register DRM classmap
+      drm/radeon: Register DRM classmap
+      drm/vmwgfx: Register DRM classmap
+      drm/vkms: Register DRM classmap
+      drm/udl: Register DRM classmap
+      drm/mgag200: Register DRM classmap
+      drm/gud: Register DRM classmap
+      drm/qxl: Register DRM classmap
+      drm/shmem-helper: Register DRM classmap
+      drm/ttm-helper: DRM_CLASSMAP_USE(drm_debug_classes);
+      drm/nouveau: Fix NULL pointer dereferences in GETPARAM ioctl
+      drm/vc4: Register DRM classmap
+      drm/msm: Register DRM classmap
+      drm/hibmc: Register DRM classmap
+      drm/imx: Register DRM classmap
+      drm/mediatek: Register DRM classmap
+      drm/rockchip: Register DRM classmap
+      drm/sti: Register DRM classmap
+      drm/stm: Register DRM classmap
+      accel: add -DDYNAMIC_DEBUG_MODULE to subdir-ccflags
+      accel/ivpu: implement IVPU_DBG_* as a dyndbg classmap
+      accel/ethosu: enable drm.debug control
+      accel/rocket: enable drm.debug control
+      drm/komeda: Register DRM classmap
+      drm/bridge/analogix: Register DRM classmap
+      drm/bridge/dw-hdmi: Register DRM classmap
+      drm/hisilicon/kirin: Register DRM classmap
+      drm/imx/dc: Register DRM classmap
+      drm/imx/dcss: Register DRM classmap
+      drm/logicvc: Register DRM classmap
+      drm/loongson: Register DRM classmap
+      drm/renesas/rcar-du: Register DRM classmap
+      drm/sysfb/simpledrm: Register DRM classmap
+      drm/tests: Register DRM classmap in drm_mm_test
+      drm/ttm: Register DRM classmap
+      drm: restore CONFIG_DRM_USE_DYNAMIC_DEBUG un-BROKEN
+      drm-print: fix config-dependent unused variable
+      drm_print: fix drm_printer dynamic debug bypass
+      drm: enable DRM_USE_DYNAMIC_DEBUG by default (for testing)
+      drm-dyndbg: add DRM_CLASSMAP_USE to etnaviv
+      drm/tiny: panel-mipi-dbi: Add DRM_CLASSMAP_USE
+      drm/bridge: ite-it6505: Add DRM_CLASSMAP_USE
+      drm/mipi-dbi: Add DRM_CLASSMAP_USE
+      drm/clients: Add DRM_CLASSMAP_USE to drm_client_setup
+      dyndbg: add +c flag to demonstrate advantage of classmaps for DRM
+
+Philipp Hahn (1):
+      dyndbg: Ignore additional arguments from pr_fmt
+
+ Documentation/admin-guide/dynamic-debug-howto.rst  | 184 ++++-
+ MAINTAINERS                                        |   4 +-
+ drivers/accel/Makefile                             |   7 +-
+ drivers/accel/ethosu/ethosu_drv.c                  |   3 +
+ drivers/accel/ivpu/ivpu_drv.c                      |  27 +-
+ drivers/accel/ivpu/ivpu_drv.h                      |  45 +-
+ drivers/accel/rocket/rocket_gem.c                  |   2 +
+ drivers/gpu/drm/Kconfig.debug                      |   3 +-
+ drivers/gpu/drm/Makefile                           |   3 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  12 +-
+ drivers/gpu/drm/arm/display/komeda/komeda_drv.c    |   4 +
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c |   2 +
+ drivers/gpu/drm/bridge/ite-it6505.c                |   2 +
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c          |   2 +
+ drivers/gpu/drm/clients/drm_client_setup.c         |   2 +
+ drivers/gpu/drm/display/drm_dp_helper.c            |  12 +-
+ drivers/gpu/drm/drm_crtc_helper.c                  |  12 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c             |   1 +
+ drivers/gpu/drm/drm_gem_ttm_helper.c               |   2 +
+ drivers/gpu/drm/drm_mipi_dbi.c                     |   2 +
+ drivers/gpu/drm/drm_print.c                        |  40 +-
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c              |   2 +
+ drivers/gpu/drm/gma500/psb_drv.c                   |   2 +
+ drivers/gpu/drm/gud/gud_drv.c                      |   2 +
+ drivers/gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c    |   2 +
+ drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c    |   2 +
+ drivers/gpu/drm/i915/i915_params.c                 |  12 +-
+ drivers/gpu/drm/imx/dc/dc-drv.c                    |   3 +
+ drivers/gpu/drm/imx/dcss/dcss-drv.c                |   3 +
+ drivers/gpu/drm/imx/ipuv3/imx-drm-core.c           |   2 +
+ drivers/gpu/drm/logicvc/logicvc_drm.c              |   2 +
+ drivers/gpu/drm/loongson/lsdc_drv.c                |   2 +
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c             |   3 +
+ drivers/gpu/drm/mgag200/mgag200_drv.c              |   2 +
+ drivers/gpu/drm/msm/msm_drv.c                      |   3 +
+ drivers/gpu/drm/nouveau/nouveau_abi16.c            |  25 +-
+ drivers/gpu/drm/nouveau/nouveau_drm.c              |  12 +-
+ drivers/gpu/drm/qxl/qxl_drv.c                      |   2 +
+ drivers/gpu/drm/radeon/radeon_drv.c                |   2 +
+ drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c      |   2 +
+ drivers/gpu/drm/rockchip/rockchip_drm_drv.c        |   2 +
+ drivers/gpu/drm/sti/sti_drv.c                      |   2 +
+ drivers/gpu/drm/stm/drv.c                          |   2 +
+ drivers/gpu/drm/sysfb/simpledrm.c                  |   2 +
+ drivers/gpu/drm/tests/drm_mm_test.c                |   2 +
+ drivers/gpu/drm/tiny/panel-mipi-dbi.c              |   2 +
+ drivers/gpu/drm/ttm/ttm_device.c                   |   3 +
+ drivers/gpu/drm/udl/udl_main.c                     |   2 +
+ drivers/gpu/drm/vc4/vc4_drv.c                      |   2 +
+ drivers/gpu/drm/virtio/virtgpu_drv.c               |   2 +
+ drivers/gpu/drm/vkms/vkms_drv.c                    |   2 +
+ drivers/gpu/drm/vmwgfx/vmwgfx_drv.c                |   2 +
+ drivers/gpu/drm/xe/xe_module.c                     |   3 +
+ include/asm-generic/bounded_sections.lds.h         |  23 +
+ include/asm-generic/dyndbg.lds.h                   |  26 +
+ include/asm-generic/vmlinux.lds.h                  |  48 +-
+ include/drm/drm_print.h                            |  17 +-
+ include/linux/dynamic_debug.h                      | 334 ++++++--
+ kernel/module/main.c                               |  15 +-
+ lib/Kconfig.debug                                  |  24 +-
+ lib/Makefile                                       |   5 +
+ lib/dynamic_debug.c                                | 889 ++++++++++++++-------
+ lib/test_dynamic_debug.c                           | 211 +++--
+ lib/test_dynamic_debug_submod.c                    |  21 +
+ scripts/module.lds.S                               |   2 +
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/dynamic_debug/Makefile     |   9 +
+ tools/testing/selftests/dynamic_debug/config       |   7 +
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 373 +++++++++
+ 69 files changed, 1891 insertions(+), 598 deletions(-)
+---
+base-commit: d662a710c668a86a39ebaad334d9960a0cc776c2
+change-id: 20260419-submit-dyndbg-classmap-foundation-a3c77652c054
+
+Best regards,
 -- 
-Thanks,
-Petr
+Jim Cromie <jim.cromie@gmail.com>
+
