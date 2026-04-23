@@ -1,66 +1,65 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EB63E1D1A
-	for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 09:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8F53033F7
+	for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 14:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776936874; cv=none; b=UM8t4IofYGcdhVmqX0aJtDc9ii84wfJh2DU/PHlEhq4F8UyD2lDxQTtGKBEReU7yzWlRYyBECXn3VcsXyFU+Sr7c6K2Z1XmmpEneV7WT8huAmc4DzypypqHcoYO2/Nky+p9fuXcLVjfARQHmwis95+l/xwlVZxhTMOjIfriuZco=
+	t=1776952811; cv=none; b=NfW1Pk52GCwpMYUOkUbCx01iBv+h+IB+kjJnFdmn+3l952p/ZqdIN5cZ4OnQ2ocuyuCMjT03SaPdQ6P7HKIuJ40184IuC9UPatg5K8afUzwcFCB3hYeZFEL2zhU42XX8E7zgRlfOW5Jdmie5hH3iOJEt2wJrCRKkuRI3nB5nnIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776936874; c=relaxed/simple;
-	bh=uNBIefZDxhBdTplR4Rutsfb3Br0hvsb2IXlHcCoomHE=;
+	s=arc-20240116; t=1776952811; c=relaxed/simple;
+	bh=e6wZXuQNZj/lX9I9qWia7hKXHCqhnnmYtXf6RYXsHNg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GYgf+c+wksccoO2r/m4ac17Be+Li8B+JvZ1CgAJwQyMb+Gt/YzHM+NpZ1HCA4ccwwLm04IRNIL/qv5UKkIbTUIOypZHB61/2qzrK0GI/qPCzQFzBxiMl4fnJP26RDIGCkjBuv5ubztuaR4Woqo9/5SLRA770TZDSYmtHfq7b1ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T4Qy0KrI; arc=none smtp.client-ip=209.85.128.52
+	 In-Reply-To:Content-Type; b=UW9uyX/GUMOwrJTJcrf1oUTW3ZfIqE2wtnRiTIk6HVUMUYKTDsxIQ0TtS1fbTwtL8mqflsTnHRz3ey9dXkMW7ymGhytPJNY2s7x2rqqLL6n+ZWsnYEAB7yM1kg3vMKZCuG3/glH2mvnbCLeHRzoTfYFo9GeRrBh5bOjQ+IERSAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FMpo88C1; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="T4Qy0KrI"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso65578955e9.1
-        for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 02:34:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FMpo88C1"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43fde5b81a1so5026559f8f.0
+        for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 07:00:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776936871; x=1777541671; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1776952807; x=1777557607; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nlLH7AnUkh/yIK3b4miCcJ1QsnDeuZTPALrNv48Gw7Y=;
-        b=T4Qy0KrIvqvZQP6GGvdG1AgYTCoO/YXqdNqENF6ULXdciv93zS2QsDbPp9rbvo8IyA
-         +hsrdLosjspwO/5ruU9OkNftvl9yYt4wfK4WwvgHfr3mDsTkZwXq/7c871hMngRNNC/V
-         P7G4NHE+DUtvgywwp7jOFHR5iwzwXY5GctZdKmFdrIq3VAhW+WV0mDD5NTsmwlidjAgV
-         Y3HKwdcH+nlH/71cms+O1l3g/Bu5UlHpbwbRtQ+dizCFS23EtBXFf41xCcF4TY+6xJ89
-         28LW00/uIO37+bh5RTNyOSXUOzQAFaxqkM7JukILc3WIerHR1izoRjJkxhCMXQRoySnu
-         Opvg==
+        bh=XRQ+3xe0xHI/qgQNJnJ3B7Leq+8E0R1UPebMSgZhgzM=;
+        b=FMpo88C1KZXh+i0ReTiYxHQn+drFez/cF1qEd6tWtMJhU5VqricSWUO5RAUiDVqz3C
+         cAk6AVO81wJz9tcHUfDsVOyvcPkQcXoRWnurtgfm5vv1SkHL/dSSVQ5BRbWMS5f0yn0m
+         aXTNq9kCFmUJoxRPGliUc4oGanUifw4sZcNrbUPiKQmAoLIZPqZIIjvHJGZ2yy5VVpns
+         j5dpf+7ZD/N4dqruc1KPxdh1NE3kDLYhQwkjJEFVI/hCmoiZli2N48wqSHsBhyooseTj
+         coeBxSln9/PAGyC/hqBq2A3WkUjaFHDDElCZcezBjeW7x+5XuwOnnOK0PAOvTDcH72yp
+         /37Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776936871; x=1777541671;
+        d=1e100.net; s=20251104; t=1776952807; x=1777557607;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nlLH7AnUkh/yIK3b4miCcJ1QsnDeuZTPALrNv48Gw7Y=;
-        b=GV5tvl0wTZhdLk7AZ9zZg+JgKfnpHHArPext6ozU4DySBdPnDamR+w65xrAvKisDco
-         DbyvqZP2uHycukuGdHdHTXMlSXE9MS6KEbNMQtU3IEtq8st4wpraKL5rnf/Dp/Qa0eAA
-         fAnTXZiH9bplJ9sxy9rBUrM3tJtbGC2kSeDJdLkMawgmokVzXjqQIKHejQUCDn4kIy6K
-         AlQz7ohgWTew4+aNlvN02k+fZtz/OYO77alQg6yj9MqX93VjlcdgPM3jbsJVThn6/noj
-         RdfOA5AGpSiWke9djUzXryr/5sqDFpX02CKiV+4EAa64E5mNpQLND+ZfzsVS4JjZqyCQ
-         IKLg==
-X-Forwarded-Encrypted: i=1; AFNElJ9q4c8pP7WA43EHeSZAWK/nk/hc5fA87Ei+vu4+w14+TB/rFbqok43bLYg6xR4qci+95q12642atnijOZ50@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTPHTBPWOS47rTBffxa0zA/4byXFEX2mqMjwvBICmzPAuMM+M4
-	oHNuYucurt4P8IPZVV0EQiFiWkxruyxqdUxKiWkRByoZFwZx+L4kDm4Kl8DgzWgP3i4=
-X-Gm-Gg: AeBDietcr+vjy7qM+WfclBb9fjedwjc3guj2ah64ghELibZNPSQflfTmGSFKPuS70i0
-	s4fZv5uuTjxpzPt0PL3PN8Q3UwZW6WUPtgf1HgXQ9p8zNzy/vV9ON2KDHGWqcbChJfcodyCDXVP
-	mVXh/ZvPk5bPrYKFyB7MQqjNbLf9Oguf1x4D/n94nmZjjhrs09k4XjD87xv6Z/0Q5bN0p9HlJgJ
-	v3qxz8Kp3OuatZnWXJLBR+BODBMJzG/QBsJSPf2VV/IoD6lPw/OAAs9w4uglfHgKRIPxVQD7qtR
-	RCc3UNywWqO9ZJcd7R4gGB47MKllpo2zfwhICdeOAkr9AaNACW5RdywrcXo2tz6rJPeP7CUJ4PX
-	CzhxowTubhrZtzcms28LpyWAS+xq06naiVkFb7cWrBmyaEsBJvTYxpwL07K0SYCE/W+apKVdDIP
-	R+/xrnFcPwzAKOdkVw9AqGMaJA9VKi0ZptWwYVO7PAivs+BwQ+VgXEbmg=
-X-Received: by 2002:a05:600c:1d05:b0:489:1baf:8c03 with SMTP id 5b1f17b1804b1-4891baf8d2cmr224085135e9.11.1776936870253;
-        Thu, 23 Apr 2026 02:34:30 -0700 (PDT)
+        bh=XRQ+3xe0xHI/qgQNJnJ3B7Leq+8E0R1UPebMSgZhgzM=;
+        b=QpBg63s7MN2iu59FUwsU/rvv1mA36uxMF9XAZxDVnnzb37QPOzd893CwjHv80UhYkk
+         5wig3Ki2oJt6XZJI8nb7IvAT2aTWDqJyX01YbU5xA2pXCW2OnwlLPIEqMdERtx4Tkp9i
+         j72VFE2/dSRM4sLLM5kTFOYqu5qOXdusn+Mrv7dK4+O5bxTSJPLGKkzdhMq911ZQUHiw
+         GANc64kO/R+6s35OjJnGIUL51Y3NXZjwaGoYJk5eVLW8sLbSKvPOXqA2mpees/sVcv8j
+         P4Gn4+fGW/Gpq9dY/m8Pdga7Dy7RGxL0ew8Nhw/ejkAlv0+j4CfsAfTQHc50uNZbrqLQ
+         hnLw==
+X-Gm-Message-State: AOJu0YyukOORhxT0Tro9njTjMp8jtIkqc/X63Ml/HvE29E3emXyVMTjI
+	kiDnYuRWemVqcxqdAD+w3myVVwVfB54XVej1+Z2on6SmHf7p6BbO1MEzqV2Oe5rpkoM=
+X-Gm-Gg: AeBDieu0a7pxbxvrjxQ0cyhrH7vlfm04zTAG0DJHpsk/i7ogQVTHR4Vstt+Hx7fnblw
+	J6nILndXA0py+oUjYWQiuUZnU2UEHnSwrJ/kVKWShT41uRP0kBCx5RjE4VleLhjg1bQRC4Jtxy2
+	9hSwJYYys1Oj8GsSD9Ot90PV0z84xccS0J+fPRlyQUq8SwX+IRGjFhscIalUUB99Eb7DBE3i++s
+	xPH0YpqoMBfSgyz/EoL+FeAD1OiPCtgsvd/OZCx8D02PyBInjGgj8twYQYavZdLu5/X6vatL7xp
+	ntjUU6Jh/0dbN6HCaeqOIFTPweLn18MAvR56lOC6Ad1MCGXuRP5i8MYMm+twgV7/8BV9NX0fM02
+	2NHkskbjx1z4pnnsvjXQWyDjbcApA5GkchF+5PjauOX1WCL9ZpTQk0TAa5U0xK78mg3zhInXXt7
+	UV2OfCDudu7ySHLntNx0Yzq79Bb9BVDiTwW16qr891AYbBUh5BqjISW+o=
+X-Received: by 2002:a5d:5f92:0:b0:43b:9c73:2933 with SMTP id ffacd0b85a97d-43fe3dc1795mr42546195f8f.15.1776952806300;
+        Thu, 23 Apr 2026 07:00:06 -0700 (PDT)
 Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-489fec8f7cbsm237232245e9.11.2026.04.23.02.34.29
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb1176sm54804409f8f.3.2026.04.23.07.00.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Apr 2026 02:34:29 -0700 (PDT)
-Message-ID: <3df70252-1a11-4360-8803-8a093c12ac75@suse.com>
-Date: Thu, 23 Apr 2026 11:34:29 +0200
+        Thu, 23 Apr 2026 07:00:05 -0700 (PDT)
+Message-ID: <11c8e139-f9f3-4b22-863a-4e021a3947e7@suse.com>
+Date: Thu, 23 Apr 2026 16:00:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -68,104 +67,430 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] params: bound array element output to the caller's page
- buffer
-To: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Cc: Daniel Gomez <da.gomez@samsung.com>,
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
- Aaron Tomlin <atomlin@atomlin.com>, Dmitry Antipov <dmantipov@yandex.ru>,
- Thorsten Blum <thorsten.blum@linux.dev>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260417075042.26632-1-pengpeng@iscas.ac.cn>
+Subject: Re: [PATCH v2 2/2] module/kallsyms: sort function symbols and use
+ binary search
+To: Stanislaw Gruszka <stf_xl@wp.pl>
+Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+ Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Jordan Rome <linux@jordanrome.com>,
+ Viktor Malik <vmalik@redhat.com>
+References: <20260327110005.16499-1-stf_xl@wp.pl>
+ <20260327110005.16499-2-stf_xl@wp.pl>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260417075042.26632-1-pengpeng@iscas.ac.cn>
+In-Reply-To: <20260327110005.16499-2-stf_xl@wp.pl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/17/26 9:50 AM, Pengpeng Hou wrote:
-> param_array_get() appends each element's string representation into the
-> shared sysfs page buffer by passing buffer + off to the element getter.
+On 3/27/26 12:00 PM, Stanislaw Gruszka wrote:
+> Module symbol lookup via find_kallsyms_symbol() performs a linear scan
+> over the entire symtab when resolving an address. The number of symbols
+> in module symtabs has grown over the years, largely due to additional
+> metadata in non-standard sections, making this lookup very slow.
 > 
-> That works for getters that only write a small bounded string, but
-> param_get_charp() and similar helpers format against PAGE_SIZE from the
-> pointer they receive. Once off is non-zero, an element getter can
-> therefore write past the end of the original sysfs page buffer.
+> Improve this by separating function symbols during module load, placing
+> them at the beginning of the symtab, sorting them by address, and using
+> binary search when resolving addresses in module text.
 > 
-> Collect each element into a temporary PAGE_SIZE buffer first and then
-> copy only the remaining space into the caller's page buffer.
+> This also should improve times for linear symbol name lookups, as valid
+> function symbols are now located at the beginning of the symtab.
+> 
+> The cost of sorting is small relative to module load time. In repeated
+> module load tests [1], depending on .config options, this change
+> increases load time between 2% and 4%. With cold caches, the difference
+> is not measurable, as memory access latency dominates.
+> 
+> The sorting theoretically could be done in compile time, but much more
+> complicated as we would have to simulate kernel addresses resolution
+> for symbols, and then correct relocation entries. That would be risky
+> if get out of sync.
+> 
+> The improvement can be observed when listing ftrace filter functions.
+> 
+> Before:
+> 
+> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
+> 74908
+> 
+> real	0m1.315s
+> user	0m0.000s
+> sys	0m1.312s
+> 
+> After:
+> 
+> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
+> 74911
+> 
+> real	0m0.167s
+> user	0m0.004s
+> sys	0m0.175s
+> 
+> (there are three more symbols introduced by the patch)
+> 
+> For livepatch modules, the symtab layout is preserved and the existing
+> linear search is used. For this case, it should be possible to keep
+> the original ELF symtab instead of copying it 1:1, but that is outside
+> the scope of this patch.
+> 
+> Link: https://gist.github.com/sgruszka/09f3fb1dad53a97b1aad96e1927ab117 [1]
+> Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
 
-The underlying issue is that the kernel_param_ops::get() callback only
-takes a pointer to a buffer where the result should be stored, with the
-implicit knowledge that it is at least PAGE_SIZE in size. The params
-code apparently borrows this from the sysfs code, which is
-understandable because only sysfs can currently print module parameters.
+Sorry for the delay reviewing this patch.
 
-Nonetheless, the question is whether it would be better to rework the
-kernel_param_ops::get() callback to also include a size argument. This
-modification would prevent the copying in param_array_get() and having
-an explicit size is generally a better interface. It could also be
-useful for Rust integration, even though the current code doesn't
-support reading module parameters via sysfs. However, this change would
-require more work to update all current implementations of this
-callback.
+> ---
+> v1 -> v2: 
+>  - fix searching data symbols for CONFIG_KALLSYMS_ALL
+>  - use kallsyms_symbol_value() in elf_sym_cmp()
+> 
+>  include/linux/module.h   |   1 +
+>  kernel/module/internal.h |   1 +
+>  kernel/module/kallsyms.c | 171 +++++++++++++++++++++++++++++----------
+>  3 files changed, 130 insertions(+), 43 deletions(-)
+> 
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index ac254525014c..67c053afa882 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -379,6 +379,7 @@ struct module_memory {
+>  struct mod_kallsyms {
+>  	Elf_Sym *symtab;
+>  	unsigned int num_symtab;
+> +	unsigned int num_func_syms;
+>  	char *strtab;
+>  	char *typetab;
+>  };
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index 618202578b42..6a4d498619b1 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -73,6 +73,7 @@ struct load_info {
+>  	bool sig_ok;
+>  #ifdef CONFIG_KALLSYMS
+>  	unsigned long mod_kallsyms_init_off;
+> +	unsigned long num_func_syms;
+>  #endif
+>  #ifdef CONFIG_MODULE_DECOMPRESS
+>  #ifdef CONFIG_MODULE_STATS
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index f23126d804b2..d69e99e67707 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/kallsyms.h>
+>  #include <linux/buildid.h>
+>  #include <linux/bsearch.h>
+> +#include <linux/sort.h>
+>  #include "internal.h"
+>  
+>  /* Lookup exported symbol in given range of kernel_symbols */
+> @@ -103,6 +104,95 @@ static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
+>  	return true;
+>  }
+>  
+> +static inline bool is_func_symbol(const Elf_Sym *sym)
+> +{
+> +	return sym->st_shndx != SHN_UNDEF && sym->st_size != 0 &&
+> +	       ELF_ST_TYPE(sym->st_info) == STT_FUNC;
+> +}
+> +
+> +static unsigned int bsearch_func_symbol(struct mod_kallsyms *kallsyms,
+> +					unsigned long addr,
+> +					unsigned long *bestval,
+> +					unsigned long *nextval)
+> +
+> +{
+> +	unsigned int mid, low = 1, high = kallsyms->num_func_syms + 1;
+> +	unsigned int best = 0;
+> +	unsigned long thisval;
+> +
+> +	while (low < high) {
+> +		mid = low + (high - low) / 2;
+> +		thisval = kallsyms_symbol_value(&kallsyms->symtab[mid]);
+> +
+> +		if (thisval <= addr) {
+> +			*bestval = thisval;
+> +			best = mid;
+> +			low = mid + 1;
+
+If thisval == addr, the search moves to the right and finds the last
+symbol with the same address. I believe it should do the opposite and
+return the first symbol to match the behavior of
+search_kallsyms_symbol().
+
+> +		} else {
+> +			*nextval = thisval;
+> +			high = mid;
+> +		}
+> +	}
+> +
+> +	return best;
+> +}
+> +
+> +static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms,
+> +					unsigned int symnum)
+> +{
+> +	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
+> +}
+> +
+> +static unsigned int search_kallsyms_symbol(struct mod_kallsyms *kallsyms,
+> +					   unsigned long addr,
+> +					   unsigned long *bestval,
+> +					   unsigned long *nextval)
+> +{
+> +	unsigned int i, best = 0;
+> +
+> +	/*
+> +	 * Scan for closest preceding symbol and next symbol. (ELF starts
+> +	 * real symbols at 1). Skip the initial function symbols range
+> +	 * if num_func_syms is non-zero, those are handled separately for
+> +	 * the core TEXT segment lookup.
+> +	 */
+> +	for (i = 1 + kallsyms->num_func_syms; i < kallsyms->num_symtab; i++) {
+> +		const Elf_Sym *sym = &kallsyms->symtab[i];
+> +		unsigned long thisval = kallsyms_symbol_value(sym);
+> +
+> +		if (sym->st_shndx == SHN_UNDEF)
+> +			continue;
+> +
+> +		/*
+> +		 * We ignore unnamed symbols: they're uninformative
+> +		 * and inserted at a whim.
+> +		 */
+> +		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
+> +		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
+> +			continue;
+> +
+> +		if (thisval <= addr && thisval > *bestval) {
+> +			best = i;
+> +			*bestval = thisval;
+> +		}
+> +		if (thisval > addr && thisval < *nextval)
+> +			*nextval = thisval;
+> +	}
+> +
+> +	return best;
+> +}
+> +
+> +static int elf_sym_cmp(const void *a, const void *b)
+> +{
+> +	unsigned long val_a = kallsyms_symbol_value((const Elf_Sym *)a);
+> +	unsigned long val_b = kallsyms_symbol_value((const Elf_Sym *)b);
+> +
+> +	if (val_a < val_b)
+> +		return -1;
+> +
+> +	return val_a > val_b;
+
+Does this comparison function and the sort() call result in stable
+sorting? If val_a and val_b are the same, the sorting should preserve
+the original order.
+
+> +}
+> +
+>  /*
+>   * We only allocate and copy the strings needed by the parts of symtab
+>   * we keep.  This is simple, but has the effect of making multiple
+> @@ -115,9 +205,10 @@ void layout_symtab(struct module *mod, struct load_info *info)
+>  	Elf_Shdr *symsect = info->sechdrs + info->index.sym;
+>  	Elf_Shdr *strsect = info->sechdrs + info->index.str;
+>  	const Elf_Sym *src;
+> -	unsigned int i, nsrc, ndst, strtab_size = 0;
+> +	unsigned int i, nsrc, ndst, nfunc, strtab_size = 0;
+>  	struct module_memory *mod_mem_data = &mod->mem[MOD_DATA];
+>  	struct module_memory *mod_mem_init_data = &mod->mem[MOD_INIT_DATA];
+> +	bool is_lp_mod = is_livepatch_module(mod);
+>  
+>  	/* Put symbol section at end of init part of module. */
+>  	symsect->sh_flags |= SHF_ALLOC;
+> @@ -129,12 +220,14 @@ void layout_symtab(struct module *mod, struct load_info *info)
+>  	nsrc = symsect->sh_size / sizeof(*src);
+>  
+>  	/* Compute total space required for the core symbols' strtab. */
+> -	for (ndst = i = 0; i < nsrc; i++) {
+> -		if (i == 0 || is_livepatch_module(mod) ||
+> +	for (ndst = nfunc = i = 0; i < nsrc; i++) {
+> +		if (i == 0 || is_lp_mod ||
+>  		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
+>  				   info->index.pcpu)) {
+>  			strtab_size += strlen(&info->strtab[src[i].st_name]) + 1;
+>  			ndst++;
+> +			if (!is_lp_mod && is_func_symbol(src + i))
+> +				nfunc++;
+>  		}
+>  	}
+>  
+> @@ -156,6 +249,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
+>  	mod_mem_init_data->size = ALIGN(mod_mem_init_data->size,
+>  					__alignof__(struct mod_kallsyms));
+>  	info->mod_kallsyms_init_off = mod_mem_init_data->size;
+> +	info->num_func_syms = nfunc;
+>  
+>  	mod_mem_init_data->size += sizeof(struct mod_kallsyms);
+>  	info->init_typeoffs = mod_mem_init_data->size;
+> @@ -169,7 +263,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
+>   */
+>  void add_kallsyms(struct module *mod, const struct load_info *info)
+>  {
+> -	unsigned int i, ndst;
+> +	unsigned int i, di, nfunc, ndst;
+>  	const Elf_Sym *src;
+>  	Elf_Sym *dst;
+>  	char *s;
+> @@ -178,6 +272,7 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
+>  	void *data_base = mod->mem[MOD_DATA].base;
+>  	void *init_data_base = mod->mem[MOD_INIT_DATA].base;
+>  	struct mod_kallsyms *kallsyms;
+> +	bool is_lp_mod = is_livepatch_module(mod);
+>  
+>  	kallsyms = init_data_base + info->mod_kallsyms_init_off;
+
+This code is followed by the initialization of kallsyms:
+
+	kallsyms->symtab = (void *)symsec->sh_addr;
+	kallsyms->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
+	/* Make sure we get permanent strtab: don't use info->strtab. */
+	kallsyms->strtab = (void *)info->sechdrs[info->index.str].sh_addr;
+	kallsyms->typetab = init_data_base + info->init_typeoffs;
+
+I suggest adding 'kallsyms->num_func_syms = 0;' after the initialization
+of kallsyms->num_symtab.
+
+>  
+> @@ -194,19 +289,28 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
+>  	mod->core_kallsyms.symtab = dst = data_base + info->symoffs;
+>  	mod->core_kallsyms.strtab = s = data_base + info->stroffs;
+>  	mod->core_kallsyms.typetab = data_base + info->core_typeoffs;
+> +
+>  	strtab_size = info->core_typeoffs - info->stroffs;
+>  	src = kallsyms->symtab;
+> -	for (ndst = i = 0; i < kallsyms->num_symtab; i++) {
+> +	ndst = info->num_func_syms + 1;
+> +
+> +	for (nfunc = i = 0; i < kallsyms->num_symtab; i++) {
+>  		kallsyms->typetab[i] = elf_type(src + i, info);
+> -		if (i == 0 || is_livepatch_module(mod) ||
+> +		if (i == 0 || is_lp_mod ||
+>  		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
+>  				   info->index.pcpu)) {
+>  			ssize_t ret;
+>  
+> -			mod->core_kallsyms.typetab[ndst] =
+> -				kallsyms->typetab[i];
+> -			dst[ndst] = src[i];
+> -			dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
+> +			if (i == 0)
+> +				di = 0;
+> +			else if (!is_lp_mod && is_func_symbol(src + i))
+> +				di = 1 + nfunc++;
+> +			else
+> +				di = ndst++;
+> +
+> +			mod->core_kallsyms.typetab[di] = kallsyms->typetab[i];
+> +			dst[di] = src[i];
+> +			dst[di].st_name = s - mod->core_kallsyms.strtab;
+>  			ret = strscpy(s, &kallsyms->strtab[src[i].st_name],
+>  				      strtab_size);
+>  			if (ret < 0)
+> @@ -216,9 +320,13 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
+>  		}
+>  	}
+>  
+> +	WARN_ON_ONCE(nfunc != info->num_func_syms);
+> +	sort(dst + 1, nfunc, sizeof(Elf_Sym), elf_sym_cmp, NULL);
+> +
+
+The code sorts mod->core_kallsyms.symtab but mod->core_kallsyms.typetab
+is not reordered accordingly.
+
+>  	/* Set up to point into init section. */
+>  	rcu_assign_pointer(mod->kallsyms, kallsyms);
+>  	mod->core_kallsyms.num_symtab = ndst;
+> +	mod->core_kallsyms.num_func_syms = nfunc;
+>  }
+>  
+>  #if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> @@ -241,11 +349,6 @@ void init_build_id(struct module *mod, const struct load_info *info)
+>  }
+>  #endif
+>  
+> -static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms, unsigned int symnum)
+> -{
+> -	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
+> -}
+> -
+>  /*
+>   * Given a module and address, find the corresponding symbol and return its name
+>   * while providing its size and offset if needed.
+> @@ -255,7 +358,10 @@ static const char *find_kallsyms_symbol(struct module *mod,
+>  					unsigned long *size,
+>  					unsigned long *offset)
+>  {
+> -	unsigned int i, best = 0;
+> +	unsigned int (*search)(struct mod_kallsyms *kallsyms,
+> +			       unsigned long addr, unsigned long *bestval,
+> +			       unsigned long *nextval);
+> +	unsigned int best;
+>  	unsigned long nextval, bestval;
+>  	struct mod_kallsyms *kallsyms = rcu_dereference(mod->kallsyms);
+>  	struct module_memory *mod_mem = NULL;
+> @@ -266,6 +372,11 @@ static const char *find_kallsyms_symbol(struct module *mod,
+>  			continue;
+>  #endif
+>  		if (within_module_mem_type(addr, mod, type)) {
+> +			if (type == MOD_TEXT && kallsyms->num_func_syms > 0)
+> +				search = bsearch_func_symbol;
+
+I'm not sure if it is ok to limit the search only to function symbols
+when the address lies in MOD_TEXT. The text can theoretically contain
+non-function symbols. Could this optimization be adjusted to sort all
+MOD_TEXT symbols (excluding anonymous and mapping symbols) and move them
+to the front of the symbol table?
+
+> +			else
+> +				search = search_kallsyms_symbol;
+> +
+>  			mod_mem = &mod->mem[type];
+>  			break;
+>  		}
+> @@ -278,33 +389,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
+>  	nextval = (unsigned long)mod_mem->base + mod_mem->size;
+>  	bestval = (unsigned long)mod_mem->base - 1;
+>  
+> -	/*
+> -	 * Scan for closest preceding symbol, and next symbol. (ELF
+> -	 * starts real symbols at 1).
+> -	 */
+> -	for (i = 1; i < kallsyms->num_symtab; i++) {
+> -		const Elf_Sym *sym = &kallsyms->symtab[i];
+> -		unsigned long thisval = kallsyms_symbol_value(sym);
+> -
+> -		if (sym->st_shndx == SHN_UNDEF)
+> -			continue;
+> -
+> -		/*
+> -		 * We ignore unnamed symbols: they're uninformative
+> -		 * and inserted at a whim.
+> -		 */
+> -		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
+> -		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
+> -			continue;
+> -
+> -		if (thisval <= addr && thisval > bestval) {
+> -			best = i;
+> -			bestval = thisval;
+> -		}
+> -		if (thisval > addr && thisval < nextval)
+> -			nextval = thisval;
+> -	}
+> -
+> +	best = search(kallsyms, addr, &bestval, &nextval);
+>  	if (!best)
+>  		return NULL;
+>  
 
 -- 
 Thanks,
 Petr
-
-> 
-> Fixes: 9bbb9e5a3310 ("param: use ops in struct kernel_param, rather than get and set fns directly")
-> Cc: stable@vger.kernel.org
-> 
-> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
-> ---
->  kernel/params.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/params.c b/kernel/params.c
-> index 74d620bc2521..8910daa12816 100644
-> --- a/kernel/params.c
-> +++ b/kernel/params.c
-> @@ -475,22 +475,34 @@ static int param_array_set(const char *val, const struct kernel_param *kp)
->  static int param_array_get(char *buffer, const struct kernel_param *kp)
->  {
->  	int i, off, ret;
-> +	char *elem_buf;
->  	const struct kparam_array *arr = kp->arr;
->  	struct kernel_param p = *kp;
->  
-> +	elem_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-> +	if (!elem_buf)
-> +		return -ENOMEM;
-> +
->  	for (i = off = 0; i < (arr->num ? *arr->num : arr->max); i++) {
->  		/* Replace \n with comma */
->  		if (i)
->  			buffer[off - 1] = ',';
->  		p.arg = arr->elem + arr->elemsize * i;
->  		check_kparam_locked(p.mod);
-> -		ret = arr->ops->get(buffer + off, &p);
-> +		ret = arr->ops->get(elem_buf, &p);
->  		if (ret < 0)
-> -			return ret;
-> +			goto out;
-> +		ret = min(ret, (int)(PAGE_SIZE - 1 - off));
-> +		memcpy(buffer + off, elem_buf, ret);
->  		off += ret;
-> +		if (off == PAGE_SIZE - 1)
-> +			break;
->  	}
->  	buffer[off] = '\0';
-> -	return off;
-> +	ret = off;
-> +out:
-> +	kfree(elem_buf);
-> +	return ret;
->  }
->  
->  static void param_array_free(void *arg)
-
