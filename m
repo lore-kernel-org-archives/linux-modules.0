@@ -1,68 +1,67 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AAE342C98
-	for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 20:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0220D34B183
+	for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 20:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776977650; cv=none; b=RBgr9rQ3GzXxieMjfcFuK158SnXhFRREoxwOxbpGJ7Tt/3qzAR5vnQRAKbZhNC7I+9wvLUAup/slQlZDXlFkIBYQ9fAJFPqBBzaRMxHJqAG9IAhxRM9jmwIW99OAbQbeew6PNfPI75wGAK7wQ6EG1f4zC5jyDmQ06GKFBgN9xEU=
+	t=1776977656; cv=none; b=hfyYzt9JBBsOzsdvUSfO+97QdJ4RaaDpfTL7HB0FPnJERRWzGnl4woao4Q2i+dGWNCgLF+Az06yUuGrufeWySmUIUYyav4DjotOsP/IfCoauCA53CNk0GMzhXFk+DQpwRLcSW3rf3rJaDnMvr/X8iiUwh0IvcNc2aMO1y9R8C38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776977650; c=relaxed/simple;
-	bh=YvI+c+2Ph7G01gY6UA2wVrmrHHoi2nJdOmOI4+tqFF4=;
+	s=arc-20240116; t=1776977656; c=relaxed/simple;
+	bh=69R8ZEYuJ3XX3uaR1bDYpBHLyhieWCXWd/8ZwqL+bEM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EyGGVlQzicHwzDLBQ3uRnU5jTrEuC+0Isgp58JJeQ5rhqdl6t9L8UR1pCP4JYxChir8/7mqT9/ABAz2k5vOeC5IwnDdF2R/Xr99NUoRj73siu9Wc8JSwMfvaA+aSwALsVV/MIfOwXUaYQsEnyyW5uU3EAE7v/dwddZIHintDqGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V6ddrJDR; arc=none smtp.client-ip=209.85.167.174
+	 In-Reply-To:To:Cc; b=Y2kRP4IQEtszxUaDGDNBQOW2pjF4JPxr/pJbBPJyFBCNJhG3C/LEQ04C2qJcuLNbKgKBzV1GslU7zBVc83YHmIXy6Ug5wrhOvpY0tT3C0EQoSq2JgUemvusLjWm/oCtrGuqlFC3P/Jha8OeqBAqrLCZI4tHz3eEluvLCeIkWfc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hsf0DWeG; arc=none smtp.client-ip=209.85.167.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6ddrJDR"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-464bba3a9easo3705014b6e.0
-        for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 13:54:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hsf0DWeG"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-479932ccbc8so4094449b6e.3
+        for <linux-modules@vger.kernel.org>; Thu, 23 Apr 2026 13:54:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776977648; x=1777582448; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776977653; x=1777582453; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vh+dAS21x3C6ulKovRegxLPmO53GnqH/AjpAPmkhI+c=;
-        b=V6ddrJDRE6GeIVkfpv4uFL1QGP2y742sZlS4+Aenf1ksZChR54S3b8oM+EsBEfW8DS
-         85sGrVybFZcKwjSfzue3csRiiSYix0QOZBZtRTnxkPKAV8e8eWtmlOm4Go2lwfb9XVA2
-         qtbxjy8aqzMXwF2HBZTgCyi9Yg+Ah2iFN8OU6CsUeNByM0Ifzs+RZeysz8ADUqXTZCRw
-         23J00iirdL4ciwHx93ZKvrsYWo/xdxewp8DzfGkaL8f9yoSDzTfYKurR9QhnJJ49Rogi
-         LklzzMkSuF8+vUvU3VjthPHidWJAAe5RSV0AK4GLkJLJP7kTu+J/XX/xP/3kl6vkFNLX
-         KuqA==
+        bh=smTQWx2Oo6n65DlNeq5F4cIF6aC/F9cGlPTeWDOeAjM=;
+        b=hsf0DWeGpsmDEUCAZQDTDlIgNDTqEbdh9Pvia3CbWhgG++vf62KDl/CowQSTdOidPy
+         wx1VXfVFWvmW+q1LI4yPyICbehwbWVylZixqqoJ0hvLZQFvC7/9w12wMF7iKxR8Azbca
+         IELqJ0nzZ+0UsjflRY6RyrL7jqj1C/Mcp2ifcHUUQ06xXuyW1hhH3ywIST6RCpUNFcu8
+         SEIzashdUE3Ld3+iO9rcjgaNhV8XzAs5s2cLRAXFBC6tBXsl3v0SdKyyAk2Oe8KDSiON
+         STsVWfspV6Ih/W6wwALxu04FJRw5A3RdRoqATy7BL4xkDcHFUAy442PU+gc/R037UNYR
+         rgPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776977648; x=1777582448;
+        d=1e100.net; s=20251104; t=1776977653; x=1777582453;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=vh+dAS21x3C6ulKovRegxLPmO53GnqH/AjpAPmkhI+c=;
-        b=E4MvcWT5KJpEH1/X2mImvjEapLuI+1lvi4LNsSEFfS5ID4HNp9wT27Ey8f741az3bY
-         0JKMA2bH+9CyLulUgsk49E8qodmAra2bUEoRi14jS4gVU/0VhM4cvAZT5L/e0a4U8YlI
-         kAgZ0HmJdTreJdAT81SmHatBd2zMhT4zt5Xq3q3J6AkErzj39KFf2KEUFXATz7HlHYbw
-         +raaTZCROj10bdPUZQBHqsrWeNmGrazOf0+oRbuzKzS6kknjYsawAE1k6FJ6THnkUeNE
-         jlFPfxy6F/BDD9QSI2S6GSM/FUfdLg7eroQpmtV89W0QvB8IRJrYxTj5v+Iwl1P6mgaL
-         Vn3A==
-X-Forwarded-Encrypted: i=1; AFNElJ9xFPePxl6rCKAFjuQwJHpEt/q9tCxoWBKr/P3wMqicftght53U5fUlCUzzRdwcrjdGrLcTYLyBIa1xA2QH@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCp9iUK6zMj4q+GyDPylMdY6C4P44ED/Qp91yGIRc5UgrOVOPU
-	teMvYRravGd/GlnQiiDcIjj5QAwR8+ZTrtsBXDTmkQcpkkYpQIdTtYtY
-X-Gm-Gg: AeBDiesIvoYP2pp0nDbSFwwVL3ViJFsXI3jfw9nrzQW8O6nHnRAQzBfjwJRgMvOOGFP
-	JIVunDiXkgJ41ud21Dp5dmMfGGwQPgFaqUNJ5ZBxH+Bl+suMAQoEwy/r31XGnOIG6gmhwOpM2mB
-	Zv0NW2286yVwDxVsY0y0bvwmI7+BBAWE6a59HF3qjNllCl9FlaJPVzQNj1QrpwvoAz7lyk+XsI2
-	XLrYIoAY7EBmgyJwiGmHdK28lLJZKzxa3bFqyGJ/qlL69BLF5jUZ2HxQm86NgCOPAgjsw/9o65/
-	D04abTd3Qq9YXupNtmO2qvmhNPmbCYNUwtLcXnHIN7ZlrsQQ198rT99HzqUBLv2GMVixcMtIuF+
-	nmy2kOIxLcYwee9hyCBcJsg5pTtt5UhHcJRtKfaJ+8Axt3hEw4y+F5qB9HWfAMMo2A9YueNpil1
-	nONf+8n1bE2lqUD3AX0jxNibCvl0j9H54WXHuTn06sHQhz2197IhduiRvxFYtVTp8Ojutgd1mnf
-	BJOKR1reRk=
-X-Received: by 2002:a05:6808:138b:b0:45f:59e:1e06 with SMTP id 5614622812f47-4799c8711e1mr17988935b6e.4.1776977647783;
-        Thu, 23 Apr 2026 13:54:07 -0700 (PDT)
+        bh=smTQWx2Oo6n65DlNeq5F4cIF6aC/F9cGlPTeWDOeAjM=;
+        b=VsWyXbSOWAne70Hq8wBcbVVELRYjukofX1SNlCw+L5uGgBbV6hO4gX2v+1lffDE9r4
+         rCQKTRXNjG4nBTznXPfvn45GPKQ7898wd33wDwWWZV1gCAkThc0q191HBIIaI6S+MEgS
+         kFC3zgZDfseDpdjKWdbx6cgYO0IDkn9aY96G87+TgDxQdSVYrTI3mtH/kRNXGQI4XZIc
+         qZ1wJqfxUumEJaogWlVCOMzNj8ayI7bYaHQ8wYp53NM5PAhLMp1f+S2mntGKzfIO4FSZ
+         z1m+wpVfcR/nd7GNEewmA451wQX3qwS1kGp4t9PPfV/5xpsF2+vgW5IPQvb95or5P0wr
+         Mbkw==
+X-Forwarded-Encrypted: i=1; AFNElJ+p9K6s0w39IxG7xIr/fr+wPsCv9bRaPKJdAGeItSgb14jSOilAPq7tGxsEiWjlRE0lV/QFqNuuiDzbePJT@vger.kernel.org
+X-Gm-Message-State: AOJu0YylRJ2aH/374q8xD+4UCclZpo5xlt8fJiTRxeCFO/ALWZxVY27s
+	FsQ3TkVqfDtzcq+xn/bm2vjJtgD6E+XafdBzAwwrAji5gK/pNDf+Nr+K
+X-Gm-Gg: AeBDieukv2rSnDcHSzS63EALveQMPvV6anPapGDnUyiZWaKqTwuWMb82e7bGpzIXHL1
+	EY2sBh+Ho/GrMQG6/HpY/IRq38ffZ5m7Le4ciAitenRkY7zupffWiAJYe6NK5W1VTIo00QtBdK+
+	5jgprswahKaXwA8KhMUCEuk0ixiBxt0MjRtVZ4UpAjKg4yOnGXVuF+g/mrmU4tzjP3EAdpKn1t4
+	KUKk95Hc8KVdN4jwpooVJNfHiNc+GU+3pAP/N+39t9IAmoZdOc8F6lTy8so4PpMdT+Cpho2zVaW
+	qFMmb5zCZPjaU94y6ZoWOPqj+ep1QrlMYNyFR5joTc0L8aZBI0dOOYQUOxQCJ5QH58mzv/yQ8ie
+	o0iMxTqzpMLNgIyXMRn/YVHNWZXfysmx6X2RPc/sq+J827zU9hChj7GBsj6ZMkW3k17d+GpBmy0
+	ZpT4dD/An6gly/5lY1oLXxVlsmTw2HVude/n1AhBIbw1/EPtcQl3/Itg+f/Qc6160/n9bHjf0c
+X-Received: by 2002:a05:6808:2006:10b0:479:ab0d:706d with SMTP id 5614622812f47-479ab0d8292mr9669402b6e.19.1776977652886;
+        Thu, 23 Apr 2026 13:54:12 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.54.03
+        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.54.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2026 13:54:07 -0700 (PDT)
+        Thu, 23 Apr 2026 13:54:12 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Thu, 23 Apr 2026 14:53:42 -0600
-Subject: [PATCH v14 01/92] dyndbg: fix NULL ptr on i386 due to section
- mis-alignment
+Date: Thu, 23 Apr 2026 14:53:43 -0600
+Subject: [PATCH v14 02/92] vmlinux.lds.h: move BOUNDED_SECTION_* macros to
+ reuse later
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -71,7 +70,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-1-2b809a8019d0@gmail.com>
+Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-2-2b809a8019d0@gmail.com>
 References: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 In-Reply-To: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 To: Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>, 
@@ -164,88 +163,121 @@ Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
  imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
  linux-mediatek@lists.infradead.org, linux-rockchip@lists.infradead.org, 
  linux-stm32@st-md-mailman.stormreply.com, linux-renesas-soc@vger.kernel.org, 
- etnaviv@lists.freedesktop.org, Jim Cromie <jim.cromie@gmail.com>, 
- kernel test robot <oliver.sang@intel.com>
+ etnaviv@lists.freedesktop.org, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977636; l=2644;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977636; l=3825;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=YvI+c+2Ph7G01gY6UA2wVrmrHHoi2nJdOmOI4+tqFF4=;
- b=JyTcuYLHHiwHBHDMwQ80bkTwG2D19eoKHDE+tl83KcpGRfh3fZenxZ7q9Sw+M3I1crSkiEMPL
- U/h1shBkXbNDxTVmN1qvPMSBm5G8hxuK6TqMgzZBBZXdklZASPjpC8F
+ bh=69R8ZEYuJ3XX3uaR1bDYpBHLyhieWCXWd/8ZwqL+bEM=;
+ b=1RGrWBaCfa375YwomdXNmnBuK8DPasMGZMRXVFmSM5kqzTNvnvoK7RGv96IWfWsLl+f8VO+Oe
+ DXnoOOHuOZ4A8HQQXvtEvtDkuAud4PS6djTnPaYlAYjqAqNr+vt0nX+
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-When dyndbg classmaps get used (later in this series), the
-__dyndbg_classes section (which has 28 byte structs on i386), causes
-mis-alignment of the following __dyndbg section, resulting in a NULL
-pointer deref in dynamic_debug_init().
+Move BOUNDED_SECTION_* macros to a new helper file:
+include/asm-generic/bounded_sections.lds.h
+and include it back into vmlinux.lds.h
 
-Fix this by:
+This allows its reuse later to fix a future problem with modules
+failing to keep dyndbg sections in some circumstances.
 
-Adding ALIGN(8) to the BOUNDED_SECTION* macros.  This aligns all
-sections using those macros, including the problem section above.
-Almost all the other macro uses are already ALIGN(8), either
-directly or by being below one.
+NB: this ignores a checkpatch warning, because new file is covered by
+GENERIC INCLUDE/ASM HEADER FILES
 
-Removing BOUNDED_SECTION* uses in ORC_UNWINDER sections.  These
-explicitly have smaller alignments, and using the modified macros here
-would override that alignment, which scripts/sorttable.c does not
-tolerate.
-
-Move __dyndbg section back above __dyndbg_classes, restoring its
-original position.  This is cosmetic, given the alignment added to the
-macros.
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202601211325.7e1f336-lkp@intel.com
+CC: Arnd Bergmann <arnd@arndb.de>
+CC: linux-arch@vger.kernel.org
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/asm-generic/vmlinux.lds.h | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ include/asm-generic/bounded_sections.lds.h | 38 ++++++++++++++++++++++++++++++
+ include/asm-generic/vmlinux.lds.h          | 32 +------------------------
+ 2 files changed, 39 insertions(+), 31 deletions(-)
 
+diff --git a/include/asm-generic/bounded_sections.lds.h b/include/asm-generic/bounded_sections.lds.h
+new file mode 100644
+index 000000000000..43e79603d4af
+--- /dev/null
++++ b/include/asm-generic/bounded_sections.lds.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _ASM_GENERIC_BOUNDED_SECTIONS_H
++#define _ASM_GENERIC_BOUNDED_SECTIONS_H
++
++#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
++	. = ALIGN(8);							\
++	_BEGIN_##_label_ = .;						\
++	KEEP(*(_sec_))							\
++	_END_##_label_ = .;
++
++#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
++	. = ALIGN(8);							\
++	_label_##_BEGIN_ = .;						\
++	KEEP(*(_sec_))							\
++	_label_##_END_ = .;
++
++#define BOUNDED_SECTION_BY(_sec_, _label_)				\
++	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++
++#define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
++
++#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_HDR_##_label_	= .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_label_##_HDR_ = .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_BY(_sec_, _label_)				\
++	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++
++#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
++
++#endif /* _ASM_GENERIC_BOUNDED_SECTIONS_H */
 diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 60c8c22fd3e4..db38f52035f3 100644
+index db38f52035f3..acb4aadd74da 100644
 --- a/include/asm-generic/vmlinux.lds.h
 +++ b/include/asm-generic/vmlinux.lds.h
-@@ -212,11 +212,13 @@
+@@ -211,37 +211,7 @@
+ # endif
  #endif
  
- #define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
-+	. = ALIGN(8);							\
- 	_BEGIN_##_label_ = .;						\
- 	KEEP(*(_sec_))							\
- 	_END_##_label_ = .;
+-#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
+-	. = ALIGN(8);							\
+-	_BEGIN_##_label_ = .;						\
+-	KEEP(*(_sec_))							\
+-	_END_##_label_ = .;
+-
+-#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
+-	. = ALIGN(8);							\
+-	_label_##_BEGIN_ = .;						\
+-	KEEP(*(_sec_))							\
+-	_label_##_END_ = .;
+-
+-#define BOUNDED_SECTION_BY(_sec_, _label_)				\
+-	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
+-
+-#define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
+-
+-#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
+-	_HDR_##_label_	= .;						\
+-	KEEP(*(.gnu.linkonce.##_sec_))					\
+-	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
+-
+-#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
+-	_label_##_HDR_ = .;						\
+-	KEEP(*(.gnu.linkonce.##_sec_))					\
+-	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
+-
+-#define HEADERED_SECTION_BY(_sec_, _label_)				\
+-	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
+-
+-#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
++#include <asm-generic/bounded_sections.lds.h>
  
- #define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
-+	. = ALIGN(8);							\
- 	_label_##_BEGIN_ = .;						\
- 	KEEP(*(_sec_))							\
- 	_label_##_END_ = .;
-@@ -862,15 +864,21 @@
- #ifdef CONFIG_UNWINDER_ORC
- #define ORC_UNWIND_TABLE						\
- 	.orc_header : AT(ADDR(.orc_header) - LOAD_OFFSET) {		\
--		BOUNDED_SECTION_BY(.orc_header, _orc_header)		\
-+		__start_orc_header = .;					\
-+		KEEP(*(.orc_header))					\
-+		__stop_orc_header = .;					\
- 	}								\
- 	. = ALIGN(4);							\
- 	.orc_unwind_ip : AT(ADDR(.orc_unwind_ip) - LOAD_OFFSET) {	\
--		BOUNDED_SECTION_BY(.orc_unwind_ip, _orc_unwind_ip)	\
-+		__start_orc_unwind_ip = .;				\
-+		KEEP(*(.orc_unwind_ip))					\
-+		__stop_orc_unwind_ip = .;				\
- 	}								\
- 	. = ALIGN(2);							\
- 	.orc_unwind : AT(ADDR(.orc_unwind) - LOAD_OFFSET) {		\
--		BOUNDED_SECTION_BY(.orc_unwind, _orc_unwind)		\
-+		__start_orc_unwind = .;					\
-+		KEEP(*(.orc_unwind))					\
-+		__stop_orc_unwind = .;					\
- 	}								\
- 	text_size = _etext - _stext;					\
- 	. = ALIGN(4);							\
+ #ifdef CONFIG_TRACE_BRANCH_PROFILING
+ #define LIKELY_PROFILE()						\
 
 -- 
 2.53.0
