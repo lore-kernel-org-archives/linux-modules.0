@@ -1,276 +1,216 @@
-Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.8])
+Received: from jpms-ob01-os7.noc.sony.co.jp (jpms-ob01-os7.noc.sony.co.jp [211.125.139.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E35A33EAF9;
-	Sun, 26 Apr 2026 14:31:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76EA31E82E;
+	Mon, 27 Apr 2026 02:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.139.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777213882; cv=none; b=B4oCBBO6iYDhQ8giyyXVRSDYh7nFHxxmC5tHnCaseh2r23yaOGze81USIKuocMa53Q7oXXR+rkl2ejKCqlgdvSAXI5oemgKUwTmSKoqFCSgucPgl2Op4F+HM6R9c+w1r9dV+AysgYZR/jqr8rMPJtTV1pnQHWiF8AjYogHW77aY=
+	t=1777257735; cv=none; b=lBsmkXRZ02sj2attpP2kXAYtOldL1zg4OYLv046f3ohVe6gn/Uuy2VbAYvqJtvvM0vtbwQfjm0CfVvuHRipjsTEFRHakgN2TNFJwE/mnkaIalkB+XpBJzXfr56jbCOujsIzrFOd8vlY//V/7SW8ulDqqCb/uw8nfLQeMbIFYnoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777213882; c=relaxed/simple;
-	bh=+bORunN9DihtZKlWmsbyAGvFX7FDw4aL3SCDlhq8TbQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Iq9JWsNU47zulAjTpwkWEIwLER16AYo9OwggxexnsmZK24z0Yql8/OeoVS6CER/gIXBb6dC6A3qQ/+NKhsAKiNVFK1heGf81ZC4Zv+OLUOuvyDJzbyjCyCYTunE0oZN64Bmuk3cpLSDORbjXDbR0JqMZ/wHKebfn45k23jGSpNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=GJr6WW1F; arc=none smtp.client-ip=117.135.210.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+	s=arc-20240116; t=1777257735; c=relaxed/simple;
+	bh=Bc6B30GXoro1QIrZ2ACQX8CrnIUIWdRhjjFxqv9HIMo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 In-Reply-To:References:To:Cc; b=adM6vHuvkuTIAo0yYKU96NJWJzX2LCKFN6qFwAwwHbMCnOGVAYtDnBjL5pzmIMJEfIWcofhIv2EhsqX1yy2EMDaoZmvrYBaBhayTLUxYaYofWzXZ7gjgOoUA0dky5p1qJodt9ZWz6SCaJJl8zucTNA3aD5RE9YB4pDMWW7dIAz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=fail smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=P8uFp8qW; arc=none smtp.client-ip=211.125.139.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sony.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="GJr6WW1F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=E9QmRybu2HwGPax/8gg8zi6sH9jkn1UXfiltYEM9caY=;
-	b=GJr6WW1FFj6/yFQO/D5b9Z35SC7l1yTBhxhkj4vkJEDWXnmtfwNBf1YT1GYzae
-	P0Gt/eizsqh6vY6sMw6Mw1boLItuuLSQUjjE1+H0HF3nkXamKKPRxDHvIBIeT+aq
-	TIDE6L1lz40dD6JtPB2Ok5ChCODfw8DCkX8wZ/USbRfTA=
-Received: from [IPV6:2408:8210:480a:2590:ec66:74e8:68a7:a44b] (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3lxKMIO5pdslVAQ--.7227S2;
-	Sun, 26 Apr 2026 22:26:22 +0800 (CST)
-Message-ID: <c646232a-f2bf-439a-88c9-737dde9b1725@126.com>
-Date: Sun, 26 Apr 2026 22:26:20 +0800
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="P8uFp8qW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=sony.com; s=s1jp; t=1777257731; x=1808793731;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:in-reply-to:references:to:cc;
+  bh=qhtscWonEKOFZrQW+3xWMuRK2rrdNHFur8IInUkqd5Q=;
+  b=P8uFp8qWuXuMmPI/BzHN1pq9LPXroiDeGUH0AQdkifUlvFR6KsVAPiZH
+   Zx0q6/rZDdxFYqoyllC0cg3uJZnmA8GOdutpTtM3pzcqfP2v5WitLoaZv
+   CD0cknoLxkf8xplw7bU6PeLrmAjcNZ8qZ+C3tuVD9Zo8VYAcAW6Y8rQXb
+   iqO68rSbJmfbnpnwhE1QwyKiSEhSl9aa+1byMoRxrQjz7VyVpLplbtLaG
+   VeffIKt5+y+ql1KDc/QmnMmHPmysjU7a2CP9ukMnLqaDuSnrZ7SzdYVNw
+   sRCQD54uu7dmougEGWlOswjSERzqtTJAPPfXfxXWNWvwqM8vHs6j5mtL7
+   Q==;
+X-CSE-ConnectionGUID: lQyQBs0gSJiAez883wMZsQ==
+X-CSE-MsgGUID: CW4FryawRNaZbpR2qn8Fow==
+Received: from unknown (HELO jpmta-ob02-os7.noc.sony.co.jp) ([IPv6:2001:cf8:acf:1104::7])
+  by jpms-ob01-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 11:42:04 +0900
+X-CSE-ConnectionGUID: +W+n/bPoRC+IUCG6r6jjxQ==
+X-CSE-MsgGUID: +R75kAZwS56p+O/DwSqFEA==
+X-IronPort-AV: E=Sophos;i="6.23,201,1770562800"; 
+   d="scan'208";a="52275250"
+Received: from unknown (HELO [127.0.1.1]) ([IPv6:2001:cf8:1:573:0:dddd:eb3e:119e])
+  by jpmta-ob02-os7.noc.sony.co.jp with ESMTP; 27 Apr 2026 11:42:03 +0900
+From: Shashank Balaji <shashank.mahadasyam@sony.com>
+Subject: [PATCH v4 0/4] Enable sysfs module symlink for more built-in
+ drivers
+Date: Mon, 27 Apr 2026 11:41:20 +0900
+Message-Id: <20260427-acpi_mod_name-v4-0-22b42240c9bf@sony.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 2/2] kernel/module: Decouple klp and ftrace from
- load_module
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- Petr Mladek <pmladek@suse.com>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, rafael@kernel.org, lenb@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, viresh.kumar@linaro.org,
- agk@redhat.com, snitzer@kernel.org, mpatocka@redhat.com,
- bmarzins@redhat.com, song@kernel.org, yukuai@fnnas.com, linan122@huawei.com,
- jason.wessel@windriver.com, danielt@kernel.org, dianders@chromium.org,
- horms@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, paulmck@kernel.org, frederic@kernel.org,
- mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
- atomlin@atomlin.com, jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
- joe.lawrence@redhat.com, rostedt@goodmis.org, mark.rutland@arm.com,
- mathieu.desnoyers@efficios.com, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org, live-patching@vger.kernel.org,
- dm-devel@lists.linux.dev, linux-raid@vger.kernel.org,
- kgdb-bugreport@lists.sourceforge.net, netdev@vger.kernel.org
-References: <20260413080701.180976-1-chensong_2000@189.cn>
- <1191caf5-6a61-4622-a15e-854d3701f4fc@suse.com>
- <a35f5f94-7d5a-4347-974b-b270c89ef241@189.cn>
- <1db425bf-58a9-4768-8c38-3ae25d7662a5@suse.com>
- <aeD2_FrFL6E3dbAC@pathway.suse.cz>
- <20260420112707.aa3627ca9f975eeaf7d8ea0e@kernel.org>
-Content-Language: en-US
-From: Song Chen <chensong_2000@126.com>
-In-Reply-To: <20260420112707.aa3627ca9f975eeaf7d8ea0e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_____wD3lxKMIO5pdslVAQ--.7227S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3JrW8Wry8Gr4xKw15uFy3Jwb_yoW3GFWDpF
-	9xWF17Gr4DXr9rCa1Ivw1UZr17K34UGr4jqr15GFyxGryqyFn7JFy8Gr109FykJrWkZry2
-	qr4UAry7A345JrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UG-eOUUUUU=
-X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBsw5BwGnuII7qoQAA3e
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANDM7mkC/3XNTQqDMBCG4atI1k0xP43aVe9RisRkpqagEWOlI
+ t690W5E6PKDed6ZSYDeQSDXZCY9jC4438YhTwkxtW6fQJ2Nm/CUq1QyRbXpXNl4W7a6AYpKXnS
+ mQIisItF0PaD7bL3747fDu3qBGdbIelG7MPh+2h6ObL371x4ZTSnT0hYKba5McQu+nc7GN2RNj
+ 3yHOTtiHjFkAgvBUqutOGCxx/yIRcSa5RIQC0SFO7wsyxcEjrLlNQEAAA==
+X-Change-ID: 20260416-acpi_mod_name-f645a76e337b
+In-Reply-To: <20260422-acpi_mod_name-v3-0-a184eff9ff6f@sony.com>
+References: <20260422-acpi_mod_name-v3-0-a184eff9ff6f@sony.com>
+To: Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ James Clark <james.clark@linaro.org>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Richard Cochran <richardcochran@gmail.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, Mike Leach <mike.leach@arm.com>, 
+ Leo Yan <leo.yan@arm.com>, Mike Leach <mike.leach@arm.com>
+Cc: Rahul Bukte <rahul.bukte@sony.com>, 
+ Shashank Balaji <shashank.mahadasyam@sony.com>, 
+ linux-kernel@vger.kernel.org, coresight@lists.linaro.org, 
+ linux-arm-kernel@lists.infradead.org, driver-core@lists.linux.dev, 
+ rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Daniel Palmer <daniel.palmer@sony.com>, Tim Bird <tim.bird@sony.com>, 
+ linux-modules@vger.kernel.org
+X-Mailer: b4 0.16-dev-3bfbc
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5490;
+ i=shashank.mahadasyam@sony.com; h=from:subject:message-id;
+ bh=Bc6B30GXoro1QIrZ2ACQX8CrnIUIWdRhjjFxqv9HIMo=;
+ b=owGbwMvMwCU2bX1+URVTXyjjabUkhsx3Z37uWVxx1i2qbb66zaSW3DoDlY4+ifSDy46883T8v
+ 7viDa9QRykLgxgXg6yYIkupUvWvvSuClvScea0IM4eVCWQIAxenAEykfCMjw8Wldx+UeUe/bY9Q
+ r7h2LLI0ZpnpBMFr131n2x7d8fZcnCQjw52Q28H35i9kDlb/uSs8Riu36MWKGc6xAm90557hZTg
+ VxwcA
+X-Developer-Key: i=shashank.mahadasyam@sony.com; a=openpgp;
+ fpr=75227BFABDA852A48CCCEB2196AF6F727A028E55
 
-Hi,
+struct device_driver's mod_name is not set by a number of bus' driver registration
+functions. Without that, built-in drivers don't have the module symlink in sysfs.
+We want this to go from unbound driver name -> module name -> kernel config name.
+This is useful on embedded platforms to minimize kernel config, reduce kernel size,
+and reduce boot time.
 
+In order to achieve this, mod_name has to be set to KBUILD_MODNAME, and this has
+to be done for all buses which don't yet do this.
 
-On 4/20/26 10:27, Masami Hiramatsu (Google) wrote:
-> On Thu, 16 Apr 2026 16:49:32 +0200
-> Petr Mladek <pmladek@suse.com> wrote:
-> 
->> On Thu 2026-04-16 13:18:30, Petr Pavlu wrote:
->>> On 4/15/26 8:43 AM, Song Chen wrote:
->>>> On 4/14/26 22:33, Petr Pavlu wrote:
->>>>> On 4/13/26 10:07 AM, chensong_2000@189.cn wrote:
->>>>>> diff --git a/include/linux/module.h b/include/linux/module.h
->>>>>> index 14f391b186c6..0bdd56f9defd 100644
->>>>>> --- a/include/linux/module.h
->>>>>> +++ b/include/linux/module.h
->>>>>> @@ -308,6 +308,14 @@ enum module_state {
->>>>>>        MODULE_STATE_COMING,    /* Full formed, running module_init. */
->>>>>>        MODULE_STATE_GOING,    /* Going away. */
->>>>>>        MODULE_STATE_UNFORMED,    /* Still setting it up. */
->>>>>> +    MODULE_STATE_FORMED,
->>>>>
->>>>> I don't see a reason to add a new module state. Why is it necessary and
->>>>> how does it fit with the existing states?
->>>>>
->>>> because once notifier fails in state MODULE_STATE_UNFORMED (now only ftrace has someting to do in this state), notifier chain will roll back by calling blocking_notifier_call_chain_robust, i'm afraid MODULE_STATE_GOING is going to jeopardise the notifers which don't handle it appropriately, like:
->>>>
->>>> case MODULE_STATE_COMING:
->>>>       kmalloc();
->>>> case MODULE_STATE_GOING:
->>>>       kfree();
->>>
->>> My understanding is that the current module "state machine" operates as
->>> follows. Transitions marked with an asterisk (*) are announced via the
->>> module notifier.
->>>
->>> ---> UNFORMED --*> COMING --*> LIVE --*> GOING -.
->>>          ^            |                     ^    |
->>>          |            '---------------------*    |
->>>          '---------------------------------------'
->>>
->>> The new code aims to replace the current ftrace_module_init() call in
->>> load_module(). To achieve this, it adds a notification for the UNFORMED
->>> state (only when loading a module) and introduces a new FORMED state for
->>> rollback. FORMED is purely a fake state because it never appears in
->>> module::state. The new structure is as follows:
->>>
->>>          ,--*> (FORMED)
->>>          |
->>> --*> UNFORMED --*> COMING --*> LIVE --*> GOING -.
->>>          ^            |                     ^    |
->>>          |            '---------------------*    |
->>>          '---------------------------------------'
->>>
->>> I'm afraid this is quite complex and inconsistent. Unless it can be kept
->>> simple, we would be just replacing one special handling with a different
->>> complexity, which is not worth it.
->>
->>>>>
->>>>>> +    if (err)
->>>>>> +        goto ddebug_cleanup;
->>>>>>          /* Finally it's fully formed, ready to start executing. */
->>>>>>        err = complete_formation(mod, info);
->>>>>> -    if (err)
->>>>>> +    if (err) {
->>>>>> +        blocking_notifier_call_chain_reverse(&module_notify_list,
->>>>>> +                MODULE_STATE_FORMED, mod);
->>>>>>            goto ddebug_cleanup;
->>>>>> +    }
->>>>>>    -    err = prepare_coming_module(mod);
->>>>>> +    err = prepare_module_state_transaction(mod,
->>>>>> +                MODULE_STATE_COMING, MODULE_STATE_GOING);
->>>>>>        if (err)
->>>>>>            goto bug_cleanup;
->>>>>>    @@ -3522,7 +3519,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
->>>>>>        destroy_params(mod->kp, mod->num_kp);
->>>>>>        blocking_notifier_call_chain(&module_notify_list,
->>>>>>                         MODULE_STATE_GOING, mod);
->>>>>
->>>>> My understanding is that all notifier chains for MODULE_STATE_GOING
->>>>> should be reversed.
->>>> yes, all, from lowest priority notifier to highest.
->>>> I will resend patch 1 which was failed due to my proxy setting.
->>>
->>> What I meant here is that the call:
->>>
->>> blocking_notifier_call_chain(&module_notify_list, MODULE_STATE_GOING, mod);
->>>
->>> should be replaced with:
->>>
->>> blocking_notifier_call_chain_reverse(&module_notify_list, MODULE_STATE_GOING, mod);
->>>
->>>>
->>>>>
->>>>>> -    klp_module_going(mod);
->>>>>>     bug_cleanup:
->>>>>>        mod->state = MODULE_STATE_GOING;
->>>>>>        /* module_bug_cleanup needs module_mutex protection */
->>>>>
->>>>> The patch removes the klp_module_going() cleanup call in load_module().
->>>>> Similarly, the ftrace_release_mod() call under the ddebug_cleanup label
->>>>> should be removed and appropriately replaced with a cleanup via
->>>>> a notifier.
->>>>>
->>>>      err = prepare_module_state_transaction(mod,
->>>>                  MODULE_STATE_UNFORMED, MODULE_STATE_FORMED);
->>>>      if (err)
->>>>          goto ddebug_cleanup;
->>>>
->>>> ftrace will be cleanup in blocking_notifier_call_chain_robust rolling back.
->>>>
->>>>      err = prepare_module_state_transaction(mod,
->>>>                  MODULE_STATE_COMING, MODULE_STATE_GOING);
->>>>
->>>> each notifier including ftrace and klp will be cleanup in blocking_notifier_call_chain_robust rolling back.
->>>>
->>>> if all notifiers are successful in MODULE_STATE_COMING, they all will be clean up in
->>>>   coming_cleanup:
->>>>      mod->state = MODULE_STATE_GOING;
->>>>      destroy_params(mod->kp, mod->num_kp);
->>>>      blocking_notifier_call_chain(&module_notify_list,
->>>>                       MODULE_STATE_GOING, mod);
->>>>
->>>> if  something wrong underneath.
->>>
->>> My point is that the patch leaves a call to ftrace_release_mod() in
->>> load_module(), which I expected to be handled via a notifier.
->>
->> I think that I have got it. The ftrace code needs two notifiers when
->> the module is being loaded and two when it is going.
->>
->> This is why Sond added the new state. But I think that we would
->> need two new states to call:
->>
->>      + ftrace_module_init() in MODULE_STATE_UNFORMED
->>      + ftrace_module_enable() in MODULE_STATE_FORMED
->>
->> and
->>
->>      + ftrace_free_mem() in MODULE_STATE_PRE_GOING
->>      + ftrace_free_mem() in MODULE_STATE_GOING
->>
->>
->> By using the ascii art:
->>
->>   -*> UNFORMED -*> FORMED -> COMING -*> LIVE -*> PRE_GOING -*> GOING -.
->>                |          |         |                ^           ^    ^
->>                |          |         '----------------'           |    |
->>                |          '--------------------------------------'    |
->>                '------------------------------------------------------'
->>
->>
->> But I think that this is not worth it.
-> 
-> Agree.
-> 
-> If this needs to be ordered so strictly, why we will use a "single"
-> module notifier chain for this complex situation?
-> 
-> I think the notifier call chain is just for notice a single signal,
-> instead of sending several different signals, especially if there is
-> any dependency among the callbacks.
-> 
-> If notification callbacks need to be ordered, they are currently
-> sorted by representing priority numerically, but this is quite
-> fragile for updating. It has to look up other registered priorities
-> and adjust the order among dependencies each time. For this reason,
-> this mechanism is not suitable for global ordering. (It's like line
-> numbers in BASIC.)
-> It is probably only useful for representing dependencies between
-> two components maintained by the same maintainer.
-> 
-> I'm against a general-purpose system that makes everything modular.
-> It unnecessarily complicates things. If there are processes that
-> require strict ordering, especially processes that must be performed
-> before each stage as part of the framework, they should be called
-> directly from the framework, not via notification callbacks.
-> 
-> This makes it simpler and more robust to maintain.
-> 
-> Only the framework's end users should utilize notification callbacks.
-> 
-> Thank you,
-> 
-> 
+Here are some treewide stats:
+- 110 registration functions across all bus types
+- 20 of them set mod_name
+- Remaining 90 do not set mod_name:
+    1. 36 functions under pattern 1:
+        They have a __register function + register macro. KBUILD_MODNAME needs to
+        be passed and the function needs to take mod_name as input.
+    2. 42 functions under pattern 2:
+        These have no macro wrapper. They need a double-underscore rename + macro
+        wrapper to make them similar to pattern 1.
+    3. Remaining 12 do not have such a clean registration interface. More analysis
+       is required.
 
-my motivation is to decouple ftrace and klp from module loader and make 
-blocking_notifier_chain more generic, but it doesn't become generic 
-completely. I understand your and Petr's comments and agree.
+We plan to start with pattern 1, since it's the easiest category of changes.
+Within that, for now we're only sending the platform patch. If we get the go-ahead
+on that, we'll send the remaining ones.
 
-Thanks
+Patch 3 depends on patches 1 and 2.
 
-Best regards
+Co-developed-by: Rahul Bukte <rahul.bukte@sony.com>
+Signed-off-by: Rahul Bukte <rahul.bukte@sony.com>
+Signed-off-by: Shashank Balaji <shashank.mahadasyam@sony.com>
+---
+Changes in v4:
+- Initialize module_kset in do_basic_setup() before do_initcalls() (Gary)
+- Add commit body to the documentation patch (Greg)
+- Link to v3: https://patch.msgid.link/20260422-acpi_mod_name-v3-0-a184eff9ff6f@sony.com
 
-Song
+Changes in v3:
+- Initialize module_kset on-demand (Greg)
+- Make coresight driver registration happen through a macro (Greg)
+- Split up the patch adding mod_name to platform driver registrations (Greg)
+- Link to v2: https://patch.msgid.link/20260421-acpi_mod_name-v2-0-e73f9310dad3@sony.com
 
->>
->> Best Regards,
->> Petr
->>
-> 
-> 
+Changes in v2:
+- Drop acpi patch, send platform instead (Rafael)
+- Link to v1: https://patch.msgid.link/20260416-acpi_mod_name-v1-0-1a4d96fd86c9@sony.com
+
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+To: Mike Leach <mike.leach@linaro.org>
+To: James Clark <james.clark@linaro.org>
+To: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Danilo Krummrich <dakr@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+To: Gary Guo <gary@garyguo.net>
+To: Björn Roy Baron <bjorn3_gh@protonmail.com>
+To: Benno Lossin <lossin@kernel.org>
+To: Andreas Hindborg <a.hindborg@kernel.org>
+To: Alice Ryhl <aliceryhl@google.com>
+To: Trevor Gross <tmgross@umich.edu>
+To: Richard Cochran <richardcochran@gmail.com>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+To: Daniel Gomez <da.gomez@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+To: Aaron Tomlin <atomlin@atomlin.com>
+To: Mike Leach <mike.leach@arm.com>
+To: Leo Yan <leo.yan@arm.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: coresight@lists.linaro.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: driver-core@lists.linux.dev
+Cc: rust-for-linux@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: Shashank Balaji <shashank.mahadasyam@sony.com>
+Cc: Rahul Bukte <rahul.bukte@sony.com>
+Cc: Daniel Palmer <daniel.palmer@sony.com>
+Cc: Tim Bird <tim.bird@sony.com>
+Cc: linux-modules@vger.kernel.org
+
+---
+Shashank Balaji (4):
+      kernel: param: initialize module_kset before do_initcalls()
+      coresight: pass THIS_MODULE implicitly through a macro
+      driver core: platform: set mod_name in driver registration
+      docs: driver-api: add mod_name argument to __platform_register_drivers()
+
+ Documentation/driver-api/driver-model/platform.rst |  3 ++-
+ drivers/base/platform.c                            | 21 ++++++++++++++-------
+ drivers/hwtracing/coresight/coresight-catu.c       |  2 +-
+ drivers/hwtracing/coresight/coresight-core.c       |  9 +++++----
+ drivers/hwtracing/coresight/coresight-cpu-debug.c  |  3 +--
+ drivers/hwtracing/coresight/coresight-funnel.c     |  3 +--
+ drivers/hwtracing/coresight/coresight-replicator.c |  3 +--
+ drivers/hwtracing/coresight/coresight-stm.c        |  2 +-
+ drivers/hwtracing/coresight/coresight-tmc-core.c   |  2 +-
+ drivers/hwtracing/coresight/coresight-tnoc.c       |  2 +-
+ drivers/hwtracing/coresight/coresight-tpdm.c       |  3 +--
+ drivers/hwtracing/coresight/coresight-tpiu.c       |  2 +-
+ include/linux/coresight.h                          |  7 +++++--
+ include/linux/module.h                             |  4 ++++
+ include/linux/platform_device.h                    | 17 +++++++++--------
+ init/main.c                                        |  1 +
+ kernel/params.c                                    | 21 +++++++++------------
+ rust/kernel/platform.rs                            |  4 +++-
+ 18 files changed, 61 insertions(+), 48 deletions(-)
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260416-acpi_mod_name-f645a76e337b
+
+Best regards,
+--  
+Shashank Balaji <shashank.mahadasyam@sony.com>
 
