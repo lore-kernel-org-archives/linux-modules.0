@@ -1,67 +1,67 @@
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A6932861E
-	for <linux-modules@vger.kernel.org>; Mon,  4 May 2026 20:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18263264C5
+	for <linux-modules@vger.kernel.org>; Mon,  4 May 2026 20:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777927542; cv=none; b=GGb1aqNNrZLU3Pcl8PSMak65iTfbQxywM4E+VSKUsritt0PI9unqVQ7Bg+VEkoR8SDOYQf6nqL4BCfr1c0CKAeLA6TGQTFhT6ysSGF/iemhleQJ/o/46cSB4Dmh9yOhp7/I4eiXIpP0LREt03yhHyI9O9MmP+hrKELb85Pn2jZ8=
+	t=1777927545; cv=none; b=iCSx4IAyHAJp7h33Rr437O/B3YyBaN3ctcp/CZY54fjYjBthk1JGJECHnbC2PwuQFhoRg9pKHHD39DBwwAlTW7NAwXRqJPdRxe5HHmyEsdbTAGcDLNSUfDqCAZ2YMUagRvEqBhtrqscyCJLn86Q1qDuyZShbW4zUg8HuewJfCYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777927542; c=relaxed/simple;
-	bh=dtqu57tTiTg+/ZbSLGxcKg17Z/e0rhUuOqHamIrCW50=;
+	s=arc-20240116; t=1777927545; c=relaxed/simple;
+	bh=HUQ0mLcNudkicbeewp+OjYx5/v+lNJVyI+yllTTxfMo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FyeKIXPufgUXPQ+/a6kDZ4SZb/Wf+Eja1PCkY7wduT0nlQik7oEbkqdJ8MS+8l63eGJR5/ifNP1vYuekoeK9BYWoWqyg/NX3NHFeNukBxYwAsQBDQRoaMVfPDKLyv3rPv/HJJVbAFYMVWYseZI27yCEAX52cFN3M7BoERf4+iew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eCEZJrRR; arc=none smtp.client-ip=209.85.210.41
+	 In-Reply-To:To:Cc; b=bdJ5RP3au+wAEyiDJJGXJWu/9dA106enPDG7xoCCcpxmVwLmGklkrn0NfFXnrmMFxVbERqs3X2DIRALs2z/QVxAoTuzczLlym3b59KFxtz5Baz+4kSWUjri4utBBPKt/p+qmSBBmykk1qE4Q44Sm39jsv44GHZypszW/NpxG46E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LFSHElxA; arc=none smtp.client-ip=209.85.210.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eCEZJrRR"
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7dbe437b072so2888672a34.2
-        for <linux-modules@vger.kernel.org>; Mon, 04 May 2026 13:45:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFSHElxA"
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7dbd23bc684so2839673a34.2
+        for <linux-modules@vger.kernel.org>; Mon, 04 May 2026 13:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777927535; x=1778532335; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777927537; x=1778532337; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CoAUjtO0rUn4rdhSkIXC4btc4762MSmMYn3G6l7f49E=;
-        b=eCEZJrRRoejAU2lauM/h75yIhjE8Tb0jt7JnQvcknVRrBXCucwn2+GxYVrLNFu5dc2
-         gcFUemVAaSjOw5g/n8wx7Xyo+4yMC/HaePyMEImVlkug7A6ntNRWPBtmi40s3JEgwEG+
-         htkpKaTFvzZHfL5uSO32esWPtYLe4tna4xCFFU3xESIv5RFiYYYQ6MYgI3PQwUQnyZEM
-         I/CGm0E1x7Unmg4HqqEwj2fWi5rN/oqLhwqo/G0nKmM6yyXGnVLg8FfkDNFMA9Z8yjeI
-         TQ/906LSbzrSKzAPiAUw4hTUHz6p/TaR5mgXuRN7gep5Ag8qsfdeZ1Zv1/GJkJr1ZHq5
-         3xeA==
+        bh=Y3NXRpnDY3pcVCodoGkidsnjPerNv+a1qOYpGvIl9oE=;
+        b=LFSHElxAu+3e67X70PFteYg/tFKvcfnE2SvqqJWYhBl7lCegOlWk6nzMJwjUlRHSCF
+         cljf0mSYCUrybCVNLGtkm5WzeXqv+j7VG5gBf3HJJfN4VZpieFtf0+YwKinf5VAycILG
+         E8OgT8rHzGJp9kA3FU9Vo/1NLKERxJZoaMNxvTMaikSKvbfo57gdM25emhW8qccU/gal
+         ffzJto4TiMeTVpg9iegjveRrhHPSUAQPE1CF0MPMFNGKqlqN1FwYRf7PDQCfRDIuFuyy
+         xnTyHJbfFEAyrNospGlq8Yhr7E+jo+7thTcpBbhmsxJstHuUwFbN4U0Mu+eakYLF1DLd
+         dHcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777927535; x=1778532335;
+        d=1e100.net; s=20251104; t=1777927537; x=1778532337;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=CoAUjtO0rUn4rdhSkIXC4btc4762MSmMYn3G6l7f49E=;
-        b=DuvCgcxSatx/WJ4uUvuM/V1pU0wPdCEzlHH0mp24Khh8QtBpHCkk/Wf6/vo83XZ3HE
-         XfQgYX7ot9FcNBJ2biGKQgby6hsVHmxgeqFb3WSlFauwOR2a/39crWNfdpva+cOp8Zck
-         H7gaDQuBBkbmfxz4Nzmvr6GnVMKQ02+R55JpZ4hCM1On8n0lLeNqqI6JAEDT7AN0oX59
-         HdaR+kaqSKir0l/76GpYA0w80QEz4huzdjjgHP945blLi4tlQoTFao07NFKRylwETmJc
-         QV315OdiOQr2hWJguSFBpahBY7FB4JkMVRSoezFCmvj8bcx/RMuLE2NEcyY9ZfhLDiS+
-         IunA==
-X-Forwarded-Encrypted: i=1; AFNElJ93SxEMhdw8kVOvplIdvPTCyQT6HU+VDjHaQQPVg/emIpPoGN/hjitQ2uwe5BRL2y2XQQ93jY3/3nesijhf@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvSc3XZXvbpE+UBmKYmiNdiDcmLjoDaylT8D/Sk3VAKv41MnHW
-	GjiOKpColm2TiNEizqlcnDvcpmIjBEN65B3pBn3kxZ/Z/N917XHxbUPu
-X-Gm-Gg: AeBDieuaYc3Ga5L3yDb+KPPoFNkjNI2cwF2D9c0F37H2Wu8cu0/b64N2BUdc7nz5NiY
-	CQ+sX3lUXpM3xZ46lfkag4w2gWtbQRuY8bZpiz2Yn/pIqLVsK7IvW40n2ZCkONAe/VwyT5X+bi+
-	ppOmPPOR7DabnPak45pWFFd5c8aHfPXNHaZkuBKuGyeyN2ZphYl4Ai2kDGqO1mTkjN+Z2U3WEKZ
-	MVtK4E03c3m8cCoFYUlvsQMwP6LJomvexih0Jj6Jeem7xpjsjPm3QbU5KXYlZFpg+zzdTMrw0tX
-	hcCOT7Ymu6d57l7njVsTphAkLQcG/9lrioEyN538xHxbuxKv2kvIyA2WxsKPF5/3vfgUASNmdNA
-	vYzkXnIJZlYXDZKmsuTWKh0rg4AxRMqcTDAgsku83F2WHAZf7HUaunVxIUfugypIf/6qVHLLU6R
-	mXHcUVWoKxAE69iJTgduFh27c2FjhT/DZrhNHEFzZlFIzKaqWQ8qBzJyhWrjTjugW9yA1HZ2M9
-X-Received: by 2002:a05:6820:1987:b0:694:8683:3860 with SMTP id 006d021491bc7-6998d252929mr90078eaf.48.1777927535621;
-        Mon, 04 May 2026 13:45:35 -0700 (PDT)
+        bh=Y3NXRpnDY3pcVCodoGkidsnjPerNv+a1qOYpGvIl9oE=;
+        b=Bloz/8m2Y/qXCR7NPZGHf9QUoaplKK8pgHhrVqO6DDE5wZlwm2h5MEx/iierlg5+DR
+         XLmWYbnllMuqjYpDmOFM6i9Ulbovc4CLZdySqlm+bO0TeqNX3TufRxmxbcy/6DEw7Bd2
+         6V5vkynCIwf+/oBGN3RGr6FGfFjXfd52qiILNNIVE2VIPbiKHreQCAFra4za6MW8IgRr
+         JHr8rOzTau2doO19uSYDJ9TedlYMtcDMdDzijGwvrR6B2n2XYysu8Hf+4xPUuXVHOWQE
+         Kho/Epiv1OxK9KSjYXnT6QeYRHV0O72wMUZHLy/j58PH+WbpE4habte7f2WLBLy7vK7B
+         LZ4Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/829X6L+OYp0XiR+HSCoHbd3+3jsXRYZ1LzRZUDJvbY+xz06zvzbTYq2PWohmFCpPPlZzaqwUPgo7sLdp2@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN4wL8KkONGDcpt+qQsqNhbQ0XO4EF7NUFMlPyThjTD/5f89+x
+	fu57LUQ0gwDNk797wWgW+f2sLuWbXvMwnMNTdlKOHHWlqq1+uDRmlmCC
+X-Gm-Gg: AeBDievgtpVbnSG+28k8Ie+0RwgdfbkiO0h+/NU6NhhS0MBKE0WV6aXQwWP6oMhMRU8
+	rmldVFduzoEeFN8ESn64TVexJ9VVb1wa6UJn/hrCyPGoqnrUAY9KqgWb2YFDoGTyxMXpyNlT2DJ
+	pWt5MfNOVPFudHcq18WF4bbyPUps0ZdT6vdiJHdihsmQBfv+SpZhWhMwvuHYmTXayeSe9wxb4S5
+	tT44+58Y1ya6pOMrHikDStagkuUNupgAsXmlcnZPufJZuNW8i/lnxgyly8PEu5vrlqCKLq8odPe
+	SUrk2t0FMpcitg2xze6Ih2BHxz0spyCAGhXz81GpfuGhHWEcdmcDk5S66GArb90HXiOdTP9FxBg
+	fXhvHBxs2cmMfZPjb4eVfTOpzY7PG/cWHC1dmMwWa0hhqefJxplDEIITfV3llr4h8KHjA+Djrh0
+	EYvp802X/R0CqVHAyCxZJyg8/BtJXJV73R5CHxqwdujGpFG9APYWuB+SWBW6nboAjzbpl2C6jt
+X-Received: by 2002:a05:6820:2109:b0:694:9910:f77e with SMTP id 006d021491bc7-696979c9bbemr5253173eaf.4.1777927536906;
+        Mon, 04 May 2026 13:45:36 -0700 (PDT)
 Received: from [100.82.231.29] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 006d021491bc7-69689266bacsm7144713eaf.0.2026.05.04.13.45.34
+        by smtp.googlemail.com with ESMTPSA id 006d021491bc7-69689266bacsm7144713eaf.0.2026.05.04.13.45.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 13:45:35 -0700 (PDT)
+        Mon, 04 May 2026 13:45:36 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Mon, 04 May 2026 14:45:21 -0600
-Subject: [PATCH 15/17] dyndbg-API: remove
- DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
+Date: Mon, 04 May 2026 14:45:22 -0600
+Subject: [PATCH 16/17] selftests-dyndbg: add a dynamic_debug run_tests
+ target
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,8 +69,8 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260504-dd-cleanups-2-v1-15-6fdd24040642@gmail.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260504-dd-cleanups-2-v1-16-6fdd24040642@gmail.com>
 References: <20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com>
 In-Reply-To: <20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -79,272 +79,409 @@ To: Andrew Morton <akpm@linux-foundation.org>,
  Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
  Shuah Khan <shuah@kernel.org>, Louis Chauvet <louis.chauvet@bootlin.com>
 Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
+ linux-kselftest@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>, 
+ =?utf-8?q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777927513; l=8443;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777927513; l=12833;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=dtqu57tTiTg+/ZbSLGxcKg17Z/e0rhUuOqHamIrCW50=;
- b=c/Sl7rMZ7diJO/iWFgCrMmdMX6ZJo9LCBiUPWHNhjxWT3ygpYEoFxxwgyaKC89wToaHEPtbcB
- VtsEFx+NUpuByf4xr4J/PvObxIhBfFchZHlH4vew9w7dhEv53c8y54r
+ bh=HUQ0mLcNudkicbeewp+OjYx5/v+lNJVyI+yllTTxfMo=;
+ b=StwIGSARi//V1ITdjlTwE2M9mYDCI3v/4vbEul3cckSxSs+CN/KI4rfHBxCd8WFz48O0piy+O
+ 5xueqHtJ/hNC7HHFaxLlF2LeIwXyHU4no60DxQDT4UeSUKidf+VntlL
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Remove the DD_CLASS_TYPE_*_NAMES classmap types and code.
+Add a selftest script for dynamic-debug.  The config requires
+CONFIG_TEST_DYNAMIC_DEBUG=m and CONFIG_TEST_DYNAMIC_DEBUG_SUBMOD=m,
+which tacitly requires either CONFIG_DYNAMIC_DEBUG=y or
+CONFIG_DYNAMIC_DEBUG_CORE=y
 
-These 2 classmap types accept class names at the PARAM interface, for
-example:
+ATM this has just basic_tests(), which modify pr_debug() flags in the
+builtin params module.  This means they're available to manipulate and
+observe the effects in "cat control".
 
-  echo +DRM_UT_CORE,-DRM_UT_KMS > /sys/module/drm/parameters/debug_names
+This is backported from another feature branch; the support-fns (thx
+Lukas) have unused features at the moment, they'll get used shortly.
 
-The code works, but its only used by test-dynamic-debug, and wasn't
-asked for by anyone else, so reduce LOC & test-surface; simplify things.
+The script enables simple virtme-ng testing:
 
-Also rename enum class_map_type to enum ddebug_class_map_type.
+   [jimc@gandalf b0-ftrace]$ vrun_t
+   virtme-ng 1.32+115.g07b109d
+   doing: vng --name v6.14-rc4-60-gd5f48427de0c \
+	  --user root -v -p 4 -a dynamic_debug.verbose=3 V=1 \
+	  -- ../tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+   virtme: waiting for virtiofsd to start
+   ..
+
+And add dynamic_debug to TARGETS, so `make run_tests` sees it properly
+For the impatient, set TARGETS explicitly:
+
+  [root@v6 selftests]# make TARGETS=dynamic_debug run_tests
+  make[1]: Nothing to be done for 'all'.
+  TAP version 13
+  1..1
+  # timeout set to 45
+  # selftests: dynamic_debug: dyndbg_selftest.sh
+  # # BASIC_TESTS    95.422122] dyndbg: query 0: 0"=_" mod:*
+  ...
+
+NOTES
+
+check KCONFIG_CONFIG to avoid silly fails
+
+Several tests are dependent upon config choices. Lets avoid failing
+where that is noise.
+
+The KCONFIG_CONFIG var exists to convey the config-file around.  If
+the var names a file, read it and extract the relevant CONFIG items,
+and use them to skip the dependent tests, thus avoiding the fails that
+would follow, and the disruption to whatever CI is running these
+selftests.
+
+If the envar doesn't name a config-file, ".config" is assumed.
+
+CONFIG_DYNAMIC_DEBUG=y:
+
+basic-tests() and comma-terminator-tests() test for the presence of
+the builtin pr_debugs in module/main.c, which I deemed stable and
+therefore safe to count.  That said, the test fails if only
+CONFIG_DYNAMIC_DEBUG_CORE=y is set.  It could be rewritten to test
+against test-dynamic-debug.ko, but that just trades one config
+dependence for another.
+
+CONFIG_TEST_DYNAMIC_DEBUG=m
+
+As written, test_percent_splitting() modprobes test_dynamic_debug,
+enables several classes, and counts them.  It could be re-written to
+work for the builtin module also, but builtin test modules are not a
+common or desirable build/config.
 
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
+Co-developed-by: Łukasz Bartosik <ukaszb@chromium.org>
+Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/linux/dynamic_debug.h |  23 +++-------
- lib/dynamic_debug.c           | 102 ++++--------------------------------------
- lib/test_dynamic_debug.c      |  26 -----------
- 3 files changed, 14 insertions(+), 137 deletions(-)
+ MAINTAINERS                                        |   1 +
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/dynamic_debug/Makefile     |   9 +
+ tools/testing/selftests/dynamic_debug/config       |   7 +
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 257 +++++++++++++++++++++
+ 5 files changed, 275 insertions(+)
 
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 7d60da0b9506..027e96e0889b 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -59,27 +59,16 @@ struct _ddebug {
- #endif
- } __attribute__((aligned(8)));
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 882214b0e7db..bbd750ce24d3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9073,6 +9073,7 @@ S:	Maintained
+ F:	include/linux/dynamic_debug.h
+ F:	lib/dynamic_debug.c
+ F:	lib/test_dynamic_debug.c
++F:	tools/testing/selftests/dynamic_debug/*
  
--enum class_map_type {
-+enum ddebug_class_map_type {
- 	DD_CLASS_TYPE_DISJOINT_BITS,
- 	/**
--	 * DD_CLASS_TYPE_DISJOINT_BITS: classes are independent, one per bit.
--	 * expecting hex input. Built for drm.debug, basis for other types.
-+	 * DD_CLASS_TYPE_DISJOINT_BITS: classes are independent, mapped to bits[0..N].
-+	 * Expects hex input. Built for drm.debug, basis for other types.
- 	 */
- 	DD_CLASS_TYPE_LEVEL_NUM,
- 	/**
--	 * DD_CLASS_TYPE_LEVEL_NUM: input is numeric level, 0-N.
--	 * N turns on just bits N-1 .. 0, so N=0 turns all bits off.
--	 */
--	DD_CLASS_TYPE_DISJOINT_NAMES,
--	/**
--	 * DD_CLASS_TYPE_DISJOINT_NAMES: input is a CSV of [+-]CLASS_NAMES,
--	 * classes are independent, like _DISJOINT_BITS.
--	 */
--	DD_CLASS_TYPE_LEVEL_NAMES,
--	/**
--	 * DD_CLASS_TYPE_LEVEL_NAMES: input is a CSV of [+-]CLASS_NAMES,
--	 * intended for names like: INFO,DEBUG,TRACE, with a module prefix
--	 * avoid EMERG,ALERT,CRIT,ERR,WARNING: they're not debug
-+	 * DD_CLASS_TYPE_LEVEL_NUM: input is numeric level, 0..N.
-+	 * Input N turns on bits 0..N-1
- 	 */
- };
- 
-@@ -89,7 +78,7 @@ struct _ddebug_class_map {
- 	const char **class_names;
- 	const int length;
- 	const int base;		/* index of 1st .class_id, allows split/shared space */
--	enum class_map_type map_type;
-+	enum ddebug_class_map_type map_type;
- };
- 
- /*
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 546b3e9ec25c..21e70a0919c8 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -667,76 +667,6 @@ static int ddebug_apply_class_bitmap(const struct _ddebug_class_param *dcp,
- 
- #define CLASSMAP_BITMASK(width) ((1UL << (width)) - 1)
- 
--/* accept comma-separated-list of [+-] classnames */
--static int param_set_dyndbg_classnames(const char *instr, const struct kernel_param *kp)
--{
--	const struct _ddebug_class_param *dcp = kp->arg;
--	const struct _ddebug_class_map *map = dcp->map;
--	unsigned long curr_bits, old_bits;
--	char *cl_str, *p, *tmp;
--	int cls_id, totct = 0;
--	bool wanted;
--
--	cl_str = tmp = kstrdup_and_replace(instr, '\n', '\0', GFP_KERNEL);
--	if (!tmp)
--		return -ENOMEM;
--
--	/* start with previously set state-bits, then modify */
--	curr_bits = old_bits = *dcp->bits;
--	vpr_info("\"%s\" > %s:0x%lx\n", cl_str, KP_NAME(kp), curr_bits);
--
--	for (; cl_str; cl_str = p) {
--		p = strchr(cl_str, ',');
--		if (p)
--			*p++ = '\0';
--
--		if (*cl_str == '-') {
--			wanted = false;
--			cl_str++;
--		} else {
--			wanted = true;
--			if (*cl_str == '+')
--				cl_str++;
--		}
--		cls_id = match_string(map->class_names, map->length, cl_str);
--		if (cls_id < 0) {
--			pr_err("%s unknown to %s\n", cl_str, KP_NAME(kp));
--			continue;
--		}
--
--		/* have one or more valid class_ids of one *_NAMES type */
--		switch (map->map_type) {
--		case DD_CLASS_TYPE_DISJOINT_NAMES:
--			/* the +/- pertains to a single bit */
--			if (test_bit(cls_id, &curr_bits) == wanted) {
--				v3pr_info("no change on %s\n", cl_str);
--				continue;
--			}
--			curr_bits ^= BIT(cls_id);
--			totct += ddebug_apply_class_bitmap(dcp, &curr_bits, *dcp->bits, NULL);
--			*dcp->bits = curr_bits;
--			v2pr_info("%s: changed bit %d:%s\n", KP_NAME(kp), cls_id,
--				  map->class_names[cls_id]);
--			break;
--		case DD_CLASS_TYPE_LEVEL_NAMES:
--			/* cls_id = N in 0..max. wanted +/- determines N or N-1 */
--			old_bits = CLASSMAP_BITMASK(*dcp->lvl);
--			curr_bits = CLASSMAP_BITMASK(cls_id + (wanted ? 1 : 0 ));
--
--			totct += ddebug_apply_class_bitmap(dcp, &curr_bits, old_bits, NULL);
--			*dcp->lvl = (cls_id + (wanted ? 1 : 0));
--			v2pr_info("%s: changed bit-%d: \"%s\" %lx->%lx\n", KP_NAME(kp), cls_id,
--				  map->class_names[cls_id], old_bits, curr_bits);
--			break;
--		default:
--			pr_err("illegal map-type value %d\n", map->map_type);
--		}
--	}
--	kfree(tmp);
--	vpr_info("total matches: %d\n", totct);
--	return 0;
--}
--
- static int param_set_dyndbg_module_classes(const char *instr,
- 					   const struct kernel_param *kp,
- 					   const char *mod_name)
-@@ -745,29 +675,17 @@ static int param_set_dyndbg_module_classes(const char *instr,
- 	const struct _ddebug_class_map *map = dcp->map;
- 	unsigned long inrep, new_bits, old_bits;
- 	int rc, totct = 0;
--
--	switch (map->map_type) {
--
--	case DD_CLASS_TYPE_DISJOINT_NAMES:
--	case DD_CLASS_TYPE_LEVEL_NAMES:
--		/* handle [+-]classnames list separately, we are done here */
--		return param_set_dyndbg_classnames(instr, kp);
--
--	case DD_CLASS_TYPE_DISJOINT_BITS:
--	case DD_CLASS_TYPE_LEVEL_NUM:
--		/* numeric input, accept and fall-thru */
--		rc = kstrtoul(instr, 0, &inrep);
--		if (rc) {
--			pr_err("expecting numeric input: %s > %s\n", instr, KP_NAME(kp));
--			return -EINVAL;
--		}
--		break;
--	default:
--		pr_err("%s: bad map type: %d\n", KP_NAME(kp), map->map_type);
-+	char *nl;
+ DYNAMIC INTERRUPT MODERATION
+ M:	Tal Gilboa <talgi@nvidia.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 6e59b8f63e41..17c4ddbcee89 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -27,6 +27,7 @@ TARGETS += drivers/net/team
+ TARGETS += drivers/net/virtio_net
+ TARGETS += drivers/platform/x86/intel/ifs
+ TARGETS += dt
++TARGETS += dynamic_debug
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += fchmodat2
+diff --git a/tools/testing/selftests/dynamic_debug/Makefile b/tools/testing/selftests/dynamic_debug/Makefile
+new file mode 100644
+index 000000000000..6d06fa7f1040
+--- /dev/null
++++ b/tools/testing/selftests/dynamic_debug/Makefile
+@@ -0,0 +1,9 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# borrowed from Makefile for user memory selftests
 +
-+	rc = kstrtoul(instr, 0, &inrep);
-+	if (rc) {
-+		nl = strchr(instr, '\n');
-+		if (nl)
-+			*nl = '\0';
-+		pr_err("expecting numeric input, not: %s > %s\n", instr, KP_NAME(kp));
- 		return -EINVAL;
- 	}
- 
--	/* only _BITS,_NUM (numeric) map-types get here */
- 	switch (map->map_type) {
- 	case DD_CLASS_TYPE_DISJOINT_BITS:
- 		/* expect bits. mask and warn if too many */
-@@ -833,12 +751,8 @@ int param_get_dyndbg_classes(char *buffer, const struct kernel_param *kp)
- 	const struct _ddebug_class_map *map = dcp->map;
- 
- 	switch (map->map_type) {
--
--	case DD_CLASS_TYPE_DISJOINT_NAMES:
- 	case DD_CLASS_TYPE_DISJOINT_BITS:
- 		return scnprintf(buffer, PAGE_SIZE, "0x%lx\n", *dcp->bits);
--
--	case DD_CLASS_TYPE_LEVEL_NAMES:
- 	case DD_CLASS_TYPE_LEVEL_NUM:
- 		return scnprintf(buffer, PAGE_SIZE, "%ld\n", *dcp->lvl);
- 	default:
-diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
-index 36c9d9acbf6b..9c3e53cd26bd 100644
---- a/lib/test_dynamic_debug.c
-+++ b/lib/test_dynamic_debug.c
-@@ -74,13 +74,6 @@ DECLARE_DYNDBG_CLASSMAP(map_disjoint_bits, DD_CLASS_TYPE_DISJOINT_BITS, 0,
- DD_SYS_WRAP(disjoint_bits, p);
- DD_SYS_WRAP(disjoint_bits, T);
- 
--/* symbolic input, independent bits */
--enum cat_disjoint_names { LOW = 11, MID, HI };
--DECLARE_DYNDBG_CLASSMAP(map_disjoint_names, DD_CLASS_TYPE_DISJOINT_NAMES, 10,
--			"LOW", "MID", "HI");
--DD_SYS_WRAP(disjoint_names, p);
--DD_SYS_WRAP(disjoint_names, T);
--
- /* numeric verbosity, V2 > V1 related */
- enum cat_level_num { V0 = 14, V1, V2, V3, V4, V5, V6, V7 };
- DECLARE_DYNDBG_CLASSMAP(map_level_num, DD_CLASS_TYPE_LEVEL_NUM, 14,
-@@ -88,13 +81,6 @@ DECLARE_DYNDBG_CLASSMAP(map_level_num, DD_CLASS_TYPE_LEVEL_NUM, 14,
- DD_SYS_WRAP(level_num, p);
- DD_SYS_WRAP(level_num, T);
- 
--/* symbolic verbosity */
--enum cat_level_names { L0 = 22, L1, L2, L3, L4, L5, L6, L7 };
--DECLARE_DYNDBG_CLASSMAP(map_level_names, DD_CLASS_TYPE_LEVEL_NAMES, 22,
--			"L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7");
--DD_SYS_WRAP(level_names, p);
--DD_SYS_WRAP(level_names, T);
--
- /* stand-in for all pr_debug etc */
- #define prdbg(SYM) __pr_debug_cls(SYM, #SYM " msg\n")
- 
-@@ -102,10 +88,6 @@ static void do_cats(void)
- {
- 	pr_debug("doing categories\n");
- 
--	prdbg(LOW);
--	prdbg(MID);
--	prdbg(HI);
--
- 	prdbg(D2_CORE);
- 	prdbg(D2_DRIVER);
- 	prdbg(D2_KMS);
-@@ -129,14 +111,6 @@ static void do_levels(void)
- 	prdbg(V5);
- 	prdbg(V6);
- 	prdbg(V7);
--
--	prdbg(L1);
--	prdbg(L2);
--	prdbg(L3);
--	prdbg(L4);
--	prdbg(L5);
--	prdbg(L6);
--	prdbg(L7);
- }
- 
- static void do_prints(void)
++# No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
++all:
++
++TEST_PROGS := dyndbg_selftest.sh
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/dynamic_debug/config b/tools/testing/selftests/dynamic_debug/config
+new file mode 100644
+index 000000000000..0f906ff53908
+--- /dev/null
++++ b/tools/testing/selftests/dynamic_debug/config
+@@ -0,0 +1,7 @@
++
++# basic tests ref the builtin params module
++CONFIG_DYNAMIC_DEBUG=m
++
++# more testing is possible with these
++# CONFIG_TEST_DYNAMIC_DEBUG=m
++# CONFIG_TEST_DYNAMIC_DEBUG_SUBMOD=m
+diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+new file mode 100755
+index 000000000000..465fad3f392c
+--- /dev/null
++++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+@@ -0,0 +1,257 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++
++V=${V:=0}  # invoke as V=1 $0  for global verbose
++RED="\033[0;31m"
++GREEN="\033[0;32m"
++YELLOW="\033[0;33m"
++BLUE="\033[0;34m"
++MAGENTA="\033[0;35m"
++CYAN="\033[0;36m"
++NC="\033[0;0m"
++error_msg=""
++
++[ -e /proc/dynamic_debug/control ] || {
++    echo -e "${RED}: this test requires CONFIG_DYNAMIC_DEBUG=y ${NC}"
++    exit 0 # nothing to test here, no good reason to fail.
++}
++
++# need info to avoid failures due to untestable configs
++
++[ -f "$KCONFIG_CONFIG" ] || KCONFIG_CONFIG=".config"
++if [ -f "$KCONFIG_CONFIG" ]; then
++    echo "# consulting KCONFIG_CONFIG: $KCONFIG_CONFIG"
++    grep -q "CONFIG_DYNAMIC_DEBUG=y" $KCONFIG_CONFIG ; LACK_DD_BUILTIN=$?
++    grep -q "CONFIG_TEST_DYNAMIC_DEBUG=m" $KCONFIG_CONFIG ; LACK_TMOD=$?
++    grep -q "CONFIG_TEST_DYNAMIC_DEBUG_SUBMOD=m" $KCONFIG_CONFIG ; LACK_TMOD_SUBMOD=$?
++    if [ $V -eq 1 ]; then
++	echo LACK_DD_BUILTIN: $LACK_DD_BUILTIN
++	echo LACK_TMOD: $LACK_TMOD
++	echo LACK_TMOD_SUBMOD: $LACK_TMOD_SUBMOD
++    fi
++else
++    LACK_DD_BUILTIN=0
++    LACK_TMOD=0
++    LACK_TMOD_SUBMOD=0
++fi
++
++function vx () {
++    echo $1 > /sys/module/dynamic_debug/parameters/verbose
++}
++
++function ddgrep () {
++    grep $1 /proc/dynamic_debug/control
++}
++
++function doprints () {
++    cat /sys/module/test_dynamic_debug/parameters/do_prints
++}
++
++function ddcmd () {
++    exp_exit_code=0
++    num_args=$#
++    if [ "${@:$#}" = "pass" ]; then
++	num_args=$#-1
++    elif [ "${@:$#}" = "fail" ]; then
++        num_args=$#-1
++	exp_exit_code=1
++    fi
++    args=${@:1:$num_args}
++    output=$((echo "$args" > /proc/dynamic_debug/control) 2>&1)
++    exit_code=$?
++    error_msg=$(echo $output | cut -d ":" -f 5 | sed -e 's/^[[:space:]]*//')
++    handle_exit_code $BASH_LINENO $FUNCNAME $exit_code $exp_exit_code
++}
++
++function handle_exit_code() {
++    local exp_exit_code=0
++    [ $# == 4 ] && exp_exit_code=$4
++    if [ $3 -ne $exp_exit_code ]; then
++        echo -e "${RED}: $BASH_SOURCE:$1 $2() expected to exit with code $exp_exit_code"
++	[ $3 == 1 ] && echo "Error: '$error_msg'"
++        exit
++    fi
++}
++
++# $1 - pattern to match, pattern in $1 is enclosed by spaces for a match ""\s$1\s"
++# $2 - number of times the pattern passed in $1 is expected to match
++# $3 - optional can be set either to "-r" or "-v"
++#       "-r" means relaxed matching in this case pattern provided in $1 is passed
++#       as is without enclosing it with spaces
++#       "-v" prints matching lines
++# $4 - optional when $3 is set to "-r" then $4 can be used to pass "-v"
++function check_match_ct {
++    pattern="\s$1\s"
++    exp_cnt=0
++
++    [ "$3" == "-r" ] && pattern="$1"
++    let cnt=$(ddgrep "$pattern" | wc -l)
++    if [ $V -eq 1 ] || [ "$3" == "-v" ] || [ "$4" == "-v" ]; then
++        echo -ne "${BLUE}" && ddgrep $pattern && echo -ne "${NC}"
++    fi
++    [ $# -gt 1 ] && exp_cnt=$2
++    if [ $cnt -ne $exp_cnt ]; then
++        echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO check failed expected $exp_cnt on $1, got $cnt"
++        exit
++    else
++        echo ": $cnt matches on $1"
++    fi
++}
++
++# $1 - trace instance name
++# #2 - if > 0 then directory is expected to exist, if <= 0 then otherwise
++# $3 - "-v" for verbose
++function check_trace_instance_dir {
++    if [ -e /sys/kernel/tracing/instances/$1 ]; then
++        if [ "$3" == "-v" ] ; then
++            echo "ls -l /sys/kernel/tracing/instances/$1: "
++            ls -l /sys/kernel/tracing/instances/$1
++        fi
++	if [ $2 -le 0 ]; then
++            echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO error trace instance \
++		    '/sys/kernel/tracing/instances/$1' does exist"
++	    exit
++	fi
++    else
++	if [ $2 -gt 0 ]; then
++            echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO error trace instance \
++		    '/sys/kernel/tracing/instances/$1' does not exist"
++	    exit
++        fi
++    fi
++}
++
++function tmark {
++    echo $* > /sys/kernel/tracing/trace_marker
++}
++
++# $1 - trace instance name
++# $2 - line number
++# $3 - if > 0 then the instance is expected to be opened, otherwise
++# the instance is expected to be closed
++function check_trace_instance {
++    output=$(tail -n9 /proc/dynamic_debug/control | grep ": Opened trace instances" \
++	    | xargs -n1 | grep $1)
++    if [ "$output" != $1 ] && [ $3 -gt 0 ]; then
++        echo -e "${RED}: $BASH_SOURCE:$2 trace instance $1 is not opened"
++        exit
++    fi
++    if [ "$output" == $1 ] && [ $3 -le 0 ]; then
++        echo -e "${RED}: $BASH_SOURCE:$2 trace instance $1 is not closed"
++        exit
++    fi
++}
++
++function is_trace_instance_opened {
++    check_trace_instance $1 $BASH_LINENO 1
++}
++
++function is_trace_instance_closed {
++    check_trace_instance $1 $BASH_LINENO 0
++}
++
++# $1 - trace instance directory to delete
++# $2 - if > 0 then directory is expected to be deleted successfully, if <= 0 then otherwise
++function del_trace_instance_dir() {
++    exp_exit_code=1
++    [ $2 -gt 0 ] && exp_exit_code=0
++    output=$((rmdir /sys/kernel/debug/tracing/instances/$1) 2>&1)
++    exit_code=$?
++    error_msg=$(echo $output | cut -d ":" -f 3 | sed -e 's/^[[:space:]]*//')
++    handle_exit_code $BASH_LINENO $FUNCNAME $exit_code $exp_exit_code
++}
++
++function error_log_ref {
++    # to show what I got
++    : echo "# error-log-ref: $1"
++    : echo cat \$2
++}
++
++function ifrmmod {
++    lsmod | grep $1 2>&1>/dev/null && rmmod $1
++}
++
++# $1 - text to search for
++function search_trace() {
++    search_trace_name 0 1 $1
++}
++
++# $1 - trace instance name, 0 for global event trace
++# $2 - line number counting from the bottom
++# $3 - text to search for
++function search_trace_name() {
++	if [ "$1" = "0" ]; then
++	    buf=$(cat /sys/kernel/debug/tracing/trace)
++	    line=$(tail -$2 /sys/kernel/debug/tracing/trace | head -1 | sed -e 's/^[[:space:]]*//')
++	else
++	    buf=$(cat /sys/kernel/debug/tracing/instances/$1/trace)
++	    line=$(tail -$2 /sys/kernel/debug/tracing/instances/$1/trace | head -1 | \
++		   sed -e 's/^[[:space:]]*//')
++	fi
++	if [ $2 = 0 ]; then
++	    # whole-buf check
++	    output=$(echo $buf | grep "$3")
++	else
++	    output=$(echo $line | grep "$3")
++	fi
++	if [ "$output" = "" ]; then
++            echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO search for '$3' failed \
++		    in line '$line' or '$buf'"
++	    exit
++	fi
++	if [ $V = 1 ]; then
++	    echo -e "${MAGENTA}: search_trace_name in $1 found: \n$output \nin:${BLUE} $buf ${NC}"
++        fi
++}
++
++# $1 - error message to check
++function check_err_msg() {
++    if [ "$error_msg" != "$1" ]; then
++        echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO error message '$error_msg' \
++		does not match with '$1'"
++        exit
++    fi
++}
++
++function basic_tests {
++    echo -e "${GREEN}# BASIC_TESTS ${NC}"
++    if [ $LACK_DD_BUILTIN -eq 1 ]; then
++	echo "SKIP"
++	return
++    fi
++    ddcmd =_ # zero everything
++    check_match_ct =p 0
++
++    # module params are builtin to handle boot args
++    check_match_ct '\[params\]' 4 -r
++    ddcmd module params +mpf
++    check_match_ct =pmf 4
++
++    # multi-cmd input, newline separated, with embedded comments
++    cat <<"EOF" > /proc/dynamic_debug/control
++      module params =_				# clear params
++      module params +mf				# set flags
++      module params func parse_args +sl		# other flags
++EOF
++    check_match_ct =mf 3
++    check_match_ct =mfsl 1
++    ddcmd =_
++}
++
++tests_list=(
++    basic_tests
++)
++
++# Run tests
++
++ifrmmod test_dynamic_debug_submod
++ifrmmod test_dynamic_debug
++
++for test in "${tests_list[@]}"
++do
++    $test
++    echo ""
++done
++echo -en "${GREEN}# Done on: "
++date
++echo -en "${NC}"
 
 -- 
 2.54.0
