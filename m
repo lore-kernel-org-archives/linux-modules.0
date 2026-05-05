@@ -1,190 +1,200 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F6C38F64D
-	for <linux-modules@vger.kernel.org>; Tue,  5 May 2026 12:24:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B2F18DF80
+	for <linux-modules@vger.kernel.org>; Tue,  5 May 2026 14:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777983888; cv=none; b=PbxkdNjvzW6LcYNOIgANi7oEe3XcdDC4vFFYX3hBoUxZIHksP8j/dUlbTv/kwLpZKnNZS3BCWQ9xpRtyZkVXwFCrJvd9EQLnNTHlWKLP621fvfZQoqmtB/jATZE407YTrFo8ORB5WIiZIsxOcNhDutIX84YYljtXjzoyefGBVaY=
+	t=1777991881; cv=none; b=UOQQzmiSXnxvqmO+Aln655L36NA2A31Wl4vI9UiLLjKyYrQy/1PaIh+FPk2rpiv3wQUYNd+YrqD7mYy/LDFsThy76hnKeQAxNKqNq8qNluacMpVOkCyLqi2rcaNQxKh9HhgAxG4izQXDPN/cRghPW+AbHkwOJw2ArZbQdV9ohCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777983888; c=relaxed/simple;
-	bh=T60HQbL8qDyAg5IiNgQTk8uqdsTOZsHn/TzRE3z1AbM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mra/jiP1jvRBWTLxJmjuVMKJuwNvPYEOnzn2aGGhf19vjWkZLMaVTGeBZL7Pm/jgvu/Unp10M79tXguuAQM3qawS5iBkZDgil9BfNn4wUR6ryWErLjzkD6qFUAVT8alM9DROVfx/PBcp7iMUfH/hEMAguDifd4WAuec33FcrpgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cnj/gdL+; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1777991881; c=relaxed/simple;
+	bh=JvUqTfqiAW9yC35/8X+aOZcYzssa6BCdLInlTa1/lkM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oADHQADUv7RL7QVczy0VXTBXbPhHuHR7SKUOVwyS07ecuxHAg3PMj2M4sgQlQ2HuXPCoAJ2xhZepib8NGEUrdt9QMA8lH3ISSRoIM1QOxuTL6WFsyI6IyKrNPZcLp+5Ifpr5zBvJ6PJsc7Rfb8mbhjNk693kmo5XG6P3yLlaU4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bfOCfQwx; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cnj/gdL+"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-44a044cb827so3628648f8f.0
-        for <linux-modules@vger.kernel.org>; Tue, 05 May 2026 05:24:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bfOCfQwx"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48374014a77so63430795e9.3
+        for <linux-modules@vger.kernel.org>; Tue, 05 May 2026 07:38:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777983885; x=1778588685; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7yiH2TZpywbFVEglbVYA5/bUDfLfXjzVUSCKuxkRreU=;
-        b=cnj/gdL+YLBQrX4yDlj3bwHxc/BaimJFIo/LT+2ZeTyz9TR58jX2qTFdWtuSSJAF6M
-         3QO13kQmzU/zQRVbpSQE42Xx+QpQnmFvy0u6v1fsXCOEO22UJTRkms9ohm01t/FaOW3G
-         jaX8kF3sbydz1tge4OXh4RbMtBf/oj9UWUbesg0rYY9M4bcgxpYEqueaLR4YQ/SlVtb2
-         vjOXnAFZg4un5ydx78MWCwcWGiqtc5+sWF0W93aDgh9pb7o+Vicczk7DC7Cz05GkzGIo
-         iociAN9JrOKFcfRrG5owf3NGebyoiYxQK+gB9T4fa4d2j9EpbvmSpMmpl0eG28mDDJer
-         taMg==
+        d=suse.com; s=google; t=1777991879; x=1778596679; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rW/yHyxsN9QI7AveMhZMYM5ISMvZ0yqJBxdD/EhC5LQ=;
+        b=bfOCfQwxrawu82lUm1DRP/xOV/wBNJhWMJG6XVRH3eyQ8GucyHVVfJoXgIrrCTxt4l
+         A4WUC3p14+oyf0DBh8Q2uB8ZuK5O6D74Eg/k+BYtaQkG2f/nyMjmkhtup6UcM6LoPnmd
+         PK7ieHiGSTakBdqqZfr5yFNLdwIXU2oupKKg0y1uVGrSajVabDHBv56QJXPKyMMh6sHh
+         kSKTQSh398izPQkFWhRhHnH6D0aYnO+PSCXZbwEi9AhJs8GJkb/W0SH0RO1h7yLj+Ezw
+         Qe1VTjq1CsABEKRrKDQqU1GUuHYVCBYJr8ZrXRn7tNJITOr5OzFRNBev9pYcxc+W9+q3
+         XL/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777983885; x=1778588685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7yiH2TZpywbFVEglbVYA5/bUDfLfXjzVUSCKuxkRreU=;
-        b=PDiCub8nUK7zgJUQcNhJ53dIbEE1n4vF0B+Y3YPNziqzyKc1BVZlagagMHjZF6HzZ6
-         ugvLgWPCI7dcv4O3hl2/8nNbXKphe+tM2V8A2/R9UP4MXukkWe99CaaccZ2JcC76uFKU
-         29MERRNU0vRk5U9LLbk5euIzQiv61jaaAif1fNiNQqW9a4+qcdELKD7+/Wel2MRHaZp/
-         ID9Uc/uAOgVnI7ye+9yPHpQvWTbJP4QsvpYEVZb+xQ7D9eUBScaEWUsfQp8EEY2yXOBt
-         X+gP6wQnA+URzKiWL1/5N+4pstUMGV4FnidQ7x5+kZd9TD+TTcUeQVqr3QPlUKkeslUn
-         LEUA==
-X-Gm-Message-State: AOJu0Yy7PJG29Dk23iDONpz+SDk/fROmzal+ZXMHVfJr9zpgjLHSOhUr
-	cP+SSy5nWPTI8g17fWBdlpGKvOpeDZIsnf7kogPovGjEURdNkmoSPiF0U2Dxue3hQ3M=
-X-Gm-Gg: AeBDiesbEhb9L5Q0RZsjq6r+MEnBv4dsmYvscDlHHChX694aAjp7hWUJUbcUdkQov1h
-	YNQQ3BNnncbfFdUIuI+LMTZo2rX295/SZI9jLa5iOStJXgojc/N18mgtQu23yLKwoYgZwEzFwtC
-	YH0lbnF1EWh8cZzFark6D/3+qab4nR0qvxmBEk5wHQ5DC7a3c6OUp5UFc+tFZw/itfbNaJAacSv
-	Vk140OYHOzhXRWwngN79fbvHOESJ7fSf1MklarRS6yxgFSQVCS3yc9yePQOAWGwvaGdyAvK4nS4
-	CPvFazhJ5md/vMc5GftFwPyLJayuQVJaaKs2sqYopFdD/uMvPJDx3QT6PlESqM3ftdvVLY9qu1T
-	x/gDfoX70Ltx2LMNEHzlQZhoYIXPbd50EtqD3gr5VpNj+C33Hp2dKKyfS2jNcEVN1vDUUyOVJvE
-	gf5RX7M0ywVdzIDeITLRniWDLgVCSaig1BNM9wBYd3s53/i88=
-X-Received: by 2002:a5d:64c9:0:b0:43d:7d24:b4ff with SMTP id ffacd0b85a97d-44bb772f856mr22057200f8f.40.1777983884553;
-        Tue, 05 May 2026 05:24:44 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4505285e765sm4159009f8f.10.2026.05.05.05.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 05:24:43 -0700 (PDT)
-Date: Tue, 5 May 2026 14:24:41 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Stanislaw Gruszka <stf_xl@wp.pl>
-Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jordan Rome <linux@jordanrome.com>,
-	Viktor Malik <vmalik@redhat.com>, Miroslav Benes <mbenes@suse.cz>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v2 2/2] module/kallsyms: sort function symbols and use
- binary search
-Message-ID: <afnhidn7K7dZ_cPh@pathway.suse.cz>
-References: <20260327110005.16499-1-stf_xl@wp.pl>
- <20260327110005.16499-2-stf_xl@wp.pl>
+        d=1e100.net; s=20251104; t=1777991879; x=1778596679;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rW/yHyxsN9QI7AveMhZMYM5ISMvZ0yqJBxdD/EhC5LQ=;
+        b=rn6pfxh/jY8OXlo8k4ThKpHdOtnF0b0hERZUj7lSmzBqEkZytTO/BCrmft9Fl1HOSZ
+         /+g/wnmBmWbHcLzhfOEe5UA0/iK/y5dmCW9xBMaGzcnkSG3gaoTdL52LuPVzfKXh29W8
+         rWOvOMtXazd+e4UBAPY83Ss4OKBeqBDlrrW0rmGcbi4oQz3VECfCOISotQtQgIuN16uE
+         eBHrSa2zd5QQRq4pULVPNH5o2P7QXQki5fL0/s3Sh2z2X6aNFqvUydV6FJ/+iFmE6wm/
+         CEsC5ZgzCbrKx8DP7V/GpXItktILdBf2KYi6FHsVzBhmkhAdPDg8ehWEV5ZbpVZ3ugEo
+         +xMA==
+X-Forwarded-Encrypted: i=1; AFNElJ+Rq0F5p7f3LgOxYd6qWloxAC0FgEkDaXOO0cx/KrtyL5Ja8pNMhXWJjICuJJn0oZNtWpsLZXula2lKI1NU@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzd8ojosBxB44yFEZNLGYbf/xLC+cWQ2+uUFXK7n1QyfaWgj3qB
+	ZH1bDv0zG7eTE284zxw2NG6CjeLqjlZkZfjIr/NVaNfpHTBqo7aYiY9x4QerZxShawo=
+X-Gm-Gg: AeBDieuTuKVbyyeyGDdQqoVFJ5EZueRo51N3T8TY7TaWyuYSC6NJR7edqZqtr4g8SQI
+	aNEp3paLhuhRvo8S8cjU76dUYShiqi9EKwgrCN0evzm3rzNsiBxO5XHo2rUAjCeYGh/wC413T4u
+	Y7VQbwLCa2YvITI87BYynpD8mvvVANacc7TshvKk+0LqDT+yqJhj0OA+XeL8FrGallX5dC30aJk
+	pSW9iGb186y9B6HoZjkooFUbvIj1wiCiBT4JejXOiRdXEMrwR/yBzMgs50HIsNfQAZlsdsM7hz0
+	hUBmyax8XdkKA68k5OWKfusTi2/ElexSEzLIG4w16Hiwr2Ecq88foDFXVYsDnkomvuGNP9LzzPz
+	pV++zNolqEmK0+rVlu3UpjkWp/NSJ+JPXcyHIlt1sfFxPK1bEmU6XV9/qBl+gDqrXPY6rGt51+2
+	IXSNLKTvhbWwynogzY413j0bSNx1qWx6rI8j4Ms2qs5ZxvW/jCdo1tlPGdesaQheqgzi6AA7awW
+	D+zi6J9c05wTm/880mG3ceCR9rSlbEF/e8aA0ntiWVwJ0h2niLBt5G+JtPdS/BjXjKEBey7xFWW
+	/5QLIZrhWg1nRjA=
+X-Received: by 2002:a05:600c:4e43:b0:480:1d0b:2d32 with SMTP id 5b1f17b1804b1-48a98638227mr256258935e9.12.1777991878651;
+        Tue, 05 May 2026 07:37:58 -0700 (PDT)
+Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a8ebb2fa5sm309081525e9.12.2026.05.05.07.37.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 May 2026 07:37:58 -0700 (PDT)
+Message-ID: <28bb0f74-8721-4e53-ad89-87b2a78623b2@suse.com>
+Date: Tue, 5 May 2026 16:37:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260327110005.16499-2-stf_xl@wp.pl>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] module/kallsyms: sort function symbols and use
+ binary search
+To: Petr Mladek <pmladek@suse.com>
+Cc: Stanislaw Gruszka <stf_xl@wp.pl>, linux-modules@vger.kernel.org,
+ Sami Tolvanen <samitolvanen@google.com>, Luis Chamberlain
+ <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+ Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Jordan Rome <linux@jordanrome.com>,
+ Viktor Malik <vmalik@redhat.com>, Miroslav Benes <mbenes@suse.cz>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Joe Lawrence <joe.lawrence@redhat.com>
+References: <20260327110005.16499-1-stf_xl@wp.pl>
+ <20260327110005.16499-2-stf_xl@wp.pl> <afnhidn7K7dZ_cPh@pathway.suse.cz>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <afnhidn7K7dZ_cPh@pathway.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri 2026-03-27 12:00:05, Stanislaw Gruszka wrote:
-> Module symbol lookup via find_kallsyms_symbol() performs a linear scan
-> over the entire symtab when resolving an address. The number of symbols
-> in module symtabs has grown over the years, largely due to additional
-> metadata in non-standard sections, making this lookup very slow.
+On 5/5/26 2:24 PM, Petr Mladek wrote:
+> On Fri 2026-03-27 12:00:05, Stanislaw Gruszka wrote:
+>> Module symbol lookup via find_kallsyms_symbol() performs a linear scan
+>> over the entire symtab when resolving an address. The number of symbols
+>> in module symtabs has grown over the years, largely due to additional
+>> metadata in non-standard sections, making this lookup very slow.
+>>
+>> Improve this by separating function symbols during module load, placing
+>> them at the beginning of the symtab, sorting them by address, and using
+>> binary search when resolving addresses in module text.
+>>
+>> This also should improve times for linear symbol name lookups, as valid
+>> function symbols are now located at the beginning of the symtab.
+>>
+>> The cost of sorting is small relative to module load time. In repeated
+>> module load tests [1], depending on .config options, this change
+>> increases load time between 2% and 4%. With cold caches, the difference
+>> is not measurable, as memory access latency dominates.
+>>
+>> The sorting theoretically could be done in compile time, but much more
+>> complicated as we would have to simulate kernel addresses resolution
+>> for symbols, and then correct relocation entries. That would be risky
+>> if get out of sync.
+>>
+>> The improvement can be observed when listing ftrace filter functions.
+>>
+>> Before:
+>>
+>> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
+>> 74908
+>>
+>> real	0m1.315s
+>> user	0m0.000s
+>> sys	0m1.312s
+>>
+>> After:
+>>
+>> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
+>> 74911
+>>
+>> real	0m0.167s
+>> user	0m0.004s
+>> sys	0m0.175s
+>>
+>> (there are three more symbols introduced by the patch)
+>>
+>> For livepatch modules, the symtab layout is preserved and the existing
+>> linear search is used. For this case, it should be possible to keep
+>> the original ELF symtab instead of copying it 1:1, but that is outside
+>> the scope of this patch.
 > 
-> Improve this by separating function symbols during module load, placing
-> them at the beginning of the symtab, sorting them by address, and using
-> binary search when resolving addresses in module text.
+> What is the exact motivation for the special handling of livepatch modules,
+> please?
 > 
-> This also should improve times for linear symbol name lookups, as valid
-> function symbols are now located at the beginning of the symtab.
+> Honestly, I am always a bit lost in the various symbol tables. It is
+> possile that I have got something wrong.
 > 
-> The cost of sorting is small relative to module load time. In repeated
-> module load tests [1], depending on .config options, this change
-> increases load time between 2% and 4%. With cold caches, the difference
-> is not measurable, as memory access latency dominates.
+> Anyway, my understanding is that there are two aspects which are important
+> for livepatches:
 > 
-> The sorting theoretically could be done in compile time, but much more
-> complicated as we would have to simulate kernel addresses resolution
-> for symbols, and then correct relocation entries. That would be risky
-> if get out of sync.
+> 1. Livepatches need to preserve special symbols which are used to
+>    relocate symbols which were local in the original code, see
+>    Documentation/livepatch/module-elf-format.rst
 > 
-> The improvement can be observed when listing ftrace filter functions.
+>    IMHO, this is why layout_symtab() computes space for all core
+>    symbols in livepatch modules and copies them in add_kallsyms().
 > 
-> Before:
+>    The symtab is normally released when the module is loaded.
+>    But livepatch modules make its own copy of the important
+>    parts, see copy_module_elf().
 > 
-> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
-> 74908
+>    IMHO, the sorting of function symbols vs other symbols does
+>    not matter here. I believe that the special relocation
+>    symbols are not affected by this.
+
+I'm not sure if I fully follow the conclusion in this point. My
+understanding is that .klp.rela sections still refer to their special
+symbols in the symbol table via Elf_Rela::r_info. If the symbol table is
+filtered or reordered, these references will end up pointing to
+incorrect symbols.
+
+This is also described in Documentation/livepatch/module-elf-format.rst,
+section "4.1 A livepatch module's symbol table".
+
 > 
-> real	0m1.315s
-> user	0m0.000s
-> sys	0m1.312s
 > 
-> After:
+> 2. Livepatches _rely on the sorting_ of symbols in the module.
+>    The special relocation symbols might define a symbol position,
+>    see
 > 
-> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
-> 74911
+> 	.klp.sym.objname.symbol_name,sympos
 > 
-> real	0m0.167s
-> user	0m0.004s
-> sys	0m0.175s
+>    in the documentation. It defines the position of the symbol
+>    when there are more symbols of the same name, see
+>    klp_match_callback() in kernel/livepatch/core.c.
 > 
-> (there are three more symbols introduced by the patch)
-> 
-> For livepatch modules, the symtab layout is preserved and the existing
-> linear search is used. For this case, it should be possible to keep
-> the original ELF symtab instead of copying it 1:1, but that is outside
-> the scope of this patch.
+>    I am afraid that _this patch might break_ this when it moves
+>    function symbols before non-funciton ones. I guess that
+>    the symbols of the same name will not longer be groupped.
 
-What is the exact motivation for the special handling of livepatch modules,
-please?
+I see. So if the module loader sorts the symbol table in a regular
+module and a livepatch module exists for that module, the livepatch may
+no longer function correctly. This means that the loader cannot even
+reorder the symbol table in regular modules.
 
-Honestly, I am always a bit lost in the various symbol tables. It is
-possile that I have got something wrong.
-
-Anyway, my understanding is that there are two aspects which are important
-for livepatches:
-
-1. Livepatches need to preserve special symbols which are used to
-   relocate symbols which were local in the original code, see
-   Documentation/livepatch/module-elf-format.rst
-
-   IMHO, this is why layout_symtab() computes space for all core
-   symbols in livepatch modules and copies them in add_kallsyms().
-
-   The symtab is normally released when the module is loaded.
-   But livepatch modules make its own copy of the important
-   parts, see copy_module_elf().
-
-   IMHO, the sorting of function symbols vs other symbols does
-   not matter here. I believe that the special relocation
-   symbols are not affected by this.
-
-
-2. Livepatches _rely on the sorting_ of symbols in the module.
-   The special relocation symbols might define a symbol position,
-   see
-
-	.klp.sym.objname.symbol_name,sympos
-
-   in the documentation. It defines the position of the symbol
-   when there are more symbols of the same name, see
-   klp_match_callback() in kernel/livepatch/core.c.
-
-   I am afraid that _this patch might break_ this when it moves
-   function symbols before non-funciton ones. I guess that
-   the symbols of the same name will not longer be groupped.
-
-Idea: Is the shufling really important for the performance, please?
-
-   I would expect that binary search would have a good performance
-   even without the shuffling. It puts aside half of the symbols in
-   one cycle.
-
-
-Note that the binary search in find_kallsyms_symbol() is perfectly
-fine. The livepatch code explicitly iterates over all symbols using
-module_kallsyms_on_each_symbol(), see klp_find_object_symbol().
-
-Best Regards,
+-- 
+Thanks,
 Petr
