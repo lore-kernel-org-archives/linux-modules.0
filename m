@@ -1,201 +1,217 @@
-Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022125.outbound.protection.outlook.com [52.101.101.125])
+Received: from jpms-ob02.noc.sony.co.jp (jpms-ob02.noc.sony.co.jp [211.125.140.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9170A3A3E99;
-	Mon, 11 May 2026 20:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.125
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778531654; cv=fail; b=sG7M2faD9ckeWnp8aJz2BgL1kJpxorZ9h4WOcCnbisaF6KknJMLz/z+dluJy/gaM6U4JiXSTnmMTX8V3SmyP9lpi45ViiIp6Aa+Ipyv66YplWyW0sBHi7dlBLAo2PmFKnLb/zQKeXXRrNSaJq5oUQ0W5yz1F4IJUIzU7eFNje1w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778531654; c=relaxed/simple;
-	bh=bUcd6uBkeqPB00XkHzPs9/C7ipOIS41DM36UqEYyqnk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=cTRD/1UJmW8+yjj00fHslR24PW37bPpQCBQ6z5kyLrCBpsxRho5IkeqakzSYAtL1MFwG1YmfQxynfkcOAkNuBbvK0XuEagdyum9uLdvsLlxYCevN9MVksixW/e1JQncUSK+Nlb2d94uMfYVWm5//Rq1/1XfNOnqXrREbBMEKhLA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.101.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eJulWN6ETiYQ4013up8oKXImJo+614wnCV1s2VVoNrU8U344DU+ZywRgyu9OP0o3LBhYl8moiXOnj0aHAIGBOVqSNdfQyK8/TjK8ynLQxOxwEbT77XYIhsT/z/Lk6jZ7cabT4jaL8+S9V+q7jcGdQWD5HroLzMwnDMBZie3eKQwhZy8QaMDq5E6RlPUzoRi+d8CrosBNY9WAxNup6MM4CShZGppcwP11p9tRhsFUxSYVNI6PUa7bXAOIJqYRv3cVKY9/pxbzUwdHfweeEOZCCHgpOQPHMS6Pfifqsf1IVycTKCU6bGxmRiXcgtgfGsO8i525IjhdMhiQ5GqSQE1wQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=akOJjVszhkCDcj/JYnUqvHu7AQ6Ex0Ves+3e6U2A8G4=;
- b=LY1KeugTyHZ7detG4Qx16p6wRlbvofKT+lXWr69QqWbhPXAuO+GiZankq4e2vjFfgbyirfBaNdub+Y3xFIp4QEvW5mw3DmqRl06u7ac1Zl8IEfhDjiFT+vmhfWXcPrUIdLrcBkUdhu5QeFMRyPApDWDBkWbgmqrOQ94inJehIg2UjAKklZ6I77VVqb+j6BOlnP/mhkui76NkbNBMPl8tUUISrvT5p3/drIP/I36oK3y0S5/K4sE7I84xKLM2mxmiOAHa44DyUBq5NDcQLnHTZGfHiGvrwz2nIuS8MiGOIonyREi7Lp9o8/qhtNJSc0FcYRVvKfDDpRYezPx73kde7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
- by LO9P123MB7883.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:3e3::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.23; Mon, 11 May
- 2026 20:34:07 +0000
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf%2]) with mapi id 15.20.9846.025; Mon, 11 May 2026
- 20:34:07 +0000
-Date: Mon, 11 May 2026 16:34:04 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: arnd@arndb.de, mcgrof@kernel.org, petr.pavlu@suse.com, 
-	da.gomez@kernel.org, samitolvanen@google.com, sashal@kernel.org, leitao@debian.org, 
-	akpm@linux-foundation.org
-Cc: neelx@suse.com, sean@ashe.io, chjohnst@mail.com, steve@abita.co, 
-	mproche@mail.com, nick.lane@mail.com, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] init/main: Expose built-in initcalls and blacklist
- status via debugfs
-Message-ID: <gkvmkpkhesd225sqdwoepjazhmqli7cqc5ut7czo3b453fd7aq@qer3g3oqhoou>
-References: <20260510061301.41341-1-atomlin@atomlin.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ya4r6ktjheu4erdu"
-Content-Disposition: inline
-In-Reply-To: <20260510061301.41341-1-atomlin@atomlin.com>
-X-ClientProxiedBy: BL1PR13CA0026.namprd13.prod.outlook.com
- (2603:10b6:208:256::31) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:70::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3751C2D5922;
+	Tue, 12 May 2026 02:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.140.165
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778552535; cv=none; b=SVuOTZmgVsgUEwQiIHguDU20EXfhmaSb1N47X0CTfLIpqoKUmif22c35ehme7tw4zSyrc9nXTpPvrEWago/2lV5O1K+eTM7pyfimj8ieMpi2Qq5k6cl42gxuP4QUxaUnFOXw6zniZIn2tSOKfaj3SUSSB10urfeN+sgQk7mpZ4M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778552535; c=relaxed/simple;
+	bh=GklZYUKJX6KCfliVPjcXd8Jfg1EfG4Yx/dYPm0oFv3I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JuS2SEH9iDLLPVvuBkvwabBy4WaOBxQrAczujUA0ouyVL7MgStiOcCLTd6643ZA3fXA0WbuBaVrdMcCFzAmEYhawdcffV80q9v9EV9oIMkFZ9yjFalzWuiz1sMaW5GQPhhwDv8cTm5NmotQRmroRUknCrOYHwqHAhELeYLZ1bz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=AvBtndsj; arc=none smtp.client-ip=211.125.140.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="AvBtndsj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=sony.com; s=s1jp; t=1778552534; x=1810088534;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hPXs4xfe9WaD1xaFn0d8PPw/gVNLx2J4xPkxz7s4xqs=;
+  b=AvBtndsjAm+PUvUuKW8nrsOYmtuyoaeIXv3dXGIFar4Yu/JE11qgZfGx
+   GQHf2+arX9TBC4x1+jSa24toOLhNr36rWB6l26yXWb8Rso2ZtXUSIe1dU
+   xEyc1uKMblh/pEeFBiaKVHDcnAGZenGiVkRORZff1ej3A9kTIdnFka1L6
+   RFf97bO1f0sPVkkzxwOyWBcnL9SKDZIbnoMohtBtYkKq10U+g/I8HefpI
+   rZm2ENfpNyk/cs9e1ymui/cu78lYw/PSw9UlDyjAK3yjO1fmGNKyeqy3B
+   5WpKrvPcBVXObiVU0kVqvfS2BqQoQlTebA8g0sBI65YBz8npAsi3NtpNJ
+   w==;
+X-CSE-ConnectionGUID: kZC+Y2dPQDWo7xh8pyAsew==
+X-CSE-MsgGUID: EIn/X9iGRR2/cnYone0EVA==
+Received: from unknown (HELO jpmta-ob02.noc.sony.co.jp) ([IPv6:2001:cf8:0:6e7::7])
+  by jpms-ob02.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 11:12:02 +0900
+X-CSE-ConnectionGUID: E4sXDblmSuKgQZmCqCcvnA==
+X-CSE-MsgGUID: Qwx43BEcSKO83PNWSCJ4AQ==
+X-IronPort-AV: E=Sophos;i="6.23,230,1770562800"; 
+   d="scan'208";a="606139396"
+Received: from unknown (HELO JPC00244420) ([IPv6:2001:cf8:1:573:0:dddd:6b3e:119e])
+  by jpmta-ob02.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 11:12:01 +0900
+Date: Tue, 12 May 2026 11:12:00 +0900
+From: Shashank Balaji <shashank.mahadasyam@sony.com>
+To: Thierry Reding <thierry.reding@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Gary Guo <gary@garyguo.net>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+	James Clark <james.clark@linaro.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, Mike Leach <mike.leach@arm.com>,
+	Leo Yan <leo.yan@arm.com>, Rahul Bukte <rahul.bukte@sony.com>,
+	linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org, driver-core@lists.linux.dev,
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+	Daniel Palmer <daniel.palmer@sony.com>,
+	Tim Bird <tim.bird@sony.com>, linux-modules@vger.kernel.org,
+	linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] kernel: param: initialize module_kset before
+ do_initcalls()
+Message-ID: <agKMcA7a_UqMua5V@JPC00244420>
+References: <20260427-acpi_mod_name-v4-0-22b42240c9bf@sony.com>
+ <20260427-acpi_mod_name-v4-1-22b42240c9bf@sony.com>
+ <DI3Z28IZZOT9.349TTWNN9VDMB@garyguo.net>
+ <afABOMT_s9DvF6NY@JPC00244420>
+ <DI4QQA6EGIA1.N8WRFWVKG91S@garyguo.net>
+ <afCxHUrjr3Z22U6V@JPC00244420>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LO9P123MB7883:EE_
-X-MS-Office365-Filtering-Correlation-Id: 79eb42a6-e5f7-4ad0-4dd1-08deaf9ca677
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|3023799003|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	aNXfHMeLwKtV8Tfor868wbs/c6V4pjGgXrWak6yfRRZ+9W8zPFoMnAK/rxLzx/hgFA+A0YsKv6vGVgkMd6cD2ZwMqtaMMx8sPdNi53PpXE+zknQRo8AFlEHv0xfhVUJ4n+UGumqOcQFwl3qQhzvP+G3G3b8rRW8kBYU91ddq6OlaaeF8Rq5jbV8GfFxi9gSN0Jaf++eR+gdz6c3lDETF22q5oAarEtoyk1n8YjcMel1Sec+TC4lbgjuFIhDP1sm/bpy0N4BtKQDMzYxFpvBjka3x3JOGJry+3HBIWtCxRXP049ndm4DoYMB68qWj6TAbC3OUGpim/yJEQtTGsk7z5spv1LUfOn77my3FQziwjY1Kp/sWGdnXmvGLeegSGn0Yu198AisjqVh+D4N9kLxvJEdlr6JGuoOwUdAKu77FNvfpR8UhGOPuJ5JU4Psr8vp7HYXcf+ScNNUXsEgC08tst7g60GnX/VyXXMEgnf3wipM5okQClT/dvgexrgbOwpMRMaCSJsZ+P37U1QAvnyxRAMBAt5JVFP7kG7LYb1X6xxedLTup3LTZXYDhhzw/zoWqhhl7JrzZZLTHrNCNrimmCsIOMwSHfq2G9/O4jT5Pt1mo8uKuCu2eME3blHH3TaT7JSa7/f0nllZDtFWGjcgWi2hqe3vgTjpT2WZQPmFKyGkxbcySnJnQ3mIa56QXi/QY
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(3023799003)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MFB2eEx6di9HY0greXIrZGtSc1dQTnZEMm5SRjFZZkJXeGRKVnBPa0d5aHBO?=
- =?utf-8?B?Q2YxREU1eSsvRCtmeXVtaFdBT2xBSFgwc05nRnV5cWNCak04Ynl5S1hsb2NF?=
- =?utf-8?B?Q2hKRTlYZHBWM0tqK09GT0daeGVXVnE5L2ZDUkRWbkdxclV0eGsxT2RXNlBM?=
- =?utf-8?B?cGkvS05sVjN3R0dqdU0xelFodVVkRWN1eWxSbHJFZ3E1MFJPNitvZnFSaWJC?=
- =?utf-8?B?YmFJODkxSk9vRmZ5bUo1WUlYMVR5eFFkbXM3NGFjTkd2Y3ZFQjA1Q2JJbVN5?=
- =?utf-8?B?YWVlYlh4bTFyNU5tVFA0dXV4TnpjN0QvMGVrZlp5THhWdFMxc05meDJvcXQx?=
- =?utf-8?B?KzN2alp2L1ppYUV2RGt3RHVuTENFWHhnbDNFZUo3Q1MxQXVEKzllQnlSbFVp?=
- =?utf-8?B?U2VtY1JnZUtpc2xzTS9tY0lBWmVHdXpNai96RFZGT1VyT3M4Vjk3Y2hhbFRS?=
- =?utf-8?B?QWVZZnF6Rk0ybm1oUmJ3ZW1kMlZRMFcwV0xDWEFCeEptYTZRUTAySFNEcG5P?=
- =?utf-8?B?bmZrUkpZSTZ6MXF2bzZZYlozSWZmWHJpSUlabVA3cjQ2djhuTzZKRnNWdlRw?=
- =?utf-8?B?MkhWK2h3cFFqM2l4R1RMbFVQVjhiRlV3RjJMallqMEpsaEZUSWpMa3FRQXl1?=
- =?utf-8?B?U0ZsaDFza1ZBN0htWGRxVU1GKzNEOGU2ZXY3eHNrdGt4ZDdFQVBoSXpXKzgx?=
- =?utf-8?B?bWJpYXhPVnp4dkFLY2pxRk50NWJkdk1UczE0TlFiY3BvNS9uU01lUXMrRE5Y?=
- =?utf-8?B?WW4yWEZ2U01nSXNqOUZCNW5DMkxvRjhFSTZjTkZjOWZKUTZpaUJ2Nlo1Q2ls?=
- =?utf-8?B?THF4TFpPZUlkTWRoMlBGWS8ybjlyUzlHbzVQQ1JuNGxEOW5yb0x1a0didjJE?=
- =?utf-8?B?ck9zMXJHclcrU0RtWWNtVURjSlFGVmkySGFYb3M3OFdwR3N1ZXdxZXFsRDBQ?=
- =?utf-8?B?YldrMFVNZ2dXWEJvaEduZ292eEZHaDMrU2pqMlpXcDRoSi81RzZoQXduT1A5?=
- =?utf-8?B?QUZZVzB3ZHhpYnV0VUlqZVlQelVrNjF1UWZBWmVFVjZ2VlVIQlpaUGcydGU3?=
- =?utf-8?B?TCs2aENIUjFiZEdrNTU2ZFF0UUczK3JjWGhBdWFHTlZSU2FLWVk1NEZ4K3Rk?=
- =?utf-8?B?S2ZNdm5iajg5a21rUFBzSXozK25PaDFZc2ZLL2NWSkczK25tK3pVSHRFeWZq?=
- =?utf-8?B?TFA0bWxja0E3MnRDSWI3OWZNMTFXc1IwKzhDY0xjYnVvbmxDTldLdEdiaU85?=
- =?utf-8?B?NDMxVVN4cE5telVDWjY1bnc0ZnNoSldCVndkVjlQakl1eHkwZFQxTitHb2hh?=
- =?utf-8?B?RUFqNHcvUS9CREh6cE16VVN5cEdXN1c1SUN1dExYWE1pQjNsRXVvU2RoRE0w?=
- =?utf-8?B?L1NUQ3MwREJxQ0VFL0dZUVRxdkdpbitWMlk5aTFsN1RiWVZ1VVNaNmQ1VzhG?=
- =?utf-8?B?bmxjSFJ6T2ptN3AzVkhGTmEzV29nZWVpTTQvRkErR3BnVkVxMnI5N2FxWjRI?=
- =?utf-8?B?bitrVmtmYXRSMkdwdlNzWkN6SzQvTWx3Qk1MUXIwLzJidUpEUDR3bGdZT3hT?=
- =?utf-8?B?d0Y1a3pCbkdYcDlsZWlrNHZKS21ldmdBMkN6b1N3ZDJKVll6WUNIblJQTTlY?=
- =?utf-8?B?d2daT1Nybnl3ZCs1TVg1WTV2dDkxMDBmTGxKVE1yU1dzRU5wbzNVVHppck5U?=
- =?utf-8?B?S0Z2RUlNUzkycUlnWWRxeEQ2NUJCL1BlTGlqZk1UR2ZYYkQyaEJ3eTVxd2s3?=
- =?utf-8?B?d21oUC9URHNaOFpVcVBkbmhmMmpXVEl0MFBneWRXVWdCMFFmSlJ1NVlIbUlW?=
- =?utf-8?B?UTZxa0Z4cFB2dlczQURKMTRMNFd6MkxiRzBucFk2ZmpBNGowQ1BGNERWVUxS?=
- =?utf-8?B?WkdmVkZQZHphMCt1eXV3VmducWgrU2JqVEM1R09BUWJ0cUwrTlNrZmxCaGd2?=
- =?utf-8?B?Z0wxNGVWUCtkNEVnVmxwemV6TGNMTkt2VmJPL0VpdVdrbVhKdWNEMWxYT2F5?=
- =?utf-8?B?cElTL2pYNDFvZTgyRDZ2WnE1ZDNHbGxuOXpySE5IUHpBa1M2d0JzdDY2WWF1?=
- =?utf-8?B?T3BmNVlDQU5GcCs2bUpRY2E4OUVZTU0va1FGQjY4eUpSVXpWcG9OaC9kVzFo?=
- =?utf-8?B?T3d2aUhsT2ZPZzluM2pwVmU3dFQwYXZZcDQ1NlBVN25IZWNud2UzcXRWSWZv?=
- =?utf-8?B?OG1ydXcxNDg4dlR5V1JESkJxVUNJb0c1R2UweGZtWmllelN3dVhWWUl1KzJx?=
- =?utf-8?B?SUZGdXJFRmMxNDhUZkRIYThWR3JXeThROXZRc20yY3RvMlBnRHBPWmJjUnBo?=
- =?utf-8?B?TnF1Mk9GemJKSHVkdUV4eC81VWZFU0N6ZzE1SUZaR0c1Z3ErUFVoUT09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79eb42a6-e5f7-4ad0-4dd1-08deaf9ca677
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2026 20:34:07.7074
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vpmlMUtdiDL1fC075AtIwfwaCqup9UaozjnY9CNJU8DmXxcatuA+4lVBaFRXR6OwCyfHZBjoovKoHYz1fCHxjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO9P123MB7883
-
---ya4r6ktjheu4erdu
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] init/main: Expose built-in initcalls and blacklist
- status via debugfs
-MIME-Version: 1.0
+In-Reply-To: <afCxHUrjr3Z22U6V@JPC00244420>
 
-On Sun, May 10, 2026 at 02:13:01AM -0400, Aaron Tomlin wrote:
-> At present, identifying the correct function name to supply to the
-> "initcall_blacklist=3D" kernel command-line parameter requires manual
-> inspection of the source code or kernel symbol tables. Furthermore,
-> administrators lack a reliable runtime mechanism to verify whether a
-> specified built-in module has been successfully blacklisted.
->=20
-> To resolve this, introduce a new debugfs interface at
-> /sys/kernel/debug/modules/builtin_initcalls. This file enumerates all
-> built-in modules alongside their corresponding initialisation callbacks
-> (e.g., those specified by module_init()) in a simple format:
-> "module_name init_callback". If a built-in module has been actively
-> blacklisted, the entry is explicitly appended with a " [blacklisted]"
-> suffix.
->=20
-> To achieve this without incurring runtime overhead, the
-> ___define_initcall macro is expanded to statically allocate a
-> builtin_initcall_record structure (containing the module and function
-> name strings) within a dedicated .rodata_builtin_initcall_records
-> section.
->=20
-> This implementation incorporates several critical architectural safety
-> measures:
->   - The custom section name deliberately begins with ".rodata" to ensure
->     KASLR (Kernel Address Space Layout Randomisation) relocation tools
->     process and update the string pointers correctly during boot.
->   - The structural alignment is explicitly forced to 8 bytes to prevent
->     the compiler from inserting silent padding that would misalign the
->     linker script boundaries.
->   - The blacklisted_initcalls list head is stripped of its
->     __initdata_or_module annotation, ensuring the list remains safely
->     accessible in memory when queried from user space after early boot.
+Hi Thierry, Jonathan,
 
-Hi Sasha, Breno,
+Just following up on the below, would moving tegra194_cbb_driver and
+tegra234_cbb_driver from pure_initcall to core_initcall work for you?
 
-I thought this might be of interest to you for review, given your recent
-work and interest on the "killswitch" proposal [1].
+Thanks,
+Shashank
 
-
-[1]: https://lore.kernel.org/lkml/20260508195749.1885522-1-sashal@kernel.or=
-g/
-
-Kind regards,
---=20
-Aaron Tomlin
-
---ya4r6ktjheu4erdu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEeQaE6/qKljiNHm6b4t6WWBnMd9YFAmoCPTwACgkQ4t6WWBnM
-d9bEIA/9GZUgSibxIL1AapPHNSDH2McFG2tYAiTJo/c3lhaqdu5MeWq7My5yVEMZ
-n2PkD++9mbHKxYOHsP9IK7BpBbHi4DrW2gIeYFTcMsxIkFtc2uaxrI0zZAZA+p0E
-rDA+rhoGGIvBabM8D7RFgbP9zEZ5SIL5GOXfXPOC3RKcWakYKQ5dpomCwSfSSKkb
-DBd5QJmeqYibo2VjvlD+ZRFgkRjHZGX/mBYpO8p5O9WbgwiaNSphgsxSHkS0UVAG
-hHRqTtZLvU2a059cICWTYMjJcdAMPr0s4uhZdS2T2KanuJ2DmXq0qWfew8+PRO8H
-F9leUtCZyasyAm3JoeIJhhqpOkbn5MQLbu1ldVYYtNkxmQPJRFKSKGriutnA9DgQ
-oequjiWPSnzJ8Jm4GGek27+TA/cprlMa4PUefoGv6h9y1dNReIhVYSplZiNbWFyO
-jNvIO/19jJauDeU48DvUrexRRdTkASQS269Erbz26ETN+b77SrUBuoxPPBdI6WdZ
-RYjNgIfPuIRFTrNfRqJxKZfoLuH3hg5ZeBfEk6LIS+G8dJvktTnBbJK1AEie7qol
-lCCjhOdh6pBI5OW66yEygaMsA8aHv2Z9mlxKDZikGU4AgDM4qVAy20etlS1eeCIW
-P5Tj8uDRt/gYC6LFOfVOb+q6qIbODyKD/NApenskyysB3m1gnhk=
-=bxOW
------END PGP SIGNATURE-----
-
---ya4r6ktjheu4erdu--
+On Tue, Apr 28, 2026 at 10:07:41PM +0900, Shashank Balaji wrote:
+> Adding Tegra maintainers.
+> 
+> On Tue, Apr 28, 2026 at 12:10:50PM +0100, Gary Guo wrote:
+> > On Tue Apr 28, 2026 at 1:37 AM BST, Shashank Balaji wrote:
+> > > Hi Gary,
+> > >
+> > > On Mon, Apr 27, 2026 at 02:29:55PM +0100, Gary Guo wrote:
+> > >> On Mon Apr 27, 2026 at 3:41 AM BST, Shashank Balaji wrote:
+> > >> > module_kset is initialized in param_sysfs_init(), a subsys_initcall. A number
+> > >> > of platform drivers register themselves prior to subsys_initcalls
+> > >> > (tegra194_cbb_driver registers in a pure_initcall, for example). With an
+> > >> > upcoming patch ("driver core: platform: set mod_name in driver registration")
+> > >> > that sets their mod_name in struct device_driver, lookup_or_create_module_kobject()
+> > >> > will be called for those drivers, which calls kset_find_obj(module_kset, mod_name).
+> > >> > This causes a null deref because module_kset isn't alive yet.
+> > >> >
+> > >> > Fix this by initializing module_kset in do_basic_setup() before do_initcalls().
+> > >> > Modernize the pr_warn while we're at it.
+> > >> >
+> > >> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > >> > Suggested-by: Gary Guo <gary@garyguo.net>
+> > >> 
+> > >> I didn't suggest this change :)
+> > >> 
+> > >> I suggested `pure_initcall`, which is just a one line change.
+> > >
+> > > Oops, sorry about the misattribution.
+> > >
+> > >> diff --git a/kernel/params.c b/kernel/params.c
+> > >> index 74d620bc2521..ac088d4b09a9 100644
+> > >> --- a/kernel/params.c
+> > >> +++ b/kernel/params.c
+> > >> @@ -957,7 +957,7 @@ static int __init param_sysfs_init(void)
+> > >>  
+> > >>  	return 0;
+> > >>  }
+> > >> -subsys_initcall(param_sysfs_init);
+> > >> +pure_initcall(param_sysfs_init);
+> > >>  
+> > >>  /*
+> > >>   * param_sysfs_builtin_init - add sysfs version and parameter
+> > >> 
+> > >> pure_initcall is level 0 so it happens before all other init calls. Does it not
+> > >> work?
+> > >
+> > > tegra194_cbb_driver registers itself in a pure_initcall too. We wouldn't
+> > > want the ordering of its registration and module_kset init to be link order
+> > > dependent.
+> > 
+> > It's the only device driver that does this. And I don't think it's supposed to.
+> > 
+> > >From documentation:
+> > 
+> > > A "pure" initcall has no dependencies on anything else, and purely
+> > > initializes variables that couldn't be statically initialized.
+> > 
+> > I understand that given large amount of drivers registering themselves during
+> > core/arch_initcall that there might be regressions if all of them are moved, but
+> > surely we can demote these two specific tegra driver to core/postcore_initcall?
+> > This will still be called earlier than init_machine call which happens during
+> > arch_initcall.
+> > 
+> > Looks like the tegra CBB driver is just doing error logging anyway.
+> 
+> That's a good point, Gary. Thanks!
+> 
+> Hi Thierry and Jonathan,
+> 
+> You can find the context for this email in this patch:
+> https://lore.kernel.org/all/20260427-acpi_mod_name-v4-1-22b42240c9bf@sony.com/
+> 
+> TL;DR: tegra194_cbb_driver and tegra234_cbb_driver are the only drivers
+> registering themselves as early as in a pure_initcall. This is a problem
+> on two fronts:
+> 1. Philosophical: As Gary pointed out, pure_initcalls are intended to purely
+> initialize variables that couldn't be statically initialized. But these
+> are doing driver registrations.
+> 2. module_kset not initialized at pure_initcall stage: This is needed to
+> set the module sysfs symlink. Since module_kset is not alive yet during
+> pure_initcalls, registering these drivers panics the kernel.
+> 
+> We would like to do the tegra cbb driver registration in a core_initcall
+> (or some later initcall works too), and move module_kset initialization
+> to a pure_initcall. Like this:
+> 
+> diff --git a/drivers/soc/tegra/cbb/tegra194-cbb.c b/drivers/soc/tegra/cbb/tegra194-cbb.c
+> index ab75d50cc85c..2f69e104c838 100644
+> --- a/drivers/soc/tegra/cbb/tegra194-cbb.c
+> +++ b/drivers/soc/tegra/cbb/tegra194-cbb.c
+> @@ -2342,7 +2342,7 @@ static int __init tegra194_cbb_init(void)
+>  {
+>         return platform_driver_register(&tegra194_cbb_driver);
+>  }
+> -pure_initcall(tegra194_cbb_init);
+> +core_initcall(tegra194_cbb_init);
+> 
+>  static void __exit tegra194_cbb_exit(void)
+>  {
+> diff --git a/drivers/soc/tegra/cbb/tegra234-cbb.c b/drivers/soc/tegra/cbb/tegra234-cbb.c
+> index fb26f085f691..785072fa4e85 100644
+> --- a/drivers/soc/tegra/cbb/tegra234-cbb.c
+> +++ b/drivers/soc/tegra/cbb/tegra234-cbb.c
+> @@ -1774,7 +1774,7 @@ static int __init tegra234_cbb_init(void)
+>  {
+>         return platform_driver_register(&tegra234_cbb_driver);
+>  }
+> -pure_initcall(tegra234_cbb_init);
+> +core_initcall(tegra234_cbb_init);
+> 
+>  static void __exit tegra234_cbb_exit(void)
+>  {
+> 
+> Would this work?
+> 
+> Thanks,
+> Shashank
+> 
