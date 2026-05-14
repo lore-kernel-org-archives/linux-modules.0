@@ -1,201 +1,136 @@
-Received: from jpms-ob01.noc.sony.co.jp (jpms-ob01.noc.sony.co.jp [211.125.140.164])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697663911A6;
-	Tue, 12 May 2026 13:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.140.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B863AB5C7
+	for <linux-modules@vger.kernel.org>; Thu, 14 May 2026 06:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778593371; cv=none; b=qRRZRw7Ii7MoHVN8B/O/+Fl7h90KVwluJ5KPDlIHEcEp6dr7Dyo/ci4J00xWaOuKhKpqdz172jLJFssnqsFmo4/C1GcUdjM9ISdt0lcGJ1cKceQqmixvyqifqUv1i6yamaxVVbL4rsA1MDNrAnLl5leUtZmepCp+jNcY1JQZFkA=
+	t=1778741175; cv=none; b=Q/ZDZ7eoAqmTingWDZTS3ckHKwQUE3DPlkoC697vS6rWUvTmNkWXadjmGCElfxKpibWJh5jQLVQbazXxpzkcsRFzTc3qfejf70XtUDU5JM+ur8V5DWoZO7mA5gRc+ME/UqfsHDXiqoTq8MHHayP94YM2VbszXNt1VHEDMNvr5Q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778593371; c=relaxed/simple;
-	bh=aCbLkkEb8CmTjTx67o+7g0qb4DJL+BCzbnRWwd1nKi4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XlLUUvZ3B/NPyFsSVjnlaFRJ10ng+lEDGTSNKkrbudZB/38ic1eq5ZG31hgd2bJ8Q2v2vdgAglhS4UHR2MCk101Og/oV2V5QyEbJblDFX7AjuoFUiFuisEFcnPOBA8ZPkbbbfUXf9uQOg6N2YO/d7dMHD6KyUbJf0V48HS1/j14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=U8T/a2CV; arc=none smtp.client-ip=211.125.140.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
+	s=arc-20240116; t=1778741175; c=relaxed/simple;
+	bh=9WoMlXctnJX7VI6xy3gmdkzNlfWMOnxsDI0zmen0z7A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dz9pINpJ/NwGgmy9t8yEfwb57VHXf5GFXzBvHuHQvxLeJQOdW+O36lsWVZwysGsEKpE+qZjadU7e5XHWinPvcNrfPnIr4Y6BHe59Jbtwf5Q0+QvvTEC9OXYOwgsmieFBQMWmnSjZ+lJ7up455s/VlPF+zQIgVGpfQ1ZFQRoS++8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IlZcLVwP; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="U8T/a2CV"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IlZcLVwP"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43d77f6092eso4755336f8f.2
+        for <linux-modules@vger.kernel.org>; Wed, 13 May 2026 23:46:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=sony.com; s=s1jp; t=1778593369; x=1810129369;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=zCAAJwp1uN+g2GJ/FoC38hHQLXrzoMaWan6fUELQijA=;
-  b=U8T/a2CVZiCrhcyMhK/U+szmfw0aWKJGuC23SaMVX/ZPbk6QJP0P4NqX
-   3/wq51nbXmeLEodFMDmoHBicxJoj884xvlxX4btVRP3Y+JmsPajm76KHn
-   MdlS+OJCDldR98YRkoOujd46/PDFVFK58bhl5mK+Sbg6QSBgBciLEN3tT
-   CYUsprqofpQIPkal/QF493cJIlpkznyJ/np4Qnc0gRLcw7tqbGLnaht8b
-   G+CgdVYbnUBslj3cL2a5yL9A4gbpdro7j8xqj+AuBR1n89bxmvknKS+7t
-   XcwXYzM8U1Fgh/w0eUUEJd7TKSATztO76W/mkLlqSr+ebMnj8D6hxMoav
-   g==;
-X-CSE-ConnectionGUID: etA6HqxzTd2ZEdx1jYcwtg==
-X-CSE-MsgGUID: ok2476mJQkmi+p1sDAMcjg==
-Received: from unknown (HELO jpmta-ob1.noc.sony.co.jp) ([IPv6:2001:cf8:0:6e7::6])
-  by jpms-ob01.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 22:32:39 +0900
-X-CSE-ConnectionGUID: mNNKHimMRcquTd1VVSnX2g==
-X-CSE-MsgGUID: Xv8Ksh8fRDO0yoXAS/EB/g==
-X-IronPort-AV: E=Sophos;i="6.23,231,1770562800"; 
-   d="scan'208";a="637606608"
-Received: from unknown (HELO JPC00244420) ([IPv6:2001:cf8:1:573:0:dddd:6b3e:119e])
-  by jpmta-ob1.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 22:32:37 +0900
-Date: Tue, 12 May 2026 22:32:37 +0900
-From: Shashank Balaji <shashank.mahadasyam@sony.com>
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: Jon Hunter <jonathanh@nvidia.com>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	James Clark <james.clark@linaro.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, Mike Leach <mike.leach@arm.com>,
-	Leo Yan <leo.yan@arm.com>, Rahul Bukte <rahul.bukte@sony.com>,
-	linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-	linux-arm-kernel@lists.infradead.org, driver-core@lists.linux.dev,
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
-	Daniel Palmer <daniel.palmer@sony.com>,
-	Tim Bird <tim.bird@sony.com>, linux-modules@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] kernel: param: initialize module_kset before
- do_initcalls()
-Message-ID: <agMr9Vo3nYu623Y-@JPC00244420>
-References: <20260427-acpi_mod_name-v4-0-22b42240c9bf@sony.com>
- <20260427-acpi_mod_name-v4-1-22b42240c9bf@sony.com>
- <DI3Z28IZZOT9.349TTWNN9VDMB@garyguo.net>
- <afABOMT_s9DvF6NY@JPC00244420>
- <DI4QQA6EGIA1.N8WRFWVKG91S@garyguo.net>
- <afCxHUrjr3Z22U6V@JPC00244420>
- <agKMcA7a_UqMua5V@JPC00244420>
- <40c3aab2-b5cf-4297-9b14-3ccfea377c83@nvidia.com>
- <0d9e5a78-948e-42da-9d37-78cc2a700cd6@nvidia.com>
+        d=suse.com; s=google; t=1778741172; x=1779345972; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tLK4OFCAyAlL4axAHiV7SbqndCrWYl28zniYu6/O1QY=;
+        b=IlZcLVwPk0RiNQPzap2NYz2eb9006clL6A1sg0iLk2XXRnOt7IHvIJQItGnw0NdE5V
+         DYKejrcj/dmJVIbaS+HFJ+2Uz6v2/+IR1vFj0ThPr07+qGPUOWaNfBWUWgYOcqebVhol
+         66J3YZu2gMBaRUqgUZVYE5DyyqoFHGokpj2mfg86g6WdExVcqn+wx4RQT/8qKp6pLQ3y
+         JvkcSA9r3tV6PWKBHTxA7v/CySiLTEkbnfLbsVO5XON/5zjUcWm9KVhuGAUhsMHHtnnx
+         RlZE8ZWn6nHaOrunKBSAYGrFwJFPCE1mseqrBTTHMLWqslwbil0FAf+8M5Y4LLwXj8AO
+         z1QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778741172; x=1779345972;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tLK4OFCAyAlL4axAHiV7SbqndCrWYl28zniYu6/O1QY=;
+        b=jf1+1qDKrVDTebYhEVS38Frht21ropaqvRkX14xLUwI/5yc4ps/trLLXbelRR6R8EG
+         Q2Xo5I9FtAQKH1wHujpD3MsK3wAORUbfULxsGxr+/fdStJSUFxUHOzNzLiMlgiVY7pSo
+         90eL/11bO8+DMNKGLcTcEuRyYVjW+MZpJTO80ygXSIDfTuhvWC7Nxg9vMV207Y0JYCdM
+         RTj+AOFBJFY9NzqPkbgXWnmfbKqC/SztaCovVTas0ytGWYypnkPg15cwYw388TEHKzLy
+         TOVzRO1E33yc5SYYLPC2wqM92qJ+2bjUARs6kyyZxRMPOYHvi4N3/2AHMYHe7FbDrzu8
+         xOBQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9XVbc8O0sDME2fHRO4EH8h0ayQPBLnbRnzZL+CsdwwiXLIv39sLifz0VDqGjtRMQwO89AYtZ8ky5Fwvvpt@vger.kernel.org
+X-Gm-Message-State: AOJu0YztgyyR7b69wQljQzlyczruy3tJIbOOsGymae852X68XRkbKvL0
+	86UZdYHEs40nEuzbsf+EU9mejcZiVW4DKqOONN4YiClVro61xohnb6e2eLNW8P+CEZs=
+X-Gm-Gg: Acq92OEhB9oPryeGEDN9Ttl8KG+d9kpoCszOqmbgOv0pzjiMzeHo1szx9CfoIQFblqC
+	vLRbfLW6pFTvxJPlG26YOFHQ2nodoKCC3Z1PnM37OWno5IwhQl2Bd1tfeVD5GKVHWXEUzHcks8+
+	+JfO7+nXPyfrsoYWGZ6JiUYC5RPVishkHzjLdYA6iSZacVUH2pRRlJM36sJTEFzy2TtOisPE+nV
+	uaJ9WwoOhaFIHnQGJFkH/oQsgbnIPw9LkfZNoWyFajI5q8wsre3z67GStTzPJK/5XAPKNFZ2iwL
+	V07pvKnIt0xcCQznd3Lw7tsWjah16rExLVcjRfwbH4AfS5fD/Uh15FLdQJv7ie/kwNnSv6+X6aC
+	zoy+BsCtFSMlK3R/rAHG1yGRAvo78QUMCa4jsSUAby0HTpFhn/4JpKb/x8b2p+E8PVr2YWMY9Ts
+	w3O63Dh3ReJt+I15OgNJVjbQJCjxthJHZxMyECdUi+RHyK
+X-Received: by 2002:a05:600c:4ed1:b0:489:a4:e555 with SMTP id 5b1f17b1804b1-48fc9a41e96mr88986265e9.21.1778741172397;
+        Wed, 13 May 2026 23:46:12 -0700 (PDT)
+Received: from [192.168.42.79] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm4465330f8f.34.2026.05.13.23.46.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 May 2026 23:46:11 -0700 (PDT)
+Message-ID: <29fa0ff2-4477-4b42-824f-c99d862786ce@suse.com>
+Date: Thu, 14 May 2026 08:46:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0d9e5a78-948e-42da-9d37-78cc2a700cd6@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/5] dyndbg.lds.S: fix lost dyndbg sections in modules
+To: Jim Cromie <jim.cromie@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org
+References: <20260507-asm-generic-1-v2-0-47c52759d268@gmail.com>
+ <20260507-asm-generic-1-v2-5-47c52759d268@gmail.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260507-asm-generic-1-v2-5-47c52759d268@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 12, 2026 at 05:44:40PM +0530, Sumit Gupta wrote:
+On 5/7/26 10:40 PM, Jim Cromie wrote:
+> With CONFIG_DRM_USE_DYNAMIC_DEBUG=y, several build configs had
+> problems with __dyndbg* sections getting lost in drm drivers.  Fix
+> this by following the model demonstrated in codetag.lds.h.
 > 
-> On 12/05/26 14:25, Jon Hunter wrote:
-> > Hi Shashank,
-> > 
-> > On 12/05/2026 03:12, Shashank Balaji wrote:
-> > 
-> > ...
-> > 
-> > > > Hi Thierry and Jonathan,
-> > > > 
-> > > > You can find the context for this email in this patch:
-> > > > https://lore.kernel.org/all/20260427-acpi_mod_name-v4-1-22b42240c9bf@sony.com/
-> > > > 
-> > > > 
-> > > > TL;DR: tegra194_cbb_driver and tegra234_cbb_driver are the only drivers
-> > > > registering themselves as early as in a pure_initcall. This is a
-> > > > problem
-> > > > on two fronts:
-> > > > 1. Philosophical: As Gary pointed out, pure_initcalls are
-> > > > intended to purely
-> > > > initialize variables that couldn't be statically initialized. But these
-> > > > are doing driver registrations.
-> > > > 2. module_kset not initialized at pure_initcall stage: This is
-> > > > needed to
-> > > > set the module sysfs symlink. Since module_kset is not alive yet during
-> > > > pure_initcalls, registering these drivers panics the kernel.
-> > 
-> > Where exactly is this panic seen? Ie. why are we not seeing this?
-
-The panic happens as a result of this patch series. This series aims to
-set .mod_name of struct device_driver for platform drivers. So that, for
-built-in drivers, their module sysfs symlink can be created on the basis
-of .modname. We essentially want to link a platform driver to its
-module. This happens naturally if the driver is built as a loadable
-module, but for this to happen for built-in modules, .mod_name needs to be set.
-
-To go from .mod_name to the module sysfs symlink, the module_kset kset
-needs to be initialized. This currently happens in a subsys_initcall.
-These tegra cbb drivers register themselves in a pure_initcall, i.e.
-before subsys_initcall, leading to a null dereference of module_kset.
-
-To fix this, we want to move the module_kset creation to pure_initcall,
-and tegra cbb driver registration to core_initcall, so after
-pure_initcall.
-
-> > > > We would like to do the tegra cbb driver registration in a
-> > > > core_initcall
-> > > > (or some later initcall works too), and move module_kset initialization
-> > > > to a pure_initcall. Like this:
-> > > > 
-> > > > diff --git a/drivers/soc/tegra/cbb/tegra194-cbb.c
-> > > > b/drivers/soc/tegra/cbb/tegra194-cbb.c
-> > > > index ab75d50cc85c..2f69e104c838 100644
-> > > > --- a/drivers/soc/tegra/cbb/tegra194-cbb.c
-> > > > +++ b/drivers/soc/tegra/cbb/tegra194-cbb.c
-> > > > @@ -2342,7 +2342,7 @@ static int __init tegra194_cbb_init(void)
-> > > >   {
-> > > >          return platform_driver_register(&tegra194_cbb_driver);
-> > > >   }
-> > > > -pure_initcall(tegra194_cbb_init);
-> > > > +core_initcall(tegra194_cbb_init);
-> > > > 
-> > > >   static void __exit tegra194_cbb_exit(void)
-> > > >   {
-> > > > diff --git a/drivers/soc/tegra/cbb/tegra234-cbb.c
-> > > > b/drivers/soc/tegra/cbb/tegra234-cbb.c
-> > > > index fb26f085f691..785072fa4e85 100644
-> > > > --- a/drivers/soc/tegra/cbb/tegra234-cbb.c
-> > > > +++ b/drivers/soc/tegra/cbb/tegra234-cbb.c
-> > > > @@ -1774,7 +1774,7 @@ static int __init tegra234_cbb_init(void)
-> > > >   {
-> > > >          return platform_driver_register(&tegra234_cbb_driver);
-> > > >   }
-> > > > -pure_initcall(tegra234_cbb_init);
-> > > > +core_initcall(tegra234_cbb_init);
-> > > > 
-> > > >   static void __exit tegra234_cbb_exit(void)
-> > > >   {
-> > > > 
-> > > > Would this work?
-> > 
-> > 
-> > I am adding Sumit who has been doing a lot of the Tegra CBB driver work.
-> > 
-> > Sumit, any concerns here? We could run this change through our internal
-> > testing to confirm.
-> > 
-> > Jon
-> > 
+> Introduce include/asm-generic/dyndbg.lds.h, to bundle dynamic-debug's
+> multiple sections together, into 2 macros:
 > 
-> CBB driver can be switched to core_initcall.
-> pure_initcall was originally added so its IRQ handler is registered
-> before other Tegra drivers to catch and print any bad MMIO error
-> during their probe.
-> Looked at the current state of Tegra drivers:
->  - The other early Tegra drivers (PMC, fuse, flowctrl, ARI) all run at
->    early_initcall, before either pure_ or core_initcall.
->  - The only other Tegra core_initcall is tegra-hsp, and link order keeps
->    CBB ahead of it (drivers/soc/ links before drivers/mailbox/).
+> vmlinux.lds.h DATA_DATA: move the 2 BOUNDED_SECTION_BY(__dyndbg*)
+> calls into dyndbg.lds.h DYNDBG_SECTIONS(). vmlinux.lds.h now includes
+> the new file and calls the new macro.
 > 
-> Acked-by: Sumit Gupta <sumitg@nvidia.com>
+> MOD_DYNDBG_SECTIONS declares the 2 BOUNDED_SECTION_BY calls, but wraps
+> them with output section syntax to keep them as known and separate ELF
+> sections in the module.ko.  The KEEP fixes the lost section.
+> 
+> dyndbg.lds.h includes (reuses) bounded-section.lds.h
+> 
+> scripts/module.lds.S: now calls MOD_DYNDBG_SECTIONS right before the
+> CODETAG macro (consistent with their placements in vmlinux.lds.h), and
+> also includes dyndbg.lds.h
+> 
+> This isolates vmlinux.lds.h from further __dyndbg section additions.
+> 
+> CC: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> ---
+> [...]
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index d9d2eb708355..54897d742c6c 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -332,6 +332,7 @@
+>  /*
+>   * .data section
+>   */
+> +#include <asm-generic/dyndbg.lds.h>
+>  #define DATA_DATA							\
+>  	*(.xiptext)							\
+>  	*(DATA_MAIN)	
 
-Thanks, Sumit and Jon!
+Nit: I suggest placing the dyndbg.lds.h include at the top of the file,
+as is usual, together with the codetag.lds.h include.
+
+Otherwise, this looks ok to me. Feel free to add:
+
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+
+-- 
+Thanks,
+Petr
