@@ -1,119 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE77C47886E;
-	Mon, 18 May 2026 16:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779121275; cv=none; b=ul9g7DG9SNsNk+CWseFOT2BRo2O2NGGKXe5ZVxtJFKImQGu3QIjVYn3mPdtW8TQXPyJfkfYpbbDADJf0EthoMNH05kboGwkE8jFVaFIbyUUjAgiz5AOlBXqiIUI9XVVHNQG50QY1FTeozrrFO3Y0fPkid5rzXjLKpgLF5LRIHsA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779121275; c=relaxed/simple;
-	bh=4ovUSVlsIvBgxFkMAwIXQGZSlg7tcGA+QS26l5de8oY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pUu0TLon1YM1e+w39YdaS2XSnClXGDluxF+4dx5OEPysVPp15Zm8dlt0YI5fpgkKWOlXpRU92uXDtFuF5+K0Y3HtrGnvmbfsG53xdMWpgvWBxZI3hYLdG3f+yWLY0m9jxmqWZB2kLJ5mwqR7ovkyGstI4gHNWQxS0JZRyN8ax0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e/ezEnb0; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E89B4779B3
+	for <linux-modules@vger.kernel.org>; Mon, 18 May 2026 17:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779125835; cv=pass; b=jksH+1UJVnegP0l7M/9nnrTd7e164Py25XXBkZqATq7xsoVdCkbu0YATi/tvqzOLMRv4XxDTd1umrm/DcBbAe+wiPdeB5JJGIZCN0gb3NIqBXXGEemodghQduuY9pvszQWGZSqbjBh7D2l+QJxnbLpW8ami+5/ke1SCy8NYWbJI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779125835; c=relaxed/simple;
+	bh=jrvS32sEevys8TZH3O55MR1p10eVSCxD3OnQbjCZDD0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=h2EqhOu+H3exdV+9ErvDfTAwz0Q83ExwV5NhbYY1FCcJZI7wHwmYGXfHu7q0mc32yYQGePu90pFU4vlCUuHuwtov/41GEd43g+mdQvF3tJEH7J/GIWptdcmkeXm/uXncVBRuQ309RjKEGJ+n4uR/rgGXLMTpQvBFw9UEu/0rPME=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHQ+EcpW; arc=pass smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e/ezEnb0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B5FAC2BCB7;
-	Mon, 18 May 2026 16:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779121271;
-	bh=4ovUSVlsIvBgxFkMAwIXQGZSlg7tcGA+QS26l5de8oY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=e/ezEnb0KYd2gfaJ3NYVQKeJL238+8WbJbN/+x808RyvcwYBCirB2ZLYL7nyIgkoL
-	 ikJEPSIgdYLhmc3cjGjepV7WHnBKTuZFi4JWf0uGG8w5IWHzSu6TPHABRxXVbaBOHA
-	 fvTHo9fUaqZeo6IPHbtUNYgsrQGiMsuPZRHOwfqplL5DZQBJQDGI0ImHVRAKePm+65
-	 IZmngkQ7WFVX6zMRKNyKiLP0sB8sqzgEIjNRGuFD78/FXrz4GJDm5Qh1gEI+AwE6JQ
-	 VgUE0JhCNNeVyuD9aXSpHP0eZ3TdQMLwnaxce0gMvGScwmELViUSGMGXIiXDBo4/cN
-	 k8Z94vWYXdztA==
-Message-ID: <be6734b9-112e-4e71-9013-1c6dc5f750da@kernel.org>
-Date: Mon, 18 May 2026 18:21:07 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHQ+EcpW"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-303c0a57d55so158363eec.1
+        for <linux-modules@vger.kernel.org>; Mon, 18 May 2026 10:37:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779125833; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OVAXLLnqas7INROmrgPhhBJS6VFUFWgys5wmPiO6ys/Kcjso6tz+ENd2LLimS8Z4xg
+         LbmbkHs5OCbhttYcaLwfxMJczx6tU73jD/yyx4eNwJLsgvfwHj4Vkqvoe/UQis7fboDS
+         HCHm3n4puuIvM/6zIicouebRLIzVRRP1QzbsMKVhouuG8+m1ybGr+p2yIdEPYfM8wKv1
+         AWWpWHYMlU/EF3QnO7v0SJ8vplXp+fDxHiRkT8maZ6N8lKdw6GXCvo0QRqasFy7n8eXO
+         CcnBfhSUwUPbhzUOI628fMxdCRwp55hvidv47wzKtc3mmr1YGQLWZe0XcSRz5vRJDPPs
+         uYFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0HX17qVGSDXSzZemTKi2JBGH3uqyvO3ppEnIs5HIR9k=;
+        fh=Akoys0l1vt8UNaWk/zabT4gwCqcXszEmqYb0gZJIWnI=;
+        b=L3juZIGaa2qHrHDU1TB/4Y1huhynGhiUFf6rlJGh42YD3S8aOmBRYgQocTtp4nUgzn
+         wsnPh9mm2A4oJvtgYFwOHbse1AyxDzswDu//QA9GB+5xovoIVLX3oxBnlHiqmuaQToul
+         ZNbR88BDFHZ/CleaU562ZuLs0MkCpsjosnLWthjIkM1yowbCGotXRbo7tsALBKTkVVSc
+         1uhcjBzfIXKEMbmFQpO6U2z/qeQsGtGJ7XK7npA/YlT7CvO/MUy6xagAHGhPqiqmQFB4
+         sOtQKp1Z9R9B1Y0QTK0qbojb3X5FGhxar19GXMJwnJZ+SGpOicAOikK2UzFckrqQpl4f
+         a/mg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779125833; x=1779730633; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0HX17qVGSDXSzZemTKi2JBGH3uqyvO3ppEnIs5HIR9k=;
+        b=NHQ+EcpWGNxiHmV9+2TWO8suq1XSW+ehIxJ163fs2OzSZ8zdlHGjLruVBN/60iDZpd
+         r7AwoisPfEzj5ePtUZAliNxEeEYkqlkTJBp+WunoByA4bgkmHma7EXGB2YIRU/Bicn2M
+         TxORW1baGxevNuryYmdmN+vgzbp076coYe9FxyLhctlRTjxxDRi+LwWBuFR6luEzk2ZF
+         ova3qthuxMqhRkdU3taz+CPN9VqU3Xt7WntLSNDem6rzwC1JUuoh6ftExDIg1d0+nF7i
+         WmMHqQ4D/ii/QYSIvlDmI+mVGDjFfg1s6DqgIQ5mym3mO/UxDo29jcHFi8HqO9b2Fhzp
+         w2Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779125833; x=1779730633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0HX17qVGSDXSzZemTKi2JBGH3uqyvO3ppEnIs5HIR9k=;
+        b=QJlIrTTfBzCnJ/S5eFhpAy70wXXc3siTS9G1+CO5wtClJ5lvX6vHKsyvdNh1+gDggv
+         SDyqbZih/JtTvPhvDpCxRM8tOGT/n2BXgQqbFdTC3jTYI205EO3rwIiMdO5csNZQuohQ
+         dPqTtKKLmjWGVBR9E6/Y+/otUciVnNZKEJDj3sQOl7ItjIZ6Iy/ij8R1WfR1bQKs0mP+
+         l+zHdVXtOrG7K8aDzfbccYMYL1YVy6OC4x+z3gPdBktFMmZ2BtpPIT+klOMccaiCinYw
+         ARW081jlE/uFXqCi8eXmyBszHnAmtWpSc2lPbYFc8MTXQ2JUknV7CB/CSt1pONMHolKw
+         iHpg==
+X-Forwarded-Encrypted: i=1; AFNElJ/2bul45FT91OLePtW9+sLNHpsp7SigMCDahbfPxhh1fMYfHZE1f8V0XOIWsMajQNWl0ppZYjxrO2hLV+hm@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKR5HmrF8jHEDJUTCRlmIabgo+bUHf+GK5Cd36Ja3TIZAUJRPC
+	MSue2cfs/SEkkBe2XaCh3BlNsXG8YN3LpTOate3B5DlcRYVoKhuYll62vMMD0cay7K3lNp8CpK9
+	iDJZm1Hw1y+eh4TCQn0jFAI/5TpoxTfI=
+X-Gm-Gg: Acq92OHm6P0w/wZFVlyM2cieJn5lD9d4dLChiprqEKu31rGml5gvRdiC2CxZW2nm7+S
+	DHJoftwfkmgyRuN9UXXskqPs0A7WWfFzcJIav6dd+xB0VlARw7FbZAYD2+gO12vDMWCdMJno4g2
+	Tn7DRCYmaQRP8gsQCq+YNghl9C7+IwtcHMklYmRM0XEvgChB2wSsJEzkgbTEN/XSA7s5zx/+Cs0
+	wh4OBdlXjUzgd6qr4fD2Jcc6bOj+G45FNzDLGgyLv8l7F6N5TCymPIBDs0u+ctEXIsJ1w4WmWPp
+	izLTkr8Eltg8oUoP/0kQZw+wnF1E17oPgj/F1LOvoQ00/rTzANRspM4PctUTKhzuizXD0nCFde/
+	8h4tXHpmU36kG7KD8O7C6Mk0=
+X-Received: by 2002:a05:7300:2391:b0:2da:b05a:5a7d with SMTP id
+ 5a478bee46e88-30397c12731mr2821874eec.0.1779125833139; Mon, 18 May 2026
+ 10:37:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module: decompress: check return value of
- module_extend_max_pages()
-To: Andrii Kuchmenko <capyenglishlite@gmail.com>,
- linux-modules@vger.kernel.org
-Cc: mcgrof@kernel.org, dmitry.torokhov@gmail.com,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260518143233.16091-1-capyenglishlite@gmail.com>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <20260518143233.16091-1-capyenglishlite@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260518134107.4114-1-cppcoffee@gmail.com>
+In-Reply-To: <20260518134107.4114-1-cppcoffee@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 18 May 2026 19:37:01 +0200
+X-Gm-Features: AVHnY4IEBcW_Q34oou59uRlgX_xaMFEhRhkXWKkbxl7ggzI2sZKcR1sOQptVmvE
+Message-ID: <CANiq72kyRjidJ=s2CHgoP75cJ3yVZtmEFyraBocjkLUuU3+xPA@mail.gmail.com>
+Subject: Re: [PATCH] rust: kernel: module_param: replace pr_warn with pr_warn_once
+To: Xiaobo Liu <cppcoffee@gmail.com>, Adarsh Das <adarshdas950@gmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	da.gomez@kernel.org, samitolvanen@google.com, atomlin@atomlin.com, 
+	ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, lossin@kernel.org, aliceryhl@google.com, 
+	tmgross@umich.edu, dakr@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 18, 2026 at 3:41=E2=80=AFPM Xiaobo Liu <cppcoffee@gmail.com> wr=
+ote:
+>
+> Replace pr_warn!() with pr_warn_once!() in module_param::set_param() to
+> avoid flooding the kernel log when a null pointer is repeatedly passed.
+>
+> The original code had a TODO comment noting that pr_warn_once should be
+> used once available. Since pr_warn_once!() is now available, switch to it
+> and update the comment accordingly.
+>
+> Signed-off-by: Xiaobo Liu <cppcoffee@gmail.com>
 
+Isn't this
 
-Le 18/05/2026 à 16:32, Andrii Kuchmenko a écrit :
-> [Vous ne recevez pas souvent de courriers de capyenglishlite@gmail.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
-> 
-> module_extend_max_pages() calls kvrealloc() internally and returns
-> -ENOMEM on allocation failure. The return value is never checked.
-> The decompression loop then continues calling module_get_next_page(),
-> which writes struct page pointers into info->pages[]. When used_pages
-> reaches the stale max_pages value (not updated due to the failed
-> extend), a subsequent write to info->pages[used_pages++] goes out of
-> bounds into adjacent heap memory.
-> 
-> Adjacent slab objects in the same kmalloc cache (pipe_buffer,
-> seq_operations, cred) can be corrupted, potentially leading to local
-> privilege escalation on kernels without SLAB_VIRTUAL mitigation.
-> 
-> The call order in finit_module() is:
-> 
->    module_decompress()    <- vulnerable, runs FIRST
->    load_module()
->      module_sig_check()   <- signature check, runs SECOND
-> 
-> Decompression happens before signature verification. A crafted
-> compressed module submitted via finit_module(MODULE_INIT_COMPRESSED_FILE)
-> reaches this code path before any signature gate is applied. On kernels
-> with module.sig_enforce=0 (default without SecureBoot) or with
-> unprivileged user namespaces (Ubuntu, Debian default), this is
-> reachable without CAP_SYS_MODULE.
-> 
-> Confirmed present in mainline (tested on v6.14-rc3).
-> 
-> Fix: add the missing error check after module_extend_max_pages() and
-> return immediately on failure. This matches the pattern used by every
-> other kvrealloc() caller in the module loading path.
-> 
-> Fixes: 169a58ad824d ("module: add in-kernel support for decompressing")
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Andrii Kuchmenko <capyenglishlite@gmail.com>
-> ---
-> Changes in v2:
->   - Remove unnecessary initialization of 'error' to 0 (Christophe Leroy)
->   - Remove unrelated blank line after if (error) return error (Christophe Leroy)
-> 
->   kernel/module/decompress.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-> --- a/kernel/module/decompress.c
-> +++ b/kernel/module/decompress.c
-> @@ -XXX,9 +XXX,12 @@ int module_decompress(struct load_info *info,
->                                  const void *buf, size_t size)
->   {
->          unsigned int n_pages;
->          int error;
->          ssize_t data_size;
-> 
->          n_pages = DIV_ROUND_UP(size, PAGE_SIZE) * 2;
->          error = module_extend_max_pages(info, n_pages);
-> +       if (error)
-> +               return error;
->          data_size = MODULE_DECOMPRESS_FN(info, buf, size);
->          if (data_size < 0) {
->                  error = data_size;
-> --
-> 2.39.0
+  https://lore.kernel.org/rust-for-linux/20260226120848.82891-3-adarshdas95=
+0@gmail.com/
 
+and this:
+
+  https://lore.kernel.org/rust-for-linux/20260427-params-pr-once-v1-1-3a8c6=
+4704cc4@kernel.org/
+
+? Cc'ing the authors of both. I will reply in the second one too.
+
+(Also, your email seems to have been sent twice to the list)
+
+In any case, Sashiko is correct, this "time-based comment" is not very usef=
+ul:
+
+> +        // `pr_warn_once` is already available, use it.
+
+Cheers,
+Miguel
