@@ -1,134 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E608C4534AE;
-	Mon, 18 May 2026 12:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41873481FA2
+	for <linux-modules@vger.kernel.org>; Mon, 18 May 2026 13:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779109063; cv=none; b=NZB3FFRSUBegQm0zQl/Y2F6V+iW1yyh0pDWfNqIMxfL5nNYbCgEMhsNk5K08uHtjIce7IiN+QUwTc2Oeb1BfDdVIvTaTTmrvnrDklGok2xIeUtHF8t8zJsWPvQRPm0WT9ewglNODCpWA3tecvWiEixH9QDfcERgIh418YjO0Jvg=
+	t=1779111666; cv=none; b=ozTow4HWRtYjI6fWgkXPHCYNStVj1hOMaambp8ucIq5VMLQCFnQ3YnpShSZORwSJmNJhDZ9TFpBEDyNrTg0ENMJmSYk9wbMfIhxeo+roMd3r+832GHfce+kt0vZD7FWqcPqHsrfDQy9pu17qHfxNkhWa46PTLiA+cFvo+n2+T/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779109063; c=relaxed/simple;
-	bh=YRRrljfx2AYP0ODnBJBnxldou5SjjyxCVajUiH70kvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CC2dvppQAseD/0r5wvVWzJLZ/qriV6u9Tm0QQT43j3lAJqndM2wjqe8kylfR2vpuA9/AQ2anpxN4/SZ/mhWIGf9IywQZeAYA/5WC7KJABUV+C537OXKxgSMFEJqLvVyZsNAAf2GR1dfzxPLdJX71MxIMPMJdrAnEvZogJ2FGcAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=I26H2lA0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779111666; c=relaxed/simple;
+	bh=0GMy557X2yIPxBvMxVdGjzD8em/l/TBASpj6hxhrv8I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eVGmUfs1wJe6ltZrgI4fBESOFS/ChxhvJYnX6s/hvrEurjlgoKlDcO4cI9EnXphPGqXfC0tm5j6sMXShL7pBpLdpe86vaORiVo0+czZOmKqmy0ybrTOOU9m3zFfX7Z1NaeoB9U+qyHwXhWBmQxRv+lexSuHqhFsOalmR8PVXQ6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Huw7mbZ/; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="I26H2lA0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6492EC2BCB7;
-	Mon, 18 May 2026 12:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1779109062;
-	bh=YRRrljfx2AYP0ODnBJBnxldou5SjjyxCVajUiH70kvA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I26H2lA0o6c2g+XH7+UBuLV3SlbuESQt7X07rvzTavBrGoQUE9aj3+RNsCENJadOK
-	 qJOx4XGDO8g60sGcQwJSBu9opZE+4dJXagVajpBLUeqGLgLpMnOhZjooBlAXJS1zas
-	 asa3QksVn5KkHMPP+bSxZehBRvfx7QIR+D9Fd2Ms=
-Date: Mon, 18 May 2026 14:57:46 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Andrii Kuchmenko <capyenglishlite@gmail.com>
-Cc: linux-modules@vger.kernel.org, chleroy@kernel.org, mcgrof@kernel.org,
-	dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: decompress: check return value of
- module_extend_max_pages()
-Message-ID: <2026051832-mystify-gaffe-0d5a@gregkh>
-References: <20260518121858.3071-1-capyenglishlite@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Huw7mbZ/"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ba17c8cfacso22718385ad.2
+        for <linux-modules@vger.kernel.org>; Mon, 18 May 2026 06:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779111665; x=1779716465; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wQ1AlD1AM21fm4X96F6F2/fw1jm8rVL0VNrv0bCYenQ=;
+        b=Huw7mbZ/5fKzJKKAH/8JY0q0tGNw7zo5vqe/Mr84yo5S0jljTHI1h+crJU6REFAGou
+         Z8RU3P7A1e0OjnKFosQg5HhPV2rzgJCTJeYp9AdKpdhQrGOoalCosI6vQ3/8Lr5bwF9Y
+         Bme2057FtCi6/LP38myo902Zx/6975WbHW3eudt3z9gYSR79iW1NpeHVOikQAu8AsCEm
+         JKRCblF8kQ9omVFXFQWM2Q3ARbbMAae6xEWlsUAHNJT+YSxgOwPCvC+nyqpbTnxCPllP
+         zsVPVXa9neKyyQziKmCU1tqCjTq/wOb7jXBqgUDUBysiFX9t+R0xocxBZN3JufjuwvLD
+         Lndg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779111665; x=1779716465;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wQ1AlD1AM21fm4X96F6F2/fw1jm8rVL0VNrv0bCYenQ=;
+        b=ELNNOtCO+0fOd8KAOaBLQKPr1CAwrfXFwREiXrGLkgyQ8+IvPlT5VQjHtaOwtH+4gg
+         f+FHm27lZXOmZkaVxKvxI0nfO3827+d5Fx8iHiz36oBBQiGbXrfjFon6efUN5y9/3ZlD
+         qJJHY7jrjFLGUULMC3qaSo5nBVd/xL9NzGiGRlpWw8Kt+2DLtRIBmILIRrn1pmiTgGpG
+         h7hz2W7XbCksuQ5fHXXkxfJQtrmE2xduuvJ0Yb89a1s3++Ipn8M6YduPAO6T6hIMfzbI
+         buvQJsjfeVI+VL1RSEERQr+7tYLTlItdSlA7w0SY48oZcJaaHtDVpG5GS5uV8/7fEIR7
+         of3Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/9U9dpKXgteBMrvmEr6rKABWz//IswewjAguyKtxKv6kCI7K/6uxcdfhFHMsu9eQb/hdv0lG0ch/yZ+CUg@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkIOo8l+RJEPgk3m6EBzbpUQkJBkmMC0Ec+mmDNuy+PAWzXtox
+	vGvYZhiANjbhPsRVhiNzNLtWoJUeTHARjCcA4AOdygI/cLA6aYAYtMpc
+X-Gm-Gg: Acq92OG5BPG8BlsczLQMrN7XJ6VSto1bnFqwr0npzMzQtdU8R3BjbqnabXhhP1zooqJ
+	+pXiFjtIxaKkUgsPXXyAWOjyL0ldxN8Lce9P6hMaUQt9e1QaL00IrFwwzHW+CYScq/D0mbSyClZ
+	Mqa+l1dotWmFQD6LprPAyWYR89BrDo/RvyRZK1NtzyYbg267Qy+p8/2IYDPouCANUawaSibR8+S
+	j2FN/zoI0hT0d4M4Y6pbEReEMcwNERuqQbzVK5sPxSgWdUnmNBFKBu68qBBDcRvFzb/jHoErVrv
+	FaBQRUu3vxQMv12S+cuPmUdPyJwE3rTlH/+HPEyWkaJaneFTeN6QuKXwBkleFY9JfQd/6xxIXNp
+	C7qUN1Y71Hiawx48oNuetzdrMaWqjjFnyzUGEAlHrbp5mgvMi0Vl0p8d3qQ8ZYMisR4OEdzA1+d
+	7w/IylMuYRxvBZAO9Ie8iMfiWw+WAIQuRyXyvfFksg9YFEcrIe/s80xt4I3LNguTygKq2VdI7IO
+	WGf0/XxOdzaQVYSyKBEeuKn5gBrF06681XWBpMCKtoM8872eQ==
+X-Received: by 2002:a17:902:c948:b0:2b2:4f43:b48c with SMTP id d9443c01a7336-2bd7e8423a7mr173026705ad.14.1779111664551;
+        Mon, 18 May 2026 06:41:04 -0700 (PDT)
+Received: from localhost.localdomain (ec2-54-199-123-161.ap-northeast-1.compute.amazonaws.com. [54.199.123.161])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd5fb17sm148500135ad.1.2026.05.18.06.40.58
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 18 May 2026 06:41:03 -0700 (PDT)
+From: Xiaobo Liu <cppcoffee@gmail.com>
+To: rust-for-linux@vger.kernel.org,
+	linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
+	atomlin@atomlin.com,
+	ojeda@kernel.org,
+	boqun@kernel.org,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	dakr@kernel.org,
+	Xiaobo Liu <cppcoffee@gmail.com>
+Subject: [PATCH] rust: kernel: module_param: replace pr_warn with pr_warn_once
+Date: Mon, 18 May 2026 21:40:53 +0800
+Message-ID: <20260518134053.4078-1-cppcoffee@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260518121858.3071-1-capyenglishlite@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 18, 2026 at 03:18:58PM +0300, Andrii Kuchmenko wrote:
-> module_extend_max_pages() calls kvrealloc() internally and returns
-> -ENOMEM on allocation failure. The return value is never checked.
-> The decompression loop then continues calling module_get_next_page(),
-> which writes struct page pointers into info->pages[]. When used_pages
-> reaches the stale max_pages value (not updated due to the failed
-> extend), a subsequent write to info->pages[used_pages++] goes out of
-> bounds into adjacent heap memory.
-> 
-> Adjacent slab objects in the same kmalloc cache (pipe_buffer,
-> seq_operations, cred) can be corrupted, potentially leading to local
-> privilege escalation on kernels without SLAB_VIRTUAL mitigation.
-> 
-> The call order in finit_module() is:
-> 
->   module_decompress()    <- vulnerable, runs FIRST
->   load_module()
->     module_sig_check()   <- signature check, runs SECOND
-> 
-> Decompression happens before signature verification. A crafted
-> compressed module submitted via finit_module(MODULE_INIT_COMPRESSED_FILE)
-> reaches this code path before any signature gate is applied. On kernels
-> with module.sig_enforce=0 (default without SecureBoot) or with
-> unprivileged user namespaces (Ubuntu, Debian default), this is
-> reachable without CAP_SYS_MODULE.
-> 
-> Confirmed present in mainline (tested on v6.14-rc3).
-> 
-> Fix: add the missing error check after module_extend_max_pages() and
-> return immediately on failure. This matches the pattern used by every
-> other kvrealloc() caller in the module loading path.
-> 
-> Fixes: 169a58ad824d ("module: add in-kernel support for decompressing")
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Andrii Kuchmenko <capyenglishlite@gmail.com>
-> ---
->  kernel/module/decompress.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-> --- a/kernel/module/decompress.c
-> +++ b/kernel/module/decompress.c
-> @@ -XXX,9 +XXX,12 @@ int module_decompress(struct load_info *info,
->  				const void *buf, size_t size)
->  {
->  	unsigned int n_pages;
->  	int error;
->  	ssize_t data_size;
->  
->  	n_pages = DIV_ROUND_UP(size, PAGE_SIZE) * 2;
->  	error = module_extend_max_pages(info, n_pages);
-> +	if (error)
-> +		return error;
->  	data_size = MODULE_DECOMPRESS_FN(info, buf, size);
->  	if (data_size < 0) {
->  		error = data_size;
-> -- 
-> 2.39.0
-> 
+Replace pr_warn!() with pr_warn_once!() in module_param::set_param() to
+avoid flooding the kernel log when a null pointer is repeatedly passed.
 
-Hi,
+The original code had a TODO comment noting that pr_warn_once should be
+used once available. Since pr_warn_once!() is now available, switch to it
+and update the comment accordingly.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Signed-off-by: Xiaobo Liu <cppcoffee@gmail.com>
+---
+ rust/kernel/module_param.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
+index 6a8a7a875..fedb709fa 100644
+--- a/rust/kernel/module_param.rs
++++ b/rust/kernel/module_param.rs
+@@ -62,8 +62,8 @@ pub trait ModuleParam: Sized + Copy {
+     // NOTE: If we start supporting arguments without values, val _is_ allowed
+     // to be null here.
+     if val.is_null() {
+-        // TODO: Use pr_warn_once available.
+-        crate::pr_warn!("Null pointer passed to `module_param::set_param`");
++        // `pr_warn_once` is already available, use it.
++        crate::pr_warn_once!("Null pointer passed to `module_param::set_param`");
+         return EINVAL.to_errno();
+     }
+ 
+-- 
+2.34.1
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
