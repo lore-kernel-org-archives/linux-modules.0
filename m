@@ -1,127 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-43170.protonmail.ch (mail-43170.protonmail.ch [185.70.43.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE553CC9F6;
-	Mon, 18 May 2026 10:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF8031F9A1;
+	Mon, 18 May 2026 11:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779101390; cv=none; b=pBb+ixLEJfFhk1UuhOO8kMCCuwh/ho3acGsOXogkBEqMsREWUtHCBbciOit25vcEiAT5lSmGMUAtZnhV94AXlZzv+vwXia3B0S387MMs8Uz4TByyu977Vdxbkt9o9/QKW8LKLUrgloVStguUvSNLlypsdw9sLQdcQLHDK/9VFCI=
+	t=1779103119; cv=none; b=iUK+swg8NsJzNSA8qfCpmOCmUjSW5LtZShgkQR7EcnNcK3MjOwc2IzA4jhUY/cud8sOALpkHJJvSjqVIFWNXcxP9i9gfhf+Ssle1BLwjJALkG307JeXHkrGGcHDM335YHwdhC9a+wpYEKNkK+6SiEriI+8pXZ22RFsjWm2j6Tk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779101390; c=relaxed/simple;
-	bh=42jNNsHQpsQpdQu92rwfrOHOBcpmK94BPUkm62USyd4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OkuwPOMzL326bvihT7wQt2XhxDIuQXQF/HUq/yf7EUnotP0+RoZMK/0go+OxB7nWQdqfK8XtjVLB/UA5hoB/HFJ28/2rAydEjlRvBMWRvr4IcOMulbUjbfHIN1UUa2BMN5i3GhkbZtMMUCJv+yI/x9iJZXqyUp1/SPR8SkLKKzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bvmkqrM+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779103119; c=relaxed/simple;
+	bh=g9oigkZAnSfNfWv7VgFXGodLGkyR1hOlWNHwF+NTWU8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BYGLlvv3QlAGnM88bg0huhHemERQoHGh5nr2fdvO9obT3u/zY1BiS3xduc+I/SxO/UvzHx3LQwFJhdJvc/s17NGgVczWQ6ctqskPMCUJw4E/xyT3gsZpqrV6+KmEemcWjzUAMB0WJNCVJ3FbJum6NNYQYtDRpwpOQVbWgvU6HjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (2048-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=lerK9hyU; arc=none smtp.client-ip=185.70.43.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bvmkqrM+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC5DC2BCB7;
-	Mon, 18 May 2026 10:49:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1779101389;
-	bh=42jNNsHQpsQpdQu92rwfrOHOBcpmK94BPUkm62USyd4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bvmkqrM+eXFjvGXVjJHiwUCycK215Afb0uWDNVzd1/qkeeUmDxVKwfS8cLg9LcLFf
-	 gSI0Vp7+TKoFzL9pIp3Ga8zHUcTvD0kmsveZ2nd3ds7cGPM81D3VR4kwFq9v4CNLjR
-	 /m8B69I8qyU/qSTxlW0YVjITv6VzOn4aKpDD49W8=
-Date: Mon, 18 May 2026 12:49:03 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Shashank Balaji <shashank.mahadasyam@sony.com>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>,
-	James Clark <james.clark@linaro.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, Mike Leach <mike.leach@arm.com>,
-	Leo Yan <leo.yan@arm.com>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Rahul Bukte <rahul.bukte@sony.com>, linux-kernel@vger.kernel.org,
-	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-	driver-core@lists.linux.dev, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, Daniel Palmer <daniel.palmer@sony.com>,
-	Tim Bird <tim.bird@sony.com>, linux-modules@vger.kernel.org,
-	linux-tegra@vger.kernel.org, Sumit Gupta <sumitg@nvidia.com>
-Subject: Re: [PATCH v5 4/4] driver core: platform: set mod_name in driver
- registration
-Message-ID: <2026051849-life-almanac-224e@gregkh>
-References: <20260518-acpi_mod_name-v5-0-705ccc430885@sony.com>
- <20260518-acpi_mod_name-v5-4-705ccc430885@sony.com>
- <2026051827-curler-disjoin-c83f@gregkh>
- <agrqvIiNWrYtGvTk@JPC00244420>
+	dkim=pass (2048-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="lerK9hyU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=protonmail; t=1779103091; x=1779362291;
+	bh=uLsnoGQ0i5yHMXKMyVYaC5fl5YpXpo5gCg4PnRmRGnU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:From:To:
+	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=lerK9hyUvdfdmFqtyzNJANYjFIp1rsY0wAG6suGCksSz9dQRc/x5VjgmP4vywzBD9
+	 uchD+6l96ORs0sVVuJwVOnC6E+Ald063AZPTYYrYgCSXWx4aGQoCAC4wGbV8Geb90M
+	 xDqJ61ThZNDt4jh34EtzVSYdempkgGfWyg9EAjr4Gpsgi/jD++SIR64HE9mloSLPsY
+	 tnlTYPFPBPPZK3ut06fk12Lhy7nwl2alRfAZciN7boI95IP15+6NrqA6cDMELMLhN7
+	 d1yAXSa6ZRLCUVi69RfX4YBRF8mkookG/KOrKf7L04k+x2XQ0lS1VBsR3HuCF6t+Fl
+	 zpJoFBBgtH9dg==
+X-Pm-Submission-Id: 4gJwJt1bbVz1DFG2
+From: =?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>
+To: Xiaobo Liu <cppcoffee@gmail.com>
+Cc: rust-for-linux@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
+	atomlin@atomlin.com,
+	ojeda@kernel.org,
+	boqun@kernel.org,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	dakr@kernel.org
+Subject: Re: [PATCH] rust: kernel: module_param: replace pr_warn with pr_warn_once
+Date: Mon, 18 May 2026 14:18:02 +0300
+Message-ID: <20260518111805.65576-1-work@onurozkan.dev>
+X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20260518104735.34906-1-cppcoffee@gmail.com>
+References: <20260518104735.34906-1-cppcoffee@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <agrqvIiNWrYtGvTk@JPC00244420>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 18, 2026 at 07:32:28PM +0900, Shashank Balaji wrote:
-> On Mon, May 18, 2026 at 12:27:13PM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, May 18, 2026 at 07:20:00PM +0900, Shashank Balaji wrote:
-> > > Pass KBUILD_MODNAME through the driver registration macro so that
-> > > the driver core can create the module symlink in sysfs for built-in
-> > > drivers, and fixup all callers.
-> > > 
-> > > The Rust platform adapter is updated to pass the module name through to the new
-> > > parameter.
-> > > 
-> > > Tested on qemu with:
-> > > - x86 defconfig + CONFIG_RUST
-> > > - arm64 defconfig + CONFIG_RUST + CONFIG_CORESIGHT stuff
-> > > 
-> > > Examples after this patch:
-> > > 
-> > >     /sys/bus/platform/drivers/...
-> > >         coresight-itnoc/module		-> coresight_tnoc
-> > >         coresight-static-tpdm/module	-> coresight_tpdm
-> > >         coresight-catu-platform/module	-> coresight_catu
-> > >         serial8250/module		-> 8250
-> > >         acpi-ged/module			-> acpi
-> > >         vmclock/module			-> ptp_vmclock
-> > > 
-> > > Co-developed-by: Rahul Bukte <rahul.bukte@sony.com>
-> > > Signed-off-by: Rahul Bukte <rahul.bukte@sony.com>
-> > > Signed-off-by: Shashank Balaji <shashank.mahadasyam@sony.com>
-> > > ---
-> > > This patch depends on patches 1, 2, 3
-> > > ---
-> > >  Documentation/driver-api/driver-model/platform.rst |  3 ++-
-> > >  drivers/base/platform.c                            | 21 ++++++++++++++-------
-> > >  drivers/hwtracing/coresight/coresight-core.c       |  5 +++--
-> > >  include/linux/coresight.h                          |  5 +++--
-> > >  include/linux/platform_device.h                    | 17 +++++++++--------
-> > >  rust/kernel/platform.rs                            |  4 +++-
-> > >  6 files changed, 34 insertions(+), 21 deletions(-)
-> > > 
-> > > diff --git a/Documentation/driver-api/driver-model/platform.rst b/Documentation/driver-api/driver-model/platform.rst
-> > > index cf5ff48d3115..9673470bded2 100644
-> > > --- a/Documentation/driver-api/driver-model/platform.rst
-> > > +++ b/Documentation/driver-api/driver-model/platform.rst
-> > > @@ -70,7 +70,8 @@ Kernel modules can be composed of several platform drivers. The platform core
-> > >  provides helpers to register and unregister an array of drivers::
-> > >  
-> > >  	int __platform_register_drivers(struct platform_driver * const *drivers,
-> > > -				      unsigned int count, struct module *owner);
-> > > +				      unsigned int count, struct module *owner,
-> > > +				      const char *mod_name);
-> > 
-> > Why can't you just use the owner->name value instead?  They are always
-> > the same here, right?
-> 
-> owner is NULL for built-in modules.
-
-Ah, sorry, forgot about that.
+On Mon, 18 May 2026 18:47:35 +0800=0D
+Xiaobo Liu <cppcoffee@gmail.com> wrote:=0D
+=0D
+> Signed-off-by: Xiaobo Liu <cppcoffee@gmail.com>=0D
+> ---=0D
+=0D
+You need to write description for the change.=0D
+=0D
+Onur=0D
+=0D
+>  rust/kernel/module_param.rs | 4 ++--=0D
+>  1 file changed, 2 insertions(+), 2 deletions(-)=0D
+> =0D
+> diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs=0D
+> index 6a8a7a875..fedb709fa 100644=0D
+> --- a/rust/kernel/module_param.rs=0D
+> +++ b/rust/kernel/module_param.rs=0D
+> @@ -62,8 +62,8 @@ pub trait ModuleParam: Sized + Copy {=0D
+>      // NOTE: If we start supporting arguments without values, val _is_ a=
+llowed=0D
+>      // to be null here.=0D
+>      if val.is_null() {=0D
+> -        // TODO: Use pr_warn_once available.=0D
+> -        crate::pr_warn!("Null pointer passed to `module_param::set_param=
+`");=0D
+> +        crate::pr_warn_once!("Null pointer passed to `module_param::set_=
+param`");=0D
+>          return EINVAL.to_errno();=0D
+>      }=0D
+>  =0D
+> -- =0D
+> 2.34.1=0D
+> =0D
+=0D
