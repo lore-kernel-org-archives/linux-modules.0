@@ -1,142 +1,97 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6B3398915
-	for <linux-modules@vger.kernel.org>; Mon, 18 May 2026 21:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0431A682A;
+	Tue, 19 May 2026 06:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779141351; cv=none; b=A3GQ5fW2Ke1LnV1jNgEQnEGOgfMWEUR66K8YbdjvaQBcOhNtidZSx0JHds52Q4RlxfWCd0ScugOGfXLdwJVXwcDQ08e8ZzHImeyYX9z0/P0Xl5Mg9hQpi51NUyO/sSZXZyopL/EmRaCiDfYePmQHBnDrxh0TG7gIJhtAmEjo3Uk=
+	t=1779171977; cv=none; b=HoYoNu4NxSJk1YtNCoD2SAs3RdZ+7P9x6NgohmwIfedIwIDQWKpfB2f8Twy25bsDOZV/Ke3Lc5DgHAkgqgR0R4S64aILH/d6JPSTNGZVTZDfnaYpmqesfcs/DpD4GXJmc7F2J6ZJzzZRgODHpE/ADnSdfy2hdK9xrotq9W//cas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779141351; c=relaxed/simple;
-	bh=WhaVFwVRm1Wf4thmzuA0e0qjOQLT9x+04R1dduxYWzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QLiUFZ1gS7gDEc5iWppHGVY/UBO1j4ru508PC8hhKehmKwb0YRYvYgTK66VPHiD3TrsL2j3Y0v9BTeC6Sy6Pa9mjziMGzANXsWKB4BmktdGoolRxdu2QvgagjIlChMQ4xV7zxbBhABcv+MScq7x+QvL6JmfacgOL8E3r7YZtx1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IvoDbo4V; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1779171977; c=relaxed/simple;
+	bh=vfc7PEfuAeEjqo+PGe1GnSXUHGllBagvhexmLDwXXe8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=l24E7KggOxUxl8VAta0q8X0Lq565EThJgSpuyCwuWG4+tR4lL52lbrie3+q/iLYal1YRy+VSPzWzeGtw00TIQfOIA6+EY0wmdtSNlasdsb0uS1KBXCYw1Hin3u4OG2EOm7KJ5uNKMKkVgqWhvg1fiNgdnVtCi+mrUfar2KPOJDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P8rM12T0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IvoDbo4V"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ba3b9bcf69so765ad.0
-        for <linux-modules@vger.kernel.org>; Mon, 18 May 2026 14:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779141350; x=1779746150; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eATlafWR2CpUln9HSfV3CyzBd2Vyaqeh6UVZyYqlodE=;
-        b=IvoDbo4V1nj4Q9OWvBMcUPpA6eDFfBAFbu4ry1ujeKWH4fYBAFNjP7BApepEoXKgFW
-         echIH2GbEhb+kGhHlHfftLXlBnHDih1oHm9UtaSSK5CAFRUvXh1PCqOj+XI9wKqJnmv9
-         BdHZsxEJDc6k4l629t6bytiQfWInZt6CAKX455PJMRgqGvsL+3fHb7ubaoj1OjP5TMpJ
-         apWTAqJbeutKX9DtvRx+hRvKlId5JUFry4JYzoUpiHudyEvfAoPlfnA1GOb/KpKOehgq
-         VY2sjO/zadidGT8zNRrbzepfosggp1gNZrno+6RpVU2wOW8V9Y0N7qAHPHbOdQPTZ4W2
-         afYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779141350; x=1779746150;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eATlafWR2CpUln9HSfV3CyzBd2Vyaqeh6UVZyYqlodE=;
-        b=TSK+4ywValGhp2ak6l0eR7KFlmvcHoglOgxD4bb/sNAfP6FrZRkh9AeD4ud6HCWT94
-         AoPM5erb3LrQySyo/ZkHCvrkL9SPj+6oTePM7MpQN/SKg/3ZS9Ait2n3GIgV8KuvzV/P
-         NwYt+G6K+vYTfC7Hq+7kFjfuJF05U/ha6x8+HwNYSX/ikZMtx5bEiWqqL7IczmRnD3YA
-         x1/DZVIpkHrzMd16xPmMmLeXmqnLQvcmvECv+uz3OjjoRyPYDRz57dFbCkKtnIqSHkjH
-         vD9fezqZ6tYJQTKWuCGI8kmDmSzDWzin3lu7pz5Xn/F5+maeUuhhhZMgJWLp5605txJf
-         DSkQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9lK4IkjQKs+U7yQ8M0VVGN0/o7xgf2qX3pnjB5Gfan9EZiykevYhJMbAGxGWeHL/JJ9UIbpZ0kYZZJK6kj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKPtQSU6z++bdlOErV0K6tOEHUO6WfuZrf1zcCOVlRu9yPg7k+
-	SzX9an/RSM6S5owk/9hHntzN9fehCLqI66L609cHr6arf0x+FPPrf06AwcTUtois6w==
-X-Gm-Gg: Acq92OGsC1KL6ufGQEk67BE+nYrCQ6MmlhOSOqAyZknttVtcraM3t62aoSmMVpOZiCF
-	/UbsVq6AoxFCKwAApkSeu1ePCXobwsiaKuc6D1lgkNG0t2BLhskVQoBfLksM9B3vERykFkQyIJY
-	e/bYnFARWzOcYxIIkQhjIa9kbfcUXz6NrqsRoUt6U8JeCWyq2CUr4tfUfmvNfFcuk3NTnJbrmfr
-	pzumei58NN+cMStkL4aF9PpZQ8/k2QdIEameNRsCrkHyaTSmgZfozP6yLCeyNfXDgQA3wN7UNcP
-	4jtOCv3yIPjCG75p+LQFXDVFJuX1WKY8kM0rER/QOeSlvTAw4CdObYEpYn1eW4N1ldWsYyPdocm
-	qY/DQ/AfZosXZvfsvgcM1SQCvwjBiyCMnr96F/C9cs/7DdYJexn2SHAekINibBVG+kc1E9Pgh1T
-	0GYtXXL0otC5zpmQreR7ok3vHIhDMhFGYamh7r9pnfMVzcMuMDVsF5rE4kInFOhVzcam4Wywwrr
-	u94XFzUClA+mvDJ
-X-Received: by 2002:a17:902:d512:b0:2bc:dc0b:ab29 with SMTP id d9443c01a7336-2bdb0109472mr3880435ad.0.1779141349445;
-        Mon, 18 May 2026 14:55:49 -0700 (PDT)
-Received: from google.com (171.46.125.34.bc.googleusercontent.com. [34.125.46.171])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5cfe498asm164380125ad.39.2026.05.18.14.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 14:55:48 -0700 (PDT)
-Date: Mon, 18 May 2026 21:55:43 +0000
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
-	debian-kernel@lists.debian.org
-Subject: Re: [PATCH v5 00/14] module: Introduce hash-based integrity checking
-Message-ID: <20260518215543.GA1878854@google.com>
-References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P8rM12T0"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A978C2BCC6;
+	Tue, 19 May 2026 06:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
+	t=1779171977; bh=vfc7PEfuAeEjqo+PGe1GnSXUHGllBagvhexmLDwXXe8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=P8rM12T04+ZuBv6GHundGYtIAaOiFQVmUSH7xably5MuOZQ8r7iLOc9QKjSDnaqHj
+	 ffhhMsqcDAfQUTpMlh75x4ZMxFrqOtbIE6ktVNGwnd8YqYIC9l66CN/lrR07iXbABi
+	 n7Q3gj5LIToe4RvmN8BIkAX2EuqEmobGxso5P/M8=
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 095DCCD4851;
+	Tue, 19 May 2026 06:26:17 +0000 (UTC)
+From: Alvin Sun <alvin.sun@linux.dev>
+Date: Tue, 19 May 2026 14:26:14 +0800
+Subject: [PATCH 2/8] rust: driver: make `DriverModule` struct pub(crate) in
+ `module_driver!`
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260519-fix-fops-owner-v1-2-2ded9830da14@linux.dev>
+References: <20260519-fix-fops-owner-v1-0-2ded9830da14@linux.dev>
+In-Reply-To: <20260519-fix-fops-owner-v1-0-2ded9830da14@linux.dev>
+To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Arnd Bergmann <arnd@arndb.de>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-modules@vger.kernel.org, driver-core@lists.linux.dev, 
+ dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev, 
+ Alvin Sun <alvin.sun@linux.dev>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779171975; l=796;
+ i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
+ bh=vfc7PEfuAeEjqo+PGe1GnSXUHGllBagvhexmLDwXXe8=;
+ b=iHl0SVhJNpVhuwZ7fh48egK9TuW+0iU+YW7qNL4AsNI9HBq33i2CD/EuLLetzk/gmObncqGZY
+ c1YeH3GB4bhDdkz58UDUJs4GIxBetIU7CQNTcDd16LTUVxnj/j/Y7aw
+X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
+ pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
+X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
+ auth_id=684
 
-Hi Thomas,
+Expose the generated `DriverModule` struct as `pub(crate)` so that
+driver implementations can reference it via `super::DriverModule`
+for the `ThisModule` associated type.
 
-On Tue, May 05, 2026 at 11:05:04AM +0200, Thomas Weißschuh wrote:
-> The current signature-based module integrity checking has some drawbacks
-> in combination with reproducible builds. Either the module signing key
-> is generated at build time, which makes the build unreproducible, or a
-> static signing key is used, which precludes rebuilds by third parties
-> and makes the whole build and packaging process much more complicated.
-> 
-> The goal is to reach bit-for-bit reproducibility. Excluding certain
-> parts of the build output from the reproducibility analysis would be
-> error-prone and force each downstream consumer to introduce new tooling.
-> 
-> Introduce a new mechanism to ensure only well-known modules are loaded
-> by embedding a merkle tree root of all modules built as part of the full
-> kernel build into vmlinux.
+Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+---
+ rust/kernel/driver.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I noticed Sashiko had a few concerns about the build changes. Would you
-mind taking a look to see if they're valid?
+diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+index 36de8098754d0..9c7c69c4d2af0 100644
+--- a/rust/kernel/driver.rs
++++ b/rust/kernel/driver.rs
+@@ -253,7 +253,7 @@ macro_rules! module_driver {
+         type Ops<$gen_type> = $driver_ops;
+ 
+         #[$crate::prelude::pin_data]
+-        struct DriverModule {
++        pub(crate) struct DriverModule {
+             #[pin]
+             _driver: $crate::driver::Registration<Ops<$type>>,
+         }
 
-https://sashiko.dev/#/patchset/20260505-module-hashes-v5-0-e174a5a49fce%40weissschuh.net
+-- 
+2.43.0
 
-Sami
+
