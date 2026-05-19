@@ -1,96 +1,121 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7B8367F26;
-	Tue, 19 May 2026 18:19:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2CB3E2ACD
+	for <linux-modules@vger.kernel.org>; Tue, 19 May 2026 21:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779214787; cv=none; b=PxWQIkMIxnzU9KjKP3QEOzTBJqd7J6oAJNey82EcyM5D5kxWKbcp+7aqBYH8CePKtJ0c9UcSILjvl7N3uLuYi0w5lc8H0OzhYsb262KoU5M3+SurOFH0UD1yaQ7Fj7kgPszL3mmZHVgaoK+kXdx6X8SKUjSvmgykaO8+zqk8QxM=
+	t=1779225816; cv=none; b=EnOUxaR7fh8/RHJhQbtbSP/1OBiR3mQ1rL0xiYlEcH5dZI26ew1RU52YjjJBJ6nufZm9BnniaDtRjjsYKHJswPZ0TV3PKYQAyUbqaqdzzRj/1zgOXX8kMUS+y5KEBudgITMs8mhuiQTWNMSs6BaXi6RQn9yz/udRYzVqxH2aU2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779214787; c=relaxed/simple;
-	bh=v4SY6HigQ/OOsllBvHWhDfaSzCSvRwcpB55NIroxYRI=;
+	s=arc-20240116; t=1779225816; c=relaxed/simple;
+	bh=lWpu8BLqWj1TfNJlm3ClQfJmScLbNoYxCmBu95VgfzY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uXDLTIbSjkKCvW8FSKka23dSeioBLkP/TF9hvv1x+D/ma2+wwp80AraaRtSREogQ1SpbPs7rHTceF4HhiBIhXC8xxpfUWZaq1U1NXf+LOpfMtpPmzDFriYNB/ec3xyBrHUzahilqPpfw3iQTdYYVd2ALec4zXI++SlTBg9Zu6Ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=NdQD2zkT; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=QOW9PBIuoITEo2uSQrDghcO7DOeULAzf7g16ZWVVq3GiAmFmbXF7ExM5t6xtwFS6CcoA6jchYGEryYVb2Rw5FEpc9RD59o4Jh+rgZFh2EmQhqibYukpgdujpDBqcu+SgadHhAY4KN24005YyqZgLoJiAsYxEqLksQICB2EJj/xU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OlUf+Sdl; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="NdQD2zkT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1779214783;
-	bh=v4SY6HigQ/OOsllBvHWhDfaSzCSvRwcpB55NIroxYRI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NdQD2zkTt1Vg9+d5xPbFs/rZabXzVYqYNbkmay7bmbURQRlVQgmdR/B+lNrKO/wnl
-	 1sbEfjBOCBZinr7ADwsrKwPOLPyNy01sn050oiI8Z1+dSOENnfOYkdJcWLo/dMo86Q
-	 BmkG/C5RjZiti4BDcsEE/fXj4HnkbrPupz3pqug4=
-Date: Tue, 19 May 2026 20:19:43 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, 
-	Xiu Jianfeng <xiujianfeng@huawei.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, 
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>, 
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
-	Christian Heusel <christian@heusel.eu>, =?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, 
-	Eric Biggers <ebiggers@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org, debian-kernel@lists.debian.org
-Subject: Re: [PATCH v5 00/14] module: Introduce hash-based integrity checking
-Message-ID: <e00a5b59-71c9-4c52-9747-0447d5e66b51@t-8ch.de>
-References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
- <20260518215543.GA1878854@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OlUf+Sdl"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b2e8b95bdbso495ad.0
+        for <linux-modules@vger.kernel.org>; Tue, 19 May 2026 14:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779225815; x=1779830615; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JQ56lnoRLJyhWveNJGv3cFgJb4oUuS+nNxeIsg+gH7Y=;
+        b=OlUf+SdlQxGGE420K3w/hBZFOOiiyiNflgf+i0Ze7GEHpZwBHdXHBw5SWQmvBaRWBz
+         Itss8MFwpuN4P9ZSEB7H7maXMWl5Hwk9L4djSAxmS38ESM+99UhFvPNOLXS/bLLam9JB
+         ANIFxm6w7VADD/C/VxC4fuhIsIw+iR8uLEcrGC/xYAjf5ywx3ZRlGpERtoVRc9zRGOMZ
+         0tCeFsPx8Qt1hSgfCBBEBEB7sxguj9ao2PeduAvI5wmKwT9Hp1ROwIU24ulKGq4zVehq
+         qZ1F6Rhq0HjG7LACg7VyHTIApf2kzIIlAaWYmEH4oF59YdgAuW9zffLpckZhVN+HlANc
+         cofQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779225815; x=1779830615;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JQ56lnoRLJyhWveNJGv3cFgJb4oUuS+nNxeIsg+gH7Y=;
+        b=JLBzrkkSRZE2HAR4SxWtr9E5kBhQ/NSRHYMLQqkK1ulm2rYK1e5K6luwPjO4ktjkQP
+         inGeMPHUpTXgmCJHMd/qvMQr7HzNlo4AaMU/x6PdaCf0/CbBGfVVypGRL06r16G0sEF5
+         AqEeWRPsoBsKftwioJTFViHyLGVNpRzVbK4ueWnl+0gVnNzL8Eyez07tVYKtORO/8O6l
+         iqhJ7u6IfXO16bnwrEYyn2D2MRUZSLNQG7j+Fnc+aVt7OOOg8BigNVFaRfYEAqcf8Nkm
+         zdqwiMh4vnoAW60QLWa+8kpI8xhJT3vrTswajHCNSzUQcpeKXQ5IR+omgZR59Kbqx+Wy
+         pgjA==
+X-Gm-Message-State: AOJu0YyOpy5yLCuZhk9pl/rIOpy6SQBbrpJY/c7cVOC6gtH7APKeETZj
+	aCq798ySRumit8ET6F7RHjJxwboxbxgNM+7eNafzSrzArzQ2yT7/Giz39j1FkEAe6NVuwVG5WCF
+	scqQ89ijxpsE=
+X-Gm-Gg: Acq92OFuI1mfKUF1wNOhO7/SbqcPEH4bpiT3k30/jwFEY8/V7a+hBCi0lyMa2eCzaeT
+	9pbsO0S9VJF//en3wA970+HlblbQphsZzW5HRT02M/SvdYgZXvhmD7+akj6t5aDukJdE7wW8ERn
+	LhK05xCpkXOkUJjTF/E8upX87SDQ4cOFdFKt7Y0IOmoKzb8f6/GZcpTu7L0opJ1CYv/TxkJg219
+	MX1wGIgYvnsOJXUJeLd5aVZI4UKR1gCOQMeZLRh2cNnKrGnJTfJI0pEl9/V7w6oxENWTIU/Zmc7
+	zKz2X/pbPx0nnMojDNTMwx0we2U/uTQ+C5gPhHBW93T+NYHcdK1lrh1J6Y2sCiE+/6OMR1QQyoq
+	b+K6uHprxesawvWvj9KYkxYQn/jQiRYeWBm7Nhn29cXwUpobzP8Kwy3hy0OaZHjvtMyG6RLQkB9
+	mZtC1BcKuAYYiYMncMFXI6taT4ehP3tsxsJjavPDrZmFhPtcYGSZW9ZKnZzJcAyTG7NftGox4qW
+	8IIffo=
+X-Received: by 2002:a17:902:ef52:b0:2bd:6dad:7ccb with SMTP id d9443c01a7336-2bdb32bb6damr8726015ad.23.1779225814226;
+        Tue, 19 May 2026 14:23:34 -0700 (PDT)
+Received: from google.com (171.46.125.34.bc.googleusercontent.com. [34.125.46.171])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f196660easm18608271b3a.11.2026.05.19.14.23.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 14:23:33 -0700 (PDT)
+Date: Tue, 19 May 2026 21:23:28 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Andrii Kuchmenko <capyenglishlite@gmail.com>
+Cc: linux-modules@vger.kernel.org, chleroy@kernel.org, mcgrof@kernel.org,
+	dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: decompress: check return value of
+ module_extend_max_pages()
+Message-ID: <20260519212328.GA2614626@google.com>
+References: <20260518143233.16091-1-capyenglishlite@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260518215543.GA1878854@google.com>
+In-Reply-To: <20260518143233.16091-1-capyenglishlite@gmail.com>
 
-Hi Sami,
+Hi Andrii,
 
-On 2026-05-18 21:55:43+0000, Sami Tolvanen wrote:
-> On Tue, May 05, 2026 at 11:05:04AM +0200, Thomas Weißschuh wrote:
-> > The current signature-based module integrity checking has some drawbacks
-> > in combination with reproducible builds. Either the module signing key
-> > is generated at build time, which makes the build unreproducible, or a
-> > static signing key is used, which precludes rebuilds by third parties
-> > and makes the whole build and packaging process much more complicated.
-> > 
-> > The goal is to reach bit-for-bit reproducibility. Excluding certain
-> > parts of the build output from the reproducibility analysis would be
-> > error-prone and force each downstream consumer to introduce new tooling.
-> > 
-> > Introduce a new mechanism to ensure only well-known modules are loaded
-> > by embedding a merkle tree root of all modules built as part of the full
-> > kernel build into vmlinux.
+On Mon, May 18, 2026 at 05:32:33PM +0300, Andrii Kuchmenko wrote:
+> module_extend_max_pages() calls kvrealloc() internally and returns
+> -ENOMEM on allocation failure. The return value is never checked.
+
+We should definitely fix this, but I'm not sure the rest of the
+commit message is entirely accurate.
+
+> The decompression loop then continues calling module_get_next_page(),
+> which writes struct page pointers into info->pages[]. When used_pages
+> reaches the stale max_pages value (not updated due to the failed
+> extend), a subsequent write to info->pages[used_pages++] goes out of
+> bounds into adjacent heap memory.
 > 
-> I noticed Sashiko had a few concerns about the build changes. Would you
-> mind taking a look to see if they're valid?
-> 
-> https://sashiko.dev/#/patchset/20260505-module-hashes-v5-0-e174a5a49fce%40weissschuh.net
+> Adjacent slab objects in the same kmalloc cache (pipe_buffer,
+> seq_operations, cred) can be corrupted, potentially leading to local
+> privilege escalation on kernels without SLAB_VIRTUAL mitigation.
 
-I definitively have these on my list. Unfortunately I am busy with
-something else right now. But this series and the Sashiko comments
-are next.
+Looking at the code:
 
+- struct load_info info is zero-initialized in init_module_from_file().
 
-Thomas
+- If module_extend_max_pages() fails, info->pages remains NULL and
+  info->max_pages and info->used_pages both remain 0.
+
+- module_get_next_page() sees info->max_pages == info->used_pages
+  immediately and calls module_extend_max_pages(info, 0).
+
+- kvrealloc() is called with a size of 0 and it returns ZERO_SIZE_PTR.
+
+- Because ZERO_SIZE_PTR != NULL, module_extend_max_pages() sets
+  info->pages to ZERO_SIZE_PTR and returns 0.
+
+- module_get_next_page() writes to info->pages[info->used_pages++],
+  and the write to ZERO_SIZE_PTR results in an immediate oops.
+
+This isn't great, but I do not see a potential for an out-of-bounds
+write or slab corruption in this specific case. What am I missing?
+
+Sami
