@@ -1,34 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1D6305665;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E523909AB;
 	Tue, 19 May 2026 06:26:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779171977; cv=none; b=IcJQOM9Llk/MAeakZAntbAhexBTY4nf3gt3eCAjRw1wTv9JusS8VXHSQkJUCz3I6z9rKcdQhRKghie++woWIPuGBvxHXDfftbRcLWO0AqO6gfsGRLyseEqC7A9iV7obnT8kD4v5stHkWAs9ZHTgeugPo6pgSCYD7KhV0x7OfF9A=
+	t=1779171977; cv=none; b=jcPAFUirqq/Fc34zXuOjSexVpw56Sx7tXPxmDAOTwlXp//+8rf8+pD1YcbnNLeKLqgR1cPvI81AUebGhg7U7NJ/XK4BCConapGHIHx6nhvxoYbbW2cyfmz8/4QPPLkafZis7cf7qc/26o83OuIv4npVzHnsY8mTzutwBV3Pqo+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779171977; c=relaxed/simple;
-	bh=ZxczDP1VleS2E+h97aaS99GWrdXeqA4F9FKMUPVF+a8=;
+	bh=9Z9wAsI6CYGM9qPQGM6HbNxhzSLG4aRh4Z3ixoqvDE8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U+qaOx908taT6OqEn3PbTFWR8FcW0LjKlCSoKy3U+lo7Z8uJ/60eT9DZHpBdq6fuC+Fx4esnac4mHoduNa8x+WXGEgsg1PwjTWDMgxJmvSMRUwAotaQ6DiQCMTahUigOOzdGzM1u6RB1PZrKqfIC+3wdqWytShBs9lcg+wMJRkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YHElItly; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=osbMrZtph9IIb37n63Vf5DxOfLlQMZzag3v9FC5YsRtSawHmfjJHehso38nBgb2+Mv1Awm9o+Bj6sFPVV29gqUIjwoylytoX71SUW/gYF3RbCf3StZkTEukiBof/RI12Gwg7aYV8LMSY3UJ7LfoZLxhjisuRVn+s/zSF/eM/PYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=1kiIVOLn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YHElItly"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11FE7C2BCC9;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="1kiIVOLn"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A60CC2BCFA;
 	Tue, 19 May 2026 06:26:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1779171977; bh=ZxczDP1VleS2E+h97aaS99GWrdXeqA4F9FKMUPVF+a8=;
+	t=1779171977; bh=9Z9wAsI6CYGM9qPQGM6HbNxhzSLG4aRh4Z3ixoqvDE8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=YHElItlyyola2Ig+eyQgiYWn9USci/7TxKtEce+7M1grk06Wd1OA2GW8f/wAnJvDl
-	 bDxJJ/3N3nTA1mfZC3+5Kvs3zG/MgP3F6Pj+C3Si/XpeXJzdsPsroK+FdAMXcd/BDM
-	 HsMf/ujpJg3r5/2zONWhf8GbD2oPBT1f4PJsU4bU=
+	b=1kiIVOLnBUen5Tn1JaIZpays9z+1J0Kybl7WUzAHRh4W4IhG+JLrO202e7qMMharG
+	 fAc8djvUVpxV0IJBIjDUYNVCzE5WqUpDDdseUrpUDOVRlzfBSZ8b97Y2YOs98TUyq5
+	 UMl6xUJ6fXHqFcr5SEd0jxvzY/JtIpGTnmZdLUoE=
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECD99CD4F3C;
-	Tue, 19 May 2026 06:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A62FCD4F58;
+	Tue, 19 May 2026 06:26:17 +0000 (UTC)
 From: Alvin Sun <alvin.sun@linux.dev>
-Date: Tue, 19 May 2026 14:26:13 +0800
-Subject: [PATCH 1/8] rust: module: add `MODULE_PTR` const to
- `ModuleMetadata` trait
+Date: Tue, 19 May 2026 14:26:16 +0800
+Subject: [PATCH 4/8] gpu: nova: implement `ThisModule`
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,7 +36,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260519-fix-fops-owner-v1-1-2ded9830da14@linux.dev>
+Message-Id: <20260519-fix-fops-owner-v1-4-2ded9830da14@linux.dev>
 References: <20260519-fix-fops-owner-v1-0-2ded9830da14@linux.dev>
 In-Reply-To: <20260519-fix-fops-owner-v1-0-2ded9830da14@linux.dev>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
@@ -58,65 +57,36 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev, 
  Alvin Sun <alvin.sun@linux.dev>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779171975; l=2011;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779171975; l=694;
  i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
- bh=ZxczDP1VleS2E+h97aaS99GWrdXeqA4F9FKMUPVF+a8=;
- b=nZswdxITOGGBNtXxziHC46ym73dmkEpgBRSKXECBrIkKx63Q6fXF2BcQ9Wu99HlqtRv32iuS7
- nenSNwiKIxRDsSSvybK6NrQ/NmLMOgegWv7aRnPdYLyeBWx7+qzexiI
+ bh=9Z9wAsI6CYGM9qPQGM6HbNxhzSLG4aRh4Z3ixoqvDE8=;
+ b=5tu+ljTbic4iFxV8s9jKyOts11sBxBoViBntzSvf9qqyEQD+HdB1HSeUaRJ6XehDZwXtw/HCj
+ XOplTY2EhRQCkwdT+ebmsCgDQb4BBXxhNMiT7mIAHqaAR0Wd7uZ+o/F
 X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
  pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
 X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
  auth_id=684
 
-Add a `MODULE_PTR` const to the `ModuleMetadata` trait so that
-modules can provide a constant pointer to their `struct module`
-usable in const contexts such as static file_operations.
+Set `ThisModule = super::DriverModule` to provide the correct module
+pointer for file operations ownership.
 
 Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 ---
- rust/kernel/lib.rs    |  3 +++
- rust/macros/module.rs | 14 ++++++++++++++
- 2 files changed, 17 insertions(+)
+ drivers/gpu/drm/nova/driver.rs | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index b72b2fbe046d6..c7e809636e1a9 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -184,6 +184,9 @@ fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, error::Erro
- pub trait ModuleMetadata {
-     /// The name of the module as specified in the `module!` macro.
-     const NAME: &'static crate::str::CStr;
-+
-+    /// The pointer to the kernel `struct module` for this module.
-+    const MODULE_PTR: *mut bindings::module;
- }
+diff --git a/drivers/gpu/drm/nova/driver.rs b/drivers/gpu/drm/nova/driver.rs
+index b1af0a099551d..6353c19d319c6 100644
+--- a/drivers/gpu/drm/nova/driver.rs
++++ b/drivers/gpu/drm/nova/driver.rs
+@@ -68,6 +68,7 @@ impl drm::Driver for NovaDriver {
+     type Data = NovaData;
+     type File = File;
+     type Object = gem::Object<NovaObject>;
++    type ThisModule = super::DriverModule;
  
- /// Equivalent to `THIS_MODULE` in the C API.
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 06c18e2075083..7204fe604f24a 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -519,6 +519,20 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+     const INFO: drm::DriverInfo = INFO;
  
-         impl ::kernel::ModuleMetadata for #type_ {
-             const NAME: &'static ::kernel::str::CStr = #name_cstr;
-+
-+            #[cfg(MODULE)]
-+            const MODULE_PTR: *mut ::kernel::bindings::module = {
-+                extern "C" {
-+                    static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
-+                }
-+
-+                // SAFETY: `__this_module` is constructed by the kernel at load time
-+                // and lives until the module is unloaded.
-+                unsafe { __this_module.get() }
-+            };
-+
-+            #[cfg(not(MODULE))]
-+            const MODULE_PTR: *mut ::kernel::bindings::module = ::core::ptr::null_mut();
-         }
- 
-         // Double nested modules, since then nobody can access the public items inside.
 
 -- 
 2.43.0
