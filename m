@@ -1,121 +1,110 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2CB3E2ACD
-	for <linux-modules@vger.kernel.org>; Tue, 19 May 2026 21:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779225816; cv=none; b=EnOUxaR7fh8/RHJhQbtbSP/1OBiR3mQ1rL0xiYlEcH5dZI26ew1RU52YjjJBJ6nufZm9BnniaDtRjjsYKHJswPZ0TV3PKYQAyUbqaqdzzRj/1zgOXX8kMUS+y5KEBudgITMs8mhuiQTWNMSs6BaXi6RQn9yz/udRYzVqxH2aU2c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779225816; c=relaxed/simple;
-	bh=lWpu8BLqWj1TfNJlm3ClQfJmScLbNoYxCmBu95VgfzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QOW9PBIuoITEo2uSQrDghcO7DOeULAzf7g16ZWVVq3GiAmFmbXF7ExM5t6xtwFS6CcoA6jchYGEryYVb2Rw5FEpc9RD59o4Jh+rgZFh2EmQhqibYukpgdujpDBqcu+SgadHhAY4KN24005YyqZgLoJiAsYxEqLksQICB2EJj/xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OlUf+Sdl; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AC823392C
+	for <linux-modules@vger.kernel.org>; Wed, 20 May 2026 15:13:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779290017; cv=pass; b=DcXWZtErec75ywnDVdaVhR1zoIOHSTrTZldB7RWlzyvzzP/UPOY4a56RssuNjx9ipBp6ORMjRV8VXuNgs7fI2p39/QfAyqRHSR0gkZDFDmqttgTMa9/PVUxj5Zf5hQ1fljgut2aTggzFXRf44QB+XsTEUCf7gp+48Wx0jG9VIJI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779290017; c=relaxed/simple;
+	bh=0jDm5atvhHuIxeQV8hGmizmK+8RSolpSQCrjOaP+ltM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=efV5CkLZ+prK11ZHsn4Awp2R/jF15k8jIyswstQk4+dLcwLMzC1VL7ggU+bnS3hii04AHCK1OCABIhbfsdLYRSWMSvy+M85aOm08wz6Behxrfq5DKTzso6CcKVqQvOvGKuAxSxTnPZsJ1FqKh3Ybl+9rt2Fjs1CUbkmvTx24U4c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NNwwy7ww; arc=pass smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OlUf+Sdl"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b2e8b95bdbso495ad.0
-        for <linux-modules@vger.kernel.org>; Tue, 19 May 2026 14:23:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NNwwy7ww"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-67bf769704eso462a12.0
+        for <linux-modules@vger.kernel.org>; Wed, 20 May 2026 08:13:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779290014; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XxR3iYnVZZxLoKSZ1vDgA6I8WfafEBAStuUi5yqzJXXt/RuqbDhg5Hlm+xnxEWjumU
+         yoVXviD8ipJQkFpHxr2/sSMgMnDFISRmRjb7M+LgkG2G47DlAx0UmailwPZe9vy6C9yr
+         84C013nSKQmRX/5AlD3CwMIiOspSfSZl52zAXWhDE2fXHzihXvc8kAcuqrR9MVLKwR+m
+         jOsJtlpz/no7TGW9P2TiC3Ah2ko0c534qp+fh0rTlCAL96JEtRsiKgA1C4W84Cv8OCbb
+         Yfuy3/enTBnjby9ehBbtkR1upwUzxZkmLVcCryFLr8aXJhpyYI4TtDZMZEdTCrzHpUK/
+         CYWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0jDm5atvhHuIxeQV8hGmizmK+8RSolpSQCrjOaP+ltM=;
+        fh=YzHBlW6jxyPXgBjliJwI5ryjZthBegKicRcaJaHT2Ks=;
+        b=JIOSZVVtdxVyslQJ1TleT/J/bwLlxgI0LDpLAnVj58lUnF2KZJLW5BV0HDHriUkBep
+         6SRsa8hstCsgBH81X3QGukHrzeyZk4hCQZk8NPOQlfGKm7ILOn5EWbYboo9N6d7vKm+Y
+         tZX36AlCDFgqBcnHDcP3GPFRamYabfvwbMbqPoo/OFadbyLXQBnnkygLfna31s0aWVhk
+         Qnfs2AR3vIBMm7N5wqA1AKPnp4tMLFWfcx+mt5bVDpyh2FUtY4GR+8Zhr77IjOseKhf+
+         5y02U8+v5+xfinJc5WOPKStf4W2xSgZnmvFeSYPhn1f0ymA3LnvZLeUmAhUvXWFnwn5d
+         rGdQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779225815; x=1779830615; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JQ56lnoRLJyhWveNJGv3cFgJb4oUuS+nNxeIsg+gH7Y=;
-        b=OlUf+SdlQxGGE420K3w/hBZFOOiiyiNflgf+i0Ze7GEHpZwBHdXHBw5SWQmvBaRWBz
-         Itss8MFwpuN4P9ZSEB7H7maXMWl5Hwk9L4djSAxmS38ESM+99UhFvPNOLXS/bLLam9JB
-         ANIFxm6w7VADD/C/VxC4fuhIsIw+iR8uLEcrGC/xYAjf5ywx3ZRlGpERtoVRc9zRGOMZ
-         0tCeFsPx8Qt1hSgfCBBEBEB7sxguj9ao2PeduAvI5wmKwT9Hp1ROwIU24ulKGq4zVehq
-         qZ1F6Rhq0HjG7LACg7VyHTIApf2kzIIlAaWYmEH4oF59YdgAuW9zffLpckZhVN+HlANc
-         cofQ==
+        d=google.com; s=20251104; t=1779290014; x=1779894814; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0jDm5atvhHuIxeQV8hGmizmK+8RSolpSQCrjOaP+ltM=;
+        b=NNwwy7wwTGLcUsVkwQqHdrF3IW3iUaL/vxuavvVb75JyG1RtYIswHA8TnpAOlhzVQP
+         /g7l2oLySO2lsPMVbGA1zWQTtpwUVw02dKSdYCcbOzfKwJd5tJg+GWHc3atUQiwOGD82
+         Hj32nRwLlhBnC0ZVArD/jwdGsTfk3Ls1p63302HkKADafPUE87zWncdOmgg+8y55QG7L
+         ilVZj280NxMa/Bjb5E+2e7eFFwWIcgvtWFHMMIKj0fssGC3Igx5AjxTT4dLr9t2IY0EI
+         vXac3SZNj2XiEtCq69tUbnLENzXwMTTF2f9XGzU/JZWr5MiRRnDkTTFGF9npJ9FikOea
+         F/Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779225815; x=1779830615;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JQ56lnoRLJyhWveNJGv3cFgJb4oUuS+nNxeIsg+gH7Y=;
-        b=JLBzrkkSRZE2HAR4SxWtr9E5kBhQ/NSRHYMLQqkK1ulm2rYK1e5K6luwPjO4ktjkQP
-         inGeMPHUpTXgmCJHMd/qvMQr7HzNlo4AaMU/x6PdaCf0/CbBGfVVypGRL06r16G0sEF5
-         AqEeWRPsoBsKftwioJTFViHyLGVNpRzVbK4ueWnl+0gVnNzL8Eyez07tVYKtORO/8O6l
-         iqhJ7u6IfXO16bnwrEYyn2D2MRUZSLNQG7j+Fnc+aVt7OOOg8BigNVFaRfYEAqcf8Nkm
-         zdqwiMh4vnoAW60QLWa+8kpI8xhJT3vrTswajHCNSzUQcpeKXQ5IR+omgZR59Kbqx+Wy
-         pgjA==
-X-Gm-Message-State: AOJu0YyOpy5yLCuZhk9pl/rIOpy6SQBbrpJY/c7cVOC6gtH7APKeETZj
-	aCq798ySRumit8ET6F7RHjJxwboxbxgNM+7eNafzSrzArzQ2yT7/Giz39j1FkEAe6NVuwVG5WCF
-	scqQ89ijxpsE=
-X-Gm-Gg: Acq92OFuI1mfKUF1wNOhO7/SbqcPEH4bpiT3k30/jwFEY8/V7a+hBCi0lyMa2eCzaeT
-	9pbsO0S9VJF//en3wA970+HlblbQphsZzW5HRT02M/SvdYgZXvhmD7+akj6t5aDukJdE7wW8ERn
-	LhK05xCpkXOkUJjTF/E8upX87SDQ4cOFdFKt7Y0IOmoKzb8f6/GZcpTu7L0opJ1CYv/TxkJg219
-	MX1wGIgYvnsOJXUJeLd5aVZI4UKR1gCOQMeZLRh2cNnKrGnJTfJI0pEl9/V7w6oxENWTIU/Zmc7
-	zKz2X/pbPx0nnMojDNTMwx0we2U/uTQ+C5gPhHBW93T+NYHcdK1lrh1J6Y2sCiE+/6OMR1QQyoq
-	b+K6uHprxesawvWvj9KYkxYQn/jQiRYeWBm7Nhn29cXwUpobzP8Kwy3hy0OaZHjvtMyG6RLQkB9
-	mZtC1BcKuAYYiYMncMFXI6taT4ehP3tsxsJjavPDrZmFhPtcYGSZW9ZKnZzJcAyTG7NftGox4qW
-	8IIffo=
-X-Received: by 2002:a17:902:ef52:b0:2bd:6dad:7ccb with SMTP id d9443c01a7336-2bdb32bb6damr8726015ad.23.1779225814226;
-        Tue, 19 May 2026 14:23:34 -0700 (PDT)
-Received: from google.com (171.46.125.34.bc.googleusercontent.com. [34.125.46.171])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f196660easm18608271b3a.11.2026.05.19.14.23.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2026 14:23:33 -0700 (PDT)
-Date: Tue, 19 May 2026 21:23:28 +0000
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Andrii Kuchmenko <capyenglishlite@gmail.com>
-Cc: linux-modules@vger.kernel.org, chleroy@kernel.org, mcgrof@kernel.org,
-	dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: decompress: check return value of
- module_extend_max_pages()
-Message-ID: <20260519212328.GA2614626@google.com>
-References: <20260518143233.16091-1-capyenglishlite@gmail.com>
+        d=1e100.net; s=20251104; t=1779290014; x=1779894814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0jDm5atvhHuIxeQV8hGmizmK+8RSolpSQCrjOaP+ltM=;
+        b=Jrr+1NixyuAt//WecYgA4Jt6XXM08/rAl/Y0d9J1vWciRuXcNA6Q5NgJIzYgvZrBVM
+         CWEMD9A4Mj9ynWeR0gNuOUREGY8NGm93mBJVEOl7eg1GmZTwqUxrNFtN9L1gFkDbNELR
+         xm/6948F+zRBmD9UYbMqP5BceLrQx2N5Mphqdpa9QdDaL4zK23tWxWeZww+NzGIXmwRk
+         aUr1cmC1epJy1s/h0f78iGaKs4g1fhRhHbaVC9KRD+Qsqmc80ZcsAs+OFVHmi8CXQAr6
+         1HcOgdkYqViwfX0njfpNfuRhiYQNw5MB9Oi8aenX9KdcAPHWwjDRhTL1BgqiLuaMgVx0
+         qegA==
+X-Gm-Message-State: AOJu0Yxa0rx9jkmN/NMk1oD9DvQsuDy6S9EAogwzhspXuIKFd8VHU/F4
+	wBd1YNwAOkZBKJr/8QfGuUz5u+FIBJV7Qof/XzoaS8JxhZjgVD0Scx5P6kNZ4NBcSYuMNv7rckE
+	21A3dyJbHLwhaxIOX0ywIdegxhs9iSW0oW93tGZnK
+X-Gm-Gg: Acq92OH/9f5RhNh8qZlBS1/5Gu8ahhVfF3h16AxdW/N54oFX2k3scHEgdKkgiW3OHIu
+	C8lzIYBiWull4CiDJhR5/HC7vVjZsnlAsmQLkPPQXLVRu3LgV/7TopS/6VBStSfUt4JQ4qzak7t
+	LzlaTEhJZZRjAZheiHTOCdzAdCBo0jEn6LZahTq0Ru7S4OYzcJ7yZZI7B9kpDowB15969cJg24y
+	8U395ouxat9NevcAt9szJ9K6nz+zM0sO0EceF6KioLmOmcf7ErS1zIYp34TxW7Md5gU0rOL2YfV
+	ogYu0LW2LtalUbA=
+X-Received: by 2002:a05:6402:52:b0:671:fff6:f82c with SMTP id
+ 4fb4d7f45d1cf-684891acef2mr234306a12.2.1779290013807; Wed, 20 May 2026
+ 08:13:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260518143233.16091-1-capyenglishlite@gmail.com>
+References: <20260518143233.16091-1-capyenglishlite@gmail.com>
+ <20260519212328.GA2614626@google.com> <CAEABq7f3agKZqrBiu+UwXHY44mTcK360ryg-i0w=wEc_Lv+T0A@mail.gmail.com>
+In-Reply-To: <CAEABq7f3agKZqrBiu+UwXHY44mTcK360ryg-i0w=wEc_Lv+T0A@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 20 May 2026 08:12:57 -0700
+X-Gm-Features: AVHnY4L6eZ6JdOCJ4YxM5npWqzTWyTozwWpMd7ccTT89uumPUpXazMBZui-XQ2Y
+Message-ID: <CABCJKuej82rrQbQ0eoG+JsY6Fwi0SdVJqduvps7eiPrJ_BgT0A@mail.gmail.com>
+Subject: Re: [PATCH v2] module: decompress: check return value of module_extend_max_pages()
+To: Afi0 <capyenglishlite@gmail.com>
+Cc: linux-modules@vger.kernel.org, chleroy@kernel.org, mcgrof@kernel.org, 
+	dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrii,
+On Tue, May 19, 2026 at 9:11=E2=80=AFPM Afi0 <capyenglishlite@gmail.com> wr=
+ote:
+>
+> Hi,
+>
+> You are right, the commit message overstates the impact. The actual resul=
+t is an immediate kernel oops, not an OOB write into adjacent slab objects.=
+ The fix is still correct - checking the return value avoids the oops. Shal=
+l I send a v3 with a corrected commit message?
 
-On Mon, May 18, 2026 at 05:32:33PM +0300, Andrii Kuchmenko wrote:
-> module_extend_max_pages() calls kvrealloc() internally and returns
-> -ENOMEM on allocation failure. The return value is never checked.
-
-We should definitely fix this, but I'm not sure the rest of the
-commit message is entirely accurate.
-
-> The decompression loop then continues calling module_get_next_page(),
-> which writes struct page pointers into info->pages[]. When used_pages
-> reaches the stale max_pages value (not updated due to the failed
-> extend), a subsequent write to info->pages[used_pages++] goes out of
-> bounds into adjacent heap memory.
-> 
-> Adjacent slab objects in the same kmalloc cache (pipe_buffer,
-> seq_operations, cred) can be corrupted, potentially leading to local
-> privilege escalation on kernels without SLAB_VIRTUAL mitigation.
-
-Looking at the code:
-
-- struct load_info info is zero-initialized in init_module_from_file().
-
-- If module_extend_max_pages() fails, info->pages remains NULL and
-  info->max_pages and info->used_pages both remain 0.
-
-- module_get_next_page() sees info->max_pages == info->used_pages
-  immediately and calls module_extend_max_pages(info, 0).
-
-- kvrealloc() is called with a size of 0 and it returns ZERO_SIZE_PTR.
-
-- Because ZERO_SIZE_PTR != NULL, module_extend_max_pages() sets
-  info->pages to ZERO_SIZE_PTR and returns 0.
-
-- module_get_next_page() writes to info->pages[info->used_pages++],
-  and the write to ZERO_SIZE_PTR results in an immediate oops.
-
-This isn't great, but I do not see a potential for an out-of-bounds
-write or slab corruption in this specific case. What am I missing?
+Yes, please send v3.
 
 Sami
