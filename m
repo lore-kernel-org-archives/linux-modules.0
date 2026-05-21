@@ -1,132 +1,116 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F8E3CE0A8
-	for <linux-modules@vger.kernel.org>; Thu, 21 May 2026 13:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5676736AB5A;
+	Thu, 21 May 2026 15:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779371978; cv=none; b=IMceeDozDKU/qE4zek7XpRrjhS4oAjGVlbKtE1yjlowIzkjuFnN6ls0nPVN82XfOyxA3ot7GpR/Ol0X+4r00gRFsHta78GrhigPgxHjFfWtCfSlPAdnNf/U/AbSPQjEUrcga5LLZJTPOTCGbrQV+ieXViTgPqBcfE5sYyG7wEB0=
+	t=1779379092; cv=none; b=B1oCVD6uxrrG/i93B4o/M/d4qEzC35BGB2fhw7gBEnWf0TT2ILkKjYA3k9BwjSJnQeHiZjSvNCC+RgcSixAv8AzZYPI6wf2W4eAjdp/+I0pccjRM99dYp+5n41R8vRcMGCMKKLWcwhloM5TZl/5oZzqY2/47JnmRpsWW2cyAGyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779371978; c=relaxed/simple;
-	bh=h+4NVJo3wpAjspHwkhwsyzZn+zEl2CEEOehXzRGNdBY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EoxfIGRzz36W2jApkK06MMxYSNbnEQzDLGpPHFCS438yPnrljADBHpIcBMDT0Nnvh++rKIWmMtkSX2JoIW1Tu0jEyC0z5YHyfaMGRtxXF8Tlju6lYbXFHBe/c1QM8vgRO8AlaZHuc4fOu2QfubS6Tmw0NNa29hAe+HlJlv+mk5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jodHEZLM; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1779379092; c=relaxed/simple;
+	bh=Ld+DGrzkTuQen17g1tuF/0CHgbVjnxCe56GF9uyobho=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=TGuZjBkSsBXIujrwoojnfAeAVJvdhVIPnuztkPGI5xqMmIDK1C4exjOTmHuLxZ/BG/8t3QON289D4DrrTI5nvyM8RDD4a/FLvjTEERLiTzL0VfKjUjcyGyHl9icsirxey5RfZTcQZigeo+QJQdN1qstqT2DmsVMNqLclBGnX3YQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=xM7DFqLm; arc=none smtp.client-ip=162.62.57.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jodHEZLM"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c8279604464so9098296a12.1
-        for <linux-modules@vger.kernel.org>; Thu, 21 May 2026 06:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779371975; x=1779976775; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tqeEG6FXEKElqAGUt/Z2qfbIbuB++N7b4Fh1Zt6D5dk=;
-        b=jodHEZLMnrXvcr0U+8aiQ3+8HMthO764B3RtgzEf+7ztkCNfkmkIlQBTfUmc0CO1Gm
-         znKHCX5+9bAECaG80vh/IPP806tKIqZE2l7HZLe1YU0HCE1c+TVzdByotFkWkoU+YEws
-         qLgdufxQuD2gsyG2s9NK2v18HBYBS1w+SMsS+Qi6jr0LEmhA4R7O7tZpYus8VaPMyFeG
-         15VYXBj+eYi7/OswJ5AioWab2qhZVYFRjyf4SpApvc+UkSyiNxbsaWg55EmuzRTPh+T9
-         X183BhHSUrQrVCzdTIOykwkJ84D445JXsSdEAvmO37Cr/WfIjw3mclOhGc8OX4c80G1x
-         Di8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779371975; x=1779976775;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tqeEG6FXEKElqAGUt/Z2qfbIbuB++N7b4Fh1Zt6D5dk=;
-        b=oHPW6n4IhYMSRfFJ2dKXNhu64Ttme1iCFG/8h/IjZhGgm0L/qQg3FF4l0Av00t/CGw
-         lrhnssk0LiT/lNiFs44Y9ysXf0imJ0ueUuxKEXMmV0jxqR64NTiOi6YNYbs8WTle676v
-         CEwF5EBSE1TUNrif4IjZtkMwqG5vdiNpOWvVlKeCQFX12isS8q7HpVbE8vq5clz3MTMp
-         uSP++/zOs6CKJrDQrdTOGT5o/ThgG0/GBHFvwPxQ4GB9TlSxEcXUg/+Cj5xZPvne2moj
-         gcPVW22fKD8k7QbPKMXM6Nk71mym4M8XqqSYT3bdzq2sC1+o0GqkwCSBKK1x4lxPVPm+
-         8XHA==
-X-Forwarded-Encrypted: i=1; AFNElJ+2BkMPE+nOroi5sxi7AOttX7nKeF/3VVe/4+WSpmU5xU/4U+adgI8ZG4KjT29dPY1EnGr6pNkHn6NVwuiL@vger.kernel.org
-X-Gm-Message-State: AOJu0YwchbQvFqpCE0KEurVSP2N8nyuvTVS2BMVIPbJx1oktyYD2pWQQ
-	PHKSKqBXpitQPV58DeGD3sQXHz6jQzBuP+2UjdxbhdDSeeyNBJCw2EDXjaWWe38NRBWtOPOxVGr
-	gzOBB9g==
-X-Received: from pge1.prod.google.com ([2002:a05:6a02:2d01:b0:c79:83b3:cdf8])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:431a:b0:39c:a78e:dba9
- with SMTP id adf61e73a8af0-3b308ac1b14mr3725831637.40.1779371973881; Thu, 21
- May 2026 06:59:33 -0700 (PDT)
-Date: Thu, 21 May 2026 06:59:33 -0700
-In-Reply-To: <20260521133326.2465264-4-kees@kernel.org>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="xM7DFqLm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1779379077;
+	bh=ytrHI1NAcV1X0TRAEuLH3Qut13RJxS0IznS6P86zRXI=;
+	h=From:To:Cc:Subject:Date;
+	b=xM7DFqLmbgXusspiE15/iu4WLkTuAtjgspMk8uXOHMcXzq6MNIehssc8CLzNKNDit
+	 I0/4zgFuYjpEumI8Msw5tD9hEmtTeYuEKzEnfmS763hsrMTg5fJmRl1lWq2rCHXKSk
+	 WztukGKxISYnf6I5khx7j3a7ZzkHcQp7RIqaOQ54=
+Received: from LAPTOP-JJ91J38E.localdomain ([222.125.130.99])
+	by newxmesmtplogicsvrszb43-0.qq.com (NewEsmtp) with SMTP
+	id E77A8EE9; Thu, 21 May 2026 23:57:55 +0800
+X-QQ-mid: xmsmtpt1779379075thg884qg7
+Message-ID: <tencent_69DC6E2A5B77E4D567CA4F552DD3A835590A@qq.com>
+X-QQ-XMAILINFO: M1rD3f8svNznY8aeuYkUt7jNUdYLELDhEQzJByuH55MeT06gyCHyxpTBwJI07h
+	 oovc7YTCwnTGVXFHFMPQnXLRkizYoRXiP+2Hj13D4ltmYMrenZHnx0fX1rcUH8bldNoNvrh345Kl
+	 du4Kl0PShCb2KYoSE/eqN+OuKu2UnRqLW11GZy1bz50/YdxZcZ08bWk+nf9xLo1JcqhOXDbozwqk
+	 pGdnLXN+Idbf4houwfcF9HUPrhMg812nfTO4i9Iqdcz5nCV4gJfh3GGnHiPiK9y395J+4MlMQY80
+	 qOtEOposP2PfeItTi1gOp6ou9u66J8YTvSHEE5Q3fMOvoQJRVCeLf4Izf6vlIg3Dkg7y5sbhB03c
+	 92hlDtvVmBGd/bOiNXEsCk71B86xQdGYQSfXDGa+/PBFa6Gkh6FprIf6iaGJyKL/SPZVRjL9TUQq
+	 1aDR38MgumR8V2QPF/M/Sdwv7OeiYiQmBRyT5Uwop6LFoW1U9IDfmGO4U6qbl3RF7SRLUnXZRpmz
+	 H6uGnQS7nCWvThtmainSJYa4ztGH0wEddPViB4WZvRzIoYORgRetV+OZdh0nFmZyFapcKJgc++ft
+	 u5oALwm+TRG3Aor9RYrIpKbvz/NChCyQ87+1cjTCmF03s+6ExkdY/wMn1LvXkTDMKPHmTJZB0BmL
+	 KRNcUlwFlUnwdkHViLgDxP6RCqnkGw7Pl6wiFSczAMW4VAVi57AJWcenlOrjp5M1Z6cIBJaSIBby
+	 dHuCQB//5SebKcdIc+GUcJ9TTxObknDrqj9N3+vIwmcruOmmId4Z4uIfv0qIXNph5397o1dtJQVz
+	 jRBU+zLPkVczuG+T0Mes11eISEgNTIiMkZzJezWZP3QUn9cbDSUYByLfjryHXV3iAlnXNAHe4Twg
+	 L6UdbNFcmGcY2MWJO9IqWKZJJfYb1ouzdUh7wUbmRsAMw2fd3UBVf7ZK2eq1QG7fPbfF6I48NuJ4
+	 5oFymP1kXnYP9d2WmBV7xClFpuhu9kt9X66tZpL9IuHqKtcyfVzooRCBFLepJmwkINFnLWxEUW03
+	 dZPltvt86UaQFp+oZyKqs8bUVoUaRJ2oKaX00004IP+dG0kWpnr4yKLTupFkurz/DkUSFA7bYApq
+	 qukXRm
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+From: Egg12138 <egg12138@foxmail.com>
+To: Russell King <linux@armlinux.org.uk>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Petr Mladek <pmladek@suse.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Egg12138 <egg12138@foxmail.com>
+Subject: [PATCH] ARM: module.lds: fix unwind metadata for merged .text sections
+Date: Thu, 21 May 2026 23:57:53 +0800
+X-OQ-MSGID: <20260521155753.882044-1-egg12138@foxmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260521133315.work.845-kees@kernel.org> <20260521133326.2465264-4-kees@kernel.org>
-Message-ID: <ag8PxTTi5NxT51EW@google.com>
-Subject: Re: [PATCH 04/11] treewide: Convert struct kernel_param_ops
- initializers to DEFINE_KERNEL_PARAM_OPS
-From: Sean Christopherson <seanjc@google.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Pengpeng Hou <pengpeng@iscas.ac.cn>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Corey Minyard <corey@minyard.net>, 
-	Gabriel Somlo <somlo@cmu.edu>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Hannes Reinecke <hare@suse.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	"Eugenio =?utf-8?B?UMOpcmV6?=" <eperezma@redhat.com>, Jason Baron <jbaron@akamai.com>, 
-	Jim Cromie <jim.cromie@gmail.com>, Tiwei Bie <tiwei.btw@antgroup.com>, 
-	Benjamin Berg <benjamin.berg@intel.com>, 
-	"Ilpo =?utf-8?B?SsOkcnZpbmVu?=" <ilpo.jarvinen@linux.intel.com>, 
-	"David E. Box" <david.e.box@linux.intel.com>, "Maciej W. Rozycki" <macro@orcam.me.uk>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>, Frank Li <Frank.Li@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	John Johansen <john.johansen@canonical.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-modules@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com, 
-	linux-security-module@vger.kernel.org, linux-um@lists.infradead.org, 
-	linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net, 
-	qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net, 
-	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 21, 2026, Kees Cook wrote:
-> Using Coccinelle, rewrite every struct kernel_param_ops initializer that
-> sets .get into a DEFINE_KERNEL_PARAM_OPS-family macro invocation,
-> for example:
-> 
-> @@
-> declarer name DEFINE_KERNEL_PARAM_OPS;
-> identifier OPS;
-> expression SET, GET;
-> @@
-> - const struct kernel_param_ops OPS = {
-> -       .set = SET,
-> -       .get = GET,
-> - };
-> + DEFINE_KERNEL_PARAM_OPS(OPS, SET, GET);
+Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN,
+and related macros") made scripts/module.lds.S merge module input
+.text.* sections into the output .text section.
 
-IMO, "OPS, GET, SET" is more intuitive, especially since that's the order used
-by DEFINE_SIMPLE_ATTRIBUTE and DEFINE_DEBUGFS_ATTRIBUTE.
+On ARM, the paired unwind input sections keep their original names.  A
+module can therefore contain .ARM.exidx.text.unlikely with sh_link
+pointing at .text, while .text.unlikely no longer exists.
+
+This is a valid ELF relationship, but ARM module_finalize() does not use
+sh_link when registering module unwind tables.  It derives the target
+text section from the exidx section name instead:
+
+  .ARM.exidx.text.unlikely -> .text.unlikely
+
+The lookup fails and the unwind table is not registered for the actual
+.text range.  This can make module stack unwinding fail with:
+
+  unwind: Index not found
+
+Keep the ARM module unwind output names in sync with the text sections
+that scripts/module.lds.S now produces.  Coalesce the .ARM.exidx/.ARM.extab
+sections associated with .text.*, into the
+stable output names expected by the existing ARM module unwind code.
+
+Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
+Signed-off-by: Egg12138 <egg12138@foxmail.com>
+---
+ arch/arm/include/asm/module.lds.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm/include/asm/module.lds.h b/arch/arm/include/asm/module.lds.h
+index 0e7cb4e314b4..dc9adf8fa50e 100644
+--- a/arch/arm/include/asm/module.lds.h
++++ b/arch/arm/include/asm/module.lds.h
+@@ -1,4 +1,12 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef CONFIG_ARCH_WANTS_MODULES_TEXT_SECTIONS
++SECTIONS {
++	.ARM.extab		0 : { *(.ARM.extab .ARM.extab.text .ARM.extab.text.[0-9a-zA-Z_]*) }
++	.ARM.exidx		0 : { *(.ARM.exidx .ARM.exidx.text .ARM.exidx.text.[0-9a-zA-Z_]*) }
++}
++#endif
++
+ #ifdef CONFIG_ARM_MODULE_PLTS
+ SECTIONS {
+ 	.plt : { BYTE(0) }
+-- 
+2.43.0
+
