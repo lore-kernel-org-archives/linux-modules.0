@@ -1,120 +1,229 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33ADC175A72
-	for <linux-modules@vger.kernel.org>; Sat, 23 May 2026 07:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F2C343208
+	for <linux-modules@vger.kernel.org>; Sat, 23 May 2026 07:45:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779522171; cv=none; b=s97tCtsqtoEBw44jvVD5X6M4MkChyVngdUJGTta7iMlFxe8BJJ48u63BeHZOj8em2csitK8aXJPu+uFh2+MeaSduG09GjfhXhg4p7IHI/+wBbPop18Tu9BDXtbstwRrIXjZ8OUkqFaqVw0GELq7P4ZN+JQPgeg+Ac6uWUqewpbA=
+	t=1779522311; cv=none; b=cqnzcqANNxHe1WHs8xYQyHhtUmzLJ/Sjs6TPcXc5cPsY9cBNYalJ/t7V7VKhEWUP/HH2nHXAil8aJxmMBk7ostHhD8DVjAGDnPSucOj9TABoF3sV44JZ/RjaU2+Np4x8qAs/fSzvsqGW8skewC184+n6CFCm6zWlA1kMVr7Nhx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779522171; c=relaxed/simple;
-	bh=/Y+Uw2aU26irr+uhpwQ4vA4zZZL49qzyDiyPCWU6xd8=;
+	s=arc-20240116; t=1779522311; c=relaxed/simple;
+	bh=Rk0AITy7uwo2pTmz9NNTR9Fx4mBoumecyeflxsL9Y+0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Nz2ONJzJ4jCx7n4hqXUYjl9wcVSovmA/UtTj7U+09uAAAcaL79HUH7eHieV6KEKNaxSZbDnYhEW7epAHMCjXKYCgXwmmLLl+bE9X/ZL+2rebBWMuIc1N8B1gsNVe50hMq0NdUUnJv35mu8G2JZe9kLiShtP3GDKktHypeGWkIic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xr7J44dl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=JQS58lOeowjSVF8q/EXthz1sFfLrU10FO8G6LLr6bYd1S3EdIud5M+IPGawNruLusaEgrDAm71X+4Xasf2jKg3aNrHElX35zUV/16aZ7nj4XpiQ3Hpds0xoveDAyaMtKQBm2/X246h3jeEXcAFUxAJaZl472kf5mWAn8cGz/fJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BW72eYsb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xr7J44dl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1EB61F000E9;
-	Sat, 23 May 2026 07:42:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BW72eYsb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 543791F000E9;
+	Sat, 23 May 2026 07:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779522169;
-	bh=uy1I8Pi7y+9MTmq0B3ReHMvewG4s1xACTAu7Y09zDeA=;
+	s=k20260515; t=1779522309;
+	bh=Exk8ktQop1qhA3avn5rmah72HYRqZu4i+ajSTq3DQAk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Xr7J44dl35vIZ8DNOfVTLGurO0NAfSS5PLN/S5HSGEo0TYyTRP/SfneK+RwbZzRQa
-	 kI5rFMu/F11LVijVQnlMICYIZ0cX75o8Gq2+hUBG2HN6HodVVJOt4GSrZmrfLcKxZ5
-	 uKr8VmF6Xh6cofwdhiHxXs0VCsXfYWa+DZnprXbn2v+O/eaZ8Hhds9fyLcbuHCbByp
-	 CVZrz3r3Iu7CCMgLLsIa1aActWEJ1QggqhBlAbpZ9feAR0j4lqt82LpPtqgYVITL/k
-	 vNzOw9c0p3o9xGWOKlcwxd3yeQr0BNIGGeYXgJlM95vEi/PhmkLqkciwmxnb+aNiVm
-	 uvrehaK/WjTZw==
+	b=BW72eYsbjqnGphJx5IwoWqinlHl+xCFNfqBkZDXXFD6Q7iiVDoGFRKDZKaC6q5tp6
+	 Wa2k+NZvIF6DtW50BlX9wEADFPC9OuSepQxed6Ldeab6Atg7g9Z3S4bAGejC9KGaS5
+	 wgmVs38A5Zj2EqRtqZBoV6mskyP+bNf59A+YOwqn/ldg8MUZNeAA9+DmPW1fdTZk9o
+	 S0bpWXq+wa3ieT/J2lauZyZGTjUY3FM4IJN1SpO07ylvFooY1eHx9eravATt6kCw9h
+	 IYN7YlJTU2nm91cC7UiNkFWKQDUvzerRSsYz1UHq/5arVSCLAOus/qhdYt8I16pwjf
+	 yKZJm4Wy3KRhg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 18/24] dyndbg: Upgrade class param storage to u64 for
- 64-bit classmaps
+Subject: Re: [PATCH v2 19/24] dyndbg,module: make proper substructs in
+ _ddebug_info
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jim Cromie" <jim.cromie@gmail.com>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260523-dd-maint-2-v2-18-b937312aa083@gmail.com>
-References: <20260523-dd-maint-2-v2-18-b937312aa083@gmail.com>
+In-Reply-To: <20260523-dd-maint-2-v2-19-b937312aa083@gmail.com>
+References: <20260523-dd-maint-2-v2-19-b937312aa083@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 23 May 2026 07:42:49 +0000
-Message-Id: <20260523074249.B1EB61F000E9@smtp.kernel.org>
+Date: Sat, 23 May 2026 07:45:08 +0000
+Message-Id: <20260523074509.543791F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-
-New issues:
-- [High] Buffer Overflow / Memory Corruption due to mismatched types in `dd=
-ebug_class_param`.
-
-Pre-existing issues:
-- [High] Undefined Behavior in `CLASSMAP_BITMASK` triggers shift overflow f=
-or 64-bit classmaps.
+- [High] Module loader searches for incorrectly named dynamic debug section=
+s, completely disabling dynamic debug for all loadable modules.
+- [High] Built-in modules without class maps erroneously inherit all global=
+ system-wide class maps due to missing state reset.
+- [Low] Renaming `struct ddebug_class_param` breaks compilation of external=
+ users like the DRM subsystem.
 --
 
-commit 58d2c659362026860249b9d71580382d0d84aa4e
+commit 647ef6a50774bbbe7f638336c42ae9d912b4ca12
 Author: Jim Cromie <jim.cromie@gmail.com>
 
-dyndbg: Upgrade class param storage to u64 for 64-bit classmaps
+dyndbg,module: make proper substructs in _ddebug_info
 
-This commit upgrades the internal storage types in struct
-ddebug_class_param from unsigned long to u64 pointers. This change
-aims to safely support 64-bit classmaps across all architectures
-without truncation.
+This commit recomposes struct _ddebug_info by moving the descriptors and cl=
+ass
+maps fields into new sub-structures struct _ddebug_descs and struct
+_ddebug_class_maps. It also normalizes all related struct names to use a
+_ddebug_ prefix.
 
+> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+> index a84dcc127e5a7..001bc84eadcab 100644
+> --- a/include/linux/dynamic_debug.h
+> +++ b/include/linux/dynamic_debug.h
+[ ... ]
+> @@ -81,21 +81,33 @@ struct ddebug_class_map {
+>  	enum ddebug_class_map_type map_type;
+>  };
+> =20
+> -/* encapsulate linker provided built-in (or module) dyndbg data */
+> +/*
+> + * @_ddebug_info: gathers module/builtin dyndbg_* __sections together.
+> + * For builtins, it is used as a cursor, with the inner structs
+> + * marking sub-vectors of the builtin __sections in DATA.
+> + */
+> +struct _ddebug_descs {
+> +	struct _ddebug *start;
+> +	unsigned int len;
+> +};
+> +
+> +struct _ddebug_class_maps {
+> +	struct _ddebug_class_map *start;
+> +	unsigned int len;
+> +};
+> +
+>  struct _ddebug_info {
+> -	struct _ddebug *descs;
+> -	struct ddebug_class_map *classes;
+> -	unsigned int num_descs;
+> -	unsigned int num_classes;
+> +	struct _ddebug_descs descs;
+> +	struct _ddebug_class_maps maps;
+>  };
+> =20
+> -struct ddebug_class_param {
+> +struct _ddebug_class_param {
+
+[Severity: Low]
+Does renaming this structure break compilation for external users?
+
+For example, the DRM subsystem directly references the old structure name in
+drivers/gpu/drm/drm_print.c:
+"static struct ddebug_class_param drm_debug_bitmap"
+
+Failing to update these external users will result in a build failure for
+configurations enabling DRM.
+
+>  	union {
+>  		u64 *bits;
+>  		u64 *lvl;
+>  	};
+>  	char flags[8];
+> -	const struct ddebug_class_map *map;
+> +	const struct _ddebug_class_map *map;
+>  };
+> =20
+>  /*
+[ ... ]
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 46dd8d25a6058..c2b6e70f2e773 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2774,12 +2774,12 @@ static int find_module_sections(struct module *mo=
+d, struct load_info *info)
+>  		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
+> =20
+>  #ifdef CONFIG_DYNAMIC_DEBUG_CORE
+> -	mod->dyndbg_info.descs =3D section_objs(info, "__dyndbg",
+> -					      sizeof(*mod->dyndbg_info.descs),
+> -					      &mod->dyndbg_info.num_descs);
+> -	mod->dyndbg_info.classes =3D section_objs(info, "__dyndbg_classes",
+> -						sizeof(*mod->dyndbg_info.classes),
+> -						&mod->dyndbg_info.num_classes);
+> +	mod->dyndbg_info.descs.start =3D section_objs(info, "__dyndbg_descripto=
+rs",
+> +						    sizeof(*mod->dyndbg_info.descs.start),
+> +						    &mod->dyndbg_info.descs.len);
+> +	mod->dyndbg_info.maps.start =3D section_objs(info, "__dyndbg_class_maps=
+",
+> +						   sizeof(*mod->dyndbg_info.maps.start),
+> +						   &mod->dyndbg_info.maps.len);
+
+[Severity: High]
+Does this correctly match the section names emitted by the linker?
+
+It looks like the section names here were updated to "__dyndbg_descriptors"
+and "__dyndbg_class_maps", but the macros like DECLARE_DYNDBG_CLASSMAP and
+DEFINE_DYNAMIC_DEBUG_METADATA still emit to "__dyndbg" and "__dyndbg_classe=
+s".
+
+Because the strings do not match, section_objs() will fail to find the
+sections, setting their lengths to 0 and effectively discarding all
+dynamic debug prints for loadable modules.
+
+I see this regression is fixed later in the series by commit f9409a020a4bc
+("dyndbg: improve section names").
+
+>  #endif
+> =20
+>  	return 0;
+[ ... ]
 > diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> index e9481ef21825d..580aa258f902f 100644
+> index 580aa258f902f..169b94ff6f8ed 100644
 > --- a/lib/dynamic_debug.c
 > +++ b/lib/dynamic_debug.c
-> @@ -661,7 +663,7 @@ static int ddebug_apply_class_bitmap(const struct dde=
-bug_class_param *dcp,
->  /* stub to later conditionally add "$module." prefix where not already d=
-one */
->  #define KP_NAME(kp)	kp->name
-> =20
-> -#define CLASSMAP_BITMASK(width) ((1UL << (width)) - 1)
-> +#define CLASSMAP_BITMASK(width) ((1ULL << (width)) - 1)
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this macro invoke
-undefined behavior if the classmap width reaches 64 bits?
-
-If width is 64, shifting 1ULL by 64 is undefined behavior in C. On some
-architectures like x86, the shift count is masked by 63, causing 1ULL << 64
-to evaluate to 1ULL << 0 (which is 1). This would result in a bitmask of 0,
-wiping out valid input bits and breaking the 64-bit feature.
-
 [ ... ]
-
-> @@ -696,24 +698,24 @@ static int param_set_dyndbg_module_classes(const ch=
-ar *instr,
->  	case DD_CLASS_TYPE_DISJOINT_BITS:
->  		/* expect bits. mask and warn if too many */
->  		if (inrep & ~CLASSMAP_BITMASK(map->length)) {
-> -			pr_warn("%s: input: 0x%lx exceeds mask: 0x%lx, masking\n",
-> +			pr_warn("%s: input: 0x%llx exceeds mask: 0x%llx, masking\n",
->  				KP_NAME(kp), inrep, CLASSMAP_BITMASK(map->length));
->  			inrep &=3D CLASSMAP_BITMASK(map->length);
->  		}
-> -		v2pr_info("bits:0x%lx > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp));
-> +		v2pr_info("bits:0x%llx > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp)=
-);
->  		totct +=3D ddebug_apply_class_bitmap(dcp, &inrep, *dcp->bits, mod_name=
-);
->  		*dcp->bits =3D inrep;
+> @@ -1202,10 +1203,10 @@ static int ddebug_add_module(struct _ddebug_info =
+*di, const char *modname)
+>  {
+>  	struct ddebug_table *dt;
+> =20
+> -	if (!di->num_descs)
+> +	if (!di->descs.len)
+>  		return 0;
+> =20
+> -	v3pr_info("add-module: %s %d sites\n", modname, di->num_descs);
+> +	v3pr_info("add-module: %s %d sites\n", modname, di->descs.len);
+> =20
+>  	dt =3D kzalloc_obj(*dt);
+>  	if (dt =3D=3D NULL) {
+> @@ -1219,19 +1220,18 @@ static int ddebug_add_module(struct _ddebug_info =
+*di, const char *modname)
+>  	 * this struct ddebug_table.
+>  	 */
+>  	dt->mod_name =3D modname;
+> -	dt->ddebugs =3D di->descs;
+> -	dt->num_ddebugs =3D di->num_descs;
+> +	dt->info =3D *di;
 
 [Severity: High]
-Can this cause memory corruption on 32-bit architectures?
+Does this code leave dt->info.maps initialized to the entire system-wide
+class maps array if the built-in module has no class maps?
 
-The commit message notes that __drm_debug is not yet updated to u64,
-meaning it remains an unsigned long. On 32-bit systems, unsigned long is 4
-bytes. Since dcp->bits is now a u64 pointer, won't assigning inrep perform
-an 8-byte write into a 4-byte allocation, corrupting adjacent memory?
+In dynamic_debug_init(), the global _ddebug_info di is initialized with
+.maps spanning the entire __dyndbg_classes section.
+
+When this is copied via dt->info =3D *di here, dt->info.maps also spans
+the entire section.
+
+If the module has no class maps, ddebug_attach_module_classes() will run, b=
+ut
+the local variable nc remains 0. The block if (nc) at the end is skipped,
+and dt->info.maps is never updated to reflect 0 length.
+
+As a result, built-in modules without class maps falsely match unrelated
+class maps from other built-in modules.
+
+I see this regression is fixed later in the series by commit 6fc0ea29f4f01
+("dyndbg: hoist classmap-filter-by-modname up to ddebug_add_module").
+
+> =20
+>  	INIT_LIST_HEAD(&dt->link);
+> =20
+> -	if (di->classes && di->num_classes)
+> +	if (di->maps.len)
+>  		ddebug_attach_module_classes(dt, di);
+> =20
+>  	mutex_lock(&ddebug_lock);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260523-dd-maint-2=
--v2-0-b937312aa083@gmail.com?part=3D18
+-v2-0-b937312aa083@gmail.com?part=3D19
