@@ -1,168 +1,106 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9B1382F18
-	for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 13:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0710E383300;
+	Mon, 25 May 2026 13:41:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779716113; cv=none; b=rXrkkN4+66gNimIof0JIEdegLHwHy6drUv4mO7wmRF5vEyIRvEoij2Oo6J77pUPGj1xRtNTKbzLRlg/9Ar2wCj4/xuqujNfPD9kHUfQaSWzEwxXFma1o+7oAce+28aHlLh/8n2Q7dTXhFrMlXZ0AXptJwY+mxcOy/7oYxpzZ/Jc=
+	t=1779716514; cv=none; b=PZ2x2l5XiGUD4+6H7XBTCDqK1mLdPyBmLAIao0yIbh4ZXoiLWahFQTqyHssVLny8ndKxPQjh+TRkY5f2d9X7h49U45l1LnKW7jfl/Giy7qFrU1nT7WRrHk1pq1s/gAF9UvGdbPD517X4VLbsY7JyJtXbhHE/xQa19XdCFjGx3AI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779716113; c=relaxed/simple;
-	bh=s/CzDsE1zdMqB98tClQW/DiNhe7WU760fn0iU6bx43Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=picg7jRPhqbosUp9AWUmlkUcsG6/1darLHEMWJvKh8c3T3YQP57CB6F0oVxK5OC5bDdikByV4cJRnj2RLr3tG40AGJ6ZmD4O4Bk3qbco6ZWf2H9JPfRWm7uE5BAybQNp+P5B40kYlBVEoCFHwNpYTJBwpwrDBmSUjXxoL5yjs/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BpUH14EG; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1779716514; c=relaxed/simple;
+	bh=Nc/Jb5csnsx5gDgcPsmWWNNTtsoY2CvIv3mmQ/YO8ek=;
+	h=From:To:Cc:Subject:Mime-Version:Content-Type:Date:Message-ID:
+	 References:In-Reply-To; b=mGRylS9tOc/Dn83R2Llrd5jKd0Yxm2IIsjPw3HbKwP/juGmE81DmuPIHHGpTLqX4Qw9U343sNFaHPN7IvperwOn0GJWzKMlcZMDTItRBCrAKMLmUMSCLxuDUD7mM0fFmFc+E/z0EeNlHq9orzqd4IV18ck9+8CE6tin6iCLoN5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=aK9/B6fL; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BpUH14EG"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-441209fb77eso5927330f8f.1
-        for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 06:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779716110; x=1780320910; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9XVHRPBSt9KXo5wrulw6nEDVPqzcFN/DF35DZwL4F0c=;
-        b=BpUH14EGnlm4UYZVu9foBdalLVCHK55wdvwsZK81HpX2SG6MTxvw/kc4VaJeXSjZQs
-         3eTBMqQvcMIzwXiWfi3KT13WN+SRW8QHICGRtWD6SY/UWm63k8eQp79rk6d0NGLAc1qv
-         WjIAbFurjt3Rkm4z1tsFPUIrIEG7MyEpyocm02DR2uAkfQIxvmO2cNTG+McK3R2XH7Rj
-         7AUUX8rh2epSIAQYE8gycCnQ+260SuVSBqvdVV4OrRcaJMwiZDn6IsIj94PggCttQSXr
-         UHNrnpG4ko2zTsVOvv0b7M9hyRTdGQZQuFT25cBFZjgK3I+CYbhCVOqZqdeTrTSrkrDJ
-         92RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779716110; x=1780320910;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9XVHRPBSt9KXo5wrulw6nEDVPqzcFN/DF35DZwL4F0c=;
-        b=EUV/dEMVJDJ/AWh5+mD9LW6ei6rVz8V5Pcdve2SDvVpy2mthgNpoQ2aL9i8fU8k3hB
-         BBsbWJEyDqhD2ddyKQzL554AXi1KuNS73EgPyjz7U1i0Ao1bFa09NQTKGRB8QYizmYCp
-         rqGZ0SZEZLX2M/WO+sjM6Y0dBdz9834uUjDCySAqmHPCKI+SWW3NdMv03Sb/DNGtGa6D
-         s0Kz6mLifDeQ2BtYdmJx3U7WSIF51H8udUzJ2aNiNmHDbg27hnE2Hrw672Vezk9JCCJZ
-         lWwnV4hRMZUmhIdL07vB4iMzJ4B33536jPTd9L2PA+kSnnhIB5y2WLYyCiaHrDteqtT7
-         pBTw==
-X-Forwarded-Encrypted: i=1; AFNElJ90OejmSAJfF16Y3Yn17dSKM676sbNlUivzJGRsW7qCmDZts7LEYfWEkbpEooOSGSA4Wnir14kiDkTP5XXF@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA1/B6yPR24P45JPp480nFh1HX+KUCWRKC+XMCH5oHQeN6+EEd
-	987umF/tw+b/IcX7j5Vbl3BO8UkLGtzhAXTGdFWfaBKCL5U/rtLNs7uuD3c0w+tvk0I=
-X-Gm-Gg: Acq92OE+Dzl+6U9ltCqTdafcMgB0k1oOJsEi/8BLbAUG7X9/ZzOoXbP5O+DND4KxBzt
-	9cX433pQz3snizFarOOi5tQAVHFf3krkAzohGcFp8dKB4TL/fGmkMrfCN7wfTiixiiUr0SrA8LK
-	jR/rs3JO0jtYiH5iecuj2ZxeKePIZFZsHgGfOF6mqLZFrhc6QS/wIbTAjdwSUZL+OGU63ySIgmH
-	1trhTfAYqOB18enzpimvUDDrvBoxAJykqZRblPc3YCOeJI5fCFWJdwhONuCiLcMnuYcMWu5kA8p
-	FR6xU9QpInLvRb9QT/1r02Rt48I9bmmQ18aI+ahCZF3vv/vc7FZIOj3QbiRReDF3+D5Ck/6cUdt
-	2EIljnpyXpCVe2L56Xuli6SCYpRSSXR0CteVTzQzSqgQKbtFaUPN+wO5hQpnTKTgk4eqJBb2HSu
-	NNu1m4R7deUMQOSqFuCMUK2ssXFtm/ho9d6E9jKb51Pp/9uBOC8NH88icrUY+zZuFTDchYckVUN
-	ngvHPuwbI4hfDZDWE4lQfYpgJa7nGtfrbGEjPEuLmNe9x431CRVFng+ykoTm2qJ07ApLA==
-X-Received: by 2002:a05:6000:2008:b0:45e:8cdc:4ee8 with SMTP id ffacd0b85a97d-45ea3128ccdmr31052715f8f.6.1779716109692;
-        Mon, 25 May 2026 06:35:09 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d5cb9asm29456456f8f.27.2026.05.25.06.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2026 06:35:09 -0700 (PDT)
-Message-ID: <da358ae1-91b4-4a16-ac76-ffab99c230b9@suse.com>
-Date: Mon, 25 May 2026 15:35:06 +0200
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="aK9/B6fL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1779716466;
+	bh=Nc/Jb5csnsx5gDgcPsmWWNNTtsoY2CvIv3mmQ/YO8ek=;
+	h=From:To:Subject:Mime-Version:Date:Message-ID;
+	b=aK9/B6fLpETZVzKQ28Kd04mu+4TBbLuiV9RyT1i2gKbPKJVDqvMr7SaNnf8LrX92i
+	 KO9cW5Ybmuks/2Tcc2aADI5eNdXR0lP4gayIlFiPL5dzhv4HXhE7VRaRQaoEHSoZJn
+	 3qiCdGXejTNj/fyTedCtoidykXFTS1vVdhR3FCWc=
+EX-QQ-RecipientCnt: 5
+X-QQ-GoodBg: 1
+X-QQ-SSF: 00400000000000F0
+X-QQ-FEAT: D4aqtcRDiqTsBAZj3BNqi+E7MGSirmitosRUhGyHACY=
+X-QQ-BUSINESS-ORIGIN: 2
+X-QQ-Originating-IP: VenZ0hzj9GNcUaoHOrbn1qGc9ix9OI1ffzh2IXBKFawfaInuxooZrdEAAV+70/uGJaaqK3cz/RG8ea8Wh7EPjA==
+X-QQ-STYLE: 
+X-QQ-mid: lv3gz7b-6t1779716464td61e0df7
+From: "=?utf-8?B?V2VudGFvIEd1YW4=?=" <guanwentao@uniontech.com>
+To: "=?utf-8?B?UGV0ciBQYXZsdQ==?=" <petr.pavlu@suse.com>
+Cc: "=?utf-8?B?bGludXgta2J1aWxk?=" <linux-kbuild@vger.kernel.org>, "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>, "=?utf-8?B?bGludXgtbW9kdWxlcw==?=" <linux-modules@vger.kernel.org>, "=?utf-8?B?bWFzYWhpcm95?=" <masahiroy@kernel.org>
+Subject: Re: [PATCH v2] genksyms: Support arm64 CRC32 hardware acceleration1~
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/11] treewide: Convert struct kernel_param_ops
- initializers to DEFINE_KERNEL_PARAM_OPS
-To: Kees Cook <kees@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Pengpeng Hou
- <pengpeng@iscas.ac.cn>, Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Corey Minyard <corey@minyard.net>, Gabriel Somlo <somlo@cmu.edu>,
- "Michael S. Tsirkin" <mst@redhat.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Hannes Reinecke <hare@suse.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
- Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
- Tiwei Bie <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "David E. Box" <david.e.box@linux.intel.com>,
- "Maciej W. Rozycki" <macro@orcam.me.uk>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Peter Zijlstra <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
- Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
- Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, John Johansen <john.johansen@canonical.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
- linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
- qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, netdev@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20260521133315.work.845-kees@kernel.org>
- <20260521133326.2465264-4-kees@kernel.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260521133326.2465264-4-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
+Date: Mon, 25 May 2026 21:41:04 +0800
+X-Priority: 3
+Message-ID: <tencent_23032AC04EF146C803D19A6D@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+References: <5d1b8b13-d590-497d-9185-609494135348@suse.com>
+	<20260525080229.1570905-1-guanwentao@uniontech.com>
+	<26c47a0e-7a9b-473a-818d-455e68476dd1@suse.com>
+In-Reply-To: <26c47a0e-7a9b-473a-818d-455e68476dd1@suse.com>
+X-QQ-ReplyHash: 1755302232
+X-BIZMAIL-ID: 12752282045284709240
+X-Address-Ticket:version=;type=;ticket_id=;id_list=;display_name=;session_id=;
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [127.0.0.1])
+	by smtp.qq.com (ESMTP) with SMTP
+	id ; Mon, 25 May 2026 21:41:05 +0800 (CST)
+Feedback-ID: lv:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: NTNLxPxYD/4Isf3zWHXhvhMZYJXOCa7NxMiMh0cO8SWOwRMKAh4/gd05
+	Vwg3XedJNYsK09MuCTvnLOTvKpMOAolHxOEcFaYoIwziNW6cgrhrWramN6xme4FLlecKWBq
+	p1rjTuj6+705Tu/Sf3Zb+8X1QO4Qu4G59fgkQ1Zfi+I98O2edRkIyBuL3DC6Hyi3iQZwhNU
+	GzQhaS7r5upnT1RkcQsL2CbEYvkOdQZx6HWqO4f7VdWb11KwY4kK9OWkDOqdJ4TdjnzMvED
+	A0xEgiRLqtS7F60dGtfNk/J77hH4AsaOtSUWdUdw49YWkndAAAp2odjesmNX3sPf4VSWMYT
+	nph/8lDqUxLhsKf05C4FQiyHuiu1gJo3Nqflx+H855nI1ZweFREj4NupNug4mkx89Jgl+Te
+	LgHaiBWzkcyhrFgv3xBg2rIklasiywdLzfimMjH0XOGhI2sWJ4ltwWVT6UGAu86nUMQtvBg
+	/Q5hqwFL0uy3Jk/d+9JfjXZiJ5fWB5GEzxHNeqqMf3/oNpM4r0rFWs2/tchSLtXD0ehZ7gv
+	PBnXtauaG8kqL+0tstNMuzyCO74JWmW9AablucI2XoamxWtnSJd/tXEacApuSCK0yDUuy/L
+	qInHqAX6fiaaFvieTpf/Qma9V31/2oN1Kp/cmOR364tSqzFO1Gc4aK8TSym2kVskmAgsaIx
+	IUKkSaEpvlas0FA6oohHHZ27299i2eqf7RZSTDTSc3uU6zxYQ5L8F9a7ux41nzLy5rBUeyC
+	BkWkkqvxMlb15LVF/8Zaqt4Z9Izcurcc7iIgh3il+FcxqRiDvIG+lWdqt3gLcV6kR3Dbya+
+	M+D0lDUOSXU+Cbxh57BXWwnajjPNQ87MKzxv4FIl1jF/V+0ZAkGbBwdawJfxH1iuu54Wvh7
+	gQpG8dZNVX6Uw410Z0bIUzgHoSK0Fv31AT/Pj51VBBIGQ//3FPpAjYvkMEau+yO8kaEGGrq
+	zH5HnJ4cjDd71StGCJv3SFdh2abLYdpBNq8Ov/7KqYrrnEuSU2ipz5rzYfVVL8q11vwqyE+
+	sawiPK0VUdLXRjAVxkFEBbZ+km6chcpXt+eDJYA16E5p/zeugGfJlxVEbXtJ6MA+yXfVfUp
+	g==
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+X-QQ-RECHKSPAM: 0
 
-On 5/21/26 3:33 PM, Kees Cook wrote:
-> Using Coccinelle, rewrite every struct kernel_param_ops initializer that
-> sets .get into a DEFINE_KERNEL_PARAM_OPS-family macro invocation,
-> for example:
-> 
-> @@
-> declarer name DEFINE_KERNEL_PARAM_OPS;
-> identifier OPS;
-> expression SET, GET;
-> @@
-> - const struct kernel_param_ops OPS = {
-> -       .set = SET,
-> -       .get = GET,
-> - };
-> + DEFINE_KERNEL_PARAM_OPS(OPS, SET, GET);
-> 
-> Using the macro for initialization means future changes can manipulate
-> the struct layout and callback prototypes without having to change every
-> initializer.
+Pk9uIDUvMjUvMjYgMTA6MDIgQU0sIFdlbnRhbyBHdWFuIHdyb3RlOg0KPj4+IEFkZGl0aW9u
+YWxseSwgbWFueSBkaXN0cmlidXRpb25zIGFscmVhZHkgc3dpdGNoZWQgdG8gZ2VuZHdhcmZr
+c3ltcyBsYXN0DQo+Pj4geWVhci4gVW5sZXNzIHNvbWVvbmUgcHJvdmlkZXMgYSBnb29kIHJl
+YXNvbiB0byBrZWVwIGdlbmtzeW1zIGFyb3VuZCwNCj4+PiBJIGV4cGVjdCBpdCB3aWxsIGJl
+IGRlcHJlY2F0ZWQgc29vbiBhbmQgZXZlbnR1YWxseSByZW1vdmVkLiBJdCB3b3VsZCBiZQ0K
+Pj4+IG1vcmUgdmFsdWFibGUgdG8gc2hvdyB3aGV0aGVyIHRoZSBzYW1lIG9wdGltaXphdGlv
+biBpcyB3b3J0aHdoaWxlIGZvcg0KPj4+IGdlbmR3YXJma3N5bXMuDQo+PiBJIHNlZSBnZW5k
+d2FyZmtzeW1zIHVzZSBjcmMzMiBmcm9tIDx6bGliLmg+LCB3aGljaCBmcm9tIHpsaWIxZy1k
+ZXYgYW5kIHpsaWIxZy4NCj4NCj4gQWgsIEkgZm9yZ290IGFib3V0IHRoaXMsIHNvIGdlbmR3
+YXJma3N5bXMgc2hvdWxkIGFscmVhZHkgYmUgd2VsbA0KPiBvcHRpbWl6ZWQuIEkgdGhpbmsg
+dGhhdCBpcyB0aGUgbW9zdCBpbXBvcnRhbnQgdGhpbmcuDQoNCldoaWNoIHdheSBkbyB5b3Ug
+cHJlZmVyPyBUaGVyZSBhcmUgdHdvIHdheXMgbm93Og0KMS4gdGhpcyB3b3JrLA0KMi4gaW1w
+b3J0IHpsaWIgbGlrZSBnZW5kd2FyZmtzeW1zIGFuZCByZW1vdmUgdGhlIGh1Z2UgY3JjdGFi
+LA0KYnV0IG5lZWQgbWFrZSBzdXJlIGFueSBhcmNoIGRvIG5vdCBjYXVzZSBwZXJmb3JtYW5j
+ZSByZWdyZXNzaW9uPw0KKEFzc2VydCB0aGUgdXNlciBsaWJzIHByZWNvbXBpbGUgd2l0aCAr
+Y3JjMzIgaXMgcmlnaHQ/KQ0KSSBkbyBzb21lIGVhcmx5IHRlc3RzIHNob3cgdGhhdDoNCjEp
+IHpsaWIgaW4geDg2IGZhc3QgdGhhbiBnZW5rc3ltIHNvZnR3YXJlDQoyKSB6bGliIGluIGFy
+bTY0IGRlYmlhbiBwcmVjb21waWxlIHNsb3cgdGhhbiBnZW5rc3ltIHNvZnR3YXJlKGNyYzMy
+IG5vdCBpbiBhcm12OCkNCjMpIHpsaWIgaW4gYXJtNjQgcmVjb21waWxlIHdpdGggK2NyYzMy
+IHNhbWUgc3BlZWQgd2l0aCBnZW5rc3ltcyBoYXJkd2FyZQ0KDQpCUnMNCldlbnRhbyBHdWFu
 
-Nit: For consistency, I suggest also converting the few remaining
-kernel_param_ops instances that specify only .set and no .get, such as
-simdisk_param_ops_filename.
 
--- 
-Thanks,
-Petr
