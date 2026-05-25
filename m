@@ -1,106 +1,170 @@
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0710E383300;
-	Mon, 25 May 2026 13:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C892038331A
+	for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 16:19:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779716514; cv=none; b=PZ2x2l5XiGUD4+6H7XBTCDqK1mLdPyBmLAIao0yIbh4ZXoiLWahFQTqyHssVLny8ndKxPQjh+TRkY5f2d9X7h49U45l1LnKW7jfl/Giy7qFrU1nT7WRrHk1pq1s/gAF9UvGdbPD517X4VLbsY7JyJtXbhHE/xQa19XdCFjGx3AI=
+	t=1779725967; cv=none; b=a0bjWbr2zwQ5Ql4uoy1XT8ld+xhYkmg/qsTlStAnmykXHe+rwcUt0cVtKW08KwnFfs2hf/VpGH5fFGtfNqWnt3o4KbMwsjCr1Nrk5jbO3UqWJ0N3eK7mdN8FgOq77EAkK6aqaxGk7lyFvTJYsCsY80+p8Qt+JYYEZ2RXiLIiYQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779716514; c=relaxed/simple;
-	bh=Nc/Jb5csnsx5gDgcPsmWWNNTtsoY2CvIv3mmQ/YO8ek=;
-	h=From:To:Cc:Subject:Mime-Version:Content-Type:Date:Message-ID:
-	 References:In-Reply-To; b=mGRylS9tOc/Dn83R2Llrd5jKd0Yxm2IIsjPw3HbKwP/juGmE81DmuPIHHGpTLqX4Qw9U343sNFaHPN7IvperwOn0GJWzKMlcZMDTItRBCrAKMLmUMSCLxuDUD7mM0fFmFc+E/z0EeNlHq9orzqd4IV18ck9+8CE6tin6iCLoN5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=aK9/B6fL; arc=none smtp.client-ip=54.206.16.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1779725967; c=relaxed/simple;
+	bh=6ATTepTt/W1eTfJKlZcOEC7miXlLa4M2ScAL84EJqWk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NYuLStkIjEFCKhK8F36TcVAe3D+WK8KIGco/cVsB8AvSGfhUURYfiaDqtvYw9U4yGoZMLzFVkDpNNmfR5WoOtQT5hvNT7A6nzFFmMuPXA9J1Oty22T3KLyrBW1LA/slLkG9Pj3rCMpSjgJzZ7kxYv/2Xzr4da0kcFM1xJOxyHes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dr4TZWgD; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="aK9/B6fL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1779716466;
-	bh=Nc/Jb5csnsx5gDgcPsmWWNNTtsoY2CvIv3mmQ/YO8ek=;
-	h=From:To:Subject:Mime-Version:Date:Message-ID;
-	b=aK9/B6fLpETZVzKQ28Kd04mu+4TBbLuiV9RyT1i2gKbPKJVDqvMr7SaNnf8LrX92i
-	 KO9cW5Ybmuks/2Tcc2aADI5eNdXR0lP4gayIlFiPL5dzhv4HXhE7VRaRQaoEHSoZJn
-	 3qiCdGXejTNj/fyTedCtoidykXFTS1vVdhR3FCWc=
-EX-QQ-RecipientCnt: 5
-X-QQ-GoodBg: 1
-X-QQ-SSF: 00400000000000F0
-X-QQ-FEAT: D4aqtcRDiqTsBAZj3BNqi+E7MGSirmitosRUhGyHACY=
-X-QQ-BUSINESS-ORIGIN: 2
-X-QQ-Originating-IP: VenZ0hzj9GNcUaoHOrbn1qGc9ix9OI1ffzh2IXBKFawfaInuxooZrdEAAV+70/uGJaaqK3cz/RG8ea8Wh7EPjA==
-X-QQ-STYLE: 
-X-QQ-mid: lv3gz7b-6t1779716464td61e0df7
-From: "=?utf-8?B?V2VudGFvIEd1YW4=?=" <guanwentao@uniontech.com>
-To: "=?utf-8?B?UGV0ciBQYXZsdQ==?=" <petr.pavlu@suse.com>
-Cc: "=?utf-8?B?bGludXgta2J1aWxk?=" <linux-kbuild@vger.kernel.org>, "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>, "=?utf-8?B?bGludXgtbW9kdWxlcw==?=" <linux-modules@vger.kernel.org>, "=?utf-8?B?bWFzYWhpcm95?=" <masahiroy@kernel.org>
-Subject: Re: [PATCH v2] genksyms: Support arm64 CRC32 hardware acceleration1~
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dr4TZWgD"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-490686877a1so6683455e9.0
+        for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 09:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1779725963; x=1780330763; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6YA+/JJXQ9abERc/NViF0XyaL5qdJ2pUb4chRkVwshY=;
+        b=dr4TZWgD1Esm3Qat2phkFsMogL1QSisy0KS5zRNj7QLd+O/GTWfZKF/uEdi+t9nmcR
+         dNii4QQxToJf+zI9chidglTAOXLiVdJ387YJpWnu4O63RZWZpdft6OjU//0zfSVBO/Yy
+         aLoJ+GdqYyIcf1QZ3S/llKFAOlJ84UyYM98oHjPHgYY3F7FL0OrljqOzg8++8jmqQw7A
+         O5n5KKQspBxCRl24VEYndxfcbPND9j7SmWztWHYdSuVM/njdzkK1jbGeu/q+wYu+k1tw
+         8TTcdzkzuBj6AUmwdDxqdavz+slVMsWbwdX+qKe1b1YYNz7v1oMCb8aIIpb7FBEk2qd1
+         WQkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779725963; x=1780330763;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6YA+/JJXQ9abERc/NViF0XyaL5qdJ2pUb4chRkVwshY=;
+        b=HCgfwQpopV9Xspe7CEwbVDYlkkxnruJf14E6ODRE+ovIGFE3PbmYLewaMHcc42cHiM
+         1rAqcdFUiMLQdsok6bg7OyUxE2AbJyjZCAnmgAyBHHsvKMfTtAuky0cK+3UnXW9DWbhC
+         2JUza+FSNIh4cfR2gYtk8yiLqdyNEeqXWKLpehEaJ4QiwR+2JE1iT35bN/cP99hrtKv7
+         5IUgWuGfU8stO9HjwdP2dy0AMDQbd6bnpYBPgKzdR03ck9zZifOaKP0QRbp2qt2rAEd0
+         Lw+9b+6zXPW45cVKg5Cc0OiUcqXzzE9lg9OaPyZ61lacJMVXAQ73QAe+wNSU8E3OFA/O
+         OJfw==
+X-Forwarded-Encrypted: i=1; AFNElJ+9ACh9xhF9gWQu2aEYISW6DHRTPKYcLC4hVQ189KMqjJD6j8gFFYaaYOt2tEmnt5oT+LKonG2wrRJ+OAll@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW5jY6V1BtqQv+dohlbZhvh8CZGal87VPXiOqorHvuN09YZa3p
+	JyhDRU9J2yxd9ErBn9SsxaUBmS/5utSs/X463xsht4CGLiTlTlBcfXeweQ1kViib+UE=
+X-Gm-Gg: Acq92OEHjkDVhp3IgXKSVc71OE2tBOyb0JyqeL2ocSNlqJC8OwLYTPOMK1S6jKM0Gx2
+	SA2j1N8rPbj8IUmLR5GH0mwfSd2F41ZgTfKJp5KPFOUZbM1Xhu1GDhl0PQOcECfHph6pQ7GVsz9
+	Qfjkyea9IUvttSJhmPzw3L5g3gIZ6Ws5iN3z2dJZKBfeme0SizUegAAfaSjOBI2OWrniiF9guHv
+	9KGL1E8CdfmvypMACRL5bsel+nSMwIxg98Mrzpfvkmx5nc4WSgcUYdoT/3cvTXmgq3RFTJLxNnp
+	8Fip9kgQcqLDQcmw+wH3P/xGk4TSPZOwRSkPdXZjBZ8+/Jc4w2yi7Ci3k2vfvyoC5QySmM9znNn
+	uQCE12Dx8I64/jtGTnTy+DhoJqJ/WCKOjeMndi53rDR23pnTbk9rMTqbaqa4bTFBS2TZKYMpxqg
+	+axqGWsaZ1RGqlOSwUoKqorgb44Al7YBAGazU+RJqsWaZQcCo9VB70m9ZvGSLzM2cW3LDrWCNbx
+	syqFu0D2ixMNZcKacvijF+Tx4zV+F3Vgl32tV0lUOuPohdpUl06uKj5pyfMhhHuAND8RQ==
+X-Received: by 2002:a05:600c:3b07:b0:490:f7c:b19 with SMTP id 5b1f17b1804b1-490420f67f5mr197977845e9.0.1779725963153;
+        Mon, 25 May 2026 09:19:23 -0700 (PDT)
+Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49059cc9a91sm48939425e9.1.2026.05.25.09.19.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2026 09:19:22 -0700 (PDT)
+Message-ID: <a4c7ccee-6189-4c74-bad8-57d1438c7d8d@suse.com>
+Date: Mon, 25 May 2026 18:19:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-Date: Mon, 25 May 2026 21:41:04 +0800
-X-Priority: 3
-Message-ID: <tencent_23032AC04EF146C803D19A6D@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-References: <5d1b8b13-d590-497d-9185-609494135348@suse.com>
-	<20260525080229.1570905-1-guanwentao@uniontech.com>
-	<26c47a0e-7a9b-473a-818d-455e68476dd1@suse.com>
-In-Reply-To: <26c47a0e-7a9b-473a-818d-455e68476dd1@suse.com>
-X-QQ-ReplyHash: 1755302232
-X-BIZMAIL-ID: 12752282045284709240
-X-Address-Ticket:version=;type=;ticket_id=;id_list=;display_name=;session_id=;
-X-QQ-SENDSIZE: 520
-Received: from qq.com (unknown [127.0.0.1])
-	by smtp.qq.com (ESMTP) with SMTP
-	id ; Mon, 25 May 2026 21:41:05 +0800 (CST)
-Feedback-ID: lv:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: NTNLxPxYD/4Isf3zWHXhvhMZYJXOCa7NxMiMh0cO8SWOwRMKAh4/gd05
-	Vwg3XedJNYsK09MuCTvnLOTvKpMOAolHxOEcFaYoIwziNW6cgrhrWramN6xme4FLlecKWBq
-	p1rjTuj6+705Tu/Sf3Zb+8X1QO4Qu4G59fgkQ1Zfi+I98O2edRkIyBuL3DC6Hyi3iQZwhNU
-	GzQhaS7r5upnT1RkcQsL2CbEYvkOdQZx6HWqO4f7VdWb11KwY4kK9OWkDOqdJ4TdjnzMvED
-	A0xEgiRLqtS7F60dGtfNk/J77hH4AsaOtSUWdUdw49YWkndAAAp2odjesmNX3sPf4VSWMYT
-	nph/8lDqUxLhsKf05C4FQiyHuiu1gJo3Nqflx+H855nI1ZweFREj4NupNug4mkx89Jgl+Te
-	LgHaiBWzkcyhrFgv3xBg2rIklasiywdLzfimMjH0XOGhI2sWJ4ltwWVT6UGAu86nUMQtvBg
-	/Q5hqwFL0uy3Jk/d+9JfjXZiJ5fWB5GEzxHNeqqMf3/oNpM4r0rFWs2/tchSLtXD0ehZ7gv
-	PBnXtauaG8kqL+0tstNMuzyCO74JWmW9AablucI2XoamxWtnSJd/tXEacApuSCK0yDUuy/L
-	qInHqAX6fiaaFvieTpf/Qma9V31/2oN1Kp/cmOR364tSqzFO1Gc4aK8TSym2kVskmAgsaIx
-	IUKkSaEpvlas0FA6oohHHZ27299i2eqf7RZSTDTSc3uU6zxYQ5L8F9a7ux41nzLy5rBUeyC
-	BkWkkqvxMlb15LVF/8Zaqt4Z9Izcurcc7iIgh3il+FcxqRiDvIG+lWdqt3gLcV6kR3Dbya+
-	M+D0lDUOSXU+Cbxh57BXWwnajjPNQ87MKzxv4FIl1jF/V+0ZAkGbBwdawJfxH1iuu54Wvh7
-	gQpG8dZNVX6Uw410Z0bIUzgHoSK0Fv31AT/Pj51VBBIGQ//3FPpAjYvkMEau+yO8kaEGGrq
-	zH5HnJ4cjDd71StGCJv3SFdh2abLYdpBNq8Ov/7KqYrrnEuSU2ipz5rzYfVVL8q11vwqyE+
-	sawiPK0VUdLXRjAVxkFEBbZ+km6chcpXt+eDJYA16E5p/zeugGfJlxVEbXtJ6MA+yXfVfUp
-	g==
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
-X-QQ-RECHKSPAM: 0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/11] moduleparam: Add seq_buf-based .get callback
+ alongside .get_str
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Pengpeng Hou
+ <pengpeng@iscas.ac.cn>, Richard Weinberger <richard@nod.at>,
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Corey Minyard <corey@minyard.net>, Gabriel Somlo <somlo@cmu.edu>,
+ "Michael S. Tsirkin" <mst@redhat.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Hannes Reinecke <hare@suse.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+ Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
+ Tiwei Bie <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "David E. Box" <david.e.box@linux.intel.com>,
+ "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Peter Zijlstra <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
+ Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
+ <akpm@linux-foundation.org>, John Johansen <john.johansen@canonical.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com,
+ linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
+ linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+ qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+ virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, netdev@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20260521133315.work.845-kees@kernel.org>
+ <20260521133326.2465264-6-kees@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260521133326.2465264-6-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Pk9uIDUvMjUvMjYgMTA6MDIgQU0sIFdlbnRhbyBHdWFuIHdyb3RlOg0KPj4+IEFkZGl0aW9u
-YWxseSwgbWFueSBkaXN0cmlidXRpb25zIGFscmVhZHkgc3dpdGNoZWQgdG8gZ2VuZHdhcmZr
-c3ltcyBsYXN0DQo+Pj4geWVhci4gVW5sZXNzIHNvbWVvbmUgcHJvdmlkZXMgYSBnb29kIHJl
-YXNvbiB0byBrZWVwIGdlbmtzeW1zIGFyb3VuZCwNCj4+PiBJIGV4cGVjdCBpdCB3aWxsIGJl
-IGRlcHJlY2F0ZWQgc29vbiBhbmQgZXZlbnR1YWxseSByZW1vdmVkLiBJdCB3b3VsZCBiZQ0K
-Pj4+IG1vcmUgdmFsdWFibGUgdG8gc2hvdyB3aGV0aGVyIHRoZSBzYW1lIG9wdGltaXphdGlv
-biBpcyB3b3J0aHdoaWxlIGZvcg0KPj4+IGdlbmR3YXJma3N5bXMuDQo+PiBJIHNlZSBnZW5k
-d2FyZmtzeW1zIHVzZSBjcmMzMiBmcm9tIDx6bGliLmg+LCB3aGljaCBmcm9tIHpsaWIxZy1k
-ZXYgYW5kIHpsaWIxZy4NCj4NCj4gQWgsIEkgZm9yZ290IGFib3V0IHRoaXMsIHNvIGdlbmR3
-YXJma3N5bXMgc2hvdWxkIGFscmVhZHkgYmUgd2VsbA0KPiBvcHRpbWl6ZWQuIEkgdGhpbmsg
-dGhhdCBpcyB0aGUgbW9zdCBpbXBvcnRhbnQgdGhpbmcuDQoNCldoaWNoIHdheSBkbyB5b3Ug
-cHJlZmVyPyBUaGVyZSBhcmUgdHdvIHdheXMgbm93Og0KMS4gdGhpcyB3b3JrLA0KMi4gaW1w
-b3J0IHpsaWIgbGlrZSBnZW5kd2FyZmtzeW1zIGFuZCByZW1vdmUgdGhlIGh1Z2UgY3JjdGFi
-LA0KYnV0IG5lZWQgbWFrZSBzdXJlIGFueSBhcmNoIGRvIG5vdCBjYXVzZSBwZXJmb3JtYW5j
-ZSByZWdyZXNzaW9uPw0KKEFzc2VydCB0aGUgdXNlciBsaWJzIHByZWNvbXBpbGUgd2l0aCAr
-Y3JjMzIgaXMgcmlnaHQ/KQ0KSSBkbyBzb21lIGVhcmx5IHRlc3RzIHNob3cgdGhhdDoNCjEp
-IHpsaWIgaW4geDg2IGZhc3QgdGhhbiBnZW5rc3ltIHNvZnR3YXJlDQoyKSB6bGliIGluIGFy
-bTY0IGRlYmlhbiBwcmVjb21waWxlIHNsb3cgdGhhbiBnZW5rc3ltIHNvZnR3YXJlKGNyYzMy
-IG5vdCBpbiBhcm12OCkNCjMpIHpsaWIgaW4gYXJtNjQgcmVjb21waWxlIHdpdGggK2NyYzMy
-IHNhbWUgc3BlZWQgd2l0aCBnZW5rc3ltcyBoYXJkd2FyZQ0KDQpCUnMNCldlbnRhbyBHdWFu
+On 5/21/26 3:33 PM, Kees Cook wrote:
+> Add a new struct kernel_param_ops::get callback whose signature
+> takes a struct seq_buf instead of a raw char buffer:
+> 
+>   int (*get)(struct seq_buf *sb, const struct kernel_param *kp);
+> 
+> The previously-legacy .get field is now .get_str (char *buffer);
+> .get is the new seq_buf-aware form.  param_attr_show() prefers .get
+> when set, otherwise falls back to .get_str.  WARN_ON_ONCE() if both
+> are set.  Return contract for .get:
+> 
+>   < 0 : errno propagated to userspace; seq_buf contents discarded
+>   = 0 : success; length derived from seq_buf_used()
+>   > 0 : forbidden; the dispatcher WARN_ON_ONCE()s and treats as 0
+> 
+> The default policy on seq_buf_has_overflowed() is silent truncation,
+> matching scnprintf()/sysfs_emit() behaviour.  Callbacks that want a
+> specific overflow errno can check seq_buf_has_overflowed() and
+> return their preferred error.
+> 
+> No callbacks use .get yet; the legacy path is still the only one in use
+> after this commit. A subsequent commit teaches DEFINE_KERNEL_PARAM_OPS
+> to route initializers by type.
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
+-- Petr
