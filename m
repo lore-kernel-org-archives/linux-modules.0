@@ -1,172 +1,118 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08803D4131
-	for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 07:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDAE3D9020;
+	Mon, 25 May 2026 08:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779695411; cv=none; b=CzQ8govfLIoJhmNl3CIVTXk9e7uDFJ0yRcWjibsZ/GtLEr9c3a4XVtQRrGM8Exq7r7gDub6Fr5CeMuU6NrtgYZWzgxNJAy1UfbjkRm40+vMzVNAaoyNwAuB1Xi9sc3cTLI9PJsbEVxAVUgnd/nra6aIZtXjyk0EaZV6wGKs+CNs=
+	t=1779696289; cv=none; b=K2MtstafwGPQHBptyqKU5ro6alw+yEWRpnvGb6e/U4z3K5WeOnh1iBEDEVn3ab1AtxNmACrOpQQAayFs6ER7caeS5pHMvha0Hw6lrSgVEuJenyX2kOJmHDZZk/A9z7JztuwUqLrXILdTCAE+1WaPXPVBbHeNeM3STPdGlenM0Ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779695411; c=relaxed/simple;
-	bh=NR8ERBteiNpEvT/i3MkwfQhIOdqEBtmpkWicvVoDvSY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NFko0cI1bl+v+LjrYuoWyyBaq5thqdxwiVVJktjodVy5KVbdOsrDesz6WBFLHerKAHgYL0uJhALrYnTK2kjEVkomF4I6WUa0DklAxxoSGANLz9BqOO/Gh+T8WexgS50fsTAKgbYNJz/llyOQeseUhgHGvel32swvRGtBdu/TKgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JATo0DsK; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1779696289; c=relaxed/simple;
+	bh=UNF96M+UDCAZMp95O/JWzkeXxV2VuNOkNZ2czONssQM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Tjk5FwI4O1i21idAZxaGi9NfrKAZov4Bxf/BIj8ac3IFU/HH80f5FYnTNtuDC1NWezH8Mxe0nkCPcTx65m+lxCcW38IEX+H9shXT9O81iA1SIKxZdWX9LMqZpTEVrMY0Wkntik7jr+smplKYzav5BEWqFWM3Ahcejizuyv2Oh00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=mhYOt+f5; arc=none smtp.client-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JATo0DsK"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-44a044cb827so6940708f8f.0
-        for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 00:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779695408; x=1780300208; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PoBZmEEKJgwumlmFRTQvrYGlkjtr/HeYrTo4cMXpiV0=;
-        b=JATo0DsKUAIwiaib334nnvCZvfCMDNZfB/zXSFLAtU2RuUxxOUe4vb+ypPbpcCpjfj
-         lC9aW1xMFrdczvsLF8Zw2hdPHXsMFh2AOFnhGllgmyahxo9FLCPExKoOW7oYNK5ey6jY
-         Bs8Iq9wQjANHSan6nRaH8e+mb10duHfhD32Iey1+BN3WdOTrjKIzzjsiH5i/kufnUUrv
-         i4uMYy63SS2AkhtSBeM9q5VhS2iWHpMMaRYPClcIp/jwGRDmGFd95sjEArDVuvHi0CxA
-         LIOVwIwj+pHZqz+QNEzg7ZvxcvKENS0/WntYoVwrrkR9XT6UdQiXeOdYJVA5KeYi9SsL
-         7FmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779695408; x=1780300208;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PoBZmEEKJgwumlmFRTQvrYGlkjtr/HeYrTo4cMXpiV0=;
-        b=hwvyqMtV+7EslIKYr9lvfaaQZDvDWz03r//+N8weRangP2wpiZiOtNdD98JH28pVjN
-         jxA3TRegb1JWxT81LxMgDcZp+dRulY/fsEIguybcl5KcHjFCca2boSIhmbgzNx1RKNBl
-         nlc61mYhvrsldCFgzy5NJSsWse7BT05VaER9u7Tntl85zbZ/XImOGjv0YjRu5+7s07Uu
-         9T5/GM7n47f7L+G7yD4+rjdHRvSJfvxsnSsB0lQmzJ7UAZ+sotX4ZPXRmCkowFkVAgB/
-         EghjW2yNSw7YWvxbeh0cs1KTr2+141Tjh0471JxoI8p+ndRPDt+HvFdVnnVMIqPYm/mx
-         1A3w==
-X-Forwarded-Encrypted: i=1; AFNElJ8bN3JbUUIuOiQ6DXlZ01lDvQ2Hk/pB++QJ1Ho8F84iG2kyrQMdLCZjGggrB84VjRifsluq/3fXOIeM9/2A@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvZOHo0iVOPyuA5IYjfhKwTYRgFfK2/i8N3C1N81sdHIOnm5/r
-	mbsBJACTpWYCZSw5L5zJFTbmlqImyyHZ3OhHiOFjJTjFQ6DCYir7Lh/UrxD2gQToH+0=
-X-Gm-Gg: Acq92OFMZNPr9kLybSD76DMi/D5yqmyKdi/dlieSmrrYxpS8idSxDAPl3ncIIUgogWx
-	4xcCUgudpSZHwi66tNTdd/tp20jJxnhgCZyW14/63hU3zxeU+kBHAMAKEl3c6SvS6oMgk5AVEvx
-	HoAXdcnloYyJb/qq6I++wlHmKtjmPG0352Z1ZtAdYb7543m7zmdrcX1vdlOwvLfrw+wEXuYPJWb
-	SuOZ4qvBKku6Qlwo3u9PoLjAGN6L8t709lmLUEr8hBTeTdTJS8tXuPFDkVKRMLIYJZAaWtAJSJ1
-	xNexmLyvXtn+EIRM4eEJDtzuPRngLYxdke9caGc65fExFv4HcHEuMfTCYLMeNwpqBl18tOArLPm
-	EheSRfh069ghvCi+4TXFxXR6zJsJaQ7e4ezD6Z/uvzeyGSvK4Avk6abBlJu7HzuGvMjRCuZkHx5
-	K0G1Y1onvXqJ71e3NlgxPtx00iPQ1FCZwq3XRUH4dlqCRHqDVfoLjd1hHBO8ga0I0bF/ebwYowF
-	ryBJ7ApZU4Bo3U14b/Fc3lZqTy3Qcfidn1r7AVfzsAnwgxdutvNZEw0s2d0ZEOePwPhCQ==
-X-Received: by 2002:a05:6000:1882:b0:43d:7d24:b4ff with SMTP id ffacd0b85a97d-45eb38a80b5mr18489748f8f.40.1779695407785;
-        Mon, 25 May 2026 00:50:07 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6c9ba2esm26039629f8f.8.2026.05.25.00.50.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2026 00:50:07 -0700 (PDT)
-Message-ID: <5d1b8b13-d590-497d-9185-609494135348@suse.com>
-Date: Mon, 25 May 2026 09:50:06 +0200
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="mhYOt+f5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1779696249;
+	bh=GK0AcFW5IPbg97vLvTZXdLNFFCxbwYzKywtInr4XSUA=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=mhYOt+f5fQB1YC7zGNhciEa2ldR7+bt7wuCnvO6dxBjRwK12fXVhcV975DWR+WF3Q
+	 VPBxeZ7fGtDxVEAduW1JzQrebwRRSWm15uKDpI3N9y+9aZzBUhy8YgtyFcgSSAAQJ/
+	 /KRRmAt2wGVk8/vjLvVuVuUrGgoM5sdiXHAKJxio=
+X-QQ-mid: esmtpgz16t1779696231t7a118d65
+X-QQ-Originating-IP: tglWTa7jp8/hh3inSZB9NJcQwm/bHefu53S7jS2DENM=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 25 May 2026 16:03:49 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 2093867168644187205
+EX-QQ-RecipientCnt: 6
+From: Wentao Guan <guanwentao@uniontech.com>
+To: petr.pavlu@suse.com
+Cc: guanwentao@uniontech.com,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	masahiroy@kernel.org
+Subject: Re: [PATCH v2] genksyms: Support arm64 CRC32 hardware acceleration1~
+Date: Mon, 25 May 2026 16:02:29 +0800
+Message-Id: <20260525080229.1570905-1-guanwentao@uniontech.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <5d1b8b13-d590-497d-9185-609494135348@suse.com>
+References: <5d1b8b13-d590-497d-9185-609494135348@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] genksyms: Support arm64 CRC32 hardware acceleration
-To: Wentao Guan <guanwentao@uniontech.com>
-Cc: masahiroy@kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
-References: <20260525070344.1564886-1-guanwentao@uniontech.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260525070344.1564886-1-guanwentao@uniontech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NWth7vBa++Gd2mL1dw9gWXuxo7KU172DoO2dvIIlgOwnEuR97Z471Sbp
+	ZVkDWcApLRKgCZjPwJ2NgfoY6TT4YJKX3G27zIAqAtrV78OaR9nJEKef1MDjbyQ6f/mncmU
+	7wJSy2ztJqD5el/i0fPKbAaBgZyuOwqyBc+e6ADXWIfJS+ll61Wh57Za7PvOfvYMebuP3XY
+	bcxffHVQz0z+ImMJTfsbPrG2RsgOTFTVgHaRM7rD8V2z/DhKGnnIohVgcFmwnl64OEYUJ86
+	21KNY+NPzNk+BOq6V6FSuFCV6LJlVqSoMOBsMu+YT0wWMqycvHBCos83dCP06z99vScwoml
+	h5dAPUARIZMXJbjeComZ1aotfZOaYc2sFa+MQSiN0BccFcbXuEp79rHLaYc9PczDRF8uipu
+	LFGSLQ7hCuwRaOxuFEKaWkRhB2j1eEBGnyVYgPtGLPDQNDTVHLQG2uoAAx18c2iQc+UAGPf
+	CnZ/t+grz3oSCBNlnCRqwhCm/2O8CpZT+1tnXoZDzp8unPjeRCMF42MqXi2+Y3Vo3giN/n7
+	5QskSAJuzUCxktJ8ByOCNfWAN2n8b/iM54hcMx8pTTbKNEm1PQnDcSWfhGq2dA8JbKU1J4J
+	BXWQM9yFId0dP9FYIYTOaJmUFj0z0NQRCGOvr2T39Pii/95pR1emCN8ms01dHuolKI4I4W3
+	Yg5e2JUcXEjzGY/+/2fGJkLPPMaaCOxBUwkWrQ+p0FLg99jn8C1/+tS8E/vTYjKkBSaQ263
+	5WklsxXRvIA+b7txi4azc0lRolm10igHWZxCltXtuvOjUCsS7Zx1eFTpTkMHN4JsXS17f4r
+	XPoGtIuKIzdobV7uC82ikcgOej3wcMvG2MxSPJ/RBI+oiwBdb1Io6kPN6r6xhgAWzoKrj/R
+	sWhFyL1uICo12ZjWkgpcg8nPPBhMxdH3/GHCgH28j8jEVuoQLkLFeezVBKO9C3bchqtO23R
+	8h4xBF5qUBvno4QKlu0lNz9JhUtNQ+blT89Fav7Sak4O8sG8IAQx0QD9OvW7XVB9ViXAScv
+	serNid8kRf9uQAgjZtXnJNwcx0TI90RIDl+ZAfW6OupS1s/xdgqT5Z9bCyk2Cz0YsNFJJtY
+	g==
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+X-QQ-RECHKSPAM: 0
 
-+Cc: kbuild, modules
+Hello Petr,
 
-On 5/25/26 9:03 AM, Wentao Guan wrote:
-> Use hardware 'crc32b' to partial_crc32_one() when support,
-> it shows 2x speed up than crctab32 way.
-> 
-> I think it will be scaled to more architecture.
+Thanks for your reply,
 
-Could you please provide measurements showing how this improves the
-runtime of genksyms and affects the overall kernel build time? Are
-CRC calculations actually a hot path in genksyms? I don't think it is
-worth complicating the genksyms code with architecture-specific
-optimizations unless there is a clear benefit.
+> Could you please provide measurements showing how this improves the
+> runtime of genksyms and affects the overall kernel build time? Are
+From my build kernel workload, genksyms perf report (record -g -F 99) show:
+without patch:
+-  7.83% 0.00% genksyms genksyms [.] _start
+   _start
+ - __libc_start_main
+   + 3.19% yylex
+     1.81% find_symbol
+     0.92% is_reserved_word
+     0.62% free_list
+   + 0.56% export_symbol
 
-Additionally, many distributions already switched to gendwarfksyms last
-year. Unless someone provides a good reason to keep genksyms around,
-I expect it will be deprecated soon and eventually removed. It would be
-more valuable to show whether the same optimization is worthwhile for
-gendwarfksyms.
+with patch:(find_symbol() and export_symbol() benifit from this):
+-  7.12% 0.00% genksyms genksyms [.] _start
+   _start
+ - __libc_start_main
+   - 3.01% yylex
+       0.51% malloc
+     1.65% find_symbol
+     0.82% is_reserved_word
+     0.50% free_list
 
--- 
-Thanks,
-Petr
+> CRC calculations actually a hot path in genksyms? I don't think it is
+> worth complicating the genksyms code with architecture-specific
+> optimizations unless there is a clear benefit.
+Right.
 
-> 
-> Signed-off-by: Wentao Guan <guanwentao@uniontech.com>
-> ---
-> changelog:
-> 1. remove change in partial_crc32(),
-> for partial_crc32_one() already use crc32b.
-> 
-> ---
-> ---
->  scripts/genksyms/genksyms.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-> 
-> diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
-> index 83e48670c2fcf..80b7797c842aa 100644
-> --- a/scripts/genksyms/genksyms.c
-> +++ b/scripts/genksyms/genksyms.c
-> @@ -116,8 +116,40 @@ static const uint32_t crctab32[] = {
->  	0x2d02ef8dU
->  };
->  
-> +/*
-> + * Architecture-specific CRC32 hardware acceleration.
-> + */
-> +static int crc32_hw_available;
-> +
-> +#ifdef __aarch64__
-> +#include <sys/auxv.h>
-> +#include <asm/hwcap.h>
-> +
-> +static void crc32_check_hw(void)
-> +{
-> +	crc32_hw_available = (getauxval(AT_HWCAP) & HWCAP_CRC32) != 0;
-> +}
-> +
-> +static inline uint32_t crc32_hw_byte(uint8_t c, uint32_t crc)
-> +{
-> +	asm volatile(".arch_extension crc\n\t"
-> +				"crc32b %w0, %w0, %w1" : "+r"(crc) : "r"(c));
-> +	return crc;
-> +}
-> +
-> +#else
-> +static void crc32_check_hw(void)
-> +{
-> +	crc32_hw_available = 0;
-> +}
-> +#endif
-> +
->  static uint32_t partial_crc32_one(uint8_t c, uint32_t crc)
->  {
-> +#if defined(__aarch64__)
-> +	if (__builtin_expect(crc32_hw_available, 0))
-> +		return crc32_hw_byte(c, crc);
-> +#endif
->  	return crctab32[(crc ^ c) & 0xff] ^ (crc >> 8);
->  }
->  
-> @@ -740,6 +772,8 @@ int main(int argc, char **argv)
->  	FILE *dumpfile = NULL, *ref_file = NULL;
->  	int o;
->  
-> +	crc32_check_hw();
-> +
->  	struct option long_opts[] = {
->  		{"debug", 0, 0, 'd'},
->  		{"warnings", 0, 0, 'w'},
+> Additionally, many distributions already switched to gendwarfksyms last
+> year. Unless someone provides a good reason to keep genksyms around,
+> I expect it will be deprecated soon and eventually removed. It would be
+> more valuable to show whether the same optimization is worthwhile for
+> gendwarfksyms.
+I see gendwarfksyms use crc32 from <zlib.h>, which from zlib1g-dev and zlib1g.
+
+
+BRs
+Wentao Guan
