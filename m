@@ -1,67 +1,68 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7B43914F8
-	for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 09:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE1C385539
+	for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 13:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779701088; cv=none; b=BnCIC51RjJuw4v5DL7LFNZfG50Vjh7db4457ymtylkUycwjUj84GT/3b04ll4ZU3ZB4SGmAykpa5FjfMAo1ZvGX+shWpDnPJ6C5pA61/EQ65JbRxHAnveJWPULSwK8ZHq9z7z4YkuEcV0YRWrCtVN+Io3O63kczBkuI1ScbilqM=
+	t=1779715640; cv=none; b=THUGIkAHkHa+c7HFeX0ObAiZDVZccSMyXWlF3jRH0ozkXGDvRELIMK7mJ2VFYVU6PFATBQM+arDEDKFAdB66Oc8nBS6i3FsiLQcOeLtAXlV0D4Ddpsy3MmoWPRFyURntLdATMC5qlyN5KBrC/BlBeLoe5DDXNodjFkfp0vJdwEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779701088; c=relaxed/simple;
-	bh=Usv9zpYi4do2lifC/zfE8nnMvp61yptX2XkYnVZEyU4=;
+	s=arc-20240116; t=1779715640; c=relaxed/simple;
+	bh=C94U0R51pf0+NwK55ZN6EU/K9cssUS28krlgs1NAXvo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VqjVIWqKTh2yiaSgzDkiiDom5SwaekHCUfJMU5paIcqZPlEywBD1PzKn05cY7E6sFUbqlmGrke5GaT2+BAhEUZasawjJHh1b4rjea6j/1GvwF+HJ1FACKVtyxGEf9dGMKiy0cP6Nxfi3K8dCoxsb3QtNpxY3ojTd1ZyUPFAPM2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GVaBy0+a; arc=none smtp.client-ip=209.85.221.42
+	 In-Reply-To:Content-Type; b=V/g4uZt5TIhRfv7cxwTpqQKCKTb/ypVU1XGpGWhqINtKPyb9zM9VV2VfCBVrKcH/GYV+Q2UlGU9KZdhP5EbKs31vs0z3OxWSc6zU7Fgl5DsBnFvuMeu8dB7ORGIy5lI4kH97ecSpt/il6ivFnD2gCwQ8I9yNJk7P/OVAoQpRsAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aQ7LUXtW; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GVaBy0+a"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43d7645adbdso5989846f8f.1
-        for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 02:24:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aQ7LUXtW"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-49056b9f04aso23538915e9.0
+        for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 06:27:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779701084; x=1780305884; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1779715637; x=1780320437; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dXIop8scfYA59+iIi8F9PKH/sL+IWlJPcxqiOfC7myM=;
-        b=GVaBy0+al/3PPx4qotsRTWKFITYfcIsLX9GnH91MlkDd+F5uUyBXskAyv9Z+pCrPbp
-         WsDIheZgEkK4oIMUK+xU7hqwaFWEHTVZJxlo8H8wmZUBeKl/o6HlBWVJNBgSM3W++joU
-         NG+qE3LCcnk5lpC7jDWvC0IQDSwFd/DadFbl16wYuLEOodshw/HKzOkOvW5lEeocAFUg
-         y7Sb3MT64pW6sAdB3RrntmfgvGfIk1XdXsKfLTaENamM9bhWXZqdnTi/+4JisqaoWayR
-         UpKJz3Ldt2uzmzN/WA0ALeDIbB4w76qzkmYffZnHX6wiWMbVjCZT66HWlhjBoZ166Nju
-         qlfg==
+        bh=Ij+l12dR+ISDUAaA9eJOw0SDQ47xwS4UQDqlRXMB76c=;
+        b=aQ7LUXtW5bxOb+tWWbnJ9LI9Hu4ho2cWZv/3AUVlb7neykv3e+8w6/VBaL6Xr0dGge
+         z1KK2LMTAA72OCAu5AxD12Qy5s1M0/sw9ULxv7vFq7+upKOnBYr2wRR1ZvodcmgkysM4
+         sWabOR3Ubm2vqDtISC9F8a7yRMxFSNpxL+BvdxucPoZsLwmwpi+VqhZI8mUejTHqAsHt
+         us9KcbeyES8MwfL9wN5iAnDDh83sw6VahdIZeophjTkDCT9NWqrub1WwEH9gCU2y0gYZ
+         Rh2ajrWgiGd+BqSe3mipr5Mst8DS1o2/LF66I805h9zC41cP2I0l1MO9ZLDfwi8MxZFB
+         EZDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779701084; x=1780305884;
+        d=1e100.net; s=20251104; t=1779715637; x=1780320437;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dXIop8scfYA59+iIi8F9PKH/sL+IWlJPcxqiOfC7myM=;
-        b=aAvdaZZUwtzEXSEX07aU1xcRiQfEP4M9ZjUirxgCfzpLKI8TG/tMPwctWZ+atHnjB2
-         Sj8su0fT0+uCqYBUvxeQp4ZKSu2SsqwAt3kDIW2b8yc3omsF+EIzDsx1R5BMt+xgtps5
-         HYrEH7Dock+TSmL3x8OJQcOISkCorGYVgfE8LJGbDVMgCTlljWA3LEWwieB/Ixtgd5Lc
-         ErjXLCaCSwAx6B50YBJP6ThHijJxjKriou9dge/9/d+DpEyOdLQxFx0R+0Q6zJFdcTxN
-         uDwk9P/vX9hvqkIkBgo1qQT/tvgWxIO26e+9cGMmmgep8YtQpMq55ARSP7d/Om6JOaJJ
-         DXzQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/13PKp0CNSlSW4fL3Lvd92VhmtKcuXdIVl/JR9rLfRsu158UMq67wy8JfUeTXg8yAaMVprASf13rJcsSPo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRbadrSh+0rHZvDTOEnJ9qMWhoN1p1Z75f5SY5hMfaF1E2Zcjt
-	G4R/jb+p5PQCe/39Oz8m85xAsXkSkWzi7mfS821yp9vXt6WqUDTH8tzaW7icB+Z57JI=
-X-Gm-Gg: Acq92OHWFwy8bc41AnPjjg8a1OJuK0/THFcbCc+2cKg+Zjr29/p8NDD9giOlH9eCRqB
-	1ALF+/UDYlZWZvWdApSNjj6Qq+PkQLS3/bMosJxInA2KY7N5USBxIi/hh1oEvqfGN2RHnyub/Qe
-	GH+MQidK2+6kHVfwsxuCxmjSdXZ2LHpf9xAfj+RWjTsIUdTBKBhsAme8PYhik++QJb4/we6ek33
-	47IR77Xw1/EGPTulU0qsP87d+U18ordQAoM0sL8dkK3YLft8wANJDU6V4E+idArnsKcyPekXknq
-	usF4dqDiqsjvq3G51Z1KC1oj8Qk8qEAx1Loa9DBSpyJZy6uP//Qfs8yxMf40ddiA+Rb4a69sDmx
-	cRruZTz/COqEA+c2+oWER25v4W3ZOnfeCsrjrbTENlaOgdrl3xznKj71QxF1ZZZO/KsKRxIUBOk
-	Qz5UdoIwlxeYUL4cMDmfX8AggSL9qFHPx7Cgb5WcHbNjLCVrVIq0wZUsCtnvWqNrPLTzpsnvlU6
-	2IMOdfqjwBSAkgSr6WtO1m/nX9YhoLU6K9xIjDLq5Knulk3mDap8tYMbkgaXFkxJGEvew==
-X-Received: by 2002:a05:6000:4b04:b0:45e:9420:ed16 with SMTP id ffacd0b85a97d-45eb38b0045mr22939460f8f.10.1779701084065;
-        Mon, 25 May 2026 02:24:44 -0700 (PDT)
+        bh=Ij+l12dR+ISDUAaA9eJOw0SDQ47xwS4UQDqlRXMB76c=;
+        b=KsoR5LlmaNCRQxG5rpvUpFBmYjHRhO1Kcmqzf6gl3mc2vBXBpk5azp1mti6qDYYdhW
+         IHwekXqiyi0MGBbFUq50qfJkCudJYywmZuKtiKHzmL1vY6k5GGj8ojiHYFWYnpzF1Gus
+         gTEZHMVjgkdsFKOKI2kVFRIbzTMhuV2tSk1PYFqDoXEeetl9eVADfOKdXmC1PWAId5To
+         Od5d7ofpc0fm1AKFjLYywR40KySbEzXm3yf5z5OeAd0PHjX6rP2gMQwLOOr04H1CMGSR
+         UY/+dvzIPCGCIq1T/NtgLOHNDvq7yVDiqjbUQIb6LzqfaE+brpJPQffS9gCfTZlSUxpx
+         GVXA==
+X-Forwarded-Encrypted: i=1; AFNElJ9rgcczzLYFZCFCwwgKfjCmYAryGkWKYsKrEgE0VOnOHm9Se/lksh8+WQvLiKMeCZ/zWHWtlM/Vbk9eYc7q@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwhT0JR+7Dc0KaronhaJ8OAJZb+FdJbF+YFVDPgwbjs0v+Fu+p
+	/vY6Z0SdvAIJGUcBsvfBrMCO21Grzw6SFHtEk0KTJ/v54z4aV2DLCJychRW28gU5CPM=
+X-Gm-Gg: Acq92OGn597pCUQXHziMDKCsEUHX6mq8FvfcoOygyP4SCIfl+tLeEdmo9b/VyLFwCQE
+	OKHPakvwpFxNDHI2M52/X/uk9DTXW24Vq7BzWLtnABIOMPeRHtAoy1SBFPFCpOmL6MzZs3irNtc
+	SCK+ElHvb1xZgmW8DUQRwIgC48k81WIzAPNLGPHW8NBToJ4Vag3gSwwkH1N6JIVLA06br13AVFC
+	2Fbxbpc/StvBpoZ1A2Qit4fEBjP/LlVCqu1Pwy4PQtBKSkJ4Xh+EvN39Jut96/VHNah20sW738X
+	Q52DblNRgxEqorKqbclwOzghTvwZH55CkIJPJC/q8S1OAoEo+pxlAEKZar5ef4Ddkjuq/6x2UWS
+	hTDWpqTcVtd5BOPNcFlajM6lKD/povV27JJeKj7L3pF8xEyrI5ty4HeGLtUU/lK3Gik5ThevZGB
+	se/8d9yYa5fZB6fNdJmRy4G0Wo2vMemcCfGgpgb7C8gDv9kI5S/9u3lDnRCRV3b/jvTo4YmSj4M
+	eRHSbI+jqqGyqEUcwA/fmTSJBeAiNOim355hRVr1dGvcTl8rUreh+A30uNuhIPUc5U1+FfSAtk7
+	iIvH
+X-Received: by 2002:a05:600c:3b02:b0:48f:e1ac:c94f with SMTP id 5b1f17b1804b1-490424b3938mr247672645e9.10.1779715636631;
+        Mon, 25 May 2026 06:27:16 -0700 (PDT)
 Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6c9f598sm26426853f8f.6.2026.05.25.02.24.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490454b1ab3sm284841905e9.14.2026.05.25.06.27.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2026 02:24:43 -0700 (PDT)
-Message-ID: <ba0135a1-f03b-433f-96d0-39665bca1557@suse.com>
-Date: Mon, 25 May 2026 11:24:42 +0200
+        Mon, 25 May 2026 06:27:16 -0700 (PDT)
+Message-ID: <1c21f66f-0d0f-4a8b-835b-23408242cff1@suse.com>
+Date: Mon, 25 May 2026 15:27:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,82 +70,134 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 19/24] dyndbg,module: make proper substructs in
- _ddebug_info
-To: Jim Cromie <jim.cromie@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+Subject: Re: [PATCH 03/11] moduleparam: Add DEFINE_KERNEL_PARAM_OPS macro
+ family
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Pengpeng Hou
+ <pengpeng@iscas.ac.cn>, Richard Weinberger <richard@nod.at>,
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Corey Minyard <corey@minyard.net>, Gabriel Somlo <somlo@cmu.edu>,
+ "Michael S. Tsirkin" <mst@redhat.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Hannes Reinecke <hare@suse.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+ Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
+ Tiwei Bie <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "David E. Box" <david.e.box@linux.intel.com>,
+ "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Peter Zijlstra <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
+ Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
  Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Louis Chauvet <louis.chauvet@bootlin.com>
-References: <20260523-dd-maint-2-v2-0-b937312aa083@gmail.com>
- <20260523-dd-maint-2-v2-19-b937312aa083@gmail.com>
+ Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
+ <akpm@linux-foundation.org>, John Johansen <john.johansen@canonical.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com,
+ linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
+ linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+ qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+ virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, netdev@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20260521133315.work.845-kees@kernel.org>
+ <20260521133326.2465264-3-kees@kernel.org>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260523-dd-maint-2-v2-19-b937312aa083@gmail.com>
+In-Reply-To: <20260521133326.2465264-3-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 5/23/26 9:14 AM, Jim Cromie wrote:
-> recompose struct _ddebug_info, inserting proper sub-structs.
+On 5/21/26 3:33 PM, Kees Cook wrote:
+> Add macros that define a struct kernel_param_ops initializer through a
+> macro so the underlying field layout can evolve without touching every
+> call site. Three variants cover the three cases:
 > 
-> The struct _ddebug_info has 2 pairs of _vec, num_##_vec fields, for
-> descs and classes respectively.  for_subvec() makes walking these
-> vectors less cumbersome, now lets move those field pairs into their
-> own "vec" structs: _ddebug_descs & _ddebug_class_maps, and re-compose
-> struct _ddebug_info to contain them cleanly.  This also lets us get
-> rid of for_subvec()'s num_##_vec paste-up.
+>  DEFINE_KERNEL_PARAM_OPS(name, set, get) // basic
+>  DEFINE_KERNEL_PARAM_OPS_NOARG(name, set, get) // set KERNEL_PARAM_OPS_FL_NOARG
+>  DEFINE_KERNEL_PARAM_OPS_FREE(name, set, get, free) // also set .free
 > 
-> Also recompose struct ddebug_table to contain a _ddebug_info.  This
-> reinforces its use as a cursor into relevant data for a builtin
-> module, and access to the full _ddebug state for modules.
+> Callers prefix their own visibility qualifiers, e.g.:
 > 
-> NOTES:
+>   static DEFINE_KERNEL_PARAM_OPS(my_ops, my_set, my_get);
 > 
-> Fixup names: Normalize all struct names to "struct _ddebug_*"
-> eliminating the minor/stupid variations created in classmaps-v1.
+> Also update module_param_call() and STANDARD_PARAM_DEF() to use
+> DEFINE_KERNEL_PARAM_OPS internally so the generated ops table will go
+> through the same macro as everything else.
 > 
-> Invariant: These vectors ref a contiguous subrange of __section memory
-> in builtin/DATA or in loadable modules via mod->dyndbg_info; with
-> guaranteed life-time for us.
+> Subsequent commits convert all open-coded struct kernel_param_ops
+> definitions to use these macros, in preparation for migrating to a
+> seq_buf .get API.
 > 
-> struct module contains a _ddebug_info field and module/main.c sets it
-> up, so that gets adjusted rather obviously.
-> 
-> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-> Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> Signed-off-by: Kees Cook <kees@kernel.org>
 > ---
-> [...]
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 46dd8d25a605..c2b6e70f2e77 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2774,12 +2774,12 @@ static int find_module_sections(struct module *mod, struct load_info *info)
->  		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
+>  include/linux/moduleparam.h | 36 ++++++++++++++++++++++++++++++++++--
+>  kernel/params.c             |  6 ++----
+>  2 files changed, 36 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
+> index 075f28585074..26bf45b36d02 100644
+> --- a/include/linux/moduleparam.h
+> +++ b/include/linux/moduleparam.h
+> @@ -68,6 +68,39 @@ struct kernel_param_ops {
+>  	void (*free)(void *arg);
+>  };
 >  
->  #ifdef CONFIG_DYNAMIC_DEBUG_CORE
-> -	mod->dyndbg_info.descs = section_objs(info, "__dyndbg",
-> -					      sizeof(*mod->dyndbg_info.descs),
-> -					      &mod->dyndbg_info.num_descs);
-> -	mod->dyndbg_info.classes = section_objs(info, "__dyndbg_classes",
-> -						sizeof(*mod->dyndbg_info.classes),
-> -						&mod->dyndbg_info.num_classes);
-> +	mod->dyndbg_info.descs.start = section_objs(info, "__dyndbg_descriptors",
-> +						    sizeof(*mod->dyndbg_info.descs.start),
-> +						    &mod->dyndbg_info.descs.len);
-> +	mod->dyndbg_info.maps.start = section_objs(info, "__dyndbg_class_maps",
-> +						   sizeof(*mod->dyndbg_info.maps.start),
-> +						   &mod->dyndbg_info.maps.len);
->  #endif
->  
->  	return 0;
+> +/*
+> + * Define a const struct kernel_param_ops initializer. Callers prefix with
+> + * any required visibility qualifiers (typically "static"):
+> + *
+> + *   static DEFINE_KERNEL_PARAM_OPS(my_ops, my_set, my_get);
+> + *
+> + * Routing the @_set and @_get function pointers through the macro
+> + * (rather than naming the struct fields at every call site) lets the
+> + * field layout change in one place when callbacks are migrated to a
+> + * new signature.
+> + */
 
-The update changes the names of dyndbg sections that the module loader
-looks up. However, the actual rename is not done until patch 24. It
-would be good to clean this up to avoid potential bisection issues.
+Nit: The newly introduced DEFINE_KERNEL_PARAM_OPS*() macros remain in
+place at the end of the series after the migration is complete and this
+comment is removed in patch 7. It would be helpful to describe in the
+commit message why these macros are generally preferable to defining
+kernel_param_ops instances directly.
+
+I assume the motivation is that the structure is simple enough and using
+macros then makes defining kernel_param_ops instances a bit more
+concise. A minor disadvantage is that some analysis tools, such as
+ctags, may no longer see the generated definition, but that is also the
+case for DEFINE_MUTEX() and other similar macros.
 
 -- 
 Thanks,
