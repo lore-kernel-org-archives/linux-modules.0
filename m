@@ -1,68 +1,68 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC05277C81
-	for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 17:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42772BF3D7
+	for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 17:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779729012; cv=none; b=DmlY8CO7gdQWdNpp8m9MPx1rwU/bgaoRg7s7mYBKbAoUDhToYCKdO7NXfzFOkfGV2b21BhQlyk0PQPV0osMD1IV+aeVdJc8QvTQVHks2i6NvRnXRmJlbMEB6UdUCGPHwobFQjGh/xW3zZvOGWu7lwYvbUt41hQZTLrERHx2GHoY=
+	t=1779730397; cv=none; b=HcEhjhJtd1kzwT71p6IP98XIhDcjHv21wPyfFju7VHyusoMOZrUq+LAPXL23gWzGcS0wQ8M6lTaa9ubd5bVrFr829K1CgWJcaq0JmUyYlFBX/KzWKkUD895CULqMMoqPbs4A+MJymnStEse03Kd/e2ys5R91MyFnOf5U6apjPc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779729012; c=relaxed/simple;
-	bh=PTNg3RyBjtWL4NnI8O0q7hXUoY8uPF4RaVnZMbEInR0=;
+	s=arc-20240116; t=1779730397; c=relaxed/simple;
+	bh=KS4jzXcYEGWyhvQcyiid+k+SW44m4Tzp76dkHlQp0vc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Pt5Vimhru+oCr2PqElf24QZt053RiHn/tAESZYVQNh/elPA8DdnPQvAYeYRLzjcIZ7MXCucuL5UyoyJOObhlHYowmlTCoh4BVIjhY3+3zVVA3AmJCCFtnjl/adT9lX/efI18xmw79j3fFVPtWLB4J/9QrpsBzCdk1a0tBg5fwAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GQr1PYm1; arc=none smtp.client-ip=209.85.128.41
+	 In-Reply-To:Content-Type; b=StACW5+/NfPJaJujqAvJvfkTnpoCpoElcRp4EJp5NM7u66cWLln4DiayOkGmFSvV5cOj7TtXuFgYu30U0I3kbuMO7zk4IwyPYIpapYcCF5dy1FwsOURPty5RhxARsSNwe4OOGSuO3XI0Y1R5VM6is/EztTvCCg5tW+VExHtlYrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EwMekC7i; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GQr1PYm1"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4903997fcb5so40910625e9.2
-        for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 10:10:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EwMekC7i"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490388fd0dbso41710845e9.0
+        for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 10:33:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779729007; x=1780333807; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1779730394; x=1780335194; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=izugkSqOYsBmSyQ8jfD9m1SVj73YG14U78pRBc6Lai0=;
-        b=GQr1PYm1QRIrfgBC/EILAtR9O17tFRT933ldDJCayUjXIyRMiDnumrFP9i4iPLQuP/
-         bWYj6u/50hd5AlTl8fnNFXZxscNWQsfvT08lWT2g7USA76CFTeDeB9CAGnGBLt+Jk5Kd
-         lX3x9dDR55Y2wg8pVl8cBGmVyZoFj8APvHLhilXEkRN6z7J5HsqQkRDuiJpcpmZ76bBE
-         nunnNO0efpqrh3Mg+srvekhGI13bTspzjyxHMZeoT7BQvRd6lyijtBc2rfmKjAaENr6C
-         i+8SY1MRgNki/ClY1lWgGG4FXSsH+ZhGYZ0VK7FSfIVhFbKqAWGdmu0VyhcviooSpQ7X
-         9jYQ==
+        bh=ke3902//gigT30lDRSKJbeulpB5AsGLO9vF808ols74=;
+        b=EwMekC7iNvhGWbs6+8J1AnlXa+qE4hswY+dZQjQGPGUlb7tnhG+gB9RrN1V412Vbjq
+         PVuuRzaFeCQ1wRZFaG/ZUw0h67KO022n2Q59w13GNbFk+VZ1THRkhPBMJj5PfsYw+6n+
+         8Y4QA2ZUPxeb+ViqYakrSqg/WAgOaelWlEnDZTPko1U46k2JT4SZWrjOmuFDA5AO3qNZ
+         GWHHPscJVxRljc0eu3UW4ZVgUUD8M8JodazqA3TwWkjTH2CDnpqjJu7FqwsOPp5iFK9U
+         /0qH6xYoZqDJwh3da9U3CfK2Yfct3FioJLOsz/xD1cU2a2+CbJZr1zlJ6yBDg3O42LVk
+         BQWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779729007; x=1780333807;
+        d=1e100.net; s=20251104; t=1779730394; x=1780335194;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=izugkSqOYsBmSyQ8jfD9m1SVj73YG14U78pRBc6Lai0=;
-        b=l6HUk4MYWRr7qjQzIWd7PqSA1qbmuv4yHeCt/wPH8Pcmj9f8z1yy3rg5Xx4iw2T6qG
-         K46rQWE0MxrWSvfCmS6KlkjXiegrDaSe+dA7oliOS28tjW0nb90E4VakgRG7oJLzmW1y
-         ADvyJglMak+RzurbGsppoa9XEKGY7i14D9KTbC/YFcr8PByjvQa0o4duzylGVzyiLQYp
-         6unTKD0C4bNtE3JBNGB7eywkM8bO6ny9jPhM/OwxGJcveGrA0N9gppOpIfG82Qe7sx4A
-         mMT726o9no+d10pSO2sobdaCnAkl1NlKtxPGDWyeZ2JPM2OHy2uiDjOjgF+E5uc06kqk
-         uQ6w==
-X-Forwarded-Encrypted: i=1; AFNElJ+GtLxDJJa8Rbq3eMHQ2phSUPSULtzpy0+c25tdTHKiUSiH8zYXMndDfRRZIvyA9b0vGo0FHqX6VGf3BSti@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUDDJflkCTCSNtTeOsrIxnmDkkFNl81Lm17wsKZM2bP0lStZL+
-	4DJRB7/gXuVs459UDlx8/AQmKk/fqjX63MuCsaC4eevPKs+ec/NELUpfGkr8qA30nMY=
-X-Gm-Gg: Acq92OEgl5fGYScUDFLv98I3cpXwgIqUzMvVwnUm915Bf6I4OndwwlPgGeYFor6Zts7
-	Drk2t7XTbgztZC267y/w+SplO5p3/teG6upWlleTWxRvZBEufOgOj4E/ICnexleZEGNNAOZCmhs
-	X3oW3Rw78uQMU9pMvBnznnrZuOfAnTOjxwTDUS+v2qNwrOCRUsB+LATwH94l/B1ELkbFsXwod3c
-	YhSgoU5zlrxIXpdpPAe55QENp8dWDr5MUAVmljt3EuvtIsTvbZjxmNiZ47rg+9Af0vwbWUSCkeL
-	iKQTTlTknBtRoNhb4bPjpmC6HLLeIBBBAVTUtMkgFhcNKoKDTPbJNqZW5+N1ERuKscSUicEOkL8
-	QtJkTd2bh3KHobLLDnA2VUTlqVzed2iXwvGrFWSgHn3jTmT5CJEKjrfFC/meGCT0NreCX5rrHIA
-	sudcz7ZHOzRREZaakbY6N5xa8uxPJC6YgzE+b6Hn/uzmA/AxmGhAJMkttr/47GlD31VW0OMam60
-	C+Ekvf8lcsHiwhfuUP0V46WKry4WQcy8etMZyMOadzYn+1817l7IOEwjknZnZ3xemFfYQdyOJUA
-	gP/OLhwr6ZksBck=
-X-Received: by 2002:a05:600c:35cf:b0:490:44eb:c1e5 with SMTP id 5b1f17b1804b1-49044ebc257mr277307095e9.31.1779729006482;
-        Mon, 25 May 2026 10:10:06 -0700 (PDT)
+        bh=ke3902//gigT30lDRSKJbeulpB5AsGLO9vF808ols74=;
+        b=h1aJvdleo8Yl0glvGh4yo8Kj/RdcE1BlK1jczF7MVvonpzcXeoJf2qokiMoyNpI0GN
+         Ph+jLfr9GcN4HEZlyGkO1xRlIBNtrmyzmrTXDCf/Po6Pjz2ADVJtpoYa0bU/4ZUc0b8e
+         xyRfETwvPRjLD2ABOMZFxIKcbm61yxt6v7ThUut+HX9wOqr0So+qygW8g3Yp5pWHzhFo
+         qCAIaYqnyt93fGpkmH7zcR4AjD6M1UKnqM3UnNrZE1eSFjQvfTDvR3VGQdy0BKOFDl08
+         asR8eOArV7K8Tnr+z7936msY5Roj/3fae/8yx+0PPowDdjGh5PEnq7m1mWdnUI8XSYZf
+         7I0Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9JcxZDR81Zg+mtw035dVkqvxO6NPHtbsDpW6BCRJLowowFxGU8IE/q54pKsUCfjPmZH298P6cXWZSqWYi5@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYZLuxtvmqpSiNs2dcr6LeK80jliTeGpPMk/Xr2SiEnPCMq5Nb
+	w15SDPsI2DJPvPutcI/sVvDMc1NVXZzKvP/Mt1kRKssbdNGfXP8wwEFHi0ad2+MaSGg=
+X-Gm-Gg: Acq92OEgwL5/v65vlUa9qTzbjyXQ3Q9VFurTOtic0zZVST7T0yfZuTjy4WMUGxspInf
+	SH1bsO4WQRd7b3+OltszmqDwbAPM7SVcpFBqHZ6O8MNuwDUZo036XkyDStPqHJpzfQp9pkwpC2Z
+	2Otg8MW7wso2zbI9Ksr8inISlM3ScMhjwmA9w9f1lehKpPCVm1CJQV1enTz073FTXK2IY6LnHqI
+	qA/yi7W7Z50+88NWypHZPkBRxYWXsHDBlPLObicTNzzOYqZEAg4C9PsRVdsr1ydrUg5sMunC80u
+	ed0U2pHB7OmDVy7+ybA6Y2MlSYh+abu9WmfRqmbzXPZl/TrVDCG68tp+VTg1VNfok5p23fNYh66
+	ybShEPmPLdaIaMWFKFjCfvbUa8jhCYWk/kalBUfa8C+ngZticzNU/wllM1JGfLft2YM6tHQXqHm
+	ewz0R2RFv8NU6rpaQAnlpfkW+ehrcAsPFgfli6/AcMHLc/7/b0UbyprPpYXRhLYxpXN1hWJ5sbX
+	SVxIrS2ziWBqH0pqIJQeFA3nX1+0Np0CNZe3anP4G2UgDm3xCqKSG43vbRH6EjNsAlf601H46dW
+	vh21
+X-Received: by 2002:a05:600c:154d:b0:490:44eb:c1d7 with SMTP id 5b1f17b1804b1-49044ebc367mr241188825e9.30.1779730393854;
+        Mon, 25 May 2026 10:33:13 -0700 (PDT)
 Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4904526c926sm456877405e9.1.2026.05.25.10.10.03
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49048f70f55sm76151265e9.17.2026.05.25.10.33.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2026 10:10:06 -0700 (PDT)
-Message-ID: <a192eb5c-5d16-483d-862e-d937fa1b8269@suse.com>
-Date: Mon, 25 May 2026 19:10:03 +0200
+        Mon, 25 May 2026 10:33:13 -0700 (PDT)
+Message-ID: <c135351a-d7cc-467b-a0c0-bea735fe850a@suse.com>
+Date: Mon, 25 May 2026 19:33:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,192 +70,47 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/11] params: Convert generic kernel_param_ops .get
- helpers to seq_buf
-To: Kees Cook <kees@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Pengpeng Hou
- <pengpeng@iscas.ac.cn>, Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Corey Minyard <corey@minyard.net>, Gabriel Somlo <somlo@cmu.edu>,
- "Michael S. Tsirkin" <mst@redhat.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Hannes Reinecke <hare@suse.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
- Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
- Tiwei Bie <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "David E. Box" <david.e.box@linux.intel.com>,
- "Maciej W. Rozycki" <macro@orcam.me.uk>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Peter Zijlstra <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
- Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
- Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, John Johansen <john.johansen@canonical.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
- linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
- qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, netdev@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20260521133315.work.845-kees@kernel.org>
- <20260521133326.2465264-8-kees@kernel.org>
+Subject: Re: [PATCH v2] genksyms: Support arm64 CRC32 hardware acceleration1~
+To: Wentao Guan <guanwentao@uniontech.com>
+Cc: linux-kbuild <linux-kbuild@vger.kernel.org>,
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ linux-modules <linux-modules@vger.kernel.org>,
+ masahiroy <masahiroy@kernel.org>
+References: <5d1b8b13-d590-497d-9185-609494135348@suse.com>
+ <20260525080229.1570905-1-guanwentao@uniontech.com>
+ <26c47a0e-7a9b-473a-818d-455e68476dd1@suse.com>
+ <tencent_23032AC04EF146C803D19A6D@qq.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260521133326.2465264-8-kees@kernel.org>
+In-Reply-To: <tencent_23032AC04EF146C803D19A6D@qq.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/21/26 3:33 PM, Kees Cook wrote:
-> Convert the generic struct kernel_param_ops .get helpers in
-> kernel/params.c directly to the seq_buf signature, drop their legacy
-> "char *" form, and refresh prototypes in <linux/moduleparam.h>:
+On 5/25/26 3:41 PM, Wentao Guan wrote:
+>> On 5/25/26 10:02 AM, Wentao Guan wrote:
+>>>> Additionally, many distributions already switched to gendwarfksyms last
+>>>> year. Unless someone provides a good reason to keep genksyms around,
+>>>> I expect it will be deprecated soon and eventually removed. It would be
+>>>> more valuable to show whether the same optimization is worthwhile for
+>>>> gendwarfksyms.
+>>> I see gendwarfksyms use crc32 from <zlib.h>, which from zlib1g-dev and zlib1g.
+>>
+>> Ah, I forgot about this, so gendwarfksyms should already be well
+>> optimized. I think that is the most important thing.
 > 
->   param_get_byte/short/ushort/int/uint/long/ulong/ullong/hexint
->   param_get_charp/bool/invbool/string
->   param_array_get
-> 
-> The STANDARD_PARAM_DEF() macro expands to a seq_buf body for every
-> numeric helper. param_array_get() now writes element output directly
-> into the parent seq_buf when the element ops provide .get; it only
-> allocates the per-call PAGE_SIZE bounce buffer when the element ops
-> still use the legacy .get_str path. The common "rewrite the prior
-> element's trailing newline as a comma" step lives outside both
-> branches so the two paths share it.
-> 
-> The non-core changes in this commit (arch/x86/kvm, mm/kfence,
-> drivers/dma/dmatest, security/apparmor) are the small set of callers that
-> directly invoke one of the converted generic helpers from their own .get
-> callback (e.g. an apparmor wrapper that adds a capability check and then
-> delegates to param_get_bool()). Because the helpers' signature changes
-> here, these wrappers must move in lockstep. Each of them is updated
-> to take "struct seq_buf *" and pass it through; param_get_debug() in
-> apparmor also pulls aa_print_debug_params() (and its val_mask_to_str()
-> helper, in security/apparmor/lib.c) over to seq_buf, since that is the
-> only consumer. No other behavioural change is intended.
-> 
-> Custom .get callbacks that do not delegate to a generic helper (and
-> therefore still match the .get_str signature) are routed automatically
-> to the .get_str field by the DEFINE_KERNEL_PARAM_OPS _Generic dispatcher
-> and are deliberately left alone here, to be changed separately within
-> their respective subsystems.
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> [...]
-> @@ -453,36 +457,46 @@ static int param_array_set(const char *val, const struct kernel_param *kp)
->  			   arr->num ?: &temp_num);
->  }
->  
-> -static int param_array_get(char *buffer, const struct kernel_param *kp)
-> +static int param_array_get(struct seq_buf *s, const struct kernel_param *kp)
->  {
-> -	int i, off, ret;
-> -	char *elem_buf;
->  	const struct kparam_array *arr = kp->arr;
->  	struct kernel_param p = *kp;
-> +	char *elem_buf = NULL;
-> +	int i, ret = 0;
->  
-> -	elem_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-> -	if (!elem_buf)
-> -		return -ENOMEM;
-> +	for (i = 0; i < (arr->num ? *arr->num : arr->max); i++) {
-> +		size_t before = s->len;
->  
-> -	for (i = off = 0; i < (arr->num ? *arr->num : arr->max); i++) {
->  		p.arg = arr->elem + arr->elemsize * i;
->  		check_kparam_locked(p.mod);
-> -		ret = arr->ops->get_str(elem_buf, &p);
-> -		if (ret < 0)
-> -			goto out;
-> -		ret = min(ret, (int)(PAGE_SIZE - 1 - off));
-> -		if (!ret)
-> +
-> +		if (arr->ops->get) {
-> +			ret = arr->ops->get(s, &p);
-> +			if (ret < 0)
-> +				goto out;
-> +		} else {
-> +			if (!elem_buf) {
-> +				elem_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-> +				if (!elem_buf) {
-> +					ret = -ENOMEM;
-> +					goto out;
-> +				}
-> +			}
-> +			ret = arr->ops->get_str(elem_buf, &p);
-> +			if (ret < 0)
-> +				goto out;
-> +			seq_buf_putmem(s, elem_buf, ret);
-> +		}
-> +
-> +		/* Nothing got written (e.g. overflow) — stop. */
-> +		if (s->len == before)
->  			break;
-> +
->  		/* Replace the previous element's trailing newline with a comma. */
-> -		if (i)
-> -			buffer[off - 1] = ',';
-> -		memcpy(buffer + off, elem_buf, ret);
-> -		off += ret;
-> -		if (off == PAGE_SIZE - 1)
-> -			break;
-> +		if (i && s->buffer[before - 1] == '\n')
-> +			s->buffer[before - 1] = ',';
->  	}
-> -	buffer[off] = '\0';
-> -	ret = off;
-> +	ret = 0;
->  out:
->  	kfree(elem_buf);
->  	return ret;
+> Which way do you prefer? There are two ways now:
+> 1. this work,
+> 2. import zlib like gendwarfksyms and remove the huge crctab,
+> but need make sure any arch do not cause performance regression?
+> (Assert the user libs precompile with +crc32 is right?)
+> I do some early tests show that:
+> 1) zlib in x86 fast than genksym software
+> 2) zlib in arm64 debian precompile slow than genksym software(crc32 not in armv8)
+> 3) zlib in arm64 recompile with +crc32 same speed with genksyms hardware
 
-Since you're almost completely rewriting the logic in param_array_get(),
-I suggest tightening it up a bit. The function could warn or return an
-error when a kernel_param_ops::get/get_str() call adds a string that
-doesn't terminate with '\n', specifically, when the call adds either
-a zero-length string or a non-zero-length string that ends with
-a different character (unless an overflow occurred).
-
-The updated code silently stops the loop when a get call returns
-a zero-length string. Similarly, handling of a string not terminated by
-'\n' is halfway there because of the added check
-"s->buffer[before - 1] == '\n'".
+I think it would be useful to first have more data showing that the CRC
+calculation in genksyms is a hot path and contributes significantly to
+the overall kernel build time.
 
 -- 
 Thanks,
