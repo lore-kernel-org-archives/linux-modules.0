@@ -1,68 +1,66 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15D63B7B8C
-	for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 06:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A228F3A7F40
+	for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 07:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779778393; cv=none; b=ofNXPRa+Zt7cz+XmPTJd9FVvwSL6IS8jgA4bw/WWOV0bBstKPted0xefJ67QOp6tWRFkpfs/BNm65hPt5GjHuHQsduEu73hsqbNCtJ077smL3PH4lJ8c8tBJlZaNat6g93/Xm8DLMs7y8++toZOHq+vD3t+9fJCpivtaQ3DevV8=
+	t=1779780675; cv=none; b=BvsLKPoz6ai0rf1zhcQ9FyyPeFyIGDi8sfHBfVQahrBz5UhWRkpOLp9cxEAFBmFWVZjfu4qXf7jcg05VEzG+uQ9icwTjHKs0EPtUingA4CJorbPLJQpga1M9SxoNg6hibYo9uisfeopVN/3Zs9gO9cf0aB9KzRcbU5OA8ClvGxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779778393; c=relaxed/simple;
-	bh=lI94k3K5Kcc20pekEfGAOaAomJ1QgkYtP6G74MUe9gk=;
+	s=arc-20240116; t=1779780675; c=relaxed/simple;
+	bh=kqpENnTE4wNumutQr2BKy4XgQPNbxnvT/AGbHPYrjQY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pVKToj7FU4QSwJwyxycc01G0JGIz4f4zM8PjfXkQY5/dwfzfUEoOuU4emvoIrb0JeVnb/omCvsY/7gc/jih5lpTGOEsu461IKOuWesmzL9QhR4ZL4vzECD/9bh09EklIlAmeyJ6RZKehAR51F/qqDuXng2rs+MuvHnw0vI+BfI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TR/s+dSF; arc=none smtp.client-ip=209.85.221.45
+	 In-Reply-To:Content-Type; b=GHKzRC9KTVijOwyiGdtyv2HxsptOXQLJHwxhMdDgRaYBtfDor2dYBxqDDGY4eeJVd/hgu0jGg7MzMypdm5bH6X7CSQjd/+n8NHJiUfUFZp7DREG/TNL9O8M7wWAwkPIEoAGYCHEu9wNvmTozs2KDWT38HEzvySUbOW4m/NdRyFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BPbOYnFG; arc=none smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TR/s+dSF"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-459bf19e87bso5943361f8f.1
-        for <linux-modules@vger.kernel.org>; Mon, 25 May 2026 23:53:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BPbOYnFG"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-49068493267so11667485e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 00:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779778389; x=1780383189; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1779780672; x=1780385472; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yXWASYjT/jE4WzpKhE8nVhHkzGwmPlTITkkcMF0D8BI=;
-        b=TR/s+dSFI2Vk05JY9oKvhTkUPLyGjERphtpAPMGuiQxvuv3fbFSbN1th4lK+bttysm
-         cFb/iWCpkNb08kRUbTcn9WjfJUaB3xcjwa8CXEuHNu8ztYYWGwWQbD8loHo0HuyuciOC
-         0TwcL+CxgU01vXU93n3aCg4f5dmgC1/3cis8o9d493p1B0tb+ArlTCB5LaW6RVOHuZSe
-         xFgNBY2Ddet/gPdHUxjFVULwbZSkZetwjzSKlyv7KFRavsith7RHUAc5uHnKUJqDu/G4
-         H3+i6q7GH893mbCE8FjnHXqiv6/6t+5ocWoYo60XT6575r8A+rywJ8KG4tumaLrCo8Ff
-         W8Eg==
+        bh=ekK3aVvgBJN45Ca6LV8CJRGR8knFXIQZQ0WX8FEULTQ=;
+        b=BPbOYnFGlHKBIEmlk+/osM2ZBjef05wjPMfI1mkIn6EHmSMuacLiK4vy96uFYbTBTC
+         UJjdUPblKrXGsWOQoIaINOioR8td4wjMpEQJgIAeVAKsT758emz7GIqZHs/ApcFpBbun
+         o5tiA7yTNKoOha7fZmLlPx4Bb0e6t5l8GJQ8lEa7z8TLXY/IxzW9365HTfAt+fCp4IG1
+         JQ6Ms5A6t6CNBLxl2W9+GFGggk6jScqexY8+x/xNH6tfiGdHT42j2OLXu0WjDoJHnLZH
+         CiJnSarOaddId5YTjW3/wt3BAwS09dkvfn9Mdjmg4XbiyJf51+OENpK47dT2exBnWu6B
+         /9LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779778389; x=1780383189;
+        d=1e100.net; s=20251104; t=1779780672; x=1780385472;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yXWASYjT/jE4WzpKhE8nVhHkzGwmPlTITkkcMF0D8BI=;
-        b=BmbUk7SXwkteutr7sdGOFzpAg0mzfpnxpMJ3fjGvWdc/jY7BBF/Yj2Rg2FOGLshwP1
-         A0maieYZn6DUiaF/G2d9HzueRmqYARoV12sPmv8tKHXN3/iTwT3IQbHor4BL8jlglqP2
-         0CIVPOiLmjXIJrKqsx+/kfoiXB99NMK2xjN4A97A8ViMS+WnMm9DUnrVCOgxWOqmGWWj
-         1NsKTMOAIpQ9PTKoZwa6fMK1Fs6xEWP2M5HXznBolGYs+VLVvBv/rVvzW+blgZuAwWy/
-         KkKO+9rkwmiSe1bh/hCgUcKiDX7zwQH1Cm4FwFSGLL2IN8yX7t6/A8qF1ZxIx+IS6VK4
-         3yfw==
-X-Forwarded-Encrypted: i=1; AFNElJ8STqNgMtP74EI9mj4x/nQKVSaixKZeJsflI2rGWrpaJzUh9bWiBEGyvaX+JNrWw/H7d4jGr5IE2EwxUpKQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA1OZm77tOMbIzOE28JtLIoqp73ZcgxfBil97feMwoQeWDBZ9Q
-	rvLySXOSmIf8DtV6uCCSAP40pyjjnlYxKPQQ1uz3uYletE02C4/A+7Ag/MAlba33G8M=
-X-Gm-Gg: Acq92OGUzCTfjmz3onafxAOVdjsz4AjwCnr5Cm6hmhqPbwStTgSJrja1Xn42Gmhnsz3
-	HsE5TpvkncM5A8grPnVHlvKYHZVzitbp0JMiy8k+JZv2VEYSmCnUGlKc9WtyBZVDKFbJtEf0CD0
-	lVdt4LLJFgdSRIFl3um1QiSpT0VyN91KcDPvC4tHfVLerurXtxxvIYKxBXq2qg1ZMPqSn6+kjPc
-	NzEqOzKP4En4Uch5fHg1Nm31ClhOc38cfks9IsvZVirWIdt2vBw07D6gzVeMyaJsByc5vdVO7kd
-	IkXCN+EiE2NpaabHRAQ/U6cFhlHgVjG2tTq1Kv2jfPn835rzAHjGLReljcodIB+QFFeWgpE3OFg
-	RWef7lE1BHbChF0QLvP7cbIuFNSHWpKrta5ygbRFi8RPoOd48i6Xbe1KPswVPdH8w9XQg4OBoWx
-	zsRhFTkk/ky5EiUCTJvY4Zpg7JURJhJtUplvfCikj5PbpvXeMghUWngW5sij8Ryb+bn5qL5D5dd
-	rpa9ZzSfeqZ3yvO3oNnBuacCrghlZOxNNCc0pUxaaGyUkoqstUTFyp+/r8PA9Z62eaxp/3Otr0E
-	15uU
-X-Received: by 2002:a05:6000:2003:b0:43b:4136:1e6f with SMTP id ffacd0b85a97d-45eb38e4b46mr29516257f8f.38.1779778389230;
-        Mon, 25 May 2026 23:53:09 -0700 (PDT)
+        bh=ekK3aVvgBJN45Ca6LV8CJRGR8knFXIQZQ0WX8FEULTQ=;
+        b=eEqQtWW1YPQjqCGhvmx7L6EGyqRLP6Oz/dJGmNtYTqNI4YMmHBFsXmd5sQPkMU/l63
+         G+3QXV/n4VHCFIZEpH8Jv3u/H3HSbSx312gScFWCyEaGKLFSXR4gvl/XClR68Be1e5kb
+         W2m/BWg/jzU69KQLBwgF1yqTnptvoDyQ1D78t/ZPgpY5TBIUvFlR+yIP7lzgLWaSCYXD
+         jOb5Fi0KviXFy8v+0pBCqhnGjkfQATU/E+PzGUPPkturW2qnKdQl/IWy0qEytQCi4wze
+         As8n+oiimITr4QTKcHrw6BoaG5BV2Gq7rXrI5vdN6gocykn21uzIrf40RyTjCIK4RAi6
+         Q31g==
+X-Gm-Message-State: AOJu0YwZ5/lxJPWkMiAXwJ+PiGB4+5Ilbr14ZG1jR9x5QRhaF4PNDM1j
+	8dQ/l4aPmX+iyKqCSbeZ17Unh1+312DMJyOmB1GAjcG4vcBj3O+8XixlA4SpfUu6Wvg=
+X-Gm-Gg: Acq92OEMq7IkR61r49Xt6Y6zWthIjZncB2XILbrLRoSTy5kNXZzx+mTmAM12tmO4tIE
+	3EdozB31HyF5zN20KImjsY3Nd/OcYKYwgEF8XxES1PzzTWaI+fdSUA94iK8cxe+xREGlk21Soil
+	FuyBsPWlMbBfvfnR9iLt2QoNhwF4rdo2tC0dCoDzw9dOB7/yyUlD3AAmdb9BevPEV6lR27Hei+H
+	gFyvGJ74LU1R/6mIMxbwGVdPGzp1XQ1zUyCh8uZIoOwAFzVuGTvR/5AnIssIr/pvxpxEhByr3vC
+	b82C7mfEPNjLxBngrg8uwbeSgycmac00BGPPSkoSEnmxuhKJi0B9oTIC/YSbNhAOE1HcOhppvmt
+	bCLByEBNcookwwquuAMnHzfi5HDLlVnLZRM+ENRVvmqmCsw5l+DNwevkocSSEHJgZxRYJvyrQlR
+	x1iryGc+QK+9HS1I3CvHyuzFeC/zoP03dxgXmvepf/CjtzMhc/6lxall3O4sTq8BgdQTSqwZ3ux
+	YYstyWxc7xA2ZKvzkf4Fhz2c4U+yg/yTEEAahI30FbbKellxuAGnIzRFYqpDIRvEH1pjQ==
+X-Received: by 2002:a05:600c:3106:b0:490:6889:1ff with SMTP id 5b1f17b1804b1-4906889025dmr88445605e9.28.1779780671966;
+        Tue, 26 May 2026 00:31:11 -0700 (PDT)
 Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6c9ba2esm33848641f8f.8.2026.05.25.23.53.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490454a0cd5sm371483025e9.10.2026.05.26.00.31.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2026 23:53:08 -0700 (PDT)
-Message-ID: <88c5ca1d-eeda-4023-bc7a-397b92780db9@suse.com>
-Date: Tue, 26 May 2026 08:53:06 +0200
+        Tue, 26 May 2026 00:31:11 -0700 (PDT)
+Message-ID: <a4ac44fa-146b-4b13-bf42-0c8cff601ed2@suse.com>
+Date: Tue, 26 May 2026 09:31:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,102 +68,43 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/11] Convert moduleparams to seq_buf
-To: Kees Cook <kees@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Pengpeng Hou
- <pengpeng@iscas.ac.cn>, Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Corey Minyard <corey@minyard.net>, Gabriel Somlo <somlo@cmu.edu>,
- "Michael S. Tsirkin" <mst@redhat.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Hannes Reinecke <hare@suse.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
- Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
- Tiwei Bie <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "David E. Box" <david.e.box@linux.intel.com>,
- "Maciej W. Rozycki" <macro@orcam.me.uk>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Peter Zijlstra <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
- Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
- Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, John Johansen <john.johansen@canonical.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
- linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
- qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, netdev@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20260521133315.work.845-kees@kernel.org>
+Subject: Re: build failure for stablerc
+To: =?UTF-8?Q?Toralf_F=C3=B6rster?= <toralf.foerster@gmx.de>
+Cc: linux-modules@vger.kernel.org, linux-kbuild
+ <linux-kbuild@vger.kernel.org>, Linux Kernel <linux-kernel@vger.kernel.org>
+References: <a47f9124-15b3-4dbc-a211-6161eb98406c@gmx.de>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260521133315.work.845-kees@kernel.org>
+In-Reply-To: <a47f9124-15b3-4dbc-a211-6161eb98406c@gmx.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/21/26 3:33 PM, Kees Cook wrote:
+On 5/25/26 9:39 PM, Toralf Förster wrote:
 > Hi,
 > 
-> I tried to trim the CC list here, but it's still pretty huge...
+> at a small Hetzner VPS at x86 the compilation of the stablerc v7.0.5-1656-ge79d5c5d57c0 fails under Ubuntu-26.04 with
 > 
-> We've had a long-standing issue with "write to a string pointer" callbacks
-> that don't bounds check the destination (and for which the bounds is
-> also not part of the callback prototype, even if it is "known" to be
-> PAGE_SIZE, which sysfs_emit() depends on). Both moduleparams and sysfs
-> use this pattern. As a first step, and to test the migration method,
-> migrate moduleparams first.
-> 
-> There are 2 "mechanical" treewide patches that are handled by Coccinelle:
-> - treewide: Convert struct kernel_param_ops initializers to DEFINE_KERNEL_PARAM_OPS
-> - treewide: Convert custom kernel_param_ops .get callbacks to seq_buf via cocci
-> 
-> The last treewide patch is manual, and may need to be broken up into
-> per-subsystem patches, though I'd prefer to avoid this, as it would
-> extend the migration from 1 relase to at least 2 releases. (1 to
-> release the migration infrastructure, then 1 release to collect all the
-> subsystem changes, and possibly 1 more release to remove the migration
-> infrastructure.)
-> 
-> Thoughts, questions?
+>  WRAP    arch/x86/include/generated/asm/mmiowb.h
+>  WRAP    arch/x86/include/generated/asm/module.lds.h
+>  WRAP    arch/x86/include/generated/asm/rwonce.h
+>  UPD     include/generated/utsrelease.h
+>  CC      /root/linux/tools/objtool/libsubcmd/run-command.o
+>  HOSTCC  scripts/gendwarfksyms/gendwarfksyms.o
+> In file included from scripts/gendwarfksyms/gendwarfksyms.c:12:
+> scripts/gendwarfksyms/gendwarfksyms.h:6:10: fatal error: dwarf.h: No such file or directory
+>    6 | #include <dwarf.h>
+>      |          ^~~~~~~~~
+> compilation terminated.
+> make[3]: *** [scripts/Makefile.host:131: scripts/gendwarfksyms/gendwarfksyms.o] Error 1
+> make[2]: *** [scripts/Makefile.build:548: scripts/gendwarfksyms] Error 2
+> make[1]: *** [/root/linux/Makefile:1325: scripts] Error 2
+> make[1]: *** Waiting for unfinished jobs....
+>  CC      /root/linux/tools/objtool/libsubcmd/sigchain.o
+Gendwarfksyms requires libdw, see Documentation/kbuild/gendwarfksyms.rst
+[1]. Is the library and its development files installed on your system?
+If you write a trivial program that includes <dwarf.h>, can the compiler
+find it in the default search locations?
 
-This looks reasonable to me. I added a few minor comments on the patches
-but they already look solid.
+[1] https://github.com/torvalds/linux/blob/v7.1-rc5/Documentation/kbuild/gendwarfksyms.rst
 
--- 
-Thanks,
-Petr
+-- Petr
