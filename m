@@ -1,62 +1,76 @@
-Received: from mail.archlinux.org (mail.archlinux.org [95.216.189.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4223F88AA;
-	Tue, 26 May 2026 12:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.216.189.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2F013D539
+	for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 13:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779798465; cv=none; b=YrrxGG847tfeWEhARZvj2WgDQzIP/cuyCX3vyZZDj58TQEiKdRsfMv+/9BxvT+vgidhq3rRiZkcwTkhstP1c15MH8u+fVIaSChBuf09N+X4UirgDqcUxJosEqg/j2Lh4YajfBG86xrOkhGL55qBsd/9YS6H8FpsD03M7jq6WHV4=
+	t=1779800627; cv=none; b=aQqbh44oQt4AxzqzkAuNkVs/4mrmcY1Pd5OtemDBDfp3p/bVBqCaRi+QX5OA6F17EqvvgikgdFGbHBVEybQXnB/Icf4g815AgqbSIeOnBlfFkKKMKdpwTwfPS/ibOM2rVflasJEvvKLLdvvjXp5LRLkd8g+CJZvthaZS6rWPoPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779798465; c=relaxed/simple;
-	bh=vDlPE3WlLowbB4twTPNt5oAOKEs7T3k99UMNQRP9CcM=;
+	s=arc-20240116; t=1779800627; c=relaxed/simple;
+	bh=cIV7eVLFj1WSRdO8UJfWGAKcQ4RL3tgfGuH1jAdS3kQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PCQW2HGgXmqu9gcuiGCD/CLzy0bCeTJK8X/zHnOm37PBQlPvY2+/WJnv4jS4zRjvj43EQEsIQ/NnYzdUkPyxzxVplVbxqBOByCPuzrrYgjTO3FanAvAPciw3azCc6O15uIc70GTZIfqrQULf0h1qAiErGfKntR3WXEAQLLYiw+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org; spf=pass smtp.mailfrom=archlinux.org; dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=0PaXCVkX; dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=qAvsEodf; arc=none smtp.client-ip=95.216.189.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=archlinux.org
+	 In-Reply-To:Content-Type; b=dQ98z2ZrVRcm72qHJVkHiBVVFsvlV4SzolDX1ZWrNL/BzB1Y7FUGW8F145D9+xjf4xjCXIHbC/citovbTE/oorBh0rmlSi+rK+Q3NqBxwmVcVxXO5uSGvnsT9rXSdOP5m7+oPnmmiY5OurqoEva9nShaqwAnXreI6iq21h41jL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CkA/ew8b; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="0PaXCVkX";
-	dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="qAvsEodf"
-Message-ID: <2d93a9e4-0c36-4bc7-8e94-b15f69ebda79@archlinux.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=archlinux.org;
-	s=dkim-rsa; t=1779798460;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DumjHkMnQiUKEXczcFzbHTJ12Og3qEh2uESbAgSH9Z0=;
-	b=0PaXCVkXBjwxgV57Gtk9GND9h+M3olt9dDZsAZSMh69khuwz+7omoquMv7bxY+X2NwBvDs
-	7cJghWP+kfKXxa/Mzj4ItNhRylLxtHEbXT2U/CdXfxlLvJjJ5rkSidgc2aBrQrTiI+CPaf
-	ofc7Q62sZXcpwYR2fUFCbVV0KYA5RBkUnwqkS7dvPSc8p+xrEimxO3yvUJhT2LR8N394lG
-	zKL5TDaB8eCxpGZRhxbfjUn9RFNKl2xluA2p7u5kkai+avEVgv9hwAOtKMW2EVgYqK2xAn
-	EZYIc0WKVZAH1Nb4ZDiz1NIO/snRu/iHOKTOeHm8VeRYVTieMy8yWHVg8nfo1l/UbnU8Tv
-	k5Yk3bdm2ZtFa0+WU70NGuYxJOHWvVeBaFwICiatUOh8gM6R/WS3IFlU9YbXwjVzymwuFc
-	XKuulQ5BeoNzGUlr/QrMDgw1cdIvgtAwKofD4IsvIOGsRR1yNR3JjzQoMvKvrQPONqF6JZ
-	OMMNLxAhP1LGiCUgH2GoiCYXngwwZmE2ZcjLiIEAmlhKl2r0JyV2gMJn4Uke4zTOViHDJQ
-	/gJXPKLMTm5lh6Zjv6J183nbfZ/UIz4eehTUQeqX6uRy6jBru/K/rs1ICZHdgd/GSKMS+z
-	nP5SILf6vZKcsnA0+D/43BN50nXByYlhjDbPB2kBPA+oekNoiga84=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=archlinux.org;
-	s=dkim-ed25519; t=1779798460;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DumjHkMnQiUKEXczcFzbHTJ12Og3qEh2uESbAgSH9Z0=;
-	b=qAvsEodfYN9Au3PfLWPaXQEfyjbOcwD3RqWnSlsvTSJQ3NP8ZX9wWEW0wqValvrgMDgl0u
-	ST8XcV+dvsfuSMCQ==
-Authentication-Results: mail.archlinux.org;
-	auth=pass smtp.auth=kpcyrd smtp.mailfrom=kpcyrd@archlinux.org
-Date: Tue, 26 May 2026 14:27:36 +0200
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CkA/ew8b"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-490388fd0dbso50136555e9.0
+        for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 06:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1779800624; x=1780405424; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UjNTcWc9bOGf723loCTUep8771/uj7ug5EPYZq+XxOs=;
+        b=CkA/ew8bHQnTyLbheU0tKlrPxe8xDGNFqQotUJEMcWW3Tn4izx9/5Wr69fbvqXNIrH
+         eJhcFYm2FwT43HFHVhup2TEWSY9btQCJdzdHC25FcRPDFu7X2XfkNGJQk6Y1iz5JxwKo
+         QjRf5jvXL7ImDuU+nVFT6WEDEvaTgphh6DX+WVNxkUDEo6LVdU1oGl6Nwp1zelB8yVRj
+         tqr3xqAOovFmzd70qP/wIIL6ed41pFKIxGQCy6wcvHaKBqF7L7MzEay+rWNRiDWepQU+
+         +gjQOuGxUKKqxIyCOBXsupJUjswmD1ds9yBuhKnSOtgCrorIOlMa4DmTgbMDlNkJIqBL
+         tWjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779800624; x=1780405424;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UjNTcWc9bOGf723loCTUep8771/uj7ug5EPYZq+XxOs=;
+        b=nweUwsr57WubhZq2CcL39Tz1myQkrbd7LI6RjPPu1YNhXCsCR2qvA3AKxCW3PmsbTN
+         ORw5PY0/0oXmCcYYKQQ7WuC2KaC3FxNj8ZVcdPlhE3EObb3mETRP2p/NRPqoLAq/MND+
+         ZxAtKrBWPaySUw2LsJdDt6e0tqui9XP3kW5uBlF7ylIrvBb8BZIvQ9sjdU+0XPRvch0B
+         yPH1FQJEDN2ynNcFfVllaA71nfm9oe/R1y0PC4YovPtH9AD4cThvpQAjAdMRMt7ZVmQk
+         pv0ob95VL1LdyViVW/WTAqILOpHKnLmMgiSq3tJi9JWMmi3ta9Rt/n6Ss6T/W8330fLQ
+         WWHA==
+X-Forwarded-Encrypted: i=1; AFNElJ8EwjjZ7sRtQxuWjNvzS/ffwMgpJqJ7YMmHd8n28UUeYsSnbSRiRXisVYtBNxZGxvZq0oHR9/zO5qRdksmJ@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywr+Hspm4KktCcFzCOdCGXw5ez+uFwxLDe7jx1DWO7xLJwQO8DC
+	L3O0wkoH2ZxQFIIgw67xJyXzMLOZM3UMZqc9AVsGcO46J2Q+e8bCAwtwLg1sxEm9i4c=
+X-Gm-Gg: Acq92OENbemgMgekL8j1ZWodU/2/J5bCU4tHWaE1d+wAyyvp9FBSH7mgr6Xu98hxz7W
+	rMn8Xw/D/ipuYaN1kpgdKuQEAADnR4Pl27ofXdEWgxDBJf3BuZK5p9Y9PcLyDs/v2i+KEHrCwNQ
+	e6DjSGdb+tSIAeQk0CcdIn2E1ANm0Yz4OoRqy+cBIv2TxeNTVuFCF69rOJV2qVsMIWbE5CB2eiS
+	jl+twSE3Ouc3C2WOxBsbCGHhK2XCsNEMipgmYbbDVq/y3dXkopmOUXayRyG5a/MBluZA5WFuQAr
+	1B5FSpfOrYgzw6hChS5yVYy/SCLkkYDOVdkIV2Ncd/2sgVf+J4J5XYDK0fvI3RT387tXJ1FxJmj
+	PWWXGH0QITVo51PdT9P/WvA/2wuMTnZ+3LEwoTLrkq9jKdGKqAyQJezTKOHHGg42D8Z/pzQkf5t
+	nY4lpwaSPPXGwRu6bIYyNFpgmtqJYU5WUbhwu51W74FQ/C
+X-Received: by 2002:a05:600c:45ce:b0:490:52c0:73f1 with SMTP id 5b1f17b1804b1-49052c07823mr223327865e9.9.1779800622880;
+        Tue, 26 May 2026 06:03:42 -0700 (PDT)
+Received: from [192.168.42.79] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4904561a198sm318501285e9.10.2026.05.26.06.03.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2026 06:03:42 -0700 (PDT)
+Message-ID: <635fed3c-4e39-4357-acd1-13f1653f9e3d@suse.com>
+Date: Tue, 26 May 2026 15:03:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 07/14] module: Make module authentication usable
- without MODULE_SIG
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Petr Pavlu <petr.pavlu@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 09/14] module: Move signature type check out of
+ mod_check_sig()
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
  Eduard Zingerman <eddyz87@gmail.com>,
@@ -81,41 +95,30 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
  bpf@vger.kernel.org, =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?=
  <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>,
- Mattia Rizzolo <mattia@mapreri.org>, Christian Heusel <christian@heusel.eu>,
- =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
- Eric Biggers <ebiggers@kernel.org>,
+ Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+ Christian Heusel <christian@heusel.eu>, =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?=
+ <mcaju95@gmail.com>, Eric Biggers <ebiggers@kernel.org>,
  Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
  linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
  linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
- debian-kernel@lists.debian.org,
- Holger Levsen <holger@reproducible-builds.org>
+ debian-kernel@lists.debian.org
 References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
- <20260505-module-hashes-v5-7-e174a5a49fce@weissschuh.net>
- <0a0736a4-2cdd-49f2-9062-e2f18d769fc0@suse.com>
- <4ee3c775-1fbf-45e1-8b77-5f9034f45125@t-8ch.de>
-Content-Language: de-DE, en-US
-From: kpcyrd <kpcyrd@archlinux.org>
-In-Reply-To: <4ee3c775-1fbf-45e1-8b77-5f9034f45125@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20260505-module-hashes-v5-9-e174a5a49fce@weissschuh.net>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260505-module-hashes-v5-9-e174a5a49fce@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 5/26/26 1:38 PM, Thomas Weißschuh wrote:
-> On 2026-05-26 12:53:22+0200, Petr Pavlu wrote:
->> Should MODULE_SIG_FORCE be renamed to MODULE_AUTH_FORCE, along with
->> renaming the sig_enforce functionality in kernel/module/auth.c to
->> auth_enforce?
+On 5/5/26 11:05 AM, Thomas Weißschuh wrote:
+> Additional signature types are about to be added.
+> As each caller of mod_check_sig() can have different support for these,
+> move the type validation into the callers.
 > 
-> Given that it is a user-visible symbol we'll need to be a bit careful
-> not to break existing configurations.
-> I'll try to use the new "transitional" kconfig attribute.
-A slightly softer worded alternative (yet semantically equivalent) name could be 
-MODULE_AUTH_REQUIRE. No strong opinion though, I think MODULE_AUTH_* does make 
-sense.
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-I initially shared the concern about renaming well established config options, 
-but the transitional feature does seem to be a good fit for this.
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Sincerely,
-kpcyrd
+-- Petr
