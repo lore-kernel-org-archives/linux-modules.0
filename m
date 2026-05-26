@@ -1,101 +1,85 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118133D332C
-	for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 23:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FF83D1A9C
+	for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 23:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779838844; cv=none; b=poTCa9KqNgKAC0yelKxSPD2NXN8fhhwhjECwywHsMOUCWYA+/G8y6Ig+afGP7l582kTrV0qfzHbfIEvoZUOffoMhtcuLueNENMpKZ8S9Vhrrg+htjO9rN095OWebl8dm1aMXIZJC03I7e05JFQDT+vN/J2fdaOjFcJnabRYRev4=
+	t=1779838845; cv=none; b=R//4p8wzGjlk+C0wp+OyCOj7XHAfGvRkrTCWn7q5nIgdXz8HjS9Dhp7XwzQlWEfBXK5frWoTCRcUOg36IemLuvrHiFRm2uhElef2JyFeRK6LXOfqHv9bCzCbICfVnkkPPT18C3x0e1iaHMU1rQq8KdG5WL2dRyUA8GYFOeHfIQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779838844; c=relaxed/simple;
-	bh=8ddzaQpPIU1lk7nO3NywObbzd/d9fgjAwKKOFsq7vE0=;
+	s=arc-20240116; t=1779838845; c=relaxed/simple;
+	bh=ue5Qj3tkiBpJBhqMgsSCI+ppGyow/fPJ2WxBTPFrOQo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nWU7Yssbyarwz9HleHL1T9l56okSefI7bCnJvd1yjx8lf/0pOHdAT+NmDqhGDPYIDDaN+wZLkfsxYOgGZaYeZ2beFDeev/Aqn6qH2emT9u1SOknzvXEBkxfQ8NDCkjNCCZHbyB5NQNrYDuI/6Sj5z88qNd1FzShowF1qLSF2fUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hZ8Oc71G; arc=none smtp.client-ip=74.125.82.201
+	 To:Cc:Content-Type; b=SLTGd3/ZnzFKI3Eit+039m+AmTOCdwuVBeKe1KP2UlHTYxKquDlC9l1ONpQctbGvagxQDek/LFrnMjlp5VqFEEK1Wuw/JOCF/VyKmnVDmzQI7z9yRo6Fx5L/PcXxC3U1yonDEEbmoA1sv+CbIEW//b5x3yDQv9tr4z3VpNFbgRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MsU9QSon; arc=none smtp.client-ip=74.125.82.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hZ8Oc71G"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-30457ff05b8so4051550eec.0
-        for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 16:40:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MsU9QSon"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-132d631edaaso3351676c88.0
+        for <linux-modules@vger.kernel.org>; Tue, 26 May 2026 16:40:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779838839; x=1780443639; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779838840; x=1780443640; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K1GQjZOhKRA0cpDt8l/K+2WDzgefBcTkUmqo1xyKi8I=;
-        b=hZ8Oc71G7fU5tiMyiNFCQ95v17M1VdYcqfpGglul06uqFuVukWIpzgHm5zyEuVlTW4
-         3BR89v8i9HlKSC3TawFi9WplT70trGBII3biy3LllXpD4WYHRxX3BS/Yd+GNOW451trj
-         KKJYFn1czHWNK1RhCGNSGuPABhTPuz3o339LDG6huzknhOrDkDcvOtwqzRpAD+ygWKyE
-         11KwzllGJ8XcKNXKTWLvEKYSrt+oTAFAsIid6zcN8M69sZ6PK7401tfmXIObuYcN5C7T
-         va3NdCkvh7IQuNZrH9VjoWFbSXnYFZ/+ooWiyDlYrZ3eb22foYSvPK0bJ2ZbXas0BM2j
-         tWZw==
+        bh=2C0S2w8UKATUl0Jp7xshg/gDFeia5kPjP02r6MRcxxY=;
+        b=MsU9QSonQU+TTLF/T4Lac4rxoXB79O0BacKB0qys1jCleyL5vMWhnP5GbL6JbwJQjE
+         8oupWMzY/rMpBwXxXjKxY2wVbSuy5fCAVtS8lZQ6MzU8ELJTlV0FKf6z75FpkRCMwUV8
+         1Gguag8X+C7Yny8LRcC/monffEVRRmSUc0YKbxvLjfYiOq4te4uaGW70coSuaB1XD2c1
+         WFGjHTrEjegfQ4LvYT+xphnY7jO0z6W4PaJfR+VFt18mwnkD9FYV/D4+q9WCIpZjP5AB
+         1sZlnRvREyqJkEzoqhFi2ChuYMR1o086S6yFSjBAKov1rcYWbP1zhOY20AOIbTsnnaaH
+         aSmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779838839; x=1780443639;
+        d=1e100.net; s=20251104; t=1779838840; x=1780443640;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K1GQjZOhKRA0cpDt8l/K+2WDzgefBcTkUmqo1xyKi8I=;
-        b=pkBZ2GTH8enKASEThCwFubJ3H+8gcyPse1GFmID6omh3j8zPyizdjhSjoduN1JhJkg
-         oi3IAwT7QiXu1Onxe4brCv8aBZmEUB4NxtY0MKO4RyuGxTfO/RZDzknmn10ue+3kn7o7
-         nlDR7Z44vmymynIC3evjVuPB5SIx1MFcdpkRqenqax60ohTEuI2BxBOJZuI0w/XD/wGx
-         40hS5eeVPLYzGspaDG+qHw2Sz1zt3ixF1/khjAVtSxwwc25xBLL1wCs2nfeRGcpegg2m
-         onj7h6ncoSRyXpNSRyjrheVVUCL0Bofr9Awd+OA4BS3r2QxfMqzTpjAaWhq7RQ83Fg1I
-         fS2Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+O983VtlOxxoLr2PlsuFAJCenMWQ7sPqhNori09Lnu1N9jb/nQYVLR8KEnXiOlMRYXv0ywTDNy0DSIcyc3@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjE/C6072Ul8YmR0vgAEhqy/Jq0jfhq8RYPVdDz/Ckaciuwi10
-	nok1PrqUxrZvnJf50xtp9sOOO2noSOSDvXDef3spcPd0RkqGEqa0g4sEDgHlogIcqazzeQvbEti
-	dxAShTf5GTlBdT0lF5Rx+2jyAZKybig==
-X-Received: from dycrm18.prod.google.com ([2002:a05:693c:2a12:b0:2f9:af7:5053])
+        bh=2C0S2w8UKATUl0Jp7xshg/gDFeia5kPjP02r6MRcxxY=;
+        b=KjaKsIxoktiV5rAf2OwARn3QnZk8/zr3vEnhbTkJsW5EY6AZLRJl08TI4zaOp21IfM
+         Zlz9A5CKLHnDK/w9yPgQ6t7bMwfecmWpd3yNNnrFCsZ8Q4maH2eQJT3pI3V4Y2Af6Kx5
+         eiXtccdwmiDWyjQvRENFDWng78DNa3FYFQUiCK6gF7b3kAeqweypOeTeeXF5V44nvJCd
+         Z04zKs4CktvigQ0TNGv6cr99Zd+IkvYiprlR+4fqdw58fA2KZvQ9EZByrwflflvKBiag
+         yEtZKhL7qA3tLeCx9Mx4oNR1UMUqMVacOynfVQWggTr31ioN5tznTWbnbuzLKiOzSkCP
+         Jm2g==
+X-Gm-Message-State: AOJu0YyY/wXdJ3diXf7HYlhpyRo7IQ9T+cGgfMwdr77xqJ7qoC2yvt/d
+	DRCuypL0R/UPjjjrdzqDsp4UC5QmqfrxwrqHaBZlRlGgXMhicmcoQDVcNzDfqaVk9xJ+y38I7Mg
+	xAlVxEMvYDK6phd/1Xca+hlSG2ADC1w==
+X-Received: from dlbsi4.prod.google.com ([2002:a05:7022:b884:b0:136:420:2090])
  (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:a84:b0:303:f2fc:c483 with SMTP id 5a478bee46e88-30448f30872mr9330662eec.1.1779838838965;
- Tue, 26 May 2026 16:40:38 -0700 (PDT)
-Date: Tue, 26 May 2026 23:40:38 +0000
-In-Reply-To: <20260327080023.861105-1-petr.pavlu@suse.com>
+ 2002:a05:7022:f313:b0:12d:b7e5:a67b with SMTP id a92af1059eb24-1365f81e628mr4025340c88.14.1779838840126;
+ Tue, 26 May 2026 16:40:40 -0700 (PDT)
+Date: Tue, 26 May 2026 23:40:39 +0000
+In-Reply-To: <20260427-params-pr-once-v1-1-3a8c64704cc4@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260327080023.861105-1-petr.pavlu@suse.com>
+References: <20260427-params-pr-once-v1-1-3a8c64704cc4@kernel.org>
 X-Mailer: b4 0.14.3
-Message-ID: <177983883822.35274.16490796584446355825.b4-ty@google.com>
-Subject: Re: [PATCH 0/4] module: force sh_addr=0 for arch-specific sections
+Message-ID: <177983883957.35274.15506019019254966722.b4-ty@google.com>
+Subject: Re: [PATCH] rust: module_param: use `pr_warn_once!` for null pointer warning
 From: Sami Tolvanen <samitolvanen@google.com>
-To: Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Petr Pavlu <petr.pavlu@suse.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, 
-	linux-riscv@lists.infradead.org, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Fri, 27 Mar 2026 08:58:59 +0100, Petr Pavlu wrote:
-> When linking modules with 'ld.bfd -r', sections defined without an address
-> inherit the location counter, resulting in non-zero sh_addr values in the
-> resulting .ko files. Relocatable objects are expected to have sh_addr=0 for
-> all sections. Non-zero addresses are confusing in this context, typically
-> worse compressible, and may cause tools to misbehave [1].
+On Mon, 27 Apr 2026 10:11:35 +0200, Andreas Hindborg wrote:
+> Replace `pr_warn!` and the accompanying TODO with `pr_warn_once!`, now that
+> the macro is available.
 > 
-> Joe Lawrence previously addressed the same issue in the main
-> scripts/module.lds.S file [2] and we discussed that the same fix should be
-> also applied to architecture-specific module sections. This series
-> implements these changes.
 > 
-> [...]
 
 Applied to modules-next, thanks!
 
-[1/4] module, arm: force sh_addr=0 for arch-specific sections
-      commit: ffe1545ce8a0a7bb698d5f68cbbdef8f93d1fce6
-[2/4] module, arm64: force sh_addr=0 for arch-specific sections
-      commit: c5553deb577fe433f770e270fd9582b8325f12d9
-[3/4] module, m68k: force sh_addr=0 for arch-specific sections
-      commit: 9cb4d4dc82272538de1b7edb6e8cf91597ed00b0
-[4/4] module, riscv: force sh_addr=0 for arch-specific sections
-      commit: 04e17ca3f77e1722a5db068fbcd7b93c51656013
+[1/1] rust: module_param: use `pr_warn_once!` for null pointer warning
+      commit: 8d2a562b7efe98fdea57d10caaced911fca46a3f
 
 Best regards,
 
