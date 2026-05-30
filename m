@@ -1,111 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF6C2DB7BF;
-	Sat, 30 May 2026 00:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3902227FB1C;
+	Sat, 30 May 2026 15:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780101964; cv=none; b=EbrQxqUHlgX+PVreew3Ba7fZ6VV5gwJRLiLujbZAx629bxfV7exNbh4bWZI3NVDIp/5BtsurSJip+SyuqPblEowomxkCJmmOdBXm3rYam7JdetcA1orfS0EQhN3UlFaos9lQHUyBOyoBwBtPRRI7g2HApZKXPEZl+lY7QPEDeWU=
+	t=1780155985; cv=none; b=FT0oTGCpWKE2Sj01v/ONNKlemOUjHlDHXpvcIWDVFh4O3UZJ+rbETKqMxcEbXbspZe+9JitHG9KyjFEgtb/DkJMZvQbBhGagYN7TGX76tGgIiWAEhn4MX8Z2ZKz32WzzPKOJx7ehhrNYjiT0XWW8WLVqlt4XavBFKSukytIiBr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780101964; c=relaxed/simple;
-	bh=K0+J+UcsLatDZgMrzII2EndHog2w4aS02JUTm38DK/A=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PQ7oJiPUI/zKM3sf56numfew1j/5aCIUkL2QNebKM+4Zn3R/T4eYVkGfcAPlVMr2rENu6Hh0WVi3c5pfRA5iPA5Qwqz5mUt41dLu0eyCC2cC3Ty4YT2K8fXqTl6tlVrMGlP5m5FCRKm9HrWznjQhdlhQe14k9nO0GPX1bpqCPS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XRAtuKuE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780155985; c=relaxed/simple;
+	bh=xm71VHTCRupxnG2aliywUiZm9ZIVX+C8OKruUSD9ccE=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=ewW3yCPwlwnfOJAo5hslq0ReLDUd6mfmCRvuwNAtyr+mJo7I3BGaShKLy1AVUE/zi4h/97KwWlYoZKGTiplqVyGr8PHEqcOpgNUb1jKDgqgnT27l0GNw4asGIv9pgoWlhXuZdPoluc7QozYkda9cAMR5g2XENRZ5Vy680F6oUaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=wIty/s2r; arc=none smtp.client-ip=43.163.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XRAtuKuE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F6D1F00893;
-	Sat, 30 May 2026 00:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780101961;
-	bh=tgcInZqyhkkP4msOEISdWXRIsJwIfldxBc7ekr2WWpY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XRAtuKuEXgLh/hjMC8cC8ApyruWRCX+1Xaa2KU0mjtakH9Fc6EJ7z6djMhhKbT1id
-	 hYgRP6SmITSVyy7tgVUaO0XX0vsLDrqJv5/CZKdtzjL8UsoNnmz6Ze6+Fp5lSzgulg
-	 f2x4HI7FfZfjSLSlcBgGWTe92YmJv/P8a5D5krnS9gYZsXh0bT08Vj2RrM1MpHzlPr
-	 epkRIVdaEHWOpnMzQ9EO+BV97V39EFjbd26woMtDBwdXFm/882cz4N144+QnMzVLJU
-	 /fjjq2BpVN8BCU5/DR6tgnXPpbnFy8DX8IdbR2T7M+nXEGvtZJuxWj5W3pC5Ybjala
-	 rv+YiqJ6zq1yw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 11/11] moduleparam: Drop legacy kernel_param_ops
- .get_str field and dispatch logic
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kees Cook" <kees@kernel.org>
-Cc: dmaengine@vger.kernel.org, vkoul@kernel.org, kvm@vger.kernel.org, linux-modules@vger.kernel.org, linux-pci@vger.kernel.org, Frank.Li@kernel.org, linux-media@vger.kernel.org
-In-Reply-To: <20260521133326.2465264-11-kees@kernel.org>
-References: <20260521133326.2465264-11-kees@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 30 May 2026 00:46:01 +0000
-Message-Id: <20260530004601.82F6D1F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="wIty/s2r"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1780155972;
+	bh=ilThKkB9WvCKq5FZp5MfmjxtGvtaKq8BAl5toqC3268=;
+	h=From:To:Cc:Subject:Date;
+	b=wIty/s2rPe8/MPWtYYUIP9eXzk6OrHz1kRu+aqNpsXRJofHgssoosZ7zdmjWrv5i8
+	 AmxjVgf2L4OosLWjmIRh6WzJZcNk2SoRezw2opVWF7N+znceUQwGS/bp3eqYwMo6DS
+	 GZQMBmZDtVr0HHvICOxdCzSADRstSbDYiC+iypY8=
+Received: from LAPTOP-JJ91J38E.localdomain ([222.125.130.99])
+	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
+	id B89BCE76; Sat, 30 May 2026 23:46:09 +0800
+X-QQ-mid: xmsmtpt1780155969tp6b9r6cb
+Message-ID: <tencent_08845B64E5F38EB7FA1779982A071AB4A607@qq.com>
+X-QQ-XMAILINFO: MRMtjO3A6C9XIq5n+/XvMRMRIkQ5/XvU5XffPlcu+zegeLaEElrr7GQKhI1EMN
+	 ua7TU82ORW2Bc11eRPHjdJZ7+hjyIlUGSmvLfJzhnB9BwkF9lHH6v6TtJ62pMVBT98JzWrk7Kcpq
+	 0Z/JXUdRosiYyOio1u/OIXTwJ9CQCBYygFZGkHS4Xthd/iX1AuMjeslWfayBnoZkJ9wLzUctWO7A
+	 U2NMIAcc0YL1xG4DmB97nH7/1e4/OKhDhRNG37SZ8blcsWSCpUoKgG+X3JvGtgCGnr5pL1qK60Uz
+	 hFDZ0azg8cLJrTqSs5JIeSgc7nsZLDyqeGzKPIAuhjRHfGe9KEnEmtzpNKiAvvF25NHmDI9iCn1p
+	 IYul+DNYeqPEpH2udXdHw+dM5MSg+2JYKrDgNUu3ERKXh+8sG75sEPqiEW8uXT3ZO75zCtPy8amW
+	 blTsnLkBwMRybXHe8GJGp3e4IlZvM0Vrhya1sTl7XeaqQxEzfT5dI6hZDT1EmAFBuHiu2Y1tiu1a
+	 vtwGp/mgnqJT0CM2RftLD3FplFdVUCb9rn0XiDjdoC7xsN0IU4KtMzGYT7AzizUU9fKWTIRei9F7
+	 hrBZLMiitibD+a8i36UHeTY0u6U/1oUXxtb7t7I3wTV1PeHJdotUcKoY3Ajp9d6FoXYlie77RZp0
+	 9KOCRBtdZOwS2jvspvs0Zcbk3jo6MmOtdggbLO5cp+X/YTeCjnPIn5DDFf+5GLZ14ui6nVDRUB5W
+	 LarKPeD694U/DokZKcB0ST5SfXj1NxeTiPwf1QhZ3Shpen1ElU0qzsP5OyvA4k++BIGdl+SU719/
+	 UqFZDt8oUwofCGoN3OupfDQpfuORItp5/Vy9mgYok5NyiXvoMpadAXdowZYmTCkwO1f/sBnU6Sg+
+	 v6YgJ/Yqoec8mMtrNtqo4eQvq6vqM4EnOKaqpyR8oI7q/PzqjpkwDIBHOUQyFmegGHxX1FpE9/v7
+	 RsLAuSuvETZYRk+M6tsv+tSgw0E77BcpBwyWO5ybHB6bjPBsmd5KMHQ3WbLEieE8K2GT+7QsRt7C
+	 DOYmiHqsWfz3TyjB9W5z0G/hITwmq1uBCs1HmBmMRx9AhQ0gJ4AIcCTPbjS8w44j35DQm3sULJ7k
+	 4sag9EoZN9XdTkFYo=
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+From: Egg12138 <egg12138@foxmail.com>
+To: Russell King <linux@armlinux.org.uk>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Petr Mladek <pmladek@suse.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Xiao Junzhe <egg12138@foxmail.com>
+Subject: [PATCH v3] ARM: module.lds: fix unwind metadata for merged .text sections
+Date: Sat, 30 May 2026 23:46:01 +0800
+X-OQ-MSGID: <20260530154601.2409511-1-egg12138@foxmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+From: Xiao Junzhe <egg12138@foxmail.com>
 
-Pre-existing issues:
-- [High] Unconditional call to `arr->ops->get()` without a NULL check can c=
-ause a kernel panic if the array parameter element lacks a `.get` callback.
---
+Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN,
+and related macros") made scripts/module.lds.S merge module input
+.text.* sections into the output .text section.
 
-commit a252ae87a187a5b644d160fded352c545493a611
-Author: Kees Cook <kees@kernel.org>
+On ARM, the paired unwind input sections keep their original names.  A
+module can therefore contain .ARM.exidx.text.unlikely with sh_link
+pointing at .text, while .text.unlikely no longer exists.
 
-moduleparam: Drop legacy kernel_param_ops .get_str field and dispatch logic
+This is a valid ELF relationship, but ARM module_finalize() does not use
+sh_link when registering module unwind tables.  It derives the target
+text section from the exidx section name instead:
 
-All struct kernel_param_ops .get callbacks have been migrated to using
-struct seq_buf. Drop the migration scaffolding.
+  .ARM.exidx.text.unlikely -> .text.unlikely
 
-> diff --git a/kernel/params.c b/kernel/params.c
-> index 25f0c8d5d19f3..6b410189297b1 100644
-> --- a/kernel/params.c
-> +++ b/kernel/params.c
-[ ... ]
-> @@ -470,23 +469,9 @@ static int param_array_get(struct seq_buf *s, const =
-struct kernel_param *kp)
->  		p.arg =3D arr->elem + arr->elemsize * i;
->  		check_kparam_locked(p.mod);
-> =20
-> -		if (arr->ops->get) {
-> -			ret =3D arr->ops->get(s, &p);
-> -			if (ret < 0)
-> -				goto out;
-> -		} else {
-[ ... ]
-> -		}
-> +		ret =3D arr->ops->get(s, &p);
+The lookup fails and the unwind table is not registered for the actual
+.text range.  This can make module stack unwinding fail with:
 
-[Severity: High]
-This isn't a bug introduced by this patch, but does this unconditional call=
- to
-arr->ops->get() need a NULL check to avoid a kernel panic?
+  unwind: Index not found
 
-If a module defines a write-only array parameter where the element's
-kernel_param_ops struct lacks a .get callback, and assigns it write-only sy=
-sfs
-permissions, root can still attempt to read the file. When this happens, sy=
-sfs
-invokes param_attr_show().
+Keep the ARM module unwind output names in sync with the text sections
+that scripts/module.lds.S now produces.  Coalesce the .ARM.exidx/.ARM.extab
+section associated with .text.*, into the
+stable output names expected by the existing ARM module unwind code.
 
-For normal parameters, param_attr_show() has a safety check that rejects the
-read if ops->get is NULL. However, for array parameters, ops resolves to
-param_array_ops which has a valid .get callback, bypassing the safeguard.
+Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
+Signed-off-by: Xiao Junzhe <egg12138@foxmail.com>
+---
+Changes in v3:
+  - Apply the ARM unwind section coalescing under CONFIG_ARM_UNWIND.
+  - Remove quotes around linker-script wildcard patterns so GNU ld expands
+    them correctly.
+  - Use conventional linker-script wildcard syntax, i.e. *(...) without a
+    space after the wildcard.
 
-Could this result in a NULL pointer dereference when arr->ops->get(s, &p) is
-executed? Before this patch, the code fell back to calling .get_str(), which
-would also be NULL for a write-only type, resulting in the same kernel pani=
-c.
+ arch/arm/include/asm/module.lds.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-> +		if (ret < 0)
-> +			return ret;
-> =20
->  		/* Nothing got written (e.g. overflow) =E2=80=94 stop. */
->  		if (s->len =3D=3D before)
+diff --git a/arch/arm/include/asm/module.lds.h b/arch/arm/include/asm/module.lds.h
+index 0e7cb4e314b4..1d56c0375c18 100644
+--- a/arch/arm/include/asm/module.lds.h
++++ b/arch/arm/include/asm/module.lds.h
+@@ -1,4 +1,16 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
++
++#ifdef CONFIG_ARM_UNWIND
++SECTIONS {
++	.ARM.extab		0 : {
++		*(.ARM.extab .ARM.extab.text .ARM.extab.text.[0-9a-zA-Z_]*)
++	}
++	.ARM.exidx		0 : {
++		*(.ARM.exidx .ARM.exidx.text .ARM.exidx.text.[0-9a-zA-Z_]*)
++	}
++}
++#endif
++
+ #ifdef CONFIG_ARM_MODULE_PLTS
+ SECTIONS {
+ 	.plt : { BYTE(0) }
+-- 
+2.43.0
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521133315.work=
-.845-kees@kernel.org?part=3D11
