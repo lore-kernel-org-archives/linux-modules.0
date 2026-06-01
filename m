@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED12374725
-	for <linux-modules@vger.kernel.org>; Mon,  1 Jun 2026 12:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E18340411
+	for <linux-modules@vger.kernel.org>; Mon,  1 Jun 2026 12:28:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780316463; cv=none; b=q8hgUYBeuuff6KxQuH8l9YUy6sM+3Lv9hZyWpf/Byfb0qvITaeTkq6Yh8Zxz4xxmxC5ZBJBiNRh2C/uvDgQK+tgQXhFtjQLIqRsMmj+NHWzs7O477CGnVeJW9t6iEH5/QrNmmRVc04LL/MH+biEQ6Eq0k64NPkJSR3eYtn9gf/c=
+	t=1780316894; cv=none; b=h8P1PFMJp0XfICXxZFDjlGU1Zg+RcI7UVpiNDDSmifNUJZ/Not0Ugrvl4YvLnfJCgXDEzmNQ8bOFCzoFFlb2ErBVST8XtTW3n7EWiM8nKZ9f7jKyg+KR4bzIzU+WSGD4E96MPFesmSVtRJy4Vk7TIHFMk+kFqHADjpfe3G+Fbk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780316463; c=relaxed/simple;
-	bh=nyPf389pjLVld6hsBNJmt6B+xPQb4bCwTsd5iOZ/fyA=;
+	s=arc-20240116; t=1780316894; c=relaxed/simple;
+	bh=8T01rYmuA6AzXVO6T8h9isSdhkwxG+kxH/XgtNAfb8A=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jPczw9+/gxyNbRfup3gldq3QETbpmLY6F6GEXHD2b2WAmmE/VWmHnDRjv5pu22BbiTg/J8Y9W387SuCgESga/WQF3z5dTzEnOvwhCtozGi+M4XjX4EUabmMJHh/QZdBfpx3nrMIDKqav/rUHoAMtOGYOR3S5G8c9zC4X3IrPM78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=flo8J27F; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=NJUdSwHSegiw+QBgqQcxeXbBNEOxDYgGqkKI3hzE95ySU/+NKEBT+3R96kCUUdgZISnwYulUF5seg1VUjqCejvxtvHqzVcAx7EOn8edAk88O1/2bMX6qDQvPQSXNKhWuxbNT1OKRAGOx0IC2oVn4+LSTPBSsxc4KRJ6cze71OTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mSckYQyI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="flo8J27F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360121F00893;
-	Mon,  1 Jun 2026 12:21:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mSckYQyI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F641F00893;
+	Mon,  1 Jun 2026 12:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780316462;
-	bh=pjbARCzrhSEFuFxs7ec6GlrsC5D3O6Yf6gVlYzStKkg=;
+	s=k20260515; t=1780316893;
+	bh=izZB7CRgH44OMdrdgj4kDlj13evBSUadJkwcCCtXbT0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=flo8J27FlUgQkSw/gpqhol/4vnKRHKk4XhpActEHiNa69BWF5HGNKplXADrEV0cgw
-	 wmwIPhqSNj6eltxbMpQKL+G8wt+pduMiEW2UV3Hxf02KdAdKHh9zzR+BZ+S8bzpf4e
-	 QPldbZ+Gvz7XYhTgScTOQdg/VUcNeTuY6dSFRH2tC8RXeR2MvrltZKygE0Fu7KjTtl
-	 +HxWNvRON9B1kbKZpRraZoxPu035AhsLJK9b+pL0hw20SrBhnglFn5IM5Z5zyPeTjn
-	 AEku2PUm3pOpMHpWKcfRbqmiP+BH1UZsJDyLA7cXtv15e4OiBxpHbJR23/kGPlYdP8
-	 cePvbBBxyic8g==
+	b=mSckYQyIFZA8J06zwH1GU9/iJ0JWRh1EC75EoEnUUjcs/2zaLfbEEU8RoiZspiSdF
+	 VcILT1rm5zZsLyk0Jn12GMbfChRwn0vnDyIWIuFFvfd+z5DjYghausAnGr+rkMRqkF
+	 uB4fuCGztipIThjVtJhnP8i71mw5U9IhCR6GGLxObPishkB3KQhZMsFemtzxQGwELk
+	 Ei+pBA8gLfbRWCTGkKvnVOtpb1FyNAM6mnRW2IDQve1J4f3NFWGfGQUOghqxRkYaXi
+	 vf9/5/smm1Eue4Jd4yDh2dEMi1xuavopuOkWIjZPuKLbP4DDt/GYd+dHWcTrAb9hAJ
+	 6thFrRWbIa7Lg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 22/24] selftests-dyndbg: add a dynamic_debug
- run_tests target
+Subject: Re: [PATCH v3 24/24] dynamic_debug: use KBUILD_MODFILE for unique
+ builtin module names
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jim Cromie" <jim.cromie@gmail.com>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260601-dd-maint-2-v3-22-4a15b241bd3c@gmail.com>
-References: <20260601-dd-maint-2-v3-22-4a15b241bd3c@gmail.com>
+In-Reply-To: <20260601-dd-maint-2-v3-24-4a15b241bd3c@gmail.com>
+References: <20260601-dd-maint-2-v3-24-4a15b241bd3c@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 01 Jun 2026 12:21:01 +0000
-Message-Id: <20260601122102.360121F00893@smtp.kernel.org>
+Date: Mon, 01 Jun 2026 12:28:12 +0000
+Message-Id: <20260601122812.D4F641F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -46,54 +46,71 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Unquoted variable in helper function `search_trace` truncates the s=
-earch pattern if it contains spaces.
+- [High] User queries and boot parameters for built-in modules with hyphens=
+ in their names will silently fail because KBUILD_MODFILE retains hyphens, =
+unlike KBUILD_MODNAME.
 --
 
-commit 35e29a827e53195f855e4fc5d139746aeb606df3
+commit 5657a3b8ff6d75b1ecf79e0009e73fb62384f27d
 Author: Jim Cromie <jim.cromie@gmail.com>
 
-selftests-dyndbg: add a dynamic_debug run_tests target
+dynamic_debug: use KBUILD_MODFILE for unique builtin module names
 
-This commit adds a dynamic-debug selftest script and basic test targets
-for the dynamic_debug subsystem. It introduces tests that modify pr_debug()
-flags and verify their effects in the control interface.
+This commit changes the module name used by dynamic debug for built-in
+modules from KBUILD_MODNAME to KBUILD_MODFILE. This provides unique names
+for built-in modules that might otherwise just be called "main".
 
-> diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/t=
-ools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-> new file mode 100755
-> index 0000000000000..8b2b7388678e3
-> --- /dev/null
-> +++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+> index 2d6983186f37d..aee6f3d0916f4 100644
+> --- a/include/linux/dynamic_debug.h
+> +++ b/include/linux/dynamic_debug.h
+> @@ -8,6 +8,17 @@
+> =20
+>  #include <linux/build_bug.h>
+> =20
+> +/*
+> + * Pick the best name for the module:
+> + * KBUILD_MODFILE includes the path (e.g., drivers/usb/core/usbcore) for=
+ built-ins.
+> + * Fall back to KBUILD_MODNAME for modules (loader requires unique names=
+).
+> + */
+> +#ifdef KBUILD_MODFILE
+> +# define DDEBUG_MODNAME KBUILD_MODFILE
+> +#else
+> +# define DDEBUG_MODNAME KBUILD_MODNAME
+> +#endif
+
 [ ... ]
-> +function ifrmmod {
-> +    lsmod | grep $1 2>&1>/dev/null && rmmod $1
-> +}
-> +
-> +# $1 - text to search for
-> +function search_trace() {
-> +    search_trace_name 0 1 $1
 
-[Severity: Low]
-Does this unquoted variable truncate the search pattern if it contains
-spaces?
+> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+> index fdb730db385e8..7f78c6b3eeaf7 100644
+> --- a/lib/dynamic_debug.c
+> +++ b/lib/dynamic_debug.c
+> @@ -248,7 +248,8 @@ static int ddebug_change(const struct ddebug_query *q=
+uery,
+> =20
+>  		/* match against the module name */
+>  		if (query->module &&
+> -		    !match_wildcard(query->module, di->mod_name))
+> +		    !match_wildcard(query->module, di->mod_name) &&
+> +		    !match_wildcard(query->module, kbasename(di->mod_name)))
+>  			continue;
 
-If search_trace() is called with a multi-word string like
-search_trace "error message", word splitting will cause
-search_trace_name() to receive "error" as the third parameter and
-"message" as a fourth parameter. Since search_trace_name() only uses
-$3 for its grep pattern, it will only search for the first word.
+[Severity: High]
+Since KBUILD_MODFILE retains hyphens (unlike KBUILD_MODNAME, which is
+sanitized by the build system to convert hyphens to underscores), will user
+queries and boot parameters using underscores fail to match?
 
-Could this be fixed by quoting "$1" instead?
+For example, if a user passes a boot parameter like snd_hda_intel.dyndbg=3D=
++p,
+query->module will use underscores.
 
-> +}
-> +
-> +# $1 - trace instance name, 0 for global event trace
-> +# $2 - line number counting from the bottom
-> +# $3 - text to search for
-> +function search_trace_name() {
-[ ... ]
+Because match_wildcard() performs exact character matching without translat=
+ing
+hyphens, will this silently break dynamic debug configuration for built-in
+modules with hyphens in their file names?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601-dd-maint-2=
--v3-0-4a15b241bd3c@gmail.com?part=3D22
+-v3-0-4a15b241bd3c@gmail.com?part=3D24
