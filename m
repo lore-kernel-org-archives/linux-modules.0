@@ -1,116 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from jpms-ob01-os7.noc.sony.co.jp (jpms-ob01-os7.noc.sony.co.jp [211.125.139.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5432BE65B
-	for <linux-modules@vger.kernel.org>; Mon,  1 Jun 2026 10:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B32D395AE2;
+	Mon,  1 Jun 2026 10:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.139.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780309699; cv=none; b=PfR6qOIGD0S+fd8IEdngPPR+2ems0OyAz3sBsICAVav9ZtcE8R7ENyeJ5kbBlqqhALykcE6MWYdgJRafgVBS/rcrWYYT+AtjnBSq5+kaxf2HRtgwk1zBnwOevJA6fcJubBlptxmCJ9qJC7LxisMZpsiHJUQ4u6BD712YHmBrCoc=
+	t=1780309805; cv=none; b=NoKEedFYFX/Dy0LWNMKJmuwSi1oUbyEfX8Wb/UoaIIoFeeEjB6UT0nFq3BsAqWKDpcPHWpRBkDSrRfR+r1KNMn1SJjF/LkIWe/+4meRsTsunnhGe+q6NdLQBliTGwcmLuSBGOCPkL4yBlRrrq+i06n9emYiA8b1t97EMmpgoRuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780309699; c=relaxed/simple;
-	bh=TfRoJn5H2150htKDlgxUzZg+ESJjTTUa6+EVSFM2IlI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IxS0iYhVWbYvqpUEm1EjY1KX9+A3ms66IJSxH5CMd2mlmYymtVot5CCktNKlNvkRmESpN0xwm70X3O73yV4sVjDozBv5dmegoKrlP0R8xKOZYbxTBHiSlYmU9EmLhZk63DffzXec0B8UbmhgxYi4D8BlDoZnCGsrQYYkFrukbGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bbLZA3z8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780309805; c=relaxed/simple;
+	bh=NCCEOep1v/81LrwEaRyt9x58TIOTCpVMYpw9cwgu8Sw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BwRCcPBTnWblkcs0We1vyAuIz0PMDAsW5KWvFOxvlw7J3fp17u/2u73c5HxGUYLfpzDyO1hXuS7BkdjG5r3sfRyz+2mjKVzWmclhdJrmj0nigBMMqYoTQoa4sRAWokYzBtI5wizYnbUEz2ec6Fv6ekYD1QOTp6/N/Q9XrlfWThw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=fail smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=ZL2m23Uv; arc=none smtp.client-ip=211.125.139.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sony.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bbLZA3z8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F73E1F00893;
-	Mon,  1 Jun 2026 10:28:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780309697;
-	bh=nEROZ4LOz55S8/AK1V2OysBrwyBvMsVthmgneAqyCIU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bbLZA3z8fCOwkN9uUoNuHM7+3UYD7EYFMv0ScxgOyF8R95RkeKfW9dUdcIkvcWHzQ
-	 8B1/X1v4qK9+2/w861bJVZqpvMzqwPGs2YFUtxaRJ4pghgFSC1kiTyT6Aej/UcPvwn
-	 4Q+b10w7OGL0yXGpCon5HYJAyiN1U+1opT1KO5YWh06lFMm2vQwrJMwHOIaa7+GtH9
-	 sEyu+Ji4lmVzkVGt/LXfIDzSAtiWd7A6TugKkWVqj2hGF05PpP2+QjxuLcmkmDviY8
-	 MHRoWrpoGuSCvStNOcW3ZCTaBz4nNRMrWgoSencezevG1FErcXe83PGSzSz7SD9/FM
-	 xv0L/STgcbpBg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] rust: module_param: return value by copy from
- `value`
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Andreas Hindborg" <a.hindborg@kernel.org>
-Cc: linux-modules@vger.kernel.org, ojeda@kernel.org
-In-Reply-To: <20260601-modules-value-ref-v2-1-12ebbf0510c9@kernel.org>
-References: <20260601-modules-value-ref-v2-1-12ebbf0510c9@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 01 Jun 2026 10:28:17 +0000
-Message-Id: <20260601102817.9F73E1F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="ZL2m23Uv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=sony.com; s=s1jp; t=1780309804; x=1811845804;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0rHdH/6OzUvgw/Z1d6llxooirf3DGCf2wJCl22Zrk6k=;
+  b=ZL2m23UvAKplAAuw4wHwj8BopN8yQxX4GD4F9AL98jcGUZeMo6i9FuY3
+   EN3AtzK81E+luchi3Amc7amj9yRaFl8I5xkAcZ8AHwe7da07Q9e5+0Zyr
+   BBJ1+zNDYCSsv9sdYR0+ugpKQ4gS6AkR6TXUSCggcZBE/gSTU63cSg/lr
+   1oDaMtqVbhXn2SXZFDWBBga95uXfVqwhyCUc11GlO3urLSW8zrjiiRcJn
+   T7NEz2J/UyACS2Z8hMQn/lZvdtgzRnCFNw0/cGUa9bmckngmqB4DfPsJy
+   gxD+WURJvDK4MMkb5zrzU0ehF00kkUWGmTFC+lZGMgficl7gWeXkOZsw/
+   w==;
+X-CSE-ConnectionGUID: fHY3hk8IQPya5S/VzT0E7w==
+X-CSE-MsgGUID: A6YwwHDwRxS/ycdMpF3BAg==
+Received: from unknown (HELO jpmta-ob01-os7.noc.sony.co.jp) ([IPv6:2001:cf8:acf:1104::6])
+  by jpms-ob01-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 19:19:52 +0900
+X-CSE-ConnectionGUID: sNjFdX7LQYSLb2PshMkn2Q==
+X-CSE-MsgGUID: WqV8hNo5ShCKx694VddLQw==
+X-IronPort-AV: E=Sophos;i="6.24,181,1774278000"; 
+   d="scan'208";a="69757146"
+Received: from unknown (HELO JPC00244420..) ([IPv6:2001:cf8:1:573:0:dddd:6b3e:119e])
+  by jpmta-ob01-os7.noc.sony.co.jp with ESMTP; 01 Jun 2026 19:19:52 +0900
+From: Shashank Balaji <shashank.mahadasyam@sony.com>
+To: "Gary Guo" <gary@garyguo.net>,
+	"Danilo Krummrich" <dakr@kernel.org>,
+	"Petr Pavlu" <petr.pavlu@suse.com>
+Cc: Shashank Balaji <shashank.mahadasyam@sony.com>,
+	Rahul Bukte <rahul.bukte@sony.com>,
+	linux-kernel@vger.kernel.org,
+	coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	driver-core@lists.linux.dev,
+	rust-for-linux@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Daniel Palmer <daniel.palmer@sony.com>,
+	Tim Bird <tim.bird@sony.com>,
+	linux-modules@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	Sumit Gupta <sumitg@nvidia.com>,
+	"Suzuki K Poulose" <suzuki.poulose@arm.com>,
+	"James Clark" <james.clark@linaro.org>,
+	"Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	"Miguel Ojeda" <ojeda@kernel.org>,
+	"Boqun Feng" <boqun@kernel.org>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	"Benno Lossin" <lossin@kernel.org>,
+	"Andreas Hindborg" <a.hindborg@kernel.org>,
+	"Alice Ryhl" <aliceryhl@google.com>,
+	"Trevor Gross" <tmgross@umich.edu>,
+	"Jonathan Corbet" <corbet@lwn.net>,
+	"Shuah Khan" <skhan@linuxfoundation.org>,
+	"Luis Chamberlain" <mcgrof@kernel.org>,
+	"Daniel Gomez" <da.gomez@kernel.org>,
+	"Sami Tolvanen" <samitolvanen@google.com>,
+	"Aaron Tomlin" <atomlin@atomlin.com>,
+	"Mike Leach" <mike.leach@arm.com>,
+	"Leo Yan" <leo.yan@arm.com>,
+	"Thierry Reding" <thierry.reding@kernel.org>,
+	"Jonathan Hunter" <jonathanh@nvidia.com>
+Subject: [PATCH v6] kernel: param: initialize module_kset in a pure_initcall
+Date: Mon,  1 Jun 2026 19:19:41 +0900
+Message-ID: <20260601101942.4002661-1-shashank.mahadasyam@sony.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <ahEd4iC-2hqUbMy3@JPC00244420>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Commit "driver core: platform: set mod_name in driver registration" will set
+struct device_driver's mod_name member for platform driver registration. For a
+driver to be registered with its mod_name set, module_kset needs to be
+initialized, which currently happens in a subsys_initcall in param_sysfs_init().
+The tegra cbb drivers register themselves before module_kset init, in a
+core_initcall. This works currently because lookup_or_create_module_kobject(),
+which dereferences module_kset via kset_find_obj(), is not called if mod_name
+is not set, which is the case now.
 
-Pre-existing issues:
-- [High] Casting a pointer of `ModuleParamAccess<T>` to `SetOnce<T>` invoke=
-s undefined behavior due to missing `#[repr(C)]` on `ModuleParamAccess`.
---
+So in preparation for the commit "driver core: platform: set mod_name in driver registration",
+move module_kset init to pure_initcall level, ensuring it happens before tegra
+cbb driver registration.
 
-commit 9dc35dfddf4037b5b314ed7586fa775219811371
-Author: Andreas Hindborg <a.hindborg@kernel.org>
+Suggested-by: Gary Guo <gary@garyguo.net>
+Reviewed-by: Gary Guo <gary@garyguo.net>
+Co-developed-by: Rahul Bukte <rahul.bukte@sony.com>
+Signed-off-by: Rahul Bukte <rahul.bukte@sony.com>
+Signed-off-by: Shashank Balaji <shashank.mahadasyam@sony.com>
+---
+I'm sending v6 of just this patch to add the comment suggested by Petr and pick
+up Gary's Reviewed-by. The rest of the patches are the same as v5.
 
-rust: module_param: return value by copy from value
+Danilo, I'm assuming this series goes through driver-core. Could you please pick
+up this version of this patch and the v5 of the others?
+---
+ kernel/params.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-This commit updates parameter access to be more ergonomic for Copy types
-by returning the parameter value by copy rather than through a shared
-reference. It changes ModuleParamAccess::value to return T by copy when
-T: Copy, and renames the previous reference-returning accessor to
-value_ref. The in-tree caller in rust_minimal is updated to reflect this
-change.
+diff --git a/kernel/params.c b/kernel/params.c
+index 74d620bc2521..a668863a4bb6 100644
+--- a/kernel/params.c
++++ b/kernel/params.c
+@@ -942,9 +942,9 @@ const struct kobj_type module_ktype = {
+ /*
+  * param_sysfs_init - create "module" kset
+  *
+- * This must be done before the initramfs is unpacked and
+- * request_module() thus becomes possible, because otherwise the
+- * module load would fail in mod_sysfs_init.
++ * This must be done before any driver registration so that when a driver comes
++ * from a built-in module, the driver core can add the module under /sys/module
++ * and create the associated driver symlinks.
+  */
+ static int __init param_sysfs_init(void)
+ {
+@@ -957,7 +957,7 @@ static int __init param_sysfs_init(void)
+ 
+ 	return 0;
+ }
+-subsys_initcall(param_sysfs_init);
++pure_initcall(param_sysfs_init);
+ 
+ /*
+  * param_sysfs_builtin_init - add sysfs version and parameter
+-- 
+2.43.0
 
-> diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-> index 6a8a7a875643a..a33302d1b8a36 100644
-> --- a/rust/kernel/module_param.rs
-> +++ b/rust/kernel/module_param.rs
-
-[ ... ]
-
-[Severity: High]
-This isn't a bug introduced by this patch, but casting the pointer to
-SetOnce<T> appears to rely on an unspecified memory layout.
-
-In rust/kernel/module_param.rs:ModuleParamAccess:
-
-pub struct ModuleParamAccess<T> {
-    value: SetOnce<T>,
-    default: T,
-}
-
-Since ModuleParamAccess lacks a #[repr(C)] annotation, the compiler is
-free to reorder its fields. If the default field is placed before value
-to minimize padding, would the cast in set_param() overwrite the default
-field instead?
-
-rust/kernel/module_param.rs:set_param() {
-    ...
-    // SAFETY: By function safety requirements, this access is safe.
-    let container =3D unsafe {
-        &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<T>>())
-    };
-
-    container
-        .populate(new_value)
-    ...
-}
-
-Should ModuleParamAccess be marked with #[repr(C)], or should the pointer
-be cast back to ModuleParamAccess<T> before accessing the value field?
-
-> @@ -131,10 +131,26 @@ pub const fn new(default: T) -> Self {
->          }
->      }
-> =20
-> +    /// Get a copy of the parameter value.
-> +    ///
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601-modules-va=
-lue-ref-v2-1-12ebbf0510c9@kernel.org?part=3D1
