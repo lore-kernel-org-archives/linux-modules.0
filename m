@@ -1,67 +1,67 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F933A7194
-	for <linux-modules@vger.kernel.org>; Mon,  1 Jun 2026 12:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E629737C91E
+	for <linux-modules@vger.kernel.org>; Mon,  1 Jun 2026 12:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780315561; cv=none; b=GA1In7hqfuVZtjYkB1tJCjtvqPnKaRaRZlOS8Tr+S/IQDGlWOQEh9Txgk6EgpHLksVS4+IK5HS4ujlSRqTWkjAlK6vTBun/O207s2fuRLn7+szmf8YnfNtoK7vDiu8MNyu7wEnpvmzppI4Y6jeLBB1YKRzHd8I46APdSScPtzk4=
+	t=1780315562; cv=none; b=D+69Tn9WUkjtqAl5Mqwtfs/9gjp+2hTZk0YzPGz4Qr9nE/hDsaJYxRFGWvznOUpktKPUdvdCsNqou1Pzls9dmDP3T/qlOKgT7JngwpJKyAUc3Gx9trBk1xcmBqDHQw92WBtAhq3qm5KJXVV5S1+Jaips/+0bOzwrxwsvdZvxm7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780315561; c=relaxed/simple;
-	bh=beffx13F53TU2XEmbM9tQ+HBGxp491P2D4sjMFQTIgQ=;
+	s=arc-20240116; t=1780315562; c=relaxed/simple;
+	bh=h10PnN9dZij/9KIShcmtDym4aMWTMKg/65aOZIHej50=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MxEWf8C3gUZ8JOUSr6cWYqFzr/3Clvgt2u5HJdZSvx9o5/iWQ+EnQyNnuEmgi3diebpFWcmYyiwyVosq9PEzK0bhY6uGitUqA4kT5MEUNHZabWVUGruj4ajTOdeU0+LX3IDhcc6yNuhxW5bMRR3t6TuWcbXwYi7FmupvxbXtezU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sds5L9Iu; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:To:Cc; b=pgYd4vyTitVFIz6fJE+SHWWMUA/Npfl6FJ3SFVoPMVfywRs0y/L+zEET05+tvKueu/iSTYYpKWkKq+n0+pb/qDkgTRwRsBQs+Ktm30artJWvdkahjopwaw9qjf9LwfjrHpetehE4z2TFbyKwpX0rqrd6hLW0T8RlsyU6dBeYQnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7iIvUfM; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sds5L9Iu"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490ac10e337so3735245e9.3
-        for <linux-modules@vger.kernel.org>; Mon, 01 Jun 2026 05:05:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7iIvUfM"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-490a7876f8cso11458975e9.3
+        for <linux-modules@vger.kernel.org>; Mon, 01 Jun 2026 05:05:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780315555; x=1780920355; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780315558; x=1780920358; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gGmIKQdNt75wRPwPP9ogeMu0eNQjjB2cwFIkDSGhGCg=;
-        b=sds5L9IufdLeUREFS43cawdJcSIwGT9C2DV7JISFMdQnYG4fUycCaIbuKDRoDTqIz5
-         lvV/G2K5u+SOPizJfNz73pmFi8xfKM4CvjgQip6a6+sscskBbSZU+opioMFMV9zXVQZX
-         Zgn4NHEETPnERbhtKiLrPMs+O9eBqmP1WH0cUINd4VkpOUZYEclONRWPrqJdibD4dH7B
-         DyQShj33U63Ck0K/jqOoVAsvuOWRB4285CuEX6eeDL5ybxuUxJGfoeX+FMPxjE5bNprd
-         fSdsTsOUf+hc6E7M8afG4K8mh/oRXqx9qqvC+TvLt6siqTpUN31KCUG1hL0k0hO6onR+
-         4D4w==
+        bh=yYycUh0v045JLMzHv+cDjWaRSMlpTVGG8/fmLB5h0j8=;
+        b=V7iIvUfMhb7SYycWP/6siol7VERg9dKBNgPg4laUom+r4Kbhz84wRvPQEVVnvtj9YI
+         m2kIT31QSXKuszMcgiOKmzAFUX8iSNDHEFQT8HiUo8SyBcFTne2q5HsNq3VydGaqHOTX
+         9c00nbn7JYsvDVsE2pdj6BX7oedieF4kPyA1ALfLwtjOLHXmA/Xb/zfJYPVTccKCAytC
+         FiHuRyXuWCedPmh83dBDgiGBJ0FGPjflPuYNVWVw6XGXpg7Finsr8v8vGsTTolxR4cqO
+         pVhnhq1wk8EWPntfCHJM3+zoAk0JShijTCPbB9rajTEJ42dtvkZjRCxZUsu7zxviHXQ1
+         GbOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780315555; x=1780920355;
+        d=1e100.net; s=20251104; t=1780315558; x=1780920358;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=gGmIKQdNt75wRPwPP9ogeMu0eNQjjB2cwFIkDSGhGCg=;
-        b=EHTenXvdgrnRRU27DTk9UjfECB9sQhYxeUVE1emBxG4WdBqCW0at+jjuWaVPBRDqO8
-         gjAtOuLQ6JDLIv76rSHcZQ+icoIwwzVSswDBgHsCmORcI9W8+pWL2OXVeDWu8TcMuGKm
-         j8ZpmPBLFtFMVHdowJBI2Tjc6VCvwqrWwUVA7ks2g180Pzg8ks+lg2oilEvShb75FQu0
-         JJW9uSDUPyzxm1t9cEPm35Gkj8+0L0RlF/S26Kv8bMCFfD0USRSGbfDDTbueRJgTSxOD
-         +S8GYfm6Ck58CAbQNCeXtMx3H6DHF5rGgHF4wXjGriXUwJAvhbUcRQfww6nqKNCGePiQ
-         d3Aw==
-X-Forwarded-Encrypted: i=1; AFNElJ8+4r/lrztQzLgIU2s5hQBBKYCiRCZumYStGxbzX0LIkWXczGnoZjGHvFDJB6RIk1jlFDuSwX4i45FNGbne@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNCHg1V2/mV5AF1YLmql33GRg2hD0qa8NBZNMpVJkkjd11lZyz
-	XcXYDcJYOVEbPwehf9qEOIEFNI9AnON+/YFUb09ja3FT7ytQAId0pkfn
-X-Gm-Gg: Acq92OG+SjV/wkeWpyVPxotXqYcYI5FeP4eiCJp7aTFWOjNqTBP3iH3qJer0fD4/0D7
-	a3Yt/O/5maCqQtzH3t5xr+Z3bmNOrfD3dCrrocmWtnKQ/ghHDfCb5LW9FdD7AJWWSTktlcqOrD+
-	Bg95o/ST+iHIoC5IpPrhf5N6RRHowsKEyHz0oRNzXKa9yM5dIkaS4xWDXyBWpS9ZcCxqAAgXoRo
-	oBAc26SurGVfZd9E8webIrZ8J0UAt5Jufwjsu7AV/sFTDNe4aTYIhnYCT3d5BzXiyqdqVbmGdp/
-	Iv4HhoBInE/KP2wQp4cOUZGGIF2ZThuFHJCAP8rNA8EaM0xUwin4g0Aiw9vIoStK49l/tYbacQV
-	aOX2cSytZ4Mg8gN7AAhC+E3vt5F4chfp0FMgWUGJYk2HAzAAKS43N198JReFn9je2j2/eVo8737
-	4Uq0zOd1tWKHYRwhpXoZkO7YThSywcKiz2pgzoWqx68A==
-X-Received: by 2002:a05:600c:5306:b0:490:aeae:1eea with SMTP id 5b1f17b1804b1-490aeae1f1cmr20861945e9.7.1780315555002;
-        Mon, 01 Jun 2026 05:05:55 -0700 (PDT)
+        bh=yYycUh0v045JLMzHv+cDjWaRSMlpTVGG8/fmLB5h0j8=;
+        b=MyKxUtQY3TBmlrRImZ9AA2xFkzXiFxQkHdOnaVsJ2Z46HV2Tp3krubr5AxxJDr+aAM
+         Mp5f17JXUD9AN+DLbe8Iv9DI+DvEDfT5h2ZGRwffv68ykPPtiNj10cATjQr+JAhkGO7q
+         sgyNNHVa/SJaY94Jb245cdiSbJYVn/6+7RPMFlySKGmjrdSj4oOE+EjJk4QhI2Q2MT1N
+         uUqBMwEDDniDAi0iMd/3VmlhK2kEQPIAvwH9dXmrYQQsWtn5nDzP9GeX99oaz1v7Flqe
+         Vkcsx/sDluEcCuGx8/BsOCGOXdszFnhTN+qMKMuGGVS/eRWgp5hss94weVif0/33/xdQ
+         bNMw==
+X-Forwarded-Encrypted: i=1; AFNElJ9rhCqW2P9NuXby4CalhNK/bRot9TIHYxNtTX55R0mLSuB7n0JLN2wX6p7RH4wcbJ//yUO0DaZPpXKvjXua@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVRIUj1cW3WKBMalUhNGmsVXEOAbkWiOmVz+kP1vIETP8qacXp
+	0kK9EfkuXC1SslC0KqaR5EAlIaWQIkEkHgOUpbzIbYVsTQexCDTOo26s
+X-Gm-Gg: Acq92OHCbrg9moLjVhI1EcFnkhj/oDQ2xaoWx1VK0X+nCEarjUWdQ7DsVfWHI+MVV6F
+	vmfsPuJzi+qrE1Work7XsAa+zP6CbByxnjYSceGJdYq75iC3tLFgTkd+mPZDo7htPHBfHFzAxTG
+	JV4RiHjX6/Az1WkjKeaG67f4Rh4e27yQCZHcbK33IeCd4RZRzQCeZgEiRanSGqvbrnPQZVcsKG+
+	mBiGDkBqqvjJipLDEa7dsD0lflaQZewplU6VZ82v/YC7KBihN1+Tx+3GxhIIXBOAFeO7wl1d2dj
+	soTpZjaUKJa1AR368t03XseMwZnnrkg5FKvFK9t9o9iRvasbJTZXgETDx8Gq7QR8BV/qDx5Tud0
+	Q+zjs7ZN96go1MMUEoZ/2QPOAffSe00CquVe/RJy9X1/3L55XqGKN3OMAZDTuRE4FBQizW+T3PX
+	ysjNP3uH72II4QxBfSTU2dO4TMMG6QvY+2HGvhsHMYRLRHoiYCNJeO
+X-Received: by 2002:a7b:c3c3:0:b0:490:5191:6e26 with SMTP id 5b1f17b1804b1-490a2941d7emr123128335e9.18.1780315558152;
+        Mon, 01 Jun 2026 05:05:58 -0700 (PDT)
 Received: from [172.16.188.153] ([213.181.114.83])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4909c152570sm103972805e9.9.2026.06.01.05.05.52
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4909c152570sm103972805e9.9.2026.06.01.05.05.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 05:05:54 -0700 (PDT)
+        Mon, 01 Jun 2026 05:05:57 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Mon, 01 Jun 2026 12:05:08 +0000
-Subject: [PATCH v3 22/24] selftests-dyndbg: add a dynamic_debug run_tests
- target
+Date: Mon, 01 Jun 2026 12:05:09 +0000
+Subject: [PATCH v3 23/24] dyndbg: change __dynamic_func_call_cls* macros
+ into expressions
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,8 +69,8 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260601-dd-maint-2-v3-22-4a15b241bd3c@gmail.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260601-dd-maint-2-v3-23-4a15b241bd3c@gmail.com>
 References: <20260601-dd-maint-2-v3-0-4a15b241bd3c@gmail.com>
 In-Reply-To: <20260601-dd-maint-2-v3-0-4a15b241bd3c@gmail.com>
 To: Jonathan Corbet <corbet@lwn.net>, 
@@ -86,417 +86,98 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
  Jim Cromie <jim.cromie@gmail.com>, 
- =?utf-8?q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>, 
  Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780315495; l=13151;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780315495; l=3131;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=beffx13F53TU2XEmbM9tQ+HBGxp491P2D4sjMFQTIgQ=;
- b=xeiYUBjCENglst/LpkbKnn6z+U7hYl6CE4lmzcO5kYMeaXfTL/l4VK5kV8zws4Beg6ZLpofz3
- 6rH+F8sZECDCpJi5rckxeEa9GTWHlzgHSboNmj9Qfkxp/r07Y/ogv7M
+ bh=h10PnN9dZij/9KIShcmtDym4aMWTMKg/65aOZIHej50=;
+ b=7d4cXQrVbi/WeQvP8ZQuwmniE0ZO2BzoQ9gySu/7FaWMnxSGtRwVplsGXCR/85fxmr/fnL+vF
+ wSHFrEsdBaeBNH4X2ZDEhDHxsO9POFKRVGtZMsRU54EYlGrkzM4lXm0
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Add a selftest script for dynamic-debug.  The config requires
-CONFIG_TEST_DYNAMIC_DEBUG=m and CONFIG_TEST_DYNAMIC_DEBUG_SUBMOD=m,
-which tacitly requires either CONFIG_DYNAMIC_DEBUG=y or
-CONFIG_DYNAMIC_DEBUG_CORE=y
+The Xe driver's XE_IOCTL_DBG macro calls drm_dbg() from inside an if
+(expression).  This breaks when CONFIG_DRM_USE_DYNAMIC_DEBUG=y because
+the invoked macro has a do-while-0 wrapper, and is not an expression.
 
-ATM this has just basic_tests(), which modify pr_debug() flags in the
-builtin params module.  This means they're available to manipulate and
-observe the effects in "cat control".
+   if (cond && (drm_dbg("expr-form"),1)) {
+      ... do some more stuff
+   }
 
-This is backported from another feature branch; the support-fns (thx
-Lukas) have unused features at the moment, they'll get used shortly.
+Fix for this usage by changing __dynamic_func_call_cls{,_no_desc}
+macros into expressions, by replacing the do-while-0s with a ({ })
+wrapper.  In the common usage, the trailing ';' converts the
+expression into a statement.
 
-The script enables simple virtme-ng testing:
+   drm_dbg("statement form");
 
-   [jimc@gandalf b0-ftrace]$ vrun_t
-   virtme-ng 1.32+115.g07b109d
-   doing: vng --name v6.14-rc4-60-gd5f48427de0c \
-	  --user root -v -p 4 -a dynamic_debug.verbose=3 V=1 \
-	  -- ../tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-   virtme: waiting for virtiofsd to start
-   ..
-
-And add dynamic_debug to TARGETS, so `make run_tests` sees it properly.
-For the impatient, set TARGETS explicitly:
-
-  [root@v6 selftests]# make TARGETS=dynamic_debug run_tests
-  make[1]: Nothing to be done for 'all'.
-  TAP version 13
-  1..1
-  # timeout set to 45
-  # selftests: dynamic_debug: dyndbg_selftest.sh
-  # # BASIC_TESTS    95.422122] dyndbg: query 0: 0"=_" mod:*
-  ...
-
-NOTES
-
-check KCONFIG_CONFIG to avoid silly fails.  Several tests are
-dependent upon config choices. Lets avoid failing where that is noise.
-
-The KCONFIG_CONFIG var exists to convey the config-file around.  If
-the var names a file, read it and extract the relevant CONFIG items,
-and use them to skip the dependent tests, thus avoiding the fails that
-would follow, and the disruption to whatever CI is running these
-selftests.
-
-If the envar doesn't name a config-file, ".config" is assumed.
-
-CONFIG_DYNAMIC_DEBUG=y:
-
-basic-tests() and comma-terminator-tests() test for the presence of
-the builtin pr_debugs in module/main.c, which I deemed stable and
-therefore safe to count.  That said, the test fails if only
-CONFIG_DYNAMIC_DEBUG_CORE=y is set.  It could be rewritten to test
-against test-dynamic-debug.ko, but that just trades one config
-dependence for another.
-
-Co-developed-by: Łukasz Bartosik <ukaszb@chromium.org>
-Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-
-v3: use ksft_* exit codes
-
 v2:
-drop commit-msg mention of yet-to-be-submitted tests
+
+fix statement-expressions to return 0 (not void) like their respective fallbacks
+
+   1. Add 0; to __dynamic_func_call_cls
+   2. Add 0; to __dynamic_func_call_cls_no_desc
+   3. Convert the disabled fallback of dynamic_hex_dump from do { ... } while(0) to ({ ... 0; })
+
 move RvB after SoB
-
-script fixups per sashiko review
-
-   1. CONFIG_DYNAMIC_DEBUG=y is set correctly.
-   2. All subshell captures $( ( ... ) 2>&1 ) are fixed.
-   3. All echo variables are safely quoted to prevent word-splitting.
-   4. Standardized on modern /sys/kernel/tracing/ paths.
-   5. exit $exp_exit_code correctly propagates failure status.
 ---
- MAINTAINERS                                        |   1 +
- tools/testing/selftests/Makefile                   |   1 +
- tools/testing/selftests/dynamic_debug/Makefile     |   9 +
- tools/testing/selftests/dynamic_debug/config       |   8 +
- .../selftests/dynamic_debug/dyndbg_selftest.sh     | 258 +++++++++++++++++++++
- 5 files changed, 277 insertions(+)
+ include/linux/dynamic_debug.h | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6cf80e7ac039..b3d41824220a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9087,6 +9087,7 @@ F:	include/asm-generic/dyndbg.lds.h
- F:	include/linux/dynamic_debug.h
- F:	lib/dynamic_debug.c
- F:	lib/test_dynamic_debug.c
-+F:	tools/testing/selftests/dynamic_debug/*
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index e4a62cb73267..2d6983186f37 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -224,24 +224,26 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+  * (|_cls):	adds in _DPRINT_CLASS_DFLT as needed
+  * (|_no_desc):	former gets callsite descriptor as 1st arg (for prdbgs)
+  */
+-#define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {	\
++#define __dynamic_func_call_cls(id, cls, fmt, func, ...) ({	\
+ 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);	\
+ 	if (DYNAMIC_DEBUG_BRANCH(id)) {				\
+ 		func(&id, ##__VA_ARGS__);			\
+ 		__dynamic_dump_stack(id);			\
+ 	}							\
+-} while (0)
++	0; /* match no_printk return value */			\
++})
+ #define __dynamic_func_call(id, fmt, func, ...)				\
+ 	__dynamic_func_call_cls(id, _DPRINTK_CLASS_DFLT, fmt,		\
+ 				func, ##__VA_ARGS__)
  
- DYNAMIC INTERRUPT MODERATION
- M:	Tal Gilboa <talgi@nvidia.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 6e59b8f63e41..17c4ddbcee89 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -27,6 +27,7 @@ TARGETS += drivers/net/team
- TARGETS += drivers/net/virtio_net
- TARGETS += drivers/platform/x86/intel/ifs
- TARGETS += dt
-+TARGETS += dynamic_debug
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += fchmodat2
-diff --git a/tools/testing/selftests/dynamic_debug/Makefile b/tools/testing/selftests/dynamic_debug/Makefile
-new file mode 100644
-index 000000000000..6d06fa7f1040
---- /dev/null
-+++ b/tools/testing/selftests/dynamic_debug/Makefile
-@@ -0,0 +1,9 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# borrowed from Makefile for user memory selftests
-+
-+# No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
-+all:
-+
-+TEST_PROGS := dyndbg_selftest.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/dynamic_debug/config b/tools/testing/selftests/dynamic_debug/config
-new file mode 100644
-index 000000000000..ec478b17873d
---- /dev/null
-+++ b/tools/testing/selftests/dynamic_debug/config
-@@ -0,0 +1,8 @@
-+
-+# basic tests ref the builtin params module
-+CONFIG_DYNAMIC_DEBUG=y
-+
-+# more testing is possible with these,
-+# but insisting on them here skips testing entirely for such configs
-+# CONFIG_TEST_DYNAMIC_DEBUG=m
-+# CONFIG_TEST_DYNAMIC_DEBUG_SUBMOD=m
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-new file mode 100755
-index 000000000000..8b2b7388678e
---- /dev/null
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -0,0 +1,258 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+V=${V:=0}  # invoke as V=1 $0  for global verbose
-+RED="\033[0;31m"
-+GREEN="\033[0;32m"
-+YELLOW="\033[0;33m"
-+BLUE="\033[0;34m"
-+MAGENTA="\033[0;35m"
-+CYAN="\033[0;36m"
-+NC="\033[0;0m"
-+error_msg=""
-+
-+# Standard kselftest exit codes
-+ksft_pass=0
-+ksft_fail=1
-+ksft_skip=4
-+
-+[ -e /proc/dynamic_debug/control ] || {
-+    echo -e "${RED}: this test requires CONFIG_DYNAMIC_DEBUG=y ${NC}"
-+    exit $ksft_skip # nothing to test here, no good reason to fail.
-+}
-+
-+# need info to avoid failures due to untestable configs
-+
-+[ -f "$KCONFIG_CONFIG" ] || KCONFIG_CONFIG=".config"
-+if [ -f "$KCONFIG_CONFIG" ]; then
-+    echo "# consulting KCONFIG_CONFIG: $KCONFIG_CONFIG"
-+    grep -q "CONFIG_DYNAMIC_DEBUG=y" $KCONFIG_CONFIG ; LACK_DD_BUILTIN=$?
-+    grep -q "CONFIG_TEST_DYNAMIC_DEBUG=m" $KCONFIG_CONFIG ; LACK_TMOD=$?
-+else
-+    # if no config, try runtime probes
-+    modprobe -n test_dynamic_debug 2>/dev/null ; LACK_TMOD=$?
-+    # assume builtin dyndbg if control exists (checked above)
-+    LACK_DD_BUILTIN=0
-+fi
-+
-+function vx () {
-+    echo "$1" > /sys/module/dynamic_debug/parameters/verbose
-+}
-+
-+function ddgrep () {
-+    grep "$1" /proc/dynamic_debug/control
-+}
-+
-+function doprints () {
-+    cat /sys/module/test_dynamic_debug/parameters/do_prints
-+}
-+
-+function ddcmd () {
-+    exp_exit_code=0
-+    num_args=$#
-+    if [ "${@:$#}" = "pass" ]; then
-+	num_args=$#-1
-+    elif [ "${@:$#}" = "fail" ]; then
-+        num_args=$#-1
-+	exp_exit_code=1
-+    fi
-+    args=${@:1:$num_args}
-+    output=$( (echo "$args" > /proc/dynamic_debug/control) 2>&1)
-+    exit_code=$?
-+    error_msg=$(echo "$output" | cut -d ":" -f 5 | sed -e 's/^[[:space:]]*//')
-+    handle_exit_code $BASH_LINENO $FUNCNAME $exit_code $exp_exit_code
-+}
-+
-+function handle_exit_code() {
-+    local exp_exit_code=0
-+    [ $# == 4 ] && exp_exit_code=$4
-+    if [ $3 -ne $exp_exit_code ]; then
-+        echo -e "${RED}: $BASH_SOURCE:$1 $2() expected to exit with code $exp_exit_code, got $3"
-+	[ $3 == 1 ] && echo "Error: '$error_msg'"
-+        exit $ksft_fail
-+    fi
-+}
-+
-+# $1 - pattern to match, pattern in $1 is enclosed by spaces for a match ""\s$1\s"
-+# $2 - number of times the pattern passed in $1 is expected to match
-+# $3 - optional can be set either to "-r" or "-v"
-+#       "-r" means relaxed matching in this case pattern provided in $1 is passed
-+#       as is without enclosing it with spaces
-+#       "-v" prints matching lines
-+# $4 - optional when $3 is set to "-r" then $4 can be used to pass "-v"
-+function check_match_ct {
-+    pattern="\s$1\s"
-+    exp_cnt=0
-+
-+    [ "$3" == "-r" ] && pattern="$1"
-+    let cnt=$(ddgrep "$pattern" | wc -l)
-+    if [ $V -eq 1 ] || [ "$3" == "-v" ] || [ "$4" == "-v" ]; then
-+        echo -ne "${BLUE}" && ddgrep "$pattern" && echo -ne "${NC}"
-+    fi
-+    [ $# -gt 1 ] && exp_cnt=$2
-+    if [ $cnt -ne $exp_cnt ]; then
-+        echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO check failed expected $exp_cnt on $1, got $cnt"
-+        exit $ksft_fail
-+    else
-+        echo ": $cnt matches on $1"
-+    fi
-+}
-+
-+# $1 - trace instance name
-+# #2 - if > 0 then directory is expected to exist, if <= 0 then otherwise
-+# $3 - "-v" for verbose
-+function check_trace_instance_dir {
-+    if [ -e /sys/kernel/tracing/instances/$1 ]; then
-+        if [ "$3" == "-v" ] ; then
-+            echo "ls -l /sys/kernel/tracing/instances/$1: "
-+            ls -l /sys/kernel/tracing/instances/$1
-+        fi
-+	if [ $2 -le 0 ]; then
-+            echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO error trace instance \
-+		    '/sys/kernel/tracing/instances/$1' does exist"
-+	    exit $ksft_fail
-+	fi
-+    else
-+	if [ $2 -gt 0 ]; then
-+            echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO error trace instance \
-+		    '/sys/kernel/tracing/instances/$1' does not exist"
-+	    exit $ksft_fail
-+        fi
-+    fi
-+}
-+
-+function tmark {
-+    echo $* > /sys/kernel/tracing/trace_marker
-+}
-+
-+# $1 - trace instance name
-+# $2 - line number
-+# $3 - if > 0 then the instance is expected to be opened, otherwise
-+# the instance is expected to be closed
-+function check_trace_instance {
-+    output=$(tail -n9 /proc/dynamic_debug/control | grep ": Opened trace instances" \
-+	    | xargs -n1 | grep $1)
-+    if [ "$output" != $1 ] && [ $3 -gt 0 ]; then
-+        echo -e "${RED}: $BASH_SOURCE:$2 trace instance $1 is not opened"
-+        exit $ksft_fail
-+    fi
-+    if [ "$output" == $1 ] && [ $3 -le 0 ]; then
-+        echo -e "${RED}: $BASH_SOURCE:$2 trace instance $1 is not closed"
-+        exit $ksft_fail
-+    fi
-+}
-+
-+function is_trace_instance_opened {
-+    check_trace_instance $1 $BASH_LINENO 1
-+}
-+
-+function is_trace_instance_closed {
-+    check_trace_instance $1 $BASH_LINENO 0
-+}
-+
-+# $1 - trace instance directory to delete
-+# $2 - if > 0 then directory is expected to be deleted successfully, if <= 0 then otherwise
-+function del_trace_instance_dir() {
-+    exp_exit_code=1
-+    [ $2 -gt 0 ] && exp_exit_code=0
-+    output=$( (rmdir /sys/kernel/tracing/instances/$1) 2>&1)
-+    exit_code=$?
-+    error_msg=$(echo "$output" | cut -d ":" -f 3 | sed -e 's/^[[:space:]]*//')
-+    handle_exit_code $BASH_LINENO $FUNCNAME $exit_code $exp_exit_code
-+}
-+
-+function error_log_ref {
-+    # to show what I got
-+    : echo "# error-log-ref: $1"
-+    : echo cat \$2
-+}
-+
-+function ifrmmod {
-+    lsmod | grep $1 2>&1>/dev/null && rmmod $1
-+}
-+
-+# $1 - text to search for
-+function search_trace() {
-+    search_trace_name 0 1 $1
-+}
-+
-+# $1 - trace instance name, 0 for global event trace
-+# $2 - line number counting from the bottom
-+# $3 - text to search for
-+function search_trace_name() {
-+	if [ "$1" = "0" ]; then
-+	    buf=$(cat /sys/kernel/tracing/trace)
-+	    line=$(tail -$2 /sys/kernel/tracing/trace | head -1 | sed -e 's/^[[:space:]]*//')
-+	else
-+	    buf=$(cat /sys/kernel/tracing/instances/$1/trace)
-+	    line=$(tail -$2 /sys/kernel/tracing/instances/$1/trace | head -1 | \
-+		   sed -e 's/^[[:space:]]*//')
-+	fi
-+	if [ $2 = 0 ]; then
-+	    # whole-buf check
-+	    output=$(echo "$buf" | grep "$3")
-+	else
-+	    output=$(echo "$line" | grep "$3")
-+	fi
-+	if [ "$output" = "" ]; then
-+            echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO search for '$3' failed \
-+		    in line '$line' or '$buf'"
-+	    exit $ksft_fail
-+	fi
-+	if [ $V = 1 ]; then
-+	    echo -e "${MAGENTA}: search_trace_name in $1 found: \n$output \nin:${BLUE} $buf ${NC}"
-+        fi
-+}
-+
-+# $1 - error message to check
-+function check_err_msg() {
-+    if [ "$error_msg" != "$1" ]; then
-+        echo -e "${RED}: $BASH_SOURCE:$BASH_LINENO error message '$error_msg' \
-+		does not match with '$1'"
-+        exit $ksft_fail
-+    fi
-+}
-+
-+function basic_tests {
-+    echo -e "${GREEN}# BASIC_TESTS ${NC}"
-+    if [ $LACK_DD_BUILTIN -eq 1 ]; then
-+	echo "SKIP"
-+	exit $ksft_skip
-+    fi
-+    ddcmd =_ # zero everything
-+    check_match_ct =p 0
-+
-+    # module params are builtin to handle boot args
-+    check_match_ct '\[params\]' 4 -r
-+    ddcmd module params +mpf
-+    check_match_ct =pmf 4
-+
-+    # multi-cmd input, newline separated, with embedded comments
-+    cat <<"EOF" > /proc/dynamic_debug/control
-+      module params =_				# clear params
-+      module params +mf				# set flags
-+      module params func parse_args +sl		# other flags
-+EOF
-+    check_match_ct =mf 3
-+    check_match_ct =mfsl 1
-+    ddcmd =_
-+}
-+
-+tests_list=(
-+    basic_tests
-+)
-+
-+# Run tests
-+
-+ifrmmod test_dynamic_debug
-+
-+for test in "${tests_list[@]}"
-+do
-+    $test
-+    echo ""
-+done
-+echo -en "${GREEN}# Done on: "
-+date
-+echo -en "${NC}"
-+
-+exit $ksft_pass
+-#define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) do {	\
++#define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) ({	\
+ 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);		\
+ 	if (DYNAMIC_DEBUG_BRANCH(id)) {					\
+ 		func(__VA_ARGS__);					\
+ 		__dynamic_dump_stack(id);				\
+ 	}								\
+-} while (0)
++	0; /* match no_printk return value */				\
++})
+ #define __dynamic_func_call_no_desc(id, fmt, func, ...)			\
+ 	__dynamic_func_call_cls_no_desc(id, _DPRINTK_CLASS_DFLT,	\
+ 					fmt, func, ##__VA_ARGS__)
+@@ -321,10 +323,12 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 	dev_no_printk(KERN_DEBUG, dev, fmt, ##__VA_ARGS__)
+ #define dynamic_hex_dump(prefix_str, prefix_type, rowsize,		\
+ 			 groupsize, buf, len, ascii)			\
+-	do { if (0)							\
++({									\
++	if (0)								\
+ 		print_hex_dump(KERN_DEBUG, prefix_str, prefix_type,	\
+-				rowsize, groupsize, buf, len, ascii);	\
+-	} while (0)
++			       rowsize, groupsize, buf, len, ascii);	\
++	0;								\
++})
+ 
+ #endif /* CONFIG_DYNAMIC_DEBUG || (CONFIG_DYNAMIC_DEBUG_CORE && DYNAMIC_DEBUG_MODULE) */
+ 
 
 -- 
 2.54.0
