@@ -1,150 +1,219 @@
-Received: from jpms-ob01-os7.noc.sony.co.jp (jpms-ob01-os7.noc.sony.co.jp [211.125.139.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B32D395AE2;
-	Mon,  1 Jun 2026 10:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.139.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7654A3750D5
+	for <linux-modules@vger.kernel.org>; Mon,  1 Jun 2026 12:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780309805; cv=none; b=NoKEedFYFX/Dy0LWNMKJmuwSi1oUbyEfX8Wb/UoaIIoFeeEjB6UT0nFq3BsAqWKDpcPHWpRBkDSrRfR+r1KNMn1SJjF/LkIWe/+4meRsTsunnhGe+q6NdLQBliTGwcmLuSBGOCPkL4yBlRrrq+i06n9emYiA8b1t97EMmpgoRuQ=
+	t=1780315502; cv=none; b=g6YeN0V8kgzEs0h4J83tnZxniCfNC1W73AXUHs8lWhS219J3g+59hxQ1mboea4nbsrcBzHpb5jaX68woU0x9/LlRLIyp1CC2cxTGO6Myb8cCTzbPSEjw9mLnCed261xIKu+I2iLbNqvYZvlUKSElgX7IyARylSfYAMcv2ONea7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780309805; c=relaxed/simple;
-	bh=NCCEOep1v/81LrwEaRyt9x58TIOTCpVMYpw9cwgu8Sw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BwRCcPBTnWblkcs0We1vyAuIz0PMDAsW5KWvFOxvlw7J3fp17u/2u73c5HxGUYLfpzDyO1hXuS7BkdjG5r3sfRyz+2mjKVzWmclhdJrmj0nigBMMqYoTQoa4sRAWokYzBtI5wizYnbUEz2ec6Fv6ekYD1QOTp6/N/Q9XrlfWThw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=fail smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=ZL2m23Uv; arc=none smtp.client-ip=211.125.139.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sony.com
+	s=arc-20240116; t=1780315502; c=relaxed/simple;
+	bh=UexA6IlALDsQZOTV0hLwfWpaRW3TbsQLPhPBboqis4A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=oTZkDCMdvSvsSXNR+yfV4CN3e71jAF8j03KJti31gzgyH6Ar7zdnN2OIsHxVfHTpNzeu5ZqV3akqX7r5bBZxybf2eKh+BRH0dZhBG3U+3n9iC+ItoauYQj3S8xTalSC8TxvVoIAlUAi8A88drCrBuoGvJNUd4Slb228Cvpg+cqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JQ7F7Xxq; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="ZL2m23Uv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQ7F7Xxq"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490ac357c55so6959765e9.1
+        for <linux-modules@vger.kernel.org>; Mon, 01 Jun 2026 05:05:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=sony.com; s=s1jp; t=1780309804; x=1811845804;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0rHdH/6OzUvgw/Z1d6llxooirf3DGCf2wJCl22Zrk6k=;
-  b=ZL2m23UvAKplAAuw4wHwj8BopN8yQxX4GD4F9AL98jcGUZeMo6i9FuY3
-   EN3AtzK81E+luchi3Amc7amj9yRaFl8I5xkAcZ8AHwe7da07Q9e5+0Zyr
-   BBJ1+zNDYCSsv9sdYR0+ugpKQ4gS6AkR6TXUSCggcZBE/gSTU63cSg/lr
-   1oDaMtqVbhXn2SXZFDWBBga95uXfVqwhyCUc11GlO3urLSW8zrjiiRcJn
-   T7NEz2J/UyACS2Z8hMQn/lZvdtgzRnCFNw0/cGUa9bmckngmqB4DfPsJy
-   gxD+WURJvDK4MMkb5zrzU0ehF00kkUWGmTFC+lZGMgficl7gWeXkOZsw/
-   w==;
-X-CSE-ConnectionGUID: fHY3hk8IQPya5S/VzT0E7w==
-X-CSE-MsgGUID: A6YwwHDwRxS/ycdMpF3BAg==
-Received: from unknown (HELO jpmta-ob01-os7.noc.sony.co.jp) ([IPv6:2001:cf8:acf:1104::6])
-  by jpms-ob01-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 19:19:52 +0900
-X-CSE-ConnectionGUID: sNjFdX7LQYSLb2PshMkn2Q==
-X-CSE-MsgGUID: WqV8hNo5ShCKx694VddLQw==
-X-IronPort-AV: E=Sophos;i="6.24,181,1774278000"; 
-   d="scan'208";a="69757146"
-Received: from unknown (HELO JPC00244420..) ([IPv6:2001:cf8:1:573:0:dddd:6b3e:119e])
-  by jpmta-ob01-os7.noc.sony.co.jp with ESMTP; 01 Jun 2026 19:19:52 +0900
-From: Shashank Balaji <shashank.mahadasyam@sony.com>
-To: "Gary Guo" <gary@garyguo.net>,
-	"Danilo Krummrich" <dakr@kernel.org>,
-	"Petr Pavlu" <petr.pavlu@suse.com>
-Cc: Shashank Balaji <shashank.mahadasyam@sony.com>,
-	Rahul Bukte <rahul.bukte@sony.com>,
-	linux-kernel@vger.kernel.org,
-	coresight@lists.linaro.org,
-	linux-arm-kernel@lists.infradead.org,
-	driver-core@lists.linux.dev,
-	rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Daniel Palmer <daniel.palmer@sony.com>,
-	Tim Bird <tim.bird@sony.com>,
-	linux-modules@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	Sumit Gupta <sumitg@nvidia.com>,
-	"Suzuki K Poulose" <suzuki.poulose@arm.com>,
-	"James Clark" <james.clark@linaro.org>,
-	"Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	"Miguel Ojeda" <ojeda@kernel.org>,
-	"Boqun Feng" <boqun@kernel.org>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	"Benno Lossin" <lossin@kernel.org>,
-	"Andreas Hindborg" <a.hindborg@kernel.org>,
-	"Alice Ryhl" <aliceryhl@google.com>,
-	"Trevor Gross" <tmgross@umich.edu>,
-	"Jonathan Corbet" <corbet@lwn.net>,
-	"Shuah Khan" <skhan@linuxfoundation.org>,
-	"Luis Chamberlain" <mcgrof@kernel.org>,
-	"Daniel Gomez" <da.gomez@kernel.org>,
-	"Sami Tolvanen" <samitolvanen@google.com>,
-	"Aaron Tomlin" <atomlin@atomlin.com>,
-	"Mike Leach" <mike.leach@arm.com>,
-	"Leo Yan" <leo.yan@arm.com>,
-	"Thierry Reding" <thierry.reding@kernel.org>,
-	"Jonathan Hunter" <jonathanh@nvidia.com>
-Subject: [PATCH v6] kernel: param: initialize module_kset in a pure_initcall
-Date: Mon,  1 Jun 2026 19:19:41 +0900
-Message-ID: <20260601101942.4002661-1-shashank.mahadasyam@sony.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <ahEd4iC-2hqUbMy3@JPC00244420>
-References: 
+        d=gmail.com; s=20251104; t=1780315499; x=1780920299; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n5qzKyfnccgdjCAGXdsv8yWwGixxrImvsfnV142aaYI=;
+        b=JQ7F7XxqW9g6DVtsZTVcda+KjsdeNYn03hmt1o6VGeG8nxxIPttdGcU2M3XHOG1i/o
+         j8BQD+cSziDz2A3oOPRlYD8cXBkW3gRsJZup1Z7KrLkD+8yKuGZpMdGg0HFyOcHHErNj
+         pPn8msShsZmISyTLfGbxQRUWehoHPj0nbB/knuRc2A5NIzEWaW87Kwn73G/eFSwpwz/p
+         08mQMiTn/KI/RXo3qWKj9Wk7aX7Mu7l7MeuDUpln6AsUedO1PVyF/10kJZSLJX96Z8dq
+         GxdF5jRwpCqMnWT3Bj1SkWjBR/xpawinuD53I1lZypcGGqPuiafesvGeIuqtaipOtIbb
+         fQgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780315499; x=1780920299;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n5qzKyfnccgdjCAGXdsv8yWwGixxrImvsfnV142aaYI=;
+        b=iRIs4sDDZUcL8Xj0ZFbi9x+1X7TzSOFrVgw8rZNst7tbPCzwJ/cUBXmZxAD2XAEK0W
+         AYXjHjJWkQTPDf77/Jd6aftLpHTw0QXfRWZ5SQMy4BUXHZcmyOvx2ER1xDEIRbz/BSsr
+         QQ8SzLPV9OQP7nAR9ZqO0lsnDJwSctPOJbe116AFqe1RWsM+HcmCUJHVUV5Zer2vXety
+         sAeqexYySHm/eREDlBbqxkPWSrv656wJ+atIyPxDfBDphQXz+DEseWFE8b79lXKOBGvN
+         0mAkNO41dwXKAJLyK7RZ4TOcJTOxUHmRFYhTZTS6WMHxbcyTa4Il9RxSeB2ugTPZq0p4
+         tT8Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9lgtdR8zlW1h4CrM7QMoo3oI3mg92rF8mGPrtawKHz+Vcd71O/GIAK5zG3Id8A8SF07GlLGDHYqkRGi8SM@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSRND5ju/DTEGH31Qxytk0ybbSBaW6aa21mZUYpi1WIH59hsQM
+	47cFd7LCLOzM8G8+r7rFFTgNmVJPqPqQRGbJo74kfxGMmpWgd+e2KPMa
+X-Gm-Gg: Acq92OEp8QI9x+3DDuActhC+34pZTjtuwoPv8mRHsdRjK3MjahT0uGGKJEVbeOOFzrj
+	s2qfhlG9nlVoCTxQig3bOkg2M3AsXnmQGqvcWBlGrBe8D3vw2sk0H4aEs214xN/Hdu6Q2Yhpq28
+	HO+ZMZIwxRwCIPSX0oZ7sm5raImx8+ACIvydO8TR3r3vhsGgSbq4eiBpkGCon66uJyPGHbuyGpX
+	gbmXNsvz4rtxFJFsJBZ56h1yxqpmFlLXl9sKCRSNYlhdd+eXZtpEZO/4FjdQGT8YGVpf985Y4kE
+	Vh64EM/TWIyIRRFSl8YF0DOaOSxZ8ABG+Y4D/cQoS8Cd8mkaRK+rJJOTJD06FT4rPQSGSzN0TLJ
+	mPQZYYFOBKowcWTVvML8AatQte2FOlAh8bQdu6U785qc8tSE544gtVf7FFy7CaKkl6k4agr+0d3
+	k+3kJ/stvdCkXfxz0L853sPw5itq+IaSThECfXi/aghw==
+X-Received: by 2002:a05:600c:3487:b0:48f:e1ac:c94f with SMTP id 5b1f17b1804b1-490a2918103mr212890145e9.10.1780315498448;
+        Mon, 01 Jun 2026 05:04:58 -0700 (PDT)
+Received: from [172.16.188.153] ([213.181.114.83])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4909c152570sm103972805e9.9.2026.06.01.05.04.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 05:04:57 -0700 (PDT)
+From: Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v3 00/24] dynamic-debug cleanups refactors maintenance +
+ alignment fix
+Date: Mon, 01 Jun 2026 12:04:46 +0000
+Message-Id: <20260601-dd-maint-2-v3-0-4a15b241bd3c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/02MwQrCMBBEf6Xs2ZV0Yxvryf+QHmIS2wWblKQEp
+ fTfjQXBy8CbYd4KyUV2CS7VCtFlThx8AXmowIzaDw7ZFgYS1IqGarQWJ81+QULVmuZEQnUloBz
+ m6B782mW3vvDIaQnxvbszfdufRv5rMqHAeyeVrElrcZbXoUzPowkT9Nu2fQATd1+rpAAAAA==
+X-Change-ID: 20260521-dd-maint-2-76c542079420
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Jason Baron <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ Jim Cromie <jim.cromie@gmail.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>, 
+ =?utf-8?q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780315495; l=5739;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=UexA6IlALDsQZOTV0hLwfWpaRW3TbsQLPhPBboqis4A=;
+ b=lvmgQ8g7xkH604t4KBSwylbWD7BLSeGoj0N94EqFttk+uNoSZ34wsVJ4kCQjAP+56C7j9e8+r
+ 8/livVa5JYuDL7dtGrwkxv+mPMASsWpXe10/NQqoJFwX0pqQwFAG0+r
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Commit "driver core: platform: set mod_name in driver registration" will set
-struct device_driver's mod_name member for platform driver registration. For a
-driver to be registered with its mod_name set, module_kset needs to be
-initialized, which currently happens in a subsys_initcall in param_sysfs_init().
-The tegra cbb drivers register themselves before module_kset init, in a
-core_initcall. This works currently because lookup_or_create_module_kobject(),
-which dereferences module_kset via kset_find_obj(), is not called if mod_name
-is not set, which is the case now.
+This series starts with 2 doc-only patches updating the current state
+of dynamic-debug, they were posted separately here, without pushback.
 
-So in preparation for the commit "driver core: platform: set mod_name in driver registration",
-move module_kset init to pure_initcall level, ensuring it happens before tegra
-cbb driver registration.
+https://lore.kernel.org/linux-doc/20260502-dyndbg-doc-v1-0-67cc4a93a77e@gmail.com/
+    
+Next 5 are a fix to a linker-script alignment problem in 32bit arches
+causing a null-ptr scanning dyndbg-descriptor section on i386.  These
+were reviewed by Petr Pavlu.
 
-Suggested-by: Gary Guo <gary@garyguo.net>
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Co-developed-by: Rahul Bukte <rahul.bukte@sony.com>
-Signed-off-by: Rahul Bukte <rahul.bukte@sony.com>
-Signed-off-by: Shashank Balaji <shashank.mahadasyam@sony.com>
+The remaining patches are cleanups, refactors in preparation for an
+API change needed to fix a regression in DRM when it uses classmaps.
+I split these out for easier review, I will follow up with the API
+change afterwards.
+
+The biggest revision vs V2 is the new patch: 25.  It addresses a flaw
+detected by sashiko which is best described by example.
+
+Dyndbg uses KBUILD_MODNAME to provide module-name, this works well for
+loadable modules (module loader requires unique module names), but for
+builtin modules, is effectively kbasename, and not unique.
+
+So we get 4 modules named "main": init/main, kernel/power/main,
+kernel/base/poser/main.  This ambiguity is visible in user-space since
+the beginning of dyndbg.
+
+Now suppose kernel/{,base}/power/main want to define classmaps to
+categorize the various pr-debugs they have.  The current code finds a
+module's classmaps by strcmp on modname, so init/main will match
+against classmaps defined by both kernel/{,base}/power/main.
+
+The current code will also map "main" classes to kernel/*/power/main,
+so they will probably work at first, but 2 independent classmaps can
+both use class-ids 0-N, but will conflict if they're both used by a
+module.  Then we have classmap overlaps and unpredictable results.
+
+patch-25 eliminates the ambiguity by using KBUILD_MODFILE to provide a
+unique module-name, then adds matching against kbasename(modname) to
+restore the legacy query behavior.  It *does* change the modname
+exposed in /proc/dynamic_debug/control, but not the result of a query
+like "module main +p".
+
+OLDER VERSIONS:
+
+V2 primarily revises:
+ https://lore.kernel.org/lkml/20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com/
+    
+V2 addressed most of sashiko's feedback on V1:
+ https://sashiko.dev/#/patchset/20260504-dd-cleanups-2-v1-0-6fdd24040642%40gmail.com
+    
+It dropped the pr-fmt patch, as not reproducible,
+advanced the drop-NAMES patch to reduce subsequent churn,
+and fixed the classmaps PARAMs to u64 to avoid 32bit flags on 32bit arches
+    
+For easy one-stop-shopping, V2 also included 2 smaller series:
+    
+1st fixes a section alignment problem, with Reviewed-by from Petr Pavlu
+ https://lore.kernel.org/lkml/20260515-asm-generic-1-v3-0-680b273666d4@gmail.com/
+    
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+    
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
-I'm sending v6 of just this patch to add the comment suggested by Petr and pick
-up Gary's Reviewed-by. The rest of the patches are the same as v5.
+Changes in v3:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v2: https://lore.kernel.org/r/20260523-dd-maint-2-v2-0-b937312aa083@gmail.com
 
-Danilo, I'm assuming this series goes through driver-core. Could you please pick
-up this version of this patch and the v5 of the others?
 ---
- kernel/params.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Jim Cromie (24):
+      docs/dyndbg: update examples \012 to \n
+      docs/dyndbg: explain flags parse 1st
+      vmlinux.lds.h: refactor BOUNDED_SECTION_* macros into bounded_sections.lds.h
+      vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+      vmlinux.lds.h: Fix ALIGN(8) omission causing NULL ptr on i386
+      vmlinux.lds.h: remove redundant ALIGN(8) directives
+      dyndbg.lds.S: fix lost dyndbg sections in modules
+      dyndbg: factor ddebug_match_desc out from ddebug_change
+      dyndbg: add stub macro for DECLARE_DYNDBG_CLASSMAP
+      dyndbg: reword "class unknown," to "class:_UNKNOWN_"
+      dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
+      dyndbg: drop NUM_TYPE_ARGS
+      dyndbg: reduce verbose/debug clutter
+      dyndbg: refactor param_set_dyndbg_classes and below
+      dyndbg: tighten fn-sig of ddebug_apply_class_bitmap
+      dyndbg: replace classmap list with an array-slice
+      dyndbg: macrofy a 2-index for-loop pattern
+      dyndbg: Upgrade class param storage to u64 for 64-bit classmaps
+      dyndbg,module: make proper substructs in _ddebug_info
+      dyndbg: move mod_name down from struct ddebug_table to _ddebug_info
+      dyndbg: hoist classmap-filter-by-modname up to ddebug_add_module
+      selftests-dyndbg: add a dynamic_debug run_tests target
+      dyndbg: change __dynamic_func_call_cls* macros into expressions
+      dynamic_debug: use KBUILD_MODFILE for unique builtin module names
 
-diff --git a/kernel/params.c b/kernel/params.c
-index 74d620bc2521..a668863a4bb6 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -942,9 +942,9 @@ const struct kobj_type module_ktype = {
- /*
-  * param_sysfs_init - create "module" kset
-  *
-- * This must be done before the initramfs is unpacked and
-- * request_module() thus becomes possible, because otherwise the
-- * module load would fail in mod_sysfs_init.
-+ * This must be done before any driver registration so that when a driver comes
-+ * from a built-in module, the driver core can add the module under /sys/module
-+ * and create the associated driver symlinks.
-  */
- static int __init param_sysfs_init(void)
- {
-@@ -957,7 +957,7 @@ static int __init param_sysfs_init(void)
- 
- 	return 0;
- }
--subsys_initcall(param_sysfs_init);
-+pure_initcall(param_sysfs_init);
- 
- /*
-  * param_sysfs_builtin_init - add sysfs version and parameter
+ Documentation/admin-guide/dynamic-debug-howto.rst  |  55 ++-
+ MAINTAINERS                                        |   2 +
+ drivers/gpu/drm/drm_print.c                        |   6 +-
+ include/asm-generic/bounded_sections.lds.h         |  32 ++
+ include/asm-generic/dyndbg.lds.h                   |  18 +
+ include/asm-generic/vmlinux.lds.h                  |  68 +--
+ include/drm/drm_print.h                            |   2 +-
+ include/linux/dynamic_debug.h                      | 133 +++---
+ kernel/module/main.c                               |  12 +-
+ lib/dynamic_debug.c                                | 501 ++++++++++-----------
+ lib/test_dynamic_debug.c                           |  30 +-
+ scripts/module.lds.S                               |   2 +
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/dynamic_debug/Makefile     |   9 +
+ tools/testing/selftests/dynamic_debug/config       |   8 +
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 294 ++++++++++++
+ 16 files changed, 736 insertions(+), 437 deletions(-)
+---
+base-commit: e43ffb69e0438cddd72aaa30898b4dc446f664f8
+change-id: 20260521-dd-maint-2-76c542079420
+
+Best regards,
 -- 
-2.43.0
+Jim Cromie <jim.cromie@gmail.com>
 
