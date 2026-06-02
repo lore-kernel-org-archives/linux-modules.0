@@ -1,105 +1,101 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8908280CE5
-	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 04:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8025630677B
+	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 04:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780373828; cv=none; b=P1kQMlzMVfZM2ndcNWBiMjt5bL4+kXTilvPEiclpnzMj1EFV3wO0bcA2SjFZ0V1bykEtpYKlKhkwqhF94cmEUtseiC9iOFtHuRto3ZEVa8r+DzWJnC61SRSfbWRcW1IbqNSGxqXhtuXplzXvwd/1V83GnVGBjYZefCTS/hsh9Ps=
+	t=1780374282; cv=none; b=FhyS8irgCV4XIwgJBGypQfzF7iBx18XY73H1JSFvBpeoe+L9/PuGFdKLaibHuso5rt62WkNmoH/lET3QYSo/oIsXGZYpwIRKTzvpcy6e00VpKS/bYY3bQJIVdNLGPFkXqDW1YyWNwa2DfwNd3Sd/W7ixE+qqgx+8XZWeh5l2Ims=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780373828; c=relaxed/simple;
-	bh=OfaN/BrvbraKUz7MGmEex0ckhLWy95cQi95jCTONxqc=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Zr3tQY6QD3RVTJY0W94q72KCo/Hr52b5izEs9j/gw3vqXVNMTHz55EJbbPOWyoRW2b+ZYG1Y43u3CrId3t4LeX1fa2KqXN+5lxkfLnT2+H3lHcgQbwrC4M8QHyV2BGnwx1/YxniCqMHlfxLqqli2bPM3Jw+T2NjLlFmGwuQ0wAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j4bloCy0; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780374282; c=relaxed/simple;
+	bh=V6LwKl30XDnEWMAHMPHxd4Scv28Y0AYWNdFHYCmOUSM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BEShS9jmDu0VKNEM4nMNhT2zIOgO3IeCOCgCuQn4MkkrkMddpuVHG9852MXN/sznhciLnDYv7Cib9r+8g+vTy8/HtCqjbURLQXgXU26HbX3RMaxJyhDvZO5q5n5zqpHMbQy9zLxXpWrAWKee6vX72lg9oJ/fJZKISB60oUBXjaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nj5GfKcF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j4bloCy0"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c858dc05ee3so1580804a12.2
-        for <linux-modules@vger.kernel.org>; Mon, 01 Jun 2026 21:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780373826; x=1780978626; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rC83+ymUQBEhgxiiEPLE6pwgHJ4qRRLzuAlCB42x224=;
-        b=j4bloCy0/EF57yOr1jh0/vpHSYWQmFexnYJS7vkmPcHrdcoBnehJHptSbnxuC1opUO
-         HTDa7RyvW9gZUq3eyy95QzrZBklb3I3hjb666cmRv7ZufG6nO3jxH+nxedN7FFCsHrP2
-         2fY7EChJ7igQskR/7B3V2pWyVIMH06vbIWpY0HErGs28vryRnKFO/jezIinHmEQd+3c0
-         TWOeRVah5JikiqM7G07o4w/ZsECF0oUJzPU45oWT6Tn2WKawoXqfhxgRoE44RaMI8VE5
-         zKfFTUZgWjB8hS0piGE5evjRfKyeXXBCfQf6Cr1/rXfcVjPVkP30OhhVHXY5bNO3+aS+
-         Lv8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780373826; x=1780978626;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rC83+ymUQBEhgxiiEPLE6pwgHJ4qRRLzuAlCB42x224=;
-        b=eZ6FNak4iGFXBFrInY1k9CrfeeDkZaWaphDsVyzyn6MMg6+bzNECZazwZcgTf6gh7e
-         bgR5SjpP0SBHwJY7jn2NSwrtsvjtiFtzCq3Kns3IG1lhgkSerFVbEzolJHHqVgWz8732
-         yOq/buHFW4vlX3/IMWJcMYcLzdI4+fmg7t25S2I/BHDKIodKBa/6hDmsig/uiyQSlr48
-         7nbq7hLRC+Gl6RxnPcM3IMX7sv0fhxEvR5E2T+eoWv3gNkgdl5EdCTTLhB2JU9IyiBch
-         X8eJ83tZdUb+4M3ruOdLcp0Mm8EWNV8OkkeArjjSxN1tlPrEVnfAjM1894NjHrRRmmJy
-         AUFg==
-X-Forwarded-Encrypted: i=1; AFNElJ/NjGVH4/hRxinaO/L6VE1vk5h2ZYr/iSDlIoGFwrtoAX2IUKDHmdS4hDebDugPDv4iceV2UdLOgOzJyQ/Y@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxa/fjn2s+wsWozOESfCBFyokwYcHB7plZ1DO5KQ2TXtn2moTac
-	YvujULZdT/c3Az1rBX2fQj7k4ZkWakE/787k8ZTOEikSZHmkazjtm6JR
-X-Gm-Gg: Acq92OFW0PXN27ft/n/9hjD7Odot+dj3CTadC8EnkqFydQrX3zoTPTGeJgqaYFQovBL
-	w4JcGhh0W+k4KEuR+AbX6Vub8D6lAFSlou29r8rbnGYUlvgik5E7C/ect/LT4lijqNiTub12mgr
-	ousCFTn9T8CJugT61Rt3yxxVpoMAHzOQASqsG8Fw3QabEWL2G7V7TACQ1QiYPL7BFCFcbqLaMII
-	ubEPfEe5B2snHHYSgfn0sSdGUa4zvav1CeQkls8v7R/YWo4XjGdxKSJEgpfr2AWRJx2QLyuBe3o
-	3SlBfSStQ2fiOOIJ8pahAQniB0qpXgYv4AtJC57zCVfgcynmO/8ZQ+IUgFH56vNV9qDYs25yRV1
-	T0MqL2iOlfkuCP8FzrPPAl+7Fq2e2UWgj07R8bgu/rgsoqEAqGdnI/8hE6m+9Qd5tZ/OixCG8on
-	rbQ767tc11uNZn0bS4eHhWe/oj7UUSdbzv3rftEMlr9fthXQ==
-X-Received: by 2002:a05:6a21:a34c:b0:3b2:b1ed:d1df with SMTP id adf61e73a8af0-3b427f2cff8mr16336180637.29.1780373826040;
-        Mon, 01 Jun 2026 21:17:06 -0700 (PDT)
-Received: from localhost ([2405:201:4027:a919:e2b2:8560:26ea:4d1])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8583333e91sm8995841a12.20.2026.06.01.21.17.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 21:17:05 -0700 (PDT)
-Date: Tue, 2 Jun 2026 09:47:03 +0530
-From: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-To: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org, 
-	samitolvanen@google.com, linux-modules@vger.kernel.org
-Subject: [PATCH] module: dups: don't hold mutex across synchronize_rcu()
-Message-ID: <ajydyxgaea27rhcopp5eauji24znotu65d2b4uw344yvmwcc6f@7l5re6f2xcuk>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nj5GfKcF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996331F00893;
+	Tue,  2 Jun 2026 04:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780374280;
+	bh=jtEPToHZkjj85qJ/YrlSOSNzn9dlmAVIYSLAwK9o1Ds=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=nj5GfKcFEkjO6m/6eNbwbwESzKX81mTw6ZXQYxPt48gsbn8AS98cX+zciP4ATrXjO
+	 H6Yhp8gW/d/POiOvBSqqJEY6lAgABa0KU3/nl0YcmNGA1qzNU6ubRImqT06lDVdib9
+	 2URSZijaIz+q4WtLx+RtUj9jNpSHcqsrhiXqWS0TuUV99TZ3Oam4ISIV2chPpvfaoZ
+	 +vH34sR2esVLJjIUZCEWfDIrDqANKm59wgMPwjbwh/eSwXrD8Tvy9L6pbCnsMtBPw6
+	 sjfFCSAPWNdoIYBm9tJbw1kmJ00tCHDbHxZ/dbw0tvZdIbmag3uBcyMoQNXzdrR7lZ
+	 IYy7PRq/OEILQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] module: dups: don't hold mutex across synchronize_rcu()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Naveen Kumar Chaudhary" <naveen.osdev@gmail.com>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <ajydyxgaea27rhcopp5eauji24znotu65d2b4uw344yvmwcc6f@7l5re6f2xcuk>
+References: <ajydyxgaea27rhcopp5eauji24znotu65d2b4uw344yvmwcc6f@7l5re6f2xcuk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 02 Jun 2026 04:24:40 +0000
+Message-Id: <20260602042440.996331F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-kmod_dup_request_delete() calls synchronize_rcu() while holding
-kmod_dup_mutex. This is unnecessary since list_del_rcu() only needs
-the mutex for list manipulation, and the RCU grace period just needs
-to complete before kfree(). Holding the mutex across the grace period
-blocks all other kmod_dup_mutex users for the duration, causing
-unnecessary latency.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Move synchronize_rcu() after the mutex is released.
+Pre-existing issues:
+- [High] Use-After-Free due to missing reference counting on kmod_req.
+--
 
-Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
----
- kernel/module/dups.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+commit 6715d39010e803da11ebd165eb2b1fa9278aa3d7
+Author: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
 
-diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-index 1d720a5311ba..46e74c06ed52 100644
---- a/kernel/module/dups.c
-+++ b/kernel/module/dups.c
-@@ -88,8 +88,8 @@ static void kmod_dup_request_delete(struct work_struct *work)
- 	 */
- 	mutex_lock(&kmod_dup_mutex);
- 	list_del_rcu(&kmod_req->list);
--	synchronize_rcu();
- 	mutex_unlock(&kmod_dup_mutex);
-+	synchronize_rcu();
- 	kfree(kmod_req);
- }
- 
--- 
-2.43.0
+module: dups: don't hold mutex across synchronize_rcu()
 
+This commit optimizes kmod_dup_request_delete() by moving synchronize_rcu()
+outside the kmod_dup_mutex critical section. This prevents blocking other
+mutex users during the RCU grace period.
+
+> diff --git a/kernel/module/dups.c b/kernel/module/dups.c
+> index 1d720a5311ba0..46e74c06ed52d 100644
+> --- a/kernel/module/dups.c
+> +++ b/kernel/module/dups.c
+> @@ -88,8 +88,8 @@ static void kmod_dup_request_delete(struct work_struct =
+*work)
+>  	 */
+>  	mutex_lock(&kmod_dup_mutex);
+>  	list_del_rcu(&kmod_req->list);
+> -	synchronize_rcu();
+>  	mutex_unlock(&kmod_dup_mutex);
+> +	synchronize_rcu();
+>  	kfree(kmod_req);
+
+[Severity: High]
+This is a pre-existing issue, but does this code leave kmod_req vulnerable
+to a use-after-free since waiters don't hold a reference count?
+
+In kmod_dup_request_exists_wait(), a duplicate requester drops kmod_dup_mut=
+ex
+and blocks on wait_for_completion_state(&kmod_req->first_req_done). If the
+original thread finishes loading and calls kmod_dup_request_complete(), it
+queues this delete_work with an arbitrary 60-second delay.
+
+If the waiter is preempted or otherwise delayed for more than 60 seconds
+(either before blocking, or after waking up but before reading
+kmod_req->dup_ret), kmod_dup_request_delete() will free kmod_req here.
+
+The synchronize_rcu() call does not protect the waiter because the waiter
+sleeps in wait_for_completion_state() and cannot hold an RCU read lock.
+When the waiter resumes, it could attempt lock operations on the freed
+completion structure's waitqueue lock, or read kmod_req->dup_ret, resulting
+in a use-after-free.
+
+Would it be safer to add explicit reference counting to kmod_req to ensure
+it remains allocated until all waiters have resumed and finished reading?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/ajydyxgaea27rhcopp5=
+eauji24znotu65d2b4uw344yvmwcc6f@7l5re6f2xcuk?part=3D1
