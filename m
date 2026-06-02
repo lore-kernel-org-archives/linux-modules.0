@@ -1,66 +1,66 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72CAC3C8737
-	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 22:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EAE3C871D
+	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 22:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780440498; cv=none; b=Tq51Bs2yRsmx1mQlAgwEa6OogvzqNfOIphSkzdnkxdKDib5mJ767Haphb4gW1IXA7ZIl5MGqMvik8YEqU/Kb2lVEU/zHoxMvdqZ6aXwyRSD53LHs0WZdgvMeXT43Iu6MkWx2JCqu2FIOzo25/jpaVdyJwH787K81V4XFe5R+w5s=
+	t=1780440500; cv=none; b=FEsajwN1zLGa+ySqBEVOySbOprL2BURrRcm2CD7TxksJdvXHtfUoHuojzRABqM2sOELcCx63Vq2TXrVPUl92KROn7TO3qU55RaCkVXdN+y7U1vSY0CMTslkQLM1Om7EytP5fhSt6FqTCjccaxjBoTMFISsQpZ+ulriubC97NyLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780440498; c=relaxed/simple;
-	bh=/BEze5uZvE97vkdxdEKscGQmmLTlvHt75B8/b2suPbI=;
+	s=arc-20240116; t=1780440500; c=relaxed/simple;
+	bh=Ybb0kJKNd2BJDDcZYbhZbCACFsLVAC7m/M+jXCdbe+s=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MdAbNJJtJPiWHjJ9safbqupQcwGlWaDacxvfRoy+z3dACVWjFMca1JzlFnWV7595uWKI4jlSJEQP5DzIN8tVAARQ88HUM5BVVgW0/4Aa4oeg1M8bpgRLWZ3+UqrAkS+HA1s7Mz4XfaGgXnp2TuF5x1TeE3zYEfglKwX1tZtvPP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qlEI31kN; arc=none smtp.client-ip=209.85.221.52
+	 In-Reply-To:To:Cc; b=QmiG6oFxmHkt82g5PDImHx9f5el6kCAd0oFv4dt85SJjoGwq+vHCZyz/cKD9ta2Ew/rzf1EeZLQRlOGoa8L4R3aybo8ine263jYwpDx2/gyBwD67T/ec788ltdG4J+7KLPPb+LhQtyhKJ6yiO62ky9ayu5qiVcRiSW6r04t8vss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pBoE7Ur7; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qlEI31kN"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-45eee266c6cso4406711f8f.1
-        for <linux-modules@vger.kernel.org>; Tue, 02 Jun 2026 15:48:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pBoE7Ur7"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490a76757e5so24130675e9.2
+        for <linux-modules@vger.kernel.org>; Tue, 02 Jun 2026 15:48:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780440495; x=1781045295; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780440497; x=1781045297; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CwPLhLRZkxVDbJ+XZfxPTCPSMzzunTFiSNGj95FvoLA=;
-        b=qlEI31kNxjbwB74F76h/iMA8Rt70PBfAVAwkfvOQ1OUWFaHg+UbcdRJZrCzi6K5HkO
-         Hd8lnyadsYYTlSZz3jK1pWycosr71xS2M4gkHt5HIqBgWMW0INpWQbOTimKbIlKy2zso
-         Oq1p7pXaJ8LAhZjSF1O2xlSlii4UyK5tnnIc3snbTN7GCBWwWva4f+qMsU2FmgeXgkrF
-         OA/qHwFju4QSoJP6OgJ54C6ll2mhiQx4AGI3wHifogZfzGUa+spyNxhMVT1upnK12gfs
-         Be/czoIFK+YVAZxE67rJbaOwKOKpqq++0nr59IloW0MBIUCheKY7/V+7LVsW3vAZepEJ
-         Oz5A==
+        bh=T5zD1QygmB8fWogN5M5u4F28IFz6bLgLGYRTXYqao/U=;
+        b=pBoE7Ur73OododeuuifWDn5wMtoQL7yOw348/abCpfK/wllh0lM91/84CEnCPPeUT4
+         fJH9skgUnlmmjnBdYyeP+IAJ4pzy6HFFtdaT+eP/+Gmz5BOkpVTt/kGFp9DyAx45cmz6
+         kT/+ShtNSehFz/kg22vKaPjpJvBx5dcpppX6HUpL8tzb2IE7BledM1NliSG2aTr4Z+Ke
+         6tMztv/L+f2lw8qnP1RgHkqnKztJdZNv10rFEUnCbCjhRUBxY/FoRGSCfYNRvtbsVqgX
+         VGph0jT3Db3uuOwQw59gwpsDC3ZOj5XW7KaqaUmXLkDRPnwdRPYxlfUKZtyW4cVXCCYv
+         OMDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780440495; x=1781045295;
+        d=1e100.net; s=20251104; t=1780440497; x=1781045297;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=CwPLhLRZkxVDbJ+XZfxPTCPSMzzunTFiSNGj95FvoLA=;
-        b=Wmm3AnBI41Zg6y3RgLyKW1wB+j9ZbWcPsn7bavmPnos1QMOkRz3Rxo5oJ45+9kBwxd
-         Q4S8ybSXF7HJQRlXgF8mw5ODBzNBW/DOYEMyFdhO71HXuGsMU3Wwf3IL4jsf1seAe3AB
-         lTerkxxOcOTidgoe/0Sak7LnIodNh2d68weMAW3v19C8+I1YMZe+86/kKkPb2dMgfxcQ
-         cLbFKVpqR709Bvh2CoHembIYZizS0oHMKLgVaksmSn6p2RcvTUukLkCWXH+HQM0HX92Z
-         g708UwflUZwIVPu4OdGF4+9k9kTmU0ZmfVreY0bTa6xjrDr+j8m9RA/tW41/7a22/902
-         FAJQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+z0vWfSqCNTHF248C17MTGG7Qzjh8AJh4Zeo0Uq0by4HDExIIQNoyX0BXdzZ0U/USObhkF4eWalLni0E/c@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWum7Z21iY2EJaUtfrW8IhdwwhmKIdpsqN0ivN9RDd0SKGDp6n
-	c6yw4tfU8VN2iVpNymbwcHbf2H7NAZa1GREJn98pPpW54cZGSA1mBRo7
-X-Gm-Gg: Acq92OFLWziYYWYacy7SF35tUBNo7umOPJonzaSYD6hd+r1e+vg68bJgSEry2ou8jFe
-	UTpGuJ0+r1ijH84rzjFgUsnCm9LIFpovT9YpWvSbyhM0+MdMCsmqvq5y7BE5OE6jmbqGYHpF7MC
-	7PTg+KfnirZLDrBWudieZOxtbfl8OP3yHq8bhOnAZEi1WCX1PAadcHdMVV/DQSN04Zg+P7GuZIb
-	DyyprMp10RR8k1rr4KS1DQmf8hVRan/MFV6L5pxKAHUqygLwrkh+m0YivKyg9LsIk//egBLxPQx
-	NyI9IJBQFxQ1g2UVV5Abr6oM6xF0RGOi3pNa1lVrA8N4dxiGz1AM0abfiuG3u30xAVbDtHT6PJU
-	Mdk6zPIHian/lqypZZW78wd+CUmTgg+dJuEnqQpf8tzBJIYuv1B2aMbAk5mDbb+iftt7UWJODiT
-	fv8ti3TCAYuBVUVkspamykHEryxrPgun8gO135Z0GCCA==
-X-Received: by 2002:adf:e8ca:0:b0:45e:dabf:a00e with SMTP id ffacd0b85a97d-4602195abf8mr384315f8f.31.1780440494697;
-        Tue, 02 Jun 2026 15:48:14 -0700 (PDT)
+        bh=T5zD1QygmB8fWogN5M5u4F28IFz6bLgLGYRTXYqao/U=;
+        b=iNhlUNbn/rtAscqDvGOPeucJYUftdlDqpTemIYb515fimibq1xGymyQFoeVdSekZ0Q
+         +8Pt45ipLr9seFQj4Ph/EmILvaqz3DrHtC6YlKjQLUs9oNCdb9rTzCchzmQtkubD+qHr
+         8P3J3q22DCjoleBiWLgv/fE1nzsVT+7nVpoN7byKn52tqei2HueOO4uQt4yRpRcEmvbh
+         cQwHV0oL6i9lqodKD0ZsjkSK/G7ZXR/lv40/Xp3Fs8/060U1sIPYIsRHcMXlTNjRlLI8
+         dBW9F8xdkAuJY0QCqQQ7oZJLycrOq4H/PxQ48iYFrojOsBwIw1MFVlqdgWHOCMm7uiBb
+         8tgA==
+X-Forwarded-Encrypted: i=1; AFNElJ8Zld4os/BmCfbRH3Hn9UEnwktafhIYFtg9N1WTTTb7ofuocgGwGZsW9fuqHkx9twJGycW/B7mES9M00XiF@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1uo95ocdRUoUedIu8qUoZeC4Svcy9Y/kkZfKvDbbQT3t7U6c/
+	R+xomWkKCZO/CRJGkm7R+myHqWDCXMuUWFMQjJVwF/M7Hv2cqHZTNT0o
+X-Gm-Gg: Acq92OHnIvcPfT9+bgPlcIVodFg4/Rnv0VygweoJifB0G1nKG1RUvLEg4E7DxYEdIck
+	A0NopRxxjGsknkuhC1R/dSvrpHPMogV6JLjzupzGj13Ln75BrXKtF9Zx1CTLZ1JAv6Ws6zt4S+g
+	MFz22kEtXjSICMtMr/ggGdAQMUBumxdlVv3s8TwOAs+ymhJeeu76JBN7EcRQoM3IWsbukRutJsx
+	mQvXcY19qHA4B69nCJlrxbCjGHR7ybHo24aNrXp5RwmPn+KC8naN/UYuhejfUDMcwn2F/uDupTj
+	sUMITz35EcnzBs/yPtqpVzIwDYL3Icf8td813uVjQDJ6OTRmSrXTzpsnht8G1ST3n5QUQkK2DNp
+	bWMoGCp9S7PQbONsid6ePn3hLDXbQjP/AQEsgpsztxeCif2D8H4wfkuGji3SWmdr7bbijFeYnrP
+	A6o8qSG5XppkYuyzK9CDn80/zRp+V1j4WVpnukJ0FN7g==
+X-Received: by 2002:a05:600c:c84:b0:490:389:7644 with SMTP id 5b1f17b1804b1-490b5fe0e36mr10870455e9.17.1780440497119;
+        Tue, 02 Jun 2026 15:48:17 -0700 (PDT)
 Received: from [172.16.188.153] ([213.181.114.83])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4601f2f2710sm1999791f8f.14.2026.06.02.15.48.11
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4601f2f2710sm1999791f8f.14.2026.06.02.15.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 15:48:14 -0700 (PDT)
+        Tue, 02 Jun 2026 15:48:16 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 02 Jun 2026 22:47:58 +0000
-Subject: [PATCH v4 01/25] docs/dyndbg: update examples \012 to \n
+Date: Tue, 02 Jun 2026 22:47:59 +0000
+Subject: [PATCH v4 02/25] docs/dyndbg: explain flags parse 1st
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260602-dd-maint-2-v4-1-19a1445585a8@gmail.com>
+Message-Id: <20260602-dd-maint-2-v4-2-19a1445585a8@gmail.com>
 References: <20260602-dd-maint-2-v4-0-19a1445585a8@gmail.com>
 In-Reply-To: <20260602-dd-maint-2-v4-0-19a1445585a8@gmail.com>
 To: Jonathan Corbet <corbet@lwn.net>, 
@@ -87,63 +87,55 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  Jim Cromie <jim.cromie@gmail.com>, 
  Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780440488; l=2677;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780440488; l=1814;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=/BEze5uZvE97vkdxdEKscGQmmLTlvHt75B8/b2suPbI=;
- b=eGa6JOHZRbOrzq3N8stPRNIhRHhJDTd+EXMPhxsQVEHGQJoLEX5/8ExqTRqXIhbGFTDS7i/jW
- my6ir9qw9H/DG3fyTSa1Qx5Qli7GCViICT1Ms058vTbgPI0z3h/lvaZ
+ bh=Ybb0kJKNd2BJDDcZYbhZbCACFsLVAC7m/M+jXCdbe+s=;
+ b=iGpCIeDHPVfQ770YcsgKYXv3tJwW3O+XIWlcq5CIrp9h5VC/6DBVR3xkR4b7Qcc8Pnj13ieeI
+ Y4QZse5sLQqBLq9EL6k0vDUfzHjGV6rne+yovUgeHPiSQqfDC5aN483
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-commit 47ea6f99d06e ("dyndbg: use ESCAPE_SPACE for cat control")
-changed the control-file to display format strings with "\n" rather
-than "\012".  Update the docs to match the new reality.
+When writing queries to >control, flags are parsed 1st, since they are
+the only required field, and they require specific compositions.  So
+if the flags draw an error (on those specifics), then keyword errors
+aren't reported.  This can be mildly confusing/annoying, so explain it
+instead.
 
+cc: linux-doc@vger.kernel.org
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
-Tested-by: Louis Chauvet <louis.chauvet@bootlin.com>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- Documentation/admin-guide/dynamic-debug-howto.rst | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ Documentation/admin-guide/dynamic-debug-howto.rst | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
 diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
-index 095a63892257..4b14d9fd0300 100644
+index 4b14d9fd0300..9c2f096ed1d8 100644
 --- a/Documentation/admin-guide/dynamic-debug-howto.rst
 +++ b/Documentation/admin-guide/dynamic-debug-howto.rst
-@@ -38,12 +38,12 @@ You can view the currently configured behaviour in the *prdbg* catalog::
+@@ -109,10 +109,19 @@ The match-spec's select *prdbgs* from the catalog, upon which to apply
+ the flags-spec, all constraints are ANDed together.  An absent keyword
+ is the same as keyword "*".
  
-   :#> head -n7 /proc/dynamic_debug/control
-   # filename:lineno [module]function flags format
--  init/main.c:1179 [main]initcall_blacklist =_ "blacklisting initcall %s\012
--  init/main.c:1218 [main]initcall_blacklisted =_ "initcall %s blacklisted\012"
--  init/main.c:1424 [main]run_init_process =_ "  with arguments:\012"
--  init/main.c:1426 [main]run_init_process =_ "    %s\012"
--  init/main.c:1427 [main]run_init_process =_ "  with environment:\012"
--  init/main.c:1429 [main]run_init_process =_ "    %s\012"
-+  init/main.c:1179 [main]initcall_blacklist =_ "blacklisting initcall %s\n"
-+  init/main.c:1218 [main]initcall_blacklisted =_ "initcall %s blacklisted\n"
-+  init/main.c:1424 [main]run_init_process =_ "  with arguments:\n"
-+  init/main.c:1426 [main]run_init_process =_ "    %s\n"
-+  init/main.c:1427 [main]run_init_process =_ "  with environment:\n"
-+  init/main.c:1429 [main]run_init_process =_ "    %s\n"
+-
+-A match specification is a keyword, which selects the attribute of
+-the callsite to be compared, and a value to compare against.  Possible
+-keywords are:::
++Note that since the match-spec can be empty, the flags are checked 1st,
++then the pairs of keyword and value.  Flag errs will hide keyword errs::
++
++  bash-5.2# ddcmd mod bar +foo
++  dyndbg: read 13 bytes from userspace
++  dyndbg: query 0: "mod bar +foo" mod:*
++  dyndbg: unknown flag 'o'
++  dyndbg: flags parse failed
++  dyndbg: processed 1 queries, with 0 matches, 1 errs
++
++So a match-spec is a keyword, which selects the attribute of the
++callsite to be compared, and a value to compare against.  Possible
++keywords are::
  
- The 3rd space-delimited column shows the current flags, preceded by
- a ``=`` for easy use with grep/cut. ``=p`` shows enabled callsites.
-@@ -59,10 +59,10 @@ query/commands to the control file.  Example::
- 
-   :#> ddcmd '-p; module main func run* +p'
-   :#> grep =p /proc/dynamic_debug/control
--  init/main.c:1424 [main]run_init_process =p "  with arguments:\012"
--  init/main.c:1426 [main]run_init_process =p "    %s\012"
--  init/main.c:1427 [main]run_init_process =p "  with environment:\012"
--  init/main.c:1429 [main]run_init_process =p "    %s\012"
-+  init/main.c:1424 [main]run_init_process =p "  with arguments:\n"
-+  init/main.c:1426 [main]run_init_process =p "    %s\n"
-+  init/main.c:1427 [main]run_init_process =p "  with environment:\n"
-+  init/main.c:1429 [main]run_init_process =p "    %s\n"
- 
- Error messages go to console/syslog::
- 
+   match-spec ::= 'func' string |
+ 		 'file' string |
 
 -- 
 2.54.0
