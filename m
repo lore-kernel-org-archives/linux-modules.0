@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6F634C139
-	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 22:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383883CAA30
+	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 23:00:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780441080; cv=none; b=PfDbzuBQliiQ65FANBRw9k7eF7cf7wl7YX/jJ+Pybut8rsbWQEpZQbw/v+huSni5xChp+EgS8D+0bxAfkxycDlOoRMmq4kEB1gZvA4/eyMjEYd5iqlJve2Q/KaDHZoH/DWgjQujmHWCpjGz1inA8qdXcx6nNoHUztLBrtLa31BI=
+	t=1780441260; cv=none; b=BMty0FQigp04X7MMo4UppHNcE5797s9rp4EgHMIxAobhr7BaKqTKBOHIh54PMsTJx2RNrsH7NDhSOGXgNH5RkG4ogPe31pVdydWMBSe0yKMIv6smJ72bGHO6Hq2ppfFp+cE62BksR1it32VfyfxeL1u+GTCyhqoNwTRjTH8HIUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780441080; c=relaxed/simple;
-	bh=GL9rTSwM0zxZOLfxFYoB7rVOsp5Isw/6hl1V4IthxCs=;
+	s=arc-20240116; t=1780441260; c=relaxed/simple;
+	bh=oPwOBjPsk20fae8U3Xw7YEh2GC4WqL1e+w5HUN/pjD0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=EYVx0f4R9gHgwqMTwoxzifFa6Y8kVha9w7q/xf8KwbzISOGR8yH+WzIBO7PyM8rZBNq4kx1zN7eX9Nfov8gxLkYNoLqtC8viffSTAAPZ6J6IhIueEqXyVdC70ZVdzZKZMr+E9eyL4Kd+/ulRlWkytQimGbZ33YmWlqqxh1gkTfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cwNMrZky; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=hJS955sGQn5IuP0porPHvY1xmkdbKJLpOyrJI7Qqj+9UZOX8r5TJv16xuThGlnrXgiBuvvOA7pMgg7bdWozS1ltOa0e+fZ0SFytHMbmbAZOA/gsVT74nGGTsyAtoYfnvS3+6SSsXKlE4JuJQpfDNKpncLSqYqI3Qjr8QqqLYWTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dnpk895g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cwNMrZky"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308981F00893;
-	Tue,  2 Jun 2026 22:57:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dnpk895g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFE71F00893;
+	Tue,  2 Jun 2026 23:00:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780441079;
-	bh=TukxZ7G066Od+IL0LkYgUFH+W+MQmVjoKnKbqVdjLwA=;
+	s=k20260515; t=1780441258;
+	bh=7YGvQNea+t04x21an5pSdpy6weF8qmqTDSffkqVLIxY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cwNMrZkypnLUuN/0ec8c6eEMCc6qn0Wvq4Y6F9t3PIOPN2RMexTa6J6hfL5HJ5NMW
-	 iBLLCXSOQK1r0cLlZUVqWKUpGbBtETygXs7wMyS22OBh+WgC7duZu95k+cOceZQqW7
-	 4weTVJ1xfpk03ZRpAK63RKzx+KalDF2LvMNmeC9sYlec+M7YNOWrUZtUHqIds2+IQa
-	 uIt9Kv4yTjK7fGimkoplpXrh4oNY0WOrYWhnOO+IqT7F6S5ao1iXWETMjnegAIEXgY
-	 1MVjoi56/ZFb7ZwX+IzKWoD+fpIjccYhkTWcB+e3PIkTO3SOOxQbJHLizr4Ev1YcCI
-	 twssFBbfJ/3Iw==
+	b=dnpk895gua/ZKP9wBkR7veuN9GnvHD9NkzQkAArHDzgSt06Nr/SmUJdTixKNB6+04
+	 KswfnS1mTt1mqlIXSnR+MV3xDWW4nlF8Usfv5TzffTmS21CBFKuL4TL8iOalPh1iNe
+	 lCEp/YrAcorYB6LQbZwZuVC8Me359vdOBOMDTNLwyqomwJ1VvsLZV7iHbiuJanvRCJ
+	 m0EYhZo0x7OxN3ZJxuwm+XSyDQa7Tkz8QOGSoDaOf9zLxg5k9/czfom+GUG72TjOSx
+	 QGg0AJkNRW3e1aJQUCE3TOhe8dGI24g4HPN1gmX5ZvZoHGfeZr1Ddha9fAgwl9wKyS
+	 ZgPrUPAbmEd7A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 12/25] dyndbg: drop NUM_TYPE_ARGS
+Subject: Re: [PATCH v4 11/25] dyndbg-API: remove
+ DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jim Cromie" <jim.cromie@gmail.com>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260602-dd-maint-2-v4-12-19a1445585a8@gmail.com>
-References: <20260602-dd-maint-2-v4-12-19a1445585a8@gmail.com>
+In-Reply-To: <20260602-dd-maint-2-v4-11-19a1445585a8@gmail.com>
+References: <20260602-dd-maint-2-v4-11-19a1445585a8@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 22:57:58 +0000
-Message-Id: <20260602225759.308981F00893@smtp.kernel.org>
+Date: Tue, 02 Jun 2026 23:00:58 +0000
+Message-Id: <20260602230058.ABFE71F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -45,47 +46,45 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] The macro DECLARE_DYNDBG_CLASSMAP relies on ARRAY_SIZE, but the pat=
-ch fails to include <linux/array_size.h>.
+- [Low] Kernel-doc for DECLARE_DYNDBG_CLASSMAP incorrectly references `stru=
+ct _ddebug_class_map`.
 --
 
-commit 464d8da755ec7b15d6bc584121b284d4801591c5
+commit 047a6407ea6feae6857cc7d6870594191a931c7d
 Author: Jim Cromie <jim.cromie@gmail.com>
 
-dyndbg: drop NUM_TYPE_ARGS
+dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
 
-This commit replaces the custom NUM_TYPE_ARGS macro with the standard
-ARRAY_SIZE macro in the dynamic debug classmap declaration. It removes
-the NUM_TYPE_ARGS definition entirely since the array declaration is
-complete.
+This commit removes the unused DD_CLASS_TYPE_DISJOINT_NAMES and
+DD_CLASS_TYPE_LEVEL_NAMES classmap types to simplify the dynamic debug API.
+It also renames enum class_map_type to enum ddebug_class_map_type.
 
 > diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-> index 78c22c6d23128..867e3978675f0 100644
 > --- a/include/linux/dynamic_debug.h
 > +++ b/include/linux/dynamic_debug.h
-> @@ -121,11 +121,9 @@ struct ddebug_class_param {
->  		.mod_name =3D KBUILD_MODNAME,				\
->  		.base =3D _base,						\
->  		.map_type =3D _maptype,					\
-> -		.length =3D NUM_TYPE_ARGS(char*, __VA_ARGS__),		\
-> +		.length =3D ARRAY_SIZE(_var##_classnames),		\
-
-[Severity: Low]
-Does this require an include of <linux/array_size.h> to keep the header
-self-contained?
-
-The DECLARE_DYNDBG_CLASSMAP macro now relies on ARRAY_SIZE, but it appears
-the header that defines it is not explicitly included in dynamic_debug.h.
-Could this cause build errors for files using this macro if they do not
-already happen to include <linux/array_size.h> directly or indirectly?
-
->  		.class_names =3D _var##_classnames,			\
->  	}
-> -#define NUM_TYPE_ARGS(eltype, ...)				\
-> -	(sizeof((eltype[]) {__VA_ARGS__}) / sizeof(eltype))
 
 [ ... ]
 
+> @@ -119,8 +108,8 @@ struct ddebug_class_param {
+> =20
+>  /**
+>   * DECLARE_DYNDBG_CLASSMAP - declare classnames known by a module
+> - * @_var:   a struct ddebug_class_map, passed to module_param_cb
+> - * @_type:  enum class_map_type, chooses bits/verbose, numeric/symbolic
+> + * @_var:   a struct _ddebug_class_map, passed to module_param_cb
+
+[Severity: Low]
+This isn't a bug, but is this change to struct _ddebug_class_map intentiona=
+l?
+The DECLARE_DYNDBG_CLASSMAP macro instantiates a struct ddebug_class_map
+without the leading underscore, so this appears to be a typo introduced in
+the kernel-doc comment.
+
+> + * @_maptype: enum ddebug_class_map_type, chooses bits/verbose
+>   * @_base:  offset of 1st class-name. splits .class_id space
+>   * @classes: class-names used to control class'd prdbgs
+>   */
+
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602-dd-maint-2=
--v4-0-19a1445585a8@gmail.com?part=3D12
+-v4-0-19a1445585a8@gmail.com?part=3D11
