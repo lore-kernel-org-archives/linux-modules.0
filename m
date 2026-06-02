@@ -1,209 +1,232 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0673E2ACD
-	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 13:04:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FFE3C7691
+	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 22:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780405499; cv=none; b=fTWGRHi2bzISWhsQkT/CZbllSg2SXJnwtUDou9xryVrc+PEKOPXxN0LCYCm0ULLVk4xPau71dxVkSFXII9d6E6RsJR5nNx4azHHvJKosj8QVfy77+BO60/oWchX0bXL1vmi0FIhO7WR8i0Z1pQa9f6cAiRD47F35npQeKlOyPcM=
+	t=1780440495; cv=none; b=KkZCcD35Hq+TWK8ckEWMt+L6o8L7zakOsieqitVgFraWVf/vfQ3uxYrbaQDV/wcb4/+lt3UJVw4LrnNI491paD+ZAYXXKRAmBzbn3MJMEm/LaYu4o4dTJc0zt1E7IHsjUtLJT6W/9X/eWDPhwg7o7RYicDAdVkoY1ehCm+Bz3qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780405499; c=relaxed/simple;
-	bh=Lv88enNvVjptEHx4RPDpSYkoiYl4NHCAht/k1YwYRy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ERL9wGxqJTHkmEq78MSBEkt1snc/w/GrGCzYTDVX3CdWibx3MoV4EpFp7QZjVs8ouoTwLrosOYdMn6+HmrkIaKR18AEkzhM3CX/1630mWcVSdJQ8ADba6v7PZyAXce4sJWHtm4Auttq8lTvhkNUsuCtbX9UjP4V6yX449AyOxBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oYCy8oWL; arc=none smtp.client-ip=209.85.128.49
+	s=arc-20240116; t=1780440495; c=relaxed/simple;
+	bh=pvqZETCsYkC1jfFJFSdQMsi9nib/U911lUcWXFhah34=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UMvy4SIHpnq4JSdBtHgtk1dcYJDoE5Nt0Jf+eY1CRs8GaFIWqcxIVCu8jBw3vkEjyRIKN/7fvA/Y1MZ5VelOUoZt8VTiis/b2v64GbZ+F+foNit35LbHweAxeAmGbIt4k7hQs8oCrHCnK+JcxR03rGCYZYyzXQrTkSQNjPYUuj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Px3WAmDM; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oYCy8oWL"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4906238c62eso93031335e9.3
-        for <linux-modules@vger.kernel.org>; Tue, 02 Jun 2026 06:04:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Px3WAmDM"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-490b211ee6aso11135175e9.3
+        for <linux-modules@vger.kernel.org>; Tue, 02 Jun 2026 15:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780405496; x=1781010296; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H/8nMdqnIqVIuE86ZCCEmz0EQ1iXOszPXfKX9VZoGH4=;
-        b=oYCy8oWLEOXs3ZZpnQ8VOQHoNFjKZT62/QUyW3df6kxvDecqCOK07UnU98cT9bih7d
-         QifFlcWIr+EJiA3Y4YekpYVbMWMA0XqQZb9m0aNzEy+n6CZ9KNJxUBct5gbgm0d6jBJX
-         4RYm7cSM4Fa+MgP775wpjzUTJB2NacljxFREy0lFq+bJunDJIYp2ZV4sTIDkO+Vc1xr7
-         FpcRQcE1R3qM6zq5aytz97WBpu5zXpd39pgEA0GnDnl2ujkjmEdAdRZhqHjKWr+k4Lc4
-         ry5o67NwkoWSsT9Lap7TwhGHQwNn20aUpkBNKTwaaKQ1kQ2Jb1T0oTaxOfTVux7BZHHQ
-         5nZw==
+        d=gmail.com; s=20251104; t=1780440492; x=1781045292; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V9cvVq2UX5qs+A/PtNYPNl1ibkkw2juVOILs+9glAdc=;
+        b=Px3WAmDMTdbABUTGXOwlyDv6a9YMHjqCqB3xqnXhYttecVL2nZVXAOqTtNcllYqhEE
+         Emoexcjff60POG266s30+mL0wnWUY7Mt5AtYXBHBsCcgx/CaJSRm/Fql2opHEyvKWzzu
+         11WSfCNFI2ykDmqZvQ4uYziAgU9JRUvWczPHbx4upXsktllR1/NBBnUv3v4jOVDNtXU9
+         e3vdwMjDl2fUqkWuDlvJj5urkTzPpmVs3sxgvVReOP8tqUjBSYDO2oJOBqfU1MKrv3xq
+         j/C4J1WHH4Wlswzz/1BG05FpTzl4k/ayN8u05NN/GO75g0kOBmvj/FoAxeZ8oZwO1q71
+         wAnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780405496; x=1781010296;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=H/8nMdqnIqVIuE86ZCCEmz0EQ1iXOszPXfKX9VZoGH4=;
-        b=o+owzLa4X+9nokM6JCUNDsgN64rC54L++QNvO3fzoyV6OpARTHsGsfAZviQJG7ULB7
-         yWfoNpAY2E3WYY1myJxO88Ni4bSpcTOX/FetFntsvxXd1HuG090GkBdI+o78T6yk4o7v
-         eddBgF3+wWnBqcKl75qz9+NBni/lL/vzR0RQ0yKZfbE9oQ9tDNI6CYIGsm3F50Dg4lQH
-         bcyTN4kQ41+Z8mgiYtDbm83tN7Urvqvg5bG1plVSaD1ueady26D2srh+tJkSbIRJbWXF
-         HPpDkNFvdxwfxsNn+VMHvRscvrtttMwrErlrSiauJHpfHyYCGZIDD71clnqg14mp+2D+
-         FZ1A==
-X-Forwarded-Encrypted: i=1; AFNElJ8lAHlkTCmxVoMm4F+yC0SvLObJEnquH9W0c7lL9VbcEUXGvQElPBGKqXjIhzCPTypS0pdERbE3+2coXZKL@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqyN0+ss/dUz/pqeE7M8K8uzjpw11g+a4BBVLV+dU1E0HKldSH
-	ta4Zph1LWb85mBsR91oj4C+yvZDn5QQ0fJInwkLrOY77XZNMFHzPNLcn
-X-Gm-Gg: Acq92OGZmyH1cbqkTxzNDMrjD8YhLKnT64Ci90JAqPfLCKSl3B6KolpmmYInEjZILot
-	xnOV0W2v/Q9Rio41XkoGORkCEkBBPVFjeUA/cVRsX+a+/tMHXcfJVNrYUy9lueybU3WMx04SRbl
-	+MLOMiQDbqN+cN2EcTygRPkHIDWenGu5Y/2msTdfNHB0GJ2FAbdQ389kz2FxIYfxUPItSxcOm8t
-	7EYy9bK7lH4RitEHaZJERRQIAxhvZM4vVrH4a4+XGLeknOjmfYMa5vhQLMqM14rV7T36jSAFIO+
-	Ds/zXavg5SEFeJ6UfOjzUCTr2EbiNVcjY7usLffkzzt4urUqeFKpHHNIejVZD43qujf2g9b3N5W
-	nTMAKqnidKqBUQWUrpvFmmDEvYCcFKeUQUVu0fs2LaWcgApZBGRpHPVavCEyReH0n+Je0kszrGC
-	xPO+cjlGH0myPWwzlSCX822wAChrobgLg2qwt4xIZLS3dYiew3sJ5SOV9NyNVQALqg77goMLuS8
-	H0N8siYnw==
-X-Received: by 2002:a05:600c:8105:b0:490:b072:1be6 with SMTP id 5b1f17b1804b1-490b0721e0amr76565325e9.25.1780405495119;
-        Tue, 02 Jun 2026 06:04:55 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34b834esm33184301f8f.11.2026.06.02.06.04.53
+        d=1e100.net; s=20251104; t=1780440492; x=1781045292;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V9cvVq2UX5qs+A/PtNYPNl1ibkkw2juVOILs+9glAdc=;
+        b=XhHrqv4S8ext3hyY02J1pkkP6BOWHudOYrr3urfV+33dDz2ZGtNqpRLZJwNFGMM9Sb
+         1+NOZlmM+6F+ASOkH8mOR17mj4/wSq9DhXk+ogXRYoylvLEQHV79ScjEoM7X5K3MuPJy
+         J1GI46zA1gzkrerNxaot/DiZ35c8/DBfsCmlSm10pbPR+1M5262yABSbOv01ZLwI11X2
+         B88rEzAGaLYo8mkZ/s7RFf4hdt3NGGUEZrY0yEs9gI65cHFbf1MvO9T4ohBJ8Z5gqnWc
+         pEdZNdok+aq77QF9BAN8gqtV58O3/uoSQjTpDrz3/3/cOpkXfJium1PTRcrrme/tw95b
+         i0Nw==
+X-Forwarded-Encrypted: i=1; AFNElJ+ioDaj4TFJZ0r0cw8D/SrsB58IQ9w2/ZII96eSdgw0xZIYANukt4gAdpNEa+lqDq3UgWNB6LkrURtwGmCW@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGEWBYp8qlYaCCB3QW2AFMhiv6ObHmIsRA8S2tpkeXHIqNeHK3
+	BKmjSRqpEJbL2u2eubppT7AGU8n21/PEcsBRs+xU1BnDBuE3YrFQxP+E
+X-Gm-Gg: Acq92OGp4yp2NcdguPCZ4ORuI4p/jEeQI9Vi1KqjaZGk9XcW9mDmf3HvKfF+j71xcg5
+	CLTWfCEclX6rLZ0NHenpQoSbdOTMvtI5Z5Nq/A0NKClNNmwZwqoQI4TozAI0cNH3UtnP5cWRUQN
+	tdhHKeafuWwAMjacNfsOMtqB5lQEkV+KapSGVuMoKwIrFkDq0wQLtiPHfW2MCSVCnsRnrU041Uz
+	CEZgUhXvmxKJoV2cxIWzz36r5ksXmHLqQ6uKs3mIIAA4bc2mPTf9Mc4kwpOzFQuzrYLrNEcuVR6
+	MU9Uzu9m6nN0L3aHgcjSTl7iQjk8AwIQLb5PHJWOiwcOMnuNtKH6x9Dmoft4AQa65nxHZtSdkjn
+	ubuBs1OiBDn9OP6B0O6XJxxSYo6lxTqgNFV7a6OR7EQflNBgfRiRFmshf/Ra7IEMjIMJF7lG2A2
+	QEYhVgBnMbw+Sg5DQXD8H2R4NQPJXVIMtuPsm6OjNy5w==
+X-Received: by 2002:a05:600c:8712:b0:490:b106:4fe8 with SMTP id 5b1f17b1804b1-490b5ed5d5cmr11883645e9.33.1780440491565;
+        Tue, 02 Jun 2026 15:48:11 -0700 (PDT)
+Received: from [172.16.188.153] ([213.181.114.83])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4601f2f2710sm1999791f8f.14.2026.06.02.15.48.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 06:04:54 -0700 (PDT)
-Date: Tue, 2 Jun 2026 14:04:51 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Pengpeng Hou <pengpeng@iscas.ac.cn>, stable@vger.kernel.org, Petr Pavlu
- <petr.pavlu@suse.com>, Richard Weinberger <richard@nod.at>, Anton Ivanov
- <anton.ivanov@cambridgegreys.com>, Johannes Berg
- <johannes@sipsolutions.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Len
- Brown <lenb@kernel.org>, Corey Minyard <corey@minyard.net>, Gabriel Somlo
- <somlo@cmu.edu>, "Michael S. Tsirkin" <mst@redhat.com>, Jani Nikula
- <jani.nikula@linux.intel.com>, Joonas Lahtinen
- <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, Laurent
- Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede
- <hansg@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Bjorn
- Helgaas <bhelgaas@google.com>, Hannes Reinecke <hare@suse.de>, "James E.J.
- Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen"
- <martin.petersen@oracle.com>, Daniel Lezcano <daniel.lezcano@kernel.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, Jason Wang
- <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Eugenio
- =?UTF-8?B?UMOpcmV6?= <eperezma@redhat.com>, Jason Baron
- <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, Tiwei Bie
- <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>, Ilpo
- =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, "David E. Box"
- <david.e.box@linux.intel.com>, "Maciej W. Rozycki" <macro@orcam.me.uk>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Peter Zijlstra
- <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
- <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
- <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>, Frank Li
- <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Alexander
- Potapenko <glider@google.com>, Marco Elver <elver@google.com>, Dmitry
- Vyukov <dvyukov@google.com>, Andrew Morton <akpm@linux-foundation.org>,
- John Johansen <john.johansen@canonical.com>, Paul Moore
- <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
- <serge@hallyn.com>, Georgia Garcia <georgia.garcia@canonical.com>,
- kvm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- linux-mm@kvack.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
- linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
- qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, netdev@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 01/11] params: bound array element output to the
- caller's page buffer
-Message-ID: <20260602140451.2e3e6622@pumpkin>
-In-Reply-To: <ah699hwLxIIOZ0-7@ashevche-desk.local>
-References: <20260521133315.work.845-kees@kernel.org>
-	<20260521133326.2465264-1-kees@kernel.org>
-	<ah699hwLxIIOZ0-7@ashevche-desk.local>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        Tue, 02 Jun 2026 15:48:10 -0700 (PDT)
+From: Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v4 00/25] dynamic-debug cleanups refactors maintenance +
+ alignment fix
+Date: Tue, 02 Jun 2026 22:47:57 +0000
+Message-Id: <20260602-dd-maint-2-v4-0-19a1445585a8@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/1WOwQqDMAxAf0V6XkebVp077T/GDrXtNDDtaKVsi
+ P++KIy5S+AlvEdmlnxEn9i5mFn0GROGkUAfCmZ7M3aeoyNmIKASJUjuHB8MjhMHXle21CDqhgY
+ j4Rn9HV9b7Hoj7jFNIb63doZ1+82ofSYDF7xtVK0kGCNO6tLR6XG0YWBrJqufWom/D7IiVRtZt
+ qBl65Tdq8uyfABmofZ03wAAAA==
+X-Change-ID: 20260521-dd-maint-2-76c542079420
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Jason Baron <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ Jim Cromie <jim.cromie@gmail.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>, 
+ =?utf-8?q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780440488; l=6217;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=pvqZETCsYkC1jfFJFSdQMsi9nib/U911lUcWXFhah34=;
+ b=c5JtxMZifQHPMyBgcfsCSWRGiDIiiRZIirFhHQsdyOt6nNO24F5i7nHlhST28dRSas2WCF5nq
+ rwhKP25z64EDzaAC8kCEnvcwXRGPVK2kiFNaSe5XO62iU/o9DUJEclW
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-On Tue, 2 Jun 2026 14:26:46 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+V4 of this series drops 2 doc-only patches in v3, recently picked up
+by linux-doc, thx Jonathan
 
-> On Thu, May 21, 2026 at 06:33:14AM -0700, Kees Cook wrote:
-> > 
-> > param_array_get() appends each element's string representation into the
-> > shared sysfs page buffer by passing buffer + off to the element getter.
-> > 
-> > That works for getters that only write a small bounded string, but
-> > param_get_charp() and similar helpers format against PAGE_SIZE from the
-> > pointer they receive. Once off is non-zero, an element getter can
-> > therefore write past the end of the original sysfs page buffer.
-> > 
-> > Collect each element into a temporary PAGE_SIZE buffer first and then
-> > copy only the remaining space into the caller's page buffer.  
-> 
-> ...
-> 
-> > +	elem_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);  
-> 
-> get_free_page() (or how it is called)?
+So new 1st 5 are a fix to a linker-script alignment problem in 32bit
+arches causing a null-ptr scanning dyndbg-descriptor section on i386.
+These were reviewed by Petr Pavlu.
 
-The kmalloc() should be faster and I think has to be aligned.
-There is another patch set to replace get_free_pages() with kmalloc().
+V4 main change is addition and use of match_wildcard_hyphen(), which
+allows that "i2c_hid" is same as "i2c-hid" wrt to modname comparison.
+This addresses sashiko-dev's feedback on V3.
 
-Although all these 'show' functions should really head to using a safer
-interface.
-Although, at the moment, it is really difficult to find the ones that
-are guaranteed to be passed a page aligned buffer.
+v3:
 
--- David
+The remaining patches are cleanups, refactors in preparation for an
+API change needed to fix a regression in DRM when it uses classmaps.
+I split these out for easier review, I will follow up with the API
+change afterwards.
 
-> 
-> > +	if (!elem_buf)
-> > +		return -ENOMEM;
-> > +
-> >  	for (i = off = 0; i < (arr->num ? *arr->num : arr->max); i++) {
-> > -		/* Replace \n with comma */
-> > -		if (i)
-> > -			buffer[off - 1] = ',';
-> >  		p.arg = arr->elem + arr->elemsize * i;
-> >  		check_kparam_locked(p.mod);
-> > -		ret = arr->ops->get(buffer + off, &p);
-> > +		ret = arr->ops->get(elem_buf, &p);
-> >  		if (ret < 0)
-> > -			return ret;
-> > +			goto out;
-> > +		ret = min(ret, (int)(PAGE_SIZE - 1 - off));  
-> 
-> It's usually discouraged to use castings in min/max/clamp. Can we make ret long
-> or do something different here?
-> 
-> > +		if (!ret)
-> > +			break;  
-> 
-> > +		/* Replace the previous element's trailing newline with a comma. */
-> > +		if (i)
-> > +			buffer[off - 1] = ',';  
-> 
-> Can't we do this after with help of strreplace()?
-> 
-> > +		memcpy(buffer + off, elem_buf, ret);
-> >  		off += ret;
-> > +		if (off == PAGE_SIZE - 1)
-> > +			break;
-> >  	}
-> >  	buffer[off] = '\0';
-> > -	return off;
-> > +	ret = off;
-> > +out:
-> > +	kfree(elem_buf);
-> > +	return ret;  
-> 
+The biggest revision vs V2 is the new patch: 25.  It addresses a flaw
+detected by sashiko which is best described by example.
+
+Dyndbg uses KBUILD_MODNAME to provide module-name, this works well for
+loadable modules (module loader requires unique module names), but for
+builtin modules, is effectively kbasename, and not unique.
+
+So we get 4 modules named "main": init/main, kernel/power/main,
+kernel/base/poser/main.  This ambiguity is visible in user-space since
+the beginning of dyndbg.
+
+Now suppose kernel/{,base}/power/main want to define classmaps to
+categorize the various pr-debugs they have.  The current code finds a
+module's classmaps by strcmp on modname, so init/main will match
+against classmaps defined by both kernel/{,base}/power/main.
+
+The current code will also map "main" classes to kernel/*/power/main,
+so they will probably work at first, but 2 independent classmaps can
+both use class-ids 0-N, but will conflict if they're both used by a
+module.  Then we have classmap overlaps and unpredictable results.
+
+patch-24 eliminates the ambiguity by using KBUILD_MODFILE to provide a
+unique module-name, then adds matching against kbasename(modname) to
+restore the legacy query behavior.  It *does* change the modname
+exposed in /proc/dynamic_debug/control, but not the result of a query
+like "module main +p".
+
+OLDER VERSIONS:
+
+V2 primarily revises:
+ https://lore.kernel.org/lkml/20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com/
+    
+V2 addressed most of sashiko's feedback on V1:
+ https://sashiko.dev/#/patchset/20260504-dd-cleanups-2-v1-0-6fdd24040642%40gmail.com
+    
+It dropped the pr-fmt patch, as not reproducible,
+advanced the drop-NAMES patch to reduce subsequent churn,
+and fixed the classmaps PARAMs to u64 to avoid 32bit flags on 32bit arches
+    
+For easy one-stop-shopping, V2 also included 2 smaller series:
+    
+1st fixes a section alignment problem, with Reviewed-by from Petr Pavlu
+ https://lore.kernel.org/lkml/20260515-asm-generic-1-v3-0-680b273666d4@gmail.com/
+    
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+    
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+Changes in v4:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v3: https://lore.kernel.org/r/20260601-dd-maint-2-v3-0-4a15b241bd3c@gmail.com
+
+Changes in v3:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v2: https://lore.kernel.org/r/20260523-dd-maint-2-v2-0-b937312aa083@gmail.com
+
+---
+Jim Cromie (25):
+      docs/dyndbg: update examples \012 to \n
+      docs/dyndbg: explain flags parse 1st
+      vmlinux.lds.h: refactor BOUNDED_SECTION_* macros into bounded_sections.lds.h
+      vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+      vmlinux.lds.h: Fix ALIGN(8) omission causing NULL ptr on i386
+      vmlinux.lds.h: remove redundant ALIGN(8) directives
+      dyndbg.lds.S: fix lost dyndbg sections in modules
+      dyndbg: factor ddebug_match_desc out from ddebug_change
+      dyndbg: add stub macro for DECLARE_DYNDBG_CLASSMAP
+      dyndbg: reword "class unknown," to "class:_UNKNOWN_"
+      dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
+      dyndbg: drop NUM_TYPE_ARGS
+      dyndbg: reduce verbose/debug clutter
+      dyndbg: refactor param_set_dyndbg_classes and below
+      dyndbg: tighten fn-sig of ddebug_apply_class_bitmap
+      dyndbg: replace classmap list with an array-slice
+      dyndbg: macrofy a 2-index for-loop pattern
+      dyndbg: Upgrade class param storage to u64 for 64-bit classmaps
+      dyndbg,module: make proper substructs in _ddebug_info
+      dyndbg: move mod_name down from struct ddebug_table to _ddebug_info
+      dyndbg: hoist classmap-filter-by-modname up to ddebug_add_module
+      selftests-dyndbg: add a dynamic_debug run_tests target
+      dyndbg: change __dynamic_func_call_cls* macros into expressions
+      lib/parser: add match_wildcard_hyphen() for agnostic matching
+      dynamic_debug: use KBUILD_MODFILE for unique builtin module names
+
+ Documentation/admin-guide/dynamic-debug-howto.rst  |  55 ++-
+ MAINTAINERS                                        |   2 +
+ drivers/gpu/drm/drm_print.c                        |   6 +-
+ include/asm-generic/bounded_sections.lds.h         |  32 ++
+ include/asm-generic/dyndbg.lds.h                   |  18 +
+ include/asm-generic/vmlinux.lds.h                  |  68 +--
+ include/drm/drm_print.h                            |   2 +-
+ include/linux/dynamic_debug.h                      | 133 +++---
+ include/linux/parser.h                             |   1 +
+ kernel/module/main.c                               |  12 +-
+ lib/dynamic_debug.c                                | 507 ++++++++++-----------
+ lib/parser.c                                       |  58 ++-
+ lib/test_dynamic_debug.c                           |  30 +-
+ scripts/module.lds.S                               |   2 +
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/dynamic_debug/Makefile     |   9 +
+ tools/testing/selftests/dynamic_debug/config       |   8 +
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 343 ++++++++++++++
+ 18 files changed, 833 insertions(+), 454 deletions(-)
+---
+base-commit: e43ffb69e0438cddd72aaa30898b4dc446f664f8
+change-id: 20260521-dd-maint-2-76c542079420
+
+Best regards,
+-- 
+Jim Cromie <jim.cromie@gmail.com>
 
