@@ -1,127 +1,200 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC61037C939
-	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 07:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C4B36A03A;
+	Tue,  2 Jun 2026 11:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780386619; cv=none; b=vBBkoQHeZfrGLyvpZzlwTdCyzxYDbxX8Kuc+mysKDPbN+ycym/D13rUiIwwOOQjMZtx9YBybCVf1CaocXhuFUvUX+2PYzCVy3ziF41J0vYlJ1TSmIx4vLffB0m/eWtmCc3jGaX7VC/YIgN2ejjiXSDNO/tmA97JYMrOAOP3D1o0=
+	t=1780399631; cv=none; b=YGSKUDZVmOvrSjOK37t8/orP7PGEimetOYIVjhZTXRwprO81+zT5ZhH+pEsysVq8bF/O76rMGd+JJKO8h6mc1yopRItik2yxTvHO7MVqf6/iESuWJV/oEFiI5/P0bI8+B34GlQNSg85fYw5jlDv8Oe9lMiCB4XPWDgryfyKnKFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780386619; c=relaxed/simple;
-	bh=iMeRc73/gYUtj+wFwmFrIjzMyI0u1MTWAjfgzQHJESc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=qgCFq6KSGRLejMz0x8O6f1sHI6p3LOR30KuajjCen+Rob7JCHtee7D7NLpX8y7IYTFY8T012J8751nXViRL2kCauVa9i56onrmUSA0WyTA8wv9VyeMc3D6cle7I63oNUb0ik3Mfq4Hhav+f3n3osAfT9ckfOdbsBRJnu3C2qgOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cVh9xm2s; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1780399631; c=relaxed/simple;
+	bh=vFe0YHJbZeLES+sUauMUh5hZ46dD8ew9Ej6lDFLoT9Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rr6jO1fByXYRx+tKEK7oTG4goSfF7waXcXdlLuctriRPjvmmYXgrxRRMfeZmLjnhcsB26z04C5zk7rXis6u4wOAZSP+LWrbDBXU493YwRtXD1OrEKJ9qdFg/28FfxBFreuc3DLPZS1xXWQ44/bD7tNJ5VtEr6kS4PNen2nqbcK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OpuvB+TC; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cVh9xm2s"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4904fd4f6aeso92402295e9.2
-        for <linux-modules@vger.kernel.org>; Tue, 02 Jun 2026 00:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780386616; x=1780991416; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4sJ4er/vaqbbgesppHoOGKpU4Tkfb6XJ1iMzBuO3InE=;
-        b=cVh9xm2snj9ak8T+mUhkZy2zYw8uwacIFimN6yJ9j0AvFkzCVtJbehUCzdBv5XINja
-         rtj1lJkwroGdh8fPueUXWx70kLybUd0aXqcOZCm0xO0B3wsPT3O2lYPOzaFbAdqMU4tF
-         VYk4tiFnPTdoZILwwf0P1w68to+oQ4J2Jh6mHySCMUWK+8/jvJkXVPMebhz2aXtdvq8N
-         1pi5nuzkVzdzAOgQ03gcLUffFyd+vzdamLjZaaau+q6kbbofhfOSd/NFwx1461e7K9/4
-         zcPTbYlNt4Z4gsLdkSqDl/h20GuN+Vn6ey38uRYgZFTdMKMgd25pxfICWzXUxK33XYMN
-         E1qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780386616; x=1780991416;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4sJ4er/vaqbbgesppHoOGKpU4Tkfb6XJ1iMzBuO3InE=;
-        b=n7DI8LZweys4I3kzfYXmWPsLVaYY915GE0RzAXSn4truYDIaKEuqdhXr4OFuT7HRAN
-         +dhmL8tfyvmRsjhSo8Zo1BTbhzFBhSBgespFXpDDDRg9CCpAiFmt/+wqqgtjAXGWmMzF
-         A8nI3bUigh6HOb2yS0WExi6ZXDdPCXxUNbFBfd2IDxEUCm4Bp4KrVYzEUExwSioPlB9z
-         WosfffULn4Ug1EOub34HviIDllrOTAZT33IVsOJiqbH9YmryqsH30a1prt6Cv1Oumset
-         d2L3+6OFCuF208aK/yV08pYpKsB2EAJl69Rg7l2siF36dd0ORl2YRnDZr6rviu+Sd0Y+
-         VPlg==
-X-Forwarded-Encrypted: i=1; AFNElJ8Aa7P7fD3gYj3OWeW9HHozwsD7fmYXKXsUqojK7GpmkErNY87DKsIXUFSaafzhWWf0gMAzfKKBi35IE4hE@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMw3HjcfZe6o+nDus4bNlGb9Q3ZMyKyzELPAkwW/RhqJGZUvHP
-	UCNJyju8a53BVO3fiYegSqlJ1P3AFmd8WtO9ETNUrS+bf6VcqRgBv1u2Ng3hJrcCVlc=
-X-Gm-Gg: Acq92OE/TJrkzxEYh6QfXNTgmLs4h1CCW6Hwe9fD5wPxxjTvWxW9CuV0CrBYqv5cjcc
-	zmlnKkQGcAZA7OPlZfH0yTLekrSZoit3eC4vCru7Iv2yJGNvW5ZPsxNU08lqmLyYzITK0JCFXIP
-	kSJfaZtOBSL2gJVFHCIkVmT5asmb/EaDlFUPYSSHz7Z+id7gUysRWBQMqRiYy+v/GCE/R0CQ4uf
-	pZw1KeyGUczPKaA43Qa6eL5Vq1mK0KemUWqzNlUXn13iMxgH4U5cq9kBly2YRk64Goh8TdVEdTn
-	CfLw1yD1FPviSugrCiPfLDOFQ7ngS5Zxq4knL5PhD2PpPK1hKcT+U+Sc4MRKlcyzzxU3OeECND/
-	/T4uLDh9z0YPFD+fpEYyDC4c1yWdPTg8n71of4zaDsWXvq9O4fDje/RGwvgDR7pE4aPG0WuFgyx
-	uY4yiCMFFMbvzCY0qUGZmwkvSHBQUCQxVVCzSrcYoqc6XsjFWUeIC40QUPKZmf5i4hAPpZyr6+7
-	ipCZ7pkDbo4iAKZh6bc6G3CKpeHH3B+izsjDd5401xn/vOvXPyCHOHBC3aahzMRJw/uh88pwDl4
-	i1G1
-X-Received: by 2002:a05:600c:a111:b0:490:4b89:535f with SMTP id 5b1f17b1804b1-490a2915ce2mr197079285e9.8.1780386616065;
-        Tue, 02 Jun 2026 00:50:16 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490b0e0f26csm46866775e9.2.2026.06.02.00.50.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jun 2026 00:50:15 -0700 (PDT)
-Message-ID: <ecc6ed11-de1e-49b8-b6f7-1b6ae3af5e56@suse.com>
-Date: Tue, 2 Jun 2026 09:50:15 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OpuvB+TC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780399630; x=1811935630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vFe0YHJbZeLES+sUauMUh5hZ46dD8ew9Ej6lDFLoT9Q=;
+  b=OpuvB+TCFOlrTj1dTsQq4IO6bT0RYvhdqKiNi7guAfItcI40qmxJuR+2
+   JxfSI7H8Vs0pb6lSzui2MNNzEWzxhK2dqWRYpbiEiVo05UowkhP/brLIc
+   ZVeqrXsY/GHqe3VM+ZWp1v4ClJFL3WOZdAoNffJszSxQymB3W2SmL0kdn
+   EoTQOQCHyRV6IH4CmL1hEzveBQPF06YlAMtiXnjfxI7VYYLoSP3+xGnlr
+   LFm/IXvUvXoEkVqVbja68afnmQGU98K68zOP52EZcPPPHvMGyw+ljzTra
+   1vViH6ezFD00NvPoMZN+e9EIaC8+Q8JOgg1j4bdpBSO6q8EyVZiF5BWXP
+   A==;
+X-CSE-ConnectionGUID: oIlO4b2fRxuCw2x5D/ONOg==
+X-CSE-MsgGUID: uezSZkyoSk+dL6kVsxakLg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="84804995"
+X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
+   d="scan'208";a="84804995"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 04:27:07 -0700
+X-CSE-ConnectionGUID: 57WJuzJhQk+bJIT4F8AZnw==
+X-CSE-MsgGUID: InV+5AxmRSKrEz4WoNh7bQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
+   d="scan'208";a="240879149"
+Received: from mkosciow-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.229])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 04:26:48 -0700
+Date: Tue, 2 Jun 2026 14:26:46 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+	Pengpeng Hou <pengpeng@iscas.ac.cn>, stable@vger.kernel.org,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Corey Minyard <corey@minyard.net>,
+	Gabriel Somlo <somlo@cmu.edu>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, Hannes Reinecke <hare@suse.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
+	Tiwei Bie <tiwei.btw@antgroup.com>,
+	Benjamin Berg <benjamin.berg@intel.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"David E. Box" <david.e.box@linux.intel.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
+	Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Alexander Potapenko <glider@google.com>,
+	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-mm@kvack.org,
+	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+	openipmi-developer@lists.sourceforge.net, qemu-devel@nongnu.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, netdev@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 01/11] params: bound array element output to the caller's
+ page buffer
+Message-ID: <ah699hwLxIIOZ0-7@ashevche-desk.local>
+References: <20260521133315.work.845-kees@kernel.org>
+ <20260521133326.2465264-1-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module: dups: don't hold mutex across synchronize_rcu()
-To: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-References: <ajydyxgaea27rhcopp5eauji24znotu65d2b4uw344yvmwcc6f@7l5re6f2xcuk>
-Content-Language: en-US
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
- linux-modules@vger.kernel.org
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <ajydyxgaea27rhcopp5eauji24znotu65d2b4uw344yvmwcc6f@7l5re6f2xcuk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260521133326.2465264-1-kees@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 6/2/26 6:17 AM, Naveen Kumar Chaudhary wrote:
-> kmod_dup_request_delete() calls synchronize_rcu() while holding
-> kmod_dup_mutex. This is unnecessary since list_del_rcu() only needs
-> the mutex for list manipulation, and the RCU grace period just needs
-> to complete before kfree(). Holding the mutex across the grace period
-> blocks all other kmod_dup_mutex users for the duration, causing
-> unnecessary latency.
+On Thu, May 21, 2026 at 06:33:14AM -0700, Kees Cook wrote:
 > 
-> Move synchronize_rcu() after the mutex is released.
+> param_array_get() appends each element's string representation into the
+> shared sysfs page buffer by passing buffer + off to the element getter.
 > 
-> Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-> ---
->  kernel/module/dups.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> That works for getters that only write a small bounded string, but
+> param_get_charp() and similar helpers format against PAGE_SIZE from the
+> pointer they receive. Once off is non-zero, an element getter can
+> therefore write past the end of the original sysfs page buffer.
 > 
-> diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-> index 1d720a5311ba..46e74c06ed52 100644
-> --- a/kernel/module/dups.c
-> +++ b/kernel/module/dups.c
-> @@ -88,8 +88,8 @@ static void kmod_dup_request_delete(struct work_struct *work)
->  	 */
->  	mutex_lock(&kmod_dup_mutex);
->  	list_del_rcu(&kmod_req->list);
-> -	synchronize_rcu();
->  	mutex_unlock(&kmod_dup_mutex);
-> +	synchronize_rcu();
->  	kfree(kmod_req);
->  }
->  
+> Collect each element into a temporary PAGE_SIZE buffer first and then
+> copy only the remaining space into the caller's page buffer.
 
-I think the way the module dups code works with kmod_dup_req entries is
-generally off and should be properly reworked.
+...
 
-This synchronize_rcu() call doesn't actually synchronize with anything
-because the code has no RCU read-side critical section. All lookups
-performed by kmod_dup_request_lookup() are protected by kmod_dup_mutex.
+> +	elem_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
 
-On the other hand, I suspect that there is a use-after-free in
-kmod_dup_request_exists_wait(), where the code releases kmod_dup_mutex
-but continues using the obtained kmod_dup_req.
+get_free_page() (or how it is called)?
+
+> +	if (!elem_buf)
+> +		return -ENOMEM;
+> +
+>  	for (i = off = 0; i < (arr->num ? *arr->num : arr->max); i++) {
+> -		/* Replace \n with comma */
+> -		if (i)
+> -			buffer[off - 1] = ',';
+>  		p.arg = arr->elem + arr->elemsize * i;
+>  		check_kparam_locked(p.mod);
+> -		ret = arr->ops->get(buffer + off, &p);
+> +		ret = arr->ops->get(elem_buf, &p);
+>  		if (ret < 0)
+> -			return ret;
+> +			goto out;
+> +		ret = min(ret, (int)(PAGE_SIZE - 1 - off));
+
+It's usually discouraged to use castings in min/max/clamp. Can we make ret long
+or do something different here?
+
+> +		if (!ret)
+> +			break;
+
+> +		/* Replace the previous element's trailing newline with a comma. */
+> +		if (i)
+> +			buffer[off - 1] = ',';
+
+Can't we do this after with help of strreplace()?
+
+> +		memcpy(buffer + off, elem_buf, ret);
+>  		off += ret;
+> +		if (off == PAGE_SIZE - 1)
+> +			break;
+>  	}
+>  	buffer[off] = '\0';
+> -	return off;
+> +	ret = off;
+> +out:
+> +	kfree(elem_buf);
+> +	return ret;
 
 -- 
-Thanks,
-Petr
+With Best Regards,
+Andy Shevchenko
+
+
