@@ -1,67 +1,67 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F319C3C81BF
-	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 22:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18EF3CB2CC
+	for <linux-modules@vger.kernel.org>; Tue,  2 Jun 2026 22:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780440524; cv=none; b=Rg8k4vNn7Wl+q63wYg2WOsW/P1ZMZ2EV6n+6O2XvSDpSEL9PRIoQ3d4JDU/H5eTVcnECHOk0o/a0cpDru1lioMbT8Jus6m1cy0BXuWWyovzqQVH7c2myniN0ow67XH3WGtayt8P/JiwQ083XLWT7VO5eiQ5wlQ/llpyuEohDwdA=
+	t=1780440527; cv=none; b=YwIVjUHi+c5YfMFmABtKqBVx2qgmuwVtQrYKYyZlE4x8ub+2jKnknw4bCciu2ANWn+osg3o3aLRhRMDrnFVVuL7TDadsvCxFvyh73VkAltka6iKbGXjWEtojuuC3+ZT1oKJX6B5QOj/PbL+kEp69XcWKZ64xrbDqb0bbY+sKiKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780440524; c=relaxed/simple;
-	bh=Ah9OubhC/0J+O5fnf6mytQN8u50S2Bl4xoeKfk7IEd0=;
+	s=arc-20240116; t=1780440527; c=relaxed/simple;
+	bh=3/WKOcRSB+nt/VjxfVuHRY5i0B3sWWTVXpV+X5m2Kcw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eOICEwJhYCO8U/MHgplo27CNih7MftcBt59y1GsOP60MsFDSwMLVbOfNM23IZ+7mNKavMUMuzxQVDAl7Om/WReBmsf5KaMggIc3QQnwq+O4dhXEAcdWQvgtTrh/6yeF56/wfeJnSlgvTiPhWZbBFN/jsORWgYyYFDbMFwq3Em58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hFuxi0H2; arc=none smtp.client-ip=209.85.221.51
+	 In-Reply-To:To:Cc; b=Zm65WhExLBlWnKralZqIMXGEB2WalDI2kjTpXbtMNhZi1nhhi0QfUpJN2DT2AYorN6JQ6ft90203ppR5XD9GAkdTekT/baLRNSOxJlSuGGDm/0h6WfmxmTUMAPGgRiPIQXGH6Ybua1OJgHzVHcje4EW3S6UKCVW5ATuKWbfAEAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cViidzV3; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hFuxi0H2"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-45eecb8bf67so4335742f8f.2
-        for <linux-modules@vger.kernel.org>; Tue, 02 Jun 2026 15:48:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cViidzV3"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-45efa80e0afso2901691f8f.2
+        for <linux-modules@vger.kernel.org>; Tue, 02 Jun 2026 15:48:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780440519; x=1781045319; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780440522; x=1781045322; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1/UoMyrbDRBJtnX/0jQKUAOsd+dEJyLvzD20lPdR4ww=;
-        b=hFuxi0H2UuJnZ64MYnC7sk1J7y3+R9yeqezMzy6OPMv3yOV9tOrx0vSkjnvoCP1MNg
-         Z/sctMu6JTcTxu1ng+32FHKBbFWFUOHLT1k8cRTf6CB3MQoVyHJYMzhTJl9MNhas3JcB
-         V4MK4N7d+0njhO7U9zJZmIF1t7HUEF2+8ZB9L/6ZPM+iC/mr8SeCg9TgPsWtxDADNJfP
-         P3loPLaXlwuy6HgaGkizpXNQs9k3iIbojMWpWA9MLasUmVUomupYoYqFUCm6Jj2QsqW1
-         RaN/FnjxN1G0Sx6sk/G+9685NCbRdv1EhOzDMiFqcv2nPPcvFKIlET7p+nspkMfjFBEv
-         oZpA==
+        bh=ouT17iaKBzrIR7K8VitMxlklOudvhENGiC0/9mkENrM=;
+        b=cViidzV3XPTzjGNuq4pXlzpDtguJUwYlFe4NtGUGPJao3oLSbbbDnkzAG5LhrDgqqe
+         z3/0oPFzWgouoaQPnsy6MfT4K0lAGw70VMLU6KXjAW6SuhX5+PR0J3TxXAA3AA2OtUfV
+         m1WA93sWWK4LZE0dQSsnQp+8ogh3BQ7v0qCY2SGXJDJ1Zcm1jLLEmJPTEEBpO2OncOBp
+         1eB+ZGQ6EVVFcrPWHkWqKBpKKMc50m0ZomHJYSc3ySJl1Zm2zjMpa5ojF5hr+vBAyg/b
+         XgwjwjglRHRhE9fYrbRbLeCBZrYQrE6aCP+HCD6IlIU6xyaMceXUUpyRRj6zp/XDlzhh
+         pqmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780440519; x=1781045319;
+        d=1e100.net; s=20251104; t=1780440522; x=1781045322;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=1/UoMyrbDRBJtnX/0jQKUAOsd+dEJyLvzD20lPdR4ww=;
-        b=q9T+x10fecVoSP+L0vhPIU1kKD/7sK6AJ3CWCz/HG+EFvE+CHIFyF3zmd3qteu+9KM
-         PPaNAvS5ybRf9/hO3D9WGln0SgbF/Z+PaKYDEX4blx/+fMuMteJW5Jt3zcEdf4coOhP3
-         zk4FTJTQkITdJTFDOod2Vp9g2N013SBuNjiQ5ckupOAxgaaasnLiINOIZ+M/lCQzQjjE
-         dkU+hHdDjV6KrcxfxWiAITMYqqu6QAeUVcDYlXEOli3f/fHXfd9/1Xg+Inv0LLFbbaNl
-         Y6Qw34kC0HSIwoVfw76XOI4EhN2ekpUSrwjcEGuhHdmrQSjI/zWg9o2xrxOplkEgvDV0
-         4SMA==
-X-Forwarded-Encrypted: i=1; AFNElJ/sQfAUaWj6ERDcSFbL7fCm2zB1iRk817nSnScVfe2ylO70T0YNKKk+RPtN5lWiGQ53HhrjCNo8s++1TF9w@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFOV82/De2J41il0fA7BLB6/sYfDfiDBa5aNDeBLZgPSS5aAt3
-	PgmmQUohC4ip/ILwIJYZHkfe5tOdsNWn3cu8Xl3vaqAEVE6Yy6WjiCmt
-X-Gm-Gg: Acq92OFOI2J760ejy7krGMOMmLcBoKirW2NsrBO5mvcNZ6jWNLPKOlvmOWidEzs4Lq9
-	kilmA6786pMhP+KrYEn0GPe6hHaVlx3qVbwhtrpjdaQka4NRn8PxD+tGltpz4Anx3DmBqGsDNxH
-	4araB1/GbIb5MdJGqo4tX7FSo+rBPqaLmXsJ47WnRbnrLMxwmd7OxV34fx1AXIXbxpByL7n0L6K
-	CF4Mh+lTZbz4mvfEh6snshXrhDaVZ8aH0YRNIpfz7vr6x5sMbSTebSExLV+1s/UIabAkDIqtVcw
-	Cd6eE4k7X/sFq45bg7eH5AvkqDQZMfeO/fWhCH6U+kaIvLG/eP4L6usVwLpRJT2Zb0aFvHbMcJO
-	fti0/swMm6aU0zSZ4yDL9R9CKTKxZv8GSnFwzXHYXyqHkmV6toIkuWgHPix3LnYO+yyO8o5DnOY
-	W1nMWbwDo5dp63GUb0wJO+48an1Qn2pf81To+Ep5p7SQ==
-X-Received: by 2002:a05:600c:458b:b0:490:b409:94f4 with SMTP id 5b1f17b1804b1-490b5fdcda1mr13028365e9.28.1780440519473;
-        Tue, 02 Jun 2026 15:48:39 -0700 (PDT)
+        bh=ouT17iaKBzrIR7K8VitMxlklOudvhENGiC0/9mkENrM=;
+        b=qTMngA6OAjBy7JfJRA+JFye8+zqeDTK0ftS0bcpoVCEKvN0OhdTUO8S1h1L/snKarE
+         Z45NtKeRC6Ysh8ZoE0c+lBkpAItk2QtM90IYx2LFMHwL19cG9ETbVZjUPmYHjk2DLCWT
+         yL9ug7dO+KpkjQ6QP+7G5LojxL+NOUk3W6NNqVHlde8vrbSclr1Y5iNgBj5sgYTSfTL7
+         0+leR0xNofuJ9ymdKMXr67Q4MMxQLP6iGhk1DBsioHCmRuiAvHnSuHsX6KfJfA5V9Pe2
+         96AAd5ko7SqNhYYSgEE+RphJJoUPnRVrM69b5ER3OY3nu6sUHPQyFP7wB2O202BqIAE/
+         /1OA==
+X-Forwarded-Encrypted: i=1; AFNElJ/uDfdIykwfTYqbcGTK8cqryuYULH6Bl/6Cg2qE6bmrmVulUQy5kAV2IYLk74xnkSkW2f+pXsmron1OGr6z@vger.kernel.org
+X-Gm-Message-State: AOJu0YxR2qpx2ucfxenx8QG9hvOLKOEwi7joU0TXnMFJ7xqYBVJtsWUE
+	6bg+x966n2c+FwSsEvvlefs2XIzh4Zpu/ZtX7SsoUZl09KAPvfh6Q0j6
+X-Gm-Gg: Acq92OE0L/ahAUANsMgznLjG7oQMW34BI5+04sRKZcf4OvGsD6uv1rd39pgYoky9Sr5
+	KgW3LGxG3vbsNzvVBVFhvNhNwOU3U0bro2IX5S6rSwANInukRijDn9MkYLZ4lqGdea5imhDfoyB
+	UruEeeGSVI7AR01eeNw47qjBrPKjcicwjsAJXnUkOHJc8lYZIQZ8WEcOyBC1ZG6bc1Is+kwoUZd
+	kt0UZR9Us2Rqm+VT4IlGG330TLdiYrACl8Yolt3N7fJ5LIn1ZwoaCzhTjgNXexAQMTndgk9hcMl
+	xB3Q6j7PpdhSAy2rX/AKOjq2IwU2UBiPG6zzW25iXf7NdWmZeCSRzzuL8X2uyHE/E/10tRadlJ6
+	E65PQoKvk9jRRvKoIiYf2r1c3OnY7JblohRjaC3GMuYf1I8Q9gymjQZWw2ROWp2jkqchZe4A3h+
+	rLHtDYyLAYJ4KXLBPqfqgbghVOEsLE0w7wL9SP7yW8Pw==
+X-Received: by 2002:a05:6000:2401:b0:43b:5097:6f62 with SMTP id ffacd0b85a97d-46021760f85mr726977f8f.36.1780440522072;
+        Tue, 02 Jun 2026 15:48:42 -0700 (PDT)
 Received: from [172.16.188.153] ([213.181.114.83])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4601f2f2710sm1999791f8f.14.2026.06.02.15.48.37
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4601f2f2710sm1999791f8f.14.2026.06.02.15.48.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 15:48:39 -0700 (PDT)
+        Tue, 02 Jun 2026 15:48:41 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 02 Jun 2026 22:48:07 +0000
-Subject: [PATCH v4 10/25] dyndbg: reword "class unknown," to
- "class:_UNKNOWN_"
+Date: Tue, 02 Jun 2026 22:48:08 +0000
+Subject: [PATCH v4 11/25] dyndbg-API: remove
+ DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260602-dd-maint-2-v4-10-19a1445585a8@gmail.com>
+Message-Id: <20260602-dd-maint-2-v4-11-19a1445585a8@gmail.com>
 References: <20260602-dd-maint-2-v4-0-19a1445585a8@gmail.com>
 In-Reply-To: <20260602-dd-maint-2-v4-0-19a1445585a8@gmail.com>
 To: Jonathan Corbet <corbet@lwn.net>, 
@@ -88,49 +88,296 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  Jim Cromie <jim.cromie@gmail.com>, 
  Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780440488; l=1309;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780440488; l=9437;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=Ah9OubhC/0J+O5fnf6mytQN8u50S2Bl4xoeKfk7IEd0=;
- b=mY6va1q+pplf3oiRh9kAqV2/4rkm8Jt+FXjkD2G7wa/YV3UYCu8KlP74E8zHuHM0fBwUW7QfI
- 85+dFL9KEusADx7bjdzgWA9Z4a2ALDbaZGX4b6jMBC5KuU25CaW5OCx
+ bh=3/WKOcRSB+nt/VjxfVuHRY5i0B3sWWTVXpV+X5m2Kcw=;
+ b=0Oro+fvs96gHBULnbgqI8LvicLUd9KRubfWOKkcC+3im25aR56j8yFM54WrNioaUJX2NhahT3
+ g92pijhfZ9+BxZYVa1GA+7gp/D5ui60gQw3JyQREtZAWwxIMkqut0il
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-When a dyndbg classname is unknown to a kernel module, the callsite is
-un-addressable via >control queries.
+Remove the DD_CLASS_TYPE_*_NAMES classmap types and code.
 
-The control-file displays this condition as "class unknown,"
-currently.  That spelling is sub-optimal/too-generic, so change it to
-"class:_UNKNOWN_" to loudly announce the erroneous situation, and to
-make it uniquely greppable.
+These 2 classmap types accept class names at the PARAM interface, for
+example:
 
-NB: while this might be seen as a user-visible change, this shouldn't
-disqualify the change:
+  echo +DRM_UT_CORE,-DRM_UT_KMS > /sys/module/drm/parameters/debug_names
 
-a- it reports classmap coding error condition, which should be
-   detected before review.
-b- SHOUTING the error makes it uniquely greppable.
-c- the classmap feature is marked BROKEN for its only current user.
+The code works, but its only used by test-dynamic-debug, and wasn't
+asked for by anyone else, so reduce LOC & test-surface; simplify things.
+
+Also rename enum class_map_type to enum ddebug_class_map_type.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- lib/dynamic_debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v3:
 
+fix name of enum in kdoc
+also change name of struct (to future name)
+
+v2:
+
+move RvB after SoB
+
+respect const instr in param_set_dyndbg_module_classes, return -EINVAL on classtype err.
+---
+ include/linux/dynamic_debug.h | 27 ++++--------
+ lib/dynamic_debug.c           | 99 +++----------------------------------------
+ lib/test_dynamic_debug.c      | 26 ------------
+ 3 files changed, 14 insertions(+), 138 deletions(-)
+
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index a10adac8e8f0..78c22c6d2312 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -59,27 +59,16 @@ struct _ddebug {
+ #endif
+ } __attribute__((aligned(8)));
+ 
+-enum class_map_type {
++enum ddebug_class_map_type {
+ 	DD_CLASS_TYPE_DISJOINT_BITS,
+ 	/**
+-	 * DD_CLASS_TYPE_DISJOINT_BITS: classes are independent, one per bit.
+-	 * expecting hex input. Built for drm.debug, basis for other types.
++	 * DD_CLASS_TYPE_DISJOINT_BITS: classes are independent, mapped to bits[0..N].
++	 * Expects hex input. Built for drm.debug, basis for other types.
+ 	 */
+ 	DD_CLASS_TYPE_LEVEL_NUM,
+ 	/**
+-	 * DD_CLASS_TYPE_LEVEL_NUM: input is numeric level, 0-N.
+-	 * N turns on just bits N-1 .. 0, so N=0 turns all bits off.
+-	 */
+-	DD_CLASS_TYPE_DISJOINT_NAMES,
+-	/**
+-	 * DD_CLASS_TYPE_DISJOINT_NAMES: input is a CSV of [+-]CLASS_NAMES,
+-	 * classes are independent, like _DISJOINT_BITS.
+-	 */
+-	DD_CLASS_TYPE_LEVEL_NAMES,
+-	/**
+-	 * DD_CLASS_TYPE_LEVEL_NAMES: input is a CSV of [+-]CLASS_NAMES,
+-	 * intended for names like: INFO,DEBUG,TRACE, with a module prefix
+-	 * avoid EMERG,ALERT,CRIT,ERR,WARNING: they're not debug
++	 * DD_CLASS_TYPE_LEVEL_NUM: input is numeric level, 0..N.
++	 * Input N turns on bits 0..N-1
+ 	 */
+ };
+ 
+@@ -90,7 +79,7 @@ struct ddebug_class_map {
+ 	const char **class_names;
+ 	const int length;
+ 	const int base;		/* index of 1st .class_id, allows split/shared space */
+-	enum class_map_type map_type;
++	enum ddebug_class_map_type map_type;
+ };
+ 
+ /* encapsulate linker provided built-in (or module) dyndbg data */
+@@ -119,8 +108,8 @@ struct ddebug_class_param {
+ 
+ /**
+  * DECLARE_DYNDBG_CLASSMAP - declare classnames known by a module
+- * @_var:   a struct ddebug_class_map, passed to module_param_cb
+- * @_type:  enum class_map_type, chooses bits/verbose, numeric/symbolic
++ * @_var:   a struct _ddebug_class_map, passed to module_param_cb
++ * @_maptype: enum ddebug_class_map_type, chooses bits/verbose
+  * @_base:  offset of 1st class-name. splits .class_id space
+  * @classes: class-names used to control class'd prdbgs
+  */
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 6b1e983cfedc..a9caf84ddb22 100644
+index a9caf84ddb22..0377d9f8dcd1 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -1166,7 +1166,7 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
- 		if (class)
- 			seq_printf(m, " class:%s", class);
- 		else
--			seq_printf(m, " class unknown, _id:%d", dp->class_id);
-+			seq_printf(m, " class:_UNKNOWN_ _id:%d", dp->class_id);
- 	}
- 	seq_putc(m, '\n');
+@@ -646,76 +646,6 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
  
+ #define CLASSMAP_BITMASK(width) ((1UL << (width)) - 1)
+ 
+-/* accept comma-separated-list of [+-] classnames */
+-static int param_set_dyndbg_classnames(const char *instr, const struct kernel_param *kp)
+-{
+-	const struct ddebug_class_param *dcp = kp->arg;
+-	const struct ddebug_class_map *map = dcp->map;
+-	unsigned long curr_bits, old_bits;
+-	char *cl_str, *p, *tmp;
+-	int cls_id, totct = 0;
+-	bool wanted;
+-
+-	cl_str = tmp = kstrdup_and_replace(instr, '\n', '\0', GFP_KERNEL);
+-	if (!tmp)
+-		return -ENOMEM;
+-
+-	/* start with previously set state-bits, then modify */
+-	curr_bits = old_bits = *dcp->bits;
+-	vpr_info("\"%s\" > %s:0x%lx\n", cl_str, KP_NAME(kp), curr_bits);
+-
+-	for (; cl_str; cl_str = p) {
+-		p = strchr(cl_str, ',');
+-		if (p)
+-			*p++ = '\0';
+-
+-		if (*cl_str == '-') {
+-			wanted = false;
+-			cl_str++;
+-		} else {
+-			wanted = true;
+-			if (*cl_str == '+')
+-				cl_str++;
+-		}
+-		cls_id = match_string(map->class_names, map->length, cl_str);
+-		if (cls_id < 0) {
+-			pr_err("%s unknown to %s\n", cl_str, KP_NAME(kp));
+-			continue;
+-		}
+-
+-		/* have one or more valid class_ids of one *_NAMES type */
+-		switch (map->map_type) {
+-		case DD_CLASS_TYPE_DISJOINT_NAMES:
+-			/* the +/- pertains to a single bit */
+-			if (test_bit(cls_id, &curr_bits) == wanted) {
+-				v3pr_info("no change on %s\n", cl_str);
+-				continue;
+-			}
+-			curr_bits ^= BIT(cls_id);
+-			totct += ddebug_apply_class_bitmap(dcp, &curr_bits, dcp->bits);
+-			*dcp->bits = curr_bits;
+-			v2pr_info("%s: changed bit %d:%s\n", KP_NAME(kp), cls_id,
+-				  map->class_names[cls_id]);
+-			break;
+-		case DD_CLASS_TYPE_LEVEL_NAMES:
+-			/* cls_id = N in 0..max. wanted +/- determines N or N-1 */
+-			old_bits = CLASSMAP_BITMASK(*dcp->lvl);
+-			curr_bits = CLASSMAP_BITMASK(cls_id + (wanted ? 1 : 0 ));
+-
+-			totct += ddebug_apply_class_bitmap(dcp, &curr_bits, &old_bits);
+-			*dcp->lvl = (cls_id + (wanted ? 1 : 0));
+-			v2pr_info("%s: changed bit-%d: \"%s\" %lx->%lx\n", KP_NAME(kp), cls_id,
+-				  map->class_names[cls_id], old_bits, curr_bits);
+-			break;
+-		default:
+-			pr_err("illegal map-type value %d\n", map->map_type);
+-		}
+-	}
+-	kfree(tmp);
+-	vpr_info("total matches: %d\n", totct);
+-	return 0;
+-}
+-
+ /**
+  * param_set_dyndbg_classes - class FOO >control
+  * @instr: string echo>d to sysfs, input depends on map_type
+@@ -734,28 +664,14 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
+ 	unsigned long inrep, new_bits, old_bits;
+ 	int rc, totct = 0;
+ 
+-	switch (map->map_type) {
+-
+-	case DD_CLASS_TYPE_DISJOINT_NAMES:
+-	case DD_CLASS_TYPE_LEVEL_NAMES:
+-		/* handle [+-]classnames list separately, we are done here */
+-		return param_set_dyndbg_classnames(instr, kp);
+-
+-	case DD_CLASS_TYPE_DISJOINT_BITS:
+-	case DD_CLASS_TYPE_LEVEL_NUM:
+-		/* numeric input, accept and fall-thru */
+-		rc = kstrtoul(instr, 0, &inrep);
+-		if (rc) {
+-			pr_err("expecting numeric input: %s > %s\n", instr, KP_NAME(kp));
+-			return -EINVAL;
+-		}
+-		break;
+-	default:
+-		pr_err("%s: bad map type: %d\n", KP_NAME(kp), map->map_type);
++	rc = kstrtoul(instr, 0, &inrep);
++	if (rc) {
++		int len = strcspn(instr, "\n");
++		pr_err("expecting numeric input, not: %.*s > %s\n",
++		       len, instr, KP_NAME(kp));
+ 		return -EINVAL;
+ 	}
+ 
+-	/* only _BITS,_NUM (numeric) map-types get here */
+ 	switch (map->map_type) {
+ 	case DD_CLASS_TYPE_DISJOINT_BITS:
+ 		/* expect bits. mask and warn if too many */
+@@ -783,6 +699,7 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
+ 		break;
+ 	default:
+ 		pr_warn("%s: bad map type: %d\n", KP_NAME(kp), map->map_type);
++		return -EINVAL;
+ 	}
+ 	vpr_info("%s: total matches: %d\n", KP_NAME(kp), totct);
+ 	return 0;
+@@ -804,12 +721,8 @@ int param_get_dyndbg_classes(char *buffer, const struct kernel_param *kp)
+ 	const struct ddebug_class_map *map = dcp->map;
+ 
+ 	switch (map->map_type) {
+-
+-	case DD_CLASS_TYPE_DISJOINT_NAMES:
+ 	case DD_CLASS_TYPE_DISJOINT_BITS:
+ 		return scnprintf(buffer, PAGE_SIZE, "0x%lx\n", *dcp->bits);
+-
+-	case DD_CLASS_TYPE_LEVEL_NAMES:
+ 	case DD_CLASS_TYPE_LEVEL_NUM:
+ 		return scnprintf(buffer, PAGE_SIZE, "%d\n", *dcp->lvl);
+ 	default:
+diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
+index 77c2a669b6af..74d183ebf3e0 100644
+--- a/lib/test_dynamic_debug.c
++++ b/lib/test_dynamic_debug.c
+@@ -74,13 +74,6 @@ DECLARE_DYNDBG_CLASSMAP(map_disjoint_bits, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+ DD_SYS_WRAP(disjoint_bits, p);
+ DD_SYS_WRAP(disjoint_bits, T);
+ 
+-/* symbolic input, independent bits */
+-enum cat_disjoint_names { LOW = 11, MID, HI };
+-DECLARE_DYNDBG_CLASSMAP(map_disjoint_names, DD_CLASS_TYPE_DISJOINT_NAMES, 10,
+-			"LOW", "MID", "HI");
+-DD_SYS_WRAP(disjoint_names, p);
+-DD_SYS_WRAP(disjoint_names, T);
+-
+ /* numeric verbosity, V2 > V1 related */
+ enum cat_level_num { V0 = 14, V1, V2, V3, V4, V5, V6, V7 };
+ DECLARE_DYNDBG_CLASSMAP(map_level_num, DD_CLASS_TYPE_LEVEL_NUM, 14,
+@@ -88,13 +81,6 @@ DECLARE_DYNDBG_CLASSMAP(map_level_num, DD_CLASS_TYPE_LEVEL_NUM, 14,
+ DD_SYS_WRAP(level_num, p);
+ DD_SYS_WRAP(level_num, T);
+ 
+-/* symbolic verbosity */
+-enum cat_level_names { L0 = 22, L1, L2, L3, L4, L5, L6, L7 };
+-DECLARE_DYNDBG_CLASSMAP(map_level_names, DD_CLASS_TYPE_LEVEL_NAMES, 22,
+-			"L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7");
+-DD_SYS_WRAP(level_names, p);
+-DD_SYS_WRAP(level_names, T);
+-
+ /* stand-in for all pr_debug etc */
+ #define prdbg(SYM) __pr_debug_cls(SYM, #SYM " msg\n")
+ 
+@@ -102,10 +88,6 @@ static void do_cats(void)
+ {
+ 	pr_debug("doing categories\n");
+ 
+-	prdbg(LOW);
+-	prdbg(MID);
+-	prdbg(HI);
+-
+ 	prdbg(D2_CORE);
+ 	prdbg(D2_DRIVER);
+ 	prdbg(D2_KMS);
+@@ -129,14 +111,6 @@ static void do_levels(void)
+ 	prdbg(V5);
+ 	prdbg(V6);
+ 	prdbg(V7);
+-
+-	prdbg(L1);
+-	prdbg(L2);
+-	prdbg(L3);
+-	prdbg(L4);
+-	prdbg(L5);
+-	prdbg(L6);
+-	prdbg(L7);
+ }
+ 
+ static void do_prints(void)
 
 -- 
 2.54.0
