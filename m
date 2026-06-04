@@ -1,64 +1,64 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE2A409103
-	for <linux-modules@vger.kernel.org>; Thu,  4 Jun 2026 11:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7246F409137
+	for <linux-modules@vger.kernel.org>; Thu,  4 Jun 2026 11:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780571125; cv=none; b=uBgBfhdZPAtusu2A1tMB6KW7dKDRv4+JuHnJf/Jid8QfGMkV6u5qVnZTNhWPh3oxswfv5O98MXLXzEQ9cP7sA3LQ9x6RWOcULsNOnWpI2PYQdznlEaczX+8UPDe91ui2VsMQDlyfNK4FCkbEU0QEMHDEZYuDBneO9i9EnwS47V0=
+	t=1780571126; cv=none; b=bvEUrf0wGXKWUNSH4cFo14pqDH+ygMCNOAg6fmRbuM0tm8TaPUvO6e4wvLVu3pdJGdFA/0gGOzzkWNJNFVezO16dlqrRJ8srXSoCQ+KBQJt0J42SJpOo7oEdersaka9XWWqKgdG7CISInXFyNLj/Xf1s4SRmloiXzIGHch6kSrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780571125; c=relaxed/simple;
-	bh=C92wi7j9PlBKhkeVJo2ng45cmm9eFGU8sPOk7F3JB84=;
+	s=arc-20240116; t=1780571126; c=relaxed/simple;
+	bh=1PM0LiHbncg6sP4lLs+mkgq0oy1h7NM8bUpsLT3heEI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JHhh+0pG7jUrXIJ25bCaJNlLP1JwtlqcLse81RuOf8b3HXgQfdRBVRmw5XSXlg4KdP4S/kweDhW7cNlXCTsCe0NtSK+/S6HsxTOpYtFhy0wOhudqqLG6KOkv3FJ3Xv5C3/bzvYxTN70BZuB33wgeXtP65+9j35IheNg1hTIibic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T6KMsC+a; arc=none smtp.client-ip=209.85.128.41
+	 MIME-Version; b=DeAX7GI83CdL6l89gSV7s8gVKaeDeQAwySh2qaM3xHQvNQTk1R/5OIujwdPKXToKMF60TJPV2wPIrMbSdJNOmCaxPqG5tjuT7vbhsYke+wxNfuLWWq59JRsHbDKBfuMrGfhkX4D5WZX6PW7wN0gbM58U22t4jrB23c5lhPqOoQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZJLGhURz; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="T6KMsC+a"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-490bc6a7958so7106555e9.1
-        for <linux-modules@vger.kernel.org>; Thu, 04 Jun 2026 04:05:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZJLGhURz"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4905529b933so6172195e9.0
+        for <linux-modules@vger.kernel.org>; Thu, 04 Jun 2026 04:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780571122; x=1781175922; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1780571123; x=1781175923; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=niEZAFnY1RLD4JLGZab4EnFoTzKTvX/YTAN74sNfQw8=;
-        b=T6KMsC+a0TrPZf4QJMlyoVXe0gi4auctgiU6LnhrhtHzmXtyW7uVyHxo0rkzxrxMLE
-         CPHBTnEvu0H4coziLY5QiJCMci9gKZSpNN/TZPsDDyYLmfbg3weI/cZwW4W3jKQclozv
-         Xw6pnrJhh3jckDcNVGrdBQ/zBib9orVqVT2gJD7ON34DQ7ng0kQmUjgn8+emwPJlLtoi
-         Rs+fobLJlvtWwZogIhCCcL/QcSh5X/hCa9ngRD1CHv1w6BNJdl1TIvcnzz5v3FEdj8Bm
-         6o05ItZHHFD8tbhQzsy1znmffAS4ZJYq6ffhB259n5/8r5ygNN2DBVOaknT6YSQmY83t
-         5KNQ==
+        bh=mh9nrAO/RTKL701wijSOrz3qd8apdES1vQv9RY9vWk4=;
+        b=ZJLGhURziZNZiTM+1U8AHlsibTkqivcmSQQFZBObl6mMv/n5o0ODtQqdlBnzyBIgrG
+         +86zqfDTBf39063H9Sq+Hve+XUyChJUAWl2rsD6dNG+CIeuUE2q7gaKehfdS6HAfPkm8
+         PqZII57Bea4WlPcY+RcdPKsb4VSDu2hgIC+3m3LJijtTHq/YhNFmoMixpg6622D1MqYQ
+         qDa8UcKPQAsvU5ukCfV9DOKCIn5ZjhS8cH8L/m7LpNNtYQA8FAGLQ91L+qHwadtf/Xr1
+         gA3pBsfvRxo2YbJqsDJLVycpV3/0YvGu6GUD3ntd+vKpq7dmxCvGdTE6vrezMIkgTzfQ
+         Fneg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780571122; x=1781175922;
+        d=1e100.net; s=20251104; t=1780571123; x=1781175923;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=niEZAFnY1RLD4JLGZab4EnFoTzKTvX/YTAN74sNfQw8=;
-        b=fhyGP2RcqbpqhihDuiF+LxgefWgmHC5EmIuDtNpVcFIKcXh/brHXmJmFA1cHKc/r7M
-         txKmjLb2SFEZD9FdilUt+fv0lzmucvKFUToaoURP7djYikZYijMjDUoqJsXWEEZNcgw7
-         uMRR4Ib0Wa+KaaIRUMm0Glii88cNkU6olDLr0IZ81xeiWgWdpqr1oL9pH/ns2F1mMcA9
-         IMwEhER/I8mYcE2fKas7TgaU86iK+8E/yeLjwsVfSvJLt5D4BrwzUZf8v5yiouENPcLL
-         fRd7gl7T8PMjxRsvbhAevi1BbsE8EFyIs+uBH+PilGFU95XYVCJrhQMN2ugi4KulInUj
-         HJnA==
-X-Forwarded-Encrypted: i=1; AFNElJ9U4cnJDDFsur2JpnBLmQ0nyiN7Frclpsefb8NWg0WNBE3BcnCMrcqi5rjC39mbz+C9lUiXo46xqfJVSzkK@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFFOB/lT1lebZzLu9QTOmd20rNspmcoMgAIKvuyUxWehPCQ10k
-	Du7gOvP4L104554x5usW/Py4f2gwJoBOtXfGwXosxoelV5yWIga1wA9GO6aRPE8WAHY=
-X-Gm-Gg: Acq92OE/IpKjPr6kguoAETcopCz49aDhqsnXeU/xWl05GNhzS1n+l3goQKJeqtXXUau
-	OMsj6lh3Ttu/GA6SmS2CF7Rga6Xp6ETlOhCLXTs7JuNI9kkMyspCeSxBfSa6ZQocA8gYqOTqeaI
-	M0U0/wDUgqwHZ5nqKBUJDPJJQKll6wnCVkXb593sVtwmWwx9MsBHYFy2N3iKdmGzLfmDl50zHG6
-	kntvdGO6LXHeuA2BCnbCEQ9AWqAgdEgdQktr6vP7Kz85Rdv+QmlnyeD22tHzov3wPJpmtlM30KP
-	IIAyfRH4f454fQTVQsB8DCmMjzrXJJkFhyvtnRqQfHXrgic08DrcYcIiJ2VdllfGQBuU2kS2WTu
-	YFClZAZaKerXppJLxV6TZFnvtv1xXgVNG9cBOB5BCrNaIXUbBrIAxkDhc0OIzgag6xi6ySPqr3w
-	3aFPaF9vmOY+25nIZ5eMHkoimn5uPOG4X4l/EqC/6pN4JKfnV6zRW4oh3BQs/XJySfjFcoq0Ddh
-	v2mwX3pIoFETDVdpFoOhs2Bzr74+Pq/BcM=
-X-Received: by 2002:a05:600c:4453:b0:48f:e230:29f5 with SMTP id 5b1f17b1804b1-490bc50dcecmr46150515e9.16.1780571121990;
-        Thu, 04 Jun 2026 04:05:21 -0700 (PDT)
+        bh=mh9nrAO/RTKL701wijSOrz3qd8apdES1vQv9RY9vWk4=;
+        b=U2Il4JfdiH0WJibmnLGJX+ndrSYa7kN+S6i8qlrOao0tj5iI7uEMEeaRwyaC41DEBR
+         TIP6rSBGCMan0x9Lwy3Bf7f+zaydN02Ir+/tYu+If24zd1l7EEkmJ3h4jkUKpEI3jIaA
+         TgBuw4CdJKlHmykim7sEdCoUyFvxiKS5kRQFlyGOKaYK4mmxOcfrNgqjfO0QzF4MQpqJ
+         DL8/frTTnac1ExwM5oFWF6tA9rTzNW3tBGD9FWlJt/N9rhHjwMFjmanpdRV1jXF3vpY5
+         ObnGPFvOExWFf6BJjaL+y+iYIRZvy0HR5sE5zQqqW9xblMkJ1BCssYKLiirW75gb/wcg
+         OHrw==
+X-Forwarded-Encrypted: i=1; AFNElJ8qqq5tWwSqUCRnWZJ8Ve+eQ4jU4uG2tY2xuJqSDArHd9WKzULfT+YUcoQIFOGeA3FOOMZS7rPwvPSJd7wr@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8XX1t9pCBjxcFFxVd4O7E8lMJNbK9DXsQrYzbr+3raRttvbdE
+	mA2GM0CIE+rk1CThOen9Oma07RfHGceEHV1pNA0R/SE33/4ylSbkWZXnkmCf9ziZPU0=
+X-Gm-Gg: Acq92OFUI9Ke9a4z5p92GIpqbqLplxXddS7dL1q3V10J/CldNYeBwAQY59hSj+5YTe2
+	No2A5RWnUFh+p5me+1BfACTulWOaz5SQgL0cK6R6zKn6YVczKaWf0/yZtp+1IoXe8/Kv8fBmvVE
+	xqttiUj9GIiSWJbGQlkX5hc93PU4h82ZdHyBDQUbF3yWCx/DEdEtvsFXKrNg+KNYIX2emSO52i/
+	dvi9V6jdDV2I6zpdkuvTnGbfSm9hTqchuhwFpHisc3Sr/tmpJMLRq0LRu4Kax22xlAwq28A/tZv
+	IoIRlLwDWMfXBvFUYYvSoRrFvT0fsS/37NKreUYzieQ90EefehQor6OQRKd4jh0ZfPLKdowUuvi
+	esfFej/FPtfEzKjzCfsS8dI2XcUizAFVs+57lV83kQXwoz/v8LYpQPUfm1dfx8t5Yt8t8F7qhOP
+	36YtfV30o9eUCP0XasCvr0DzpRuxTfm4jQsyLjzn6t7SW3JPtyz8lBB1b8NGNMrwCV05UNKPyVV
+	VSzAcH2aUzqo4buWVm34Gc+++CBpyapoHE=
+X-Received: by 2002:a05:600c:458d:b0:490:469c:556b with SMTP id 5b1f17b1804b1-490b5e7577dmr126886585e9.12.1780571122853;
+        Thu, 04 Jun 2026 04:05:22 -0700 (PDT)
 Received: from zovi.suse.cz (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490b7a273e3sm99648235e9.0.2026.06.04.04.05.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490b7a273e3sm99648235e9.0.2026.06.04.04.05.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 04:05:21 -0700 (PDT)
+        Thu, 04 Jun 2026 04:05:22 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Chris Zankel <chris@zankel.net>,
 	Max Filippov <jcmvbkbc@gmail.com>,
@@ -70,9 +70,9 @@ Cc: Aaron Tomlin <atomlin@atomlin.com>,
 	Matthew Wood <thepacketgeek@gmail.com>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] xtensa/simdisk: Avoid referring to module::args
-Date: Thu,  4 Jun 2026 13:04:45 +0200
-Message-ID: <20260604110455.1608038-2-petr.pavlu@suse.com>
+Subject: [PATCH 2/2] module: Remove unnecessary module::args
+Date: Thu,  4 Jun 2026 13:04:46 +0200
+Message-ID: <20260604110455.1608038-3-petr.pavlu@suse.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260604110455.1608038-1-petr.pavlu@suse.com>
 References: <20260604110455.1608038-1-petr.pavlu@suse.com>
@@ -84,88 +84,97 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When simdisk support is built as a loadable module,
-simdisk_param_set_filename() receives a pointer into module::args and
-stores each filename pointer as is.
+Historically, various parameter-handling code kept pointers into
+module::args, most notably the charp support. However, in 2009,
+commit e180a6b7759a ("param: fix charp parameters set via sysfs") changed
+charp parameters to kstrdup() the input string as well. As a result,
+module::args now mostly wastes memory.
 
-In preparation for removing module::args, update the simdisk.filename
-parameter code to copy the provided string. This is somewhat complicated by
-the fact that simdisk support can also be built-in, in which case the
-parameters are parsed during early boot before slab is available. In that
-case, the command line itself is preserved for the lifetime of the kernel,
-so continue storing the incoming pointer directly.
+The last users that still pointed into module::args have now been cleaned
+up, so remove this data.
 
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- arch/xtensa/platforms/iss/simdisk.c | 38 +++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 5 deletions(-)
+ include/linux/module.h |  4 ----
+ kernel/module/main.c   | 15 ++++++++-------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/arch/xtensa/platforms/iss/simdisk.c b/arch/xtensa/platforms/iss/simdisk.c
-index 7c7a2aa749f8..a2ddb49c269d 100644
---- a/arch/xtensa/platforms/iss/simdisk.c
-+++ b/arch/xtensa/platforms/iss/simdisk.c
-@@ -41,7 +41,7 @@ module_param(simdisk_count, int, S_IRUGO);
- MODULE_PARM_DESC(simdisk_count, "Number of simdisk units.");
- 
- static int n_files;
--static const char *filename[MAX_SIMDISK_COUNT] = {
-+static char *filename[MAX_SIMDISK_COUNT] = {
- #ifdef CONFIG_SIMDISK0_FILENAME
- 	CONFIG_SIMDISK0_FILENAME,
- #ifdef CONFIG_SIMDISK1_FILENAME
-@@ -50,20 +50,48 @@ static const char *filename[MAX_SIMDISK_COUNT] = {
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 7566815fabbe..96cc98568eea 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -477,10 +477,6 @@ struct module {
+ 	struct module_notes_attrs *notes_attrs;
  #endif
- };
  
-+/*
-+ * The simdisk code can be built either into the kernel or as a loadable module.
-+ * When built-in, CONFIG_SIMDISK{0,1}_FILENAME can be used to specify the
-+ * initial simdisk filenames and additional filenames can be provided on the
-+ * kernel command line. These arguments are parsed during early boot when slab
-+ * is not yet available, but the command line itself is preserved for the
-+ * lifetime of the kernel, so the incoming pointer is stored directly.
-+ * When built as a loadable module, each value is copied with kstrdup() and all
-+ * allocated memory is freed in simdisk_param_free_filename() when the module is
-+ * unloaded.
-+ */
- static int simdisk_param_set_filename(const char *val,
- 		const struct kernel_param *kp)
- {
--	if (n_files < ARRAY_SIZE(filename))
--		filename[n_files++] = val;
--	else
-+	char *str;
-+
-+	if (n_files >= ARRAY_SIZE(filename))
- 		return -EINVAL;
-+
-+#ifdef MODULE
-+	str = kstrdup(val, GFP_KERNEL);
-+	if (!str)
-+		return -ENOMEM;
-+#else
-+	str = (char *)val;
-+#endif
-+
-+	filename[n_files++] = str;
- 	return 0;
- }
+-	/* The command line arguments (may be mangled).  People like
+-	   keeping pointers to this stuff */
+-	char *args;
+-
+ #ifdef CONFIG_SMP
+ 	/* Per-cpu data. */
+ 	void __percpu *percpu;
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 46dd8d25a605..528690ba160b 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1458,7 +1458,6 @@ static void free_module(struct module *mod)
  
-+static void simdisk_param_free_filename(void *arg)
-+{
-+	for (int i = 0; i < n_files; i++)
-+		kfree(filename[i]);
-+}
-+
- static const struct kernel_param_ops simdisk_param_ops_filename = {
- 	.set = simdisk_param_set_filename,
-+	.free = simdisk_param_free_filename,
- };
--module_param_cb(filename, &simdisk_param_ops_filename, &n_files, 0);
-+module_param_cb(filename, &simdisk_param_ops_filename, NULL, 0);
- MODULE_PARM_DESC(filename, "Backing storage filename.");
+ 	/* This may be empty, but that's OK */
+ 	module_arch_freeing_init(mod);
+-	kfree(mod->args);
+ 	percpu_modfree(mod);
  
- static int simdisk_major = SIMDISK_MAJOR;
+ 	free_mod_mem(mod);
+@@ -3425,7 +3424,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	struct module *mod;
+ 	bool module_allocated = false;
+ 	long err = 0;
+-	char *after_dashes;
++	char *args = NULL, *after_dashes;
+ 
+ 	/*
+ 	 * Do the signature check (if any) first. All that
+@@ -3523,9 +3522,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	flush_module_icache(mod);
+ 
+ 	/* Now copy in args */
+-	mod->args = strndup_user(uargs, ~0UL >> 1);
+-	if (IS_ERR(mod->args)) {
+-		err = PTR_ERR(mod->args);
++	args = strndup_user(uargs, ~0UL >> 1);
++	if (IS_ERR(args)) {
++		err = PTR_ERR(args);
+ 		goto free_arch_cleanup;
+ 	}
+ 
+@@ -3546,7 +3545,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	mod->async_probe_requested = async_probe;
+ 
+ 	/* Module is ready to execute: parsing args may do that. */
+-	after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
++	after_dashes = parse_args(mod->name, args, mod->kp, mod->num_kp,
+ 				  -32768, 32767, mod,
+ 				  unknown_module_param_cb);
+ 	if (IS_ERR(after_dashes)) {
+@@ -3556,6 +3555,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 		pr_warn("%s: parameters '%s' after `--' ignored\n",
+ 		       mod->name, after_dashes);
+ 	}
++	kfree(args);
++	args = NULL;
+ 
+ 	/* Link in to sysfs. */
+ 	err = mod_sysfs_setup(mod, info, mod->kp, mod->num_kp);
+@@ -3597,7 +3598,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+  ddebug_cleanup:
+ 	ftrace_release_mod(mod);
+ 	synchronize_rcu();
+-	kfree(mod->args);
++	kfree(args);
+  free_arch_cleanup:
+ 	module_arch_cleanup(mod);
+  free_modinfo:
 -- 
 2.54.0
 
