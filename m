@@ -1,134 +1,173 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C1F3033DE
-	for <linux-modules@vger.kernel.org>; Thu,  4 Jun 2026 17:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7056313535
+	for <linux-modules@vger.kernel.org>; Thu,  4 Jun 2026 18:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780595107; cv=none; b=lGfu7FKrc+5fXeGOTwysCmX5dyNBMonE1JroLMOI1j6wTIqlGESvEPRKcm2/n9RY5ewx2k4diaf2TI4csXYQ8u7Kl8dgIrcGDjksd3LEkTgstT02CHGwIkJrbJVqJ4Q/s6UBVUqnzKWaqjD8zaB5HMQOTCwLNzvxLTw1+kU9G1k=
+	t=1780597199; cv=none; b=d6/eeS6m1FGd9TR2UpJCzpRJ0igRtGPgPapimVAw0cjE6Gf47V0CUkkJdIRICjMAobJAdZhecNeX4/8DJNq3T7P3QIq9mUHWaB2xH9bLB4wfM4BJITEn/cotk70NWw71OWfZzEuwf8a5tiPu/HPfXvtsrgM4VpXC7Spo8CIlmBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780595107; c=relaxed/simple;
-	bh=0r8NYy85CrQQR+hjDwHLOfJGX/SgqYi0DXuWYG6HXMI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=SsAljkntlehBWYKVD+75a9wtp62RRkLDUxqjvY+iIGDL2uVfZZdhlH5SY0a/7QCrF0LVHiP49qacruGqCIbBIvBcDYNxNSECLMFU2RXZ97aGGWkO/l2BqrwQaZemhG15kLb+t0rRiH/eK4XFnWnbwYFIt4aD+yCfR2dddGOdeWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ffKQNkKW; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780597199; c=relaxed/simple;
+	bh=r54QX+u8M8iHn1PeQK5uRz2e+pRcrgu6t1IhstJeE0k=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=D7gbhrGboFA55qHYdc17VmfhJd7HamY8FTYhSznyCeFOv5+ooEPFi/0XvD6Prq1uUk0rs7iy5gHu89vniOetXe2KJktzYzMlOcGXCQg8LKaLrNW8iJWcHEbmICQVOCB2syuzwjihu+YvcHRIpolE34nqaC1gsEiag5ShgL+xvuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hiYp03J4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffKQNkKW"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-842288702fbso499621b3a.1
-        for <linux-modules@vger.kernel.org>; Thu, 04 Jun 2026 10:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780595105; x=1781199905; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PblVEIKf50wvt3DcN+d8+jT6Sc6K4D/U2mrPqQvJr/M=;
-        b=ffKQNkKWSQBswdhIZyPYDZ9+IDKAEjtWrJ4NBwnfdbkmSJZD8D5onBlvu5U566ApW5
-         If87HJ3+xwmyCMTxyYGYHstEoFjOj9DVWyo7negqpllxe/ApOHd6EbB7yfaDV11uvAqU
-         mWJ6qBsrFY+emgNiuFAe4P88HjObkAjnlx+89TXeq+IroapY8p38bTAL/4nAly7QumIm
-         q9BdKbAs348wu4EeCAMktxbT2JBoXwiS+0NwuWsFaMzV4cqK3jbE6SAPHpsi89BpwYO5
-         a5zWyKUzZdFWsuFowjgh9q3uh9RpZwRpxs5Yg6z1vQ5xnyPFQqEy96pvZK87oljJeCVK
-         7yUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780595105; x=1781199905;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PblVEIKf50wvt3DcN+d8+jT6Sc6K4D/U2mrPqQvJr/M=;
-        b=niIoUBCJLsRsaYVs/Ag3w6zGmW6GXcGzHqN3hbJouTIAvjjz+CVC7J7FxKQFpA/VUF
-         k1mp1wQgyCsYSK7GTKAhfD9N4p+c1ATa5MIA1qPPqNK3mW4/AStUOWKM3kYijfFh0bgv
-         D6vUSXYb5wwAwyqTO2h/X78l2LbmVBzM9Jw8dqRF1NiVBYajPraxtleAUrkYwPxJM4Bc
-         ZKl/Xy6+MZdPMj+SvmoNTfKXpWZ6OxRP71jBM/37Xak972QOCeyplcHhjSij8eYVTLAW
-         hhPDACVNMZT4Lg7ym7iQsdSGKpzBBKh7/LTg7TNcinb0yYv0VPgJIFanNpnMxGR8zl8b
-         PvAA==
-X-Forwarded-Encrypted: i=1; AFNElJ8WE6tAZYdwVObCiF2hPBpzbTBHQXkuxTauZPsFwrwxUXU0J5PCpzEDSMXliGz2bdVB2HxQTYIpCEQ/iq9U@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4N4fckuzd2wug/YKSKPezARZG0bBMwwct7YD9IRxBpY/tzQbq
-	j1dpMtMbu1k1kdz+DNsFnjrBHHCZDlvwlyPAJ+N9XP1Xncioa2n+L8vNMa6+4w==
-X-Gm-Gg: Acq92OEpfMMtZuy9RM1Svr1LmK/B/ezdrcRHMBTUyxfluMmZFd/yUXMimxRKIeuwFiJ
-	UjmHpoRpPQxoBmtf1+J0PNcY1xjXJW7w82PAncQsgDnJrWEQ7gmv2biIav3Or7DWCTuzYPQfGQ5
-	0ytyNDmnRzNNHUu8AnBLbW+I49EBRnD42XqQapxUqZbmkQDVsMj6YUkoXM2WwKICzazleBFuTpV
-	UzrwMfEBQN+d+8ZKhVJ9XbFPXx2SK5rn/0rhNGANlJ/ZBstdfA06uC7iKHh/VAeFkaF+OlQ6Kqq
-	/kluXQQeZz3ybGYzUTWVwHrYIsrrZws/Q7ZC3turkEV6baoclHK701IDtC/iusDUs+1ecXHTWc/
-	3dpNbqAqW0J5p/pCtfAnhk6WIjUE5dM+xLXGlkb4zHWixejCynFvXhIJwTsJ98jB/7aLzomx6O6
-	mQ4FBIiUpfXD3sg6fo8uVKiLE9TydqhpHNhp6dL0GwjUJRXg==
-X-Received: by 2002:a05:6a00:17a7:b0:842:7436:657a with SMTP id d2e1a72fcca58-84284ecf42bmr8464156b3a.32.1780595105030;
-        Thu, 04 Jun 2026 10:45:05 -0700 (PDT)
-Received: from localhost ([2405:201:4027:a919:e2b2:8560:26ea:4d1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282904889sm6755729b3a.55.2026.06.04.10.45.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 10:45:04 -0700 (PDT)
-Date: Thu, 4 Jun 2026 23:15:02 +0530
-From: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-To: petr.pavlu@suse.com
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com, 
-	atomlin@atomlin.com, linux-modules@vger.kernel.org
-Subject: [PATCH v2] module: use strscpy() to copy module names in stats and
- dup tracking
-Message-ID: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hiYp03J4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B771F00893;
+	Thu,  4 Jun 2026 18:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780597198;
+	bh=z8c7j5etuOw4INvTMKLFhqD6A9PMpQs4O86TBISOutE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hiYp03J4lWDBZ4wLpl5aosC1d221YnuE7rMFBNxIuOoo/8DIfahoSsSbk+BKKPb9z
+	 5gIkGBZNErGanwYEJfHx8m0OFOfvM3iLl+cDhobY0M2RO4KLNo7NImrRLVNjYrcR5o
+	 ECDKo0WIA4b8UHiqkCsEIIkqZ2QMOqoXy1TCKElZxWUe4HyDXg3P+xEBtUt3lWw8PW
+	 LQCXOfzn0ZKbLrnnp5MV7X6Vkv/U4vVXT/DWqxn56VguIlLpXZsbPRjkoohVcOnUyF
+	 QPSL1kSKL4TpKbXRZOuobZXqSlhzKRraE1d+DIrYGJoypq/XDCpgwVrGkgWRKp9usx
+	 FZckVFbySl70A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2] module: use strscpy() to copy module names in stats
+ and dup tracking
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Naveen Kumar Chaudhary" <naveen.osdev@gmail.com>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
+References: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 04 Jun 2026 18:19:57 +0000
+Message-Id: <20260604181958.46B771F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <59c7b5d1-643b-4ca5-94ad-eaf82a66fc9e@suse.com>
+
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+
+New issues:
+- [Medium] Incomplete fix: Truncating overlong module names breaks deduplic=
+ation and causes list bloat/memory leak.
+
+Pre-existing issues:
+- [High] Race condition in duplicate module load tracking causing Use-After=
+-Free.
+--
+
+commit 609988fdef836043f78467817ec8e3cba34b5daf
+Author: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
+
+module: use strscpy() to copy module names in stats and dup tracking
 
 Both try_add_failed_module() and kmod_dup_request_exists_wait() use
-memcpy() with strlen() to copy module names into fixed-size
-char[MODULE_NAME_LEN] buffers. Neither performs a bounds check on the
-copy. Current callers always pass names originating from
-mod->name (itself char[MODULE_NAME_LEN]), so this is not exploitable
-today. However both functions accept a plain const char * with no
-documented length contract, making them latent buffer overflows if a
-future caller passes a longer string.
+memcpy() with strlen() to copy module names into fixed-size buffers.
+Neither performs a bounds check on the copy. This patch replaces
+memcpy() with strscpy() to ensure the copy is bounded and NUL-terminated.
 
-Replace memcpy() with strscpy() in both sites, which bounds the copy
-to MODULE_NAME_LEN and always NUL-terminates.
+> diff --git a/kernel/module/dups.c b/kernel/module/dups.c
+> index 1d720a5311ba0..8b6f8f177de4f 100644
+> --- a/kernel/module/dups.c
+> +++ b/kernel/module/dups.c
+> @@ -129,7 +129,7 @@ bool kmod_dup_request_exists_wait(char *module_name, =
+bool wait, int *dup_ret)
+>  	if (!new_kmod_req)
+>  		return false;
+> =20
+> -	memcpy(new_kmod_req->name, module_name, strlen(module_name));
+> +	strscpy(new_kmod_req->name, module_name);
 
-Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
----
+[Severity: High]
+This is a pre-existing issue, but looking at kmod_dup_request_exists_wait(),
+is there a race condition that could lead to a use-after-free?
 
-v1 -> v2:
-	- Dropped third argument to strscpy
-	- Merged the other patch https://lore.kernel.org/linux-modules/jmm7r4r3k3qt767tl7lojglosgc3umhc63cdp2fckdkgb3fzki@3fgvxgvzo5ex/
+In kmod_dup_request_exists_wait(), the kmod_req pointer is retrieved while
+holding kmod_dup_mutex, but the lock is dropped before waiting on the
+completion:
 
-Thanks Petr for the reviews. Taken care of the suggestions.
+kernel/module/dups.c:kmod_dup_request_exists_wait() {
+    ...
+    mutex_unlock(&kmod_dup_mutex);
+    ...
+    ret =3D wait_for_completion_state(&kmod_req->first_req_done, TASK_KILLA=
+BLE);
+    if (ret) {
+        *dup_ret =3D ret;
+        return true;
+    }
+    ...
+    *dup_ret =3D kmod_req->dup_ret;
+    ...
+}
 
-Regards,
-Naveen
+There doesn't appear to be a reference count or RCU read-side critical sect=
+ion
+protecting kmod_req during this wait.
 
- kernel/module/dups.c  | 2 +-
- kernel/module/stats.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The completion is signaled by kmod_dup_request_complete(), which then
+schedules kmod_dup_request_delete() via delayed work after 60 seconds.
 
-diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-index 1d720a5311ba..33bddfb57317 100644
---- a/kernel/module/dups.c
-+++ b/kernel/module/dups.c
-@@ -129,7 +129,7 @@ bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
- 	if (!new_kmod_req)
- 		return false;
- 
--	memcpy(new_kmod_req->name, module_name, strlen(module_name));
-+	strscpy(new_kmod_req->name, module_name);
- 	INIT_WORK(&new_kmod_req->complete_work, kmod_dup_request_complete);
- 	INIT_DELAYED_WORK(&new_kmod_req->delete_work, kmod_dup_request_delete);
- 	init_completion(&new_kmod_req->first_req_done);
-diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-index 3a9672f93a8e..08724baca773 100644
---- a/kernel/module/stats.c
-+++ b/kernel/module/stats.c
-@@ -253,7 +253,7 @@ int try_add_failed_module(const char *name, enum fail_dup_mod_reason reason)
- 	mod_fail = kzalloc_obj(*mod_fail);
- 	if (!mod_fail)
- 		return -ENOMEM;
--	memcpy(mod_fail->name, name, strlen(name));
-+	strscpy(mod_fail->name, name);
- 	__set_bit(reason, &mod_fail->dup_fail_mask);
- 	atomic_long_inc(&mod_fail->count);
- 	list_add_rcu(&mod_fail->list, &dup_failed_modules);
--- 
-2.43.0
+If a duplicate request arrives exactly 60 seconds later, it could drop the
+mutex just before the delayed work executes and frees the request:
 
+kernel/module/dups.c:kmod_dup_request_delete() {
+    ...
+    mutex_lock(&kmod_dup_mutex);
+    list_del_rcu(&kmod_req->list);
+    synchronize_rcu();
+    mutex_unlock(&kmod_dup_mutex);
+    kfree(kmod_req);
+}
+
+When the duplicate thread resumes and accesses kmod_req->dup_ret, would it
+dereference the freed memory?
+
+[ ... ]
+
+> diff --git a/kernel/module/stats.c b/kernel/module/stats.c
+> index 3a9672f93a8ef..78b59bc05387f 100644
+> --- a/kernel/module/stats.c
+> +++ b/kernel/module/stats.c
+> @@ -253,7 +253,7 @@ int try_add_failed_module(const char *name, enum fail=
+_dup_mod_reason reason)
+>  	mod_fail =3D kzalloc_obj(*mod_fail);
+>  	if (!mod_fail)
+>  		return -ENOMEM;
+> -	memcpy(mod_fail->name, name, strlen(name));
+> +	strscpy(mod_fail->name, name);
+
+[Severity: Medium]
+Does truncating overlong module names here break deduplication?
+
+If try_add_failed_module() is called with an overlong name (which can
+originate from the .modinfo ELF section), strscpy() safely truncates the
+string stored in mod_fail->name.
+
+However, the deduplication lookup uses strcmp(), which compares the truncat=
+ed
+stored name against the untruncated original string:
+
+kernel/module/stats.c:try_add_failed_module() {
+    ...
+    list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list, lockdep_is=
+_held(&module_mutex)) {
+        if (!strcmp(mod_fail->name, name)) {
+            atomic_long_inc(&mod_fail->count);
+    ...
+}
+
+This comparison will always fail for overlong names.
+
+Would every attempt to load a malformed module allocate a new mod_fail stru=
+ct
+and add it to dup_failed_modules, potentially allowing an attacker with
+CAP_SYS_MODULE to trigger unbounded list bloat and a memory leak?
+
+>  	__set_bit(reason, &mod_fail->dup_fail_mask);
+>  	atomic_long_inc(&mod_fail->count);
+>  	list_add_rcu(&mod_fail->list, &dup_failed_modules);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/slebbzn7p6c4ybokolv=
+ey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5?part=3D1
