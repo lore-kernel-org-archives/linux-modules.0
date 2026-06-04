@@ -1,72 +1,70 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEEA495504
-	for <linux-modules@vger.kernel.org>; Thu,  4 Jun 2026 17:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C1F3033DE
+	for <linux-modules@vger.kernel.org>; Thu,  4 Jun 2026 17:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780593592; cv=none; b=u//Vb5cX3+wHZT9RDrzoA+Y9lyerwoTXhwi9LFTB+MeBTrNBRmFYz2wv+uU8mYij00vgmNBvzCyTUV5WDqEVosdIEFfJAvR2hIsGQB8zV2E6Jsdtfep7cpK0g+oRuqVmEqA3nVQO2i7iJL37jBkXg79JlJiIiT6qQL/55k/noTo=
+	t=1780595107; cv=none; b=lGfu7FKrc+5fXeGOTwysCmX5dyNBMonE1JroLMOI1j6wTIqlGESvEPRKcm2/n9RY5ewx2k4diaf2TI4csXYQ8u7Kl8dgIrcGDjksd3LEkTgstT02CHGwIkJrbJVqJ4Q/s6UBVUqnzKWaqjD8zaB5HMQOTCwLNzvxLTw1+kU9G1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780593592; c=relaxed/simple;
-	bh=dYLsH/8LO/uLy/x+MUfB/fZEOkT7MzXcTrsqeBKbvZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rV5eRB/Xhd1mtxPYWie4oxT6akHcE4Fw7QYmwhImttnmpdOrtW6lQX8SV1BgAV8w6WiEcibf96iuEAqyUNsFrEwI5rynlCSy8mFPCjjr9mGxIZBJn6IoW7Ms2JwBP0l2cUQgyeMf6GiK2g7nsqinPWE/NogO2Nd6dIb/7YLNwEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QGqgzhP2; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1780595107; c=relaxed/simple;
+	bh=0r8NYy85CrQQR+hjDwHLOfJGX/SgqYi0DXuWYG6HXMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=SsAljkntlehBWYKVD+75a9wtp62RRkLDUxqjvY+iIGDL2uVfZZdhlH5SY0a/7QCrF0LVHiP49qacruGqCIbBIvBcDYNxNSECLMFU2RXZ97aGGWkO/l2BqrwQaZemhG15kLb+t0rRiH/eK4XFnWnbwYFIt4aD+yCfR2dddGOdeWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ffKQNkKW; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QGqgzhP2"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2bf237e1433so11960165ad.1
-        for <linux-modules@vger.kernel.org>; Thu, 04 Jun 2026 10:19:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffKQNkKW"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-842288702fbso499621b3a.1
+        for <linux-modules@vger.kernel.org>; Thu, 04 Jun 2026 10:45:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780593590; x=1781198390; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DPB2+YubXzWxhd5apad+fcnPTslFyu1F87W6IEfa1EU=;
-        b=QGqgzhP2QwHgoYt7T4UUTu+ufGKj2QLgj0Cv3QV/myJELCjNuviSGxTj9oCwWE35oT
-         WsmTVuojMr/wqJZljCq/xXFiAZ5CNAakTsGyHezQ85nPY+VscfebGc1BkbFL82IeMRS6
-         Gg1ewJtf44Y9qWqIFoMo4CiPooV2/yITivr4pLi5lkCCw8n5FhlfqtaKNL+xk6tqpMcP
-         H7mGT8tyahPrJvRpqcFlwAT16MYEPw5fT809clhrvj2ubknZfIBF0KCGeKTJIgJMO1c5
-         0iFYM21kBubR6RkuS2cnLfjyvL47BcPAQhruCaYDEO+z6iXQdVTbIbsDbLeXfS7z0PjL
-         bWJw==
+        d=gmail.com; s=20251104; t=1780595105; x=1781199905; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PblVEIKf50wvt3DcN+d8+jT6Sc6K4D/U2mrPqQvJr/M=;
+        b=ffKQNkKWSQBswdhIZyPYDZ9+IDKAEjtWrJ4NBwnfdbkmSJZD8D5onBlvu5U566ApW5
+         If87HJ3+xwmyCMTxyYGYHstEoFjOj9DVWyo7negqpllxe/ApOHd6EbB7yfaDV11uvAqU
+         mWJ6qBsrFY+emgNiuFAe4P88HjObkAjnlx+89TXeq+IroapY8p38bTAL/4nAly7QumIm
+         q9BdKbAs348wu4EeCAMktxbT2JBoXwiS+0NwuWsFaMzV4cqK3jbE6SAPHpsi89BpwYO5
+         a5zWyKUzZdFWsuFowjgh9q3uh9RpZwRpxs5Yg6z1vQ5xnyPFQqEy96pvZK87oljJeCVK
+         7yUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780593590; x=1781198390;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DPB2+YubXzWxhd5apad+fcnPTslFyu1F87W6IEfa1EU=;
-        b=dkIdoZsazh11zPnuMh3HG+kIu30HBzCmYhEdQKZSLm7yGQccABWGNztYrUDhLNG6Gt
-         BsiNr8XHSbS9tIjZAmSTqYqAaFFDjvMZi1faHHSuLyuJfAbQctG5yuMxqeNAfwevVGVi
-         OhCIapPY5KHhJ8CzQBmaunplJAGFjBWpm1JMdNs95e3wLU52lR0JEoDYj+Xfhaws7cQi
-         cL2gWn/JdQ4BTHb3w8n3K0/fUOPpUHeTUfBDJoRZ1Nf1LB0PyHLaW5UikoKFkegne17M
-         RA4qR49HGfN+SXm/znyg1PWN+z39uafBtGhxl4rkG0xj5dqv8RnPtLahHgK4tnvzaeOs
-         9C1g==
-X-Forwarded-Encrypted: i=1; AFNElJ8fJCEwLArtSx+cV/WHHDithY/0BMtLpsR4RFi8IB7gR8+L6dkMbPq6LcMdLx1a4yMZoWnn3g07RNNMTMr6@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMYcGUaUr54N9wG9lyKHDzscwUyv52GMFV+JAE/B0oCbDfGcLU
-	2l3TUHNvxhU8od8VJB5XFuijVOzFuqFWy8pJYxwRq7ZqL7SHjDK0Zmi6
-X-Gm-Gg: Acq92OFcQwPhh2zZr8sUSklOq/xJT4Y8L2lYtfV+Py+0ln15KIhDxWcrlQHRj5M15J0
-	ldOGFVt27Sb0u457hrgvvDaEumBuZS0UYXJ4JAqWURFN2xDLVBSkuwIItGIyOzGVMWfYQNHGwO3
-	suf4YAlJV7+zudjq5h5llUI+3VKF7BlaxryxtlTjGK4OGf6/gL0T3mY24i9UTTX1aMxHRjxCtv8
-	H0TlxVKOu6hXgKQoZy8sDTiQATZSg3VeO3eK6zcnyjTZQC26sS06IC2K55fV3VsHS88ADiJU0l0
-	3FsNmTI9wKtvUQXRhkRPeFrbPihHU8lSyzZ9RwVC3m0FsSN3KDGTjPYWnF5TSa7XF2g0DYHJS78
-	4qC554sD7o9U0+fUEjoh/kSI8TBBZ5aurcqjJnW0kbUuRtRLAx9mRsIv4A+a9V0AeMI7jH3f3qv
-	bbMHxZIpKyZxvzqRnJtZE2HKRO41BisUsiQzo=
-X-Received: by 2002:a17:903:1a4e:b0:2bd:8dbb:293e with SMTP id d9443c01a7336-2c163a58d7fmr91444905ad.14.1780593589582;
-        Thu, 04 Jun 2026 10:19:49 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780595105; x=1781199905;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PblVEIKf50wvt3DcN+d8+jT6Sc6K4D/U2mrPqQvJr/M=;
+        b=niIoUBCJLsRsaYVs/Ag3w6zGmW6GXcGzHqN3hbJouTIAvjjz+CVC7J7FxKQFpA/VUF
+         k1mp1wQgyCsYSK7GTKAhfD9N4p+c1ATa5MIA1qPPqNK3mW4/AStUOWKM3kYijfFh0bgv
+         D6vUSXYb5wwAwyqTO2h/X78l2LbmVBzM9Jw8dqRF1NiVBYajPraxtleAUrkYwPxJM4Bc
+         ZKl/Xy6+MZdPMj+SvmoNTfKXpWZ6OxRP71jBM/37Xak972QOCeyplcHhjSij8eYVTLAW
+         hhPDACVNMZT4Lg7ym7iQsdSGKpzBBKh7/LTg7TNcinb0yYv0VPgJIFanNpnMxGR8zl8b
+         PvAA==
+X-Forwarded-Encrypted: i=1; AFNElJ8WE6tAZYdwVObCiF2hPBpzbTBHQXkuxTauZPsFwrwxUXU0J5PCpzEDSMXliGz2bdVB2HxQTYIpCEQ/iq9U@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4N4fckuzd2wug/YKSKPezARZG0bBMwwct7YD9IRxBpY/tzQbq
+	j1dpMtMbu1k1kdz+DNsFnjrBHHCZDlvwlyPAJ+N9XP1Xncioa2n+L8vNMa6+4w==
+X-Gm-Gg: Acq92OEpfMMtZuy9RM1Svr1LmK/B/ezdrcRHMBTUyxfluMmZFd/yUXMimxRKIeuwFiJ
+	UjmHpoRpPQxoBmtf1+J0PNcY1xjXJW7w82PAncQsgDnJrWEQ7gmv2biIav3Or7DWCTuzYPQfGQ5
+	0ytyNDmnRzNNHUu8AnBLbW+I49EBRnD42XqQapxUqZbmkQDVsMj6YUkoXM2WwKICzazleBFuTpV
+	UzrwMfEBQN+d+8ZKhVJ9XbFPXx2SK5rn/0rhNGANlJ/ZBstdfA06uC7iKHh/VAeFkaF+OlQ6Kqq
+	/kluXQQeZz3ybGYzUTWVwHrYIsrrZws/Q7ZC3turkEV6baoclHK701IDtC/iusDUs+1ecXHTWc/
+	3dpNbqAqW0J5p/pCtfAnhk6WIjUE5dM+xLXGlkb4zHWixejCynFvXhIJwTsJ98jB/7aLzomx6O6
+	mQ4FBIiUpfXD3sg6fo8uVKiLE9TydqhpHNhp6dL0GwjUJRXg==
+X-Received: by 2002:a05:6a00:17a7:b0:842:7436:657a with SMTP id d2e1a72fcca58-84284ecf42bmr8464156b3a.32.1780595105030;
+        Thu, 04 Jun 2026 10:45:05 -0700 (PDT)
 Received: from localhost ([2405:201:4027:a919:e2b2:8560:26ea:4d1])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e234sm66476235ad.53.2026.06.04.10.19.48
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282904889sm6755729b3a.55.2026.06.04.10.45.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 10:19:49 -0700 (PDT)
-Date: Thu, 4 Jun 2026 22:49:47 +0530
+        Thu, 04 Jun 2026 10:45:04 -0700 (PDT)
+Date: Thu, 4 Jun 2026 23:15:02 +0530
 From: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
+To: petr.pavlu@suse.com
 Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com, 
-	atomlin@atomlin.com, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: stats: add lockdep annotation for
- dup_failed_modules list traversal
-Message-ID: <afzfogkqgihkqga47jbwtp2azr5oxohkae7atlxj5m7fahlojw@qbcmtzfxn53y>
-References: <e4za26n3jj3366oqt47hdwfze2rvsyjcujjhjj4jvbtihkleg6@kxasstqoia22>
- <2d797a44-bdd4-4b37-8bdd-2e2052c6dd38@suse.com>
+	atomlin@atomlin.com, linux-modules@vger.kernel.org
+Subject: [PATCH v2] module: use strscpy() to copy module names in stats and
+ dup tracking
+Message-ID: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -75,90 +73,62 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d797a44-bdd4-4b37-8bdd-2e2052c6dd38@suse.com>
+In-Reply-To: <59c7b5d1-643b-4ca5-94ad-eaf82a66fc9e@suse.com>
 
-Thanks Petr. Noted.
+Both try_add_failed_module() and kmod_dup_request_exists_wait() use
+memcpy() with strlen() to copy module names into fixed-size
+char[MODULE_NAME_LEN] buffers. Neither performs a bounds check on the
+copy. Current callers always pass names originating from
+mod->name (itself char[MODULE_NAME_LEN]), so this is not exploitable
+today. However both functions accept a plain const char * with no
+documented length contract, making them latent buffer overflows if a
+future caller passes a longer string.
 
-On Thu 04 Jun 10:40 AM, Petr Pavlu wrote:
-> On 6/3/26 6:22 PM, Naveen Kumar Chaudhary wrote:
-> > read_file_mod_stats() traverses dup_failed_modules with
-> > list_for_each_entry_rcu() while holding module_mutex, but does not pass
-> > the lockdep condition. This triggers a false-positive "RCU-list traversed
-> > in non-reader section" warning with CONFIG_PROVE_RCU_LIST=y.
-> > 
-> > The warning can be reproduced by:
-> >   1. Racing two loads of the same module to populate dup_failed_modules:
-> >        insmod dummy.ko &
-> >        insmod dummy.ko &
-> >   2. Reading the stats debugfs file:
-> >        cat /sys/kernel/debug/modules/stats
-> > 
-> >  =============================
-> >  WARNING: suspicious RCU usage
-> >  7.1.0-rc5-gae12a56ba16a #1 Not tainted
-> >  -----------------------------
-> >  kernel/module/stats.c:385 RCU-list traversed in non-reader section!!
-> > 
-> >  other info that might help us debug this:
-> > 
-> >  rcu_scheduler_active = 2, debug_locks = 1
-> >  1 lock held by cat/128:
-> >   #0: ffff80008288f7a8 (module_mutex){+.+.}-{4:4}, at: read_file_mod_stats+0x46c/0x5ec
-> > 
-> >  stack backtrace:
-> >  CPU: 1 UID: 0 PID: 128 Comm: cat Kdump: loaded Not tainted 7.1.0-rc5-gae12a56ba16a #1 PREEMPT
-> >  Hardware name: linux,dummy-virt (DT)
-> >  Call trace:
-> >   show_stack+0x18/0x24 (C)
-> >   __dump_stack+0x28/0x38
-> >   dump_stack_lvl+0x64/0x84
-> >   dump_stack+0x18/0x24
-> >   lockdep_rcu_suspicious+0x134/0x1d4
-> >   read_file_mod_stats+0x554/0x5ec
-> >   full_proxy_read+0xe0/0x1ac
-> >   vfs_read+0xd8/0x2b0
-> >   ksys_read+0x70/0xe4
-> >   __arm64_sys_read+0x1c/0x28
-> >   invoke_syscall+0x48/0xf8
-> >   el0_svc_common+0x8c/0xd8
-> >   do_el0_svc+0x1c/0x28
-> >   el0_svc+0x58/0x1d8
-> >   el0t_64_sync_handler+0x84/0x12c
-> >   el0t_64_sync+0x198/0x19c
-> > 
-> > The traversal is protected by module_mutex, so pass
-> > lockdep_is_held(&module_mutex) to inform the checker.
-> > 
-> > Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-> > ---
-> >  kernel/module/stats.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-> > index 3a9672f93a8e..a62961acd8e3 100644
-> > --- a/kernel/module/stats.c
-> > +++ b/kernel/module/stats.c
-> > @@ -382,7 +382,8 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
-> >  	mutex_lock(&module_mutex);
-> >  
-> >  
-> > -	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list) {
-> > +	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list,
-> > +				lockdep_is_held(&module_mutex)) {
-> >  		if (WARN_ON_ONCE(++count_failed >= MAX_FAILED_MOD_PRINT))
-> >  			goto out_unlock;
-> >  		len += scnprintf(buf + len, size - len, "%25s\t%15lu\t%25s\n", mod_fail->name,
-> 
-> I mentioned in my reply to your previous patch fixing the use of
-> synchronize_rcu() in the module dups code [1] that the overall RCU usage
-> in this code appears to be incorrect. I also noticed that Sashiko
-> reported the same issue. I think it is not very productive to try to fix
-> these specific RCU-related problems and instead the code should be
-> properly reworked. It most likely should not be using RCU at all and
-> kmod_dup_req should instead be reference-counted.
-> 
-> [1] https://lore.kernel.org/linux-modules/ajydyxgaea27rhcopp5eauji24znotu65d2b4uw344yvmwcc6f@7l5re6f2xcuk/
-> 
-> -- 
-> Thanks,
-> Petr
+Replace memcpy() with strscpy() in both sites, which bounds the copy
+to MODULE_NAME_LEN and always NUL-terminates.
+
+Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
+---
+
+v1 -> v2:
+	- Dropped third argument to strscpy
+	- Merged the other patch https://lore.kernel.org/linux-modules/jmm7r4r3k3qt767tl7lojglosgc3umhc63cdp2fckdkgb3fzki@3fgvxgvzo5ex/
+
+Thanks Petr for the reviews. Taken care of the suggestions.
+
+Regards,
+Naveen
+
+ kernel/module/dups.c  | 2 +-
+ kernel/module/stats.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/module/dups.c b/kernel/module/dups.c
+index 1d720a5311ba..33bddfb57317 100644
+--- a/kernel/module/dups.c
++++ b/kernel/module/dups.c
+@@ -129,7 +129,7 @@ bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
+ 	if (!new_kmod_req)
+ 		return false;
+ 
+-	memcpy(new_kmod_req->name, module_name, strlen(module_name));
++	strscpy(new_kmod_req->name, module_name);
+ 	INIT_WORK(&new_kmod_req->complete_work, kmod_dup_request_complete);
+ 	INIT_DELAYED_WORK(&new_kmod_req->delete_work, kmod_dup_request_delete);
+ 	init_completion(&new_kmod_req->first_req_done);
+diff --git a/kernel/module/stats.c b/kernel/module/stats.c
+index 3a9672f93a8e..08724baca773 100644
+--- a/kernel/module/stats.c
++++ b/kernel/module/stats.c
+@@ -253,7 +253,7 @@ int try_add_failed_module(const char *name, enum fail_dup_mod_reason reason)
+ 	mod_fail = kzalloc_obj(*mod_fail);
+ 	if (!mod_fail)
+ 		return -ENOMEM;
+-	memcpy(mod_fail->name, name, strlen(name));
++	strscpy(mod_fail->name, name);
+ 	__set_bit(reason, &mod_fail->dup_fail_mask);
+ 	atomic_long_inc(&mod_fail->count);
+ 	list_add_rcu(&mod_fail->list, &dup_failed_modules);
+-- 
+2.43.0
+
