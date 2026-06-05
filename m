@@ -1,173 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7056313535
-	for <linux-modules@vger.kernel.org>; Thu,  4 Jun 2026 18:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9E03A641C
+	for <linux-modules@vger.kernel.org>; Fri,  5 Jun 2026 18:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780597199; cv=none; b=d6/eeS6m1FGd9TR2UpJCzpRJ0igRtGPgPapimVAw0cjE6Gf47V0CUkkJdIRICjMAobJAdZhecNeX4/8DJNq3T7P3QIq9mUHWaB2xH9bLB4wfM4BJITEn/cotk70NWw71OWfZzEuwf8a5tiPu/HPfXvtsrgM4VpXC7Spo8CIlmBE=
+	t=1780683926; cv=none; b=NJO2CK1V8BXkyvrA60ZGYa/47APHJWvCPVTDIEQguXJ4l0OG0GYOAdD0TXjt3fcGsxd7biObfMMFFTd5AneBf3DjBXt0dVDfdEaPCg0ZIAYqW4hqkpiXXbP23v/N7h+JUIMBHuI0at6jVsUv9gNYB9z0inWj7nroYwKzd4uzaQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780597199; c=relaxed/simple;
-	bh=r54QX+u8M8iHn1PeQK5uRz2e+pRcrgu6t1IhstJeE0k=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=D7gbhrGboFA55qHYdc17VmfhJd7HamY8FTYhSznyCeFOv5+ooEPFi/0XvD6Prq1uUk0rs7iy5gHu89vniOetXe2KJktzYzMlOcGXCQg8LKaLrNW8iJWcHEbmICQVOCB2syuzwjihu+YvcHRIpolE34nqaC1gsEiag5ShgL+xvuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hiYp03J4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780683926; c=relaxed/simple;
+	bh=ODQinMMdxsaY6RL0hYX0pZOFbL9zrSNm1pmSWChLaA4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T0dZuDTD4XDDinD0igbN0+CN3Xm0VvCTUgnsebIdoW7bYnEUXW8eE09VILlW/Pvv3hmDzJlkYqZ65+wkObsZuuXpzUG//80MQakDo6VMc8KKG6/WpHTNwkv6Hc59WMWJgQGvi+LnlS2yhLBmcSibkuSUvLusO5CeXYlI+cC2jX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iiuICafn; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hiYp03J4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B771F00893;
-	Thu,  4 Jun 2026 18:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780597198;
-	bh=z8c7j5etuOw4INvTMKLFhqD6A9PMpQs4O86TBISOutE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hiYp03J4lWDBZ4wLpl5aosC1d221YnuE7rMFBNxIuOoo/8DIfahoSsSbk+BKKPb9z
-	 5gIkGBZNErGanwYEJfHx8m0OFOfvM3iLl+cDhobY0M2RO4KLNo7NImrRLVNjYrcR5o
-	 ECDKo0WIA4b8UHiqkCsEIIkqZ2QMOqoXy1TCKElZxWUe4HyDXg3P+xEBtUt3lWw8PW
-	 LQCXOfzn0ZKbLrnnp5MV7X6Vkv/U4vVXT/DWqxn56VguIlLpXZsbPRjkoohVcOnUyF
-	 QPSL1kSKL4TpKbXRZOuobZXqSlhzKRraE1d+DIrYGJoypq/XDCpgwVrGkgWRKp9usx
-	 FZckVFbySl70A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] module: use strscpy() to copy module names in stats
- and dup tracking
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Naveen Kumar Chaudhary" <naveen.osdev@gmail.com>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
-References: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Jun 2026 18:19:57 +0000
-Message-Id: <20260604181958.46B771F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iiuICafn"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2bf22c18ad3so166395ad.0
+        for <linux-modules@vger.kernel.org>; Fri, 05 Jun 2026 11:25:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780683923; x=1781288723; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6t9Y3TUDX8gOECAz6pcChptmfsUqRuuX+pFwbulAEyA=;
+        b=iiuICafnvH8RuQx0+dpLIBD9tvUC6/HmIb6q3PxVV3k7YDOLj+eAWZ1mShsgSHs6gc
+         MLmStcZp6Z12piph3rME9XGOsVwTXUIVpgWMCcn0cJnFP4MDljuwT6XGfFnf6q0cihs+
+         oljC4fV43Sid9Fk+C16048vY/jeLcKKMylyKNBQLU8vCdOJVdPN5d5gGa/HyFlIJnaDb
+         +t0jMctZtQq+6FpG3vnM8nw5EQ5Ibd08kiVZWfFlozdfjsCskii1zHWArZjTADziJiWl
+         OyXE/w7tdV2JrybeYlU7AmzoTQP1woikGJZxGwnHeQR5n38StKIZAnsnyir/YROuAOBo
+         YVGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780683923; x=1781288723;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6t9Y3TUDX8gOECAz6pcChptmfsUqRuuX+pFwbulAEyA=;
+        b=a18uAm9feYlbiIPtUmuMUtwcdkSOxWRucLQax3IcY90VkQKSeuEIraUPomcr59Ou1b
+         x8w/V4ZjeXlXvMtHse1vnlFZQV3oNyc1tnQ3Az+QZrcuH+lkyZ1Ew5k7zAFV+R6PslhN
+         V6xQPsT3s86dcWi8EmpWmW2FYc4BhJmvbPyUjUEub9kC+Iys2K5ElxGqYKjJKecl+b2l
+         JlB5fVNpmhTn3gmbiw0oxi1G3PuuRmipQ21jicQkbqcqdLzQJwZv0UehD9TaUTadERDz
+         A7qGiiFnBcSbwd0JAamBPepSUR6AXzRQ2Az8LDioYR8LnUX7m7qswY6+VBZx7RMdtd2N
+         kTjA==
+X-Forwarded-Encrypted: i=1; AFNElJ9dHRpeW+fa8MmR0WW4Ae/lDsP4QWeveafp2WnnORI8inUOhp/Aus2w/BXB22b3ysO8Mm/IjK5plh1IKJIP@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbBniqmPKqyL+LAnkL5Xz0JgM6Rity2h4yBsiIVC5pxobAn6V3
+	FolB9ioGfZRIaFvxsgb5i+PANzlb/kA9VRNJNG2+GBUqXj/M4esuM+k7L0ey+bhnjw==
+X-Gm-Gg: Acq92OEwyEXLM72t5RR5M4/9ZtrPKfhduEMptfgn5Wx4CyvXYlJfYaX8FgwjSH+cwSX
+	azUE2a/oRxmDOjx7rr3+pQ0EQt9cbcmV5Kf9yn973RGkhFiXhNPl8LOvcL3vAD9WbEjsxsoS5PG
+	3Y8H3VQaJo0QhY/hI0mEEonSzxhc7dsyosEqAEUri1oPWIoybehUqqZQYGS1xPfuubnp6474+py
+	KgN6NofoGNECLJpaJGofbPnk7U3BtIFb2uyJHoh5k5h4YTVMldMivAAko25e+sahM+0DwZxxGPX
+	HbMSdyMHocCZBXAPMC++/a0YKRZbEat59H/gze24QQXYgVTLHDxj1RkTXB70ICM5xbfta26/I+V
+	9NddwB8Ml5BKmHIRjz2+sLwuCXOSXYvGcxcRKChRCWildjyfUU81HFsRToAGdnHlR6n0jLvBoK6
+	Cg6THY3l3HqlGVThyOq1QxuoDvQEAiyx00nkLXL0sKe3G+zDoEtKsgTKUAVv9yr2gO080wZzcIC
+	jqUGA==
+X-Received: by 2002:a17:902:e842:b0:2bd:6dad:3df9 with SMTP id d9443c01a7336-2c1eb744312mr2068635ad.23.1780683922744;
+        Fri, 05 Jun 2026 11:25:22 -0700 (PDT)
+Received: from google.com (171.46.125.34.bc.googleusercontent.com. [34.125.46.171])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6e86dsm100327885ad.8.2026.06.05.11.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 11:25:21 -0700 (PDT)
+Date: Fri, 5 Jun 2026 18:25:17 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Michal Gorlas <michal.gorlas@9elements.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH 1/2] module: add CONFIG_MODULE_RESTRICT_AUTOLOAD
+Message-ID: <20260605182517.GA2939956@google.com>
+References: <20260515-autoload_restrict-v1-0-40b7c03ddd04@9elements.com>
+ <20260515-autoload_restrict-v1-1-40b7c03ddd04@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260515-autoload_restrict-v1-1-40b7c03ddd04@9elements.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Fri, May 15, 2026 at 07:20:19PM +0200, Michal Gorlas wrote:
+> Add CONFIG_MODULE_RESTRICT_AUTOLOAD and modrestrict parameter
+> documentation.
+> 
+> Signed-off-by: Michal Gorlas <michal.gorlas@9elements.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |  5 +++++
+>  kernel/module/Kconfig                           | 15 +++++++++++++++
+>  2 files changed, 20 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 03a550630644..1013104f0943 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -4185,6 +4185,11 @@ Kernel parameters
+>  			For details see:
+>  			Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+>  
+> +	modrestrict=<bool>
+> +			Control the restriction of module auto-loading to
+> +			CAP_SYS_ADMIN. If no <bool> value is specified, this
+> +			is set to the value of CONFIG_MODULE_RESTRICT_AUTOLOAD.
 
-New issues:
-- [Medium] Incomplete fix: Truncating overlong module names breaks deduplic=
-ation and causes list bloat/memory leak.
+Doesn't this default to true if no bool value is specified? It only uses
+the config if modrestrict is not passed to the kernel at all.
 
-Pre-existing issues:
-- [High] Race condition in duplicate module load tracking causing Use-After=
--Free.
---
+>  	<module>.async_probe[=<bool>] [KNL]
+>  			If no <bool> value is specified or if the value
+>  			specified is not a valid <bool>, enable asynchronous
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index 43b1bb01fd27..c9e01bb848c0 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -337,6 +337,21 @@ config MODULE_SIG_HASH
+>  
+>  endif # MODULE_SIG || IMA_APPRAISE_MODSIG
+>  
+> +config MODULE_RESTRICT_AUTOLOAD
+> +	bool "Restrict module auto-loading to privileged users"
+> +	default n
 
-commit 609988fdef836043f78467817ec8e3cba34b5daf
-Author: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
+You don't need to specify default n here.
 
-module: use strscpy() to copy module names in stats and dup tracking
+Also, I think you can just squash the two patches. There's no benefit
+in splitting the config/documentation into a separate patch.
 
-Both try_add_failed_module() and kmod_dup_request_exists_wait() use
-memcpy() with strlen() to copy module names into fixed-size buffers.
-Neither performs a bounds check on the copy. This patch replaces
-memcpy() with strscpy() to ensure the copy is bounded and NUL-terminated.
-
-> diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-> index 1d720a5311ba0..8b6f8f177de4f 100644
-> --- a/kernel/module/dups.c
-> +++ b/kernel/module/dups.c
-> @@ -129,7 +129,7 @@ bool kmod_dup_request_exists_wait(char *module_name, =
-bool wait, int *dup_ret)
->  	if (!new_kmod_req)
->  		return false;
-> =20
-> -	memcpy(new_kmod_req->name, module_name, strlen(module_name));
-> +	strscpy(new_kmod_req->name, module_name);
-
-[Severity: High]
-This is a pre-existing issue, but looking at kmod_dup_request_exists_wait(),
-is there a race condition that could lead to a use-after-free?
-
-In kmod_dup_request_exists_wait(), the kmod_req pointer is retrieved while
-holding kmod_dup_mutex, but the lock is dropped before waiting on the
-completion:
-
-kernel/module/dups.c:kmod_dup_request_exists_wait() {
-    ...
-    mutex_unlock(&kmod_dup_mutex);
-    ...
-    ret =3D wait_for_completion_state(&kmod_req->first_req_done, TASK_KILLA=
-BLE);
-    if (ret) {
-        *dup_ret =3D ret;
-        return true;
-    }
-    ...
-    *dup_ret =3D kmod_req->dup_ret;
-    ...
-}
-
-There doesn't appear to be a reference count or RCU read-side critical sect=
-ion
-protecting kmod_req during this wait.
-
-The completion is signaled by kmod_dup_request_complete(), which then
-schedules kmod_dup_request_delete() via delayed work after 60 seconds.
-
-If a duplicate request arrives exactly 60 seconds later, it could drop the
-mutex just before the delayed work executes and frees the request:
-
-kernel/module/dups.c:kmod_dup_request_delete() {
-    ...
-    mutex_lock(&kmod_dup_mutex);
-    list_del_rcu(&kmod_req->list);
-    synchronize_rcu();
-    mutex_unlock(&kmod_dup_mutex);
-    kfree(kmod_req);
-}
-
-When the duplicate thread resumes and accesses kmod_req->dup_ret, would it
-dereference the freed memory?
-
-[ ... ]
-
-> diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-> index 3a9672f93a8ef..78b59bc05387f 100644
-> --- a/kernel/module/stats.c
-> +++ b/kernel/module/stats.c
-> @@ -253,7 +253,7 @@ int try_add_failed_module(const char *name, enum fail=
-_dup_mod_reason reason)
->  	mod_fail =3D kzalloc_obj(*mod_fail);
->  	if (!mod_fail)
->  		return -ENOMEM;
-> -	memcpy(mod_fail->name, name, strlen(name));
-> +	strscpy(mod_fail->name, name);
-
-[Severity: Medium]
-Does truncating overlong module names here break deduplication?
-
-If try_add_failed_module() is called with an overlong name (which can
-originate from the .modinfo ELF section), strscpy() safely truncates the
-string stored in mod_fail->name.
-
-However, the deduplication lookup uses strcmp(), which compares the truncat=
-ed
-stored name against the untruncated original string:
-
-kernel/module/stats.c:try_add_failed_module() {
-    ...
-    list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list, lockdep_is=
-_held(&module_mutex)) {
-        if (!strcmp(mod_fail->name, name)) {
-            atomic_long_inc(&mod_fail->count);
-    ...
-}
-
-This comparison will always fail for overlong names.
-
-Would every attempt to load a malformed module allocate a new mod_fail stru=
-ct
-and add it to dup_failed_modules, potentially allowing an attacker with
-CAP_SYS_MODULE to trigger unbounded list bloat and a memory leak?
-
->  	__set_bit(reason, &mod_fail->dup_fail_mask);
->  	atomic_long_inc(&mod_fail->count);
->  	list_add_rcu(&mod_fail->list, &dup_failed_modules);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/slebbzn7p6c4ybokolv=
-ey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5?part=3D1
+Sami
