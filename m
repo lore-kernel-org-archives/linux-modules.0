@@ -1,114 +1,114 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2DC3542F6
-	for <linux-modules@vger.kernel.org>; Fri,  5 Jun 2026 20:52:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81ABD384245;
+	Sat,  6 Jun 2026 18:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780692742; cv=none; b=OhlVNlUWiuyCfGYLLMronKJvMtcit5d/fpxMr/iF/Ot7vKCcg8XY8u35yH3MLniJIdDs/sSj0Xh9wJcBaXtLKHAu/Vfv1tRwlsKvjZo+TuS6pZWlgmEHPQAOeNS2kfxcLMr5s69U69rbhSBMpxbb0bfL4nryQPaCGqG8PVi8pjc=
+	t=1780770293; cv=none; b=BxyPM43B2RmA7Kl4L7lM/64N+OqN+QzmRnV7KMVFN/QfcSdMoa36w1fRIuZmlmRo41BjsZ/2fXdueJ48p0dfQtgHEeXd1miGbV4+IL6RYk4LOW3pyyFp5hqFqzMEa5kzZDI7+Rgg9M4VKzqkHE5ipqVNPM0nXZ5YWOgqRlqrjc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780692742; c=relaxed/simple;
-	bh=xGojLbLv4NQbqNDSq+z3GuSE7kuOp9PLy2sVJwoeaRY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AR2DNK6fXDW+zHz0W2RMuEt2D2fnlTq9G0Hrg0jmcr45F0s5v73e1oaNIjey40J4Hin7c5EIMmNkmzhBTNeXG7gE69d6DqCuic9N92Qi8yrfEq6+r1b51Bx26yQl0FWtd+mboiNzUHFYI8FFb5B+ZZcOOITnKl6FBh2e5jpHvxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VIBVClby; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1780770293; c=relaxed/simple;
+	bh=3T458tR0aVleBKNVEq1AycLXElKaBiKNy8awCUsVAEg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VkwYuZwSeWkG6JPIwGhEk2GqxXAO0FamDRJdPPcp9asW3sJiIEmw2flaHEu9VmQik4g48BXdCyczkLN7TEbza+l1sqEKJW+nxvmspqKisWVpWVFrGhCrPHIQYGJ/b2QNFAhIJNfmVLZSds21dSz6aVpeqlv215r/W7D3teAMCbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=jil2dERN; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=wwVbQNR5; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VIBVClby"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2bf22c18ad3so183425ad.0
-        for <linux-modules@vger.kernel.org>; Fri, 05 Jun 2026 13:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780692741; x=1781297541; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/aHCGrw+XIjtdqLkW4WanUic2GE7XJ8o4FzpEgOR7w=;
-        b=VIBVClby+HSmsBRO2QbUBgCtMriMml89CTa9ChU07RJVxxe1OsWMyHU2xvWscOoqce
-         sdBmCX2AQzE6t1uDmzhTWAZFgsIoTexNxkwx0UGmS4B+EJ0A94k6X8i33RwPD5d6FyU1
-         azgQ9dQe+2K9k0p2IU/hd8EJwfR/aGzzvwVR5spldUq1tS2uFE3E7IspT1ADpbb1F+Bu
-         qQLtxtGR8eVdgsdqjsKNhLcX/1NTnCp/uhgONl/hOA9OqItSFtOiFK+Lv8IWB2j/2toZ
-         NNs1ouBOa5/Ejp0dXZexqDl1LYut0Dk0L3CrI+Ha0UEDeerrKXuG9IwttAUs443fOvcO
-         1sNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780692741; x=1781297541;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3/aHCGrw+XIjtdqLkW4WanUic2GE7XJ8o4FzpEgOR7w=;
-        b=Ib7OB7eV1r+NRPK0mPi4HLVGkSe7M4v/M/tbp/Y7Am3tNrM/7ZEt/ufGnDJPGCZeEG
-         41LWV71W1y9h5TiLAvSywN2r5/yoghERvblHa8JyMVqmOOLNtL8mdshwSMew61MoITIg
-         MqoSMyxqD4lV5z7lpmZSbEvvubQE2vjSNMjc4FPl6ConvBqRPRcYM9gUC01i4wE4gUNg
-         Z94g4eX9MZD/OLdcgT9/VykuxdsEGDX1kCrbPnVsMkhKoJ0SBWH6djMpHAjaf/7q9ND8
-         CfZ+UqYHzmNQN1dNDhdudqt3ByaVrMvff7Gt8Djn0wXWClb7u/IUhYQkpuc8HbDJuu00
-         5aAQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9VXxcz9HowTTqnZc3a1THRXli2d5BRtSW8I/zIhnJHkWPRQ6SxUR15Pbrkl6eNa5HIYayC0/Fl18VX+gbs@vger.kernel.org
-X-Gm-Message-State: AOJu0YxONYJpDGDzrjnUvglVQuweRn3Kx7WDZNrjUfa20VXf0DWWSifi
-	3dfSoyVnhTcCp4luCBVEU3KB4N3j76fR10jopywLOjzQmhcCesd3lcyN0jpjfDxJPg==
-X-Gm-Gg: Acq92OGR/BqI5/1rbOytSo3A57U/pWvDujNb6OWSyOYwc3vLug/5l8+LokrnasvOySn
-	7Y0zEG35TG2oQNzs6x6bflMq636G+1KVsz7lPHAHO0rMMoZO1+pErZB8auZE7JYIph9l655bUjQ
-	pw5GR0v/wj7+CJSgBZVF0BVk2tABjLM0Bhce17l6BmGjvwLwp8EBFdAMMpYx9zAvZQLzoyX1OAf
-	jp43IHHX9O98UTDNfq8tynfgIalw//BTdKAGaNqEfYxmzqfhND1LElQY0BSOOVMKG3oRuAauDXV
-	4o/cHmi/2XyPPe+xPfaJ3t8huCDUDFeLJmEegOg8qJfEE28uIWImujeIc51VvQDBmtOjId0zqOn
-	JDfjIXkVOKONddtvDAoApcr5mhbzdIi5fPkLLkvZAD+XgXv3KDW3IOuBK7+QTyawbUe4Vw9RAof
-	f/q/b/U8AJETvCuIO4o58h4vuh3NuB07FTr5wOeXU+7K61SAIXu2PJXw3fqjULjFFIornhNuYYk
-	ODD2ps=
-X-Received: by 2002:a17:903:910:b0:2c1:4a67:5f31 with SMTP id d9443c01a7336-2c1eb0c6c40mr2000735ad.9.1780692740156;
-        Fri, 05 Jun 2026 13:52:20 -0700 (PDT)
-Received: from google.com (171.46.125.34.bc.googleusercontent.com. [34.125.46.171])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164fa00b3sm96312575ad.32.2026.06.05.13.52.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 13:52:19 -0700 (PDT)
-Date: Fri, 5 Jun 2026 20:52:15 +0000
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
-	atomlin@atomlin.com, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: procfs: fix signed integer overflow in
- module_total_size()
-Message-ID: <20260605205215.GA3054112@google.com>
-References: <2k7x7245kygzpa5wzssebsrt5ivpykvvoeiljb5at2yiwgp4fy@fqkcethe4hyx>
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="jil2dERN";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="wwVbQNR5"
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4gXmtN2rNvz9spj;
+	Sat,  6 Jun 2026 20:24:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1780770284;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iGIHdO1aE4dkpQKizg9zHuUHbzM6bAkYdqsgWGarRr0=;
+	b=jil2dERNXMUGAxFhBnhTvoG+O96Rw70uF+a0scFpIXax71yQYBLP2y9YdLg6JHoli+kVUt
+	Cqy3Ic656VTgm8xZcLR65MrpAEmyRgK+iaFMC2vIbvMRowoCRg4UKsx5b25pk3M+UKdjdm
+	e99AoW8B5lDmxWZ8kGfIBfWAkBU0Vh/LcXWNY2jrgckZ2hEPH5zg1M4aFlhI2E9tdlwow8
+	OhC3kRMQHHleozT6YB9/fSQY807G+3j1s14DFI+g8s67uvF3wF7d5CntUiHM5MtSuPpKL8
+	/PKB24PjnS0BQ3ZDHHkW++KFUJV2yuT6KLaef7qW5yusbmq2CTvLGBOkdUomxw==
+From: Maurice Hieronymus <mhi@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1780770282;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iGIHdO1aE4dkpQKizg9zHuUHbzM6bAkYdqsgWGarRr0=;
+	b=wwVbQNR5OnV3P8JtzSyi58rNLqSk5gxmzQHHNFETDqgzljRD6aXhIcNGLIFASkD++HlF77
+	x2C46mVfCkpVNrNiTnuULEiPXon26SyYjujh0m/gUkiQxiltDwP2uTHqhy+iYuID9AjDhs
+	BsP9PA/AoT9CZOleiwyyTSjjnq30PQpzfvn3Zbx423nArs28g9W4TeqaZj/hGg5qPSrKU0
+	acs6vu5GlobFdOXAYwPB7UvE6UTySoF8YUXzvO5yIX0GirJOPLPHiZ3TZGpic7qNz4q3YJ
+	yBJWFFTKEmYX/NgTLcto6+l1UeaTgj3fC4QX851Kc1nA8T0JW+Nzn3db14TIWA==
+Date: Sat, 06 Jun 2026 20:24:26 +0200
+Subject: [PATCH] rust: module_param: use pr_warn_once! for null pointer
+ warning
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2k7x7245kygzpa5wzssebsrt5ivpykvvoeiljb5at2yiwgp4fy@fqkcethe4hyx>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260606-module-param-pr-warn-once-v1-1-96d9a93e8a1b@mailbox.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MwQqDMBAFf0X27IIGbcVfKR4W87QLNQkbagviv
+ xtkTnOYOSjDFJnG6iDDrlljKNLWFc1vCStYfXFyjXs0Bd6i/37ASUw2TsY/scAxzGB4t/TdAHl
+ 2LZU+GRb93+/XdJ4XyPEU6GsAAAA=
+X-Change-ID: 20260606-module-param-pr-warn-once-ed2f548ea741
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, Miguel Ojeda <ojeda@kernel.org>, 
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ rust-for-linux@vger.kernel.org, Maurice Hieronymus <mhi@mailbox.org>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780770273; l=1049;
+ i=mhi@mailbox.org; s=20260525; h=from:subject:message-id;
+ bh=3T458tR0aVleBKNVEq1AycLXElKaBiKNy8awCUsVAEg=;
+ b=QiNKS/vQPX3lusqKfFgFPjKgyjKUuWKCF8fQp4YYH/s5FQtGgsm3v/iC4PFylDt8snkGBB5Bd
+ NCtA2KVN3ijChl3y5E7XNVmshbvuZsw32Vz4/2h743RJkgj0+zvltEn
+X-Developer-Key: i=mhi@mailbox.org; a=ed25519;
+ pk=AHlEkGG3hpXZHntlEzF42Ip/LFyXWOgsNUvaHqAnV80=
+X-MBO-RS-ID: 28fd9766d3a141c4797
+X-MBO-RS-META: jarti9tfh7m49wtibifbcobnm4djt51h
 
-On Wed, Jun 03, 2026 at 09:54:11PM +0530, Naveen Kumar Chaudhary wrote:
-> module_total_size() accumulates unsigned section sizes into a signed int
-> before returning as unsigned int. If the total exceeds INT_MAX, this is
-> signed integer overflow.
+This resolves the existing TODO that asked for pr_warn_once! once
+it became available.
 
-This doesn't sound accurate to me. The compiler performs an implicit
-type conversion, but there's no signed integer overflow:
+Signed-off-by: Maurice Hieronymus <mhi@mailbox.org>
+---
+ rust/kernel/module_param.rs | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-https://godbolt.org/z/hzGrYMsPW
+diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
+index 6a8a7a875643..dd6d663a0a3c 100644
+--- a/rust/kernel/module_param.rs
++++ b/rust/kernel/module_param.rs
+@@ -62,8 +62,7 @@ pub trait ModuleParam: Sized + Copy {
+     // NOTE: If we start supporting arguments without values, val _is_ allowed
+     // to be null here.
+     if val.is_null() {
+-        // TODO: Use pr_warn_once available.
+-        crate::pr_warn!("Null pointer passed to `module_param::set_param`");
++        crate::pr_warn_once!("Null pointer passed to `module_param::set_param`");
+         return EINVAL.to_errno();
+     }
+ 
 
-> Change the accumulator to unsigned int to match the return type.
-> 
-> Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-> ---
->  kernel/module/procfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
-> index 0a4841e88adb..90712aa9dd13 100644
-> --- a/kernel/module/procfs.c
-> +++ b/kernel/module/procfs.c
-> @@ -64,7 +64,7 @@ static void m_stop(struct seq_file *m, void *p)
->  
->  static unsigned int module_total_size(struct module *mod)
->  {
-> -	int size = 0;
-> +	unsigned int size = 0;
+---
+base-commit: 838a0871cb3cf5988560d17afaaf57592bdb486b
+change-id: 20260606-module-param-pr-warn-once-ed2f548ea741
 
-While there's no behavioral difference, using unsigned int seems like
-good hygiene. With the commit message corrected:
+Best regards,
+-- 
+Maurice Hieronymus <mhi@mailbox.org>
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-
-Sami
