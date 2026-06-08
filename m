@@ -1,125 +1,87 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C4130C162
-	for <linux-modules@vger.kernel.org>; Sun,  7 Jun 2026 20:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780865075; cv=pass; b=EfVP1DDLn/EFzz+P2AHRAKfoi31AKYMsArJb+Byn3XkttNdE24NRtYM+ugd56H8V57ow1zCcLSvA9uioJf5M0CMw4lPVWnaqHWRXpzCu1kX8eEKPYqYTJwZKbnMaqCBUZgId92ljNL645rGYqPX+o9fZnWZWkjUnX9otNuJTelA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780865075; c=relaxed/simple;
-	bh=KN1F3bd0TQ5iup4dFP//scSZCORGiAVnFHhUKNhcnYk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lZ9ke0l5RzYAtvnYdhO3CTEUWqL04NGMZ92wxARB6TcXMDXXOjie9ux4muuZCtMZF/NoJprBV0z9/m7d72/+EQBXYiwplUl7lXDUwuWIFZNw16fYlSMDQRARWkQpJG01TA0eiHseWY3Z8TLviVP1O4xU/ldKdY7lMxfyXVcqh9A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P/3MD3KP; arc=pass smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C4B28B4E2;
+	Mon,  8 Jun 2026 22:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780956984; cv=none; b=r57ibNYa0rixYuUu9o4MnUiLG+4U/OBAvx+PKLfpgWw1CKKeKn36DoNpPW+rqoiNYvjGWcQB0XZdQI8HGoOumjpAqVcmHiR0/+OeiK+ISrxNp143zpJ8j8u3pewn+vxmC/Ywy8lN09OBfzQtSnIZnj3h9y8EyKu0JYbB7EedPxo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780956984; c=relaxed/simple;
+	bh=DDeO704qEU0EQ7Hlae5DWAs8z0G55TJg/i7FGO7u500=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=n+7G2wC6YGl9e7OXiIYc3ZVOlTf1jG3viRJAQFL2p+AujmdK8uaKCRG/6by5KCRzmaubBDpuF0vz3dH8keEwnY5UArCDVORZXZm1WXXsW6EtRXb/pxr2QQKEFOVueLR4S9zbSN1dUF9a2JWSFtPUws+A6702ZWnz7f78liAKM+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZLbqrydL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/3MD3KP"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-9157b94a07aso463696085a.0
-        for <linux-modules@vger.kernel.org>; Sun, 07 Jun 2026 13:44:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780865073; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bQ2oVqb0t2m0FUuOuf4NC+9om/WMjeNa3QGFw7A7K6qtsqQVa/0avaF9hG8H4Gv18L
-         P4WJ3Fwm0I2U+WNl8XxWUDiViW6KM5HFy+yJVIo3d/mrELiJo/fsNgcdOn708Oy4kVvm
-         FNnjXsEeZzq6N6SlSLfTDW+RtsVK983aM8YJCEakMr8VqLs8013uya4Jy81p1iA6+XC6
-         t17fwPMKsuW3YLBZ8IcWr95whfiZMhSRk9MDu13gsZBKH8RIn1Vns1dw5Dj5RlEA5gI0
-         mDCSs204+Ku6dLGgiTUMKskGLpLJgDa5kknq2sQ578TQKO4nbgH3BxE3rbXF69ObNwoy
-         61mA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zcJ1FGMLWiaXBW7omqcJ0jfGqRFeWks+49Sn79+dB0c=;
-        fh=Q79oKEuY5zsnIWMGYT8+i787F1aWGDNgQBZS5Sokh1s=;
-        b=GXLJu3JKMktMKhv02HP9m2xzT1C7botJtfevfzYDT7FJAUSxE8619LVu0AL4uZdVd8
-         KzF1DP1/6GowYFgpckQ97z/M0E5UFJ12FMZdprBpy3e8ZhOr7+r1YshLW1k0DES834lJ
-         OmRGLf5GQ5UT/amYWZlXXDTdyjxHpgrlOj5bHUjIkaJzRtN0ffb+NwalMySDxg5ptNHt
-         Fhywg6rXKUm+1rVIpV4MOr5y1y/R/1yqjQNt9LyAyEMgVLcgoJEJPMQlabBxQMumypyv
-         aYr3emruDtzQzy/FmvKE9UJpx1Kf5C5iYf9zed5Tv7iRUkBHsSytR2FjcvlW/B1eQBmC
-         6p7Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780865073; x=1781469873; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zcJ1FGMLWiaXBW7omqcJ0jfGqRFeWks+49Sn79+dB0c=;
-        b=P/3MD3KPTXGYQdjC4UeCyL/nZl8d2bZ1oUexqW2GlznAwJAyuNjNV38Kl797Pxas/i
-         iMtoqpY8lzrny+R+YI7qJtxAAXrIC3ssWYN/e+4EZBHd7HNfBIIfy00t5+Ov85vEeocS
-         v+nM+sHDWW/Wl1GSO9KhscJ7WFJepk8jwx07rBJqz43UH5jIVvaTco9QLizYSzg3kKoD
-         FP2p/s9LSRj7STKPcNyvqdkWhvW107Q02RkGAYT9coMAePSaU0Epy97WuuEBuoT9AkLW
-         Of3/Mo6HaloyO1Jws8o49vETJFxYj8IM9a1kh8e6wFT50UOvkp3SojSrnQlnaNWKIQGn
-         LKTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780865073; x=1781469873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zcJ1FGMLWiaXBW7omqcJ0jfGqRFeWks+49Sn79+dB0c=;
-        b=JkF1//eIGLgD+8/UyxVuxIAK9yw4y8pTE8Qul9A2ssGTAcVtWPGwrTAWy/g4l8dv83
-         9oHGqFT0KJz7RHQpX4g7OOZQN3T3V1ryvHpaVe5Z+TcrOsOPh3CMniuv3D6MW3jPQLOT
-         OGXfAvFT652Ot29au5m7pFN0AL+vA2xzlcL2tNu47pk/BERLB96lNSeRb7Zq4GXaXQNI
-         m6L+zlty6LgZzNm5LtHIwTZnHfK9WXNGORTUBgZ4d/mCenZcp+S7DuWkKUBMYKV7fgIA
-         CBCVzs+tJbnyEFyuQ1TLVlKvCjqwbAT6pr0J7VnTvGC12nJTQscOGLbI6RhgCDGnpXTn
-         VqjQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9YCEHz8mhR2KWRTyMesAWjkDp0H9xM50Mq094NkNE+0M1U/jC7CK9J8xM4Uotru73imNSrBFghv+tf7Gv3@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMetj2RZR5ZCS3ntcdB+6CGa1r4XnlzKmz8jvcZo2cl85QjfEM
-	0jzgJzW8rzKjix2LZo4q/QLQl00GqPria39k7Bn7UK2cbK6n6PCIJMPBmNnSnSgBuAOM/LcsEyh
-	4AOKekdohiSMCvwJWnRyIKBeGzguXzhM=
-X-Gm-Gg: Acq92OG9ti9LP4iFXB0dRw6uTK5xWpDJz9fa9DK6E61Yw1lC4R+8pEj+UZlJBZrA+ZS
-	lZYfznUeVJNutIfvetz+p7LginGfzxtGjyu9UzlgNUEfU1DbuEr8tZosM+fM5iX9qVMfQeO3ju3
-	uBO1iI8yI3MY/QPCZM6Yk4PkfWR6d67HF1LRUeoE1xc8lCTx/0BdK4XdR4PsDn/IlhCJpFSF2JR
-	8pCRAZ2wpPDtAX74v4/7koBP9erH4DOZLpGy5EH6wh7lIGqpoFyxWHoapvc81d8MpUvSpHsUw/9
-	uszl8e09irLXzYBzqQqjuKIzL7KrXDYzMvoX7iWwfQBrhioMMgXScCBzX3XK/9wZQ61EpKbdSLk
-	HOL8I9BHd/GL6KNHC8tBAVAURVagUXn6GSDsi
-X-Received: by 2002:a05:620a:410d:b0:915:70b5:b204 with SMTP id
- af79cd13be357-915a9df7c6cmr2144608685a.54.1780865072826; Sun, 07 Jun 2026
- 13:44:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZLbqrydL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B047A1F00893;
+	Mon,  8 Jun 2026 22:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780956983;
+	bh=s3x5kdRepi1J7M2cEklCCm2sZSMg7DeC+hQ4uJgl+jo=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To;
+	b=ZLbqrydL7uyVtFWzj+G/HXsf6Sz2tjT7ZGEGgMUDd6H07Gcz5KOZ0rkOR9SUuGpMf
+	 KUH0jpIikh9r5wEV+cMU2AtHmfmjXOkNUrhQG3lbI78brINcYV+RX5lunaFFgeMdzA
+	 2f0TIi3VeS4lHUxE1kpeVtdA2KXX4BC7HemIGdtTPAdoT684mUe4/ET1KCVAd039Ax
+	 9wAn/nDnK/rWEiXfQwgez5TprRHKpTADfNPsp7hqbGS9T8wM2PEtiUW3e4z2oJD80u
+	 0VERCKS2tDxSPFMfAekh/YB0Hw4UmBvQjDKdpcIiRrVofwwiRND1Z+iTkhkTN9VPeB
+	 OlYVhEWVBecvw==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260604110455.1608038-1-petr.pavlu@suse.com> <20260604110455.1608038-2-petr.pavlu@suse.com>
-In-Reply-To: <20260604110455.1608038-2-petr.pavlu@suse.com>
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 7 Jun 2026 13:44:21 -0700
-X-Gm-Features: AVVi8CcpynFClfuEAaqP1uLDWMw9ic4YglNbLBUGiNbd7XhW0lgdYdjcOJPqYxE
-Message-ID: <CAMo8BfLko+NZ4HVwjmPgUny3_LM4qBp+vP0HsX=315mra=p+-w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] xtensa/simdisk: Avoid referring to module::args
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Chris Zankel <chris@zankel.net>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Matthew Wood <thepacketgeek@gmail.com>, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 09 Jun 2026 00:16:15 +0200
+Message-Id: <DJ40K3IBQUBY.EAMZAFC3091I@kernel.org>
+Subject: Re: [PATCH v5 0/4] Enable sysfs module symlink for more built-in
+ drivers
+Cc: "Suzuki K Poulose" <suzuki.poulose@arm.com>, "James Clark"
+ <james.clark@linaro.org>, "Alexander Shishkin"
+ <alexander.shishkin@linux.intel.com>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Gary
+ Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Shuah Khan" <skhan@linuxfoundation.org>, "Luis Chamberlain"
+ <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez"
+ <da.gomez@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>, "Aaron
+ Tomlin" <atomlin@atomlin.com>, "Mike Leach" <mike.leach@arm.com>, "Leo Yan"
+ <leo.yan@arm.com>, "Thierry Reding" <thierry.reding@kernel.org>, "Jonathan
+ Hunter" <jonathanh@nvidia.com>, "Rahul Bukte" <rahul.bukte@sony.com>,
+ <linux-kernel@vger.kernel.org>, <coresight@lists.linaro.org>,
+ <linux-arm-kernel@lists.infradead.org>, <driver-core@lists.linux.dev>,
+ <rust-for-linux@vger.kernel.org>, <linux-doc@vger.kernel.org>, "Daniel
+ Palmer" <daniel.palmer@sony.com>, "Tim Bird" <tim.bird@sony.com>,
+ <linux-modules@vger.kernel.org>, <linux-tegra@vger.kernel.org>, "Sumit
+ Gupta" <sumitg@nvidia.com>
+To: "Shashank Balaji" <shashank.mahadasyam@sony.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260427-acpi_mod_name-v4-0-22b42240c9bf@sony.com>
+ <20260518-acpi_mod_name-v5-0-705ccc430885@sony.com>
+In-Reply-To: <20260518-acpi_mod_name-v5-0-705ccc430885@sony.com>
 
-On Thu, Jun 4, 2026 at 4:05=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wro=
-te:
->
-> When simdisk support is built as a loadable module,
-> simdisk_param_set_filename() receives a pointer into module::args and
-> stores each filename pointer as is.
->
-> In preparation for removing module::args, update the simdisk.filename
-> parameter code to copy the provided string. This is somewhat complicated =
-by
-> the fact that simdisk support can also be built-in, in which case the
-> parameters are parsed during early boot before slab is available. In that
-> case, the command line itself is preserved for the lifetime of the kernel=
-,
-> so continue storing the incoming pointer directly.
->
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->  arch/xtensa/platforms/iss/simdisk.c | 38 +++++++++++++++++++++++++----
->  1 file changed, 33 insertions(+), 5 deletions(-)
+On Mon May 18, 2026 at 12:19 PM CEST, Shashank Balaji wrote:
+> Shashank Balaji (4):
+>       soc/tegra: cbb: Move driver registration from pure_initcall to core=
+_initcall
+>       kernel: param: initialize module_kset in a pure_initcall
+>       coresight: pass THIS_MODULE implicitly through a macro
+>       driver core: platform: set mod_name in driver registration
 
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+Picking this up now, so it can still make it for 7.2-rc1 and get some time =
+in
+linux-next.
 
---=20
-Thanks.
--- Max
+Suzuki, since I haven't heard back I figured it should be fine to also pick=
+ the
+coresight change as it is purely mechanic and driver-core motivated, but pl=
+ease
+let me know if you have any concerns.
+
+Thanks,
+Danilo
