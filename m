@@ -1,106 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAE13F8244;
-	Tue,  9 Jun 2026 10:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB66A35970F
+	for <linux-modules@vger.kernel.org>; Tue,  9 Jun 2026 14:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781000952; cv=none; b=BQNCLGkzXyoxthS5fd/6M5P72aPgEyjw72QTwBXgvJ5ob0uLXkSi4mJTGCoeSb7UsIzE/9F+86lHTI7c9af8/KnQV1xDQqreBFsCVwXr3o3W5FweQCtjetk6eS7PWb81uL0LKg2M9629GD+WjCuCQwXVyryjH8SFJYEKBRLoA+k=
+	t=1781016661; cv=none; b=b4Q3/B0tqjIkqVQOpxRu+gbieZnv3CLWETLCuddBtl1xTi/IBjRugrh9Vo+XbQROwQfag/3trBr8bYSEczNO4vusNfKSnc0qvJkg/QG7fUNoShHS4n7BEIMevcBuF9fqyP0b1M5otiYNp8o7xQU95kqD/nHRryyHOmw9aPCT93A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781000952; c=relaxed/simple;
-	bh=po2PVYBoQHn3TVJ3gPK9zEXZO2IncL6RJxbmazHAy8A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=obgEcoWe5JLK72tBkl707jNtUQ/koN0cTFuwuqvE85J97EBa+AXKfOSQfDgzYdL6/x+rlV11APVD8rkd19lkfNfezBoP+F0lkIin9OjP3hn03pkJ5Eta630qDKh9fZkqbUeByeT4ObzrE2UO91OldPyvbDQb23G1yrSIBuoofQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ReKNvMcD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781016661; c=relaxed/simple;
+	bh=mf1HUDle1WUGiJkUpH1a4Nc4jxEdXDDU2aM4xHAA2N0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k4YZWNunZL5Xa9T3kfeOf0SaL2kx3wGSaAVR/l+Fwo0Gq/bw+fuWNEygGSAIIVNxPEBcyUufW28LURuIiYeaMW62J2/9c2kjr76bCmylJTtFFYd+XDFhuJN+AfoRAHf7BLsSB0Y5ObXm12R0XysILtgKSb7iG0JFuEEEk2MTduk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E+YOsstV; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ReKNvMcD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD1D1F00893;
-	Tue,  9 Jun 2026 10:29:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781000950;
-	bh=Tta0PE+TZa8mL2th0Lo4FOkqR6QU33gR5Ohh0rNcY3c=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To;
-	b=ReKNvMcDkiw28GD3JbvCn9EipMm3IlPfdSUWfJXpK9M22Lgm/K3GFU1SXdrhkXZEB
-	 5SdM69gC2r+NC3WYCbCyPuR0cxz1XkIOUgt6duIDMczoeCJR/yUOxNMDc0ndy4j1bL
-	 fhLRu560UpjLJ6CgASjX+dnsScqp81YH+hH9fCPxrUrbK58RdWMsNFEr7vDg5pBwVs
-	 35L1XnVoIyEwFAMW+axHlLAzHFwSMNxKWj5/H++TRdC8TACW8rcVaZM5dRKOPOwprT
-	 tAGhAihwORzRGf1hQKmxKcgbu/f1FfpH3ai4lC8Wc3KCMX/XVXkAO378gK1Np1FfBm
-	 cwCv4PY4W2rgg==
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E+YOsstV"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490ac357c55so61613905e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 09 Jun 2026 07:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1781016657; x=1781621457; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q92fKDa7/rVm6OlNEnz6UaasYMrx115XbzpwtLvtIjc=;
+        b=E+YOsstVfrrR0T6dHb9ILXbwUvH08BejWL4sfD0xAjaajq6mYaZmH3uGeVl9QiWp/J
+         CWWfWalSjbz9Ij2PCqLOHu0GnSyW83IwUJ1mZCb5nfYkO0AdmwwK1M7k+5eSTVr4etDF
+         gw8Yyz049VmDcqWkM6/T0b3iB+92cSKlbm3sKQ7tBpz98YHr1cHoVgR1sKYJP7ALS4+E
+         P8t6fqjo/E5qghL8okLIj5+dl1rHGHZJQEaeLOcnxyvAe3J+cN9igNGUFeT4wHhA2/Sc
+         BOUpkvIdEdczUtJAk77g7Yv9uuMHfGYvjoETzid+3qQQz1Lrj/vtyJc84bd7pKn9yF6B
+         fXwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781016657; x=1781621457;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q92fKDa7/rVm6OlNEnz6UaasYMrx115XbzpwtLvtIjc=;
+        b=qtCUJIyQte8SiKDAxdhNBxmrHIiB7LtNdJtHCkDdbx9paR7GCbmzezSro2u0am/ICm
+         fZH9lY5RK3dwiQb3AQtfu7IyZXDn/Zf3X3Il2WdxBPwktZ4+OxueNDssWQH/EjNk7hgY
+         LNCzAHpbGB6TwGELfqEB3xDAo9de3K0F4bSOqR8a6y/V5oU9fBpKKMTbYIVm6+ykRR+H
+         4jim1uaLzQgaZEny6wysMxwSkLNc+IAW91RUxqpoVp8gXGIbnrE3WFXr8GcOvwy50RVF
+         10sYtvMybY5FRdwcMdsnK+orLyiD1lNwco/WVyJpqmZUPKq8DiRDaQSEHYI0J3ktd5zD
+         VpIg==
+X-Forwarded-Encrypted: i=1; AFNElJ/o2TAgVySqseyPl30lL+gVRrw++k2SxXwJRYjSAE+9cUpA+HtD2ClO64ZABqt9QEMLNLMJ1gbuQ/LVaBLX@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBOWfvIirTtaVpMoQq4k6ur8mdKa0Z8LX+9Z28MY4yacWWRUKh
+	BghYk8wd0OyVKquEOHWyW/IGg/4CzxiTc2XslR0LBG1jBxD+NNOuLX0Zr2kw3fGw8m8=
+X-Gm-Gg: Acq92OFoBAvvbRIlTfJBySOno/sn2YhVPMdzsUm+r6Q3ndelyTPFKLQ7euQ3ZjIOUAH
+	+mUQEZrTJyqMCIks6HtTwECCD1Ui5Y0jan8QBTl5GfNjw347fLPKzjPVdwPgks22HWXPvhvzf8t
+	961jkyc7dmHM/Xjp4KmOMlfjw1F2CPcwPUavGAEKlvQU9t0z4hFhws23/hH3k9+gEZBED88FZw9
+	AJmziHmLzhe1MplnzZIEtzxE0lPcO1jbFHxmLj1ECNgzPH1Oslca9lgxfqye9K8fhOY8WIO7YVq
+	QFso0bxlRsLK4bRNje7AJAcXSha5Yajz8R0d+SupK6QX87kZukqu/mDMY+8ddhyf7rLu6jfga9k
+	fgXsQCaRsYHmDuOedGI0cUShzrEqbOTCt3cw3eO1QwggMJErGSvv8kU/3gD1hKD69W2kw/l4RXk
+	E1FMuruS8sBYqBxDemtSnaFAia6RgtkkGj6Q==
+X-Received: by 2002:a05:600c:3e15:b0:490:adb6:793d with SMTP id 5b1f17b1804b1-490c25f67d9mr335335985e9.26.1781016657089;
+        Tue, 09 Jun 2026 07:50:57 -0700 (PDT)
+Received: from [192.168.75.2] ([62.77.90.70])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490be1f69bcsm526283115e9.8.2026.06.09.07.50.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2026 07:50:56 -0700 (PDT)
+Message-ID: <d67387e6-6531-4257-b11c-bb5ff0190824@suse.com>
+Date: Tue, 9 Jun 2026 16:50:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] module: use strscpy() to copy module names in stats
+ and dup tracking
+To: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
+Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
+ atomlin@atomlin.com, linux-modules@vger.kernel.org
+References: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 12:29:02 +0200
-Message-Id: <DJ4G55S28THG.21SSZK5PQQVGL@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v5 0/4] Enable sysfs module symlink for more built-in
- drivers
-Cc: "Shashank Balaji" <shashank.mahadasyam@sony.com>, "James Clark"
- <james.clark@linaro.org>, "Alexander Shishkin"
- <alexander.shishkin@linux.intel.com>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
- "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Gary
- Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Jonathan Corbet" <corbet@lwn.net>,
- "Shuah Khan" <skhan@linuxfoundation.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez"
- <da.gomez@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>, "Aaron
- Tomlin" <atomlin@atomlin.com>, "Mike Leach" <mike.leach@arm.com>, "Leo Yan"
- <leo.yan@arm.com>, "Thierry Reding" <thierry.reding@kernel.org>, "Jonathan
- Hunter" <jonathanh@nvidia.com>, "Rahul Bukte" <rahul.bukte@sony.com>,
- <linux-kernel@vger.kernel.org>, <coresight@lists.linaro.org>,
- <linux-arm-kernel@lists.infradead.org>, <driver-core@lists.linux.dev>,
- <rust-for-linux@vger.kernel.org>, <linux-doc@vger.kernel.org>, "Daniel
- Palmer" <daniel.palmer@sony.com>, "Tim Bird" <tim.bird@sony.com>,
- <linux-modules@vger.kernel.org>, <linux-tegra@vger.kernel.org>, "Sumit
- Gupta" <sumitg@nvidia.com>
-To: "Suzuki K Poulose" <suzuki.poulose@arm.com>
-References: <20260518-acpi_mod_name-v5-0-705ccc430885@sony.com>
- <20260608222448.1353773-1-dakr@kernel.org>
- <1c8e441a-6b33-465a-88f9-9552f346ae18@arm.com>
-In-Reply-To: <1c8e441a-6b33-465a-88f9-9552f346ae18@arm.com>
+Content-Transfer-Encoding: 7bit
 
-On Tue Jun 9, 2026 at 11:08 AM CEST, Suzuki K Poulose wrote:
-> On 08/06/2026 23:24, Danilo Krummrich wrote:
->> On Mon, 18 May 2026 19:19:56 +0900, Shashank Balaji wrote:
->>> [PATCH v5 0/4] Enable sysfs module symlink for more built-in drivers
->>=20
->> Applied, thanks!
->>=20
->>    Branch: driver-core-testing
->>    Tree:   git://git.kernel.org/pub/scm/linux/kernel/git/driver-core/dri=
-ver-core.git
->>=20
->> [1/4] soc/tegra: cbb: Move driver registration from pure_initcall to cor=
-e_initcall
->>        commit: cd6e95e7ab29
->> [2/4] kernel: param: initialize module_kset in a pure_initcall
->>        commit: c82dfce47833
->> [3/4] coresight: pass THIS_MODULE implicitly through a macro
->>        commit: efc22b3f89a3
->> [4/4] driver core: platform: set mod_name in driver registration
->>        commit: a7a7dc5c46a0
->>=20
->> The patches will appear in the next linux-next integration (typically wi=
-thin 24
->> hours on weekdays).
->>=20
->> The patches are in the driver-core-testing branch and will be promoted t=
-o
->> driver-core-next after validation.
->
-> Apologies, I missed your emails. I am fine with those, happy to fixup=20
-> anything if the linux-next screams.
+On 6/4/26 7:45 PM, Naveen Kumar Chaudhary wrote:
+> Both try_add_failed_module() and kmod_dup_request_exists_wait() use
+> memcpy() with strlen() to copy module names into fixed-size
+> char[MODULE_NAME_LEN] buffers. Neither performs a bounds check on the
+> copy. Current callers always pass names originating from
+> mod->name (itself char[MODULE_NAME_LEN]), so this is not exploitable
+> today. However both functions accept a plain const char * with no
+> documented length contract, making them latent buffer overflows if a
+> future caller passes a longer string.
+> 
+> Replace memcpy() with strscpy() in both sites, which bounds the copy
+> to MODULE_NAME_LEN and always NUL-terminates.
+> 
+> Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
 
-Thanks for confirming! I did a test merge with linux-next and an allmodconf=
-ig
-arm64 build before picking it up, so it should be fine.
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
+-- 
 Thanks,
-Danilo
+Petr
