@@ -1,102 +1,97 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB66A35970F
-	for <linux-modules@vger.kernel.org>; Tue,  9 Jun 2026 14:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9F731353C;
+	Wed, 10 Jun 2026 20:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781016661; cv=none; b=b4Q3/B0tqjIkqVQOpxRu+gbieZnv3CLWETLCuddBtl1xTi/IBjRugrh9Vo+XbQROwQfag/3trBr8bYSEczNO4vusNfKSnc0qvJkg/QG7fUNoShHS4n7BEIMevcBuF9fqyP0b1M5otiYNp8o7xQU95kqD/nHRryyHOmw9aPCT93A=
+	t=1781122991; cv=none; b=EUIKmDE8/uh41C2xKZGJlmz5eE8dcpMcnlaoy8akY0Af81wndd7NO2h3idlyM7lCs+00VfGY6mfAXJuO+ADsSBSTJSmNhuGUw8GqOM97mP6wGPyxRwc+lnsxs2PLo6x5sZLRxLHwpjeZ4vQ3RDDc1Iy89oVw8JG56lNg1faBMhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781016661; c=relaxed/simple;
-	bh=mf1HUDle1WUGiJkUpH1a4Nc4jxEdXDDU2aM4xHAA2N0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k4YZWNunZL5Xa9T3kfeOf0SaL2kx3wGSaAVR/l+Fwo0Gq/bw+fuWNEygGSAIIVNxPEBcyUufW28LURuIiYeaMW62J2/9c2kjr76bCmylJTtFFYd+XDFhuJN+AfoRAHf7BLsSB0Y5ObXm12R0XysILtgKSb7iG0JFuEEEk2MTduk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E+YOsstV; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1781122991; c=relaxed/simple;
+	bh=DTOoGiG04hNAwdKyog+oW6k2jntrnWbRPypS84E/Mng=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wd7ABi/uxvt19Y2Nxn1JJLZlKH0Nh8m1OKN+UQfFwffjqkudh6GDy0yCCR/OWUiIrxZNNAFRQseGVH/lM9TCNUZJLP8C1jscsok5ZuGNu9RwFiyMVeToorAcjz3Cq1I3hLE8i2vItCEKH39d5m+XJhZ5enZqHeJ4fIALMo12dSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CtWAADDy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E+YOsstV"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490ac357c55so61613905e9.1
-        for <linux-modules@vger.kernel.org>; Tue, 09 Jun 2026 07:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781016657; x=1781621457; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q92fKDa7/rVm6OlNEnz6UaasYMrx115XbzpwtLvtIjc=;
-        b=E+YOsstVfrrR0T6dHb9ILXbwUvH08BejWL4sfD0xAjaajq6mYaZmH3uGeVl9QiWp/J
-         CWWfWalSjbz9Ij2PCqLOHu0GnSyW83IwUJ1mZCb5nfYkO0AdmwwK1M7k+5eSTVr4etDF
-         gw8Yyz049VmDcqWkM6/T0b3iB+92cSKlbm3sKQ7tBpz98YHr1cHoVgR1sKYJP7ALS4+E
-         P8t6fqjo/E5qghL8okLIj5+dl1rHGHZJQEaeLOcnxyvAe3J+cN9igNGUFeT4wHhA2/Sc
-         BOUpkvIdEdczUtJAk77g7Yv9uuMHfGYvjoETzid+3qQQz1Lrj/vtyJc84bd7pKn9yF6B
-         fXwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781016657; x=1781621457;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q92fKDa7/rVm6OlNEnz6UaasYMrx115XbzpwtLvtIjc=;
-        b=qtCUJIyQte8SiKDAxdhNBxmrHIiB7LtNdJtHCkDdbx9paR7GCbmzezSro2u0am/ICm
-         fZH9lY5RK3dwiQb3AQtfu7IyZXDn/Zf3X3Il2WdxBPwktZ4+OxueNDssWQH/EjNk7hgY
-         LNCzAHpbGB6TwGELfqEB3xDAo9de3K0F4bSOqR8a6y/V5oU9fBpKKMTbYIVm6+ykRR+H
-         4jim1uaLzQgaZEny6wysMxwSkLNc+IAW91RUxqpoVp8gXGIbnrE3WFXr8GcOvwy50RVF
-         10sYtvMybY5FRdwcMdsnK+orLyiD1lNwco/WVyJpqmZUPKq8DiRDaQSEHYI0J3ktd5zD
-         VpIg==
-X-Forwarded-Encrypted: i=1; AFNElJ/o2TAgVySqseyPl30lL+gVRrw++k2SxXwJRYjSAE+9cUpA+HtD2ClO64ZABqt9QEMLNLMJ1gbuQ/LVaBLX@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBOWfvIirTtaVpMoQq4k6ur8mdKa0Z8LX+9Z28MY4yacWWRUKh
-	BghYk8wd0OyVKquEOHWyW/IGg/4CzxiTc2XslR0LBG1jBxD+NNOuLX0Zr2kw3fGw8m8=
-X-Gm-Gg: Acq92OFoBAvvbRIlTfJBySOno/sn2YhVPMdzsUm+r6Q3ndelyTPFKLQ7euQ3ZjIOUAH
-	+mUQEZrTJyqMCIks6HtTwECCD1Ui5Y0jan8QBTl5GfNjw347fLPKzjPVdwPgks22HWXPvhvzf8t
-	961jkyc7dmHM/Xjp4KmOMlfjw1F2CPcwPUavGAEKlvQU9t0z4hFhws23/hH3k9+gEZBED88FZw9
-	AJmziHmLzhe1MplnzZIEtzxE0lPcO1jbFHxmLj1ECNgzPH1Oslca9lgxfqye9K8fhOY8WIO7YVq
-	QFso0bxlRsLK4bRNje7AJAcXSha5Yajz8R0d+SupK6QX87kZukqu/mDMY+8ddhyf7rLu6jfga9k
-	fgXsQCaRsYHmDuOedGI0cUShzrEqbOTCt3cw3eO1QwggMJErGSvv8kU/3gD1hKD69W2kw/l4RXk
-	E1FMuruS8sBYqBxDemtSnaFAia6RgtkkGj6Q==
-X-Received: by 2002:a05:600c:3e15:b0:490:adb6:793d with SMTP id 5b1f17b1804b1-490c25f67d9mr335335985e9.26.1781016657089;
-        Tue, 09 Jun 2026 07:50:57 -0700 (PDT)
-Received: from [192.168.75.2] ([62.77.90.70])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490be1f69bcsm526283115e9.8.2026.06.09.07.50.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 07:50:56 -0700 (PDT)
-Message-ID: <d67387e6-6531-4257-b11c-bb5ff0190824@suse.com>
-Date: Tue, 9 Jun 2026 16:50:55 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CtWAADDy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F791F00893;
+	Wed, 10 Jun 2026 20:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781122990;
+	bh=gTrL7Tyeuo4QVSWDitVGbLtjegWv9djHZTxLQNU7wlk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=CtWAADDykj72u83HzQmtaRoEh5tcvDokkQ75xIGg/6QXAvT5YoaM/kz56hM4qEQ5y
+	 NQMq7ptAN1QzywQmXMW24rACo8PbYvPGcM6PVqJrvDVOJ4MhWE9F772YPUonjTyVU9
+	 rqPW6hyOQ+2fBF1T2loPNwZ8ioGiTWhHzLf93CgV/c70rTySJo4FKBKnH/Y7i37RrP
+	 +xSeyhqkedvSFnCxsJxjFjLL08BofkaPtXMqMp1NY0YZxZs2OHuwy1+CCQ6KrA5pXU
+	 GpKEESDLyMEqbhoPni6f00Mr8SQwef5so9qS04sob6SVnDUEtDPGn13jnMTF6k6T1E
+	 WJ8iFIKdFxn4A==
+Date: Wed, 10 Jun 2026 13:23:09 -0700
+From: Kees Cook <kees@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Michal Gorlas <michal.gorlas@9elements.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH 0/2] module: restrict module auto-loading to privileged
+ users
+Message-ID: <202606101317.D23383F465@keescook>
+References: <20260515-autoload_restrict-v1-0-40b7c03ddd04@9elements.com>
+ <20260605183646.GC2939956@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module: use strscpy() to copy module names in stats
- and dup tracking
-To: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
- atomlin@atomlin.com, linux-modules@vger.kernel.org
-References: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <slebbzn7p6c4ybokolvey2sgvrooit66zjewwggqac2755ujgp@ptanmtdclmw5>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260605183646.GC2939956@google.com>
 
-On 6/4/26 7:45 PM, Naveen Kumar Chaudhary wrote:
-> Both try_add_failed_module() and kmod_dup_request_exists_wait() use
-> memcpy() with strlen() to copy module names into fixed-size
-> char[MODULE_NAME_LEN] buffers. Neither performs a bounds check on the
-> copy. Current callers always pass names originating from
-> mod->name (itself char[MODULE_NAME_LEN]), so this is not exploitable
-> today. However both functions accept a plain const char * with no
-> documented length contract, making them latent buffer overflows if a
-> future caller passes a longer string.
+On Fri, Jun 05, 2026 at 06:36:46PM +0000, Sami Tolvanen wrote:
+> On Fri, May 15, 2026 at 07:20:18PM +0200, Michal Gorlas wrote:
+> > Add option to restrict the module auto-loading to CAP_SYS_ADMIN.
+> > This is heavily inspired by CONFIG_GRKERNSEC_MODHARDEN of the latest
+> > available Grsecurity patches [1]. Instead of checking whether the
+> > callers' UID is 0, check whether the calling process has CAP_SYS_ADMIN.
+> > The reasoning here is that many modules are autoloaded by systemd
+> > services which are running as privileged users, but do not have UID 0.
+> > While systemd-udevd runs as root, systemd-network (which often
+> > auto-loads a module) for example runs as system user (UID range 6 to
+> > 999).
+> > 
+> > When enabled, reduces attack surface where unprivileged users can trigger
+> > vulnerable module to be auto-loaded, to then exploit it. Recent LPEs
+> > (CopyFail [3], DirtyFrag [4]) for example, would have been mitigated
+> > with this option enabled as long as the vulnerable modules are not built-in
+> > (or already loaded at the point of running the exploit). 
 > 
-> Replace memcpy() with strscpy() in both sites, which bounds the copy
-> to MODULE_NAME_LEN and always NUL-terminates.
-> 
-> Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
+> This sounds potentially useful as an optional feature. Kees, you've
+> looked at grsec features in the past, do you have any thoughts about
+> this?
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+This doesn't really look like GRKERNSEC_MODHARDEN to me? In that
+feature, the credentials of the usermode helper are passed down so that
+udev or whatever can examine them and make choices (instead of seeing
+the uid-0 usermode helper credentials).
+
+This looks like it is just doing a request-time policy check, but that's
+already covered by the security_kernel_module_request() call immediately
+before the proposed module_autoload_restrict check.
+
+Also note that module loading is _already_ controlled by CAP_SYS_MODULE,
+not uid 0 nor CAP_SYS_ADMIN.
+
+Sashiko has similar feedback, and some other notes too:
+https://sashiko.dev/#/patchset/20260515-autoload_restrict-v1-0-40b7c03ddd04%409elements.com
+
+I'm not clear what problem this patch is trying to solve?
+
+-Kees
 
 -- 
-Thanks,
-Petr
+Kees Cook
