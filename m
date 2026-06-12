@@ -1,79 +1,73 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882E0388E48
-	for <linux-modules@vger.kernel.org>; Fri, 12 Jun 2026 13:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF353E44F6
+	for <linux-modules@vger.kernel.org>; Fri, 12 Jun 2026 13:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781271109; cv=none; b=Th4RhDbDujb05nVZJZe+R0nOtfDrLqeY0B0eOm94InpuIxBrfR2yIO4/rd2wgJwBQVQ86AD55vIzG64G8d2CXN0hyN/Hw7i82aO6ywkytZVxT/oRCfA8i5es5v/hrhkxlwcfHhcYIQcFMmB0SXXFj/Omt1TAWouCZtCsjPWAInI=
+	t=1781271612; cv=none; b=mnSyp7RubU1ONXyldkSY1FC4ebHjhZnMGpAJXb6WFeAl620WGiQTdSECoZE18MWW7oL/tnmKSwe1RB1tF3qFIbtVJt0+tiIwzT/Cn+NCTcZDZU0UxD1jpzwbeQC+7PvittB56098yasq8MJ0XKN2BRV8uFaK/NiY67aGJpk0OP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781271109; c=relaxed/simple;
-	bh=85pGD/SUlttaKHV1Ui3Gm8EMYN7jMIzcuxHQpAxTR7E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IcET62BPGl1n3V7Ue3AEEnAej9uaPH0AW8QOBhTMxPH9Kc/PC3VKfNtWBTQCrhVmiwK7gUZOQnlDcMbnfvDlPoCsx4T4CZr/h46RqqaNd+MuNUPVtNmEkBdJp+pFTvX8HcwuRMWC57aMQtOXDOdeBbQTFsBSbNoRvqT6BZ1Pgzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XenTTzJv; arc=none smtp.client-ip=209.85.128.44
+	s=arc-20240116; t=1781271612; c=relaxed/simple;
+	bh=UIrRs12LL5CTfXbD3P6IRPSSbzDrVy25AnHR4B+OqKs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fS2tcd3neltUgEiCidknE8UjkGO7mOabfTaBOpfMIvn3ZjFFwIF3MOsyvYHdoMj4vcGjSbvyjmcTpd70Dep8lJgckdC8YVF5kJB8uuuNngZb4OIAGwkTTh5tCZT/ubBTpMzIMb3yitNTGL6itjKHzAs3WHI4XGuFYNDsZuRd4Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MhsQTMl6; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XenTTzJv"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-490cf322ed0so6780335e9.1
-        for <linux-modules@vger.kernel.org>; Fri, 12 Jun 2026 06:31:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MhsQTMl6"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-490d1e54b3bso12475415e9.1
+        for <linux-modules@vger.kernel.org>; Fri, 12 Jun 2026 06:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781271106; x=1781875906; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1781271609; x=1781876409; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iHq2uwDGJgB0qiB9weh1rH/HnAsP1NxbR0PVnQr+Mc8=;
-        b=XenTTzJvrbv0A8NSiN3IKlIo0GHEzz2ebH+qcUzljTa9G7MUA2u8/bvhNEQ8E41/Na
-         YnDN4XtxKZ445kXED7gveNXF+y66zF3vjKEwYHsX/Chx3chWqwGLgMagD3St4k9KwOpF
-         juar1HuXeb4bAI/0vPHxpnsREbkI6hMnAFwYiRoyNJpuGj72e3h8ZRwlaThoMfAg7EPm
-         APjDq7zZ3y/UgsG3ZZ05+WO65dIcr6E4xU4hsD2TERtcuUHwAUlyEx4zfq6H8WKaI+J+
-         aEWivj6bccDvRyQdxVjuOEKdbQaMna4/PbGO7IiujIdEjL8SIb9GJJN/3+fS5qsonCeB
-         094A==
+        bh=T6JTTjVI9OwnAGFeLH1RdNCyLRQOtyUh+DQZ+OgYrh8=;
+        b=MhsQTMl6oRGILjrom3+VEKzAF8IxxQzvXLa5yRZ7ljZUM0CI2ojAZmagh98eY63vFN
+         PMEncSJFDkppvy2whvBuUYISLPRTPoK0CDBMgGBejwsYbSBaf3J0c4WWGGKWdj7gb43U
+         Ie9Q1GGoYIoR5UmKz4YJg0WVotO3lPbV/IS4Fngguob4mkQqM3E/Ozn6kMsJZkUrn/ci
+         tlfqd1LhEotNCAl/2mzATTyeEaf8wmmBNuuXeIeIcGmJW0x0qrDaaoki/DUiXpnbcstC
+         Gfzl8jKXBCgH5ajHoYAjeAPJwXl07rPR3CAX0sJc1NsqshE5Au1Xf5PIeAKMJj/4MxmJ
+         DE2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781271106; x=1781875906;
+        d=1e100.net; s=20251104; t=1781271609; x=1781876409;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iHq2uwDGJgB0qiB9weh1rH/HnAsP1NxbR0PVnQr+Mc8=;
-        b=iwzW7g0xLmNp5ylglc5cQ1N8GUUYUdr0yP3LPhthClDpwUklEP/qAuzuZxuS83w/yl
-         876ber5gonRzZ/5yZtnDYI6R1IHbqNjUJpl35LrqCTsebsFpN80h5CRTlBHFZZFOZA83
-         hza8muZvzExkaanoNfW54BtVmRxw98gVc0ndKwGhIsBwQLrHVU43l7MMjYINAVtHwnSc
-         E5kTKV59/zX+wwWUoAT3jE6G2uHOfrrxptHRc/nwoeBxQNQxwmlJ5diRL53lROKm+LWu
-         SnYcLL3GPpcMhIP4rFa66yb5fD8S3vm/8gllAOj+ce+Y+D9QU1CFPtvthMzwGmS+Kav1
-         f1dA==
-X-Forwarded-Encrypted: i=1; AFNElJ91FGCibOKSE0Mzpu+3z+wcq1enzeuSCdmisZCC2bmtrqQrAENkpZpg7Rxu2OsIvIaABUwoOctG10TEKJgN@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiPiC7y2u+HascDv4rcWpwqEYgNVO1DvU6dGw1d6+hb2vZJTNd
-	b8cVzE/il9SMUybS13SsWE9tt2EoSxATHSkt5cCAGhdprNrgT2BuroSnkZfAV+r3TN4=
-X-Gm-Gg: Acq92OH9g4USsk5eFC1S0q0L0JzU0e8qFXj6wkRT/2bxgBaU4hyXTc5xtB5FbvPwPt+
-	AcI+O5N6+TBjLgH/83hpgBLnAGddSeH5Sb4R27kDPcrWcwjTeyyL860LpmA8xJjF3tTet73nxGA
-	P1YUkwDh0TSRb7/jTxN/6ejuceRYfoGjadLAFZwC/aa930oR8RZra6qHEAMsOuPpmRRGR6bOyFw
-	YjMj0SgMZg6R8gBcnrlJgrt6SJOOfOhoVoZ/uIZsQDmq1fVC+osYk71SfGXuU0oXeXNpu+QvqgU
-	JLcoEwy2W+EgiGge8/NS7jV4QyTrJ0V9cBThq1CYHSijN+bEdSAhweQaMGPh+Hm0t1dkn93dqvg
-	MhwuDxVByD1YH3G4STGyPAEI4eMMQbA3+hzAzluK2davBuuYawnSH2PVivGRXALbxC3E4W4XY+z
-	muMdHhT2JpfFt3PLLpXUjOXSQWPJUS7xMi
-X-Received: by 2002:a05:600c:c1d7:20b0:490:6237:521d with SMTP id 5b1f17b1804b1-490ec4b186cmr28517655e9.13.1781271105722;
-        Fri, 12 Jun 2026 06:31:45 -0700 (PDT)
+        bh=T6JTTjVI9OwnAGFeLH1RdNCyLRQOtyUh+DQZ+OgYrh8=;
+        b=BGd5zcBKYijn5e7pEH9DhtbGqMUsFDC0bCZ1ABzDraBYCAn9rnFa6y8pQRppQeVSo2
+         f3RtWpdypCtiCYhspeeO6KP1DR+N1wwi7WnTYb8rcFgYBBayqUp+ipabqCJjt028gXX6
+         waaxlLXgf27BNZEnC4U2wGhUFTqX7Gvs95KvAX41JrRHJ07k27BKZ0qvxEsjvkletPnj
+         G/MDFEXMR7QxyavUxgLAXt/csck0juCfCoRzIQ16utO2y9lhUeVoMnEc/FY9LG9jgDTC
+         Cim7FTGtKTB4DluoWGsdYEC8yqoaqzkXKECi0necKw9lCK1Jq3iJTEmyIYA70N3etCtA
+         WN4Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+m+WEWUSTVBitxqkS+fROLDcZgeWbkT5GQJuhQg+iVfRTQZnF4mNdk/nAKqNNBAjdSwKRxn2mTLWDh/Dqr@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0gH+vlUdIgQfLfXAs2FP3iqWWs31zNT9EG18aCP4SjuEKkqq6
+	WJqjyg0aNbo6bAF/U0dGwJhQMWwyKnrdMcLzHmRJPLGVN3K49ntQ9JmsyhznEiKjiJk=
+X-Gm-Gg: Acq92OHR7CVhYbK+H6ZQ4dgAzSfC7MSNWxYC/V28LjSfUaTRr7aE7DQ+tqYwePFBiSR
+	ZMfknZz+O/7nRPr2bnE2avBvOQjHbaQyau7gQRUZrK7Zo2/4H+I/ZQoclQtQEAug2r2CEHCxHR3
+	OS0FjJLUtNON1BVEGjTOXM9DhDrLlVLKbNnVtSmKxg0wUVsLUQUxYy7khcIiYa0OD1zOl/x60Jw
+	vmKB3ITcB4JoBJOrcXMsZ35q137l8Md/6p3uhHeLCThFlIXEWZl34xezHRiXg014gBDb6OFHnRl
+	2n5C05UKat2/rnLjibbeR1U/PLlTCAT8MXScGjyDXaseCmOhDscGuhV/66CuXE+vd6bm+FEMUT8
+	fvP7P0Pr6NVDcg5J4vYvTQNKhw72Zzc01zUI0m2MCTNE8iBZimIbP5cvKuh/1ikMUXZo4hKBRFF
+	/+on+rI2EvI47UpXY7BSTLljg3jjaqN8vg
+X-Received: by 2002:a05:600c:2d84:b0:490:c2a3:1781 with SMTP id 5b1f17b1804b1-490ec50a93dmr24906465e9.34.1781271608716;
+        Fri, 12 Jun 2026 06:40:08 -0700 (PDT)
 Received: from zovi (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f26434dsm6222674f8f.1.2026.06.12.06.31.44
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea963cf8sm44016335e9.2.2026.06.12.06.40.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 06:31:45 -0700 (PDT)
+        Fri, 12 Jun 2026 06:40:08 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: Peter Collingbourne <pcc@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
+To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	linux-kbuild@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Aaron Tomlin <atomlin@atomlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: Use --force-group-allocation when linking modules
-Date: Fri, 12 Jun 2026 15:31:37 +0200
-Message-ID: <20260612133139.1919042-1-petr.pavlu@suse.com>
+Subject: [PATCH] module: Remove unused DISCARD_EH_FRAME definition from module.lds.S
+Date: Fri, 12 Jun 2026 15:38:28 +0200
+Message-ID: <20260612133920.1919352-1-petr.pavlu@suse.com>
 X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -83,69 +77,51 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Specific code, such as outlined KASAN checks, may be placed in
-COMDAT-deduplicated sections. When linking modules as relocatable files,
-the linker by default preserves such groups, potentially leaving multiple
-copies in the resulting modules and unnecessary group metadata.
+The linker script scripts/module.lds.S contains an unused DISCARD_EH_FRAME
+definition introduced by commit 68c76ad4a957 ("arm64: unwind: add
+asynchronous unwind tables to kernel and modules").
 
-Use --force-group-allocation to have the linker resolve the COMDAT groups
-and place their members as regular sections. The option is available from
-ld.bfd 2.29 and ld.lld 19.1.0.
+As shown in an earlier version of that patch [1], DISCARD_EH_FRAME was
+meant to be used by SANITIZER_DISCARDS in the same file, as follows:
 
-Remove the workaround in arch/arm64/include/asm/module.lds.h that was added
-for the same problem but limited to CONFIG_KASAN_SW_TAGS and .text.hot.
-Note that this code currently has no effect anyway because all .text.hot
-sections are placed in the .text output section by scripts/module.lds.S,
-since commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
-related macros").
+-# define SANITIZER_DISCARDS	*(.eh_frame)
++# define SANITIZER_DISCARDS	DISCARD_EH_FRAME
 
+However, in the meantime, SANITIZER_DISCARDS was removed entirely from
+module.lds.S by commit 89245600941e ("cfi: Switch to -fsanitize=kcfi").
+Eventually, the mentioned commit 68c76ad4a957 only added the new
+DISCARD_EH_FRAME definition to this file without actually using it.
+
+The file include/asm-generic/vmlinux.lds.h contains a similar
+DISCARD_EH_FRAME definition for vmlinux to discard .eh_frame sections that
+may be present when CONFIG_GCOV_KERNEL, CONFIG_KASAN_GENERIC or
+CONFIG_KCSAN is enabled. Testing these options on arm64 with LLVM 19.1 did
+not show any unexpected .eh_frame sections in modules.
+
+Remove the unused DISCARD_EH_FRAME definition from scripts/module.lds.S.
+
+Link: https://lore.kernel.org/linux-arm-kernel/20220701152724.3343599-2-ardb@kernel.org/ [1]
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- Makefile                            |  6 ++++++
- arch/arm64/include/asm/module.lds.h | 13 -------------
- 2 files changed, 6 insertions(+), 13 deletions(-)
+ scripts/module.lds.S | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index e156e2696efe..1729af0690b3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1189,6 +1189,12 @@ KBUILD_RUSTFLAGS += $(KRUSTFLAGS)
- KBUILD_LDFLAGS_MODULE += --build-id=sha1
- LDFLAGS_vmlinux += --build-id=sha1
- 
-+# Specific code, such as outlined KASAN checks, may be placed in
-+# COMDAT-deduplicated sections. Use --force-group-allocation to resolve these
-+# groups when linking modules. The option is available from ld.bfd 2.29 and
-+# ld.lld 19.1.0.
-+KBUILD_LDFLAGS_MODULE += $(call ld-option,--force-group-allocation)
-+
- KBUILD_LDFLAGS	+= -z noexecstack
- ifeq ($(CONFIG_LD_IS_BFD),y)
- KBUILD_LDFLAGS	+= $(call ld-option,--no-warn-rwx-segments)
-diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
-index fb944b46846d..792a0820757a 100644
---- a/arch/arm64/include/asm/module.lds.h
-+++ b/arch/arm64/include/asm/module.lds.h
-@@ -4,19 +4,6 @@ SECTIONS {
- 	.text.ftrace_trampoline 0 : { BYTE(0) }
- 	.init.text.ftrace_trampoline 0 : { BYTE(0) }
- 
--#ifdef CONFIG_KASAN_SW_TAGS
--	/*
--	 * Outlined checks go into comdat-deduplicated sections named .text.hot.
--	 * Because they are in comdats they are not combined by the linker and
--	 * we otherwise end up with multiple sections with the same .text.hot
--	 * name in the .ko file. The kernel module loader warns if it sees
--	 * multiple sections with the same name so we use this sections
--	 * directive to force them into a single section and silence the
--	 * warning.
--	 */
--	.text.hot : { *(.text.hot) }
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index b62683061d79..d0f200428957 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -3,11 +3,6 @@
+  * Archs are free to supply their own linker scripts.  ld will
+  * combine them automatically.
+  */
+-#ifdef CONFIG_UNWIND_TABLES
+-#define DISCARD_EH_FRAME
+-#else
+-#define DISCARD_EH_FRAME	*(.eh_frame)
 -#endif
--
- #ifdef CONFIG_UNWIND_TABLES
- 	/*
- 	 * Currently, we only use unwind info at module load time, so we can
+ 
+ #include <asm-generic/codetag.lds.h>
+ 
 
 base-commit: 4549871118cf616eecdd2d939f78e3b9e1dddc48
 -- 
