@@ -1,179 +1,162 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C94F3B52EB
-	for <linux-modules@vger.kernel.org>; Wed, 10 Jun 2026 21:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781125593; cv=pass; b=pZaAgXeoUzHTSpeM0JgFoAPrCjUj1z1/dHRarKhDQ+vCD+zZNUFk01JLgV7SIU1fEipFutc6Qi7Z7bh48pXmEtuM+JPSGjvgnzDGL1PfcyjUf0yao4YDCJqtNEyp+G7E2yxTIgc8dBaAPuSSkav4jyG9htskzNPKqbU9qE/ZikI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781125593; c=relaxed/simple;
-	bh=8SPk+9kPUL0DQYsfiU6U+3rhy9CmKqHE6O0qDp+jLZI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZLChmsJA4kcyFw7al/mMAUoa0g5mDpIPyVQIvFh1nN/rOdnBAKpj7FuhUwQGk3D3zUoZpRBXabt97yVLYSe4jRvIYm6F/Yz7QcRuczPGvuG4qTceVxwIjIh73NAxZJ4991wSIiowyyCNYj+KGos05rETICv1QSkh/Wg9Lb1Ut/g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWOwKwlS; arc=pass smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A693DE457
+	for <linux-modules@vger.kernel.org>; Fri, 12 Jun 2026 12:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781268113; cv=none; b=Oasn3YVFNqQIf6byeoGt2qRK/rSTB20qMqbDunHVmJu3SW4ObB3QfUh8inwe5XAohyaLTr1QnuCDwyNgLoysGF0GAFz7TeTdm7MpUP5AlKlUNMhNrS2HJaHSF21WGUXbpmxOVrUhBosY9KBcKVwScorG7rePaq3O5zTLcBwqazE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781268113; c=relaxed/simple;
+	bh=LMYu57gU8RUYV0LQ5OTarh15mKTlnPD1JC7e6c9SqXU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Bb+8fv5SpbHbepewQaZr/gEDsW+nZ18OMuXQL9U6+9AK1YkfSsU87frSL9crkCEvplIZ4pXReqhpJW6+dguEmxCKB1qnf2prfcSsbAlgWAN2jXdcDfMmmLbKxiHPfoRS27tDUGUXrimLbVFKSKHf13Lp8i/khgcK+eITnNPqiq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=MZcSB/7k; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWOwKwlS"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-7ea16f090b4so91568467b3.2
-        for <linux-modules@vger.kernel.org>; Wed, 10 Jun 2026 14:06:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781125589; cv=none;
-        d=google.com; s=arc-20240605;
-        b=KN1I2plmj497tbPTf5zzZWMG8RqLtkU9RzLphChuNjTUGQn7BmzJ/iXgRmJFFQ7ny6
-         QPy3sxo0uFX2/ox8eblAeaZcGoHhd2nWQsuy9zDUUHeqiPbF4XCFk2kEjZE1dSLdr+1u
-         lSPpDHcNuclI3UMAOLHGLraCqrVIRdZlKeiSLPuyBjnAu9Pbm0sXxgxF+ScX9iVcG/yd
-         0DFF4wtbF+egN+g0zpyfgNcfa3HXO7PgHWH188+5FUtAHvXZfU6SL+5ECrsryRV2y62o
-         eZEI+OM9tJqjHMzYUZRcoLO6s5GYbElUWTxHEli1kY6j1M3p4tlpTiDzDqsX1Gkzv5eD
-         XkiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=96czj6yri6D29TEjjpnrX0Ms962E0G1MVyGNh2o55HQ=;
-        fh=2jj8cf8ViL+O70I3dRZMDKHjt4++IYzsCa36yOkpmwM=;
-        b=V837svdpVXOQ2PGPQ9lDWmYX+8nsnBDCxiCJiA252Lt8SmmvYU4AGDfQdbQyAoH8+6
-         riuRlMzelAyVgRHW511Hir4d8a4V1c3rs60Xhr1gnzDr3qUeWi3qQF2/VZtAbn2pudz1
-         QJklxvf+FBeya29HG4F6XIciGMqjEsWbunHUbW2tz82hAr/S8kRxqmuLvefqp4MhnFvK
-         Jyvz+EsoQRoSF7ijwnuisMga20FxgeUTS0EUm+4gwP/hVPhmOTVD/3iuAlhvW/mmObmj
-         2iaufBTaciXZKuZWecmEPQ2tRVkvY88xapLWAyqsIQM1zLEVfCIphGzGLhEijWayIJZ5
-         VIHA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="MZcSB/7k"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-490b3e03939so8119195e9.1
+        for <linux-modules@vger.kernel.org>; Fri, 12 Jun 2026 05:41:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781125589; x=1781730389; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=9elements.com; s=google; t=1781268110; x=1781872910; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=96czj6yri6D29TEjjpnrX0Ms962E0G1MVyGNh2o55HQ=;
-        b=jWOwKwlStXwGgUAXfngBzfebepF/l+Iz4nUi1RY4ZFUDUceLV7UGbSPy/9QVHif4B8
-         ZPz1O75qxMy7MzdeNnHDuLBQRANDqdgtNr4gpz1YjTbGBhWiD5oYWhkIc+R75zzFDCkO
-         Meumk/PL2hxGiDTi1EoFtI5Rjo6hDtBgNs4khoSmLMvoD3D6m4fDnyZeU2/SVa8Rl3Nq
-         Np8qgXa+5CNjzN4wJqgw9w2Dk9ZrR505dzxMLNWm5lQRAcJlwSMMAmfpaaFKXCI38Fkc
-         kL00/uRMaIP0VLi90TJNN5Ph1pRYS3cFKXlldKH1fiRvxQ998TEqxSQ9HgBoZT5xJce+
-         N+TQ==
+        bh=LMYu57gU8RUYV0LQ5OTarh15mKTlnPD1JC7e6c9SqXU=;
+        b=MZcSB/7kLPyZuLn+TWmZsVGRt3CiWJg+vvYCE+2nLVS9a/ac7q8hRMMZpcr5BJpECe
+         indVjCCLUa6Dv03RYAHD4bXt1C8pc3mHOVVmTUpt7V4ea3WB06g9ivsPnyjZ88U7tVrW
+         NQw3SJTJNZKgxuohoQDhWtnuomygckypLo7Z2GxYCrm7CgvN/e8PNjkPy0itiQc9nvQF
+         H4qhtw2Daka/P6OaUhZzcnjnnEhJ9lTE2St1EYo8unxwbZ/SJes4QUJj362sSUlobgt/
+         pIn7QGLhtTjy0P5LZARh8ryMwlVkaLL12Qa/rHMXOgPtJJ2tAXKBp5wBsTbj4Zp/oR7J
+         jRzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781125589; x=1781730389;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=96czj6yri6D29TEjjpnrX0Ms962E0G1MVyGNh2o55HQ=;
-        b=qCs5iypTfc/8xTGoj5pTMuxBy/nIgl8vaQGIcu5KUFEail8/H68rj6/82jz+IsY+rL
-         kpoY4UaEV4rG2AY2MhkUkxmlP/FfVWTpOh+9d3hzJPMsemimO0tlQm3ad7JcFbUE00eF
-         zNUL0KTMGzjNFnyMj1AWVabFj9kEH5obrSqOwvMSzmoNqlNggdeCiL+aXiuZHKvqmf2G
-         47hyQvmiXvU71ve0Kb7IzMzLzRmX+7zQ2t3XRoZyjcK95Kb1HzEwpf+PUHTlD2dHs+zI
-         psSB233DSyDmluqTTFDfg1zhkeCdHq12jUxPjvSWpvLqieUjOjvkXDgSWN4sjSdbu4DL
-         FwpA==
-X-Forwarded-Encrypted: i=1; AFNElJ9wAMhXj/fYGMLZH7t7G5m/hbKdCM08oaD1Uz+ZkCZBg7sarCdDc/GeBFk/bikcRR3hnvaKmtlxkLie9xuw@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl/yF859/w0jrlg8ZSeZgUexEoFdT0iw/Q4nox28TKz1O0JZrM
-	b1lMCxJM8cXKRuroLvytptn8Jmla2YeMoPk9GKYzzxkJ9f79XAgtyuALAAA3/Z0SY8PlpE4Um8N
-	uxEB0EJe5955X9HynDC/1GkCo3UgSwBk=
-X-Gm-Gg: Acq92OFGclrvQhBZH6IxMkDKP9HdWStcRGC4RaYa7t5gQQ4yS2XkXLzNkRA94Hbz7eE
-	BdYCapMfF8EJeRkBb63BdxjaEo+qZ042hgQTgjS54D5s2whaaRa09DcortpDlQSRz+bxh50/43T
-	XyqceDwc65CDeWQApj9gaBLS7Ad8fCwTgFeAJNifjKtvidlGZNdEH8Kdyex7xGWpYdmnx1i1tpu
-	A/W8X5brJClWSSWt3Psy+XJgMgWxG/KYyYWi/if26w0L7s4HeJu4gaVIJTvRu4rlDwHvecU+qtR
-	C1ghKpCk2Y2vU8g2hoMlX+ij2g==
-X-Received: by 2002:a05:690c:45c5:b0:7e9:ab56:3c99 with SMTP id
- 00721157ae682-7ed0adbb616mr276188567b3.6.1781125589039; Wed, 10 Jun 2026
- 14:06:29 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781268110; x=1781872910;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LMYu57gU8RUYV0LQ5OTarh15mKTlnPD1JC7e6c9SqXU=;
+        b=oOFNRRrpo8Xbi3C7kO+OUBfuxnstYyECjzuR81MRpEB7XcJxuBGiy/+i1AV6wyMt1E
+         weQrUDzBphkZxhzf5gwYTNnXtw6Wnx6j/RXSimvFtt8ZTjUCL74fZ/qxQXS6y572nGzB
+         pC9lYoxMngYhvf+eOvca57QOTey9RGHCM6P9yEdv7YZMQ8m3G2J0sXBiJJiklHaPqyFS
+         hne4tan9ZOY91VYgU22FlaBqOYQUHeSJMXi4JyLp7x0aQaubAfS7hz5Jot5zD9b3gvAO
+         RuIGMk2WaCubg9m/eV4HFzmRFMPTnPUjevYtGnK5kLMyTyC3owbgAyuGBjyuv+AdRBD+
+         Hl/g==
+X-Forwarded-Encrypted: i=1; AFNElJ9u1ERXWROSwfQXXL5G2Jib6jRYBYvw5kcjhHDnfTGMRlvqJYZhdFeLFZQcFC0kZSP9N2YDhe9a6k2ybt3F@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFEnFm9b4NwhYUA3tZGGneKXgQ6Y0q3W/RxqwaxqrGH+qLaH6a
+	BLoREaz8GxSHHNLNMwIF3pYGcOnNYhA0u5UDuMhkgjU8HjVcSvw4FIL+RaGhZXHhMA==
+X-Gm-Gg: Acq92OFnwVfRbAhrfD0krWoDWmslo4xomvfG/SY68DccWv32iqQqyyvlWAesDcUha+A
+	WcoeAhPgIhRDTUIVbjtDtFAqB0BnmAGmiYpdJLw8/hp7m9rzTGT3jqVzZfcklMzWc0eVhUfuQvy
+	z8ju47a7GOYdaPwUG1xMyJSCyr3kRpG8cjpfK5NvwyCmpEn0dUKHWFiqfmfNcrY2PWi9lKGtDhJ
+	3PxksYtx8Z1uSo5+oS/2tbV7+RMR+Z26m3DcLubu+dMcpMcCXnEqyMGsjwpKzdq5jWNGD+/kEfr
+	v6Kh/am+vbW65rZFz55aaA7GoR+qoiCWy8EE5G7AmnE5ycs0uoVB7Pp06xtxu0hAhNvR729kXwV
+	S0cUOa2l8SMB9qVuzJkRxhvDu3KtuKvEXCpM5jIoZeAYyoeTE9mThNO6Ww+ef2+cjAk7Npuflnb
+	PResGkyl0g3rzU/ZlpzDKazRnjwx21PJo=
+X-Received: by 2002:a05:600c:8b2a:b0:490:4b89:5372 with SMTP id 5b1f17b1804b1-490ec50a338mr30469575e9.11.1781268109862;
+        Fri, 12 Jun 2026 05:41:49 -0700 (PDT)
+Received: from localhost ([185.213.155.242])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea7c08fcsm72043615e9.1.2026.06.12.05.41.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Jun 2026 05:41:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260521133315.work.845-kees@kernel.org> <20260521133326.2465264-4-kees@kernel.org>
- <da358ae1-91b4-4a16-ac76-ffab99c230b9@suse.com>
-In-Reply-To: <da358ae1-91b4-4a16-ac76-ffab99c230b9@suse.com>
-From: jim.cromie@gmail.com
-Date: Wed, 10 Jun 2026 15:06:02 -0600
-X-Gm-Features: AVVi8CcLXClq9Fijm8VjZF47hQWmos5q_iXrehNZDw9kSOby-E_cMxEQI0SK-hU
-Message-ID: <CAJfuBxwRuT1K=rjPX+sdNyYurEJ=OjqbJaSa_S6JnY6yzTwTvQ@mail.gmail.com>
-Subject: Re: [PATCH 04/11] treewide: Convert struct kernel_param_ops
- initializers to DEFINE_KERNEL_PARAM_OPS
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Pengpeng Hou <pengpeng@iscas.ac.cn>, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Corey Minyard <corey@minyard.net>, 
-	Gabriel Somlo <somlo@cmu.edu>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Hannes Reinecke <hare@suse.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Jason Baron <jbaron@akamai.com>, Tiwei Bie <tiwei.btw@antgroup.com>, 
-	Benjamin Berg <benjamin.berg@intel.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	"David E. Box" <david.e.box@linux.intel.com>, "Maciej W. Rozycki" <macro@orcam.me.uk>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>, Frank Li <Frank.Li@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	John Johansen <john.johansen@canonical.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-modules@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com, 
-	linux-security-module@vger.kernel.org, linux-um@lists.infradead.org, 
-	linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net, 
-	qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net, 
-	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 12 Jun 2026 14:41:47 +0200
+Message-Id: <DJ72UFZFSASR.27NR1EMT3MCTJ@9elements.com>
+Cc: "Michal Gorlas" <michal.gorlas@9elements.com>, "Jonathan Corbet"
+ <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Luis
+ Chamberlain" <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>,
+ "Daniel Gomez" <da.gomez@kernel.org>, "Aaron Tomlin" <atomlin@atomlin.com>,
+ <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH 0/2] module: restrict module auto-loading to privileged
+ users
+From: "Michal Gorlas" <michal.gorlas@9elements.com>
+To: "Kees Cook" <kees@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>
+X-Mailer: aerc 0.21.0
+References: <20260515-autoload_restrict-v1-0-40b7c03ddd04@9elements.com>
+ <20260605183646.GC2939956@google.com> <202606101317.D23383F465@keescook>
+In-Reply-To: <202606101317.D23383F465@keescook>
 
-On Mon, May 25, 2026 at 7:35=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
+On Wed Jun 10, 2026 at 10:23 PM CEST, Kees Cook wrote:
+> On Fri, Jun 05, 2026 at 06:36:46PM +0000, Sami Tolvanen wrote:
+>> On Fri, May 15, 2026 at 07:20:18PM +0200, Michal Gorlas wrote:
+>> > Add option to restrict the module auto-loading to CAP_SYS_ADMIN.
+>> > This is heavily inspired by CONFIG_GRKERNSEC_MODHARDEN of the latest
+>> > available Grsecurity patches [1]. Instead of checking whether the
+>> > callers' UID is 0, check whether the calling process has CAP_SYS_ADMIN=
+.
+>> > The reasoning here is that many modules are autoloaded by systemd
+>> > services which are running as privileged users, but do not have UID 0.
+>> > While systemd-udevd runs as root, systemd-network (which often
+>> > auto-loads a module) for example runs as system user (UID range 6 to
+>> > 999).
+>> >=20
+>> > When enabled, reduces attack surface where unprivileged users can trig=
+ger
+>> > vulnerable module to be auto-loaded, to then exploit it. Recent LPEs
+>> > (CopyFail [3], DirtyFrag [4]) for example, would have been mitigated
+>> > with this option enabled as long as the vulnerable modules are not bui=
+lt-in
+>> > (or already loaded at the point of running the exploit).=20
+>>=20
+>> This sounds potentially useful as an optional feature. Kees, you've
+>> looked at grsec features in the past, do you have any thoughts about
+>> this?
 >
-> On 5/21/26 3:33 PM, Kees Cook wrote:
-> > Using Coccinelle, rewrite every struct kernel_param_ops initializer tha=
-t
-> > sets .get into a DEFINE_KERNEL_PARAM_OPS-family macro invocation,
-> > for example:
-> >
-> > @@
-> > declarer name DEFINE_KERNEL_PARAM_OPS;
-> > identifier OPS;
-> > expression SET, GET;
-> > @@
-> > - const struct kernel_param_ops OPS =3D {
-> > -       .set =3D SET,
-> > -       .get =3D GET,
-> > - };
-> > + DEFINE_KERNEL_PARAM_OPS(OPS, SET, GET);
-> >
-> > Using the macro for initialization means future changes can manipulate
-> > the struct layout and callback prototypes without having to change ever=
-y
-> > initializer.
->
-> Nit: For consistency, I suggest also converting the few remaining
-> kernel_param_ops instances that specify only .set and no .get, such as
-> simdisk_param_ops_filename.
->
-> --
-> Thanks,
-> Petr
+> This doesn't really look like GRKERNSEC_MODHARDEN to me? In that
+> feature, the credentials of the usermode helper are passed down so that
+> udev or whatever can examine them and make choices (instead of seeing
+> the uid-0 usermode helper credentials).
 
-for the dynamic-debug changes
+It is based on a part of GRKERNSEC_MODHARDEN policy check in=20
+____request_module in [1]. By no means it reasembles the full
+feature. Very similar check was proposed for linux-hardened
+tree few years back (with the difference of checking for=20
+CAP_SYS_MODULE) [2].
 
-Reviewed-by: Jim Cromie <jim.cromie@gmail.com>
+>
+> This looks like it is just doing a request-time policy check, but that's
+> already covered by the security_kernel_module_request() call immediately
+> before the proposed module_autoload_restrict check.
+>
+> Also note that module loading is _already_ controlled by CAP_SYS_MODULE,
+> not uid 0 nor CAP_SYS_ADMIN.
+>
+> Sashiko has similar feedback, and some other notes too:
+> https://sashiko.dev/#/patchset/20260515-autoload_restrict-v1-0-40b7c03ddd=
+04%409elements.com
+
+My understanding is that CAP_SYS_MODULE is for processes that are=20
+using load/unload directly (i.e. by doing init_module/delete_module=20
+syscall), and the kmod's__request_module, is a user mode call=20
+(at least that's what the comment in __request_module suggests),
+so CAP_SYS_MODULE does not have to be set for processes that are=20
+just using __request_module. One example of this is systemd-networkd=20
+(there are probably more but that's one that I tested), i.e. it will
+trigger the module autoload even though its not given CAP_SYS_MODULE.
+Please correct me if I am wrong here.
+
+>
+> I'm not clear what problem this patch is trying to solve?
+
+To have an option to completely disable module auto-loading for
+non-root in general. By root here I also think of system users so
+UID 1-999 [3] (had typo in cover for the patch, sorry for that).
+Not sure if this is a best approach, it could be also implemented
+as small LSM hook on security_kernel_module_request() (just a thought
+after you mentioned it). Either way, the idea is to limit the=20
+auto-loading, not direct loading.=20
+
+[1] - https://github.com/minipli/linux-grsec/blob/v4.9.24-grsec/kernel/kmod=
+.c#L153
+[2] - https://github.com/anthraxx/linux-hardened/pull/23
+[3] - https://systemd.io/UIDS-GIDS/
+
+Best,
+Michal
