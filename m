@@ -1,183 +1,140 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646283644DB
-	for <linux-modules@vger.kernel.org>; Fri, 12 Jun 2026 14:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91EB838737F
+	for <linux-modules@vger.kernel.org>; Sat, 13 Jun 2026 10:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781275153; cv=pass; b=BXYze+0u8XlvQ29FmA/9h0WtNWsjHifcHuOrYeTv7eb25ZxRR2mVSAKGkh/wUQOSNcrutP8obmJKGLfDn4qulxun80XOmmsrN6Q2fLP3LbVt3eDQVj0bNn4jZyNnyXiN84oPgcYSAxXXV7ZvX0B9Pxnk6Udzv0kPPhgzmZe2+ow=
+	t=1781347276; cv=pass; b=LQpMuUA3gz9lSQF132Fay33h18I5TSkufe4L9xgh3C0/9nRn5z1v2HUINpn24JTW0so7Ig/BQvw9MpgxGcjZZrDYWxOrgDnEjUNQcVS2ZIWxzrhM+hT+X4d2x2oZWGNvHx6MvpeUWWL07TRZbx/cjGBFAc+PAD1GGNBH0u5fpow=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781275153; c=relaxed/simple;
-	bh=ouj7/XxF+rM/cqEOn/Xx8H8wm6495TcijVSF+fy6VoQ=;
+	s=arc-20240116; t=1781347276; c=relaxed/simple;
+	bh=7k6tbN+HH+WkUq4HSNO/mcXSBNU1lROqmA4mfJkiWzo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bPxy2ASTzPSMMiqH/8EJqugsFqMaFi/lf+4sL7XoLxo7ulLJNfJKbgFaLoB8fERKUOrBYObn3nE3Ts5NTaae3stGjvpfGO1n9YJnRGKvNlnBdIBNiUWiqeiUkS9Z6HL/cjioZdNL+vcnE33BSs/aG130pGvqoRFJ7aCbVfXdDko=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tR/Ev165; arc=pass smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=WwxkJupkz180XN4uue5z+0uqfODUi15WrrXFatXAlUBkMEAMkItaQDuylNrsa+0bHBFtOLMjcIYisovj2e7M449e0a+g3CBDpOZiedsNbuBSHaIjNaugHFW5l53cgafSfoGnjyMf2qTPhEoOo8AvgP8yB8c5UTuaMDbMf+c5gqg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hggXMU4p; arc=pass smtp.client-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tR/Ev165"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2bf2911f93cso83865ad.1
-        for <linux-modules@vger.kernel.org>; Fri, 12 Jun 2026 07:39:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781275152; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hggXMU4p"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-304da3b4508so232639eec.2
+        for <linux-modules@vger.kernel.org>; Sat, 13 Jun 2026 03:41:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781347275; cv=none;
         d=google.com; s=arc-20240605;
-        b=KHdFzYVEhxigeXpgbJwus6ch/gNPgGFcHgrpL0dRfgveoOvxhti1pD5MXmTuJ6RaNy
-         Uu1y0OiKEGJH5lWm2FJVAN8Vb6r+yS3yUvlH+HQr9RTlSjzM/KDt51kTRZylBJH+eIws
-         XXMmOZVg4ljUcaK8lBsqmQy81JoYLv9w8e4tol0pC+3vQfZikcLUL9v6aFF5ExihnRcX
-         aXIM4c25d2XkFJY1OMG3jQ6IiaAnQ/NvF9qgiJGXj6VYKQNdx8tQOibsV528uJ/6ZEr4
-         ntrVW2WkaBsZfwzcgkwaoky0cMexX0NiDvugTHjKjSzaKLSwKe9sqxA9VYPcB6+mUuKL
-         +1Ww==
+        b=J8ntrmSKUWX9Z2+5reoDvEHWMD2VhSOneJmoP0aXjUhNcVxxWu+NjWxo0ltURo1H11
+         ASXhcwL2I5E1D8QALEzsj3AO0Top0zRtJCqSjEZdIEMWswDlei6EukaaJlPhtLwB36ni
+         Jt/gOFKMl4FbCiFnDjXjBWv4S6sXClkv4jNKc1/2QTrtd3JUsa8DvDZHnb+EKoFOT8eT
+         2D2P5SUIZhQl1ugAMnTSArknWazy3dhSzfwru9NGS7kGrtaL6BUZI+xfMPze+Eyy04iz
+         CosqjTaHaTUwNt1Bm0dMesDndSFkjdAVwX9H6lTQCzFz5b/p66kgWUpYAT/o6V9sP3QN
+         AU1w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=pPD0U5NZ4eXf//hJDc4itwhE90Vj8iebVbR8OA3Plrs=;
-        fh=uiL5h139wipJpheQTLYxUZ66chz5tJKk4mX/QtDOFe4=;
-        b=IF+puqu/ThgDqeuQ/QaiJivMykYEVE+r6ddug1TjK5AVdSJvvpLByy0VLXhqyAcaoU
-         nDFLhYTkv3mqoteoAQtISHTFACCcWmXaAruRCKsmBHc3GVs7fBVujUNM+UV5khtmibYD
-         nK5WL5GtvmmS7mzcJD550kTrSRe9hYgS+LotKyU69m8FXq61n8fgHJmlB7ABRcMMwKXa
-         7i3RI5Bw92QMSaHJckf8VZSb88QL7ETo3oKoAtPcntifaYudxbcg+uz66YU4SMf6M641
-         kjUDSELQ9yhmkYHlBxynyVkbIF/kCSogiDBNuOrrFGR74JWXKSpaWshCAOA1K/opvJSu
-         ZivQ==;
+        bh=G548kc/xuN9FYSMWIgZO2PFN4NWhwpWrdwSftDKzZuE=;
+        fh=tHDU4Paq7bvRe0RuL6utj/EJbtKkjD3Q6tt/hVfv6QI=;
+        b=HKy2OYZmavu6qBIq2q1O9Skp69x24EAbrIIK1jN1wb7e6u+7DRPZOgYC4/Zlg5ilnh
+         2BAiSCn4G0tYHXaZz14kfIZAugiGA0ECmYcFiMEuSw+QL29XwwcG7ZVjhz6PogKzlKma
+         RH/5Ol3m/c3GKMwSCmLTQ9i6QpLawh5qGFeAAuiAQyJy2vWTEiiqaBxUWoI+9BksmUdg
+         sGkFPYtMJfxOVDvshRpT1+uelNb+k5KAihmNfZLGrxNd9R4+9zpV8vPYSFMNKdSz242S
+         wZxYoYYQlpegTERFJ/OpqgjF/gi/mgTxYxCbBZLe04Nfx9yQIEmYdmO+8sg+4svpiTAm
+         PpWw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781275152; x=1781879952; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781347275; x=1781952075; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pPD0U5NZ4eXf//hJDc4itwhE90Vj8iebVbR8OA3Plrs=;
-        b=tR/Ev165JhC48vvb/HKrpwxPMFfu1RP1N3p/dZ+LT6er0sOqiiJdJtp+7AxAPZQ2+0
-         YuMyOcQ6V/LPbZitmO4wukRQbATcWNepSyQGgeMCCL2mGfz40Z9wdfgL34Okov4mRyT3
-         k2r6cNf5xUTVJIVCH2ZRVFm+1TOI6ylWPzfHpCYGcI98/mpBym/gsPWjKRU9/y/y4AAm
-         KDeFsvr0kdMsgdlZ/bQOTwxErAAy7SKNP9GbGtcEqDP7pGXCxnXOne+yWGTNIWyoxjXA
-         O0e0Q79I4k6DzOmmi6Av0cku9XEeQyGtatBbYgKe1hMbjD7kqlKPVi/eHfNJ3ymICUAQ
-         V8jg==
+        bh=G548kc/xuN9FYSMWIgZO2PFN4NWhwpWrdwSftDKzZuE=;
+        b=hggXMU4pAdKn2lZVKQNgKjiSta2uifLDJ9Iw/l48crsFzrm3pbnbxxy1To2ak1jByT
+         FsTwmGAtFUqq3xR5x2gmKgtlDFR6VIyUeIVUhyC1mv0lSQ2DJYl9aUHrq0Tn2vgbhdyD
+         64MYLIERBYdof+mNse5jpRn3OOFgL83vhqj8wJobew/GLHRIadj/qPqfBvx2f+gu22cB
+         G68l/HyYn1KEFja7mTg3a7a+gg9VZadaOpmNwO+Rv29lokcfcSpp6O73hfztkdCDV+Iq
+         SuEmMC+UyKiLEGR/ETfUagX0rgZ1wJCMFxhRnmJd3XM3po15eqBiGDd6sa4rfqHAzYSQ
+         mLtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781275152; x=1781879952;
+        d=1e100.net; s=20251104; t=1781347275; x=1781952075;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=pPD0U5NZ4eXf//hJDc4itwhE90Vj8iebVbR8OA3Plrs=;
-        b=T6KPOlgCZKBLAuuremGpwC3x56wWR4dXivjURsGhlBx2CJ1O9p2o2pIjg3KvwzjNRH
-         82rj3s1PMDBkXE6VCLbBWG1vhmJp+9Uphw6zrXS3q/5T3ovEwfbc2lwT4LRZyA4QoiA/
-         y/P8uz+j6OzZTlqf2p6YJUmNJfaeNp+Pw/hwfA5Q7uwXIPpmYSvbWZi3rHXWtHiJb7uW
-         /QNLWd4egysC/lwpfKXy+zpMoL1TyG2l4e8jBgiGYPIAGaWVktpKr5PD4WE9BT4F/6ng
-         jLT/zjcy+LVx0HMVCE+xdGyuWfhL4LfPC9MZtz7F5+V+yiEh/1fAKzGFx4uGiMtjF4RW
-         4w7w==
-X-Forwarded-Encrypted: i=1; AFNElJ9BSN4zNPnK4IKPJTsv+I1UR5qkXPUlwPbfa6QhWzh227uoR+ntip267Y9lh7VX3Jy+mbQ2JaEmMCTT0mAV@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0k3YnbyQY84nnZq1C+aE08F+0IGEMwq3lyiX2uBSX4Tf/yCPX
-	EMpIJVWYmfcqW1P48vZ/+WAbKS0J2qDBfXBMsOWFauZ6excC4uUfQ013mv3wLLHOXE1b3OSPswb
-	yxeyoJ7UYUHqfjg9K9tV8PqGCp8VLOWw0U37obk6m
-X-Gm-Gg: Acq92OEfnToA3T/CdFBx1YUZwPz7KdgozhikEtUM52tO/2tEacib8ov+GYiF+ljIROQ
-	r7iqvUhSHjekg0hbkiXsZZwrj68yW13egGxY/YoDh1t2BNs+KY3avTlod+Q2TgMjKDY3iY5T0QF
-	y7wZAWU9K8q+tPusJfXjkeWjt0ceNIN7ooIM0EisTeziIb7sVUmLhGOXjTHHpbqlSycqAww6KCb
-	i1/4gquyN/NII+yYBraYgkhXpZVLNFf142sq0UUFuLGnsJGB9qGzaGKshRvEkGfE64sSnA8+ICv
-	tELBQo+R4dJFykG6fjx0MfXLT78xHiJEslwWmhXc
-X-Received: by 2002:a17:903:238b:b0:2c1:4a67:5f31 with SMTP id
- d9443c01a7336-2c405c8b703mr1596605ad.9.1781275151261; Fri, 12 Jun 2026
- 07:39:11 -0700 (PDT)
+        bh=G548kc/xuN9FYSMWIgZO2PFN4NWhwpWrdwSftDKzZuE=;
+        b=K0RGBGJqGc3kGOff3iozo6QTiz2tYI/dXYw7IIbCeSClSY97PNNMO10VP07QxKnFcF
+         NBBw3kWTN3cUxaDpiOoIMmHNA5DjCsOpCLvbspQBVRBC5iIyKEEr8kF4Mg7D0phIjLun
+         2kAv0K1pABSZ7ctwcPze+qmCzT+E6z8f30HoyGzW2qjiUSOwPhqdUYkQ0FGuyrkwFRi1
+         9LFHlBdKZGzmpl55lkNfc+g3KZyRU2MSOjA+G0y/HH7rNX+VB+7w75UsKmYHqpk1Bde4
+         Pss8sLR2f6ablsUHGWhQCfDR/a2UKW8yvZKf22PsajnC5XTujAxyJGQC7fb+XCPB3LNk
+         sK5g==
+X-Forwarded-Encrypted: i=1; AFNElJ/NmVmMjOo3QFS2hPWfshpKBg5qMtbC5JGLelAJzQT8MpU2uRS0c90Oirb/dWV7GqTJS+urSFKTgPHBDnU9@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJsj/XR8mHcqMicA9rT2ctc9aej8MYuzoCAm0w6R/zDth0pUV7
+	adqAfYGIJTNL0GyvGFcuY7TURfmBoo9s98J/OOX9PsBEW91e03mpkMz1dO0aGo7i0MhU8bSVNKm
+	udt/zGyjvLu/PRd/IKCFKHbQiXVXM/9E=
+X-Gm-Gg: Acq92OG74TuUi4Kd1jJsmo3iQdKa35lNEceFRGOtjaWaN43l9jxXKYUYi1HEdMsPWH7
+	tsnz7sXYdVmh9C15hhMB7YIqGJWPgGxNZqqWFzHvEec3SkDzaH8gQbpwvM2ZUMFwmhZ3kXjBlHO
+	twj9jM//cuR5oHOEuhS7TcJ7NWzaLqBkUY51xDOni4ndKwd0T1CSGULVmFNpTps9n3eIp1BhBgV
+	cVRiZcRq5de9d8RhesNJvteEEJCJ6G0rhx4VXPWJ8BynT0l/mNl0LE4Qby+kwVkxlOgDFaRP2o/
+	MduxGShapl2CjyFYrfmCRzrjcr+mQuIY4wyJNBS+Bdu5Duhsuu4mQUGuW3rdSKn4semY6XroLFy
+	kxd2znZ59VYEDy69KwZB8d+hOPd4JuUuBzw==
+X-Received: by 2002:a05:7301:1e84:b0:2d8:7302:d3c with SMTP id
+ 5a478bee46e88-30820037738mr1755166eec.4.1781347274604; Sat, 13 Jun 2026
+ 03:41:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260612133139.1919042-1-petr.pavlu@suse.com>
-In-Reply-To: <20260612133139.1919042-1-petr.pavlu@suse.com>
-From: Peter Collingbourne <pcc@google.com>
-Date: Fri, 12 Jun 2026 07:38:58 -0700
-X-Gm-Features: AVVi8Cc9-HjgSxhb69tvudsXLdOhYLKLMYT9ddnMNb-ycz4VaCGBguQJI8Ay6yk
-Message-ID: <CAMn1gO79nDnUXuTR6LJ61kGJ8zH5gvV5st5-OjjqxD4cOxds0A@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Use --force-group-allocation when linking modules
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, linux-kbuild@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20260612-configfs-syn-v3-1-3292fbc5cc32@gmail.com>
+In-Reply-To: <20260612-configfs-syn-v3-1-3292fbc5cc32@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sat, 13 Jun 2026 12:41:00 +0200
+X-Gm-Features: AVVi8CfjPkD66q9qYEn1K64zbUlvP5cZCsx1hvccWsDn4EDiuxrat-r8eY-_Akc
+Message-ID: <CANiq72=RX5V6W+1tj0GHxZusrk5OqYbZ5-xV=wvSssrx_CWXAA@mail.gmail.com>
+Subject: Re: [PATCH v3] rust: add procedural macro for declaring configfs attributes
+To: Malte Wechter <maltewechter@gmail.com>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org, 
+	linux-modules@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 12, 2026 at 6:31=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> Specific code, such as outlined KASAN checks, may be placed in
-> COMDAT-deduplicated sections. When linking modules as relocatable files,
-> the linker by default preserves such groups, potentially leaving multiple
-> copies in the resulting modules and unnecessary group metadata.
->
-> Use --force-group-allocation to have the linker resolve the COMDAT groups
-> and place their members as regular sections. The option is available from
-> ld.bfd 2.29 and ld.lld 19.1.0.
->
-> Remove the workaround in arch/arm64/include/asm/module.lds.h that was add=
-ed
-> for the same problem but limited to CONFIG_KASAN_SW_TAGS and .text.hot.
-> Note that this code currently has no effect anyway because all .text.hot
-> sections are placed in the .text output section by scripts/module.lds.S,
-> since commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
-> related macros").
->
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+Hi Malte,
 
-Reviewed-by: Peter Collingbourne <pcc@google.com>
+Some quick notes...
 
-> ---
->  Makefile                            |  6 ++++++
->  arch/arm64/include/asm/module.lds.h | 13 -------------
->  2 files changed, 6 insertions(+), 13 deletions(-)
+On Fri, Jun 12, 2026 at 3:29=E2=80=AFPM Malte Wechter <maltewechter@gmail.c=
+om> wrote:
 >
-> diff --git a/Makefile b/Makefile
-> index e156e2696efe..1729af0690b3 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1189,6 +1189,12 @@ KBUILD_RUSTFLAGS +=3D $(KRUSTFLAGS)
->  KBUILD_LDFLAGS_MODULE +=3D --build-id=3Dsha1
->  LDFLAGS_vmlinux +=3D --build-id=3Dsha1
->
-> +# Specific code, such as outlined KASAN checks, may be placed in
-> +# COMDAT-deduplicated sections. Use --force-group-allocation to resolve =
-these
-> +# groups when linking modules. The option is available from ld.bfd 2.29 =
-and
-> +# ld.lld 19.1.0.
-> +KBUILD_LDFLAGS_MODULE +=3D $(call ld-option,--force-group-allocation)
-> +
->  KBUILD_LDFLAGS +=3D -z noexecstack
->  ifeq ($(CONFIG_LD_IS_BFD),y)
->  KBUILD_LDFLAGS +=3D $(call ld-option,--no-warn-rwx-segments)
-> diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm=
-/module.lds.h
-> index fb944b46846d..792a0820757a 100644
-> --- a/arch/arm64/include/asm/module.lds.h
-> +++ b/arch/arm64/include/asm/module.lds.h
-> @@ -4,19 +4,6 @@ SECTIONS {
->         .text.ftrace_trampoline 0 : { BYTE(0) }
->         .init.text.ftrace_trampoline 0 : { BYTE(0) }
->
-> -#ifdef CONFIG_KASAN_SW_TAGS
-> -       /*
-> -        * Outlined checks go into comdat-deduplicated sections named .te=
-xt.hot.
-> -        * Because they are in comdats they are not combined by the linke=
-r and
-> -        * we otherwise end up with multiple sections with the same .text=
-.hot
-> -        * name in the .ko file. The kernel module loader warns if it see=
-s
-> -        * multiple sections with the same name so we use this sections
-> -        * directive to force them into a single section and silence the
-> -        * warning.
-> -        */
-> -       .text.hot : { *(.text.hot) }
-> -#endif
-> -
->  #ifdef CONFIG_UNWIND_TABLES
->         /*
->          * Currently, we only use unwind info at module load time, so we =
-can
->
-> base-commit: 4549871118cf616eecdd2d939f78e3b9e1dddc48
-> --
-> 2.54.0
->
+> +/// ```ignore
+
+Empty /// before examples.
+
+> +///     // This will extract "foo: <field>" into a variable named "foo".
+
+` instead of "
+
+i.e. please use Markdown
+
+> +///```
+
+Missing space indentation
+
+> +/// Expands the following output:
+> +///    let item_type =3D {
+
+Missing example block, both at the beginning and the end.
+
+Please double-check by generating the docs and looking at how they
+appear in the browser.
+
+The prefix of the title should likely be `rust: configfs:`.
+
+Thanks!
+
+Cheers,
+Miguel
