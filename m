@@ -1,63 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E902E6CB8;
-	Wed, 17 Jun 2026 11:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE36E3ED126
+	for <linux-modules@vger.kernel.org>; Wed, 17 Jun 2026 12:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781695552; cv=none; b=o4ulMXmQjPcKYuAU4jP010x/PWS/iatEKdyph63c+vcpO2QO6Ii1Xr44k99mLcNfYakxLi5uledK0xYNIZP2DuTSqSPQ91fqGg5WgMH1cEyqHqWg287gXK8x9K4m57lCV6ER4QhyMgNIxY5GfDnTNSnZbbaccfK9kpSLcVe1F4Y=
+	t=1781699998; cv=none; b=AEmz4rqmGFiEo2H6hpBwYepbqGYXb2/N2rzppfBtl2PNPq4tTZhSRARh+J+dPWsNO3wFWt3wXxMzvX6r0GEHt+70O/HBHqR6pDvVkx2HkuYQZyw8UgFxdJ8IZ9cTg9rp4Q4HIy/I7EO4t+Q8DlcTjnG27vJSwS9ubYwxEcJLQuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781695552; c=relaxed/simple;
-	bh=TiRkFSxjzcq+JZkNP6D4wveWX7xNe4eFRX/M63R1IsA=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=geIyfa8QGMPOWWBH9pzx2bE8iuUw+u3UxH67HL/6RT+5lazIFEVsZJ0hA4cWHvJRVl2u22Vdq3/w6mNGocyZ/InvjtXiy3VuXAyt+97WJaV4hqPMZCAfCy7ltZEdnbHx26sqMhTbQxPbPOOXP7FKPKAXA5ZIqHCy8TZd7/lR5TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YUsi1M9Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781699998; c=relaxed/simple;
+	bh=LQqeWLUXpCQ3xWzoSnndmXhM2WFPmN77ePTrKVSZm2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L1NpGN0FTLr/xUgPb66bu8rSmdxDV0AhESLTx+4fF5JmlnYEFezI/g0Gsn5SkGfige8b06Wj2sMNCBcRXiZyx4T8Jxi/FPgjq2iGmxPLPnW4TxoX/G96uU2gvMhpImLQxZXJ4stdizkTGXD39QFbp8EmoKOYbTZCtz0XYmNWh90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gLnWJc3T; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YUsi1M9Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D414A1F000E9;
-	Wed, 17 Jun 2026 11:25:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781695551;
-	bh=mvOfWBXOpMFMFGWhQV5TvD7E5GMIfbXKbrd0KtXv95c=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=YUsi1M9ZGmwm52O3J4Bc+2g0DHVUASw/WRuAtWMDNYlRhfUZjeWvnrWMYVpMlIg8E
-	 8tuJ/hMoiDCTw3DAhvt1MPqIS+R9wMJVjn2ImPFxifbQhhu8t2LxO84ZzvxkNzPpph
-	 OeXGjPnrrqXN0A6X2RB2OfojXzNdhZbU0TgOnSFlDkC362mDCD4L/4mXhl0gik3dSE
-	 RPuKH0gMiS1JuKWig31nk4BnLLUViCO+ESXHd+CNzvNOJhvoE3BmY8Gx+l2Prkhy5U
-	 /DX0V5WFkUK24PnrjNnrur2YWB+8NjM2uSuDqS2KAzzpFHRGSWOCVqccmvXCudB06+
-	 SoELatlON/Ndg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 39EC33930E03;
-	Wed, 17 Jun 2026 11:25:47 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules changes for v7.2-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20260615155518.3644770-2-samitolvanen@google.com>
-References: <20260615155518.3644770-2-samitolvanen@google.com>
-X-PR-Tracked-List-Id: <linux-modules.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20260615155518.3644770-2-samitolvanen@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.2-rc1
-X-PR-Tracked-Commit-Id: 36d6b929bb0c7cc1cc742d9b5805537d3b651094
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8479bb8c44fdabe3d123735347af95002828d112
-Message-Id: <178169554599.1566750.15992486300233025100.pr-tracker-bot@kernel.org>
-Date: Wed, 17 Jun 2026 11:25:45 +0000
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Andreas Hindborg <a.hindborg@kernel.org>, Andrii Kuchmenko <capyenglishlite@gmail.com>, Daniel Gomez <da.gomez@kernel.org>, Kenny Glowner <sisyphuscode0311@gmail.com>, linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gLnWJc3T"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-490b3637b90so45248545e9.3
+        for <linux-modules@vger.kernel.org>; Wed, 17 Jun 2026 05:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1781699995; x=1782304795; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UZi5bo8Cugwshp04KdhwM9Mfr4BTkMqYISdeW8xQXaI=;
+        b=gLnWJc3T8g5mPH0ygz7/MKXwNq0sHTNISHAeXBM3sux0+KzF/+5k2Xip4oIBTnsx3y
+         f/HbwTeE6dSxnCgdfRmx9u1XTNWc7GJx6kh/zQVMRbeYsYJO20cTpu+UBP7w2eypER5Q
+         odDwRzIuwBFKbYaOBFtEZSHF3BtSEpm3UipvxXOvZNEieSx+ha5SXIfUaoMrGD/A7N+3
+         BsStJODsCHhRGW9axRFQbrRv4o61l77DTHVYKtIXUqQANatvYejwz9iVHQLONtIblt3F
+         Br/Bo9wXwhm4hv3Q+B7liAEZomGRP1vf+Iy1pO20aar5Q0a/cbLeJTXnRb68lD8h6ASJ
+         G/EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781699995; x=1782304795;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UZi5bo8Cugwshp04KdhwM9Mfr4BTkMqYISdeW8xQXaI=;
+        b=roJgPf9ryMHTmNjT1JEUnGUKFkgXRkii/HS+pFkcAU7i9S4wi6YVdV9gTrSGnR7Vyq
+         zIKGqbMDUKna/gzDQZNJMZ+EVAEQZIS/FLUZhL2bgq9txkO3a7rt+bgmfyrA80zdv+Fg
+         aDIlL08ewWJyE/wm7DKRIWMYhmFk7dFpvnXc98CqreDDj6QT3PBDDMVanDB2NgtBbrU/
+         b0rMRBkUS2L54lnzGIEUibn7XcXwYAMFPXyJCk2QcOCV2mMgQ3+NksdYpzLyTEw4gp2U
+         RYGdGcsJcYOKlIovKgY2bBo4AI/rzQaqyUH2xIw35RCUvO9QVkUfdJmwdmrW47WdVW8H
+         n+DQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8dZQzfEmBxXIhDQPYG7d5hf5+5AtKt0J51wRZWo4aSSnC/YPav7ZaOXei2J2nwHRlHMVYWkAustQ5R3M11@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMkoxseFvldYuIaKgPcQ2u5b7o2Q9CExZoNfodUB0vwslVvpVN
+	uJsB9vf6Q2YLs/Yu/1ubvjrk4JqAcaAYhZaBTPfzx1ZGd/vdDtOknr5PyrU4ns5twEI=
+X-Gm-Gg: Acq92OELvvBkA5gjTyJX7r22smPYMf8XFInhYYOvQ0K0SSpZjNiTGt7pCM85nQfn2JW
+	IG8+reBDTuzKDG0Msefe64HYF+5yZ3EIzDrxix4Zc4yyp57VTRUlK8dPfqjpJ9flHhFngHFB2Jb
+	RrZUi9A5vSr+GBbMuXwLmvttWaiEHhrlyPz+XIqSY9ZTo6RmdceFXrGXR7/vZZM20o8FK3JsojX
+	QksUSoJnwJv219CHcomgBvaB45wpED59uQ23zLMcSU2IaSHlspJsy/oIaer+z7D7q4UFe2qSlxl
+	Hmh++58gHa4LPlsHZlujEOZvil7IY0iNEVhZwHCz1QsJEkDeUdbB9xlMwnFoqdu1i3xrldea57b
+	khbN4sqNs3PVBdyhWlQm/QigJZrDAqk36xkt9eqIrnTcFI7EXWjoZxhRlOAEGLvBxiwkY3WgpqF
+	jbj7iAf3s1TeUifB7ekvoYC1wcc1a7WQ==
+X-Received: by 2002:a05:600c:e557:20b0:492:1e36:85dc with SMTP id 5b1f17b1804b1-492333e2b9dmr46704045e9.36.1781699995234;
+        Wed, 17 Jun 2026 05:39:55 -0700 (PDT)
+Received: from [10.0.2.3] (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4922fa891acsm161753865e9.9.2026.06.17.05.39.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2026 05:39:54 -0700 (PDT)
+Message-ID: <79ace94f-31d3-4a5e-9a47-3fad69304fe5@suse.com>
+Date: Wed, 17 Jun 2026 14:39:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] init/main: Expose built-in initcalls and blacklist status
+ via debugfs
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: arnd@arndb.de, mcgrof@kernel.org, da.gomez@kernel.org,
+ samitolvanen@google.com, neelx@suse.com, sean@ashe.io, chjohnst@mail.com,
+ steve@abita.co, mproche@mail.com, nick.lane@mail.com,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260510061301.41341-1-atomlin@atomlin.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260510061301.41341-1-atomlin@atomlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Mon, 15 Jun 2026 15:55:17 +0000:
+On 5/10/26 8:13 AM, Aaron Tomlin wrote:
+> At present, identifying the correct function name to supply to the
+> "initcall_blacklist=" kernel command-line parameter requires manual
+> inspection of the source code or kernel symbol tables. Furthermore,
+> administrators lack a reliable runtime mechanism to verify whether a
+> specified built-in module has been successfully blacklisted.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.2-rc1
+My understanding is that initcall_blacklist is primarily a debugging
+facility. This is documented in
+Documentation/admin-guide/kernel-parameters.txt [1] and also outlined in
+the initial commit 7b0b73d76651 ("init/main.c: add initcall_blacklist
+kernel parameter") [2]. It is expected that to use it, one must inspect
+the kernel source code.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8479bb8c44fdabe3d123735347af95002828d112
+If the goal is to allow specific built-in modules to be blacklisted,
+I wonder whether extending module_blacklist to also cover built-in
+modules might be a better option. Module names are more appropriate for
+administrators to use, while initcall names should remain internal to
+the kernel. Additionally, initcalls are typically "static" and therefore
+are not guaranteed to have unique names + using module names avoids
+a dependency on CONFIG_KALLSYMS=y.
 
-Thank you!
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/kernel-parameters.txt?h=v7.1#n2408
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7b0b73d76651e5f88c88b76efa18d719f832bf6f
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Petr
