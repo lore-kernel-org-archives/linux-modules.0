@@ -1,129 +1,153 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB4340757A
-	for <linux-modules@vger.kernel.org>; Mon, 15 Jun 2026 15:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B1B392C56
+	for <linux-modules@vger.kernel.org>; Wed, 17 Jun 2026 09:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781538924; cv=none; b=FZ3I0gaMU/rceShz4eMdnsgTyZMQ5MbayccpYvX8Io2bKQqHN/2Yn9poptoTH/gSzyRHjS8veTRA6evl/NmwqwFCwnDsb/ZWYztP+459dl4fb2GaKGEXt+RSTy2HjmV5qg97B3YoZp9DITkkyVNiLvIXkyul1q/c0jAI8MM3X84=
+	t=1781687600; cv=none; b=EZYAqeliTxhB1ylzQvh2W3ITBOcAY+KaxytjhfS5eQq/yczP1jPxS/yp46ON/AWNxX9KbI2mF/l3xp5n26KjRAgZAhCbAyC0RlvLlrAC8yn5rTY6WSpsPMEnJL3Z69HwuI8g3TG5GWOKnf82GAp0LxdyWljdadSiuV9CNy1uUEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781538924; c=relaxed/simple;
-	bh=3+dxrHg1ZJR1tusn3ojkvN/GyoLVlx3fWUZmki2H6ro=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=XCmfYe07JLXYt8YVAfsGVUzWIBBIRl0MtV7ky3cQs7H7pyNVxn89LFlMgojq2TBNSNfKnxlAIjH9Rd88HNtkD9vyxjLijA2cK3z6VH6qwTxw/qf0lbJ8tbhd701PV7hs5PSVdvcJZ9EsKjDm8XvbKE4ghx+7QhFSkPfcZ9ImPxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=N7FeIFHT; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1781687600; c=relaxed/simple;
+	bh=VNb8Oeo8fsnl2dNubUFSWKcRBi3wEZOagsaNZh7wB14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UZTcp6dctxPVS8jys/jl+5wwvnSaExQ+SqEQVxf4uNmZbiC82Lw5TjCZCrdH9wP5IZXrrwps0wAmtRRmh7SO/f9tkmpL5tKtFA81hecEXQf+WuCYLHqLCg+ADPNxbHw7hn6MqQjaI1WKu0GCacRNkhZz6J8v51FfvXt9Qr9b+tQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CXPlLkEF; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N7FeIFHT"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-30762d67a64so4969938eec.0
-        for <linux-modules@vger.kernel.org>; Mon, 15 Jun 2026 08:55:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CXPlLkEF"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490b8ac62baso6845915e9.0
+        for <linux-modules@vger.kernel.org>; Wed, 17 Jun 2026 02:13:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781538922; x=1782143722; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=67Hzt7ozQfU5utqZfz4c7CGkXUWKHlB1RFb46NyLcaw=;
-        b=N7FeIFHTLtF7bjOulITfA1yDwJxS+opFz3EF9I5dOyUZWvWovw47wZ7qovwdglDD/f
-         twzAll5SkKYiofMyIYomZIgVtUXwT1pigFVPOjTVy19PhGxo4mPSC9dO1N1y0957jZ4B
-         +fjqw/lE4pXCi3FgpTCoMRO/rDRKOUSwlHK0yho38Y3CGyZkY/i58mVOBOfj3ffCD+2V
-         l9TNo4oUD9XRTY+qEykFQKXLBkbSSjVKizlIseph9Go6WApGhMWI31zqGWw7XAbLKwPX
-         BwanOlgvLguX9tos9BQH99vKaGGAYUBH0FO67Li8IaWNB7sWnJpqnCwYACis+1JFJx/6
-         fj+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781538922; x=1782143722;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=gmail.com; s=20251104; t=1781687597; x=1782292397; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=67Hzt7ozQfU5utqZfz4c7CGkXUWKHlB1RFb46NyLcaw=;
-        b=G168W1y0zux4Xu7NvDmPimPWZeUjR8XKdbSwZ0CJPHyBW8P/4rZmvp83WPXp+hyBxC
-         GgVzin6Bn2k4AcvQ3jY5mtZJydw3qRx3EBMyy9tW1/ofzp6jeiyneMJbHjyWtuUpV0iB
-         L4TzZrCrbeFduuZRec24cipL1pUc+81w0Ig0KTTh83kroNovU2NAYO1coB59C0COV4Kd
-         k2xi4zP/qNkmDXYuUIwSAo09MJyUVOqfrjMWib4Yh2wFW3LuHlry1Lk0nAvuEUIRg+Wp
-         KnFeeJ/JiKCJ7jeTDxvijXh2QQjKqn3CSJjsZI5+CLMVzPaIvvAkCVHIRuW1E0xlpUr1
-         lD6w==
-X-Forwarded-Encrypted: i=1; AFNElJ9tQl+Rmg8PYTbEWiZefU6nDsMb7XNYwt1CbAvI6kwOLMFzP43WaH+o/3isveKPzNyXB+4ugvGqEZp3uQvd@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyi9sUA7Ab4f0oNdcHJra+KW3CTtlbiE1l7kXNgYofJENF5dGTi
-	ZBt+kxP/jQPnMNWErXUsQC8PRTLyLiLCES1PcklJr+6WGWTnLlh66pqX5M4j5wDunK9pmhAySjt
-	dGmFgwdHSGrpAaY3121rX49vek7NUzA==
-X-Received: from dybgv28.prod.google.com ([2002:a05:7301:231c:b0:30a:e5d4:1786])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:aca5:b0:304:dfb2:2274 with SMTP id 5a478bee46e88-30820098ebemr8273948eec.28.1781538921903;
- Mon, 15 Jun 2026 08:55:21 -0700 (PDT)
-Date: Mon, 15 Jun 2026 15:55:17 +0000
+        bh=pdzEnJF2ilqo5mGBwtUC4XQR13hh+SJ7AGP/8bu8ACk=;
+        b=CXPlLkEF+mjs8vpLhTWd+Sc6t6QohlDW0zR+1qcMjm4Su3Jd32HU2gmk3tPPTWwaNP
+         p9ssRghKH/qE8kop/lDoIOGRnrReIUl1o2il41jH0H49gm4lnXzQzLptSBCUj5j9fKQv
+         EU+PWayJVz916sv4cYsraFktqAZx98W+EwtlHyw24vzczbsTM+LAoMcoHaSVW++876zX
+         P3iJ/62XtmEQ8fnKOLJvA6DPlQK+v2XT3snuEaU3mmisnQLKl5Q3dwRQBaDaX8slWqWS
+         RsyYUdHifQo7y0YeDmzP4nB0vvmJlfur2CQGxUonbu7xpZLhA88JF1/R/TwQYSve1V/l
+         ECxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781687597; x=1782292397;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pdzEnJF2ilqo5mGBwtUC4XQR13hh+SJ7AGP/8bu8ACk=;
+        b=CXQ2xjfuqIf9/iXebhg/oT5BHkLFwmXxWPPOhA52HRt9CNAQp0QjEU0O1hITJRtEna
+         ek57fsq1Fo6Hfdwvf58inbRiw0t1/9r1oDO7lkXt6iwidVB2suT99O1NOAVWBqH+pX4I
+         otV3ZluAtPXXkCkMHe0v4YTY1F54sJFJYKrEV9TbLyOYRk2sXcnCOqdBOZGdRgGlAY/v
+         021HVHUAllTw2L4g/0H1oCg0s28/txCTcTd9b0xL4LTftv8Oul7m4Pt2lBjzRXFOlI/P
+         MI1Ce5kfjCFg29uo4gul3Sco6WI49f47n2Kxx7m1zd05attoVO0wjFFLDYCJRnzmvobI
+         XJ0Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8voykC0AE5Px3wt8Hli3gKTEkENlZyArh1a+3wwID0DbJeZaE8QfO7BJXVdnY4O0VkW82YOB6jWjKDlU55@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAT4kch9eGqFOjan6+tWsBiLB8mMQoaOxuVNSDZh4qVRW2P8sQ
+	WR9C5ShLPCanOjflEWREfNR+hyV2i+XiU/YbXqv4to0fMuNYYV0aslgC
+X-Gm-Gg: Acq92OFf2kR3ILJlolJXPkUNkLy6OhgFBLjt8fHdYYw5oltZMKWYXcm/gHh0WEhRtq+
+	Kvc7gR0xEPNrBVBDXE3/3jnwkTjhiu88f8JjqQf5fxgy/z18S/YV1z7+kJmlKAjFzeQ18QDLDYF
+	mnBooRp4Zb9hfn75ZnOZx/6+ww+9ar1aufcs3Dpyap2RL7Zlxwy2qjN3Up1gOx8em5S23HN0wvj
+	CE1/MhM16oIfkJLXZIeWkv0UhGHP7nmiBQRHdp0XfcZayVFWs80et8Qny+usJxNNtrev1cpFPgJ
+	Jo/HVkv0iB3G5zkVVb+P8l87w86cfHtCKIqdBiTdAKASnupCgnUp881cFXnRIqq+tmpU7Li2NRR
+	T6S8Cel2FBbv9KAw5ZoTG+9PrKp33aII/dYNZFHdqZ2BvJH/5A4+HrEKz5xXBDO1kFyuJ/t43F3
+	dzVUOgfx9zeZPICqj6qC50KtWI2BbM6DFOtVNhqfusDyICpjex+KQk
+X-Received: by 2002:a05:600c:5290:b0:490:af63:2cb1 with SMTP id 5b1f17b1804b1-492340c604emr29094785e9.7.1781687596953;
+        Wed, 17 Jun 2026 02:13:16 -0700 (PDT)
+Received: from [172.16.16.38] ([195.100.225.50])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49230a0e9e4sm130471915e9.0.2026.06.17.02.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2026 02:13:16 -0700 (PDT)
+Message-ID: <75552e2d-0bc8-40a0-b783-fba64482aea9@gmail.com>
+Date: Wed, 17 Jun 2026 11:13:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2203; i=samitolvanen@google.com;
- h=from:subject; bh=3+dxrHg1ZJR1tusn3ojkvN/GyoLVlx3fWUZmki2H6ro=;
- b=owGbwMvMwCUWxa662nLh8irG02pJDFkGCmnr3N8b1f73Co76uppTJXrfr2XGLtL26zMCz4idm
- X43LyG+o5SFQYyLQVZMkaXl6+qtu787pb76XCQBM4eVCWQIAxenAEzEZyPDP8upWQ9FRN5citRY
- LZu989NpBll3vWidZ7NK+kK3emS9cGL4Ky1YMn2L3YryzjMTRfxast/WLinVer1+7wHlp/p+TLb vOQE=
-X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
-Message-ID: <20260615155518.3644770-2-samitolvanen@google.com>
-Subject: [GIT PULL] Modules changes for v7.2-rc1
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Andrii Kuchmenko <capyenglishlite@gmail.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Kenny Glowner <sisyphuscode0311@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] rust: add procedural macro for declaring configfs
+ attributes
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Breno Leitao
+ <leitao@debian.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Jens Axboe <axboe@kernel.dk>, Luis Chamberlain <mcgrof@kernel.org>,
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-modules@vger.kernel.org
+References: <20260612-configfs-syn-v3-1-3292fbc5cc32@gmail.com>
+ <CANiq72=RX5V6W+1tj0GHxZusrk5OqYbZ5-xV=wvSssrx_CWXAA@mail.gmail.com>
+Content-Language: en-US, en-AU
+From: Malte Wechter <maltewechter@gmail.com>
+In-Reply-To: <CANiq72=RX5V6W+1tj0GHxZusrk5OqYbZ5-xV=wvSssrx_CWXAA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit e7ae89a0c97ce2b68b0983cd01eda67cf373517d:
 
-  Linux 7.1-rc5 (2026-05-24 13:48:06 -0700)
+On 6/13/26 12:41 PM, Miguel Ojeda wrote:
+> Hi Malte,
+>
+> Some quick notes...
+>
+> On Fri, Jun 12, 2026 at 3:29 PM Malte Wechter <maltewechter@gmail.com> wrote:
+>> +/// ```ignore
+> Empty /// before examples.
+>
+>> +///     // This will extract "foo: <field>" into a variable named "foo".
+> ` instead of "
+>
+> i.e. please use Markdown
+>
+>> +///```
+> Missing space indentation
+>
+>> +/// Expands the following output:
+>> +///    let item_type = {
+> Missing example block, both at the beginning and the end.
+>
+> Please double-check by generating the docs and looking at how they
+> appear in the browser.
+>
+> The prefix of the title should likely be `rust: configfs:`.
+>
+> Thanks!
+>
+> Cheers,
+> Miguel
+As of now doc strings are not generated for private items in the macros 
+crate. I am moving the `parse_ordered_fields!` macro into 
+macros/helpers.rs but this means the doc strings are not generated for 
+the macro anymore. The `parse_ordered_fields!` macro is a larger helper 
+function, and the doc strings are relevant and helpful for macro 
+developers that wants to use it.
 
-are available in the Git repository at:
+You can enable documenting private items:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.2-rc1
+diff --git a/rust/Makefile b/rust/Makefile
+index b361bfedfdf0..b4239443307e 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -147,6 +147,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
+      OBJTREE=$(abspath $(objtree)) \
+      $(RUSTDOC) $(filter-out $(skip_flags) --remap-path-scope=%,$(if 
+$(rustdoc_host),$(rust_common_flags),$(rust_flags))) \
+          $(rustc_target_flags) -L$(objtree)/$(obj) \
++        --document-private-items \
+          -Zunstable-options --generate-link-to-definition \
+          --output $(rustdoc_output) \
+          --crate-name $(subst rustdoc-,,$@) \
 
-for you to fetch changes up to 36d6b929bb0c7cc1cc742d9b5805537d3b651094:
+But this enables _all_ private items to get rendered, which is not 
+ideal. How should i proceed?
+Best regards,
 
-  rust: module_param: add missing newline to pr_warn_once (2026-06-04 16:42:34 +0000)
+Malte
 
-----------------------------------------------------------------
-Modules changes for v7.2-rc1
 
-- Add a missing return value check for module_extend_max_pages()
-  to prevent a kernel oops on memory allocation failure.
-
-- Force sh_addr to 0 for architecture-specific module sections on
-  arm, arm64, m68k, and riscv. This prevents non-zero section
-  addresses when linking modules with ld.bfd -r, which may cause
-  tools to misbehave and result in worse compressibility.
-
-- Replace pr_warn! with pr_warn_once! for set_param null pointer
-  warnings in Rust abstractions, now that the _once variant is
-  available.
-
-Note that as part of our maintainer rotation, Petr Pavlu will be
-taking over module subsystem pull requests for the next six months.
-
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-
-----------------------------------------------------------------
-Andreas Hindborg (1):
-      rust: module_param: use `pr_warn_once!` for null pointer warning
-
-Andrii Kuchmenko (1):
-      module: decompress: check return value of module_extend_max_pages()
-
-Kenny Glowner (1):
-      rust: module_param: add missing newline to pr_warn_once
-
-Petr Pavlu (4):
-      module, arm: force sh_addr=0 for arch-specific sections
-      module, arm64: force sh_addr=0 for arch-specific sections
-      module, m68k: force sh_addr=0 for arch-specific sections
-      module, riscv: force sh_addr=0 for arch-specific sections
-
- arch/arm/include/asm/module.lds.h   | 4 ++--
- arch/arm64/include/asm/module.lds.h | 4 ++--
- arch/m68k/include/asm/module.lds.h  | 2 +-
- arch/riscv/include/asm/module.lds.h | 6 +++---
- kernel/module/decompress.c          | 2 ++
- rust/kernel/module_param.rs         | 3 +--
- 6 files changed, 11 insertions(+), 10 deletions(-)
