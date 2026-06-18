@@ -1,134 +1,168 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8367738B148
-	for <linux-modules@vger.kernel.org>; Wed, 17 Jun 2026 19:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781724630; cv=pass; b=uLctEq4OJn1xPg33Ws0pouWL1H9XUurHMX4oFMqDwx/9HPSOFIiV/jz0tfMeAKwBYhGw8ROCyJpS/9gaB+HQ2Ndb3LYyuv/7rG/gdt6yllY/0+4kNY/1Dlm41PbvU9AvM/ZhTkadlmML1hTmbY8vAzUl1yvQymkCGO5Cjcz6zpU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781724630; c=relaxed/simple;
-	bh=yDzv5KtKe+Kk986ajfvNRzKO+GxC8FicWRT93AeKzoQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lYoJeniIZMo/HtKwaBFG0Odr7WQceqY3sFlTtbdDI0de5QXoktBQY47hRa1Jju3WUNRRs/QEIROJwqQoyryYHca7REKOwbBBBDmlCd89ymkhgiYW2q42q4jsNO74fcUKeRvi90i7ncMY7KAdzbylWGoIlwPfmkTyB65jNUtWxNs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CJmWwU/M; arc=pass smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A764819DF55;
+	Thu, 18 Jun 2026 12:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781784313; cv=none; b=KDFQY0mxPzcnb2oKmgNoc2MbrDdtbzOieV/+Sp+/9pBrLRtorNVQm0Sa3JKIQP9QbFrn/SndG3JgGhbUyjXpcA4CDyTk+pwTO/KXS/wl8xnmfnSW+bXo3bliQMTY2jKqfw1d0GUlfDtgcTq8g5ZIFvZ/A/V8oB9mMJbrVhNkmdM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781784313; c=relaxed/simple;
+	bh=GEspoMM67bl9n5Dj6rlvtt6LqSuy/KphfCC9216A5FA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=GZcLGX343mmU7ICWmTD+8I5lzQ6io4VpsmAe7WahXd+3ncd3kHWg5QxAng7csChqm7n88XkCDz5uGhPGVqubZzEYd0qXDJpia8YbVvjI/Bq8/Dv2aLQukc8fFcsI8LvqhQ/dnsaA9lvNRbA+1a4IAktHjMODAKWiY920Yrhk7E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D9eYSOCb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CJmWwU/M"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5175d339e8bso56001cf.0
-        for <linux-modules@vger.kernel.org>; Wed, 17 Jun 2026 12:30:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781724628; cv=none;
-        d=google.com; s=arc-20260327;
-        b=p58rYXFuXHyOxTolkJpU7kbgLSzzcnVJUBD8Y4GWySUH0fG4uUuKBT7rbDm6kGWf6w
-         x/7qvtTjyCdU1SdNyXw+jMHEWMWKlPHVmKjF4y5sWRF5bHYFZGqL+hZ/UYbZiFYkw0gB
-         d/eOnaSQWbWTVA/vpvprxnvPW2+dg8cG5o11kB25VxroeGA3oeplEVvMX5+cHMdKHCgx
-         s5X/v+f7OX0CaZsWWz0XbQ5X8FAJQSjNWGJCBIC6em6nBhBDWkTCRV2DEfGIdIGAeVnc
-         p4CKWKp+3xk/YkZ9Yxis9GCJ/56/LvWVBx1MG+5yO129Sp5zuAZvsZdaJSBGMhGDUBXi
-         ghDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GiycCcQF13rQSyejTT0C3ZPPCWaK6Y9TJsOw6qd0fOk=;
-        fh=BqZnufcUj5JK511WfmpocjM1IgsyPNmTffYTPQJkTDA=;
-        b=Disac6irL137kT6jA1LjTXujHlTO0zVuVarnY/nVR4mSLGSTopq1Q6xRF0NPOBQAqn
-         oaXWckuY0zgDFhte8uzOs2CKPN2jdtjSqWhdHm94yfnas+AbIEay+A1Uo4tuiUqEIAgr
-         TUswOXrF038aw0jx+yVMvfEuE2XXl8w1uoCxZe4/j+2AOYNGXCLEKXZORETuGDLgDCx0
-         8N1bkkuOh+MGUFmtDC5RglezFlCF4DIgMQJEu7/xp70aL6jfiz3rM0qiBiCVhcxscwsd
-         OpSEiQOmnkKIxCLXz/lPXsB1dnpg+yNGNk+dt229Qq1RCRJIW887hSIA7k2amsVBtYgm
-         qqbQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781724628; x=1782329428; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GiycCcQF13rQSyejTT0C3ZPPCWaK6Y9TJsOw6qd0fOk=;
-        b=CJmWwU/M2SEn0LkBl22SsY15JBmqX4FqS1Uq3ir6Pq6brKU1qTDHF8Vc2KkiA33sr0
-         P3oh6fA+Ye+k0TLKAFr7qYXO4QHzoiYDbGXRiFGnprpZJM4iGMaBkz0ykZd9pM3aE8S5
-         G89iDghcwfRI+plbXRkABU9VBeJ5E8NjPzmMOOoUooOMGqylkchhU6mn+YexuY3UT4aC
-         +Jc8THkoJzzuTXE5gMCtC2zB6Zl1gSHjctzVUEH13ysJ/Ew0CKKumnqptEfQdioGXtoR
-         rDBhECgOOCFqTOVajai2Hotnh1RQG4trv/fqgDNd4w49309GVo1QXpHFm0IJKOV6jMpR
-         qcEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781724628; x=1782329428;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GiycCcQF13rQSyejTT0C3ZPPCWaK6Y9TJsOw6qd0fOk=;
-        b=U/jTQpwUqGODWypcLilQ7SG3DPVtkTSk8+W9hqGHO09JVba6hjJ+ry9be9qaK7JlcY
-         aM+avKxuWqaPkuMmC+idAzdSPAygf1b9OqixdVUDzsbgIb26nW45JIJolzKLan+v7TE7
-         vxrvySF3c1uUy/Fvr0DadZtM8dZz2CNAdUN9OzFjWvvWaclaO01srl8lBTxxkx5aqzxr
-         5nvnXwsyhPfnfrhYuxb3aCRAeKC2/oBEYI7EXldsAylK7zEpJdw3VHX42S8XNxgi0ju8
-         QTyd3nhEhBFA3FGZbhZdbW1vxcWNXfG5nqIvEzZUF6t7yie6j33T8NizUCnD2ODKDaAA
-         uVOw==
-X-Forwarded-Encrypted: i=1; AFNElJ/6NeeV2l+ZJ4y3zrzcKyeqVD/gp4HiG76zeisX7A4oBgfx3lzahHlNRvxjOQ/mTMDJzyAGlVZn4t8EYjmJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyteG+ER2CEPLfBHBrEGsMN3rqqrAPbicmf3vLK0lhQqKgGASOc
-	LkNe82xjrS3q8R6KyrysoUIGQL+I4Vjti+aC/M1qr/B+u/uGZlp+i/Bks74GclB8o6ejfGo5s5Q
-	ZecU5JSVJnD7JpeJbHO4L/GwD+hdyqQ3Yxu4dvK9U
-X-Gm-Gg: Acq92OFzmD8eDr2y8fr7gCQj6cL6S+enmpYaJ4mYQnrhHnfFAUJTs14ESBEQuMGr1dL
-	EigzQZkjLM3154Q4NnB70PF93tDdxy8Xhp5y2TEWiXFw1RD0ase33/BUAG9nQQ5L0l4QF0PY6fm
-	kyLmXjiHS/iYdObIL+46erBAbWQizF4VUfMT1hp7RaMp7/xGbilX0LS+vo9UO/NHWkjqclBnHOP
-	yL/Dz9fEMKL32Tmg8JRrIDEssz8AbLTmkS1UfTfrjgs7vyDuHos20AYvYtlQtQgVOIvlht42dUF
-	mAOF
-X-Received: by 2002:ac8:5ac3:0:b0:516:4f62:85ef with SMTP id
- d75a77b69052e-519c6736dfbmr1496551cf.20.1781724627525; Wed, 17 Jun 2026
- 12:30:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D9eYSOCb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358E71F000E9;
+	Thu, 18 Jun 2026 12:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781784312;
+	bh=/7m6pRIAwNnhYn30G/uLruR9I/DO7DY2hq1NVxPJLqQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=D9eYSOCbhz717Oe7mMlWbPYXyCs1C3gwcsvyV7DF4heD7D5/1gaNIVypVYvCsMamF
+	 5IKsyJqxdMpwxKGq7aFcbkQymxw9mTFgcLKruBUls24gZuCg3+vcf1BFQc88HtOu5C
+	 nTq5q2CwEnxksL0kqYfR8i9BTEEBkgD70Q+AjA0VG3DRWmbikCM4QMC9nRdZUXy1zC
+	 UCI1F/wa3vbMYA0ORLphpra9J21PimsprbIhUmBK3gDRqIi4ZiqRF76YDpWgJyc4dA
+	 HYnhwUu/EkJ/X8qzzzATFiEMyEwbMp3AAthW0nERlFaGZ6LzGnlWciiihEDh+oP8Qv
+	 lFdSJ+GZa5zdw==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: Alvin Sun <alvin.sun@linux.dev>, Miguel Ojeda <ojeda@kernel.org>, Boqun
+ Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6r?=
+ =?utf-8?Q?n?= Roy Baron
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
+ <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
+ <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter
+ <simona@ffwll.ch>, Daniel Almeida <daniel.almeida@collabora.com>, Arnd
+ Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, Breno
+ Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
+ driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-block@vger.kernel.org, Alvin Sun
+ <alvin.sun@linux.dev>
+Subject: Re: [PATCH v2 1/7] rust: module: add `THIS_MODULE` const to
+ `ModuleMetadata` trait
+In-Reply-To: <20260521-fix-fops-owner-v2-1-fd99079c5a04@linux.dev>
+References: <20260521-fix-fops-owner-v2-0-fd99079c5a04@linux.dev>
+ <nwii7SN7dp9LYlpqQ_H4e9xoec8GK9pzGOYZXi2CEEqSgKU9pTnK_3jgpBToFSsmcAX8XxgQUJt_O1UY1vaNEQ==@protonmail.internalid>
+ <20260521-fix-fops-owner-v2-1-fd99079c5a04@linux.dev>
+Date: Thu, 18 Jun 2026 14:04:59 +0200
+Message-ID: <87ldccf40k.fsf@t14s.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260612133920.1919352-1-petr.pavlu@suse.com>
-In-Reply-To: <20260612133920.1919352-1-petr.pavlu@suse.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 17 Jun 2026 12:29:51 -0700
-X-Gm-Features: AVVi8CegfmPVO6dnf2iIhQntOfDUU-3siq95A_gDVQ4lRsXorNPKB69qunolNws
-Message-ID: <CABCJKueO3NkVrsR9H6JxFpEf=UsGZ2PCPSrs6hXJh+cdBjikVg@mail.gmail.com>
-Subject: Re: [PATCH] module: Remove unused DISCARD_EH_FRAME definition from module.lds.S
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Ard Biesheuvel <ardb@kernel.org>, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Fri, Jun 12, 2026 at 6:40=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> The linker script scripts/module.lds.S contains an unused DISCARD_EH_FRAM=
-E
-> definition introduced by commit 68c76ad4a957 ("arm64: unwind: add
-> asynchronous unwind tables to kernel and modules").
->
-> As shown in an earlier version of that patch [1], DISCARD_EH_FRAME was
-> meant to be used by SANITIZER_DISCARDS in the same file, as follows:
->
-> -# define SANITIZER_DISCARDS    *(.eh_frame)
-> +# define SANITIZER_DISCARDS    DISCARD_EH_FRAME
->
-> However, in the meantime, SANITIZER_DISCARDS was removed entirely from
-> module.lds.S by commit 89245600941e ("cfi: Switch to -fsanitize=3Dkcfi").
-> Eventually, the mentioned commit 68c76ad4a957 only added the new
-> DISCARD_EH_FRAME definition to this file without actually using it.
->
-> The file include/asm-generic/vmlinux.lds.h contains a similar
-> DISCARD_EH_FRAME definition for vmlinux to discard .eh_frame sections tha=
-t
-> may be present when CONFIG_GCOV_KERNEL, CONFIG_KASAN_GENERIC or
-> CONFIG_KCSAN is enabled. Testing these options on arm64 with LLVM 19.1 di=
-d
-> not show any unexpected .eh_frame sections in modules.
->
-> Remove the unused DISCARD_EH_FRAME definition from scripts/module.lds.S.
->
-> Link: https://lore.kernel.org/linux-arm-kernel/20220701152724.3343599-2-a=
-rdb@kernel.org/ [1]
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+"Alvin Sun" <alvin.sun@linux.dev> writes:
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+> Add a `THIS_MODULE` const to the `ModuleMetadata` trait so that
+> modules can provide their `ThisModule` pointer usable in const
+> contexts such as static file_operations.
+>
+> Move the `THIS_MODULE` static from the `module!` macro into the
+> `ModuleMetadata` impl, and update `__init` to use
+> `LocalModule::THIS_MODULE` instead.
+>
+> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+> ---
+>  rust/kernel/lib.rs    |  3 +++
+>  rust/macros/module.rs | 34 +++++++++++++++++-----------------
+>  2 files changed, 20 insertions(+), 17 deletions(-)
+>
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index b72b2fbe046d6..f0cf0705d9697 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -184,6 +184,9 @@ fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, error::Erro
+>  pub trait ModuleMetadata {
+>      /// The name of the module as specified in the `module!` macro.
+>      const NAME: &'static crate::str::CStr;
+> +
+> +    /// The module's `THIS_MODULE` pointer.
+> +    const THIS_MODULE: ThisModule;
+>  }
+>
+>  /// Equivalent to `THIS_MODULE` in the C API.
+> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> index 06c18e2075083..b6d7b3299fbf9 100644
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@ -497,28 +497,28 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+>          /// Used by the printing macros, e.g. [`info!`].
+>          const __LOG_PREFIX: &[u8] = #name_cstr.to_bytes_with_nul();
+>
+> -        // SAFETY: `__this_module` is constructed by the kernel at load time and will not be
+> -        // freed until the module is unloaded.
+> -        #[cfg(MODULE)]
+> -        static THIS_MODULE: ::kernel::ThisModule = unsafe {
+> -            extern "C" {
+> -                static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
+> -            };
+> -
+> -            ::kernel::ThisModule::from_ptr(__this_module.get())
+> -        };
+> -
+> -        #[cfg(not(MODULE))]
+> -        static THIS_MODULE: ::kernel::ThisModule = unsafe {
+> -            ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
+> -        };
+> -
+>          /// The `LocalModule` type is the type of the module created by `module!`,
+>          /// `module_pci_driver!`, `module_platform_driver!`, etc.
+>          type LocalModule = #type_;
+>
+>          impl ::kernel::ModuleMetadata for #type_ {
+>              const NAME: &'static ::kernel::str::CStr = #name_cstr;
+> +
+> +            #[cfg(MODULE)]
+> +            const THIS_MODULE: ::kernel::ThisModule = {
+> +                extern "C" {
+> +                    static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
+> +                }
+> +
+> +                // SAFETY: `__this_module` is constructed by the kernel at load time
+> +                // and lives until the module is unloaded.
+> +                unsafe { ::kernel::ThisModule::from_ptr(__this_module.get()) }
+> +            };
+> +
+> +            #[cfg(not(MODULE))]
+> +            const THIS_MODULE: ::kernel::ThisModule = unsafe {
+> +                ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
+> +            };
+>          }
+>
+>          // Double nested modules, since then nobody can access the public items inside.
+> @@ -616,7 +616,7 @@ pub extern "C" fn #ident_exit() {
+>                  /// This function must only be called once.
+>                  unsafe fn __init() -> ::kernel::ffi::c_int {
+>                      let initer = <super::super::LocalModule as ::kernel::InPlaceModule>::init(
+> -                        &super::super::THIS_MODULE
+> +                        &<super::super::LocalModule as ::kernel::ModuleMetadata>::THIS_MODULE
 
-Sami
+Is it possible we could make this more ergonomic? Perhaps by adding a
+helper:
+
+  fn this_module<M: ::kernel::ModuleMetadata>() -> &'static ::kernel::ThisModule {
+      &M::THIS_MODULE
+  }
+
+Then the invocation is a little better:
+
+  let initer = <super::super::LocalModule as ::kernel::InPlaceModule>::init(
+      this_module::<super::super::LocalModule>()
+  );
+
+
+Best regards,
+Andreas Hindborg
+
+
