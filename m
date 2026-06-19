@@ -1,256 +1,1029 @@
-Received: from LO0P265CU003.outbound.protection.outlook.com (mail-uksouthazon11022099.outbound.protection.outlook.com [52.101.96.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FD82DC357;
-	Thu, 18 Jun 2026 14:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.96.99
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781792200; cv=fail; b=dF5xgpOEE5dwEa5rRL/lgH7UjYbHD3bUCSAIWTjdwj71Kfl2EWVeD+8/t38fliP6jNNHBQDe+C2I2CcEt3K5iE6OMv2CUJFYIpBXliiOCmUl8AGpZIOzZP0teKtALtEhc6gjl2MiEzi3eMh5++5ZPUCaG7l1FubfQZo+VPV9siw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781792200; c=relaxed/simple;
-	bh=gXpahiYrAvSbHlul9RMNau2lvObXbfnQQ4/zNx6t0G8=;
-	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:References:
-	 In-Reply-To:MIME-Version; b=PI3UP8beU/zIprE5vrH1AGxZkA/V13Z5L6iSpcA2YTOrAULANEaZ9nmKcMPwBJltsHuiDScrU/o9DydlXH1uMGoxJXfvD4gFXjFAu2bnPCV2UunalXqhYbKOx1YGVP6ee3auKJwd3ghltSmtt4E4Q81vpnb1OqcsSzGpR2MaTDk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=BeVYaam4; arc=fail smtp.client-ip=52.101.96.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8324135C1B1
+	for <linux-modules@vger.kernel.org>; Fri, 19 Jun 2026 09:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781860251; cv=none; b=HBFiYQ/RjwYhxXKPjTXcM8PwXzcupJFE4AeB2RCFIShhzbqBNa9JfSIg1SDRR3dvs3AnM0GJV9gZAOPuWTnrXagZGf4AmZpgFaOVvEBcrWebGf5S1fTxtyLXlJYjWlRDCosCnGmbHGDoz4maqud5VRsmW7EUdJ1yOGAnUOhDv0w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781860251; c=relaxed/simple;
+	bh=RshchSFBgcRK69878p9jdKW4Auqu64vKx7/hADqlUJ4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qdOxplAPfOtCc0s9nj0dUNG8y92oXfRF7daBhmCvREgJoGY4jgrGqtwqTD844HT1UrjOVwPge5GwbD/4DDXNfKVo6/QYb2Ius9IKZLcRszy5sWfD0RZdFZKa9oFK/1iCCQ8Du/uLjbqJMU1xjJnNfhXJzmO7sWo7vuj6YqCpIng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UJkVxl5D; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="BeVYaam4"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wvl5pUc5EKFl4KihIE3elBFOiNT9QcZyznmyE2lvTMNpYm6lCDeUGAjFHFXd7strBBudcMkD5TbCJIrmTkCjED4qVXP5MrIAHNa+KiRtM6Ep0jXqlXeqKicuUm6c7dmVyqlUN1274kL2lEyOoQ4iTVQhv68FPNCehpWU+2NGmDA5zDGUKWh+/iZkyywwJBhGbZ0UUsQM2St9qlvI+g7WIjHzRtKLShqeAnOOjiYOYsB0T8QjM/egpXZmY/ta5t+KhGUvVglnv5m0yRK2u+JYOnv3s3toZTn+h6AbJolRAPD21iikKcV7ICsvVvrBd/hDZSF306yueLTEaCVNztk6EQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0NV8qzjTkCssO5bL3QcVxXD14lOzn5n/4d2bA+89Fv0=;
- b=N61F6cY6Zg33gewXNS1U+tPRc3jOpDtF8AejjWo+75tAbV1jF1Z0bGDjtdQ+iroz4uC23w6CQDU2WSdy74fDzMQzp/9OJKOB+O3pOboMuw2bq86fugm8dGK58TTCiR3ePBuzXtENTjsOrj9A9ElRFfe/k/48HKJPNunYuLJdXrbWYlT3S1heYxY6qq3XSGOhAUCsWJ1TKSzpw56YGiNsdVV/wt/L5LFQwXoAZorAk5vPti3cFVE6h7Q2OpeEbUSXY/EAb1CTd9JYEWwpnRnFoFVD7GPy7wMO7uABsFYpso8G8AEZNLvKH+ALvF9+kxbCXVzJOSvl78rP8vniEmpdxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0NV8qzjTkCssO5bL3QcVxXD14lOzn5n/4d2bA+89Fv0=;
- b=BeVYaam4blH0M2GvWgeRUK3M7wUBQYbsW9BZbpSHszMoRyJVRxblVfjUub5ZPJAToxIbxNfSlHiq2PhkHEcptsELTYjRp/x9D66tSHr6NmTX5OVJblmvrPDE2qZwAvs4mi0dvQE0F+cvP5zq/6CiWE/COnHc2KpFN2Sk1Th24fo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
- by CW1P265MB7964.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:212::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.13; Thu, 18 Jun
- 2026 14:16:35 +0000
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.21.0139.009; Thu, 18 Jun 2026
- 14:16:35 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 18 Jun 2026 15:16:34 +0100
-Message-Id: <DJC8MA4TZ9RE.3T3VXZU2USSJG@garyguo.net>
-Subject: Re: [PATCH v2 1/7] rust: module: add `THIS_MODULE` const to
- `ModuleMetadata` trait
-From: "Gary Guo" <gary@garyguo.net>
-To: "Alvin Sun" <alvin.sun@linux.dev>, "Miguel Ojeda" <ojeda@kernel.org>,
- "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
- Krummrich" <dakr@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
- Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Daniel Almeida" <daniel.almeida@collabora.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
- "David Gow" <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Breno
- Leitao" <leitao@debian.org>, "Jens Axboe" <axboe@kernel.dk>
-Cc: <rust-for-linux@vger.kernel.org>, <linux-modules@vger.kernel.org>,
- <driver-core@lists.linux.dev>, <dri-devel@lists.freedesktop.org>,
- <nova-gpu@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>, <linux-block@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260521-fix-fops-owner-v2-0-fd99079c5a04@linux.dev>
- <20260521-fix-fops-owner-v2-1-fd99079c5a04@linux.dev>
-In-Reply-To: <20260521-fix-fops-owner-v2-1-fd99079c5a04@linux.dev>
-X-ClientProxiedBy: LO4P265CA0088.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2bc::7) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:488::16)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UJkVxl5D"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-464192ab2e1so1126532f8f.0
+        for <linux-modules@vger.kernel.org>; Fri, 19 Jun 2026 02:10:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781860248; x=1782465048; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VNiM+Mbgshf95K/t5PON/G7yr52Wr4iGLwkbNBlHbBU=;
+        b=UJkVxl5DpkbP4zNDeyirUyOdZhtEkYkZIhsOVlPmL0bjG9Wj/59DPWfhFfnv/NfY1O
+         v8OLxfB+hu94C3Xd6u+9WrGQij2cCp0yQMUBHvUh02QYnjU/RqkUaTRgKGfpWfWGW/z0
+         Ox33jIc+p77V4UZ5TB7jN6dcBg/GMWBqNYSWAK23qt3ay33+SnsSreDFRhMtQQXX6Hqx
+         7spLDN/InA7gfZ4pa+BuizsCuz0/yIZ527hfaiz/FZnJTRTzUSUAJtSFG9eq8w1PI0LB
+         nnKyr4qoTO5gRXSvbEz6TDcteLQeyZ6XmC1zkvudkRCtjLmk/9KwCVRqSRMTFc0Jfn56
+         C/DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781860248; x=1782465048;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VNiM+Mbgshf95K/t5PON/G7yr52Wr4iGLwkbNBlHbBU=;
+        b=b+R98amiK+h9QOh0XQzNylesC61Lf2/1QuRQtTUzeW6Fb4bB5empNXnnHRrIKiqCYu
+         673g96bP30/OoabS2zsLIvF2u+JoRbZ+7Ny9gC2ppWBVqtGIpx457c0dFpXvxBnNXA89
+         AkzVolbfeYKQGblM1Fjc/VsAVe6OyKDkTI9rG23XAwuUiRDpm0h7/5rgsBXRvIxawXZt
+         ErZIXjMw34d5uD/xnU1Z7HX5G1c3SP4uqov/mGq5G2fKoRhc8EctIL7M59GsoFqnkAKh
+         GH01jCJOJ9adNINqzvzg9irdbHFVaduFBl5HaiIV+p3/ouN5xP5XvX7CqupcUYy0kHGg
+         2EPg==
+X-Forwarded-Encrypted: i=1; AFNElJ+10JgD65mFnR0hg4xfPOmY7fcpsT24FGUTkFB97WoVrlW9B0Cjia7tObK42TBS8MyVQLT8PRwZHCB1SdsC@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7U8l1zsPn63e72o9WqwQGylSDOtXche7SRP/L2gFdJ8SZ20rP
+	2B8RPOqU9IaqNJk0KST3m+lAL5Rz037suBG7ARwd+xIkUEbHlRDY74u1
+X-Gm-Gg: AfdE7cniPfU+jWh2v+LljhbwqCdyL2dxdgcatpGQV1kYhUdIFTvCFqqpmjYArbL/RfZ
+	tV6uKktGG8YdLKpKt8/Bl8wtB3A0JjPu2sLk148m8mLic+A/UaXCcxukq88PkjnmL5dAXmAFOo6
+	ZnNlpJIQ/FmovKuSMlUPj0rbNyYvG6JoJu4aNi0YN4zhG+Esyz1hijkejxojHU9l431/Wq1Cuwv
+	5EXLEyy5HsKyic+iZwXTtY0+DfLSuzHqzeRcdPGQh9r/jEOvrbdSTufxvUXXxx9kPJNzJkoczPS
+	uMEZnZvvZv98r6QQKD5ZfU8BXhugwFjmUVirV/zKLdco1UFMOE5lsCHXgm76QK0a79yI5o1xNJm
+	WzECSgY1ChPWdIzt7c/xd2PmsaLCIbsd9vIujiHNixRkhu9hoLxCFU42BM4p8+zdGPAJIQ4Denx
+	YM3XZngG8NmEd43X3Pb2vgB5QPZm1Qj8NeVmiUb6S9xPt2yYCARQc=
+X-Received: by 2002:adf:f5c3:0:b0:460:3234:77d2 with SMTP id ffacd0b85a97d-46502badfe5mr3528600f8f.40.1781860247458;
+        Fri, 19 Jun 2026 02:10:47 -0700 (PDT)
+Received: from [192.168.6.4] ([195.100.225.50])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-465059e721fsm6754472f8f.0.2026.06.19.02.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2026 02:10:46 -0700 (PDT)
+From: Malte Wechter <maltewechter@gmail.com>
+Date: Fri, 19 Jun 2026 11:10:43 +0200
+Subject: [PATCH v4] rust: configfs: add procedural macro for declaring
+ configfs attributes
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CW1P265MB7964:EE_
-X-MS-Office365-Filtering-Correlation-Id: 780213c6-6026-4f46-c6d7-08decd443462
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|10070799003|366016|1800799024|376014|7416014|56012099006|5023799004|6133799003|22082099003|18002099003|4143699003|921020;
-X-Microsoft-Antispam-Message-Info:
-	nyrRYueL/GrSX3mgvXbn13vASDy9GB+vxeI+gIlWJWSuzE21yzW6mXcN8miJTs0NFz4s5/NnqfCGkMbnHhUEBakckltX3cXtNhOeXvsQcFg83kOWb/8rdUBDtpwxcRkN5JHyNJjdK8gW8jbKCXkBuQxQCDG/onUNaB5xfNgAK3wgY4W8rLgaaGKpSwATamr6OQhNlR8JoqZTPk4m315QllsWZXofXxUS5+t/ADSYBJLnWFH5j3mG5edv2+Z1qFLjPGdz/lKDaXQCLw0kEhYwBNAJ0tgUgjlq3ufrafP162onmKJP4qw3oGMXRTLKIFykLMIEGYQLh5PYwS01mM41QCvMRpc6OSXfyUmw8ToT+NEoeeOmff5d1CclQiL2cuQ/R9iLty0/qWkMFZNN27NFn6CjYZBC35kIKyiuBWNeAFywpR/3Nvf0gSx+xbJEvMUsOfVtB5PjefhqtoKeH5VyrMD1ZqlbfZ15aLkoT9rdT1KZl2+oScKjC08dt9s7gKOjRP4QZElpCrKCv59U786Yh7kDF7IU4+U4jMb2wtNCMu+OzwmyM9dd45EFGWvvvClpucKtlxrTReeLiTShR7sWN22onyDHmtNhldmVKgf4jamnZFVG5gBsNOOWw0YJfik3MrUu1CNQF5F0/evcCVSRCY7sGuPK4MSKoUx1WP0meVYNTJrEhJGSfTktCzp8xY6QHSPezcYcqsk1n2lhn1Gjb0xefW4oeayhbnk+mbjou40=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(10070799003)(366016)(1800799024)(376014)(7416014)(56012099006)(5023799004)(6133799003)(22082099003)(18002099003)(4143699003)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M3dxUGkzVHZ3R3pxTnkyY2JFeDdzMTVoYUxONE5ORkp0b29ZUVRtTUhnTlRh?=
- =?utf-8?B?bWNyc3Zaa1d4bzlKTjN2akR6TGt1VUJrR1k0L1ZoOGVzYXpxSFRyMG1VQ3I1?=
- =?utf-8?B?c1NFSExBZFNUZ0R5bXg2V1RuRlBwZUp2dEtXMTd3WmdzSysxVmhBaFNVWEk1?=
- =?utf-8?B?OVh4eldrRndqdVRMYS9xMTJLU3Zqc1lkMjF6SWxmNUJHeXByaU1HWlF2VUFv?=
- =?utf-8?B?cW1mc0YrQkVsbnRJekdoMCt6N0gwZW4xc3JTdVk2ZHhBRi9SSzVKdEdralpH?=
- =?utf-8?B?d1hCOEpLV2VTbng3Vi9wZERyb092aFp4eEdQclRBMGJiQUNEYmpVdFVjclQv?=
- =?utf-8?B?d25ZaWNSU1dsVWZiOERvSjdxcnZ0eFA4RGRuSnR0eWsyOGxZQUY4Mk9uWkEx?=
- =?utf-8?B?czNmcFNWUUppL285SGdHamhYZEtHSVd0Zm44VE9QQWdUeE1PVTEzcks3RElO?=
- =?utf-8?B?aVlsSW1BbTh1QXRrOStzZ0kvM00wU0pzMGM5WXJIZUwrcnpjNzlzMjNhYzFp?=
- =?utf-8?B?aHFBMWlKZzFlSnVqaENCeXBobGRjRnFvQTlmTFZSc2FqTHgxSkVFcjV5ZGVx?=
- =?utf-8?B?QTEvSlJRWFY4bVg4b01BOHJ5UzFjKzhuSzkvdnRJUkVvOXpLMmVpVHhGNEs2?=
- =?utf-8?B?V0ZDUFpzODdQYkEvd1MvaG9lbEtqUEg3cTZuOWVvMFVRczFIKzU4djlONDIz?=
- =?utf-8?B?Qng4ZFpDTE0vdU9McHJuSHhSRmxITmdweE5TTEd4MWc4a1VCVkJBczh4NnY1?=
- =?utf-8?B?TFhGeWNVRFpSY2xKNkY0WGVjYWZhUnRlZThSUHFDcWdjQ25yQmg5OEZuVmZj?=
- =?utf-8?B?dGdGK2ZRd1N0S0NxSHJLUUdDYTBlM0g1SDBoYTJpY2hYT1p0YlpvMkJGQzln?=
- =?utf-8?B?a1J4aXk0Rk9JRkJDNnFnWkR2V3pHWmhIZ2FGS3ZUbTIvSE9OWUlwV3VFSFFB?=
- =?utf-8?B?aG9samI0THZXOENZMUpueFB3c0FIMXg0ekJlOENsa1NwQWMzRXZxQit5UFBp?=
- =?utf-8?B?bFBaTGFQRnRKUnFyTVVBa2pqWHNmNXoxZzUrS3YyNHlBZHlNeXRQVnRlZVps?=
- =?utf-8?B?UFRhRmdhSVZ2ZWFlczJpdDZNZTVsZ3R0eEd0OHl2SzBZY3UxRlVPck5kTWdR?=
- =?utf-8?B?VEdRNmN4ajJleG1jRmo0WjJuZ2JUT3hvZTRSZ3Y0K2hMOFk0WmV0TVI3bmxC?=
- =?utf-8?B?QmNrVG42T240ajNEWmJvSGV3MXpvRVR1Y0MvVkhseWIzL214RXhjRjl3NzE5?=
- =?utf-8?B?OHE3aURrUlkrNXY4Y0E2UlZsSEthSWRVMlRVS0RKY2lNVUZ2TlNOanBSYVc4?=
- =?utf-8?B?QUxyd3NOVEh0N3dzSFpEWkJacm9uT3lBZW1tTDNOaTY1eTZ2M2dkazQwK1Vi?=
- =?utf-8?B?UHhZWWxqK0RkL2tndmgybThpT3hURG5Nb0laakdTYVpwcno1M0NhYngrZVVL?=
- =?utf-8?B?VDJRcVhROTcwK0JWbzBCb251SVVLTUh5K3YvMWZqQ0xtS1dJVEpuN2hLeUQ2?=
- =?utf-8?B?MGZCM0dIRFBXNmZrMWdqbWJSeFFsaHFFcmNPNTh6Q0RrN3ZTQTRCZzQ5UHVJ?=
- =?utf-8?B?Q3RtRjJmYWM1TEd2c040cWpHQVlsTW5EU0diblU2TStZYmt6ZDhGRDFiODFU?=
- =?utf-8?B?RTNzRVNhWUNpTkVxdWN0VkVDRFpvSytPdWVNSTJQZG5MYitDd0N2NkZhVFRM?=
- =?utf-8?B?K2FBTFY2ZkJ3YnBtUnFMeGR3SDdTT1pEcDBPVFRrVzZjcEQvY3NlVlRQNmND?=
- =?utf-8?B?SGtvM0ZsM2wvb2RrZUVWb084d2VKbHN3bzFORzkrL0JJVzd0VHI5ZDdWRE9u?=
- =?utf-8?B?cXpXM0VaSENGeXNON1BIY3BkRENGcU9abHJPM3lycnRGMXczdFVzUVVUMzM0?=
- =?utf-8?B?WTBEYzU0T2VUMk5Ia3BwY3BZVXJwM2J2RTBmcHFNVS8zWkJ1YU9KdU0zcldw?=
- =?utf-8?B?Y1RwZWxVdnlmL1JhY1hadTh3bUtMVU9lK3FoR0F0OTJMaGVhWUEzU3h4Q2Fq?=
- =?utf-8?B?aTRiK1ZHUEpMYVE0NDQrQmF3RUc5cG4yRTdDaDVjMndLWE95bENISXRqaTRr?=
- =?utf-8?B?clZqWUwyUXRnNDJjMDNjYlRFSXo1L2tFeXFianRUTkxKQ3ArK2hHVnBTRkxq?=
- =?utf-8?B?SFdCVGUwMTIvU1hGcy9NbkdMZjJZdVIrVGlQVktsRXUvQ0RhTEhDY3o4N2dh?=
- =?utf-8?B?UVhqeFpBTlAvdFB6ZGhzTzE1Vi90OVZZRk5YbkJRYm5wTUUwd2pSQSswa3Y5?=
- =?utf-8?B?WXV2VlZkZmJKMEUySnh1TS95ZkZ3b0E2eG5zenNhQ25odnRpbHV2Y1hhb3dh?=
- =?utf-8?B?SzlKd2xaMjA4K09CRUQ5U0NCVUxsa0owMjd0QTBHb0Z1WVZVQXV1QT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 780213c6-6026-4f46-c6d7-08decd443462
-X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2026 14:16:35.4442
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TK4wFivKppD5lQbLCgRbLGD6XMveQrxlgnzMc096w5byiO5OCyZFSZPRuh0T0NqAyzCvNM32vIaB8gLOoaXtdw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P265MB7964
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260619-configfs-syn-v4-1-207c39504c1e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/13NQQ6CMBCF4auYrq3pTKEFV97DuICxhSZCTWuIh
+ HB3Cy4Ulm+S75+JRROciex8mFgwg4vO92lkxwOjtuobw909bYYClchAc/K9dY2NPI49hxKM0CC
+ FQM0SeQZj3XvNXW9pty6+fBjX+gDL9RvKUWxDA3DgivK6EFVJxuKl6Sr3OJHv2BIa8IeVkDuMC
+ VOdF1lREqpM77H8w4A7LBOWWKKtKSeSm8/zPH8AW3vPWyIBAAA=
+X-Change-ID: 20260417-configfs-syn-191e07130027
+To: Andreas Hindborg <a.hindborg@kernel.org>, 
+ Breno Leitao <leitao@debian.org>, Miguel Ojeda <ojeda@kernel.org>, 
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+ Jens Axboe <axboe@kernel.dk>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ linux-block@vger.kernel.org, linux-modules@vger.kernel.org, 
+ Malte Wechter <maltewechter@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781860245; l=32626;
+ i=maltewechter@gmail.com; s=20260417; h=from:subject:message-id;
+ bh=RshchSFBgcRK69878p9jdKW4Auqu64vKx7/hADqlUJ4=;
+ b=tqteMb0a4RVKpBxxyVRNTFRNBiGDOsmewzWNWKyeDoc8fXW7nkrJ4Hb0+tEYXnco0lZxUPm4y
+ cbBVAq7jQ7vDfX58WS/3+sGKgBE1EvoIH1crmE62NcOMB+ctWuxiUpz
+X-Developer-Key: i=maltewechter@gmail.com; a=ed25519;
+ pk=07WplWXZnwyLTMZOHNCIGcpoEutcMXU/JDY6f9VtxSY=
 
-On Thu May 21, 2026 at 8:52 AM BST, Alvin Sun wrote:
-> Add a `THIS_MODULE` const to the `ModuleMetadata` trait so that
-> modules can provide their `ThisModule` pointer usable in const
-> contexts such as static file_operations.
->
-> Move the `THIS_MODULE` static from the `module!` macro into the
-> `ModuleMetadata` impl, and update `__init` to use
-> `LocalModule::THIS_MODULE` instead.
+Implement `configfs_attrs!` as a procedural macro using `syn`, this
+improves readability and maintainability. Remove the old macro and
+replace all uses with the new macro. Add the new macro implementation
+file to MAINTAINERS.
 
-Perhaps you could mention that this is made possible by const_refs_to_stati=
-c
-which is stable since the MSRV bump.
+Signed-off-by: Malte Wechter <maltewechter@gmail.com>
+---
+Changes in v4:
+- Update link path to configfs_attr macro in configfs.rs
+- Fix doc strings for configfs_attr in macros/lib.rs
+- Fix doc strings for parse_ordered_fields in macros/helpers.rs
+- Update title prefix to `rust: configfs:`
+- Link to v3: https://lore.kernel.org/r/20260612-configfs-syn-v3-1-3292fbc5cc32@gmail.com
 
-Best,
-Gary
+Changes in v3:
+- Remove 'make_static_ident' function, make names for static variables simpler
+- Move 'parse_ordered_fields' macro from module.rs into helpers
+- Use 'parse_ordered_fields' macro for parsing instead of doing it ad-hoc
+- Link to v2: https://lore.kernel.org/r/20260603-configfs-syn-v2-1-cb58489c2647@gmail.com
 
->
-> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
-> ---
->  rust/kernel/lib.rs    |  3 +++
->  rust/macros/module.rs | 34 +++++++++++++++++-----------------
->  2 files changed, 20 insertions(+), 17 deletions(-)
->
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index b72b2fbe046d6..f0cf0705d9697 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -184,6 +184,9 @@ fn init(module: &'static ThisModule) -> impl pin_init=
-::PinInit<Self, error::Erro
->  pub trait ModuleMetadata {
->      /// The name of the module as specified in the `module!` macro.
->      const NAME: &'static crate::str::CStr;
-> +
-> +    /// The module's `THIS_MODULE` pointer.
-> +    const THIS_MODULE: ThisModule;
->  }
-> =20
->  /// Equivalent to `THIS_MODULE` in the C API.
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index 06c18e2075083..b6d7b3299fbf9 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -497,28 +497,28 @@ pub(crate) fn module(info: ModuleInfo) -> Result<To=
-kenStream> {
->          /// Used by the printing macros, e.g. [`info!`].
->          const __LOG_PREFIX: &[u8] =3D #name_cstr.to_bytes_with_nul();
-> =20
-> -        // SAFETY: `__this_module` is constructed by the kernel at load =
-time and will not be
-> -        // freed until the module is unloaded.
-> -        #[cfg(MODULE)]
-> -        static THIS_MODULE: ::kernel::ThisModule =3D unsafe {
-> -            extern "C" {
-> -                static __this_module: ::kernel::types::Opaque<::kernel::=
-bindings::module>;
-> -            };
-> -
-> -            ::kernel::ThisModule::from_ptr(__this_module.get())
-> -        };
-> -
-> -        #[cfg(not(MODULE))]
-> -        static THIS_MODULE: ::kernel::ThisModule =3D unsafe {
-> -            ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
-> -        };
-> -
->          /// The `LocalModule` type is the type of the module created by =
-`module!`,
->          /// `module_pci_driver!`, `module_platform_driver!`, etc.
->          type LocalModule =3D #type_;
-> =20
->          impl ::kernel::ModuleMetadata for #type_ {
->              const NAME: &'static ::kernel::str::CStr =3D #name_cstr;
-> +
-> +            #[cfg(MODULE)]
-> +            const THIS_MODULE: ::kernel::ThisModule =3D {
-> +                extern "C" {
-> +                    static __this_module: ::kernel::types::Opaque<::kern=
-el::bindings::module>;
-> +                }
-> +
-> +                // SAFETY: `__this_module` is constructed by the kernel =
-at load time
-> +                // and lives until the module is unloaded.
-> +                unsafe { ::kernel::ThisModule::from_ptr(__this_module.ge=
-t()) }
-> +            };
-> +
-> +            #[cfg(not(MODULE))]
-> +            const THIS_MODULE: ::kernel::ThisModule =3D unsafe {
-> +                ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
-> +            };
->          }
-> =20
->          // Double nested modules, since then nobody can access the publi=
-c items inside.
-> @@ -616,7 +616,7 @@ pub extern "C" fn #ident_exit() {
->                  /// This function must only be called once.
->                  unsafe fn __init() -> ::kernel::ffi::c_int {
->                      let initer =3D <super::super::LocalModule as ::kerne=
-l::InPlaceModule>::init(
-> -                        &super::super::THIS_MODULE
-> +                        &<super::super::LocalModule as ::kernel::ModuleM=
-etadata>::THIS_MODULE
->                      );
->                      // SAFETY: No data race, since `__MOD` can only be a=
-ccessed by this module
->                      // and there only `__init` and `__exit` access it. T=
-hese functions are only
+Changes in v2:
+- Add a try_parse helper function to macros/helpers.rs
+- Fix bug where 'child' configuration gets dropped if trailing comma is missing (sashiko)
+- Link to v1: https://lore.kernel.org/r/20260520-configfs-syn-v1-1-6c5b80a9cef2@gmail.com
+---
+ MAINTAINERS                     |   1 +
+ drivers/block/rnull/configfs.rs |   2 +-
+ rust/kernel/configfs.rs         | 263 +---------------------------------------
+ rust/macros/configfs_attrs.rs   | 135 +++++++++++++++++++++
+ rust/macros/helpers.rs          | 139 +++++++++++++++++++++
+ rust/macros/lib.rs              |  87 +++++++++++++
+ rust/macros/module.rs           | 137 ---------------------
+ samples/rust/rust_configfs.rs   |   2 +-
+ 8 files changed, 370 insertions(+), 396 deletions(-)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2fb1c75afd16..45f7a1ec93b4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6464,6 +6464,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/a.hindborg/linux.git config
+ F:	fs/configfs/
+ F:	include/linux/configfs.h
+ F:	rust/kernel/configfs.rs
++F:	rust/macros/configfs_attrs.rs
+ F:	samples/configfs/
+ F:	samples/rust/rust_configfs.rs
+ 
+diff --git a/drivers/block/rnull/configfs.rs b/drivers/block/rnull/configfs.rs
+index 7c2eb5c0b722..f28ec69d7984 100644
+--- a/drivers/block/rnull/configfs.rs
++++ b/drivers/block/rnull/configfs.rs
+@@ -4,8 +4,8 @@
+ use kernel::{
+     block::mq::gen_disk::{GenDisk, GenDiskBuilder},
+     configfs::{self, AttributeOperations},
+-    configfs_attrs,
+     fmt::{self, Write as _},
++    macros::configfs_attrs,
+     new_mutex,
+     page::PAGE_SIZE,
+     prelude::*,
+diff --git a/rust/kernel/configfs.rs b/rust/kernel/configfs.rs
+index 2339c6467325..a8995a418136 100644
+--- a/rust/kernel/configfs.rs
++++ b/rust/kernel/configfs.rs
+@@ -21,7 +21,7 @@
+ //!
+ //! ```ignore
+ //! use kernel::alloc::flags;
+-//! use kernel::configfs_attrs;
++//! use macros::configfs_attrs;
+ //! use kernel::configfs;
+ //! use kernel::new_mutex;
+ //! use kernel::page::PAGE_SIZE;
+@@ -240,7 +240,7 @@ unsafe fn container_of(group: *const bindings::config_group) -> *const Self {
+ /// A configfs group.
+ ///
+ /// To add a subgroup to configfs, pass this type as `ctype` to
+-/// [`crate::configfs_attrs`] when creating a group in [`GroupOperations::make_group`].
++/// [`macros::configfs_attrs`] when creating a group in [`GroupOperations::make_group`].
+ #[pin_data]
+ pub struct Group<Data> {
+     #[pin]
+@@ -637,7 +637,7 @@ pub const fn new(name: &'static CStr) -> Self {
+ /// implement `HasGroup<Data>`. The trait must be implemented once for each
+ /// attribute of the group. The constant type parameter `ID` maps the
+ /// implementation to a specific `Attribute`. `ID` must be passed when declaring
+-/// attributes via the [`kernel::configfs_attrs`] macro, to tie
++/// attributes via the [`macros::configfs_attrs`] macro, to tie
+ /// `AttributeOperations` implementations to concrete named attributes.
+ #[vtable]
+ pub trait AttributeOperations<const ID: u64 = 0> {
+@@ -669,13 +669,13 @@ fn store(_data: &Self::Data, _page: &[u8]) -> Result {
+ /// This type is used to construct a new [`ItemType`]. It represents a list of
+ /// [`Attribute`] that will appear in the directory representing a [`Group`].
+ /// Users should not directly instantiate this type, rather they should use the
+-/// [`kernel::configfs_attrs`] macro to declare a static set of attributes for a
++/// [`macros::configfs_attrs`] macro to declare a static set of attributes for a
+ /// group.
+ ///
+ /// # Note
+ ///
+ /// Instances of this type are constructed statically at compile by the
+-/// [`kernel::configfs_attrs`] macro.
++/// [`macros::configfs_attrs`] macro.
+ #[repr(transparent)]
+ pub struct AttributeList<const N: usize, Data>(
+     /// Null terminated Array of pointers to [`Attribute`]. The type is [`c_void`]
+@@ -724,7 +724,7 @@ impl<const N: usize, Data> AttributeList<N, Data> {
+ /// [`Subsystem`].
+ ///
+ /// Users should not directly instantiate objects of this type. Rather, they
+-/// should use the [`kernel::configfs_attrs`] macro to statically declare the
++/// should use the [`macros::configfs_attrs`] macro to statically declare the
+ /// shape of a [`Group`] or [`Subsystem`].
+ #[pin_data]
+ pub struct ItemType<Container, Data> {
+@@ -791,254 +791,3 @@ fn as_ptr(&self) -> *const bindings::config_item_type {
+         self.item_type.get()
+     }
+ }
+-
+-/// Define a list of configfs attributes statically.
+-///
+-/// Invoking the macro in the following manner:
+-///
+-/// ```ignore
+-/// let item_type = configfs_attrs! {
+-///     container: configfs::Subsystem<Configuration>,
+-///     data: Configuration,
+-///     child: Child,
+-///     attributes: [
+-///         message: 0,
+-///         bar: 1,
+-///     ],
+-/// };
+-/// ```
+-///
+-/// Expands the following output:
+-///
+-/// ```ignore
+-/// let item_type = {
+-///     static CONFIGURATION_MESSAGE_ATTR: kernel::configfs::Attribute<
+-///         0,
+-///         Configuration,
+-///         Configuration,
+-///     > = unsafe {
+-///         kernel::configfs::Attribute::new({
+-///             const S: &str = "message\u{0}";
+-///             const C: &kernel::str::CStr = match kernel::str::CStr::from_bytes_with_nul(
+-///                 S.as_bytes()
+-///             ) {
+-///                 Ok(v) => v,
+-///                 Err(_) => {
+-///                     core::panicking::panic_fmt(core::const_format_args!(
+-///                         "string contains interior NUL"
+-///                     ));
+-///                 }
+-///             };
+-///             C
+-///         })
+-///     };
+-///
+-///     static CONFIGURATION_BAR_ATTR: kernel::configfs::Attribute<
+-///             1,
+-///             Configuration,
+-///             Configuration
+-///     > = unsafe {
+-///         kernel::configfs::Attribute::new({
+-///             const S: &str = "bar\u{0}";
+-///             const C: &kernel::str::CStr = match kernel::str::CStr::from_bytes_with_nul(
+-///                 S.as_bytes()
+-///             ) {
+-///                 Ok(v) => v,
+-///                 Err(_) => {
+-///                     core::panicking::panic_fmt(core::const_format_args!(
+-///                         "string contains interior NUL"
+-///                     ));
+-///                 }
+-///             };
+-///             C
+-///         })
+-///     };
+-///
+-///     const N: usize = (1usize + (1usize + 0usize)) + 1usize;
+-///
+-///     static CONFIGURATION_ATTRS: kernel::configfs::AttributeList<N, Configuration> =
+-///         unsafe { kernel::configfs::AttributeList::new() };
+-///
+-///     {
+-///         const N: usize = 0usize;
+-///         unsafe { CONFIGURATION_ATTRS.add::<N, 0, _>(&CONFIGURATION_MESSAGE_ATTR) };
+-///     }
+-///
+-///     {
+-///         const N: usize = (1usize + 0usize);
+-///         unsafe { CONFIGURATION_ATTRS.add::<N, 1, _>(&CONFIGURATION_BAR_ATTR) };
+-///     }
+-///
+-///     static CONFIGURATION_TPE:
+-///       kernel::configfs::ItemType<configfs::Subsystem<Configuration> ,Configuration>
+-///         = kernel::configfs::ItemType::<
+-///                 configfs::Subsystem<Configuration>,
+-///                 Configuration
+-///                 >::new_with_child_ctor::<N,Child>(
+-///             &THIS_MODULE,
+-///             &CONFIGURATION_ATTRS
+-///         );
+-///
+-///     &CONFIGURATION_TPE
+-/// }
+-/// ```
+-#[macro_export]
+-macro_rules! configfs_attrs {
+-    (
+-        container: $container:ty,
+-        data: $data:ty,
+-        attributes: [
+-            $($name:ident: $attr:literal),* $(,)?
+-        ] $(,)?
+-    ) => {
+-        $crate::configfs_attrs!(
+-            count:
+-            @container($container),
+-            @data($data),
+-            @child(),
+-            @no_child(x),
+-            @attrs($($name $attr)*),
+-            @eat($($name $attr,)*),
+-            @assign(),
+-            @cnt(0usize),
+-        )
+-    };
+-    (
+-        container: $container:ty,
+-        data: $data:ty,
+-        child: $child:ty,
+-        attributes: [
+-            $($name:ident: $attr:literal),* $(,)?
+-        ] $(,)?
+-    ) => {
+-        $crate::configfs_attrs!(
+-            count:
+-            @container($container),
+-            @data($data),
+-            @child($child),
+-            @no_child(),
+-            @attrs($($name $attr)*),
+-            @eat($($name $attr,)*),
+-            @assign(),
+-            @cnt(0usize),
+-        )
+-    };
+-    (count:
+-     @container($container:ty),
+-     @data($data:ty),
+-     @child($($child:ty)?),
+-     @no_child($($no_child:ident)?),
+-     @attrs($($aname:ident $aattr:literal)*),
+-     @eat($name:ident $attr:literal, $($rname:ident $rattr:literal,)*),
+-     @assign($($assign:block)*),
+-     @cnt($cnt:expr),
+-    ) => {
+-        $crate::configfs_attrs!(
+-            count:
+-            @container($container),
+-            @data($data),
+-            @child($($child)?),
+-            @no_child($($no_child)?),
+-            @attrs($($aname $aattr)*),
+-            @eat($($rname $rattr,)*),
+-            @assign($($assign)* {
+-                const N: usize = $cnt;
+-                // The following macro text expands to a call to `Attribute::add`.
+-
+-                // SAFETY: By design of this macro, the name of the variable we
+-                // invoke the `add` method on below, is not visible outside of
+-                // the macro expansion. The macro does not operate concurrently
+-                // on this variable, and thus we have exclusive access to the
+-                // variable.
+-                unsafe {
+-                    $crate::macros::paste!(
+-                        [< $data:upper _ATTRS >]
+-                            .add::<N, $attr, _>(&[< $data:upper _ $name:upper _ATTR >])
+-                    )
+-                };
+-            }),
+-            @cnt(1usize + $cnt),
+-        )
+-    };
+-    (count:
+-     @container($container:ty),
+-     @data($data:ty),
+-     @child($($child:ty)?),
+-     @no_child($($no_child:ident)?),
+-     @attrs($($aname:ident $aattr:literal)*),
+-     @eat(),
+-     @assign($($assign:block)*),
+-     @cnt($cnt:expr),
+-    ) =>
+-    {
+-        $crate::configfs_attrs!(
+-            final:
+-            @container($container),
+-            @data($data),
+-            @child($($child)?),
+-            @no_child($($no_child)?),
+-            @attrs($($aname $aattr)*),
+-            @assign($($assign)*),
+-            @cnt($cnt),
+-        )
+-    };
+-    (final:
+-     @container($container:ty),
+-     @data($data:ty),
+-     @child($($child:ty)?),
+-     @no_child($($no_child:ident)?),
+-     @attrs($($name:ident $attr:literal)*),
+-     @assign($($assign:block)*),
+-     @cnt($cnt:expr),
+-    ) =>
+-    {
+-        $crate::macros::paste!{
+-            {
+-                $(
+-                    // SAFETY: We are expanding `configfs_attrs`.
+-                    static [< $data:upper _ $name:upper _ATTR >]:
+-                        $crate::configfs::Attribute<$attr, $data, $data> =
+-                            unsafe {
+-                                $crate::configfs::Attribute::new(
+-                                    $crate::c_str!(::core::stringify!($name)),
+-                                )
+-                            };
+-                )*
+-
+-
+-                // We need space for a null terminator.
+-                const N: usize = $cnt + 1usize;
+-
+-                // SAFETY: We are expanding `configfs_attrs`.
+-                static [< $data:upper _ATTRS >]:
+-                $crate::configfs::AttributeList<N, $data> =
+-                    unsafe { $crate::configfs::AttributeList::new() };
+-
+-                $($assign)*
+-
+-                $(
+-                    const [<$no_child:upper>]: bool = true;
+-
+-                    static [< $data:upper _TPE >] : $crate::configfs::ItemType<$container, $data>  =
+-                        $crate::configfs::ItemType::<$container, $data>::new::<N>(
+-                            &THIS_MODULE, &[<$ data:upper _ATTRS >]
+-                        );
+-                )?
+-
+-                $(
+-                    static [< $data:upper _TPE >]:
+-                        $crate::configfs::ItemType<$container, $data>  =
+-                            $crate::configfs::ItemType::<$container, $data>::
+-                            new_with_child_ctor::<N, $child>(
+-                                &THIS_MODULE, &[<$ data:upper _ATTRS >]
+-                            );
+-                )?
+-
+-                & [< $data:upper _TPE >]
+-            }
+-        }
+-    };
+-
+-}
+-
+-pub use crate::configfs_attrs;
+diff --git a/rust/macros/configfs_attrs.rs b/rust/macros/configfs_attrs.rs
+new file mode 100644
+index 000000000000..81037bc38188
+--- /dev/null
++++ b/rust/macros/configfs_attrs.rs
+@@ -0,0 +1,135 @@
++// SPDX-License-Identifier: GPL-2.0
++
++use quote::{
++    format_ident,
++    quote, //
++};
++
++use syn::{
++    bracketed,
++    ext::IdentExt,
++    parse::{
++        Parse,
++        ParseStream, //
++    },
++    punctuated::Punctuated,
++    spanned::Spanned,
++    Error,
++    Ident,
++    LitInt,
++    Token,
++    Type, //
++};
++
++use crate::helpers::parse_ordered_fields;
++
++pub(crate) struct ConfigfsAttrs {
++    container: Type,
++    data: Type,
++    child: Option<Type>,
++    attributes: Vec<(Ident, LitInt)>,
++}
++
++fn parse_attribute_field(stream: ParseStream<'_>) -> syn::Result<(Ident, LitInt)> {
++    let id = stream.parse::<syn::Ident>()?;
++    let _colon = stream.parse::<Token![:]>()?;
++    let v = stream.parse::<LitInt>()?;
++    Ok((id, v))
++}
++
++fn parse_attributes(stream: ParseStream<'_>) -> syn::Result<Vec<(Ident, LitInt)>> {
++    let attr_stream;
++    let _bracket = bracketed!(attr_stream in stream);
++    let attributes = Punctuated::<(Ident, LitInt), Token![,]>::parse_terminated_with(
++        &attr_stream,
++        parse_attribute_field,
++    )?;
++    Ok(attributes.into_iter().collect::<Vec<_>>())
++}
++
++impl Parse for ConfigfsAttrs {
++    fn parse(input: ParseStream<'_>) -> syn::Result<Self> {
++        parse_ordered_fields!(
++            from input;
++            container [required] => (input.parse::<Type>())?,
++            data [required] => (input.parse::<Type>())?,
++            child => (input.parse::<Type>())?,
++            attributes [required] => parse_attributes(input)?,
++        );
++
++        Ok(ConfigfsAttrs {
++            container,
++            data,
++            child,
++            attributes,
++        })
++    }
++}
++
++pub(crate) fn configfs_attrs(cfs_attrs: ConfigfsAttrs) -> proc_macro2::TokenStream {
++    let (container_ty, data_ty) = (&cfs_attrs.container, &cfs_attrs.data);
++
++    let data_tp_ident = Ident::new("DATA_TPE", cfs_attrs.data.span());
++    let data_attr_ident = Ident::new("DATA_ATTR_LIST", cfs_attrs.data.span());
++
++    let n = cfs_attrs.attributes.len() + 1;
++
++    let attr_list = quote! {
++        static #data_attr_ident: kernel::configfs::AttributeList<#n, #data_ty> =
++            // SAFETY: We are expanding `configfs_attrs`.
++            unsafe { kernel::configfs::AttributeList::new() };
++    };
++
++    let mut attrs = Vec::new();
++    for (attr_idx, (name, id)) in cfs_attrs.attributes.iter().enumerate() {
++        let name_with_attr = format_ident!("{}_ATTR_{}", name.to_string().to_uppercase(), attr_idx);
++
++        let id: u64 = match id.base10_parse::<u64>() {
++            Ok(v) => v,
++            Err(_) => {
++                return syn::Error::new(id.span(), "Could not parse attribute ID as a u64")
++                    .to_compile_error();
++            }
++        };
++
++        attrs.push(quote! {
++        static #name_with_attr: kernel::configfs::Attribute<#id, #data_ty, #data_ty> =
++            // SAFETY: We are expanding `configfs_attrs`.
++            unsafe {
++              kernel::configfs::Attribute::new(kernel::c_str!(::core::stringify!(#name)))
++            };
++
++          // SAFETY: By design of this macro, the name of the variable we
++          // invoke the `add` method on below, is not visible outside of
++          // the macro expansion. The macro does not operate concurrently
++          // on this variable, and thus we have exclusive access to the
++          // variable.
++          unsafe { #data_attr_ident.add::<#attr_idx, #id, _>(&#name_with_attr) }
++        });
++    }
++
++    let has_child_code = if let Some(child) = cfs_attrs.child {
++        quote! { new_with_child_ctor::<#n, #child>}
++    } else {
++        quote! { new::<#n> }
++    };
++
++    let data_type = quote! {
++        {
++            static #data_tp_ident:
++            kernel::configfs::ItemType<#container_ty, #data_ty> =
++                kernel::configfs::ItemType::<#container_ty, #data_ty>::#has_child_code(
++                    &THIS_MODULE, &#data_attr_ident
++                );
++            &#data_tp_ident
++        }
++    };
++
++    quote! {
++        {
++            #attr_list
++            #(#attrs)*
++            #data_type
++        }
++    }
++}
+diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+index d18fbf4daa0a..305dcbddf797 100644
+--- a/rust/macros/helpers.rs
++++ b/rust/macros/helpers.rs
+@@ -58,3 +58,142 @@ pub(crate) fn file() -> String {
+ pub(crate) fn gather_cfg_attrs(attr: &[Attribute]) -> impl Iterator<Item = &Attribute> + '_ {
+     attr.iter().filter(|a| a.path().is_ident("cfg"))
+ }
++
++/// Parse fields that are required to use a specific order.
++///
++/// As fields must follow a specific order, we *could* just parse fields one by one by peeking.
++/// However the error message generated when implementing that way is not very friendly.
++///
++/// So instead we parse fields in an arbitrary order, but only enforce the ordering after parsing,
++/// and if the wrong order is used, the proper order is communicated to the user with error message.
++///
++/// Usage looks like this:
++/// ```ignore
++/// parse_ordered_fields! {
++///     from input;
++///
++///     // This will extract `foo: <field>` into a variable named `foo`.
++///     // The variable will have type `Option<_>`.
++///     foo => <expression that parses the field>,
++///
++///     // If you need the variable name to be different than the key name.
++///     // This extracts `baz: <field>` into a variable named `bar`.
++///     // You might want this if `baz` is a keyword.
++///     baz as bar => <expression that parse the field>,
++///
++///     // You can mark a key as required, and the variable will no longer be `Option`.
++///     // foobar will be of type `Expr` instead of `Option<Expr>`.
++///     foobar [required] => input.parse::<Expr>()?,
++/// }
++/// ```
++macro_rules! parse_ordered_fields {
++    (@gen
++        [$input:expr]
++        [$([$name:ident; $key:ident; $parser:expr])*]
++        [$([$req_name:ident; $req_key:ident])*]
++    ) => {
++        $(let mut $name = None;)*
++
++        const EXPECTED_KEYS: &[&str] = &[$(stringify!($key),)*];
++        const REQUIRED_KEYS: &[&str] = &[$(stringify!($req_key),)*];
++
++        let span = $input.span();
++        let mut seen_keys = Vec::new();
++
++        while !$input.is_empty() {
++            let key = $input.call(Ident::parse_any)?;
++
++            if seen_keys.contains(&key) {
++                Err(Error::new_spanned(
++                    &key,
++                    format!(r#"duplicated key "{key}". Keys can only be specified once."#),
++                ))?
++            }
++
++            $input.parse::<Token![:]>()?;
++
++            match &*key.to_string() {
++                $(
++                    stringify!($key) => $name = Some($parser),
++                )*
++                _ => {
++                    Err(Error::new_spanned(
++                        &key,
++                        format!(r#"unknown key "{key}". Valid keys are: {EXPECTED_KEYS:?}."#),
++                    ))?
++                }
++            }
++
++            $input.parse::<Token![,]>()?;
++            seen_keys.push(key);
++        }
++
++        for key in REQUIRED_KEYS {
++            if !seen_keys.iter().any(|e| e == key) {
++                Err(Error::new(span, format!(r#"missing required key "{key}""#)))?
++            }
++        }
++
++        let mut ordered_keys: Vec<&str> = Vec::new();
++        for key in EXPECTED_KEYS {
++            if seen_keys.iter().any(|e| e == key) {
++                ordered_keys.push(key);
++            }
++        }
++
++        if seen_keys != ordered_keys {
++            Err(Error::new(
++                span,
++                format!(r#"keys are not ordered as expected. Order them like: {ordered_keys:?}."#),
++            ))?
++        }
++
++        $(let $req_name = $req_name.expect("required field");)*
++    };
++
++    // Handle required fields.
++    (@gen
++        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
++        $key:ident as $name:ident [required] => $parser:expr,
++        $($rest:tt)*
++    ) => {
++        parse_ordered_fields!(
++            @gen [$input] [$($tok)* [$name; $key; $parser]] [$($req)* [$name; $key]] $($rest)*
++        )
++    };
++    (@gen
++        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
++        $name:ident [required] => $parser:expr,
++        $($rest:tt)*
++    ) => {
++        parse_ordered_fields!(
++            @gen [$input] [$($tok)* [$name; $name; $parser]] [$($req)* [$name; $name]] $($rest)*
++        )
++    };
++
++    // Handle optional fields.
++    (@gen
++        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
++        $key:ident as $name:ident => $parser:expr,
++        $($rest:tt)*
++    ) => {
++        parse_ordered_fields!(
++            @gen [$input] [$($tok)* [$name; $key; $parser]] [$($req)*] $($rest)*
++        )
++    };
++    (@gen
++        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
++        $name:ident => $parser:expr,
++        $($rest:tt)*
++    ) => {
++        parse_ordered_fields!(
++            @gen [$input] [$($tok)* [$name; $name; $parser]] [$($req)*] $($rest)*
++        )
++    };
++
++    (from $input:expr; $($tok:tt)*) => {
++        parse_ordered_fields!(@gen [$input] [] [] $($tok)*)
++    }
++}
++
++pub(crate) use parse_ordered_fields;
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index 2cfd59e0f9e7..ebb41e80ecc7 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -15,6 +15,8 @@
+ #![cfg_attr(not(CONFIG_RUSTC_HAS_SPAN_FILE), feature(proc_macro_span))]
+ 
+ mod concat_idents;
++#[cfg(CONFIG_CONFIGFS_FS)]
++mod configfs_attrs;
+ mod export;
+ mod fmt;
+ mod helpers;
+@@ -489,3 +491,88 @@ pub fn kunit_tests(attr: TokenStream, input: TokenStream) -> TokenStream {
+         .unwrap_or_else(|e| e.into_compile_error())
+         .into()
+ }
++
++/// Define a list of configfs attributes statically.
++///
++/// # Examples
++///
++/// ```ignore
++/// let item_type = configfs_attrs! {
++///     container: configfs::Subsystem<Configuration>,
++///     data: Configuration,
++///     child: Child,
++///     attributes: [
++///         message: 0,
++///         bar: 1,
++///     ],
++/// };
++/// ```
++///
++/// Expands the following output:
++///
++/// ```ignore
++/// let item_type = {
++///         static DATA_ATTR_LIST: kernel::configfs::AttributeList<
++///             3usize,
++///             Configuration,
++///         > = unsafe { kernel::configfs::AttributeList::new() };
++///         static MESSAGE_ATTR_0: kernel::configfs::Attribute<
++///             0u64,
++///             Configuration,
++///             Configuration,
++///         > = unsafe {
++///             kernel::configfs::Attribute::new({
++///                 const S: &str = "message\u{0}";
++///                 const C: &kernel::str::CStr = match kernel::str::CStr::from_bytes_with_nul(
++///                     S.as_bytes(),
++///                 ) {
++///                     Ok(v) => v,
++///                     Err(_) => {
++///                         ::core::panicking::panic_fmt(
++///                             format_args!("string contains interior NUL"),
++///                         );
++///                     }
++///                 };
++///                 C
++///             })
++///         };
++///         unsafe { DATA_ATTR_LIST.add::<0usize, 0u64, _>(&MESSAGE_ATTR_0) }
++///         static BAR_ATTR_1: kernel::configfs::Attribute<
++///             1u64,
++///             Configuration,
++///             Configuration,
++///         > = unsafe {
++///             kernel::configfs::Attribute::new({
++///                 const S: &str = "bar\u{0}";
++///                 const C: &kernel::str::CStr = match kernel::str::CStr::from_bytes_with_nul(
++///                     S.as_bytes(),
++///                 ) {
++///                     Ok(v) => v,
++///                     Err(_) => {
++///                         ::core::panicking::panic_fmt(
++///                             format_args!("string contains interior NUL"),
++///                         );
++///                     }
++///                 };
++///                 C
++///             })
++///         };
++///         unsafe { DATA_ATTR_LIST.add::<1usize, 1u64, _>(&BAR_ATTR_1) }
++///         {
++///             static DATA_TPE: kernel::configfs::ItemType<
++///                 Subsystem<Configuration>,
++///                 Configuration,
++///             > = kernel::configfs::ItemType::<
++///                 Subsystem<Configuration>,
++///                 Configuration,
++///             >::new_with_child_ctor::<3usize, Child>(&THIS_MODULE, &DATA_ATTR_LIST);
++///             &DATA_TPE
++///         }
++///     };
++/// ```
++#[cfg(CONFIG_CONFIGFS_FS)]
++#[proc_macro]
++pub fn configfs_attrs(input: TokenStream) -> TokenStream {
++    configfs_attrs::configfs_attrs(parse_macro_input!(input as configfs_attrs::ConfigfsAttrs))
++        .into()
++}
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 06c18e207508..7ff6ad09b1a2 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -196,143 +196,6 @@ fn param_ops_path(param_type: &str) -> Path {
+     }
+ }
+ 
+-/// Parse fields that are required to use a specific order.
+-///
+-/// As fields must follow a specific order, we *could* just parse fields one by one by peeking.
+-/// However the error message generated when implementing that way is not very friendly.
+-///
+-/// So instead we parse fields in an arbitrary order, but only enforce the ordering after parsing,
+-/// and if the wrong order is used, the proper order is communicated to the user with error message.
+-///
+-/// Usage looks like this:
+-/// ```ignore
+-/// parse_ordered_fields! {
+-///     from input;
+-///
+-///     // This will extract "foo: <field>" into a variable named "foo".
+-///     // The variable will have type `Option<_>`.
+-///     foo => <expression that parses the field>,
+-///
+-///     // If you need the variable name to be different than the key name.
+-///     // This extracts "baz: <field>" into a variable named "bar".
+-///     // You might want this if "baz" is a keyword.
+-///     baz as bar => <expression that parse the field>,
+-///
+-///     // You can mark a key as required, and the variable will no longer be `Option`.
+-///     // foobar will be of type `Expr` instead of `Option<Expr>`.
+-///     foobar [required] => input.parse::<Expr>()?,
+-/// }
+-/// ```
+-macro_rules! parse_ordered_fields {
+-    (@gen
+-        [$input:expr]
+-        [$([$name:ident; $key:ident; $parser:expr])*]
+-        [$([$req_name:ident; $req_key:ident])*]
+-    ) => {
+-        $(let mut $name = None;)*
+-
+-        const EXPECTED_KEYS: &[&str] = &[$(stringify!($key),)*];
+-        const REQUIRED_KEYS: &[&str] = &[$(stringify!($req_key),)*];
+-
+-        let span = $input.span();
+-        let mut seen_keys = Vec::new();
+-
+-        while !$input.is_empty() {
+-            let key = $input.call(Ident::parse_any)?;
+-
+-            if seen_keys.contains(&key) {
+-                Err(Error::new_spanned(
+-                    &key,
+-                    format!(r#"duplicated key "{key}". Keys can only be specified once."#),
+-                ))?
+-            }
+-
+-            $input.parse::<Token![:]>()?;
+-
+-            match &*key.to_string() {
+-                $(
+-                    stringify!($key) => $name = Some($parser),
+-                )*
+-                _ => {
+-                    Err(Error::new_spanned(
+-                        &key,
+-                        format!(r#"unknown key "{key}". Valid keys are: {EXPECTED_KEYS:?}."#),
+-                    ))?
+-                }
+-            }
+-
+-            $input.parse::<Token![,]>()?;
+-            seen_keys.push(key);
+-        }
+-
+-        for key in REQUIRED_KEYS {
+-            if !seen_keys.iter().any(|e| e == key) {
+-                Err(Error::new(span, format!(r#"missing required key "{key}""#)))?
+-            }
+-        }
+-
+-        let mut ordered_keys: Vec<&str> = Vec::new();
+-        for key in EXPECTED_KEYS {
+-            if seen_keys.iter().any(|e| e == key) {
+-                ordered_keys.push(key);
+-            }
+-        }
+-
+-        if seen_keys != ordered_keys {
+-            Err(Error::new(
+-                span,
+-                format!(r#"keys are not ordered as expected. Order them like: {ordered_keys:?}."#),
+-            ))?
+-        }
+-
+-        $(let $req_name = $req_name.expect("required field");)*
+-    };
+-
+-    // Handle required fields.
+-    (@gen
+-        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
+-        $key:ident as $name:ident [required] => $parser:expr,
+-        $($rest:tt)*
+-    ) => {
+-        parse_ordered_fields!(
+-            @gen [$input] [$($tok)* [$name; $key; $parser]] [$($req)* [$name; $key]] $($rest)*
+-        )
+-    };
+-    (@gen
+-        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
+-        $name:ident [required] => $parser:expr,
+-        $($rest:tt)*
+-    ) => {
+-        parse_ordered_fields!(
+-            @gen [$input] [$($tok)* [$name; $name; $parser]] [$($req)* [$name; $name]] $($rest)*
+-        )
+-    };
+-
+-    // Handle optional fields.
+-    (@gen
+-        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
+-        $key:ident as $name:ident => $parser:expr,
+-        $($rest:tt)*
+-    ) => {
+-        parse_ordered_fields!(
+-            @gen [$input] [$($tok)* [$name; $key; $parser]] [$($req)*] $($rest)*
+-        )
+-    };
+-    (@gen
+-        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
+-        $name:ident => $parser:expr,
+-        $($rest:tt)*
+-    ) => {
+-        parse_ordered_fields!(
+-            @gen [$input] [$($tok)* [$name; $name; $parser]] [$($req)*] $($rest)*
+-        )
+-    };
+-
+-    (from $input:expr; $($tok:tt)*) => {
+-        parse_ordered_fields!(@gen [$input] [] [] $($tok)*)
+-    }
+-}
+-
+ struct Parameter {
+     name: Ident,
+     ptype: Ident,
+diff --git a/samples/rust/rust_configfs.rs b/samples/rust/rust_configfs.rs
+index a1bd9db6010d..876462f7789d 100644
+--- a/samples/rust/rust_configfs.rs
++++ b/samples/rust/rust_configfs.rs
+@@ -4,7 +4,7 @@
+ 
+ use kernel::alloc::flags;
+ use kernel::configfs;
+-use kernel::configfs::configfs_attrs;
++use kernel::macros::configfs_attrs;
+ use kernel::new_mutex;
+ use kernel::page::PAGE_SIZE;
+ use kernel::prelude::*;
+
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260417-configfs-syn-191e07130027
+
+Best regards,
+-- 
+Malte Wechter <maltewechter@gmail.com>
 
