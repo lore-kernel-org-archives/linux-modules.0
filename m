@@ -1,89 +1,89 @@
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3601FB1;
-	Sun, 21 Jun 2026 09:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE1F25A359;
+	Sun, 21 Jun 2026 19:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782033881; cv=none; b=sPZArFHTINnIHSZUAIbiBpiqhGMiSAaeqdZxxTRFOsogw08AsHsSsygfiis3yfsKiiHWD4WbSn0nTV+bnN6z48d4mXn5FyLNifuTlCZDXaY6ax1b2AGGCn5DcfOLIK2pDME0Bi20OitHTaYH8nYW7pTn/gYQEYqYsASiuVnSpB8=
+	t=1782071087; cv=none; b=qf2DHWCfQR2hj0kkaYHWnmJxa3GD8VzDiTTzf4BhKPV0jRsSGlDwZlnr+Z7kyPwz2BC7kCqjKYhSS7E+h/2TRHo6O8hnh5zyU9NVarvJxnDzdKAf4IsGP9swMhJd6FUzOMuPn/Pu967Gfa9bN131YS6iU3wp7QvSXAPLhE+JqaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782033881; c=relaxed/simple;
-	bh=v2tM3DiGb2IOSN/GEuMVCwJrzWhMuA1pi6P5MJ0Spq4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ARC3ZmbaV+AOd/wX1JP3Rz1dOAtzbYnY4Z7uPmyawCybJ7z4iWNxDXZGZK/NHw6O8InT3pQoGEGKcUo0Cy30N8onKUbCZAgap0HGLL4zlZ/UiV8flxTxpDKGibnA9NmmWI0a3lZugLGINNIrAAlKHWCjNmZ3Fghem/FGqqAgVoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=lR1ZyEXt; arc=none smtp.client-ip=101.71.155.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1782071087; c=relaxed/simple;
+	bh=cWeb52D/iFIsBIo/TMoeP1sMqPXvb1PWoaup82ZpGD4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dHxRLyxr4WxK5O6qfw+Mb2XFotR34oiwyZlb1xPP+Fa5IPfDA2NWB7wse5FPy3BOD4yWw+GdKEYbElqZh/VUxFkyqrc/pYfvwq+J3sE+GJd/BN7tVttRgthOBHouftkOcmzeBYwEmK7I5Dy+uxpBZMu3HAAnkmZtKTl4s38fHhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=p6/gGHRR; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="lR1ZyEXt"
-Received: from PC-202605011814.localdomain (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 4324d7652;
-	Sun, 21 Jun 2026 17:19:24 +0800 (GMT+08:00)
-From: Runyu Xiao <runyu.xiao@seu.edu.cn>
-To: mcgrof@kernel.org
-Cc: petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Runyu Xiao <runyu.xiao@seu.edu.cn>
-Subject: [PATCH] module: annotate failed-module stats list traversal
-Date: Sun, 21 Jun 2026 17:19:05 +0800
-Message-Id: <20260621091905.3555074-1-runyu.xiao@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="p6/gGHRR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=/ge2LfSi6SJh6RtEJ8h4K8CBdMsdzcj8v9US9u9tAME=; b=p6/gGHRRYwZ0NBH1mtYTaeLMDi
+	t4IoVciv5phPW5zruwCN2D0jghDWwx8dHydqy2bB64+hV3pvLix5ohMS3DBe6ZTmtawRf+X7RQSQu
+	lRfio7rD4H32Bx4/KurUKu8i+nkFg6ukxj8PUISP9Ixm9wPXug3FoGXj/3kHHeVO3wQtaUS4lssHE
+	0cK9ZKoiQ8grnUOgvj1/LfxnZlpYIwQrAv+I+tosZz3GbRhWRa7dQkmIznl/NUGDeC+j+bJj8bEWf
+	O98JaGBnIljn/NdkPd6KpJCCAORqL0aA/JvLoROSyolwrLtFtS33AnmIVz8AM+6J9qscAQkTOCRV/
+	0h+LzqUw==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wbO60-000000048Gq-1Xq4;
+	Sun, 21 Jun 2026 19:44:44 +0000
+Message-ID: <9069a13d-bed2-4e1b-9675-4c6bfe42e4f2@infradead.org>
+Date: Sun, 21 Jun 2026 12:44:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9ee97a434f03a1kunm5970f65011c425
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCTR1KVh5OSk9MHUlJSksYQ1YeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhOQ0
-	NVSktLVUtZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=lR1ZyEXtT2aGJDJMhYlnIcnAreUb1AfPppiUo9IJr9u4ZEc7do+kaoJ4lYIuaxlr/u6yWR60nyGuYa1nmc6sLiuE02G1awqo2JlPacDBDoNo40rc+6QPs9TWle2cdu2g4aFbnwTla7Gc7OjuKeOAjcIZ5zA66EoHEfHCgxg9feE=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=vH/FPjRiOjSC3aqZ1dHTDnuT/XrYbYtPcR0KJ0CoXPY=;
-	h=date:mime-version:subject:message-id:from;
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] params: fix path of /sys/module/XYZ/parameters/ in
+ comment
+To: Zenghui Yu <zenghui.yu@linux.dev>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
+ samitolvanen@google.com, atomlin@atomlin.com
+References: <20260621082223.11439-1-zenghui.yu@linux.dev>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260621082223.11439-1-zenghui.yu@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-read_file_mod_stats() dumps dup_failed_modules while holding
-module_mutex, but the loop uses list_for_each_entry_rcu() without
-telling lockdep about that non-RCU protection.
 
-The same list is already traversed in try_add_failed_module() with
-lockdep_is_held(&module_mutex) as the RCU-list lockdep condition. Use
-the same condition for the debugfs stats dump so CONFIG_PROVE_RCU_LIST
-can see the documented protection.
 
-This was found by our static analysis tool and then manually reviewed
-against the current tree. The dynamic triage evidence is a
-target-matched CONFIG_PROVE_RCU_LIST warning; the change is limited
-to documenting the existing protection contract.
+On 6/21/26 1:22 AM, Zenghui Yu wrote:
+> The comment wrongly references to /sys/modules/XYZ/parameters/ directory
+> instead of /sys/module/XYZ/parameters/. Fix it.
+> 
+> Signed-off-by: Zenghui Yu <zenghui.yu@linux.dev>
 
-This is a lockdep annotation cleanup. It does not change the list
-lifetime or serialization rules.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks.
 
-Signed-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>
----
- kernel/module/stats.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> ---
+> 
+> kernel/params.c is not covered by any MAINTAINERS entry. I assume it should
+> be a "MODULE SUPPORT" stuff?
+> 
+>  kernel/params.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/params.c b/kernel/params.c
+> index a668863a4bb6..3456b104efc9 100644
+> --- a/kernel/params.c
+> +++ b/kernel/params.c
+> @@ -538,7 +538,7 @@ const struct kernel_param_ops param_ops_string = {
+>  };
+>  EXPORT_SYMBOL(param_ops_string);
+>  
+> -/* sysfs output in /sys/modules/XYZ/parameters/ */
+> +/* sysfs output in /sys/module/XYZ/parameters/ */
+>  #define to_module_attr(n) container_of_const(n, struct module_attribute, attr)
+>  #define to_module_kobject(n) container_of(n, struct module_kobject, kobj)
+>  
 
-diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-index 3ba0e98b3c91..79c227a72a21 100644
---- a/kernel/module/stats.c
-+++ b/kernel/module/stats.c
-@@ -382,7 +382,8 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 	mutex_lock(&module_mutex);
- 
- 
--	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list) {
-+	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list,
-+				lockdep_is_held(&module_mutex)) {
- 		if (WARN_ON_ONCE(++count_failed >= MAX_FAILED_MOD_PRINT))
- 			goto out_unlock;
- 		len += scnprintf(buf + len, size - len, "%25s\t%15lu\t%25s\n", mod_fail->name,
 -- 
-2.34.1
-
+~Randy
