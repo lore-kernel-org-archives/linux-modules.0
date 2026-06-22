@@ -1,198 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7619F3AEB4A
-	for <linux-modules@vger.kernel.org>; Mon, 22 Jun 2026 14:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AC01FA859
+	for <linux-modules@vger.kernel.org>; Mon, 22 Jun 2026 19:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782137869; cv=none; b=CUZgzf4yrx/lcWZZv+k/eLlBtsqCaKxUZvCyZxH6ACR9DUi6EU39vvR9e5A3V4PH/i3/WFuHwkDh3x+dYILpqK1ptNbMTdH3oegwdGutlUKsct2JgfD1B95uHRSR1YmHJAVzhM8cxagFi2evtdiZv4c5+z02FaKRbtqDs/sdKCU=
+	t=1782155035; cv=none; b=KhSNhUmuQ+uttCkbwIQjdJJhMtDCWKEJhnoM7HJ/35bymYHNdoXlzQQHNxvgymRpSPWXa2OIytQp/GqVePz8H5xGAwN1saC6Qvvnu5dUfQ7bY6cl7mJo0+ya778+CoBoQ0/EA+XtpWh8UTD38g6OofjEjpRh3bF4PksVaYaOqTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782137869; c=relaxed/simple;
-	bh=RbAP7CCT+ZQgGyCMoN/9Z7myE+mmWAbElbfWbdZNqZk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=M0GXmGyP4ralsHqy0D9H+4PVOHKStU8Ehgn3BuEQ92pkSL7skIL4v0QBt45AeO/wAx3Ai2psUYRHRIvn4YjJOyFCTShbRwLz0exgFOCS7G0m6zv7AEYBdI2qO2vVB6yhMxllCC3iM5/+hDB2sYCe5UV+DaYPK9wiWqHD6Ijay8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AKdAsbEU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782155035; c=relaxed/simple;
+	bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=F8XfVL0JZ538CgPlZZ6gTwgXnmVB9ai4mZT3t1gMO6BPYUtw2388vIUWmpZznH1Dj0dJogIn7puvJzwM7ArdqI14JFbleRUG40v5PtlDBJDSbFM/mh/AiYWjjSf/czbsoV88jOVeZmoTT46RlJfsfymDWqgeShcCXivAPi2Q/gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LFiZE21b; arc=none smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AKdAsbEU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB5D1F000E9;
-	Mon, 22 Jun 2026 14:17:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782137868;
-	bh=03jKoFkEQ9vkVQu4uWynUF4RFu+R9x7172yp8Cu6Mhc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AKdAsbEUzeHQoNEE1tOCesIT5V+3dQrJIfWv9F6zG7GTBy1YGwTg84X3FQ5DI8kKU
-	 bIKCJkfHOIrjdL1eLBmT/ieoOQsisxd0Hvtr2heJvh5O8ifjzmT5YiyJXCmb40uuAz
-	 JYJeZno2iu2YEdrbWQ9YKo0/xtgGS0qi7TQWPAVVF6K7BQYnf6UjpjXFhBm16a/Bdr
-	 Ew1EQyV7jdbobh+mtDJ/XMV3M6QdAU9nNrmmtrNgQU4j2d2twj6ReY4fnw/ez0/KZI
-	 H2jzOoG18pShNSc3AwVLfw3QkryLEHqHrXx6AXgY3lHBjMf76Z45sbST+sTDxJVxW+
-	 gCmP7KAySQIaA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] module: Extend module_blacklist parameter to
- built-in modules
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Aaron Tomlin" <atomlin@atomlin.com>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260622140259.2974-1-atomlin@atomlin.com>
-References: <20260622140259.2974-1-atomlin@atomlin.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFiZE21b"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-3042a388168so186227eec.1
+        for <linux-modules@vger.kernel.org>; Mon, 22 Jun 2026 12:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782155033; x=1782759833; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
+        b=LFiZE21bJOd27mvhUeQY65zQorGfroSNylZhnl5pr3qjxqG/eN1p6cReYMi7Y8XHb0
+         7P2yUKScTc7SL9KBMwdl8WT1nEKnGZf9ur45NKJJuEmRNsVr4TarSwghnJCBC39U5FT/
+         hbLMbAuZB7Uhid7P768tqQ5oB5rNa0UgEghjqL8I6E/OiecFdkW7XXJUCVzAvM2Bcvqj
+         aAAg70ofC8G+A3+uW7Vx2nk3e0tc12ATFJvEbWA6+4EjPe4CrUqJXP2Emg2HT57KZ67b
+         LsX6aiKqdjYFThFXLMKvM5eHENHiOf+kS4D8rdkQabgcObx3aWN/R9FVWrU0LGgqTlRe
+         mYGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782155033; x=1782759833;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
+        b=m6zNvKPtLVyoNgBL20k3iX2XTQDE09Gih0wDD1wyT1TXlF/DPhng89dEKl/jlsGrAf
+         7UggxhTmfG/CqvhDU6kfgGlAE1KSPUrSsr33Ne8vxW8+ke5D42U9hxloyv4VPdcm89vb
+         h33O2luWbmNd0tv3nCnnagFLa95lY9xpgM5/GuyiusPsLi/NGlsU1HpG9D24AUOwxHdB
+         9ClSG/rHDdkLrPwW92jIx2xbw2e/YtYw0fb2Z2NaHv3CI6BAx7SVyvTln28Ii/XskW17
+         iSjPLwNTnzRPfvgWX8o5RL3VqgKySCFnMecZMxIxtq+LKnc/0sGr7nW8nu9sXpYBOT5q
+         TlhQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr4C8X1pFCPUVryc7WHGun0Vr5i0AEXQ9ymv4/vosB4r2eZERkwzKwuuamUy/3NDitCa1ERfFG9Q1P07X97@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIeaFYu4cVt3Bs2zd7Es+bN19dYE7ABOhNDSfq/zS2BkJlYuTk
+	aLGB5I2sL/61QCHwGBKDJsm+WvhTePeIL1meY/dzpfhssnPvqFy+SA2B
+X-Gm-Gg: AfdE7cl2ymSOJaZFnxcP4syGaRyrxHJ1c71Z6MnHwWsbjBLfaNmCKDxNzNyM9zkLRkV
+	RSVsoVifAwLm1nKGs+wMDix9977diVzUovRnj1yUjJLCz+DNO1qZOW1TFSYmZz23YEnIBsPnkOw
+	kyag9A9AYTY4/E2NUm5BoJ9pWquEiiDBqqaVbIdTKQ5L43NIV7kolCccHFsx+Zsvy2ZRd2IQ/Eg
+	nRolMuxZP/OPzQcyu9UHLa/ElFcgwfauQVtiAkC9OdAWSRT7j4v6ckzwEK2W9Npjdenh1uzuNQo
+	TVsPwKz77UIYXDtdvzgCIPvMEf94H9+zYXvngLHHORDUSl4zYxwRFgwrv2kBS0SZWNtkw0+tj9u
+	po+X84HNEE5fS4qcO+QFvvfiaOSH1RmtAzbmpuikMC4W0GxTfKGFW51z1pyD6kfKfxgJWmbQbPf
+	kiYWvtBLKS5rgyyxS7CqZJHYWFc0fXvp7IFv5wSQxyKmDiXGBdmZu9UOsCSm7GoBBiaJc=
+X-Received: by 2002:a05:693c:2887:b0:30b:cc4e:6396 with SMTP id 5a478bee46e88-30c5553b105mr382073eec.7.1782155033135;
+        Mon, 22 Jun 2026 12:03:53 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:6e2:c699:67c:63fe? ([2620:10d:c090:500::1:5387])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1be4967fsm10549199eec.26.2026.06.22.12.03.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 12:03:52 -0700 (PDT)
+Message-ID: <1979fc81ae7bdaabda8616cd9698a40ef8bbfaee.camel@gmail.com>
+Subject: Re: [PATCH v3 5/7] kernel: Use mutable list iterators
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kaitao Cheng <kaitao.cheng@linux.dev>, Paul Moore <paul@paul-moore.com>,
+  Eric Paris <eparis@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann	 <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S.
+ Miller" <davem@davemloft.net>, Jakub Kicinski	 <kuba@kernel.org>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, John Fastabend	
+ <john.fastabend@gmail.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner	
+ <hannes@cmpxchg.org>, Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>, 
+ Maarten Lankhorst	 <dev@lankhorst.se>, Maxime Ripard <mripard@kernel.org>,
+ Natalie Vock	 <natalie.vock@gmx.de>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar	 <mingo@redhat.com>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim	 <namhyung@kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Oleg Nesterov	 <oleg@redhat.com>, Peter
+ Oberparleiter <oberpar@linux.ibm.com>, Andrew Morton	
+ <akpm@linux-foundation.org>, Baoquan He <baoquan.he@linux.dev>, Mike
+ Rapoport	 <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Pratyush Yadav	 <pratyush@kernel.org>, Naveen N Rao <naveen@kernel.org>,
+ Josh Poimboeuf	 <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+ Miroslav Benes	 <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Will
+ Deacon <will@kernel.org>,  Boqun Feng <boqun@kernel.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,  Daniel Gomez
+ <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Steffen
+ Klassert	 <steffen.klassert@secunet.com>, Daniel Jordan
+ <daniel.m.jordan@oracle.com>,  "Rafael J. Wysocki"	 <rafael@kernel.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, "Paul E. McKenney"	
+ <paulmck@kernel.org>, Josh Triplett <josh@joshtriplett.org>, Frederic
+ Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes	 <joelagnelf@nvidia.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Juri Lelli	 <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Kees Cook <kees@kernel.org>,
+ Balbir Singh <bsingharora@gmail.com>, Anna-Maria Behnsen	
+ <anna-maria@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, John Stultz	
+ <jstultz@google.com>, KP Singh <kpsingh@kernel.org>, Matt Bobrowski	
+ <mattbobrowski@google.com>, Nathan Chancellor <nathan@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>,  Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, David Vernet	 <void@manifault.com>, Steven
+ Rostedt <rostedt@goodmis.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, 	netdev@vger.kernel.org, cgroups@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, 	linux-perf-users@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, 	kexec@lists.infradead.org,
+ live-patching@vger.kernel.org, 	linux-modules@vger.kernel.org,
+ linux-crypto@vger.kernel.org, 	linux-pm@vger.kernel.org,
+ rcu@vger.kernel.org, sched-ext@lists.linux.dev, 	llvm@lists.linux.dev,
+ Kaitao Cheng <chengkaitao@kylinos.cn>
+Date: Mon, 22 Jun 2026 12:03:46 -0700
+In-Reply-To: <20260622042811.31684-1-kaitao.cheng@linux.dev>
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+	 <20260622042811.31684-1-kaitao.cheng@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 22 Jun 2026 14:17:47 +0000
-Message-Id: <20260622141748.0AB5D1F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Critical] Accessing the .initcall.modnames array during loadable module =
-initialization reads freed .init memory, causing a Use-After-Free.
-- [High] Built-in module blacklisting silently bypasses or fails to compile=
- under CONFIG_LTO_CLANG / CONFIG_CFI_CLANG due to function pointer mismatch.
-- [Low] Kernel build fails when CONFIG_MODULES is disabled due to missing m=
-odule_is_blacklisted() definition.
---
+On Mon, 2026-06-22 at 12:28 +0800, Kaitao Cheng wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>=20
+> The safe list iteration helpers require callers to provide a temporary
+> cursor even when the cursor is only used internally by the loop. This
+> leaves many functions with otherwise unused variables whose only purpose
+> is to satisfy the old iterator interface.
+>=20
+> Use the mutable list iteration helpers for those cases. The mutable
+> helpers keep the same removal-safe traversal semantics, while allowing
+> the temporary cursor to be internal to the macro when the caller does
+> not need to observe it.
+>=20
+> Convert list, hlist and llist users under kernel/ where the temporary
+> cursor is not used outside the iteration. Keep the explicit cursor form
+> where the next entry is still needed by the surrounding code.
+>=20
+> No functional change intended.
+>=20
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
 
-commit 5c29fcaa43d56c5e3cb5426f55d85a536519732f
-Author: Aaron Tomlin <atomlin@atomlin.com>
+Beside the fact that this does not apply,
+I don't see a reason why is this needed for BPF sub-tree.
 
-module: Extend module_blacklist parameter to built-in modules
-
-This patch extends the module_blacklist parameter to intercept and prevent
-the initialization of built-in modules during system boot. It creates a
-.initcall.modnames section mapping initcalls to module names, using 32-bit
-relative offsets to preserve KASLR.
-
-Link: https://lore.kernel.org/lkml/20260510061301.41341-1-atomlin@atomlin.c=
-om/
-
-> diff --git a/include/linux/init.h b/include/linux/init.h
-> index 40331923b9f4a..212f64a07c739 100644
-> --- a/include/linux/init.h
-> +++ b/include/linux/init.h
-
-[ ... ]
-
-> @@ -270,9 +280,26 @@ extern struct module __this_module;
->  		__initcall_stub(fn, __iid, id),			\
->  		__initcall_name(initcall, __iid, id),		\
->  		__initcall_section(__sec, __iid))
-> +#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-> +#define ___define_initcall(fn, id, __sec)				\
-> +	__unique_initcall(fn, id, __sec, __initcall_id(fn));		\
-> +	asm(".pushsection \".initcall.modnames\", \"a\"\n"		\
-> +	    ".balign 4\n"						\
-> +	    ".long " #fn " - .\n"					\
-
-[Severity: High]
-When compiled with CONFIG_LTO_CLANG or CONFIG_CFI_CLANG, the kernel wraps
-initcalls in an __initcall_stub function, and stores the stub's address in
-the initcall array.
-
-Since ___define_initcall explicitly stores the original function's address
-here, will initcall_get_modname() fail to match the runtime CFI/LTO stub
-address passed by do_one_initcall()?
-
-Also, could using #fn in inline assembly for a static function renamed by
-LTO cause an undefined reference link error?
-
-> +	    ".long __initcall_modstr_" #fn #id " - .\n"			\
-> +	    ".popsection\n"						\
-> +	    ".pushsection .init.rodata, \"a\"\n"			\
-> +	    "__initcall_modstr_" #fn #id ": .string \"" KBUILD_MODNAME "\"\n" \
-> +	    ".popsection\n");
-
-[ ... ]
-
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index d80c3ea574726..21668ef1430a5 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -754,6 +754,8 @@ void *dereference_module_function_descriptor(struct m=
-odule *mod, void *ptr);
->  int register_module_notifier(struct notifier_block *nb);
->  int unregister_module_notifier(struct notifier_block *nb);
-> =20
-> +extern bool module_is_blacklisted(const char *module_name);
-
-[Severity: Low]
-Does this cause a build failure when CONFIG_MODULES is disabled?
-
-The function module_is_blacklisted() is defined in kernel/module/main.c,
-but it is declared here unconditionally and called from do_one_initcall()
-in init/main.c. If CONFIG_MODULES is disabled, could the linker fail with
-an undefined reference?
-
-> +
->  extern void print_modules(void);
-
-[ ... ]
-
-> diff --git a/init/main.c b/init/main.c
-> index b84818ad9685f..ce6d769b99e17 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -1365,12 +1365,39 @@ static inline void do_trace_initcall_level(const =
-char *level)
->  }
->  #endif /* !TRACEPOINTS_ENABLED */
-> =20
-> +extern struct initcall_modname __start_initcall_modnames[];
-> +extern struct initcall_modname __stop_initcall_modnames[];
-> +
-> +static const char *initcall_get_modname(initcall_t fn)
-> +{
-> +	struct initcall_modname *p;
-> +
-> +	for (p =3D __start_initcall_modnames; p < __stop_initcall_modnames; p++=
-) {
-> +		if (initcall_from_entry(&p->initcall_fn) =3D=3D fn) {
-> +#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-> +			return (const char *)offset_to_ptr(&p->modname_offset);
-> +#else
-> +			return p->modname;
-> +#endif
-> +		}
-> +	}
-> +	return NULL;
-> +}
-> +
->  int __init_or_module do_one_initcall(initcall_t fn)
->  {
->  	int count =3D preempt_count();
->  	char msgbuf[64];
-> +	const char *modname;
->  	int ret;
-> =20
-> +	modname =3D initcall_get_modname(fn);
-
-[Severity: Critical]
-Is there a use-after-free risk here when loading dynamic modules?
-
-The .initcall.modnames section is placed in INIT_DATA_SECTION, mapping it to
-.init.data. Memory in the .init.* sections is freed by free_initmem() after
-the system boots.
-
-Since do_one_initcall() is marked __init_or_module, it is also called by
-do_init_module() whenever a loadable module is initialized after boot:
-
-do_init_module()
-  do_one_initcall()
-    initcall_get_modname()
-
-Does this unconditionally iterate over the __start_initcall_modnames array
-residing in the freed .init.data section?
-
-> +	if (modname && module_is_blacklisted(modname)) {
-> +		pr_info("Skipping initcall for blacklisted built-in module %s\n",
-> +			modname);
-> +		return 0;
-> +	}
-> +
->  	if (initcall_blacklisted(fn))
->  		return -EPERM;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260622140259.2974=
--1-atomlin@atomlin.com?part=3D1
+[...]
