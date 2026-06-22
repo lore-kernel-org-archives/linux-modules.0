@@ -1,126 +1,120 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0D435E93B
-	for <linux-modules@vger.kernel.org>; Mon, 22 Jun 2026 06:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095D1238159;
+	Mon, 22 Jun 2026 08:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782111358; cv=none; b=YiCkrMhe44VypC5YMCjeywprezaEB01s7wNb7PXCmII7Lde19hVqK4HelR1GW88zCxItwfUKQvzm40TOAJfPaDUpUUmh5VtKndbCjzqKcVNcZXK4CWpi120pQGnaUtGhWf2hmmIWHvTRgAgDXCYGKyo5Q4dTZfTsN9ZlZaF4AfE=
+	t=1782117471; cv=none; b=Qf/0kATbivMuVZTC6NRp2yVNhBpSATd8UW97WNTco9HX1Vnr66h+qf/rKmEYtJSoNhSlrdxZqR/4BgBfZveqjWWGbFFp13a65rYd0ifw15wgWQItntZCeFzTa/FI4QcnIp9IO1Hh2RP3AqPgdowisEb+rCmTsMZff1bZBexCAB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782111358; c=relaxed/simple;
-	bh=LobeI6BatW/+X4E0fI8DO3vMW5iN/E/V97YIWdhrcDo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SFuX9MoMWKVYzzq6wsvpeFPVQhdEPv9pXT4DEd21tnj/osQSo0M3pDMXbNMCKCSF0GYMf1TbDD5R1liZERfo8V2q+uMcch92Nj6kJo1MWUDfBXmgXu6xo7vlwDqtnk4Fo2Vg4XM6Y7v8HqcF/zcwLR5RzAxrIAJthJQXVCH+CsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Nm0B2Ypz; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1782117471; c=relaxed/simple;
+	bh=o0XPey02pNHXumHWa6TQBgjgCeS/R84YiOVlMcvQRTw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kdsgHnVGCzUbVL9DRipZrLUJnChZekP9N+jzeqr/olTe2w18p91Hmi9jWv+qibOuHS32MTpVtRMM4VQ8JRah1snf3S7sR+7kCw94jccFu7cakKpp6WTQgRT4wbX8aImb3bj9j8yTyTEHqLYrq0il7V0AGWb3j2nF6YcGm0Tks/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lwi+leCq; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Nm0B2Ypz"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-490b64c8311so38380605e9.3
-        for <linux-modules@vger.kernel.org>; Sun, 21 Jun 2026 23:55:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1782111355; x=1782716155; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NCxlVcySBiicleY7qeBVFRSV3oYj70sPP3NaBi6h7e4=;
-        b=Nm0B2Ypz81abGlsvNG2lcGu/zGwU32M0N0wHb+9yD0EcOtmilFrEaBPJg97+6dgYL0
-         dfCHZs3De6KoFbaPEI8MI6EPlb/IkefgmBJoVUBuaDu5VGcPBRypngohK3MJzwf0dSwb
-         pXF1W3w4mZgPH9rK72KB4+UA61HiRdhEuUlghg47wjMiqCtiuR7qqhB3N8+IZ/FCqOcA
-         ZfImPLZssmMbzqeDjpd8/kPQh3q8xaxm++Xn4jDob0AXe6TqfWNXSFzJAVXuVNwRq5UC
-         D05YEMigCNxLEG/oLuIrFroi/76Ppt3mQ3VYc/pbt71TJleGJ3G1l9wS+zYlaID8Ixvn
-         9eNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782111355; x=1782716155;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NCxlVcySBiicleY7qeBVFRSV3oYj70sPP3NaBi6h7e4=;
-        b=F9oI3Kms/jVUi8/WM3PG1gLE0XIv7l+Evh1IU1mZlKSnVnD1vsUOhuswYY6ZBeFitX
-         nlgZd6VcG5fPTBTcUGOGMxWlxbVs+ncbsPkm/4d7uXwl6xwy+FbimIkmVE6w5g3DvuMP
-         BOIoxIU64zMMLy1uRbZ1LEcABhW7SKOi0TGtyipERMgw3L1ZTgIttpWUJRKO71Er1Aa2
-         /a2LL7n+AO/UiC1CEL+orTrXthHXW4/eAMRFnwqOGRgYmNz5ZaGdHPcLxzMnQ6Dn77vY
-         nt1HDOPZMiMRhgb9kGj1fyLrRz6UuVV/XUg2MiGX55aBmjy8fAwq+YWvS5AFbgrHV/L1
-         C3qQ==
-X-Forwarded-Encrypted: i=1; AFNElJ90qPsRGVoqyBN8wkF9965oD051HNG8DbCNZoT/3IRO5j8diljIbsUwVwR4l3Q/uS03AcAss1mdXPvfHJXu@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFJdOmzjUC0utd2JFJsvSPNy7DFH7xvUrCiJo0VdMrVqNEiq6D
-	mS3bCT2kqas+cLoeALORQ+OhMQEUKDH0ciDHMfEdJ3IeMNSaC7+TV64rzH9Y3kLrao4=
-X-Gm-Gg: AfdE7ckELhl4z+M4bXQE3HMPKeKNDBzPs7NCe89Ar7Efud5DPk40WPQ+5H0fhvFoQKr
-	91Q2WRCqKKB2LpaMPWbiGZt5rw1xAE+n1uD+Bd6RgALcps9JYXa+Ztt7uoX4v5PTrXxUdfsKv/N
-	VLqStY6VSKHePUFKDcB6aNufdaKgBq2rLGBRmT7vowLHjMt/j6VPWPjvg6BoVNgGlBBGEz9Ylcr
-	gFSf5BidrvhctGHImAJPZEWfE+Gs6ICShVnKHoESMBGEVDaEwB7BuFRz+FEkHDY7mtpvaxouX7e
-	OVCwasm4er9Zk56VITAM9RT/uPl3UHHoQK1JyMEvHhw6R99Q1/Y+aZAXCnCJooMWXv3kOK/Lx0u
-	zr0Qy0219ORdpVxQ9USJq5SfobexyxS3BymTHXgDwJC8hrF3PSM8qwdoJAvteKH4tWtC+b5lvRM
-	nLmOXCPa2cGejFjRl0/xXFmuBsF9f3uqun6sR42kDmw9B+5gJjjZNsXaZbl7u6mGKEQyIXhF5of
-	fNI8uNZo4iNkAcshLd62BRkzSrtgdPk/p0+84xpkBWyneMVqbPQ9+vIEHdIFlFWEhcJ9w==
-X-Received: by 2002:a05:600c:e555:10b0:490:e5c1:b8c6 with SMTP id 5b1f17b1804b1-49240dfd165mr151460045e9.8.1782111355381;
-        Sun, 21 Jun 2026 23:55:55 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd30078sm269910715e9.7.2026.06.21.23.55.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Jun 2026 23:55:54 -0700 (PDT)
-Message-ID: <31db63df-0a81-45db-97de-67bbe1a1be2a@suse.com>
-Date: Mon, 22 Jun 2026 08:55:54 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lwi+leCq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782117469; x=1813653469;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=o0XPey02pNHXumHWa6TQBgjgCeS/R84YiOVlMcvQRTw=;
+  b=lwi+leCqmYWmuFst6FQBZ5DAHNBzvjzKOvdFm9YAWYeck1lFLPstlLLE
+   HfvGplF7vI7ppon4Tfz83R0sJ7Q6UnhkB/puK65jNkqLWlw+oi1UKW+D2
+   dmHcxGUFHvd15Dc0mMhfGhhAkaz7ESnKhl+LjgjHZNbe03xX5s2/kyNKX
+   T2bQkviWBa+gpSAAvQYc38+tPbNSKQi5BFa0ScUd3NRX/apt0d888B4Lh
+   XD1X3LFU5Ma16ZgS00f+GAY92w+Y1DarSdKVL2ZmHgWSG3tOfzLz3BQvQ
+   ft49GdYMp53Vh5tvIMO+kqgJGdj8W04FzLYd7CsN+FVf6+Cmg2mV7j/HT
+   A==;
+X-CSE-ConnectionGUID: MUrLK/3DQ/+jOxbEeduDLw==
+X-CSE-MsgGUID: jN0ZpEg6Tg+TQc4Ge4NM4g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11824"; a="82844719"
+X-IronPort-AV: E=Sophos;i="6.24,218,1774335600"; 
+   d="scan'208";a="82844719"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 01:37:48 -0700
+X-CSE-ConnectionGUID: 51x2ahlxRfadoXyoUtL0hA==
+X-CSE-MsgGUID: PGIuZ8mzSP2g3MT4S82HXw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,218,1774335600"; 
+   d="scan'208";a="254255860"
+Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.245.82])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 01:37:33 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Kaitao Cheng <kaitao.cheng@linux.dev>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, Jens
+ Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Juri Lelli
+ <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
+ Paul Moore <paul@paul-moore.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, Christian
+ =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: David Howells <dhowells@redhat.com>, Simona Vetter
+ <simona.vetter@ffwll.ch>, Randy Dunlap <rdunlap@infradead.org>, Luca
+ Ceresoli <luca.ceresoli@bootlin.com>, Philipp Stanner <phasta@kernel.org>,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+ linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+ audit@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-perf-users@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, kexec@lists.infradead.org,
+ live-patching@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+ rcu@vger.kernel.org, sched-ext@lists.linux.dev, linux-mm@kvack.org,
+ virtualization@lists.linux.dev, damon@lists.linux.dev,
+ llvm@lists.linux.dev, chengkaitao <chengkaitao@kylinos.cn>
+Subject: Re: [PATCH v3 0/7] Prepare mutable list iterators to cache cursor
+ state
+In-Reply-To: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park,
+ 6 krs Bertel Jungin Aukio 5, 02600 Espoo, Finland
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+Date: Mon, 22 Jun 2026 11:37:29 +0300
+Message-ID: <88f34c7fa5a3d1700cc8005818751d6aa31f09df@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module: annotate failed-module stats list traversal
-To: Runyu Xiao <runyu.xiao@seu.edu.cn>
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260621091905.3555074-1-runyu.xiao@seu.edu.cn>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260621091905.3555074-1-runyu.xiao@seu.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 6/21/26 11:19 AM, Runyu Xiao wrote:
-> read_file_mod_stats() dumps dup_failed_modules while holding
-> module_mutex, but the loop uses list_for_each_entry_rcu() without
-> telling lockdep about that non-RCU protection.
-> 
-> The same list is already traversed in try_add_failed_module() with
-> lockdep_is_held(&module_mutex) as the RCU-list lockdep condition. Use
-> the same condition for the debugfs stats dump so CONFIG_PROVE_RCU_LIST
-> can see the documented protection.
-> 
-> This was found by our static analysis tool and then manually reviewed
-> against the current tree. The dynamic triage evidence is a
-> target-matched CONFIG_PROVE_RCU_LIST warning; the change is limited
-> to documenting the existing protection contract.
-> 
-> This is a lockdep annotation cleanup. It does not change the list
-> lifetime or serialization rules.
-> 
-> Signed-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>
-> ---
->  kernel/module/stats.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-> index 3ba0e98b3c91..79c227a72a21 100644
-> --- a/kernel/module/stats.c
-> +++ b/kernel/module/stats.c
-> @@ -382,7 +382,8 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
->  	mutex_lock(&module_mutex);
->  
->  
-> -	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list) {
-> +	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list,
-> +				lockdep_is_held(&module_mutex)) {
->  		if (WARN_ON_ONCE(++count_failed >= MAX_FAILED_MOD_PRINT))
->  			goto out_unlock;
->  		len += scnprintf(buf + len, size - len, "%25s\t%15lu\t%25s\n", mod_fail->name,
+On Mon, 22 Jun 2026, Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+> Add *_mutable() iterator variants for list, hlist and llist.  The new
+> helpers are variadic and support both forms.  In the common case, the
+> caller omits the temporary cursor and the macro creates a unique internal
+> cursor with typeof(pos) and __UNIQUE_ID().  If a loop really needs an
+> explicit temporary cursor, the caller can still pass it and the helper
+> keeps the existing *_safe() behaviour.
+>
+> For example, a call site may use the shorter form:
+>
+>   list_for_each_entry_mutable(pos, head, member)
+>
+> or keep the explicit temporary cursor form:
+>
+>   list_for_each_entry_mutable(pos, tmp, head, member)
 
-The same fix was posted previously in:
-https://lore.kernel.org/linux-modules/e4za26n3jj3366oqt47hdwfze2rvsyjcujjhjj4jvbtihkleg6@kxasstqoia22/
+I'm unconvinced it's a good idea to allow two forms with macro trickery,
+*especially* when it's not the last argument you can omit. I think it's
+a footgun.
+
+IMO stick with the first form only, and there'll always be the _safe
+variant that can be used when the temp pointer is needed.
+
+
+BR,
+Jani.
+
 
 -- 
-Cheers,
-Petr
+Jani Nikula, Intel
