@@ -1,170 +1,261 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020139.outbound.protection.outlook.com [52.101.196.139])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE0C37DEB2;
-	Tue, 23 Jun 2026 13:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.139
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782222837; cv=fail; b=tZLdyNxK3sx3mvqOn65ynW70LUT1W6V0lGpxxWAFUOARwbBwUBTIC1LrrohwJ6Mlq6m/pLp8jlBReHRxSSgDagRzjC/ehgUiEkeDzc6vDsHd5bIN96V4KmkZpIgjsnyt1Q+6Ee8WIPWcX47NO6yjf/x7XX27nu/RNdVLhTgj0uo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782222837; c=relaxed/simple;
-	bh=nXBm6cQjZnNVAj0zPW+VjraD+FeenNV/XcxIBPbFkHw=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:MIME-Version; b=Gga+K7yWmlMoFOgxE2uWkep6eLCsZfxr5caJ4FdFPVH5lRMbhkj4wZi7k+ygB83rHmIXPthsotLO9XISIz7BzvY87+DEYjGaQlAcarp+0uwVK8da31Z8JxcnhpUq7GWotLFobtZDrz/GU+L3I9D8t6DHja7a0p5n4hDMZB33TCM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=Qb3GuF8p; arc=fail smtp.client-ip=52.101.196.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803D53AE1A6;
+	Wed, 24 Jun 2026 12:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782304212; cv=none; b=HCjqQWbz1xINrtm+txs8anEUS9P4O9xIwjB6WkXjN8fqyDNMKwW+c+cgvuD9/uDlwo7p8/xG3q9OoXnjmDfuTYzDFpMbgaYxB4oCmJvwLmhAo99bUBrHBdzK1/pTtDwUpgelIgDBvzef0BikRWs/+JAKg2jRuuJnqwT2CNw+QUk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782304212; c=relaxed/simple;
+	bh=x+wrByIgOH4VvEI96gvWujAPl3WM8xGYqVOhtQGJNvw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LrICX3wr8qeh8hsYw9YCzxthxEEDoLnliSK24NAiVv338Bix9gvUQ3YZOTiU7IsoK8TE3UtYXyQlrU0kvo2T30WwRyxwNR3L3uKE926DA7IXYFWi1V42Sr3GyTwETO5prEkIkkgsIULbx3lex3bMVTZ8deDjQfMvV55qo0Au+wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R0l5uaRB; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="Qb3GuF8p"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=naoRKJ0fCEYFdDlWRKYiqs4X29YFP2lt2YHAAT1Iupi7FIfx9eVTlcN37y3ZNczqBxcMUBMTbpV6mJ8JnxQdyJFOhw1WBqwvi9RZwEkrpxxjreoR5kQOi8D2MA1+46/PyP7onUUUqcxDVhbJ7/QABa9w/DWBIodHgwTfTIveuD1Tho1k3A1zKOZg1xJcCyughl8AhcKwNf6h7Ttj1SRmfXwQVTkhvzYNVSlRpKoUPohPLi5gWfBPvFynXTc568MzKdEnJM/4jq8tmLORO2HzichC6LZbo9Ddz54K2UONglUfFTtdaMkrCJGLhhwVXf+DaeM4Rw//NI5gOl76zv83Yw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ntZ+H/jZbw6Qr7gjbdNaPlIGZcih3eFBassSF0OFppA=;
- b=Mh1sq7xZy2BGHhDlS/NNearErx7CbxP9uxFFQpVaBksUo63ziN4rYPE11kpZXe9aGbMEdK08GlFKBKoegzm8TxTLxD2wmgzavlR/uiCcApvtE+gOv/Fkj38c3PnFpqFrVEcRaVAHoT7SAcmq53jzwUR2bVUNYsbslN3r/F4d/aPF/OqKFv3R/qF8xqt7D5d3u66R6c4HgUA6vum3wv3vZS0bVYSh2d8trZ/hvjY0tZ2Wb8BP6+Ww+PFyosm+FSMLgP+fgWPFWX6y002et3RVPFNCOc6IM+eVH41P6EVvEW1yjnNWhOumr5oAMeCsE/VRhvg5llcqoDKLKS8OBqyN+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ntZ+H/jZbw6Qr7gjbdNaPlIGZcih3eFBassSF0OFppA=;
- b=Qb3GuF8pdzzKPb+EffVXBy/UGHTpj69hfN4gI4KubBV5Lqcf/KaUMeGH3dIYyVmiJdTk419zupf8hZpGteXyjwT/A+MFsRV0Knpi/XpauFKNqA+nK4dHD+bEjNYydPt002BaJeSHrOODv4yrWDzR7sMOjfgNhgWFtq5UG1gS1Co=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
- by LO9P265MB7950.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:3a1::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.20; Tue, 23 Jun
- 2026 13:53:50 +0000
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.21.0139.020; Tue, 23 Jun 2026
- 13:53:50 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 23 Jun 2026 14:53:49 +0100
-Message-Id: <DJGH9KZY0KTF.YC8IJ8SLC4YM@garyguo.net>
-Cc: <rust-for-linux@vger.kernel.org>, <linux-modules@vger.kernel.org>,
- <driver-core@lists.linux.dev>, <dri-devel@lists.freedesktop.org>,
- <nova-gpu@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>, <linux-block@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v4 9/9] rust: macros: remove `THIS_MODULE` static from
- `module!`
-From: "Gary Guo" <gary@garyguo.net>
-To: "Alvin Sun" <alvin.sun@linux.dev>, "Miguel Ojeda" <ojeda@kernel.org>,
- "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
- Krummrich" <dakr@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
- Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Daniel Almeida" <daniel.almeida@collabora.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
- "David Gow" <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Breno
- Leitao" <leitao@debian.org>, "Jens Axboe" <axboe@kernel.dk>, "Dave Ertman"
- <david.m.ertman@intel.com>, "Ira Weiny" <ira.weiny@intel.com>, "Leon
- Romanovsky" <leon@kernel.org>, "Igor Korotin" <igor.korotin@linux.dev>,
- "FUJITA Tomonori" <fujita.tomonori@gmail.com>, "Bjorn Helgaas"
- <bhelgaas@google.com>, =?utf-8?q?Krzysztof_Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>, =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?=
- <arve@android.com>, "Todd Kjos" <tkjos@android.com>, "Christian Brauner"
- <brauner@kernel.org>, "Carlos Llamas" <cmllamas@google.com>
-X-Mailer: aerc 0.21.0
-References: <20260623-fix-fops-owner-v4-0-0daf5f077d5c@linux.dev>
- <20260623-fix-fops-owner-v4-9-0daf5f077d5c@linux.dev>
-In-Reply-To: <20260623-fix-fops-owner-v4-9-0daf5f077d5c@linux.dev>
-X-ClientProxiedBy: LO4P123CA0386.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18f::13) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:488::16)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R0l5uaRB"
+Message-ID: <f99b70cc-e11c-42a9-a986-d20b3f232a31@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782304195;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eNfuHxO86n8b93ev9jYNFJxXkathlRXlXpz1k/8S9nI=;
+	b=R0l5uaRBMcxiN2aXXeE7sJmbbWZ+nIwvYOIBg2hW4xeZNywWJj11l3PcvXG3Ip7YlbinqT
+	P/PQ6kfAvOv13VlW7fdMv2tpC85uXP91R5VJRz9HOOc6aZfnOL/SuWOVvCXI8elJq6bVmX
+	Hq88NW9qj4aWnLm21y4nDBq7fAgYa9M=
+Date: Wed, 24 Jun 2026 20:29:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|LO9P265MB7950:EE_
-X-MS-Office365-Filtering-Correlation-Id: 970ba5c3-7513-4dc6-fa7f-08ded12edac3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|23010399003|10070799003|1800799024|921020|18002099003|22082099003|4143699003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	WtGUz4nXCe+cI4fITPELpdJOdOyTYdVAbSYKRUfo3m/V9oXq53/KEQgMRQnDafXIBUM1y7LJuZIIy783nnPD9G7KbnxiFvtdwGtobD4redLoB+EbYYArbTtN5nSd1n154OVwquexSfB5OQq0YKw6OOGJiF6vA5Lkz43LpheylO9QQG3t6lOgfHnXJTOSNgZnEZFmnxzOukvD0zC4oGyEOjYxxRpIue1XLHSMzKz/h59T00HwQgwLUAT/aLtGuUgFBS90VTSarYn65S8ghVbAFcqmPkKhlDfevJNepHNZDSTnYMOeXbI2eIqzWrjQ1UIMiIpkvlK/m7WHExqRiSiL/h4PueNg1QQQpZ60MYlzM+lOEzYPGtGtEz/fXsY84iU/7tDs/HSylNtsoiiLWm9XxY8Bpab6T+lBW/ApbKJcHHoTNRZgZkrC9znQICp/UBfKACp3YUHv36SaCFTaTKEJkaN/hutBVy0AFzTcPQJRrn9bq4eXSJy1kQhb0kGeYuBbSYiybIxn68w2MyHOmVqkAMhqS+0QwlnKAllYpfQm0ZcCA6nzqxaN3WjSbiFA+2d3v5xE/vZZD83ubWmm8z972p426x6DYjVg8T44/undw+aGYOiyLBdJyJEg4/Bb7bXxDtKjlorymNpZ3ulcBFddqyIM1+US+r7NhIO84byHZ3gcLKXLGdNZ/zChSeeM7tvNAODJantIIlteZCndKgH4pg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(23010399003)(10070799003)(1800799024)(921020)(18002099003)(22082099003)(4143699003)(56012099006);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WGtBMDZxWlRFeGJHVlYySmFIWUhzRzF6Y29YbjN0YkpXemNjWDNvYnVVZHVW?=
- =?utf-8?B?NFJFMWlWbWtnaXRZeTByM1JjZGkzbGt6VDJBSGdnc0JjaXBpblRqMEMrclUx?=
- =?utf-8?B?djFNMCswMUFpVjBSaFhqTkp5S3hCb1crcjBnT3JtcDBzUys1bWNZTkxnSzJM?=
- =?utf-8?B?c0NUY0hscFlDck5ZUW90azhOaHV1VEord3dJL21VSnRqckU5OVByM2paVUlx?=
- =?utf-8?B?OG1pU0c3TDJCZnE0RzFtMDNSR2RYT1J1eWNhTytWNGNQZ0JKclpVQytOb3l0?=
- =?utf-8?B?dExWWjk2RHIvTm96ZVcxTllsZmVuQjNWamxnaDNkalh0MkdiQWZyKy91M0lW?=
- =?utf-8?B?MTh1cStTNDdYQklZbnA4algwaC9JUkpVdzFTY04wKzZ2YkNKQ25xNWJIckUx?=
- =?utf-8?B?V210WUk2Z0UvMVJIR0RXanpHTmpDeDh5VFV0SnBvMUcrcFJ4eTVkU25yV1RI?=
- =?utf-8?B?RGlSdEVZNVJDQm1pMTI0UHVnTlhKT3VLQVRCbTFHWHVxRFUwM21DcDRYdlhm?=
- =?utf-8?B?RFU2c0Y0TDFvcVlETi9YYy9waGQ3S01QSm8yZGJNOXl6QlVaZy9jL0dLZWlQ?=
- =?utf-8?B?UWtsRjg4ZStrNHRlQy9ERGsrcFJhMUp5aUg4LzhDYmtPampFVERUL1hqMVJ5?=
- =?utf-8?B?aGNXMXU0dEZYY2V0Q0JTTmY3M1RzNFRuR3JxMUtabklCSDF3ZTBpM24wSjZu?=
- =?utf-8?B?Q1I1WVNZU0FqUGtrMlNWS1ByOWtzVXdTS214Z3M4eHpDd3RreWZpdGh3R2tZ?=
- =?utf-8?B?c1ZvaFJ6cUc3YVVPWVdqOElocTlDT1FQTEJ6OHdqQ29SOTVVK010QVA5VGx6?=
- =?utf-8?B?ZzRzK1cyMGMrRHBjVllldjF3THBTd1ZVNjRwTzJQdno0Y2lPcnRpTVRLRkxL?=
- =?utf-8?B?OHJFSzRBVFdWdlMzekxZMTloSVRROWY4WEpMcnpidExxeXh1eGZXRWtSdjB5?=
- =?utf-8?B?ZHF5Rzh3MVV4RlkxSkkzWFZRR25WU1NlTDViVFBZektTclZZM09wdnpSbVI3?=
- =?utf-8?B?TGVYc2I1RmJUWjd0Q3I3eG1pNGU0Sm9BYXVrVkI1V0d4VCsrY2hrSDlGSzR6?=
- =?utf-8?B?OHVRRFJrZzJuOTgxcjFwNzhUclhhbXJHdHUvNVZOUFNYc2lVN2tuUU1tMW5v?=
- =?utf-8?B?NG1ScjUySmJKMjJqd3lPa1ZNWG56SGVZN3NrRG5YOThXMVdFcGRJOXZrUXRr?=
- =?utf-8?B?WS9yZTk5VU1SaC9RbGRseng3ZWtzd2RqMi9tR1RXNUc2T045b1FBNGM3bTRV?=
- =?utf-8?B?bUZ0NDczeXZXZlNYV1RtTUxzWW13cjZWbE80T2g3SDU5aW9DVTl0VXc1SkRE?=
- =?utf-8?B?LzFyMEFYWDBHWjJTSVRZcStaUWdDaWZMRGgwUTJiTkdFRGRtRmcvaE9VNjVZ?=
- =?utf-8?B?YWdRMmlJRzU3NzRnQkxDVjhHbGVwdTBiWC9CU2Q1M2pVVjQ1UXpydno0cGtQ?=
- =?utf-8?B?eW9nclJ2Q3pwMnRuL2FhQy96Zy8wVXVpdEhWUzdCTTNlSHljVkRRbzF6Tzhw?=
- =?utf-8?B?akFNUWFodFNCZDlnZnNjM2dXMXc4N3crSy8rU1hTZU90STRwZFRDTUFONTF5?=
- =?utf-8?B?VGlHN2JNSkhldmVaZE9JODF2MTZRNjhLdXZjeTZoTm5TM04rVHFidVJqV1dw?=
- =?utf-8?B?K2duY05QeGNjcndZckpVb0xGRVg4YmxmNFdUWWFZcWgzM1hFWjEzeEh0dzdW?=
- =?utf-8?B?czlPN3NaRTBIM3dKSWNjeVRSbjhBaTg2UkxCb281NmliZE94ZjQ0dG05cDNL?=
- =?utf-8?B?MDlwR0FRV084STJxTlA4Q1lCQmJqVUIxWWhYa1cycW9aMU94ZUxOSEovdWRx?=
- =?utf-8?B?c3ROMHdnc3U3TzBSOHNVYzdiOFc2RjQ0SmY4S1p4ZHJGbmc5dlo4UDIzaUJJ?=
- =?utf-8?B?YlNWRm1FZ21VSDNKR1MrYVBsODlWVXM2aDR6SThVYTNaVGZBaUY0TWJFNmdm?=
- =?utf-8?B?aFh1MXRlL1dxNlg3WDFFd2lLOGt3dUxIcENtcGZLRDhKUWF1UXArVFFPbTEy?=
- =?utf-8?B?VGhtZERVVlZrOEJneWhNelJQaitXUHk1OHVKWUhMNU5rUGxCOWQrMUZ0TGdT?=
- =?utf-8?B?MHVwVHduMmpTZmxDeFh1blBYQkRqU1c1aDF5aU5BdmNSWHlYY3EvNmV3cFRL?=
- =?utf-8?B?Z3dHbkRSN3d6MjJJWEUwTDlFbUtWYUZUQWpaam5Ldy95NlRqUmhLYXdkelBN?=
- =?utf-8?B?UWZrM29TV1BYN0xmSFByVHU5L2wyM09vV0I4TVQwYUlNclpSM0s1d0crTk05?=
- =?utf-8?B?cksyVjZuK2pQVXBnQ2ZDYVhPN1pEN0JxYThHUWJ0S2ZmVVJzcGZqMnIrQ0Vx?=
- =?utf-8?B?MW1CVXJKUmZ1OHBFeFdkNGt1MzFXd2VhZEtydVV6WUg2Zit6bFVGQT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 970ba5c3-7513-4dc6-fa7f-08ded12edac3
-X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2026 13:53:50.2983
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9+aOxQ2/JEBMa0DPK2jyVDpvsA4qe1FtIAqjiyP0qOJB2lf0KqE1v+6labme7i+yFc0c9PK+yX1rL1XOqd/Jow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO9P265MB7950
+Subject: Re: [PATCH v3 0/7] Prepare mutable list iterators to cache cursor
+ state
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+ Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Paul Moore <paul@paul-moore.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ David Howells <dhowells@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+ linux-ntfs-dev@lists.sourceforge.net,
+ Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+ io-uring <io-uring@vger.kernel.org>, audit@vger.kernel.org,
+ bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>,
+ dri-devel@lists.freedesktop.org,
+ "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+ linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+ kexec@lists.infradead.org, live-patching@vger.kernel.org,
+ linux-modules@vger.kernel.org,
+ Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+ Linux Power Management <linux-pm@vger.kernel.org>, rcu@vger.kernel.org,
+ sched-ext@lists.linux.dev, linux-mm <linux-mm@kvack.org>,
+ virtualization@lists.linux.dev, damon@lists.linux.dev,
+ clang-built-linux <llvm@lists.linux.dev>,
+ chengkaitao <chengkaitao@kylinos.cn>, Muchun Song <muchun.song@linux.dev>
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+ <CAADnVQJmPWFT01b7DuLdtafv=8FyB84GYHNZ8zSTck+9Aw0JpA@mail.gmail.com>
+ <8c8f1849-86d3-4c69-be27-30bbdffdf616@linux.dev>
+ <ajkSftEbdGoiJXYs@ashevche-desk.local>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <ajkSftEbdGoiJXYs@ashevche-desk.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue Jun 23, 2026 at 7:29 AM BST, Alvin Sun wrote:
-> All users have been migrated to `ModuleMetadata::THIS_MODULE` const or
-> `this_module::<LocalModule>()` helper. The `static THIS_MODULE`
-> generated by the `module!` macro is no longer referenced anywhere,
-> so remove it to avoid having two sources of the same `ThisModule`
-> pointer.
->=20
-> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
 
-> ---
->  rust/macros/module.rs | 16 ----------------
->  1 file changed, 16 deletions(-)
+在 2026/6/22 18:46, Andy Shevchenko 写道:
+> On Mon, Jun 22, 2026 at 02:15:01PM +0800, Kaitao Cheng wrote:
+>> 在 2026/6/22 13:28, Alexei Starovoitov 写道:
+>>> On Sun, Jun 21, 2026 at 9:06 PM Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+> 
+> ...
+> 
+>>>>  block/bfq-iosched.c                 |  17 +-
+>>>>  block/blk-cgroup.c                  |  12 +-
+>>>>  block/blk-flush.c                   |   4 +-
+>>>>  block/blk-iocost.c                  |  18 +-
+>>>>  block/blk-mq.c                      |   8 +-
+>>>>  block/blk-throttle.c                |   4 +-
+>>>>  block/kyber-iosched.c               |   4 +-
+>>>>  block/partitions/ldm.c              |   8 +-
+>>>>  block/sed-opal.c                    |   4 +-
+>>>>  include/linux/list.h                | 269 ++++++++++++++++++++++++----
+>>>>  include/linux/llist.h               |  81 +++++++--
+>>>>  init/initramfs.c                    |   5 +-
+>>>>  io_uring/cancel.c                   |   6 +-
+>>>>  io_uring/poll.c                     |   3 +-
+>>>>  io_uring/rw.c                       |   4 +-
+>>>>  io_uring/timeout.c                  |   8 +-
+>>>>  io_uring/uring_cmd.c                |   3 +-
+>>>>  kernel/audit_tree.c                 |   4 +-
+>>>>  kernel/audit_watch.c                |  16 +-
+>>>>  kernel/auditfilter.c                |   4 +-
+>>>>  kernel/auditsc.c                    |   4 +-
+>>>>  kernel/bpf/arena.c                  |  10 +-
+>>>>  kernel/bpf/arraymap.c               |   8 +-
+>>>>  kernel/bpf/bpf_local_storage.c      |   3 +-
+>>>>  kernel/bpf/bpf_lru_list.c           |  25 ++-
+>>>>  kernel/bpf/btf.c                    |  18 +-
+>>>>  kernel/bpf/cgroup.c                 |   7 +-
+>>>>  kernel/bpf/cpumap.c                 |   4 +-
+>>>>  kernel/bpf/devmap.c                 |  10 +-
+>>>>  kernel/bpf/helpers.c                |   8 +-
+>>>>  kernel/bpf/local_storage.c          |   4 +-
+>>>>  kernel/bpf/memalloc.c               |  16 +-
+>>>>  kernel/bpf/offload.c                |   8 +-
+>>>>  kernel/bpf/states.c                 |   4 +-
+>>>>  kernel/bpf/stream.c                 |   4 +-
+>>>>  kernel/bpf/verifier.c               |   6 +-
+>>>>  kernel/cgroup/cgroup-v1.c           |   4 +-
+>>>>  kernel/cgroup/cgroup.c              |  54 +++---
+>>>>  kernel/cgroup/dmem.c                |  12 +-
+>>>>  kernel/cgroup/rdma.c                |   8 +-
+>>>>  kernel/events/core.c                |  44 +++--
+>>>>  kernel/events/uprobes.c             |  12 +-
+>>>>  kernel/exit.c                       |   8 +-
+>>>>  kernel/fail_function.c              |   4 +-
+>>>>  kernel/gcov/clang.c                 |   4 +-
+>>>>  kernel/irq_work.c                   |   4 +-
+>>>>  kernel/kexec_core.c                 |   4 +-
+>>>>  kernel/kprobes.c                    |  16 +-
+>>>>  kernel/livepatch/core.c             |   4 +-
+>>>>  kernel/livepatch/core.h             |   4 +-
+>>>>  kernel/liveupdate/kho_block.c       |   4 +-
+>>>>  kernel/liveupdate/luo_flb.c         |   4 +-
+>>>>  kernel/locking/rwsem.c              |   2 +-
+>>>>  kernel/locking/test-ww_mutex.c      |   2 +-
+>>>>  kernel/module/main.c                |  11 +-
+>>>>  kernel/padata.c                     |   4 +-
+>>>>  kernel/power/snapshot.c             |   8 +-
+>>>>  kernel/power/wakelock.c             |   4 +-
+>>>>  kernel/printk/printk.c              |  11 +-
+>>>>  kernel/ptrace.c                     |   4 +-
+>>>>  kernel/rcu/rcutorture.c             |   3 +-
+>>>>  kernel/rcu/tasks.h                  |   9 +-
+>>>>  kernel/rcu/tree.c                   |   6 +-
+>>>>  kernel/resource.c                   |   4 +-
+>>>>  kernel/sched/core.c                 |   4 +-
+>>>>  kernel/sched/ext.c                  |  22 +--
+>>>>  kernel/sched/fair.c                 |  28 +--
+>>>>  kernel/sched/topology.c             |   4 +-
+>>>>  kernel/sched/wait.c                 |   4 +-
+>>>>  kernel/seccomp.c                    |   4 +-
+>>>>  kernel/signal.c                     |  11 +-
+>>>>  kernel/smp.c                        |   4 +-
+>>>>  kernel/taskstats.c                  |   8 +-
+>>>>  kernel/time/clockevents.c           |   6 +-
+>>>>  kernel/time/clocksource.c           |   4 +-
+>>>>  kernel/time/posix-cpu-timers.c      |   4 +-
+>>>>  kernel/time/posix-timers.c          |   3 +-
+>>>>  kernel/torture.c                    |   3 +-
+>>>>  kernel/trace/bpf_trace.c            |   4 +-
+>>>>  kernel/trace/ftrace.c               |  49 +++--
+>>>>  kernel/trace/ring_buffer.c          |  25 ++-
+>>>>  kernel/trace/trace.c                |  12 +-
+>>>>  kernel/trace/trace_dynevent.c       |   6 +-
+>>>>  kernel/trace/trace_dynevent.h       |   5 +-
+>>>>  kernel/trace/trace_events.c         |  35 ++--
+>>>>  kernel/trace/trace_events_filter.c  |   4 +-
+>>>>  kernel/trace/trace_events_hist.c    |   8 +-
+>>>>  kernel/trace/trace_events_trigger.c |  17 +-
+>>>>  kernel/trace/trace_events_user.c    |  16 +-
+>>>>  kernel/trace/trace_stat.c           |   4 +-
+>>>>  kernel/user-return-notifier.c       |   3 +-
+>>>>  kernel/workqueue.c                  |  16 +-
+>>>>  mm/backing-dev.c                    |   8 +-
+>>>>  mm/balloon.c                        |   8 +-
+>>>>  mm/cma.c                            |   4 +-
+>>>>  mm/compaction.c                     |   4 +-
+>>>>  mm/damon/core.c                     |   4 +-
+>>>>  mm/damon/sysfs-schemes.c            |   4 +-
+>>>>  mm/dmapool.c                        |   4 +-
+>>>>  mm/huge_memory.c                    |   8 +-
+>>>>  mm/hugetlb.c                        |  56 +++---
+>>>>  mm/hugetlb_vmemmap.c                |  16 +-
+>>>>  mm/khugepaged.c                     |  14 +-
+>>>>  mm/kmemleak.c                       |   7 +-
+>>>>  mm/ksm.c                            |  25 +--
+>>>>  mm/list_lru.c                       |   4 +-
+>>>>  mm/memcontrol-v1.c                  |   8 +-
+>>>>  mm/memory-failure.c                 |  12 +-
+>>>>  mm/memory-tiers.c                   |   4 +-
+>>>>  mm/migrate.c                        |  23 ++-
+>>>>  mm/mmu_notifier.c                   |   9 +-
+>>>>  mm/page_alloc.c                     |   8 +-
+>>>>  mm/page_reporting.c                 |   2 +-
+>>>>  mm/percpu.c                         |  11 +-
+>>>>  mm/pgtable-generic.c                |   4 +-
+>>>>  mm/rmap.c                           |  10 +-
+>>>>  mm/shmem.c                          |   9 +-
+>>>>  mm/slab_common.c                    |  14 +-
+>>>>  mm/slub.c                           |  33 ++--
+>>>>  mm/swapfile.c                       |   4 +-
+>>>>  mm/userfaultfd.c                    |  12 +-
+>>>>  mm/vmalloc.c                        |  24 +--
+>>>>  mm/vmscan.c                         |   7 +-
+>>>>  mm/zsmalloc.c                       |   4 +-
+>>>>  124 files changed, 875 insertions(+), 681 deletions(-)
+>>>
+>>> Not sure what you were thinking, but this diff stat
+>>> is not landable.
+>>
+>> [PATCH v3 1/7] and [PATCH v3 2/7] contain the main logic and can
+>> be merged directly. They are also compatible with the old API.
+>> [PATCH v3 3/7] through [PATCH v3 7/7] are just simple interface
+>> replacements and do not change any functional logic. They can be
+>> left unmerged for now; individual modules can pick them up later
+>> if needed.
+>>
+>> In v2, Andy Shevchenko mentioned: "If it's done by Linus himself
+>> during the day when he prepares -rc1, it's fine."
+> 
+> Yes, but you need to get his blessing first to go with this.
+> Have you communicated with him on this?
+
+Not yet, because the overall approach is still not mature. People
+have different opinions on the implementation details and on how
+to move this forward, so I think we should iterate through a few
+versions first before making a final decision.
+
+>> Even so, the
+>> changes in this patch series are indeed quite large and touch
+>> almost every subsystem. I have only converted part of them for
+>> now, so I wanted to send this out first and see what people think.
+> 
+> That's why it's better to provide a script to convert (e.g., coccinelle)
+> instead of tons of patches.
+
+I tried writing conversion scripts with Coccinelle, but there were
+always cases that got missed. In contrast, I found that using AI
+for focused replacements was actually more efficient.
+
+As David Hildenbrand mentioned, "If we decide we want this, I guess
+we should target per-subsystem conversions." I would like to provide
+the new interface first; adapting each subsystem on demand later may
+be easier to achieve.
+-- 
+Thanks
+Kaitao Cheng
 
