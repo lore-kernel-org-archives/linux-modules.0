@@ -1,136 +1,287 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6C426B755
-	for <linux-modules@vger.kernel.org>; Thu, 25 Jun 2026 02:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782355797; cv=pass; b=FFFU45JHI+vn3TTi/JnKl/o1ZN19NBJJwcIq9mgjBlrQCa6xdSKmWm6EeNG5RNyYlw+A51cznp29c/b3sfYqwMTSpismJfKahPT2tCWkMHe67F3e2q2851UAD6xefQURmXbQyf0MjQY/E+3jRuRDWQC617LR+7denUBrLgHl188=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782355797; c=relaxed/simple;
-	bh=65RVjUN/oBIAIaBoq9T+amp4LisJLBuGc5W+2eAb3zE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nipzMD9jWEQ/TfjdhiqY1wePGugydMp/SN2urlnGYcaIHzsS3w/PAnquGGd+d/AWa/YtnjFTYR3VUMCHCvCbpf3Xw7bRJttKG8NveN1e0Ct8zM1UbeIJoFh96P3oTzn861DRrPnEh3v8jEAOjfPIGVv+G7KBU0FWfUiDzaONQAE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J5TMz4Ha; arc=pass smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33052318EE7;
+	Thu, 25 Jun 2026 03:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782356555; cv=none; b=YaxWDmz0plzXDAdmbmVD0uhqCNJW2pRpG8c1JH6oQvB2M42XRhbDYAcYKDRW7HhbRbamY4HOOtUFrQrv7Zooh6CS6UxyYja0zjikH/5eqMV+mCie9ITVAZ0yJuFdMFgdnYXqideuBHvEB6dgFKJNFFwkLehhV9TcyBtk1vTQTVg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782356555; c=relaxed/simple;
+	bh=AJ5z7v+xj1bwU2aG0Bcmfo35foG9ftC+wsjfKkRv/5U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TmODMDhHXXaEGDHIxOGY+s+BzRVsRa3tVG07QOunJ0/IHOYJ4INpyXYgbzBuxWMV0mpTwZRbEU52z9MH1WxUhvPVjF1k1D4fCeB43bteYRg6QoOmwozdsPrakrTuejmR8NVqc+Dfn2LMHp02L5gVxv0aUlCUqYWM4dim6n7QXZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=f3XfhSe6; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J5TMz4Ha"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-7fdb04d774aso24657177b3.2
-        for <linux-modules@vger.kernel.org>; Wed, 24 Jun 2026 19:49:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782355795; cv=none;
-        d=google.com; s=arc-20260327;
-        b=WBk0//HlwJw9OgM4H7ORgovoDzVWbuOJlzruwcRm8wH4ripDhPHd0vXewTQyw88EVm
-         2udLhGsaYOu05SS+0yL43PDOkKQ17cfiKDuYR1b1GrZAKyPN2YYD2K+asMyMWCqyx6FD
-         SIHhYs2V6r/6i9w/dcKrMI+l6VhcEaMabs6A54m9PZQGDd/l5BeZvTdIoQTSuGaUfMwb
-         fImReblFNTUWoDwqgQlKmHd8L6izzmG/CSCGXRMQfgl8GMgSO8ie8AZKJuDjtf/drkWZ
-         Go/L6AbxNRfWxPI5HjIB/Xa2VRHALQELSLYDr+P2/5LihfO1n8d7trp7wJOvda33TWQj
-         m9VA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=65RVjUN/oBIAIaBoq9T+amp4LisJLBuGc5W+2eAb3zE=;
-        fh=EaXbiTpJZuLwmTEUnUjV6txG4RX7XQ/Bad7ID6UNWzE=;
-        b=b9WBix7cLWwvGPYAPLp3fnQyUKD442fNx80LUY9wrHhOm6eTsBn4R8VgOQncPTp6/G
-         F0i/1AI/Pf8yFN0v0/os+Xt4iGfagXGHj5sa1AEgUwjmoECe3MpTI0H507u2yiP0dScP
-         ZH4lhyQw8P7UYl19jZa1Dpp2uEYFZK8iGeAEdLHLtAB8a3dLBcOyA6iTvpku/QXnmH1x
-         IARqGz4L+hZr04+dsje2q0AdsUV2YsxRvifs7BMa7whXuRA3QU+ygge5W+s05K7chpJs
-         oYLBBjvS0/fEEqZyNbbSwONUHkBTFE0eziqpAnYl6RtTWUGJxxyHfgPAqBQynGJsdrU1
-         B4cA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782355795; x=1782960595; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=65RVjUN/oBIAIaBoq9T+amp4LisJLBuGc5W+2eAb3zE=;
-        b=J5TMz4Hay8HsQwm4Bnhb2pJ0KBBZ2I4XQ8BUGOrUrSEz8hBcqhp7Ax82IdNsFCkUb8
-         izLHZuz6VcEI27AsK6u+KblF4N6EDTAPc5Ud+8yMuSrenkmUXOoBAy3Tahc9NYktjstl
-         PorzWk9rTNKHHJQQLSHsiyfeUHMHwZAcKz12Bw6xeKRXSey1VzSwBboVk46IamMbbYxI
-         AGOaaYPKJfh5m0ABLYUTp5wUlAbMgPkMFm7ihRxGvrLa8oN/Y2D46dqFRwj6N7ORtewv
-         rBsx9UIsnESD18bLUlCtTVKk62dkRB/is627fneGkbC/vj0Z7bK96JM1xhhkg94voHEv
-         roPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782355795; x=1782960595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=65RVjUN/oBIAIaBoq9T+amp4LisJLBuGc5W+2eAb3zE=;
-        b=EVlXgTK7rCifEfE4osmG6Xq9nPXWPEO+bthYIu/xOdHg7ePL+wAwTkoc5Zdn3/fWn1
-         Mtbuv6SZ0m3XKS+y9yv//UEyQzgo5FqQJeFDatS+DYs8ob4BDkrwijVTMTEri66icd4H
-         vrANPHViJj+1F0QCKsX0cNxashV59iFFIgeWwOHpadxO/osyyAka2rLYumOwPtaUYwk5
-         D1AwOxm2B2IK4UQMgZsmEql11j4YTClA4CbwvdeF5reptHuGaKN9jM1uHd+hgO52dE4W
-         1S6vmxrUgXpb0ZU2KAxteiRhqQqBvgxbXQOzYRzA1HJn3fd4Pz0Gz+2BowMrBUidFn5b
-         +b/A==
-X-Forwarded-Encrypted: i=1; AHgh+RoH7M1SyLiKtc7yWIr3sSu0zfxGFJ/p0qzlIQXjZ1ML8HcHaJfxOJoA2loC0WguLk1IVue24VotPTiD7cEz@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzJKasJlasBycwZsBssNUBmgQwCWIRVLTMTZ4+LFjQHtluH+qA
-	DkTkAKLQQx2m4kVMHnoS/o3f+UKSH//ugqBEb/utDh3kDQZRhs6SIP9b5qrTcrQgRy+ImfA0yjw
-	3SlARiwmUtaCABBLg2WF1PxgAEa8yJms=
-X-Gm-Gg: AfdE7clYHJrgg+1WBVFF4OgKB8ZUVDLZQAZLYOGfUayQE/in+nr6gi418WRlaZFDJDq
-	ZuqrQrMFTUAd6h+cmn/mlN3fwnxKv3qh2Lo9HwQon5Xr+LT6VL+rOB0o1Wv8VqIP7HvObW/tjrA
-	rLAaqXknUY+FFrK59o0WRM1UNanmSuU/PHUgounZTZA7Gb/RsJmnYfKrPBbMoEakBqtXeLMjVLJ
-	P9ltp57Ek3Dev3phDMwO+JUiRCC3hVm5r7bBMB9puhkATOazVg3LTXoPDIGD939pSWsE7tvE16y
-	dmK5bwuTOAb/6QF/8QG37An3GY3HAw==
-X-Received: by 2002:a05:690c:6d0f:b0:7bf:107b:f85b with SMTP id
- 00721157ae682-80a684e89afmr7897727b3.13.1782355795161; Wed, 24 Jun 2026
- 19:49:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="f3XfhSe6"
+Message-ID: <0ed6b5c3-e955-46e2-9fc6-075a0dfd1c4f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782356535;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bg7TU7hDzDNv/08FHHH/On04xmb+0Xhy9JCW39bnqOs=;
+	b=f3XfhSe6G7brFNVp6GZqjOXNU3vcFca4poUFfkwgVZymI1EYtq9zeoyJzoopay7HWx5JvC
+	E0YJXxuEv9p9ioc24zHIhHD7MfpA8W6eQqa3vo59Vdd3bvTmswHZxeWqPUReOxJ21Oxizv
+	nnsvKa6R3D4a+gLxizvgKiVabRJ3kcE=
+Date: Thu, 25 Jun 2026 11:01:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310023807.80140-1-laoar.shao@gmail.com> <aa-6wILF90Y4ndnd@infradead.org>
- <20260311224420.GB2440964@google.com>
-In-Reply-To: <20260311224420.GB2440964@google.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Thu, 25 Jun 2026 10:49:19 +0800
-X-Gm-Features: AVVi8Ccw0FHWpRuhLYsl1CZH9OZUuZL9qV52aX5FUqBcVJfAp1AlULjEZ4hKCB4
-Message-ID: <CALOAHbBQhOsNVemgdtj2qLMN=bwqpE89ySqgLOMa9DY3-K4y7g@mail.gmail.com>
-Subject: Re: [PATCH v3] module: print version for external modules in print_modules()
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Christoph Hellwig <hch@infradead.org>, mcgrof@kernel.org, petr.pavlu@suse.com, 
-	da.gomez@kernel.org, atomlin@atomlin.com, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 1/7] list: Add mutable iterator variants
+To: David Laight <david.laight.linux@gmail.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ "David Hildenbrand (Arm)" <david@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+ Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Paul Moore <paul@paul-moore.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>, David Howells <dhowells@redhat.com>,
+ Simona Vetter <simona.vetter@ffwll.ch>, Randy Dunlap
+ <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-ntfs-dev@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
+ io-uring@vger.kernel.org, audit@vger.kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ kexec@lists.infradead.org, live-patching@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-pm@vger.kernel.org, rcu@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-mm@kvack.org, virtualization@lists.linux.dev, damon@lists.linux.dev,
+ llvm@lists.linux.dev, Kaitao Cheng <chengkaitao@kylinos.cn>,
+ Muchun Song <muchun.song@linux.dev>
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+ <20260622040533.29824-2-kaitao.cheng@linux.dev>
+ <20260622094242.64531b9a@pumpkin>
+ <351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
+ <cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
+ <20260624152324.3def88ce@pumpkin>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <20260624152324.3def88ce@pumpkin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 12, 2026 at 6:44=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> On Mon, Mar 09, 2026 at 11:31:28PM -0700, Christoph Hellwig wrote:
-> > On Tue, Mar 10, 2026 at 10:38:07AM +0800, Yafang Shao wrote:
-> > > For vmcores triggered by a driver bug, the system calls print_modules=
-() to
-> > > list the loaded modules. However, print_modules() does not output mod=
-ule
-> > > version information.
-> >
-> > And it should not.
-> >
-> > >
-> > > Across a large fleet of servers, there are often many
-> > > different module versions running simultaneously, and we need to know=
- which
-> > > driver version caused a given vmcore.
-> >
-> > Then don't run extetrnal modules, which are not a first part citizen.
-> > Get your changeas upstream instead of just leeching the upstream
-> > developers work.
->
-> As much as I would like to see these modules upstreamed, distributions
-> do ship out-of-tree modules to users. If adding the OOT module version
-> to print_modules() helps folks better handle the resulting bug reports,
-> and maybe even indirectly keeps some of the noise away from upstream, I
-> feel it's worth the small maintenance burden from this change.
->
+在 2026/6/24 22:23, David Laight 写道:
+> On Wed, 24 Jun 2026 15:23:47 +0200
+> Christian König <christian.koenig@amd.com> wrote:
+>> On 6/24/26 15:14, Kaitao Cheng wrote:
+>>> 在 2026/6/22 16:42, David Laight 写道:  
+>>>> On Mon, 22 Jun 2026 12:05:31 +0800
+>>>> Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+>>>>  
+>>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>>
+>>>>> The list_for_each*_safe() helpers are used when the loop body may
+>>>>> remove the current entry.  Their API exposes the temporary cursor at
+>>>>> every call site, even though most users only need it for the iterator
+>>>>> implementation and never reference it in the loop body.
+>>>>>
+>>>>> Add *_mutable() variants for list and hlist iteration.  The new helpers
+>>>>> support both forms: callers may keep passing an explicit temporary cursor
+>>>>> when they need to inspect or reset it, or omit it and let the helper use
+>>>>> a unique internal cursor.  
+>>>>
+>>>> I'm not really sure 'mutable' means anything either.
+>>>> It is possible to make it valid for the loop body (or even other threads)
+>>>> to delete arbitrary list items - but that needs significant extra overheads.
+>>>>
+>>>> It might be worth doing something that doesn't need the extra variable,
+>>>> but there is little point doing all the churn just to rename things.
+>>>>  
+>>>>>
+>>>>> This makes call sites that only mutate the list through the current entry
+>>>>> less noisy, while keeping the existing *_safe() helpers available for
+>>>>> compatibility.
+>>>>>
+>>>>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>> ---
+>>>>>  include/linux/list.h | 269 +++++++++++++++++++++++++++++++++++++------
+>>>>>  1 file changed, 231 insertions(+), 38 deletions(-)
+>>>>>
+>>>>> diff --git a/include/linux/list.h b/include/linux/list.h
+>>>>> index 09d979976b3b..1081def7cea9 100644
+>>>>> --- a/include/linux/list.h
+>>>>> +++ b/include/linux/list.h
+>>>>> @@ -7,6 +7,7 @@
+>>>>>  #include <linux/stddef.h>
+>>>>>  #include <linux/poison.h>
+>>>>>  #include <linux/const.h>
+>>>>> +#include <linux/args.h>
+>>>>>  
+>>>>>  #include <asm/barrier.h>
+>>>>>  
+>>>>> @@ -763,28 +764,72 @@ static inline void list_splice_tail_init(struct list_head *list,
+>>>>>  #define list_for_each_prev(pos, head) \
+>>>>>  	for (pos = (head)->prev; !list_is_head(pos, (head)); pos = pos->prev)
+>>>>>  
+>>>>> -/**
+>>>>> - * list_for_each_safe - iterate over a list safe against removal of list entry
+>>>>> - * @pos:	the &struct list_head to use as a loop cursor.
+>>>>> - * @n:		another &struct list_head to use as temporary storage
+>>>>> - * @head:	the head for your list.
+>>>>> +/*
+>>>>> + * list_for_each_safe is an old interface, use list_for_each_mutable instead.
+>>>>>   */
+>>>>>  #define list_for_each_safe(pos, n, head) \
+>>>>>  	for (pos = (head)->next, n = pos->next; \
+>>>>>  	     !list_is_head(pos, (head)); \
+>>>>>  	     pos = n, n = pos->next)
+>>>>>  
+>>>>> +#define __list_for_each_mutable_internal(pos, tmp, head)		\
+>>>>> +	for (typeof(pos) tmp = (pos = (head)->next)->next;		\  
+>>>>
+>>>> Use auto
+>>>>  
+>>>>> +	     !list_is_head(pos, (head));				\
+>>>>> +	     pos = tmp, tmp = pos->next)
+>>>>> +
+>>>>> +#define __list_for_each_mutable1(pos, head)				\
+>>>>> +	__list_for_each_mutable_internal(pos, __UNIQUE_ID(next), head)
+>>>>> +
+>>>>> +#define __list_for_each_mutable2(pos, next, head)			\
+>>>>> +	list_for_each_safe(pos, next, head)
+>>>>> +
+>>>>>  /**
+>>>>> - * list_for_each_prev_safe - iterate over a list backwards safe against removal of list entry
+>>>>> + * list_for_each_mutable - iterate over a list safe against entry removal
+>>>>>   * @pos:	the &struct list_head to use as a loop cursor.
+>>>>> - * @n:		another &struct list_head to use as temporary storage
+>>>>> - * @head:	the head for your list.
+>>>>> + * @...:	either (head) or (next, head)
+>>>>> + *
+>>>>> + * next:	another &struct list_head to use as optional temporary storage.
+>>>>> + *		The temporary cursor is internal unless explicitly supplied by
+>>>>> + *		the caller.
+>>>>> + * head:	the head for your list.
+>>>>> + */
+>>>>> +#define list_for_each_mutable(pos, ...)					\
+>>>>> +	CONCATENATE(__list_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
+>>>>> +		(pos, __VA_ARGS__)  
+>>>>
+>>>> The variable argument count logic really just slows down compilation.
+>>>> Maybe there aren't enough copies of this code to make that significant.
+>>>> But just because you can do it doesn't mean it is a gooD idea.
+>>>> I'm also not sure it really adds anything to the readability.
+>>>>
+>>>> And, it you are going to make the middle argument optional there is
+>>>> no need to change the macro name.  
+>>>
+>>> Christian König and Jani Nikula also disagree with the variadic-argument
+>>> implementation approach. If we abandon that method, it means we will
+>>> inevitably need to add some new macros. If mutable is not a good name,
+>>> suggestions for better alternatives would be welcome; coming up with a
+>>> suitable name is indeed rather tricky.  
+>>
+>> I don't think you need to add a new macro for the specific use case that people want to modify the next element of the iteration.
+>>
+>> If I remember your numbers correctly that is a really corner case and keeping using the existing *_safe() macros for that sounds perfectly fine to me.
+> 
+> IIRC currently you have a choice of either:
+> 	define               Item that can't be deleted
+> 	list_for_each()	     The current item.
+> 	list_for_each_safe() The next item.
+> There is also likely to be code that updates the variables to allow
+> for other scenarios.
+> 
+> Note that if increase a reference count and release a lock then list_for_each()
+> is likely safer than list_for_each_safe() :-)
+> 
+> list.h has 9 variants of the 'safe' loop.
+> The bloat of another 9 is getting excessive.
+> 
+> It has to be said that this is one of my least favourite type of list...
 
-Hello Sami,
+Hi Christian König, David Laight, Jani Nikula, David Hildenbrand,
+Andy Shevchenko, Alexei Starovoitov
 
-Just a friendly follow-up. I noticed that this patch hasn't been
-merged into linux-7.1 yet. Could you please let me know if there are
-any further actions required on my end?
+For ease of discussion, I need to summarize the currently possible
+approaches and briefly describe their respective pros and cons,
+using the list_for_each_entry* interfaces as examples.
 
---=20
-Regards
-Yafang
+1. Add list_for_each_entry_mutable, while keeping list_for_each_entry
+and list_for_each_entry_safe unchanged. list_for_each_entry_mutable
+would be used specifically for safe deletion scenarios that do not
+need to expose the temporary cursor externally. The code can refer to
+the v1 version.
+
+Pros: Does not depend on immediate per-subsystem adaptation and can be
+      merged directly.
+Cons: Requires adding a whole set of mutable interfaces, which makes the
+      code somewhat redundant.
+
+2. Directly optimize away the temporary cursor in list_for_each_entry_safe
+and define it inside the loop instead, changing the interface from four
+arguments to three.
+
+Pros: Does not add redundant interfaces.
+Cons: (1) Users need to manually update special cases that use the
+      traversal variable of list_for_each_entry_safe, the new
+      list_for_each_entry_safe would no longer apply there and would
+      need to be open-coded.
+      (2) Because the macro arguments changes, all list_for_each_entry_safe
+      callers would need to be modified and merged together, making it
+      difficult to merge such a large amount of code at once.
+
+3. Use a variadic macro approach to optimize list_for_each_entry_safe,
+so that it supports both three and four arguments.
+
+Pros: (1) Does not add redundant interfaces.
+      (2) Does not depend on immediate per-subsystem adaptation and can
+      be merged directly.
+Cons: (1) Increases compile time.
+      (2) Makes the interface harder for users to use.
+
+4. Optimize list_for_each_entry by defining the temporary cursor internally,
+making it compatible with the functionality of list_for_each_entry_safe.
+The code can refer to the v2 version.
+
+Pros: (1) Does not add redundant interfaces.
+      (2) The number of externally visible arguments of list_for_each_entry
+      remains unchanged, still three.
+Cons: (1) list_for_each_entry and list_for_each_entry_safe would be merged
+      into one, and list_for_each_entry_safe would gradually be deprecated.
+      (2) Users need to manually update special cases that use the traversal
+      variable of list_for_each_entry, the new list_for_each_entry would no
+      longer apply there and would need to be open-coded. There are 15 such
+      cases in total.
+
+5. Use a variadic macro approach to optimize list_for_each_entry, so that
+it supports both three and four arguments.
+
+Pros: (1) Does not add redundant interfaces.
+      (2) Does not depend on immediate per-subsystem adaptation and can be
+      merged directly.
+Cons: (1) Increases compile time.
+      (2) list_for_each_entry and list_for_each_entry_safe would be merged
+      into one, and list_for_each_entry_safe would gradually be deprecated.
+
+6. Make no changes, keep the current logic unchanged, and close the current
+email discussion.
+
+
+Which of the six solutions above do people prefer?
+
+-- 
+Thanks
+Kaitao Cheng
+
