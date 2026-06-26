@@ -1,115 +1,178 @@
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5BF233935
-	for <linux-modules@vger.kernel.org>; Fri, 26 Jun 2026 01:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782436402; cv=pass; b=dEWrOxUcXFGG5JfcXnMWwf09P2ZcekKjguyE7bmgGkMDIuazgntBg3m0L25mY/LlEvIewfyQ1mT75YOk9Rmln6AA8LB3xfipEN8obHXyMK2fLFOxUicYuljV5gN7XPzraxG81FbENF5ECyGTrUN6QPd3nyZK18fS7WAMpgVQmu8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782436402; c=relaxed/simple;
-	bh=jRyMsIs11r2MRu6fNT1VWtbou28AKL3M5y70TjhIbYo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RlxCbFAYaegDMiGAQctZWV1kzOfSQuUoc7/NcztZuGq284HobFjgNhx2da0JCKoLmLfQPwbOZd2jJFxxVJ1HWE+Sryq1THxdpYI93hvPWt4oYKKZxEufjDx500JiIatP3sEFdnWTEIOqk7+xfWolpvDY5MmbpvMV1Q5xyyViFk4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qU4vlocd; arc=pass smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFCE1388887;
+	Fri, 26 Jun 2026 02:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782441397; cv=none; b=KopSOSc02VQA2EwdBZKEDKNZYKa3QZ1OLsI5DbUIj3Gqwud1zT/SoV24cs5AI5Xrd6srwpFiUPXaML1X5TOVsRV+f1BfBJpHnaflrKb7sO2Sz9gKlYqnPWGgcYkHCu8UAxpqjelzn7F23lywmr/T1M3VSVCzp9erm1qzLDCeXIQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782441397; c=relaxed/simple;
+	bh=DaU6X1yK4xkTvUSgXQBLEhqd1am01gmJC7t4LMkX6kw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uHyKvAeTb6y4Ex4VFy2r6uPDJYDAVDNxJywRQnFlXUzucPKkjwY0aS8QobvJgv0c5RH/kKCrwrw8G96ylIrlAGSStdkkkK5ix51DsV9ue36br6GEFhBFLL7UIWinPzne1ullZanCTnLV7vDs+Vosvfx+X3VAd5ZlXhLtPfcQ4sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HBuW3/F0; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qU4vlocd"
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-51765331535so73021cf.1
-        for <linux-modules@vger.kernel.org>; Thu, 25 Jun 2026 18:13:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782436400; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RvM0Bij40MhvTrW3DB7yzMKDb54tVyhwCwxkzFEjuP0Vs0YO/px5LlmNzA12wH5vSF
-         d5TU4eSlPGoEIGeqCqQNAMqbH7t7MGk0hs8+IvYgPf5qwd+qwbPKWsfg99zCDg8bQKkG
-         2u00++gJUsfL5SEZzOAkX6cRs4g/1lrsZdbLKwLL6mNNIztltEyYvSyAePQW/7f2ZTQW
-         8D9qt02ptK25CtaDf2GhRnMx99jhYCSJU6wp2dkkpC+aiQiWtRqYiyeB9576m5Ah8whf
-         cCtoUlLOaCiPHjVv1JBP28J2JLLBuMfgmjDn74mriaqKJasgo9sE16hIFArJIu0or/px
-         OFbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jRyMsIs11r2MRu6fNT1VWtbou28AKL3M5y70TjhIbYo=;
-        fh=pkydDUpaiOZDLLJ3jluYX9shnTObDI+2LXYtkXhGkec=;
-        b=qQc1QnZszCPjFem/W25t0QaRTSHhRTd4zMebVgrkczU5lMP0d9toT1ziLY951SO38u
-         M55F+RnRDW+TGxhIv7jIBTDkeARrzhbgBNiMWTe+PDnqcrx4LyTJlIArgYPeqcR2E0ZY
-         fEMjBSqES2AO/+7grdGR8QjUTt3nmNGLfv5xuW7CXf1Yh3LnieU6vGPlp1EDV9qRY6+0
-         UCZvupOckQKsoi8hrlOV5fNLjF0cZWDdziFoIeZJVWCfv5/2DQRiqrjejbqy85TOQSta
-         C1Y5DMkJTB8DJO1TtoYyzyjsbKAHJUVyfhm8zdv5zd6MhIHtS3fA3q0ww15rKroBydtY
-         9N5A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782436400; x=1783041200; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jRyMsIs11r2MRu6fNT1VWtbou28AKL3M5y70TjhIbYo=;
-        b=qU4vlocdl1Pr8so1EravWQRF+12AFyoqg9EXazpYa9RHdCXNA+CfZDyQ/MS42Xa+WE
-         Yhi8AgZ0Ije5+inBcdkgyMazCvILKibVw9vA7vvdhMQL+qWwvMS6KwW9UakGJJ69yvBP
-         w5gLTCh6k5ntvqVXtMInYK7X7ukmUc9uG/FzKvioXIrc9fsu/Oqt/PkFBwTg3ak4ZYAY
-         ha1iqU7VWotdoxrqML9DHgoMeBJQpnyRKtblC6Xz6KehTaMys0LZIqCsopgbXYrGIIYv
-         9coNtXrdYnytfdPIP5gqy4qtiwL06QC83u9DoYzeRF6P/8wrifYC+CU7H33kYrohuIdZ
-         lXAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782436400; x=1783041200;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jRyMsIs11r2MRu6fNT1VWtbou28AKL3M5y70TjhIbYo=;
-        b=Vh7iswd9QJ7l7ZcXVt+AeTaxNmYfte2GFK7gli6zw9Iq6CWpdAqb3x+bQdn8g9IF3T
-         oppGYEMiDsnUyIYfBRbURZvZbAIXAVQs/QaVgdSOlA0XABB1lm1uUkNX8Ur0FA7YvY65
-         sbGb/bJQwoDS7ntxYxa+RvTQfY5Z+myzJYSdOfn9c7Pvf0TSgf/Odf0xIhvwn+l5YmGE
-         wjsO5o1hnCr5iDp4lsxZ1blKSmSB5vO55nvZXWlEj2vRshe14bUR4yTQFTlh8c1fczWn
-         VOCzGkwWQKSmc2WdtbK2ssoDjKN3pEi0TN5FWtyl3NHz5C+zNZk+460Lyvq7ihklVZsg
-         yQig==
-X-Forwarded-Encrypted: i=1; AFNElJ9+Wbh2H4Wq6GqxJbCaq893EQzpMkw4GhwnKEyD3JqLb9v3XUU/2BoYUyaNtPSix9ZR61ZKpPum5QF6G2iI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3EWdgofiK3UG433WM3gOR/YRD4l95YHMJbiYHVfdb6Q8RlQAN
-	4shueEK2R3SnbCQg2lYLxZ+U5sfQoYjxhVbKhni3OFd1T3D9ppPUWM5e/egzUOK5xec5+bEiWIv
-	vZun5MSeUew5QCEe+6jf+aLWIB89pfTUEJ1ez2i2k
-X-Gm-Gg: AfdE7cn3RR3OjEei6O40oIs26OW7ZsFhKXEWmEU2cG/heVH7hY1kNg1CvvAz/bqvbKs
-	9/ZD2uO+08+s5SiAJBCNZULkxYDLcDi0aJghbeT3JEtnjQRRaacQNnc2M+KLCDQlqP/tXMuHA9o
-	H8fa4dygL9guCQtT0nP+TXB6+hMSucxP/Vc11F8rzXaDr5mjiqXXI1KpS3tNcm0kyamG0/BaR1X
-	8RfkWUyjGEumPUD3XV3COLb5EYF9lb4lST1X7ZU0E2Vvub57l17B53LzaTr6oaxD+R9CWBsKOE2
-	1X8I
-X-Received: by 2002:a05:622a:1e09:b0:519:b655:235 with SMTP id
- d75a77b69052e-51a7d918f85mr4051721cf.3.1782436399662; Thu, 25 Jun 2026
- 18:13:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HBuW3/F0"
+Message-ID: <34a009d9-a1f3-4347-9e92-866ec05ddb60@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782441379;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CegCkrNaBHbS0Oj9Ldk9o9PP5HExitwf901kAMkwPm8=;
+	b=HBuW3/F090mBYZL37N1SgKew3WdUYWwEq1G3Gdz0VQvXxEOspJwKy5dzjesLiz4H9/7nEI
+	Ld3FlxQNHmujt6uefJXigfVXjSPvhIU36Ndkyfamoz1N4Ux0yrRNByHqzMl9c55vVs8eVK
+	xqqSNZuaW5n7thiQ8n0QYdK/uoHGbEk=
+Date: Fri, 26 Jun 2026 10:35:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310023807.80140-1-laoar.shao@gmail.com> <aa-6wILF90Y4ndnd@infradead.org>
- <20260311224420.GB2440964@google.com> <CALOAHbBQhOsNVemgdtj2qLMN=bwqpE89ySqgLOMa9DY3-K4y7g@mail.gmail.com>
-In-Reply-To: <CALOAHbBQhOsNVemgdtj2qLMN=bwqpE89ySqgLOMa9DY3-K4y7g@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 25 Jun 2026 18:12:43 -0700
-X-Gm-Features: AVVi8CcqfXZ1h1HVLq2yBOfNvHANxH2EV1rCT3v6jIy0gWZXwduJ22FRHVx0RY0
-Message-ID: <CABCJKufaZMfhRFu-FJj6eHgEjkxmhPYpxMoiYMyp1U0j-f5RJg@mail.gmail.com>
-Subject: Re: [PATCH v3] module: print version for external modules in print_modules()
-To: Yafang Shao <laoar.shao@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>, mcgrof@kernel.org, petr.pavlu@suse.com, 
-	da.gomez@kernel.org, atomlin@atomlin.com, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v6 07/10] rust: configfs: use `LocalModule` for
+ `THIS_MODULE`
+To: Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann
+ <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>,
+ Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>,
+ Igor Korotin <igor.korotin@linux.dev>,
+ FUJITA Tomonori <fujita.tomonori@gmail.com>,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
+ Carlos Llamas <cmllamas@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
+ driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-pci@vger.kernel.org
+References: <20260624-fix-fops-owner-v6-0-5295e333cb3e@linux.dev>
+ <20260624-fix-fops-owner-v6-7-5295e333cb3e@linux.dev>
+ <DJI7IOXAD84M.2F6VSBY64BO62@garyguo.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Alvin Sun <alvin.sun@linux.dev>
+In-Reply-To: <DJI7IOXAD84M.2F6VSBY64BO62@garyguo.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jun 24, 2026 at 7:49=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
+
+On 6/25/26 22:40, Gary Guo wrote:
+> On Wed Jun 24, 2026 at 4:00 PM BST, Alvin Sun wrote:
+>> Replace the `THIS_MODULE` static reference in the `configfs_attrs!`
+>> macro with `this_module::<LocalModule>()`, and update
+>> rnull to import `LocalModule` instead of `THIS_MODULE`, consistent
+>> with the move of `THIS_MODULE` into the `ModuleMetadata` trait.
+>>
+>> Assisted-by: opencode:glm-5.2
+>> Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
+>> Acked-by: Danilo Krummrich <dakr@kernel.org>
+>> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+>> ---
+>>   drivers/block/rnull/configfs.rs | 6 ++----
+>>   rust/kernel/configfs.rs         | 8 +++++---
+>>   2 files changed, 7 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/block/rnull/configfs.rs b/drivers/block/rnull/configfs.rs
+>> index c10a55fc58948..b2547ad1e5ddd 100644
+>> --- a/drivers/block/rnull/configfs.rs
+>> +++ b/drivers/block/rnull/configfs.rs
+>> @@ -1,9 +1,7 @@
+>>   // SPDX-License-Identifier: GPL-2.0
+>>   
+>> -use super::{
+>> -    NullBlkDevice,
+>> -    THIS_MODULE, //
+>> -};
+>> +use super::NullBlkDevice;
+>> +use crate::LocalModule;
+>>   use kernel::{
+>>       block::mq::gen_disk::{
+>>           GenDisk,
+>> diff --git a/rust/kernel/configfs.rs b/rust/kernel/configfs.rs
+>> index 2339c6467325d..c31d7882e216d 100644
+>> --- a/rust/kernel/configfs.rs
+>> +++ b/rust/kernel/configfs.rs
+>> @@ -875,7 +875,7 @@ fn as_ptr(&self) -> *const bindings::config_item_type {
+>>   ///                 configfs::Subsystem<Configuration>,
+>>   ///                 Configuration
+>>   ///                 >::new_with_child_ctor::<N,Child>(
+>> -///             &THIS_MODULE,
+>> +///             ::kernel::module::this_module::<crate::LocalModule>(),
+>>   ///             &CONFIGURATION_ATTRS
+>>   ///         );
+>>   ///
+>> @@ -1021,7 +1021,8 @@ macro_rules! configfs_attrs {
+>>   
+>>                       static [< $data:upper _TPE >] : $crate::configfs::ItemType<$container, $data>  =
+>>                           $crate::configfs::ItemType::<$container, $data>::new::<N>(
+>> -                            &THIS_MODULE, &[<$ data:upper _ATTRS >]
+>> +                            $crate::module::this_module::<LocalModule>(),
+> ^ You only changed one single place. This is still plain `LocalModule`.
+
+Initially I wrote it as `crate::LocalModule`, but clippy warned about it. So
+instead of putting the crate path in the macro body, I added `use
+crate::LocalModule` in the calling file.
+
+```
+warning: `crate` references the macro call's crate
+     --> rust/kernel/configfs.rs:1024:59
+      |
+1024 | ...  $crate::module::this_module::<crate::LocalModule>(),
+      |                                                     ^^^^^ help: 
+to reference the macro definition's crate, use: `$crate`
+      |
+      = help: for further information visit 
+https://rust-lang.github.io/rust-clippy/rust-1.94.0/index.html#crate_in_macro_def
+      = note: `-W clippy::crate-in-macro-def` implied by `-W clippy::all`
+      = help: to override `-W clippy::all` add 
+`#[allow(clippy::crate_in_macro_def)]`
+
+warning: 1 warning emitted
+```
+
+Alternatively, `#[allow(clippy::crate_in_macro_def)]` could be added on 
+the macro
+definition. Would you suggest that approach?
+
+Best regards,
+Alvin
+
 >
-> Just a friendly follow-up. I noticed that this patch hasn't been
-> merged into linux-7.1 yet. Could you please let me know if there are
-> any further actions required on my end?
-
-Based on the discussion here, the consensus seems to be that module
-versions do not make sense in the mainline kernel and should be
-removed instead:
-
-https://lore.kernel.org/linux-modules/2026031341-evolve-repeater-987b@gregk=
-h/
-
-This reminds me: Greg, would you mind sending v2?
-
-Sami
+> Best,
+> Gary
+>
+>> +                            &[<$ data:upper _ATTRS >]
+>>                           );
+>>                   )?
+>>   
+>> @@ -1030,7 +1031,8 @@ macro_rules! configfs_attrs {
+>>                           $crate::configfs::ItemType<$container, $data>  =
+>>                               $crate::configfs::ItemType::<$container, $data>::
+>>                               new_with_child_ctor::<N, $child>(
+>> -                                &THIS_MODULE, &[<$ data:upper _ATTRS >]
+>> +                                $crate::module::this_module::<LocalModule>(),
+>> +                                &[<$ data:upper _ATTRS >]
+>>                               );
+>>                   )?
+>>   
+>
