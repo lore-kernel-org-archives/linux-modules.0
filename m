@@ -1,316 +1,252 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA31449EA9;
-	Wed,  1 Jul 2026 11:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AAE343896
+	for <linux-modules@vger.kernel.org>; Thu,  2 Jul 2026 16:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782904114; cv=none; b=nYbbBRODBCB85sa5YeQ1BdVvk6B0gkncoz/hvtukW1k0V15qbtcxAKzyIVOkXM0V8dSSLqyDb1KY5bAia1bAE6Sl3cC8JuDt+YbPkI9+on72WDvjKFOPiLXtrE5mkRzeZvYlmZ+eR0Dgtf4EpzmZkFfT57GtbNvBTMYvCeaNGi0=
+	t=1783010479; cv=none; b=rg9xJVU7xxC5mQKTZyYbIcUB5qWBQjetdKvEdDSFGa5hv/Gx+YDNfUBrvA7Q4FFVzPpjQ7fHPGI0wrwxI5+rLYC5aQG9kOBOX6O5ZqjVWP+vBBw9SLnnLcQxTthnhHw9Mkqn0ExH7PxvAXCsAEOMgx5drVgzlliGdQ6KyC9VNU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782904114; c=relaxed/simple;
-	bh=S9U/QQkOj2QcN7GOUDf8Nq4vJ3cWwPyQIEl2/pEFaPo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kKqfYrPMMtRjByZsakL5vlqIu8RDlC/porwbV+EY/X+Jj9W3fGQ2JVzTMgHChj6U5oxh/+xWUv2W+DAbDDkJiS7KS9eDPDCmvhIxkkvNsibMetJp77YrOHf0L+2x8Z20NrFQp002+l5oP/AhbnD+3usivHw10XAkUxqddKyCofU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QRnvYhKi; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783010479; c=relaxed/simple;
+	bh=/F3G78oZT/zqPROLzjF6UYQussePtN2a475lu4sjhRc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YY3ZIqZcovhPLswtvADmX1nTOlGZ0GYaWF2v37jgN5s7wMJ3MQV2CRAi5tT1+MNyVKAo8GrB4oqCIq52mxkGzqRHsjLuD7zAjsncTEHV73UJmGtPuUR+YbZGkuwxylrCSAPdAWCOQTulsSuOtDc1tMtlLY+DUYJzFpzHzHZVnOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cvUVa441; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QRnvYhKi"
-Message-ID: <0efcc0a9-a51d-4de8-8406-b8fa536a91b7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782904099;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ieMgPSS1eIBfAPTWcoeMePMwN2vKLGAwkXUol+yS3JM=;
-	b=QRnvYhKi7ifn2CAOqwrrTALRRhFuKdBNRY4USBSzQESgxOH79yyPbWsw+wvjxJGm9pDQu3
-	75wHltVABewcdEultw97xVO9Srux+vxmHLrM1y3qkyY8Qi8RlcbW/19L2d+jmEkSOqKAw5
-	8d3ZpLHm3o4fEt3mWUbZ+Ie+mvfoBxk=
-Date: Wed, 1 Jul 2026 19:07:22 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cvUVa441"
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-6a145935764so826020eaf.3
+        for <linux-modules@vger.kernel.org>; Thu, 02 Jul 2026 09:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783010475; x=1783615275; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6vj9Y8YPdjXLyONUMUrksIBiqtXi2GJzV4uQluCx+vw=;
+        b=cvUVa441MffTyPS51fYGiVZzzZ38XAEjzfcjW1g0krr7N8lJpx5LzcT1Pn3O0eihTJ
+         UJxnN8C0VKZ8p5rZXXxka8dI3+qVLKXc3hGWz2ed04tLLi2R57FXtuw//ikxLfFzDgVv
+         FYBsrS/M5WDL5tdpDuWbu2826hbCrYIIQxo64kqcZVXL1No8ecKPshrrUwdsudWLQtqC
+         fRLVV5f6v+QGXpJL3+ezcQ7cnhmY4M9wFYB5Nn1iqd13/YH+yg62K+BqGyIPzMFM4wW3
+         T5JYdbuqNIauvlC+vonZvWiCQGGxjSmEyEk9S53Z7L87BS7H2wP8FRkWqnBn3fLvViRn
+         MsmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783010475; x=1783615275;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6vj9Y8YPdjXLyONUMUrksIBiqtXi2GJzV4uQluCx+vw=;
+        b=nK8bUg1C1K2kI6QAULWvyek8QB7VljJSrJhi9+vUYKdj5aKc9vV2V3HSm+62VWbYyn
+         US2MwPRTpAPipkP2+eeJYjTfZQlxTxPuyAxp6TzzN8HRFmQzx253y0HPaUZmQqjS7H+Z
+         VDoaIO2YUz5VMbrzqeyQ6yvn/YwhaTiy8i7syV6vs1Aadx0zHnq2GhMhJRnajskn68oQ
+         LbiCRj93T7xf2/GvjKZhL1g8d+5STguVpLZ68lB9q+r8QVc7jmua25g+Q2S0GPWMBDRa
+         ISMjujnwk161+wV+3LOKMwQpNdQfgPTgi4qDst2YBn7LT72gaJnOLLKxDaK+nAaDgicV
+         M4Ew==
+X-Forwarded-Encrypted: i=1; AFNElJ+6aDPdIhA62c00IZ1l6zdx9BmL2qx/vm0rV6xlcenFlv/fcCIwnACP2litI444TeKLJhNJrVAdXeSvpb6P@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIj8OjRSRGZWP+gNounVmp3xqjr155nZIAe67sUB5Zm9PmKPJR
+	kmg4r5CvyM+DvRjgqYZm+xYbuez38ON04OZ1rdhMtjHddoZqC57I4i40
+X-Gm-Gg: AfdE7cmp9yio8tVEHP0mcdiIc4h8f18GxT8R0UJp6aVtStUyAa0EwFDPdcRtkLythnW
+	2xE1YO7JHTFuTRtSNGZfZ86gm0srl9z92lfMpKY/Tf7Fz0UL71l329eeGYfXSiQ6iILSCufzBon
+	8GGOCtBU+8vJmUVhBQfiCvJNxfM1OrpxVtE4LEGyNVw5rxuDCgGwI7FchvwbPP7rPVkhSCULBjF
+	AL/arXi/ClgtVWV1p43vyVo5I4Yon0gGslDEP6KQO5xYY7fqb6chb9N5uD5jT78O9PMZ8tssuqF
+	3tW4tFWcljZnZ9fQJOHvFps1LbxZfjlRzSyATPTFj4RID+Cje3bO5nLH1igDtq1ltcm2AdNrNvT
+	z0KKZSLo0dPUB5EAv3fetqZgDqfPq6Cc8j2k9iwLcVjMaYZj8MH/FxcJeCBvkJEXV1jCLyN08uK
+	qfRru//kO93FnlAsJrjkmMAVDxonavs0TszemWLHtNNgiFDaiWiFNGSE9mqc1V3w==
+X-Received: by 2002:a4a:ee11:0:b0:69d:281c:27aa with SMTP id 006d021491bc7-6a309a9cdcfmr3662607eaf.29.1783010474852;
+        Thu, 02 Jul 2026 09:41:14 -0700 (PDT)
+Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
+        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-44cbec93702sm3189652fac.12.2026.07.02.09.41.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 09:41:14 -0700 (PDT)
+From: Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v5 00/18] dyndbg: cleanups, refactors in prep for API fix
+Date: Thu, 02 Jul 2026 10:40:52 -0600
+Message-Id: <20260702-dd-maint-2-v5-0-24f22b052bf2@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 1/7] list: Add mutable iterator variants
-To: Jani Nikula <jani.nikula@linux.intel.com>,
- David Laight <david.laight.linux@gmail.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "David Hildenbrand (Arm)" <david@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Jens Axboe <axboe@kernel.dk>,
- Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Paul Moore <paul@paul-moore.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Shakeel Butt <shakeel.butt@linux.dev>, David Howells <dhowells@redhat.com>,
- Simona Vetter <simona.vetter@ffwll.ch>, Randy Dunlap
- <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-ntfs-dev@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, audit@vger.kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kexec@lists.infradead.org, live-patching@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-pm@vger.kernel.org, rcu@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-mm@kvack.org, virtualization@lists.linux.dev, damon@lists.linux.dev,
- llvm@lists.linux.dev, Kaitao Cheng <chengkaitao@kylinos.cn>,
- Muchun Song <muchun.song@linux.dev>
-References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
- <20260622040533.29824-2-kaitao.cheng@linux.dev>
- <20260622094242.64531b9a@pumpkin>
- <351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
- <cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
- <20260624152324.3def88ce@pumpkin>
- <0ed6b5c3-e955-46e2-9fc6-075a0dfd1c4f@linux.dev>
- <734f66ca51485ee3ec9788c0eaaead681e00664b@intel.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <734f66ca51485ee3ec9788c0eaaead681e00664b@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/12QQW7DIBBFr2Kx7kQwAxh71XtUWWCbOEiJnWIXt
+ Yp890xiRXG6Qfqg95g/VzGFFMMk6uIqUshxiuPAwXwUoj36oQ8QO84CJVppUEHXwdnHYQaE0rZ
+ GoywrPgQDlxQO8fch+9pzPsZpHtPfw53xfvvU0FaTESQ0FZWk0Hvp6LPnp9OuHc/irsn0Qq18m
+ yATo9or06BWTUftf1RvUXxDNaOq8kprY5zxbosua5sUvn94I/Na6bWQuliNJIELgz/FfgDjqpK
+ ctaisqvnj/bLcAM30vqNeAQAA
+X-Change-ID: 20260521-dd-maint-2-76c542079420
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
+ linux-modules@vger.kernel.org, Louis Chauvet <louis.chauvet@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783010473; l=6243;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=/F3G78oZT/zqPROLzjF6UYQussePtN2a475lu4sjhRc=;
+ b=6W5WsAv71vlWu3Awx4fELrUATsZFBvjRoWKEAILIb0kIvfEGoWqEVQuxzuGtXFGwRYsfMbJgP
+ 4N2YLkGcDa8AD+wexGxyWfBYJc00bjj4ScAWaJ0DmYAMBbHxUlfYjS0
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-在 2026/6/25 19:00, Jani Nikula 写道:
-> On Thu, 25 Jun 2026, Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
->> 在 2026/6/24 22:23, David Laight 写道:
->>> On Wed, 24 Jun 2026 15:23:47 +0200
->>> Christian König <christian.koenig@amd.com> wrote:
->>>> On 6/24/26 15:14, Kaitao Cheng wrote:
->>>>> 在 2026/6/22 16:42, David Laight 写道:  
->>>>>> On Mon, 22 Jun 2026 12:05:31 +0800
->>>>>> Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
->>>>>>  
->>>>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->>>>>>>
->>>>>>> The list_for_each*_safe() helpers are used when the loop body may
->>>>>>> remove the current entry.  Their API exposes the temporary cursor at
->>>>>>> every call site, even though most users only need it for the iterator
->>>>>>> implementation and never reference it in the loop body.
->>>>>>>
->>>>>>> Add *_mutable() variants for list and hlist iteration.  The new helpers
->>>>>>> support both forms: callers may keep passing an explicit temporary cursor
->>>>>>> when they need to inspect or reset it, or omit it and let the helper use
->>>>>>> a unique internal cursor.  
->>>>>>
->>>>>> I'm not really sure 'mutable' means anything either.
->>>>>> It is possible to make it valid for the loop body (or even other threads)
->>>>>> to delete arbitrary list items - but that needs significant extra overheads.
->>>>>>
->>>>>> It might be worth doing something that doesn't need the extra variable,
->>>>>> but there is little point doing all the churn just to rename things.
->>>>>>  
->>>>>>>
->>>>>>> This makes call sites that only mutate the list through the current entry
->>>>>>> less noisy, while keeping the existing *_safe() helpers available for
->>>>>>> compatibility.
->>>>>>>
->>>>>>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
->>>>>>> ---
->>>>>>>  include/linux/list.h | 269 +++++++++++++++++++++++++++++++++++++------
->>>>>>>  1 file changed, 231 insertions(+), 38 deletions(-)
->>>>>>>
->>>>>>> diff --git a/include/linux/list.h b/include/linux/list.h
->>>>>>> index 09d979976b3b..1081def7cea9 100644
->>>>>>> --- a/include/linux/list.h
->>>>>>> +++ b/include/linux/list.h
->>>>>>> @@ -7,6 +7,7 @@
->>>>>>>  #include <linux/stddef.h>
->>>>>>>  #include <linux/poison.h>
->>>>>>>  #include <linux/const.h>
->>>>>>> +#include <linux/args.h>
->>>>>>>  
->>>>>>>  #include <asm/barrier.h>
->>>>>>>  
->>>>>>> @@ -763,28 +764,72 @@ static inline void list_splice_tail_init(struct list_head *list,
->>>>>>>  #define list_for_each_prev(pos, head) \
->>>>>>>  	for (pos = (head)->prev; !list_is_head(pos, (head)); pos = pos->prev)
->>>>>>>  
->>>>>>> -/**
->>>>>>> - * list_for_each_safe - iterate over a list safe against removal of list entry
->>>>>>> - * @pos:	the &struct list_head to use as a loop cursor.
->>>>>>> - * @n:		another &struct list_head to use as temporary storage
->>>>>>> - * @head:	the head for your list.
->>>>>>> +/*
->>>>>>> + * list_for_each_safe is an old interface, use list_for_each_mutable instead.
->>>>>>>   */
->>>>>>>  #define list_for_each_safe(pos, n, head) \
->>>>>>>  	for (pos = (head)->next, n = pos->next; \
->>>>>>>  	     !list_is_head(pos, (head)); \
->>>>>>>  	     pos = n, n = pos->next)
->>>>>>>  
->>>>>>> +#define __list_for_each_mutable_internal(pos, tmp, head)		\
->>>>>>> +	for (typeof(pos) tmp = (pos = (head)->next)->next;		\  
->>>>>>
->>>>>> Use auto
->>>>>>  
->>>>>>> +	     !list_is_head(pos, (head));				\
->>>>>>> +	     pos = tmp, tmp = pos->next)
->>>>>>> +
->>>>>>> +#define __list_for_each_mutable1(pos, head)				\
->>>>>>> +	__list_for_each_mutable_internal(pos, __UNIQUE_ID(next), head)
->>>>>>> +
->>>>>>> +#define __list_for_each_mutable2(pos, next, head)			\
->>>>>>> +	list_for_each_safe(pos, next, head)
->>>>>>> +
->>>>>>>  /**
->>>>>>> - * list_for_each_prev_safe - iterate over a list backwards safe against removal of list entry
->>>>>>> + * list_for_each_mutable - iterate over a list safe against entry removal
->>>>>>>   * @pos:	the &struct list_head to use as a loop cursor.
->>>>>>> - * @n:		another &struct list_head to use as temporary storage
->>>>>>> - * @head:	the head for your list.
->>>>>>> + * @...:	either (head) or (next, head)
->>>>>>> + *
->>>>>>> + * next:	another &struct list_head to use as optional temporary storage.
->>>>>>> + *		The temporary cursor is internal unless explicitly supplied by
->>>>>>> + *		the caller.
->>>>>>> + * head:	the head for your list.
->>>>>>> + */
->>>>>>> +#define list_for_each_mutable(pos, ...)					\
->>>>>>> +	CONCATENATE(__list_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
->>>>>>> +		(pos, __VA_ARGS__)  
->>>>>>
->>>>>> The variable argument count logic really just slows down compilation.
->>>>>> Maybe there aren't enough copies of this code to make that significant.
->>>>>> But just because you can do it doesn't mean it is a gooD idea.
->>>>>> I'm also not sure it really adds anything to the readability.
->>>>>>
->>>>>> And, it you are going to make the middle argument optional there is
->>>>>> no need to change the macro name.  
->>>>>
->>>>> Christian König and Jani Nikula also disagree with the variadic-argument
->>>>> implementation approach. If we abandon that method, it means we will
->>>>> inevitably need to add some new macros. If mutable is not a good name,
->>>>> suggestions for better alternatives would be welcome; coming up with a
->>>>> suitable name is indeed rather tricky.  
->>>>
->>>> I don't think you need to add a new macro for the specific use case that people want to modify the next element of the iteration.
->>>>
->>>> If I remember your numbers correctly that is a really corner case and keeping using the existing *_safe() macros for that sounds perfectly fine to me.
->>>
->>> IIRC currently you have a choice of either:
->>> 	define               Item that can't be deleted
->>> 	list_for_each()	     The current item.
->>> 	list_for_each_safe() The next item.
->>> There is also likely to be code that updates the variables to allow
->>> for other scenarios.
->>>
->>> Note that if increase a reference count and release a lock then list_for_each()
->>> is likely safer than list_for_each_safe() :-)
->>>
->>> list.h has 9 variants of the 'safe' loop.
->>> The bloat of another 9 is getting excessive.
->>>
->>> It has to be said that this is one of my least favourite type of list...
->>
->> Hi Christian König, David Laight, Jani Nikula, David Hildenbrand,
->> Andy Shevchenko, Alexei Starovoitov
->>
->> For ease of discussion, I need to summarize the currently possible
->> approaches and briefly describe their respective pros and cons,
->> using the list_for_each_entry* interfaces as examples.
->>
->> 1. Add list_for_each_entry_mutable, while keeping list_for_each_entry
->> and list_for_each_entry_safe unchanged. list_for_each_entry_mutable
->> would be used specifically for safe deletion scenarios that do not
->> need to expose the temporary cursor externally. The code can refer to
->> the v1 version.
->>
->> Pros: Does not depend on immediate per-subsystem adaptation and can be
->>       merged directly.
->> Cons: Requires adding a whole set of mutable interfaces, which makes the
->>       code somewhat redundant.
-> 
-> Seems fine, and the original _safe naming is ambiguous anyway.
-> 
->> 2. Directly optimize away the temporary cursor in list_for_each_entry_safe
->> and define it inside the loop instead, changing the interface from four
->> arguments to three.
->>
->> Pros: Does not add redundant interfaces.
->> Cons: (1) Users need to manually update special cases that use the
->>       traversal variable of list_for_each_entry_safe, the new
->>       list_for_each_entry_safe would no longer apply there and would
->>       need to be open-coded.
->>       (2) Because the macro arguments changes, all list_for_each_entry_safe
->>       callers would need to be modified and merged together, making it
->>       difficult to merge such a large amount of code at once.
-> 
-> This won't fly because there are literally thousands of
-> list_for_each_entry_safe() users.
-> 
->> 3. Use a variadic macro approach to optimize list_for_each_entry_safe,
->> so that it supports both three and four arguments.
->>
->> Pros: (1) Does not add redundant interfaces.
->>       (2) Does not depend on immediate per-subsystem adaptation and can
->>       be merged directly.
->> Cons: (1) Increases compile time.
->>       (2) Makes the interface harder for users to use.
-> 
-> Basically I'm against any variadic macro tricks where the optional
-> argument is not the last argument. That's just way too surprising, and
-> goes against common practice in just about all other languages.
-> 
->> 4. Optimize list_for_each_entry by defining the temporary cursor internally,
->> making it compatible with the functionality of list_for_each_entry_safe.
->> The code can refer to the v2 version.
->>
->> Pros: (1) Does not add redundant interfaces.
->>       (2) The number of externally visible arguments of list_for_each_entry
->>       remains unchanged, still three.
->> Cons: (1) list_for_each_entry and list_for_each_entry_safe would be merged
->>       into one, and list_for_each_entry_safe would gradually be deprecated.
->>       (2) Users need to manually update special cases that use the traversal
->>       variable of list_for_each_entry, the new list_for_each_entry would no
->>       longer apply there and would need to be open-coded. There are 15 such
->>       cases in total.
-> 
-> This sounds good to me, though I take it there's some code size increase
-> and/or performance penalty?
-> 
-> Maybe the 15 cases are questionable anyway?
-> 
->> 5. Use a variadic macro approach to optimize list_for_each_entry, so that
->> it supports both three and four arguments.
->>
->> Pros: (1) Does not add redundant interfaces.
->>       (2) Does not depend on immediate per-subsystem adaptation and can be
->>       merged directly.
->> Cons: (1) Increases compile time.
->>       (2) list_for_each_entry and list_for_each_entry_safe would be merged
->>       into one, and list_for_each_entry_safe would gradually be deprecated.
-> 
-> Please don't do the macro tricks.
-> 
->> 6. Make no changes, keep the current logic unchanged, and close the current
->> email discussion.
-> 
-> I like hiding the temporary stuff when possible.
-> 
-> BR,
-> Jani.
+This series has cleanups and refactors in preparation for an API
+change needed to fix a regression in DRM when it uses dyndbg
+classmaps.  I split these out for easier review, and to stay under
+gmail's 500/day message limit.
 
-Hi all,
-If there are no objections, I will make the changes using the first approach.
+Whats here:
 
+. factor ddebug_match_desc out from ddebug_change
+  separate selecting from altering
 
-Hi David Laight,
-You previously expressed a different opinion. Do you have any further comments
-on the current proposed approach?
+. add stub macro for DECLARE_DYNDBG_CLASSMAP
+  for cleaner patches later
+  
+. reword class unknown to class _UNKNOWN_
+  a more greppable error announcement
 
+. API remove DD_CLASS_TYPE_ DISJOINT LEVEL _NAME
+  these are unused, just extra untested code.
+
+. drop NUM_TYPE_ARGS - just use ~ARRAY_SIZE
+  
+. bump num tokens in a query cmd from 9 to 15
+  with class keyword, can have 13 words in a query
+
+. reduce verbose debug clutter
+  7 log-lines to 4, with same info
+  
+. lib parser add match_wildcard_hyphen for underscore/hypen equivalence
+  "module kvm-intel" is same as "module kvm_intel"
+
+. dynamic_debug use KBUILD_MODFILE for unique builtin names
+  disambiguate init/main from kernel/module/main
+
+. refactor param_set_dyndbg_classes and below
+  improve selectivity of callchain underneath
+  
+. tighten fn sig of ddebug_apply_class_bitmap
+  make more args const
+
+. replace classmap list with an array slice
+  section records are directly usable from the array
+
+. macrofy a 2 index for loop pattern - DRY
+
+. pin class param storage to u32
+  avoid param size ambiguity across arches
+  this also changes __drm_debug from long unsigned to u32.
+  
+. module make proper substructs in _ddebug_info
+  its just cleaner
+
+. move mod_name down from struct ddebug_table to _ddebug_info
+  makes mod_name more available where its needed
+
+. hoist classmap filter-by-modname up to ddebug_add_module
+  closer to where its done for pr-debug descriptors
+
+. change __dynamic_func_call_cls macros into expressions
+  Xe driver uses it inside an if (cond), do-while-0 cant sit there.
+
+"user visible" changes:
+
+The KBUILD_MODFILE derived name appears in dynamic_debug/control, so
+[main] changes to [init/main] etc.  The query parser is adjusted so
+that "module main" still selects all of the former [main] modules.
+It is user visible, but not a behavior change.
+
+If a coder calls __pr_debug_cls(5, "...") but does not register a
+classmap for it, that callsite will display in dynamic_debug/control
+as "class:_UNKNOWN_ _id:5", not "class unknown, _id:5" as previously.
+This is an error case, and has never been seen in the wild.
+
+---
+Changes in v5:
+  moves KBUILD_MODFILE ahead of array-slice, to address sashiko
+  complaints which were fixed later in V4.
+
+Changes in v4:
+
+Dyndbg previously used KBUILD_MODNAME to provide module-name, this
+works well for loadable modules (module loader requires unique module
+names), but for builtin modules, is effectively kbasename, and is not
+guaranteed unique.
+
+So we get 4 modules named "main": init/main, kernel/power/main,
+kernel/base/power/main.  This ambiguity is visible in user-space since
+the beginning of dyndbg.
+
+Now suppose kernel/{,base}/power/main want to define classmaps to
+categorize the various pr-debugs they have.  The current code finds a
+module's classmaps by strcmp on modname, so init/main will match
+against classmaps defined by both kernel/{,base}/power/main.
+
+The current code will also map "main" classes to kernel/*/power/main,
+so they will probably work at first, but 2 independent classmaps can
+both use class-ids 0-N, but will conflict if they're both used by a
+module.  Then we have classmap overlaps and unpredictable results.
+
+Changes in v3:
+
+fix some (not all) of sashiko's complaints.
+
+Changes in v2:
+
+ https://lore.kernel.org/lkml/20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com/
+    
+V2 addressed most of sashiko's feedback on V1:
+ https://sashiko.dev/#/patchset/20260504-dd-cleanups-2-v1-0-6fdd24040642%40gmail.com
+
+---
+Jim Cromie (18):
+      dyndbg: factor ddebug_match_desc out from ddebug_change
+      dyndbg: add stub macro for DECLARE_DYNDBG_CLASSMAP
+      dyndbg: reword "class unknown," to "class:_UNKNOWN_"
+      dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
+      dyndbg: drop NUM_TYPE_ARGS
+      dyndbg: bump num-tokens in a query-cmd from 9 to 15
+      dyndbg: reduce verbose/debug clutter
+      lib/parser: add match_wildcard_hyphen() for agnostic matching
+      dyndbg: use KBUILD_MODFILE for unique builtin module names
+      dyndbg: refactor param_set_dyndbg_classes and below
+      dyndbg: tighten fn-sig of ddebug_apply_class_bitmap
+      dyndbg: replace classmap list with an array-slice
+      dyndbg: macrofy a 2-index for-loop pattern
+      dyndbg: pin class param storage to u32
+      dyndbg,module: make proper substructs in _ddebug_info
+      dyndbg: move mod_name down from struct ddebug_table to _ddebug_info
+      dyndbg: hoist classmap-filter-by-modname up to ddebug_add_module
+      dyndbg: change __dynamic_func_call_cls* macros into expressions
+
+ Documentation/admin-guide/dynamic-debug-howto.rst |  42 +-
+ drivers/gpu/drm/drm_print.c                       |   6 +-
+ include/asm-generic/dyndbg.lds.h                  |  14 +-
+ include/drm/drm_print.h                           |   2 +-
+ include/linux/dynamic_debug.h                     | 130 +++---
+ include/linux/parser.h                            |   1 +
+ kernel/module/main.c                              |  12 +-
+ lib/dynamic_debug.c                               | 494 +++++++++++-----------
+ lib/parser.c                                      |  58 ++-
+ lib/test_dynamic_debug.c                          |  28 +-
+ 10 files changed, 397 insertions(+), 390 deletions(-)
+---
+base-commit: 4dcdecc52686a3fbd4545e86fc711fdcd15f09cb
+change-id: 20260521-dd-maint-2-76c542079420
+prerequisite-change-id: 20260630-fix-align-589738662161:v4
+prerequisite-patch-id: d6b2b7d254c7e8bbc0aea891d49b15dc1e71eaa4
+prerequisite-patch-id: 3dffaa165e78dc58e443469755eddb07972d0ddf
+prerequisite-patch-id: 2c4827d84b4159e71df89cca2a03938a534ecdb5
+prerequisite-patch-id: 4599f9be1eb06c0d7f2a7c657d4940411635e94b
+prerequisite-patch-id: aea9e121b30e3c7f3d76921b49f81ad421b7af51
+
+Best regards,
 -- 
-Thanks
-Kaitao Cheng
+Jim Cromie <jim.cromie@gmail.com>
 
