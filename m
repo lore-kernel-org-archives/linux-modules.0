@@ -1,17 +1,17 @@
 Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092BB3AFB13;
-	Mon,  6 Jul 2026 06:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8113DDDC3;
+	Mon,  6 Jul 2026 06:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783318885; cv=none; b=hjn/Rzavl+Ae5ejbVBr3stCbU1f6Em7eTdpZPSqPhP9uVU4vIj4FLAnjP5UeQJZNKtE+luvVsRzze3kkb33VCQ/085WMjGMDYSpPOtyYV9RSp+41bpAdTIYiZ8qGcyAXyQEWPVtKIq6MWSqRusk6hK18U/4zo8goY4u36OgK46Y=
+	t=1783318894; cv=none; b=tiriSSl8ePOGWW547HBdrPUqWOiOxHzJxMhvaXrzDXd1R6oo9qAwllP27g/3+HLopNo/Pt8N/UiaDCcjIIS8GJpI5GoLSQBIirleafTAPwe+PdKBo1iC0Rnf9osPKFhbGUj7iUXRGnPPFfHNd/lg9xoQVRaBfMt4ShLq7oledMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783318885; c=relaxed/simple;
-	bh=b4wIyRNvI2EycGpP1ATGas8ShfzLdMlBYh3q9Efaew0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=LPXyEhUzoElanH24BNdABHGjw1S6q15L+pIRB+wXQ83VFkx+Ovdqnvoc9bO8huo9f+XQz/TGi8TjsjTlqecqfpgbYOufSVWzS5x8FrPY7cQBQ6EkIj9ITpy+nT8ojsyFsz1c/Xwf0HM+44xyjLHGQcAZkvXBncFvTfU5+rqfO9g=
+	s=arc-20240116; t=1783318894; c=relaxed/simple;
+	bh=w+C1tGe+D2gcMh5vmD2+eMhKBKW1r3S6v2wTTfvfqWM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=RRmABNr9cpDTnxRoEB9f/iIeYqIXDis/7JHXPQITzayXma3GMRIsQz1f0wV9NeFlHMgTnAnN+VcjOZEhGqZsZBzxb+v6pRknSNnuH4APp1mBjr2PfPqxTUew7++Kv3ndSuZrE05QHUoe4hgleMWAsSU1Z30pIfM8AZ0Z+nwKZWU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-58-6a4b4904a87b
+X-AuditID: a67dfc5b-c45ff70000001609-d3-6a4b490581ab
 From: Byungchul Park <byungchul@sk.com>
 To: linux-kernel@vger.kernel.org
 Cc: max.byungchul.park@gmail.com,
@@ -178,45 +178,45 @@ Cc: max.byungchul.park@gmail.com,
 	aliceryhl@google.com,
 	tmgross@umich.edu,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH v19 26/40] cpu/hotplug: use a weaker annotation in AP thread
-Date: Mon,  6 Jul 2026 15:19:14 +0900
-Message-Id: <20260706061928.66713-27-byungchul@sk.com>
+Subject: [PATCH v19 30/40] dept: make dept stop from working on debug_locks_off()
+Date: Mon,  6 Jul 2026 15:19:18 +0900
+Message-Id: <20260706061928.66713-31-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20260706061928.66713-1-byungchul@sk.com>
 References: <20260706061928.66713-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSbUxTZxTH99z7PPfeNja5qUQv+IGlRrtoxpToPMpczL7sbm5hyb5s08Q1
-	cidF3lIQQTet1TKC4pBEJ1SxQCxgq2Kr4UVqALVY0ayKQrVIK6slBgnujkoQgbWYffvl/8v5
-	n/PhcLQ6QJI4fW6hZMjVZWsYJVaOL6r7mHy1NWvNsxYEQ8EwgYFDXRiik2UYzlx2MDBraWWh
-	zFlN4M6gCUMwWoZgasZCg7l9HsNslYeFyekACycPIZh3exD82zLHwNhNGcF48DoBW3iOgnDX
-	7wjO1bti4tRrBuSXIQRXPcMI3E0mBl5UXqPhUXSCAe/JowxYTW4CkaduCk6ddWJoD3WwYHd+
-	C0FbBENfZX0sv7IULH8epmDadoGFew1DGGzGFWC5309gpKmGhXlrHnjsoyx4hwcIjEWqGAj2
-	lhJoNYZi5z56ToHjWISG6tohBjrdXgxls5MIPG0jFPR3nGFg2DFPwGiZIvDQ7sNwedRPQZ/n
-	DgZvTTOGvzouEjg/+IAC1/17NPhOVJAtGeKU+TgWzQ9nGdFR60DizNsqJN58NUGLR1x7xfN9
-	rxjxbfQxI96tF8T2mmesaHXuEY/cGieiq2mV2ND5khLr5CgRn45t/m71T8rPMqRsfZFk+OTz
-	n5WZ/roenB9RFE8PvyFGZOLKEccJ/DrhXIAuR4oFnJs8TcWZ4bWC3z+9kCfwHwquiggpR0qO
-	5vuThWO2ChwXi/lvhAeD9WycMb9CmGl8QuKs4j8VAt1e5n1psmBv6VooUsTyS+/OLixQ8+uF
-	wEQvjpcKfKNCKJdbyfuBRKG7yY8rkcqKPriA1PrcohydPntdSmZJrr44ZWdejhPFXs7227tt
-	bUj2fd+DeA5pFqlgy9dZaqIrKijJ6UECR2sSVCs/2pqlVmXoSvZJhrwdhj3ZUkEPWsZhzVJV
-	6pu9GWp+l65Q2i1J+ZLhf0txiiQjWuJKO5jX8sXI0QZtepHtWtLASuu4r/SPHYe/DMps948/
-	pN1OXS2TfJxVWXrC0sya0gtr5eeJSxLzfVI4YcT1epuxuO+Adn9tuLP37nKvdnv/nGTVjR5o
-	C11NVSeHtDdS6A5z+qaNaRsCimo5oebXG4lmjb658ck/ob977b80nNbggkzd2lW0oUD3H7la
-	QUZuAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe2xLcRTH/e6rd80qV7fYDX+QikckGxKWkxAhzK55E48swsou695axojH
-	Oo0alWrSjlXZxopttq7z2EZjKuYxo7WxMduQrszGmHayRzct8c/J55zvOd9z/jg0Lq4iJ9Cy
-	1L28PFWaLKGEhHD1/OxwfPmKxNmXRyJBrToK7ztcJLzJqiXA61ETcKG8lAKf8Y4A1NbzJDxp
-	VhLgKCtB0OFVI/g9ZMRBVT1KgE9XJwDPQKsA9FkIRm11CAxOHQ4tjvs4lN7MwuCXZYSC7od9
-	CPQfXRTkdmUR0Gs+jSDPbRRA16No+NZxl4TRts8YNPf3IDC7RjBw1Z5A4DMkwaXCSv+44QcF
-	Qw0vccjVOxAUfGzDoa/rA4Kbde0IbNeUFHRqb+HQ6BoLTd5eCp7qT1HwzXkBg+8WCvKVNhKc
-	z7sRmIw6BO53NgyyL5dTYDBZCaj+UCMAZ/cwBu8NOgxKrKugw+wmoF5biPnP9XdVhIExNxvz
-	hy8Y6G/cxWDAXCxYVIS436ozBFdceRvjVK98FFd6sRRxQ4M6xHmKsnFOpfWnD3t6ce545X6u
-	qL6H4ga9rynO1p9PcM8KWe7KyUGMO9sQzlXntQnWLo4VLojnk2UZvHzWwjhhQkuBnUh3Bx0Y
-	aO8njyElnYOCaJaZy454zmEBppjpbEvLAB7gUGYyW6lxkzlISONM4yT2tFlDBIQQZiXrbC4U
-	BJhgprJDV9+SARYxkWzrg6fUP9NJbIml9q9RkL9eNmz6u0DMzGNbex8TWiTMR2OKUagsNSNF
-	KkueF6FISshMlR2I2JmWYkX+fzIfHj5bhTyN0XbE0EgSLIJFMYliUpqhyEyxI5bGJaGiaTNW
-	JIpF8dLMg7w8bbt8XzKvsKOJNCEJE8Vs5uPEzG7pXj6J59N5+X8Vo4MmHEPrtG8O1+xyLd1f
-	JrrR/uC2RKZdtefcrKNtFx3k4qown7LV2zzX4Xi9NdbdNPFF6MZtG+yak+XGmE2m4KXMdxOm
-	MS0rsN/rXBMS3xXVN8UaNVN451VFZ6xFE5YTsv7HvtVfHdG2Qz/TP824Pn7LkTM78jrHqeXB
-	kTVLvE1N0zZGWebUSwhFgnTOTFyukP4BUcBZc0sDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzXSe0xTZxgGcL5z+U5bLTmpJh4xC1plcxqcW4C88bJoJPFTTNToLtliZjNO
+	RhGKKYqiYVYYhgEq1lC1BS2XNh0WJa3Oy+ymBIooDSIKVVCsARQRMUjbFewcl/jfL8/z5vnr
+	ldAKLxslUWv2iFqNKk2JZYxsaGZFLLchKXW55QWGgvxDUHbRjiFsusLB7c5cBnr8BQiC4yYa
+	wno3B6OhLg4MbXoaSn29GIatxQiM/SYOBhrXw1DPXyx0Bl4jsPb+R0HYsAvOVToxDBreYhj3
+	tNJwqvQeggrfExouuZ8icNlyMfSVXKahvTcSHviHMQy1lVHwpg6DOdfFQlvLIIJykx6BodzB
+	QLdBT0GPtZ+BUwMYQtYaDqy6GDB52ll4bjNy8MGcAe7zLzhoftrBQk/TERau6J5x4HjUiGD0
+	gY8Ce3E/Da7HS6HiSDUDN1zNDBSERxG4rz6noP16GYbiusss6ExBFu66bzPQbPyDgS7PcQ4s
+	nW0U+J55WXB6WmjwlvQhqH1TidckkxrnnxTJvx/GxH7Wjsj4mB6RUUseTSx3X2My5n+IiStg
+	ZsidSoFU/z5GkROeWHLN+IQjZsde8lvDEEuctiWk6sYAtSX2B9mqZDFNnSVqv/h6pyzl4ocQ
+	u7tRvt/28hHSofwZhUgqEfg4ofRsEfvR14JVU8b8Z4LXG6InPZufLziP9k/kMgnNt0cLxdaj
+	zGQxi98q2IMWNGmGjxH+HmmdspxPEEpGBvH0aLRwvu7m1JB0Ir/wvpyatIKPF7qGm5jpm3NS
+	4X7DymnPFW7ZvEwJkptRRA1SqDVZ6Sp1WtyylGyNev+ynzPSHWji36w573+8ikbubatHvAQp
+	Z8phzcZUBavKysxOr0eChFbOln+6OClVIU9WZR8QtRk/afemiZn1aJ6EUc6RfxXYl6zgf1Ht
+	EXeJ4m5R+7GlJNIoHTowtq7j5at3Ny98f4u7VEUOJmw4XcsvXuFnko49nvFuYWoEHfinu9O/
+	dF5K4uEdCaFFDeXVtWULvvumu2a5lFqxPTHSERddOFIdDNSe9Kk35+S8OvN2rTlv5YLsVRFu
+	anvRJuXneZreQne6Qxn176/RpdzWyE+a6sjq1f518duSvu2TK5nMFNWXS2htpup/Me8HhGsD
+	AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe0hTcRTH/d3H787V4rIGXYyyFj3oYQVZJ4owirxpRQUhCJUjLzmfsZVp
+	EKlrtN5rsUlOy1aOmitNe61aipaVFmlmWmYrWqZpWUsdPubaiv45fM73e86X88cRkdI7dJhI
+	mb5XUKUrUuVYTIk3rdAsoNfHJi86vR102kPw3uWm4U1uNQUD/ToKCsvsGHzmOwzoKs7R8LQ1
+	j4LG66UIXAM6BN4RMwlah58Cn6GOgf6hdgaMuQj8zjoEpiYDCW2NVSTYb+YS8Lt8DENPrQeB
+	8ZMbQ353LgV91hMICjrNDHQ/jobvrvs0+Du+EtA62IvA6h4jwF19BIHPlAIXLJWBddNPDCMv
+	XpKQb2xEcPFTBwme7o8IbtZ9QOC8kofhi/4WCc3uCfB6oA/DM+NxDN+bCgn4UY6hOM9JQ9Pz
+	HgRFZgOCzndOAjSXyjCYiioocHy8x0BTzygB700GAkorNoLL2klBg95CBM4NTN2YBOZ8DREo
+	XQQYr90nYMhqY6JKEO/VnqJ4W+Vtgte+8mHeft6O+JFhA+L7SzQkr9UH2trePpI/XLmfL2no
+	xfzwQAvmnYPFFF9v4fjLR4cJ/syLBbyjoIPZvDpevDJRSFVmCqqFqxLESWX+IXrPY0nWla63
+	KAdpxx1DoSKOXcI5vJfoIGN2NtfWNkQGWcZO4ypPdgZ0sYhkm8O5E9aTVNCYyG7h7N4SFGSK
+	nck99Lz8yxJ2Kaf39OB/oeFcaXn136DQgH59tIgIspSN5Nr7nlB6JC5GITYkU6ZnpimUqZER
+	6pSk7HRlVsSujLQKFHgn68HRM3dRf3N0DWJFSD5eAlExyVJakanOTqtBnIiUyySz5sQmSyWJ
+	iuwDgipjp2pfqqCuQZNFlHySJCZOSJCyuxV7hRRB2COo/ruEKDQsBxGcKjZtnX5HiPLz88Mt
+	svqYQ1cPREc9NNhCcnaTM260tIdV2fCaKeE7lt36mUjqLK1bxlDD4KMMZt+ci9uy8FpXVcRw
+	pGwwbkWkGk3vUnXMPRsV88FvfVvgy1weHf7mV6zrQve8qfUHv82vjbfcU6zVF2q+mJgNq70W
+	j2MrfpAgp9RJisVzSZVa8Qc5S0vSSgMAAA==
 X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -224,42 +224,66 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-cb92173d1f0 ("locking/lockdep, cpu/hotplug: Annotate AP thread") was
-introduced to make lockdep_assert_cpus_held() work in AP thread.
-
-However, the annotation is too strong for that purpose.  We don't have
-to use more than try lock annotation for that.
-
-rwsem_acquire() implies:
-
-   1. might be a waiter on contention of the lock.
-   2. enter to the critical section of the lock.
-
-All we need in here is to act 2, not 1.  So trylock version of
-annotation is sufficient for that purpose.  Now that dept partially
-relies on lockdep annotaions, dept interpets rwsem_acquire() as a
-potential wait and might report a deadlock by the wait.
-
-Replace it with trylock version of annotation.
+For many reasons, debug_locks_off() is called to stop lock debuging
+feature e.g. on panic().  dept should also stop it in the conditions.
 
 Signed-off-by: Byungchul Park <byungchul@sk.com>
 ---
- kernel/cpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/dept.h     | 2 ++
+ kernel/dependency/dept.c | 6 ++++++
+ lib/debug_locks.c        | 2 ++
+ 3 files changed, 10 insertions(+)
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bc4f7a9ba64e..ba9d89613590 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -542,7 +542,7 @@ int lockdep_is_cpus_write_held(void)
+diff --git a/include/linux/dept.h b/include/linux/dept.h
+index f3cc7566ddf2..236e57befb13 100644
+--- a/include/linux/dept.h
++++ b/include/linux/dept.h
+@@ -142,6 +142,7 @@ struct dept_ext_wgen {
+ 	unsigned int wgen;
+ };
  
- static void lockdep_acquire_cpus_lock(void)
- {
--	rwsem_acquire(&cpu_hotplug_lock.dep_map, 0, 0, _THIS_IP_);
-+	rwsem_acquire(&cpu_hotplug_lock.dep_map, 0, 1, _THIS_IP_);
++void dept_stop_emerg(void);
+ void dept_on(void);
+ void dept_off(void);
+ void dept_init(void);
+@@ -194,6 +195,7 @@ struct dept_ext_wgen { };
+ 
+ #define DEPT_MAP_INITIALIZER(n, k) { }
+ 
++#define dept_stop_emerg()				do { } while (0)
+ #define dept_on()					do { } while (0)
+ #define dept_off()					do { } while (0)
+ #define dept_init()					do { } while (0)
+diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
+index 048348ea64d2..007e1bc7d201 100644
+--- a/kernel/dependency/dept.c
++++ b/kernel/dependency/dept.c
+@@ -187,6 +187,12 @@ static void dept_unlock(void)
+ 	arch_spin_unlock(&dept_spin);
  }
  
- static void lockdep_release_cpus_lock(void)
++void dept_stop_emerg(void)
++{
++	WRITE_ONCE(dept_stop, 1);
++}
++EXPORT_SYMBOL_GPL(dept_stop_emerg);
++
+ enum bfs_ret {
+ 	BFS_CONTINUE,
+ 	BFS_DONE,
+diff --git a/lib/debug_locks.c b/lib/debug_locks.c
+index a75ee30b77cb..14a965914a8f 100644
+--- a/lib/debug_locks.c
++++ b/lib/debug_locks.c
+@@ -38,6 +38,8 @@ EXPORT_SYMBOL_GPL(debug_locks_silent);
+  */
+ int debug_locks_off(void)
+ {
++	dept_stop_emerg();
++
+ 	if (debug_locks && __debug_locks_off()) {
+ 		if (!debug_locks_silent) {
+ 			console_verbose();
 -- 
 2.17.1
 
