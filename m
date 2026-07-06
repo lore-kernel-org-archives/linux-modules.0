@@ -1,17 +1,17 @@
 Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE8E0400E15;
-	Mon,  6 Jul 2026 06:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128DF42B306;
+	Mon,  6 Jul 2026 06:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783318931; cv=none; b=ueYPVbdVXGq3onQTU4qw/C2teGm471FCkJ80bfOZHlieP5XZvPozRGhfOeRDc84qZEix59/QXFtGk5nxEjDnpuNKd6AyNfG75GOxBvqEM+TR40lsTHX2mgLGGfntOOoglA9bzPX+29catAUAfVyvlbP07wSfNXrCgqWwnfdudk4=
+	t=1783318940; cv=none; b=fdDKSNsp2VEmxmJFJl8N+XVLQCCQYbl+hIGzU8Jf/Un62RPQ/lDOYV27lYuWoLxDxDDF0Qvq+vdqKxBDk8c2ArhuTDIYfsRVbQDWw/Mk4BEbQKNeP1CoiJNe5JoGTC544AnFm2TR/ZP+1xppklgJVV8FpRhqkNi/CahGgfojLkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783318931; c=relaxed/simple;
-	bh=qdrhPquz9LK1TSCcGBmbSQVFrGLawwrbGLlsjRyWAwg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=nZGWObkToGdXmp9oXFD+0ke+uVj1ZglVZ4Q73UJNe5GqiPA5reECm2x9sFlPJld6t1WvzKoo9iFAdiVywXFiEUcyXofzW9P/LC9TY1ocFpr+FzjIteAAY79SexqvnqUbz9GqOG2ZV9Tn0szjXxFmlW4aLgSmDMcXOogwc4QwcHE=
+	s=arc-20240116; t=1783318940; c=relaxed/simple;
+	bh=IVs7UrTREahv4P4gaL8VNCv4Y1x1l3V8HrPMnx32xWM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=O7gECVJ2eVuUPs8hOPKI6+upRKjpB/tD/G1TAJKLtUhFJWCCEXD4BLqxEFNS0wBjM+EQRl7lemP+0R4GegOaeDAZfeJ15SE15IhPqoS+nAnduMNLqKXutSspmTCd+QRUgmQoYCjPJojJ3oiQENGAlgypd/J1Uv+QGvcPPMeOJKU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-c7-6a4b4983bcb4
+X-AuditID: a67dfc5b-c45ff70000001609-3f-6a4b49849c85
 From: Byungchul Park <byungchul@sk.com>
 To: linux-kernel@vger.kernel.org
 Cc: max.byungchul.park@gmail.com,
@@ -178,45 +178,45 @@ Cc: max.byungchul.park@gmail.com,
 	aliceryhl@google.com,
 	tmgross@umich.edu,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH v19 34/40] rcu/update: fix same dept key collision between various types of RCU
-Date: Mon,  6 Jul 2026 15:19:22 +0900
-Message-Id: <20260706061928.66713-35-byungchul@sk.com>
+Subject: [PATCH v19 38/40] mm: percpu: increase PERCPU_DYNAMIC_SIZE_SHIFT on DEPT and large PAGE_SIZE
+Date: Mon,  6 Jul 2026 15:19:26 +0900
+Message-Id: <20260706061928.66713-39-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20260706061928.66713-1-byungchul@sk.com>
 References: <20260706061928.66713-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSbUxTdxTG/d97/7eXhiY3FfWKMZga8CURdUE9S8Sgidt1ZolmWTT6QW/k
-	KkVA1yITMw1OQCXS1BrWzMq7LdpCi1UMilWsWhE2KL6MokjHEipMCuGlgIAvt25+OfnlOec8
-	5/lwGFLZhaMZdUamqMkQ0lS0nJIHIytWnNqyNXVVsS0aLjmqafDabQj8oTMIJqZNJLw3eGTw
-	0eVB8Fu7gQSf9x4Jo7UfaAj6GzAYi7wIRvr/RnDD042gV19HQtmvLgyBly4C2t/OEGBzfg9+
-	S4ACYz8NJuMpQip9BBTVNBDwzmKVgSUnFuzBNgxvAwYa/I/zMTg7HyEoz79Mwe8lXTTccT2h
-	4FxtHYYc0wQGb2MLBscbHwFPLl6loO12DQZzRzsB1//8g4Rx3QLwni/E4NP3IqgZrKDhyrBR
-	SvQinwBP2Vy4WlolZb48ToF5bJCE030NNDgCD0iYqpKuNk81E/CPLiiDkeIPGIpmzkipT+oQ
-	nBz1I8jtWgO61m9hzGalYVA/hsH0qFuWlMRP5OkoPu/pe5qvLqlG/PSUAfF5eokeDAyRvLll
-	gOabKzj+1sXXMr7MeYTPfRjEfOWdfoIvHwlh3mk9S/Pl030kP9jaKtsWs0u+PllMU2eJmpUb
-	9spTyttcxOHnG47eLbCSOahtVQGKYDg2gbNWhugv7O924zDT7BLO53tHhjmKXcRdLwxIupwh
-	2Wcx3DlLIVWAGGY2u4eratofnqHYWG7Y5/jso2DXcq8m22X/ecZwttrGzz4Rkm6fKSbCrGTX
-	cK+GHlNhT461RXATnfX/L8zn7l/xUXqkKEOzrEipzshKF9RpCfEp2Rnqo/H7DqU7kfRzluMz
-	u+vRiPcHN2IZpIpUQNJ3qUosZGmz092IY0hVlCJu6dZUpSJZyD4mag7t0RxJE7VutIChVPMU
-	X43/nKxkDwiZ4kFRPCxqvnQJJiI6B8Wf0N7YWbFkdLJ/8TF9k2xH/ZbX8+d4WxuH7ycYzvak
-	DAzHDgVDTTsTbx3XHvjLeCFqnsnhXhy5fe2u1UJJrrjbuUzl2htKLO39cezeptNxpYmquT3W
-	yp/q7MoOYVGLvOeafeOJfztn4bivXzaui3s+mZhp3udZ+PSbFZu33TR3TK/7RUVpU4TVy0mN
-	VvgEtFflsW8DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSfUxTZxTGfd9779tLY81NIXqDiZoG8SuKZkhOVIgmRu40GhMTRRMDjV6l
-	fKmtQzFblGJjZTjbmpZIQQGlakFBQBS1SiDrHIpQi9IMsGI6HAFFkSqfdu3M/jn5nec858n5
-	47CU/C4TyaqyjorqLGWGgkhp6ba1ecu1P25JW2k6Hwt63Uno8foYeJXbRIN/VE9DcXUVgWnr
-	XQnoay8y8KRLS0PHrUoEXr8ewddJKwW6xgAN0yanBEbHuyVgzkUQcDgRWFwmCjwdjymoqs/F
-	8LnmG4HBlhEE5j4fgcKBXBqGbQUIivqtEhj4PRHeex8wEOh9h6HryxACm+8bBl/TGQTTlnS4
-	XF4XXLd8JDDZ1k5BobkDQVlfLwUjA28Q1DtfI3Bc1xL423CHArdvFnT6hwn8af6VwHtXMYYP
-	NQRKtQ4GXM8GEZRYTQj6/3JgyLtSTcBSUktD45v7EnANTmHosZgwVNZuBa+tn4anhnIcPDfo
-	uj0HrIV5OFj+wWC++QDDuM0uWV+BhK+632jBXteABd2LaSJUXapCwuSECQmjFXmUoDME25ah
-	YUo4XXdMqHg6RIQJ/0siOL6U0kJrOS9cPTuBBWPbcqGxqFeyfcMe6br9YoYqW1THJKRIU8va
-	HfhwZ8LxR/l26hRqX5mPwliei+W9r5uZEBNuEe/xjFMhjuAW8HXn+oO6lKU493y+wHaOzkcs
-	G84l89eeHAh5aG4h/8lTTUIs4+L47jGX5HvmfL6ypum/nLCgfmuqBIdYzq3mu4f/oA1IWopm
-	2FGEKis7U6nKWL1Ck56ak6U6vmLfocxaFHwn2y9Txnto1J3YjDgWKWbKYP3mNDmjzNbkZDYj
-	nqUUEbLoxVvS5LL9ypwTovpQsvqnDFHTjOaytGKObPMuMUXOHVQeFdNF8bCo/n+K2bDIUyj+
-	PO6r2bs1ENs52/HQuNH+6fYPC3t+1p1s60hagjbJR4pnLotfUxTQ7Yjyawui8knU7lfUEaNp
-	G7NkjafhUon7Rmt4Qtlzg3GMOC9E1scdIclvW/DOMynassRonX6PIjzJ1XUjGxrmHUttdS7Q
-	lEu1MSSmKd697+bY6WimM05Ba1KVq5ZSao3yX1zt3TVKAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSbUxTZxiG957znvecNtacdYQdNQum+4xRxMnMk2USFuN8nT+mWaLJzDa7
+	cQblozQtMDFZ0k4wgsJcN8tGQUWwMqiDHBQU3GRMhMBgtjWs2zpwiN2wtrgiGBmIrcZ/V+4n
+	133/eQRW+we3XDAYC2SzUZ+rI2qsDi+pW1OydVt2yuDB5yEwNsHBiK0bQ02Lm8CCs4OH/t8+
+	x+Dw2Flwn7UxUB108jDZuwXCY10cLDhy4PjJNgIhxx0C0cnrCM5eGUXgm1gK12amCIQ9NQxE
+	Wgl4fgkh2F/fQiDgsDNQNUnAWbWfgaNnuhi472riwTnk42C8sZqHDut1HpTfexEoN0Y4qDvQ
+	gOHbYwECvs4aAqPuRQ6sznsceJuvYhi80o/h184zHMxWroCvIkEEoVkXC66ZKR4a/6viwB6M
+	8hBtmMVwYPoBB30V3QycuhthIVB5C4PiHiHwT3UtAz/P3GZg7nRsdqh9gIeBuQEGxivDMbc2
+	pjV7MBwqdWA413uPB9v0GILK4S0QOXKXS0+nTW3tDC31LhDqPuZGdOCkRBvK5hh6ofovnp5Q
+	CmnJ5TBH2xpX0fqLkwxVmsoIVaJ2nkaGh3na/83/mNZZj7L0Uq2b3570nvqNDDnXUCSb16bt
+	UWf5L/s50znV3o6Di7wVjfPlSCVIYqrktV3AT7i9rITEmYgvS37/fTbOCeJKqa0iyJUjtcCK
+	viTpsKvikfCMKEs/lJfHBEHA4otSV2dhPNaIG6TI/EXyuDNJam7tftSjiuXfz9cycdaKr0l/
+	TvXheKck1quk2xMu9FhYJv3U6MdHkOYEeqoJaQ3Gojy9ITc1OavYaNib/HF+noJiH+f6bH73
+	eRS9+m4PEgWkW6KB9LeztZy+yFKc14MkgdUlaF56ZVu2VpOhL94nm/M/NBfmypYetELAumc1
+	r85+mqEVM/UFco4sm2TzkysjqJZb0dovXtC8szLz72uZ9g3eVrXm9WWHMgwfpKYV7Fxa9hFZ
+	Fw2V7Ej8zptTurGu/f2EXcV9N01D3q9/rDm/UxpPtHhWbzYb9wVNWxOV0fSUqaeHfY7U5Oeg
+	8Fba4HqGDrp3v5VmCixuWj2xJinlXyWUcPzSJ8g6bbJV7NiT38J/uf7Nzad02JKlX7eKNVv0
+	DwH5ZkU2bQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAAzVSe0hTcRjtd+/dvdfR4rKELvaHMehBYVlkfJGUBdXtSRER9E+NvOTcQ9vK
+	shJ1a7jspYtNalpmbuSjtFmZ2cisLHu6LBvpmtqaia+wLdHNbCv65+N853zncP74aFxcL4ih
+	ZarDvFolVUhIISHcvkoXp9u0JTX+qzsRDPps6PJ4BdCR20RAwG8goLimmoRJSz0FBvslAbz4
+	pCWg7VYVAk/AgGAsaMFB3zBFwKSxhQL/eCcFplwEU44WBGanEQdX2yMcqu/kYvCz9jcJA09G
+	EZh6vCQU9ecSMGI7i+Cyz0JB/7ONMORpFMCUuw+DT78GEdi8vzHwNuUhmDTL4WpZXdhu/kFC
+	8M07HIpMbQiu9bhxGO3vRnCn5QsCxw0tCd8K7uLQ7p0BHwIjJLSazpAw5CzGYLiWhFKtQwDO
+	1wMISixGBL7PDgx012tIMJfYCWjofkCBcyCEQZfZiEGVfRt4bD4CXhWUYeG64avbs8BSpMPC
+	4zsGppuNGIzbKqkkK+LG9OcJrrLuHsbp30+SXPWVasQFJ4yI81t1OKcvCK9PBkdw7lTdUc76
+	apDkJgIfSc7xq5TgXpaxXPnpCYwrfBPHNVx2UzvW7hUmJvMKWQavXrJ6vzDF9dQlSL8bdaze
+	MEXloF4qH0XRLLOcvXf6FBnBJDOfdbnG8QiOZuawded8gnwkpHGmPZY9aztHRISZDM868vPD
+	BpommLls44MjEVrErGCHQw/Jf5mxbFVt09+cqDB/K1SCRbCYSWA7R54TBUhYiqZVomiZKkMp
+	lSkSFmvkKZkq2bHFB9KUdhR+J1tWqPA+8rdvbEYMjSTTRZC0OVUskGZoMpXNiKVxSbRo3oIt
+	qWJRsjTzOK9O26c+ouA1zWg2TUhmiTbv4feLmYPSw7yc59N59X8Vo6NictAyEZaVt3Nnh7xw
+	fUJv4/mYjF0T3YduKw3HF4H80EqVOsGv7RyuiXOfLN/9NqAqr0jTC8dHK8ou1CqslfVDwTyt
+	8sTFMd9QcYfu6tr4E6HW71uTe6cH12zoGNU692YvDF4p9cRUJD6yX5gZ30z09fGPuxwzrPTD
+	n3lx7zVt69IcEkKTIl26EFdrpH8ALUQrlUoDAAA=
 X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -224,230 +224,41 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-From: Yunseong Kim <ysk@kzalloc.com>
+Yunseong reported a build failure due to the BUILD_BUG_ON() statement in
+alloc_kmem_cache_cpus().  In the following test:
 
-The current implementation shares the same dept key for multiple
-synchronization points, which can lead to false positive reports in
-dependency tracking and potential confusion in debugging.  For example,
-both normal RCU and tasks trace RCU synchronization points use the same
-dept key.  Specifically:
+  PERCPU_DYNAMIC_EARLY_SIZE < NR_KMALLOC_TYPES * KMALLOC_SHIFT_HIGH * sizeof(struct kmem_cache_cpu)
 
-   1. synchronize_rcu() uses a dept key embedded in __wait_rcu_gp():
+The following factors increase the right side of the equation:
 
-      synchronize_rcu()
-         synchronize_rcu_normal()
-            _wait_rcu_gp()
-               __wait_rcu_gp() <- the key as static variable
+  1. PAGE_SIZE > 4KiB increases KMALLOC_SHIFT_HIGH.
+  2. DEPT increases the size of the local_lock_t in kmem_cache_cpu.
 
-   2. synchronize_rcu_tasks_trace() uses the dept key, too:
+Increase PERCPU_DYNAMIC_SIZE_SHIFT to 11 on configs with PAGE_SIZE
+larger than 4KiB and DEPT enabled.
 
-      synchronize_rcu_tasks_trace()
-         synchronize_rcu_tasks_generic()
-            _wait_rcu_gp()
-               __wait_rcu_gp() <- the key as static variable
-
-Since the both rely on the same dept key, dept may report false positive
-circular dependency.  To resolve this, separate dept keys and maps
-should be assigned to each struct rcu_synchronize.
-
-   ===================================================
-   DEPT: Circular dependency has been detected.
-   6.15.0-rc6-00042-ged94bafc6405 #2 Not tainted
-   ---------------------------------------------------
-   summary
-   ---------------------------------------------------
-   *** DEADLOCK ***
-
-   context A
-      [S] lock(cpu_hotplug_lock:0)
-      [W] __wait_rcu_gp(<sched>:0)
-      [E] unlock(cpu_hotplug_lock:0)
-
-   context B
-      [S] (unknown)(<sched>:0)
-      [W] lock(cpu_hotplug_lock:0)
-      [E] try_to_wake_up(<sched>:0)
-
-   [S]: start of the event context
-   [W]: the wait blocked
-   [E]: the event not reachable
-   ---------------------------------------------------
-   context A's detail
-   ---------------------------------------------------
-   context A
-      [S] lock(cpu_hotplug_lock:0)
-      [W] __wait_rcu_gp(<sched>:0)
-      [E] unlock(cpu_hotplug_lock:0)
-
-   [S] lock(cpu_hotplug_lock:0):
-   [<ffff8000802ce964>] cpus_read_lock+0x14/0x20
-   stacktrace:
-         percpu_down_read.constprop.0+0x88/0x2ec
-         cpus_read_lock+0x14/0x20
-         cgroup_procs_write_start+0x164/0x634
-         __cgroup_procs_write+0xdc/0x4d0
-         cgroup_procs_write+0x34/0x74
-         cgroup_file_write+0x25c/0x670
-         kernfs_fop_write_iter+0x2ec/0x498
-         vfs_write+0x574/0xc30
-         ksys_write+0x124/0x244
-         __arm64_sys_write+0x70/0xa4
-         invoke_syscall+0x88/0x2e0
-         el0_svc_common.constprop.0+0xe8/0x2e0
-         do_el0_svc+0x44/0x60
-         el0_svc+0x50/0x188
-         el0t_64_sync_handler+0x10c/0x140
-         el0t_64_sync+0x198/0x19c
-
-   [W] __wait_rcu_gp(<sched>:0):
-   [<ffff8000804ce88c>] __wait_rcu_gp+0x324/0x498
-   stacktrace:
-         schedule+0xcc/0x348
-         schedule_timeout+0x1a4/0x268
-         __wait_for_common+0x1c4/0x3f0
-         __wait_for_completion_state+0x20/0x38
-         __wait_rcu_gp+0x35c/0x498
-         synchronize_rcu_normal+0x200/0x218
-         synchronize_rcu+0x234/0x2a0
-         rcu_sync_enter+0x11c/0x300
-         percpu_down_write+0xb4/0x3e0
-         cgroup_procs_write_start+0x174/0x634
-         __cgroup_procs_write+0xdc/0x4d0
-         cgroup_procs_write+0x34/0x74
-         cgroup_file_write+0x25c/0x670
-         kernfs_fop_write_iter+0x2ec/0x498
-         vfs_write+0x574/0xc30
-         ksys_write+0x124/0x244
-
-   [E] unlock(cpu_hotplug_lock:0):
-   (N/A)
-   ---------------------------------------------------
-   context B's detail
-   ---------------------------------------------------
-   context B
-      [S] (unknown)(<sched>:0)
-      [W] lock(cpu_hotplug_lock:0)
-      [E] try_to_wake_up(<sched>:0)
-
-   [S] (unknown)(<sched>:0):
-   (N/A)
-
-   [W] lock(cpu_hotplug_lock:0):
-   [<ffff8000802ce964>] cpus_read_lock+0x14/0x20
-   stacktrace:
-         percpu_down_read.constprop.0+0x6c/0x2ec
-         cpus_read_lock+0x14/0x20
-         check_all_holdout_tasks_trace+0x90/0xa30
-         rcu_tasks_wait_gp+0x47c/0x938
-         rcu_tasks_one_gp+0x75c/0xef8
-         rcu_tasks_kthread+0x180/0x1dc
-         kthread+0x3ac/0x74c
-         ret_from_fork+0x10/0x20
-
-   [E] try_to_wake_up(<sched>:0):
-   [<ffff8000804233b8>] complete+0xb8/0x1e8
-   stacktrace:
-         try_to_wake_up+0x374/0x1164
-         complete+0xb8/0x1e8
-         wakeme_after_rcu+0x14/0x20
-         rcu_tasks_invoke_cbs+0x218/0xaa8
-         rcu_tasks_one_gp+0x834/0xef8
-         rcu_tasks_kthread+0x180/0x1dc
-         kthread+0x3ac/0x74c
-         ret_from_fork+0x10/0x20
-   (wait to wake up)
-   stacktrace:
-         __schedule+0xf64/0x3614
-         schedule+0xcc/0x348
-         schedule_timeout+0x1a4/0x268
-         __wait_for_common+0x1c4/0x3f0
-         __wait_for_completion_state+0x20/0x38
-         __wait_rcu_gp+0x35c/0x498
-         synchronize_rcu_tasks_generic+0x14c/0x220
-         synchronize_rcu_tasks_trace+0x24/0x8c
-         rcu_init_tasks_generic+0x168/0x194
-         do_one_initcall+0x174/0xa00
-         kernel_init_freeable+0x744/0x7dc
-         kernel_init+0x78/0x220
-         ret_from_fork+0x10/0x20
-
-Separating the dept key and map for each of struct rcu_synchronize,
-ensuring proper tracking for each execution context.
-
-Signed-off-by: Yunseong Kim <ysk@kzalloc.com>
-[ Rewrote the changelog. ]
+Reported-by: Yunseong Kim <ysk@kzalloc.com>
 Signed-off-by: Byungchul Park <byungchul@sk.com>
 ---
- include/linux/rcupdate_wait.h | 13 ++++++++-----
- kernel/rcu/rcu.h              |  1 +
- kernel/rcu/update.c           |  5 +++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
+ include/linux/percpu.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/linux/rcupdate_wait.h b/include/linux/rcupdate_wait.h
-index 4c92d4291cce..ee598e70b4bc 100644
---- a/include/linux/rcupdate_wait.h
-+++ b/include/linux/rcupdate_wait.h
-@@ -19,17 +19,20 @@ struct rcu_synchronize {
- 
- 	/* This is for debugging. */
- 	struct rcu_gp_oldstate oldstate;
-+	struct dept_map dmap;
-+	struct dept_key dkey;
- };
- void wakeme_after_rcu(struct rcu_head *head);
- 
- void __wait_rcu_gp(bool checktiny, unsigned int state, int n, call_rcu_func_t *crcu_array,
--		   struct rcu_synchronize *rs_array);
-+		   struct rcu_synchronize *rs_array, struct dept_key *dkey);
- 
- #define _wait_rcu_gp(checktiny, state, ...) \
--do {												\
--	call_rcu_func_t __crcu_array[] = { __VA_ARGS__ };					\
--	struct rcu_synchronize __rs_array[ARRAY_SIZE(__crcu_array)];				\
--	__wait_rcu_gp(checktiny, state, ARRAY_SIZE(__crcu_array), __crcu_array, __rs_array);	\
-+do {													\
-+	call_rcu_func_t __crcu_array[] = { __VA_ARGS__ };						\
-+	static struct dept_key __key;									\
-+	struct rcu_synchronize __rs_array[ARRAY_SIZE(__crcu_array)];					\
-+	__wait_rcu_gp(checktiny, state, ARRAY_SIZE(__crcu_array), __crcu_array, __rs_array, &__key);	\
- } while (0)
- 
- #define wait_rcu_gp(...) _wait_rcu_gp(false, TASK_UNINTERRUPTIBLE, __VA_ARGS__)
-diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 9b10b57b79ad..d30dfc345532 100644
---- a/kernel/rcu/rcu.h
-+++ b/kernel/rcu/rcu.h
-@@ -12,6 +12,7 @@
- 
- #include <linux/slab.h>
- #include <trace/events/rcu.h>
-+#include <linux/dept_sdt.h>
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index 85bf8dd9f087..dd74321d4bbd 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -43,7 +43,11 @@
+ # define PERCPU_DYNAMIC_SIZE_SHIFT      12
+ #endif /* LOCKDEP and PAGE_SIZE > 4KiB */
+ #else
++#if defined(CONFIG_DEPT) && !defined(CONFIG_PAGE_SIZE_4KB)
++#define PERCPU_DYNAMIC_SIZE_SHIFT      11
++#else
+ #define PERCPU_DYNAMIC_SIZE_SHIFT      10
++#endif /* DEPT and PAGE_SIZE > 4KiB */
+ #endif
  
  /*
-  * Grace-period counter management.
-diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-index d98a5c38e19c..c2858650ccf5 100644
---- a/kernel/rcu/update.c
-+++ b/kernel/rcu/update.c
-@@ -409,7 +409,7 @@ void wakeme_after_rcu(struct rcu_head *head)
- EXPORT_SYMBOL_GPL(wakeme_after_rcu);
- 
- void __wait_rcu_gp(bool checktiny, unsigned int state, int n, call_rcu_func_t *crcu_array,
--		   struct rcu_synchronize *rs_array)
-+		   struct rcu_synchronize *rs_array, struct dept_key *dkey)
- {
- 	int i;
- 	int j;
-@@ -426,7 +426,8 @@ void __wait_rcu_gp(bool checktiny, unsigned int state, int n, call_rcu_func_t *c
- 				break;
- 		if (j == i) {
- 			init_rcu_head_on_stack(&rs_array[i].head);
--			init_completion(&rs_array[i].completion);
-+			sdt_map_init_key(&rs_array[i].dmap, dkey);
-+			init_completion_dmap(&rs_array[i].completion, &rs_array[i].dmap);
- 			(crcu_array[i])(&rs_array[i].head, wakeme_after_rcu);
- 		}
- 	}
 -- 
 2.17.1
 
