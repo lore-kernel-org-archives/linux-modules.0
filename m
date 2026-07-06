@@ -1,534 +1,117 @@
-Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA68426403;
-	Mon,  6 Jul 2026 06:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A529414DCC;
+	Mon,  6 Jul 2026 09:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783318963; cv=none; b=CjA01cfGH5BcgwGyj+IYOM4Aq1ptKGMCuuztYb63nxChA9GknpLOneR5mCrTx2la/yqkfFeUEyt/YpR6Xf4W844U/71BSb5uZhxVZT+Pm+YGzvzf3QW+xglCjaf3xsKDC6sMtkWP6GIbtkI4GJrFd9zsM7TWGbYwd+/X6LZDIiw=
+	t=1783330175; cv=none; b=sTG2jIs9u/k0mY2cGKWNNV4FKfvUORd+uakUqUzWNTGERxGZqll8QDOV9hdxVJT7xBAF7fGmLsCGMx6t0FcSCvRkd6ATB/u9I/86ca8eFWHH/tWbUZJp087AC9S6qp4BCldPg1PrEMhZJNVXEOwK6yopWwB8oAizAdVF/oq+aCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783318963; c=relaxed/simple;
-	bh=xc0OMbUS9uSQ9nwrKgQqOcPYyrCTpzyELXOiHv+uu08=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=WoaZqCbOy6zNxp39qgaOMPUoqDI81n56iCzAnemuiSC+ye2u87B8jyKfr/AAmJ48GT4NbaC5Q9CiLGOBLNKYp2wOvye/PCm1EjfDy4BO01Z8zKtrtyYOHXQ6RW9gdQJ0jnXtMvLxczGznewGfI4YDqfBx0tAxtmb9N9a3joHXeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-81-6a4b4984d611
-From: Byungchul Park <byungchul@sk.com>
-To: linux-kernel@vger.kernel.org
-Cc: max.byungchul.park@gmail.com,
-	kernel_team@skhynix.com,
-	torvalds@linux-foundation.org,
-	damien.lemoal@opensource.wdc.com,
-	linux-ide@vger.kernel.org,
-	adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	will@kernel.org,
-	tglx@linutronix.de,
-	rostedt@goodmis.org,
-	joel@joelfernandes.org,
-	sashal@kernel.org,
-	daniel.vetter@ffwll.ch,
-	duyuyang@gmail.com,
-	johannes.berg@intel.com,
-	tj@kernel.org,
-	tytso@mit.edu,
-	willy@infradead.org,
-	david@fromorbit.com,
-	amir73il@gmail.com,
-	gregkh@linuxfoundation.org,
-	kernel-team@lge.com,
-	linux-mm@kvack.org,
-	akpm@linux-foundation.org,
-	mhocko@kernel.org,
-	minchan@kernel.org,
-	hannes@cmpxchg.org,
-	vdavydov.dev@gmail.com,
-	sj@kernel.org,
-	jglisse@redhat.com,
-	dennis@kernel.org,
-	cl@linux.com,
-	penberg@kernel.org,
-	rientjes@google.com,
-	vbabka@suse.cz,
-	ngupta@vflare.org,
-	linux-block@vger.kernel.org,
-	josef@toxicpanda.com,
-	linux-fsdevel@vger.kernel.org,
-	jack@suse.cz,
-	jlayton@kernel.org,
-	dan.j.williams@intel.com,
-	hch@infradead.org,
-	djwong@kernel.org,
-	dri-devel@lists.freedesktop.org,
-	rodrigosiqueiramelo@gmail.com,
-	melissa.srw@gmail.com,
-	hamohammed.sa@gmail.com,
-	harry.yoo@oracle.com,
-	chris.p.wilson@intel.com,
-	gwan-gyeong.mun@intel.com,
-	boqun.feng@gmail.com,
-	longman@redhat.com,
-	yunseong.kim@ericsson.com,
-	ysk@kzalloc.com,
-	yeoreum.yun@arm.com,
-	netdev@vger.kernel.org,
-	matthew.brost@intel.com,
-	her0gyugyu@gmail.com,
-	corbet@lwn.net,
-	catalin.marinas@arm.com,
-	bp@alien8.de,
-	x86@kernel.org,
-	hpa@zytor.com,
-	luto@kernel.org,
-	sumit.semwal@linaro.org,
-	gustavo@padovan.org,
-	christian.koenig@amd.com,
-	andi.shyti@kernel.org,
-	arnd@arndb.de,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	rppt@kernel.org,
-	surenb@google.com,
-	mcgrof@kernel.org,
-	petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
-	paulmck@kernel.org,
-	frederic@kernel.org,
-	neeraj.upadhyay@kernel.org,
-	joelagnelf@nvidia.com,
-	josh@joshtriplett.org,
-	urezki@gmail.com,
-	mathieu.desnoyers@efficios.com,
-	jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	chuck.lever@oracle.com,
-	neil@brown.name,
-	okorniev@redhat.com,
-	Dai.Ngo@oracle.com,
-	tom@talpey.com,
-	trondmy@kernel.org,
-	anna@kernel.org,
-	kees@kernel.org,
-	bigeasy@linutronix.de,
-	clrkwllms@kernel.org,
-	mark.rutland@arm.com,
-	ada.coupriediaz@arm.com,
-	kristina.martsenko@arm.com,
-	wangkefeng.wang@huawei.com,
-	broonie@kernel.org,
-	kevin.brodsky@arm.com,
-	dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev,
-	ast@kernel.org,
-	ziy@nvidia.com,
-	yuzhao@google.com,
-	baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com,
-	joel.granados@kernel.org,
-	richard.weiyang@gmail.com,
-	geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com,
-	linux@treblig.org,
-	alexander.shishkin@linux.intel.com,
-	lillian@star-ark.net,
-	chenhuacai@kernel.org,
-	francesco@valla.it,
-	guoweikang.kernel@gmail.com,
-	link@vivo.com,
-	jpoimboe@kernel.org,
-	masahiroy@kernel.org,
-	brauner@kernel.org,
-	thomas.weissschuh@linutronix.de,
-	oleg@redhat.com,
-	mjguzik@gmail.com,
-	andrii@kernel.org,
-	wangfushuai@baidu.com,
-	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org,
-	linux-i2c@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	rcu@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,
-	2407018371@qq.com,
-	dakr@kernel.org,
-	miguel.ojeda.sandonis@gmail.com,
-	neilb@ownmail.net,
-	bagasdotme@gmail.com,
-	wsa+renesas@sang-engineering.com,
-	dave.hansen@intel.com,
-	geert@linux-m68k.org,
-	ojeda@kernel.org,
-	alex.gaynor@gmail.com,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	lossin@kernel.org,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	rust-for-linux@vger.kernel.org
-Subject: [PATCH v19 40/40] dept: implement a basic unit test for dept
-Date: Mon,  6 Jul 2026 15:19:28 +0900
-Message-Id: <20260706061928.66713-41-byungchul@sk.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20260706061928.66713-1-byungchul@sk.com>
-References: <20260706061928.66713-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSa0xTdxiH/Z87DZ0n1cSjfoA0cRoTEBbQ1zszmTleY7K4ecvkZD2RQluw
-	CFgj2iidtSLDZqC2w3CzQSmDFMU67eSiVaEqFaNFbgoIkoIkIDK1gBTjlzdPnl/e3/vlZXBZ
-	K7mAUWoOiVqNoJJTEkIyFFoUYdi0JTHK2MKC0XAc2rt6Sfi70k7BhPUGDV1jRgTjn604GG5O
-	ETBhdtMw5XIjyPeacfA138FhtGqSAn/DCAJLn5WGoa5bJLz4MIjA1juJQW/tKQTX3J0IXGUn
-	KHiTex2Hlt7v4NnYMAXvqigoPOEiwevxIyiwmhH0vXRhcLKkkoL8AgcBXn8Ag/Z8Mwbljm3Q
-	lFuMwfkBCqznT2LT4y0GeRW3MLDpF0F3mYWGwOtomCpMBnd5Pw0df+YR8LDzOQk39K9ocLTe
-	Q2DP7sPB0TPtiv4oJeDipXYKbrseEmCceI/A7ezGoNM+RYLeOk5Cc20TCU/Lmwmo7Pdh0OR+
-	QMCTfytIuPzCi0H1Iw8OFe+KqTgFP27IIXjD0wmKt1+yI/7zJzPiGwaHcf5y0yDFNxZzfOnp
-	Txh/7lEEf9PSQfNZ/72k+UJHGp91d4jkq8uW8iW3BzC+aGSM3BG1R7JGIaqU6aJ22bp4ScJf
-	rUYipX794bz//bgenYk1IYbh2Bgu0K0woZAZ7Bptw4JMsYs5n+8jHuS5bDhXfbaPNCEJg7Mt
-	YVy27SwRDOawP3HeKy46yAS7iPM+Lp3xUnY5Z3K24V9Lw7jyqtoZDpn2/wQKZg7I2Fiubfg+
-	ESzl2JIQLrumh/q6MJ+rK/MRuUhaiGZdRTKlJl0tKFUxkQk6jfJw5O/JageafjhbZmCvE400
-	/1yPWAbJQ6UQtzlRRgrpqTp1PeIYXD5X+v2SLYkyqULQHRG1yfu1aSoxtR4tZAj5POkPHzIU
-	MvaAcEhMEsUUUfstxZiQBXoUv69xV1jNrCU1ku2rmIOCKWpXeI5/dlLPwFqm5dymO56smLUx
-	R3ZvrdPsXBGZ0xFf6ozQVQ+EW/bHLxz179x6zKmLe/JbyuKjsZXR47/2vLrbaHJkSOLCN/af
-	qmvYHfHL6rQDk+oLmiRXtmqF7b1XnSm8nbR4Mjf8+BrL4KwrQ6975ERqghC9FNemCl8A1xKT
-	4GwDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe0hTcRTH+917dzdHi8uSvBn0GD3VHkbKiV4WVLciiwiiItstLzkfS7Yy
-	7UHpXC0fNVeb1LLMdKWzWq7SKSNRMnuYTistsxWs1VBTTCvfTaN/Dp/z/Z7XH0eAi8t4/gKZ
-	/AinkLOxElJICMNXqBambtoSvcT2VQIa9Wn46HTx4F1yJQF9vRoCrt0vJmHYWMoHTckVHtQ2
-	pxDQcM+MwNmnQfB70IiD2jZKwLCuhg+9/a180CcjGLXXIDA4dDi0NDzBofhhMgY/LSMktFf3
-	INB/cZGQ7UkmoMuUgeCq28gHz9ON0Oms4MFo2zcMmn91IDC5RjBwVZ5DMGyIgRt5Vm+7oZuE
-	wbp6HLL1DQhufmnDocfzGcHDmk8I7HdSSPiqfYRDk2sSvOnrIuG5Pp2ETsc1DH5YSMhNsfPA
-	8aodQY5Rh8D9wY6B6tZ9Egw5JQTYPpfzwdE+hMFHgw4Dc8lWcJrcBLzU5mHec71VD/zAmK3C
-	vOE7Bvq7FRj0m4r4YQWI+a2+QDBF1scYo24cJpni68WIGRzQIaa3QIUzaq03re7owplU6zGm
-	4GUHyQz0vSUZ+69cgnmRRzP55wcwJqtuIWO72sbfvnaPcGUkFytL4BSLV0uFUZffa4j4qjWJ
-	+j/t+BmUHpKGfAQ0tYx2/mzFxpik5tEtLf34GPtSM2lrppuXhoQCnGqaQWeYMokxYzK1nnYU
-	2vljTFBzaMfr/HFdRIXSaWWt+L+hM2izpXKcfbz6vaGc8QViKoRu7XpGaJEwF00oQr4yeUIc
-	K4sNWaSMiUqSyxIXHTwcV4K8/2Q6NZRVhnqbNlYhSoAkE0UQtjlazGMTlElxVYgW4BJf0dz5
-	W6LFokg26TinOLxfcTSWU1ahaQJC4ifavIuTiqlD7BEuhuPiOcV/FxP4+J9B0kZ2dv0UqyWo
-	cffz0ilZ5WL1qpgDZ3MuSwMt4cf22bXT44wb1v2pXW41e6QBmr3BQWsS02RHB0/daAjnFljl
-	5b6fKmqn7ogItJ3uDr2Y1+kvuXCi83bppPqdnrqmQPfS0PRZXFJZt6pat1VamGqAk3LxjhTt
-	tvUBly6KmIgC1iwhlFFscACuULJ/AYjxPnJLAwAA
-X-CFilter-Loop: Reflected
+	s=arc-20240116; t=1783330175; c=relaxed/simple;
+	bh=JPB4Ms/3eH3V+i81pMEkiYfy3gOCTrbnmZe6oSsaViw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YyOU4GlltQSNKnpg+GOgWS7N3r0Z2i6G3iUWcOhON4WeuTk7X0jY0659Ec7Ygf1LFzX0zu5u/dbScF1g3I3WLmkfLQuSGMMfzJ/1259auTbc50iFW90pARJ6B9hBOCTE0yFq+AHSswDTXFWB1dK6TYFOxQJv04P1Y6KdxjHckcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xxeVSsXj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eaLAHws8; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xxeVSsXj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eaLAHws8"
+Date: Mon, 6 Jul 2026 11:29:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1783330168;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cCcLZepvm4b8pYaezu8ngLtA5fS9bUMBOmMVNu03xBw=;
+	b=xxeVSsXjSFqPcOq0HVzsUmQYNJDJzl24WpDMo5GkQ68mJgbLAxwbu3hfeyNOVS68/CA1Kp
+	EPhiqNGEWQAv567jxgrw6BnY1TcT/TTyfFpOnchbGyJb1Gp4KUn+SGOIN7JYX1x+Nj/xfY
+	LrUdG8PwTS3lkNDO2xn0nrtTFx6qHRIBdXiFhZNsbtiTyAksxrgs8Kf/vKad9Psa7o5pXR
+	hE/aowlFonkWPlzCkboAkiOuGw05jnV642MSm9xF+AXIorMLAay0X7O/kHWV7Eggt9DLum
+	w4On59vnU7MbkZwKn9LlT2OUUe5QtmUmvSpnJZQwqZCBJkfdyUTNEVonrTKojg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1783330168;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cCcLZepvm4b8pYaezu8ngLtA5fS9bUMBOmMVNu03xBw=;
+	b=eaLAHws8CrHTCsFAG6LX6kdZCh8OF7U9jFSumI1QwuDAgSWkwU/7L23aBefukCq6zfK257
+	u6YFS4dd3qh47PBA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Qingfang Deng <qingfang.deng@linux.dev>
+Cc: Breno Leitao <leitao@debian.org>, Norbert Szetei <norbert@doyensec.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Taegu Ha <hataegu0826@gmail.com>, Kees Cook <kees@kernel.org>,
+	linux-ppp@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Guillaume Nault <gnault@redhat.com>, netdev@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org
+Subject: Re: [PATCH net v2] ppp: defer channel free to an RCU grace period to
+ fix pppol2tp RX UAF
+Message-ID: <20260706092926.PIlrhRKz@linutronix.de>
+References: <D9C0245B-608B-4884-8A09-F55BA4A9F948@doyensec.com>
+ <de2616b3-6edf-4255-ba77-0674e225ab27@linux.dev>
+ <akfjpBVML_1RFF91@gmail.com>
+ <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
 
-Implement CONFIG_DEPT_UNIT_TEST introducing a kernel module that runs
-basic unit test for dept.
++ MODULE maintainer
 
-Signed-off-by: Byungchul Park <byungchul@sk.com>
----
- include/linux/dept_unit_test.h     |  61 ++++++++++++
- kernel/dependency/Makefile         |   1 +
- kernel/dependency/dept.c           |  10 ++
- kernel/dependency/dept_unit_test.c | 149 +++++++++++++++++++++++++++++
- lib/Kconfig.debug                  |  12 +++
- 5 files changed, 233 insertions(+)
- create mode 100644 include/linux/dept_unit_test.h
- create mode 100644 kernel/dependency/dept_unit_test.c
+On 2026-07-05 10:57:44 [+0800], Qingfang Deng wrote:
+> On 7/4/2026 at 12:32 AM, Breno Leitao wrote:
+> > On Fri, Jul 03, 2026 at 03:27:00PM +0800, Qingfang Deng wrote:
+> > > AI-review found an issue: https://sashiko.dev/#/patchset/D9C0245B-608B-4884-8A09-F55BA4A9F948%40doyensec.com
+> > > 
+> > > An rcu_barrier() call is needed at the end of ppp_cleanup().
+> > 
+> > I was initially unclear why rcu_barrier() would be necessary on a kfree path,
+> > but it appears to be required during module unload to ensure that
+> > ppp_release_channel_free() completes before the module's struct rcu_head is
+> > destroyed. Is that the correct understanding?
+> 
+> It's required to ensure that all ppp_release_channel_free() callback
+> complete before the text segment of the module is unloaded.
 
-diff --git a/include/linux/dept_unit_test.h b/include/linux/dept_unit_test.h
-new file mode 100644
-index 000000000000..753ac9ac727c
---- /dev/null
-+++ b/include/linux/dept_unit_test.h
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * DEPT unit test
-+ *
-+ * Started by Byungchul Park <max.byungchul.park@gmail.com>:
-+ *
-+ *  Copyright (c) 2025 SK hynix, Inc., Byungchul Park
-+ */
-+
-+#ifndef __LINUX_DEPT_UNIT_TEST_H
-+#define __LINUX_DEPT_UNIT_TEST_H
-+
-+#if defined(CONFIG_DEPT_UNIT_TEST) || defined(CONFIG_DEPT_UNIT_TEST_MODULE)
-+struct dept_ut {
-+	bool circle_detected;
-+
-+	int ecxt_stack_total_cnt;
-+	int wait_stack_total_cnt;
-+	int evnt_stack_total_cnt;
-+	int ecxt_stack_valid_cnt;
-+	int wait_stack_valid_cnt;
-+	int evnt_stack_valid_cnt;
-+};
-+
-+extern struct dept_ut dept_ut_results;
-+
-+static inline void dept_ut_circle_detect(void)
-+{
-+	dept_ut_results.circle_detected = true;
-+}
-+static inline void dept_ut_ecxt_stack_account(bool valid)
-+{
-+	dept_ut_results.ecxt_stack_total_cnt++;
-+
-+	if (valid)
-+		dept_ut_results.ecxt_stack_valid_cnt++;
-+}
-+static inline void dept_ut_wait_stack_account(bool valid)
-+{
-+	dept_ut_results.wait_stack_total_cnt++;
-+
-+	if (valid)
-+		dept_ut_results.wait_stack_valid_cnt++;
-+}
-+static inline void dept_ut_evnt_stack_account(bool valid)
-+{
-+	dept_ut_results.evnt_stack_total_cnt++;
-+
-+	if (valid)
-+		dept_ut_results.evnt_stack_valid_cnt++;
-+}
-+#else
-+struct dept_ut {};
-+
-+#define dept_ut_circle_detect() do { } while (0)
-+#define dept_ut_ecxt_stack_account(v) do { } while (0)
-+#define dept_ut_wait_stack_account(v) do { } while (0)
-+#define dept_ut_evnt_stack_account(v) do { } while (0)
-+
-+#endif
-+#endif /* __LINUX_DEPT_UNIT_TEST_H */
-diff --git a/kernel/dependency/Makefile b/kernel/dependency/Makefile
-index 92f165400187..fc584ca87124 100644
---- a/kernel/dependency/Makefile
-+++ b/kernel/dependency/Makefile
-@@ -2,3 +2,4 @@
- 
- obj-$(CONFIG_DEPT) += dept.o
- obj-$(CONFIG_DEPT) += dept_proc.o
-+obj-$(CONFIG_DEPT_UNIT_TEST) += dept_unit_test.o
-diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
-index 35a3667ac8b3..bcff14f20046 100644
---- a/kernel/dependency/dept.c
-+++ b/kernel/dependency/dept.c
-@@ -78,8 +78,12 @@
- #include <linux/workqueue.h>
- #include <linux/irq_work.h>
- #include <linux/vmalloc.h>
-+#include <linux/dept_unit_test.h>
- #include "dept_internal.h"
- 
-+struct dept_ut dept_ut_results;
-+EXPORT_SYMBOL_GPL(dept_ut_results);
-+
- static int dept_stop;
- static int dept_per_cpu_ready;
- 
-@@ -826,6 +830,10 @@ static void print_dep(struct dept_dep *d)
- 			pr_warn("(wait to wake up)\n");
- 			print_ip_stack(0, e->ewait_stack);
- 		}
-+
-+		dept_ut_ecxt_stack_account(valid_stack(e->ecxt_stack));
-+		dept_ut_wait_stack_account(valid_stack(w->wait_stack));
-+		dept_ut_evnt_stack_account(valid_stack(e->event_stack));
- 	}
- }
- 
-@@ -920,6 +928,8 @@ static void print_circle(struct dept_class *c)
- 	dump_stack();
- 
- 	dept_outworld_exit();
-+
-+	dept_ut_circle_detect();
- }
- 
- /*
-diff --git a/kernel/dependency/dept_unit_test.c b/kernel/dependency/dept_unit_test.c
-new file mode 100644
-index 000000000000..e8dada2e3dfb
---- /dev/null
-+++ b/kernel/dependency/dept_unit_test.c
-@@ -0,0 +1,149 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * DEPT unit test
-+ *
-+ * Started by Byungchul Park <max.byungchul.park@gmail.com>:
-+ *
-+ *  Copyright (c) 2025 SK hynix, Inc., Byungchul Park
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/spinlock.h>
-+#include <linux/mutex.h>
-+#include <linux/dept.h>
-+#include <linux/dept_unit_test.h>
-+
-+MODULE_DESCRIPTION("DEPT unit test");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Byungchul Park <max.byungchul.park@sk.com>");
-+
-+struct unit {
-+	const char *name;
-+	bool (*func)(void);
-+	bool result;
-+};
-+
-+static DEFINE_SPINLOCK(s1);
-+static DEFINE_SPINLOCK(s2);
-+static bool test_spin_lock_deadlock(void)
-+{
-+	dept_ut_results.circle_detected = false;
-+
-+	spin_lock(&s1);
-+	spin_lock(&s2);
-+	spin_unlock(&s2);
-+	spin_unlock(&s1);
-+
-+	spin_lock(&s2);
-+	spin_lock(&s1);
-+	spin_unlock(&s1);
-+	spin_unlock(&s2);
-+
-+	return dept_ut_results.circle_detected;
-+}
-+
-+static DEFINE_MUTEX(m1);
-+static DEFINE_MUTEX(m2);
-+static bool test_mutex_lock_deadlock(void)
-+{
-+	dept_ut_results.circle_detected = false;
-+
-+	mutex_lock(&m1);
-+	mutex_lock(&m2);
-+	mutex_unlock(&m2);
-+	mutex_unlock(&m1);
-+
-+	mutex_lock(&m2);
-+	mutex_lock(&m1);
-+	mutex_unlock(&m1);
-+	mutex_unlock(&m2);
-+
-+	return dept_ut_results.circle_detected;
-+}
-+
-+static bool test_wait_event_deadlock(void)
-+{
-+	struct dept_map dmap1;
-+	struct dept_map dmap2;
-+
-+	sdt_map_init(&dmap1);
-+	sdt_map_init(&dmap2);
-+
-+	dept_ut_results.circle_detected = false;
-+
-+	sdt_request_event(&dmap1); /* [S] */
-+	sdt_wait(&dmap2); /* [W] */
-+	sdt_event(&dmap1); /* [E] */
-+
-+	sdt_request_event(&dmap2); /* [S] */
-+	sdt_wait(&dmap1); /* [W] */
-+	sdt_event(&dmap2); /* [E] */
-+
-+	return dept_ut_results.circle_detected;
-+}
-+
-+static struct unit units[] = {
-+	{
-+		.name = "spin lock deadlock test",
-+		.func = test_spin_lock_deadlock,
-+	},
-+	{
-+		.name = "mutex lock deadlock test",
-+		.func = test_mutex_lock_deadlock,
-+	},
-+	{
-+		.name = "wait event deadlock test",
-+		.func = test_wait_event_deadlock,
-+	},
-+};
-+
-+static int __init dept_ut_init(void)
-+{
-+	int i;
-+
-+	lockdep_off();
-+
-+	dept_ut_results.ecxt_stack_valid_cnt = 0;
-+	dept_ut_results.ecxt_stack_total_cnt = 0;
-+	dept_ut_results.wait_stack_valid_cnt = 0;
-+	dept_ut_results.wait_stack_total_cnt = 0;
-+	dept_ut_results.evnt_stack_valid_cnt = 0;
-+	dept_ut_results.evnt_stack_total_cnt = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(units); i++)
-+		units[i].result = units[i].func();
-+
-+	pr_info("\n");
-+	pr_info("******************************************\n");
-+	pr_info("DEPT unit test results\n");
-+	pr_info("******************************************\n");
-+	for (i = 0; i < ARRAY_SIZE(units); i++) {
-+		pr_info("(%s) %s\n", units[i].result ? "pass" : "fail",
-+				units[i].name);
-+	}
-+	pr_info("ecxt stack valid count = %d/%d\n",
-+			dept_ut_results.ecxt_stack_valid_cnt,
-+			dept_ut_results.ecxt_stack_total_cnt);
-+	pr_info("wait stack valid count = %d/%d\n",
-+			dept_ut_results.wait_stack_valid_cnt,
-+			dept_ut_results.wait_stack_total_cnt);
-+	pr_info("event stack valid count = %d/%d\n",
-+			dept_ut_results.evnt_stack_valid_cnt,
-+			dept_ut_results.evnt_stack_total_cnt);
-+	pr_info("******************************************\n");
-+	pr_info("\n");
-+
-+	lockdep_on();
-+
-+	return 0;
-+}
-+
-+static void dept_ut_cleanup(void)
-+{
-+	/*
-+	 * Do nothing for now.
-+	 */
-+}
-+
-+module_init(dept_ut_init);
-+module_exit(dept_ut_cleanup);
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 5c7f22ba253e..41c822f7b75a 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1477,6 +1477,18 @@ config DEPT_AGGRESSIVE_TIMEOUT_WAIT
- 	  that timeout is used to avoid a deadlock. Say N if you'd like
- 	  to avoid verbose reports.
- 
-+config DEPT_UNIT_TEST
-+	tristate "unit test for DEPT"
-+	depends on DEBUG_KERNEL && DEPT
-+	default n
-+	help
-+	  This option provides a kernel module that runs unit test for
-+	  DEPT.
-+
-+	  Say Y if you want DEPT unit test to be built into the kernel.
-+	  Say M if you want DEPT unit test to build as a module.
-+	  Say N if you are unsure.
-+
- config LOCK_DEBUGGING_SUPPORT
- 	bool
- 	depends on TRACE_IRQFLAGS_SUPPORT && STACKTRACE_SUPPORT && LOCKDEP_SUPPORT
--- 
-2.17.1
+So either a rcu_barrier() in ppp's module_exit() callback or a
+synchronize_rcu() instead of the call_rcu(). And all this because the
+module RCU callbacks pending which can be invoked after the module has
+been removed. There is a synchronize_rcu() during module exit but this
+is after the module code is gone.
 
+I'm curious how many modules have a call_rcu() within their code but
+don't have anything to enforce its completion before module removal is
+complete? Wouldn't something like
+
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 46dd8d25a6058..8eae1ea2d6eb4 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -858,6 +858,9 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 		goto out;
+ 
+ 	mutex_unlock(&module_mutex);
++
++	/* Ensure all rcu callbacks issued by the module have completed */
++	rcu_barrier();
+ 	/* Final destruction now no one is using it. */
+ 	if (mod->exit != NULL)
+ 		mod->exit();
+
+make sense?
+
+Sebastian
