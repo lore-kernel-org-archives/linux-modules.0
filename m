@@ -1,117 +1,353 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A529414DCC;
-	Mon,  6 Jul 2026 09:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4AB37A843;
+	Mon,  6 Jul 2026 14:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783330175; cv=none; b=sTG2jIs9u/k0mY2cGKWNNV4FKfvUORd+uakUqUzWNTGERxGZqll8QDOV9hdxVJT7xBAF7fGmLsCGMx6t0FcSCvRkd6ATB/u9I/86ca8eFWHH/tWbUZJp087AC9S6qp4BCldPg1PrEMhZJNVXEOwK6yopWwB8oAizAdVF/oq+aCU=
+	t=1783348171; cv=none; b=jjvDKMnKtPW+47eUmkUrlunBCeL67Kh+K5r+WP7cE7o5D1of3I0BW2zzGRkwdWVeddgJ6v1sfCgRwUti7WhcrAdHDaJeSC0Wk7NOCDRc8DYSMx9bt8+b1LnHdNgQw26EQ8uUfOWZSxkFlnaARh3UB7Fhyk8dibsPDU4V1qL27z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783330175; c=relaxed/simple;
-	bh=JPB4Ms/3eH3V+i81pMEkiYfy3gOCTrbnmZe6oSsaViw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YyOU4GlltQSNKnpg+GOgWS7N3r0Z2i6G3iUWcOhON4WeuTk7X0jY0659Ec7Ygf1LFzX0zu5u/dbScF1g3I3WLmkfLQuSGMMfzJ/1259auTbc50iFW90pARJ6B9hBOCTE0yFq+AHSswDTXFWB1dK6TYFOxQJv04P1Y6KdxjHckcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xxeVSsXj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eaLAHws8; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1783348171; c=relaxed/simple;
+	bh=C2JsXtMk3NGbWSIT3N56346rbVtc4LVaotNE/BLHufs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NjZPP5i6Wnpxwi3loTwJWxcDKR29tBKkuXtP+NeY6F8GgDexarAp7EuWqgKZtXEVTUFB9luGE9aF31F4bzh2DDCR6rPcL9urtYPmrphwv86ZYoXF35/pZl66/JTpLj0SwyzP4eXf037BFqQ8pYi308HyebJTAJ45txV7vNMfEqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EitXNQHs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xxeVSsXj";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eaLAHws8"
-Date: Mon, 6 Jul 2026 11:29:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1783330168;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cCcLZepvm4b8pYaezu8ngLtA5fS9bUMBOmMVNu03xBw=;
-	b=xxeVSsXjSFqPcOq0HVzsUmQYNJDJzl24WpDMo5GkQ68mJgbLAxwbu3hfeyNOVS68/CA1Kp
-	EPhiqNGEWQAv567jxgrw6BnY1TcT/TTyfFpOnchbGyJb1Gp4KUn+SGOIN7JYX1x+Nj/xfY
-	LrUdG8PwTS3lkNDO2xn0nrtTFx6qHRIBdXiFhZNsbtiTyAksxrgs8Kf/vKad9Psa7o5pXR
-	hE/aowlFonkWPlzCkboAkiOuGw05jnV642MSm9xF+AXIorMLAay0X7O/kHWV7Eggt9DLum
-	w4On59vnU7MbkZwKn9LlT2OUUe5QtmUmvSpnJZQwqZCBJkfdyUTNEVonrTKojg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1783330168;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cCcLZepvm4b8pYaezu8ngLtA5fS9bUMBOmMVNu03xBw=;
-	b=eaLAHws8CrHTCsFAG6LX6kdZCh8OF7U9jFSumI1QwuDAgSWkwU/7L23aBefukCq6zfK257
-	u6YFS4dd3qh47PBA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Qingfang Deng <qingfang.deng@linux.dev>
-Cc: Breno Leitao <leitao@debian.org>, Norbert Szetei <norbert@doyensec.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Taegu Ha <hataegu0826@gmail.com>, Kees Cook <kees@kernel.org>,
-	linux-ppp@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Guillaume Nault <gnault@redhat.com>, netdev@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EitXNQHs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2709C1F000E9;
+	Mon,  6 Jul 2026 14:29:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783348169;
+	bh=1CIbrDwK/p1pwC0ztUAPRSXHpGelBcL5PU3zeZXxEqI=;
+	h=From:To:Cc:Subject:Date;
+	b=EitXNQHsWFyQOh+mYg+oILVCyfm9AoWj34v4d+68rnRiThdjdqhy4QkKkLe9KfT6L
+	 DAiouVB79KNWJXx3c6pLSGmMeEPqjN03G0Uau6djffisOgLqnaJubN4rTLFtnPS4W4
+	 zZssW1S6+thOI0zrLJtsAjBZmRxXSxquZaMpk8BDWTelkatXivu6KS0fG9R06d3X4T
+	 eu2fG7+nrJ1K8KNT1Y0qDZa5VUdcAO4SaSZ/f/VnywD6k0p2INYg+2nP3n7FQi7KnF
+	 edEofUt1zbwYB0qW+jfLxS/uXllttzbl2qlaahvP3mY6IQbuhp+81i5y1V7KtpmZ4T
+	 VlcrmL6Ijb2RQ==
+From: Sasha Levin <sashal@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Richard Weinberger <richard@nod.at>,
+	Juergen Gross <jgross@suse.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Sasha Levin <sashal@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Helge Deller <deller@gmx.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Vivian Wang <wangruikang@iscas.ac.cn>,
+	Zhen Lei <thunder.leizhen@huawei.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org
-Subject: Re: [PATCH net v2] ppp: defer channel free to an RCU grace period to
- fix pppol2tp RX UAF
-Message-ID: <20260706092926.PIlrhRKz@linutronix.de>
-References: <D9C0245B-608B-4884-8A09-F55BA4A9F948@doyensec.com>
- <de2616b3-6edf-4255-ba77-0674e225ab27@linux.dev>
- <akfjpBVML_1RFF91@gmail.com>
- <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v6 0/4] kallsyms: embed source file:line info in kernel stack traces
+Date: Mon,  6 Jul 2026 10:29:05 -0400
+Message-ID: <20260706142914.2398993-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-+ MODULE maintainer
+This series adds CONFIG_KALLSYMS_LINEINFO, which embeds source file:line
+information directly in the kernel image so that stack traces annotate
+every frame with the originating source location - no external tools, no
+debug symbols at runtime, and safe to use in NMI/panic context.
 
-On 2026-07-05 10:57:44 [+0800], Qingfang Deng wrote:
-> On 7/4/2026 at 12:32 AM, Breno Leitao wrote:
-> > On Fri, Jul 03, 2026 at 03:27:00PM +0800, Qingfang Deng wrote:
-> > > AI-review found an issue: https://sashiko.dev/#/patchset/D9C0245B-608B-4884-8A09-F55BA4A9F948%40doyensec.com
-> > > 
-> > > An rcu_barrier() call is needed at the end of ppp_cleanup().
-> > 
-> > I was initially unclear why rcu_barrier() would be necessary on a kfree path,
-> > but it appears to be required during module unload to ensure that
-> > ppp_release_channel_free() completes before the module's struct rcu_head is
-> > destroyed. Is that the correct understanding?
-> 
-> It's required to ensure that all ppp_release_channel_free() callback
-> complete before the text segment of the module is unloaded.
+Motivation
+==========
 
-So either a rcu_barrier() in ppp's module_exit() callback or a
-synchronize_rcu() instead of the call_rcu(). And all this because the
-module RCU callbacks pending which can be invoked after the module has
-been removed. There is a synchronize_rcu() during module exit but this
-is after the module code is gone.
+The recent "slowly decommission bugzilla?" thread surfaced a recurring
+problem: when users encounter kernel crashes they see stack traces like
+`func+0x1ec/0x240` but have no way to identify which subsystem or
+maintainer to contact. Richard Weinberger proposed building a database
+mapping symbols to source files using nm/DWARF. Linus pointed to
+scripts/decode_stacktrace.sh as the existing solution. But as the
+discussion progressed, it became clear that decode_stacktrace.sh has
+significant practical barriers that prevent it from being useful in the
+common case.
 
-I'm curious how many modules have a call_rcu() within their code but
-don't have anything to enforce its completion before module removal is
-complete? Wouldn't something like
+Problems with scripts/decode_stacktrace.sh
+==========================================
+
+- Requires debug symbols: the script needs vmlinux with DWARF debug
+  info. Many distros don't retain debug symbols for older or security
+  kernels, and even when available, asking users to obtain matching
+  debuginfo packages is a significant hurdle.
+
+- Requires toolchain: users need addr2line and nm installed.
+
+- Version-matching requirement: debug symbols must exactly match the
+  running kernel binary.
+
+What this series does
+=====================
+
+Patch 1: CONFIG_KALLSYMS_LINEINFO
+
+At build time, a host tool (scripts/gen_lineinfo) reads DWARF
+.debug_line from vmlinux, extracts address-to-file:line mappings, and
+embeds them as sorted lookup tables in .rodata.  At runtime,
+kallsyms_lookup_lineinfo() binary-searches the table and
+sprint_backtrace() appends "(file:line)" to each stack frame.
+NMI/panic-safe (no locks, no allocations), KASLR-compatible.
+
+Patch 2: CONFIG_KALLSYMS_LINEINFO_MODULES
+
+Extends lineinfo to loadable modules.  Each .ko gets .mod_lineinfo and
+.init.mod_lineinfo sections embedded at build time, each carrying one
+or more per-section sub-tables identified by an ELF relocation against
+the covered text section's symbol.  The module loader's existing
+apply_relocations() pass resolves the anchor on load - no special-cased
+loader logic, no implicit MOD_TEXT-base assumption.  Coverage extends
+to .text, .exit.text, and .init.text; the init blob is freed alongside
+init memory.
+
+Patch 3: delta compression
+
+Block-indexed delta-encoding with LEB128 varints, implementing the
+approach suggested by Juergen Gross in the RFC review.  Reduces
+overhead from ~44 MiB to ~11 MiB (~3.7 bytes/entry), addressing the
+primary size concern from the RFC.  Compression applies independently
+to each per-section table inside the module blobs.
+
+Patch 4: KUnit tests
+
+30 KUnit tests covering the lineinfo lookup paths, delta-decode logic,
+boundary conditions, the module-side multi-section format, and
+integration with the backtrace formatting APIs.
+
+Example output
+==============
+
+  [   11.206749]  dump_stack_lvl+0x5d/0x80 (lib/dump_stack.c:94)
+  [   11.207403]  vpanic+0x36e/0x620 (kernel/panic.c:650)
+  [   11.209324]  panic+0xc9/0xd0 (kernel/panic.c:787)
+  [   11.213312]  sysrq_handle_crash+0x1a/0x20 (drivers/tty/sysrq.c:154)
+  [   11.214005]  __handle_sysrq.cold+0x66/0x256 (drivers/tty/sysrq.c:611)
+  [   11.214712]  write_sysrq_trigger+0x65/0x80 (drivers/tty/sysrq.c:1221)
+  [   11.215424]  proc_reg_write+0x1bd/0x3c0 (fs/proc/inode.c:330)
+  [   11.216061]  vfs_write+0x1c6/0xff0 (fs/read_write.c:686)
+  [   11.218848]  ksys_write+0xfa/0x200 (fs/read_write.c:740)
+  [   11.222394]  do_syscall_64+0xf3/0x690 (arch/x86/entry/syscall_64.c:63)
+
+Size impact
+===========
+
+Measured with a Debian kernel config:
+
+- bzImage: +3.6 MiB (14 MiB -> 18 MiB, +26%)
+- Runtime memory: +5.9 MiB (text+data+bss)
+- Code overhead: +5.0 KiB (.text, lookup functions only)
+- Data overhead: +5.9 MiB (.data, lineinfo tables)
+
+The ~5.9 MiB is after 2.7x delta compression; uncompressed would be
+~16 MiB.  This is a fraction of the cost of shipping full DWARF debug
+info (hundreds of MiB), which distros must store and serve for every
+kernel version.
+
+For distros, maintaining debug symbol repositories is expensive:
+storage, mirrors, and CDN bandwidth for hundreds of MiB per kernel
+build add up quickly.  A ~5.9 MiB increase in the kernel image itself
+is a modest cost that eliminates the need for users to find, download,
+and version-match debuginfo packages just to make a crash report
+useful.
+
+For developers, the file:line annotations appear immediately in crash
+traces - no post-processing with decode_stacktrace.sh needed.
+
+Changes since v5
+================
+
+- Rebased onto v7.2-rc2:
+
+  - scripts/Makefile.modfinal: adapt to the removal of
+    if_changed_except in commit 7abef41afad05b ("kbuild/btf: Remove
+    broken module relinking exclusion").
+
+  - Drop unrelated MAINTAINERS hunks that had leaked into patch 2
+    during v5 preparation; those updates are already upstream.
+
+Changes since v4
+================
+
+- Replace mod->mem[MOD_TEXT].base derivation with an ELF relocation
+  against the covered section's symbol; resolved by the module loader
+  on load.  (Suggested by Petr Pavlu)
+
+- Cover .exit.text and .init.text in addition to .text.  Init code
+  lives in a parallel .init.mod_lineinfo blob (MOD_INIT_RODATA) that
+  is revoked and freed alongside init memory.
+
+- Switch the build step from objcopy --add-section to ld -r, so
+  .rela.mod_lineinfo / .rela.init.mod_lineinfo ride along into the .ko.
+
+- Pick up lineinfo sections via section_objs() (not any_section_objs)
+  to validate SHF_ALLOC and avoid dangling pointers into the temporary
+  load image.
+
+- Drop the unused "reserved" placeholder field from mod_lineinfo_root
+  and mod_lineinfo_header.  (Suggested by Petr Pavlu)
+
+- Guard the per-module fields with #ifdef CONFIG_KALLSYMS_LINEINFO_MODULES
+  and expose them via inline reader accessors.  (Suggested by Petr Pavlu)
+
+- Update the per-section header layout comment to name struct fields.
+  (Suggested by Petr Pavlu)
+
+- Cap vmlinux-side captured DWARF addresses at _etext: sections placed
+  after .rodata shift as the real lineinfo replaces the empty stub
+  during the multi-pass link, so addresses outside the invariant .text
+  window become stale in the final image.
+
+- Append "(file:line)" only via sprint_backtrace*(), not plain
+  sprint_symbol*() (which backs %ps); many format strings already
+  follow %ps with literal "()" and would otherwise render as
+  "foo (file:line)()".  KUnit gains a sprint_with_lineinfo() helper.
+
+- Build-side fixes in scripts/gen_lineinfo: apply 64-bit absolute
+  relocations to .debug_line (libdw doesn't relocate ET_REL inputs);
+  endian-safe writes for cross-builds; declare empty
+  .text/.exit.text/.init.text stanzas so ld -r binds anchors to LOCAL
+  rather than GLOBAL UND symbols.
+
+Changes since v3
+=================
+
+- Remove redundant gen_lineinfo entry in scripts/Makefile for
+  CONFIG_KALLSYMS_LINEINFO_MODULES (depends on CONFIG_KALLSYMS_LINEINFO
+  which already builds it). (Reported by Petr Pavlu)
+
+- Use R_* constants from <elf.h> instead of hardcoded relocation type
+  values in r_type_abs32(). (Reported by Petr Pavlu)
+
+- Simplify duplicated-path detection in make_relative(): replace loop
+  over every '/' with a direct midpoint check, since true path
+  duplication always splits at len/2. (Suggested by Petr Pavlu)
+
+- Fix comment in process_dwarf(): sections in ET_REL objects have
+  sh_addr == 0 and therefore overlapping address ranges; this is
+  expected behavior, not a "may" situation. (Reported by Petr Pavlu)
+
+- Use U32_MAX instead of UINT_MAX for the module raw_offset bounds
+  check, matching the u32 type of the addrs array.
+  (Reported by Petr Pavlu)
+
+- Document the assumption that .text is at the start of the MOD_TEXT
+  segment in module_lookup_lineinfo(). A proper fix using ELF
+  relocations is planned for a future series.
+  (Reported by Petr Pavlu)
+
+- Wrap -fno-inline-functions-called-once in $(call cc-option,...) for
+  clang compatibility. Clang does not support this GCC-specific flag;
+  the noinline attribute is sufficient.
+
+Changes since v2
+=================
+
+- Replace #ifdef CONFIG_KALLSYMS_LINEINFO with IS_ENABLED() throughout,
+  so the compiler checks the code for syntax errors regardless of
+  configuration. (Suggested by Helge Deller)
+
+- Replace zigzag + ULEB128 encoding of signed deltas with native SLEB128,
+  removing the unnecessary zigzag transform layer.
+  (Suggested by Vivian Wang)
+
+- Deduplicate the binary search and delta-decode logic: extract shared
+  struct lineinfo_table and lineinfo_search() into mod_lineinfo.h
+  instead of maintaining near-identical copies in kernel/kallsyms.c and
+  kernel/module/kallsyms.c. (Suggested by Vivian Wang)
+
+- Use .uleb128 / .sleb128 assembler directives in gen_lineinfo output
+  instead of encoding varints in C and emitting .byte hex literals.
+  (Suggested by Vivian Wang)
+
+- Redesign module mod_lineinfo_header to use explicit (offset, size)
+  pairs for each sub-array, similar to flattened devicetree layout.
+  This makes bounds validation straightforward: offset + size <=
+  section_size. (Suggested by Vivian Wang)
+
+- Remove dead sym_start parameter from kallsyms_lookup_lineinfo() and
+  module_lookup_lineinfo().
+
+Changes since v1
+=================
+
+- Fix path stripping regression on architectures where DWARF comp_dir is
+  a subdirectory (e.g. arch/parisc/kernel) rather than the source tree
+  root: paths now correctly show "kernel/traps.c:212" instead of bare
+  "traps.c:212". Added kernel_dirs[] fallback scan and bare-filename
+  recovery via comp_dir. (Reported by Helge Deller)
+
+- Fix RST heading: overline/underline must be at least as long as the
+  heading text in kallsyms-lineinfo.rst. (Reported by Randy Dunlap)
+
+- Fix MAINTAINERS alphabetical ordering: move KALLSYMS LINEINFO entry
+  before KASAN. (Reported by Randy Dunlap)
+
+- Fix arch-portability of .debug_line relocation handling: replace
+  hardcoded R_X86_64_32 with r_type_abs32() supporting x86, arm, arm64,
+  riscv, s390, mips, ppc, loongarch, and parisc.
+
+Sasha Levin (4):
+  kallsyms: embed source file:line info in kernel stack traces
+  kallsyms: extend lineinfo to loadable modules
+  kallsyms: delta-compress lineinfo tables for ~2.7x size reduction
+  kallsyms: add KUnit tests for lineinfo feature
+
+ Documentation/admin-guide/index.rst           |    1 +
+ .../admin-guide/kallsyms-lineinfo.rst         |   97 ++
+ MAINTAINERS                                   |    9 +
+ include/linux/kallsyms.h                      |   17 +-
+ include/linux/mod_lineinfo.h                  |  280 ++++
+ include/linux/module.h                        |   39 +
+ init/Kconfig                                  |   35 +
+ kernel/kallsyms.c                             |   78 +-
+ kernel/kallsyms_internal.h                    |   11 +
+ kernel/module/kallsyms.c                      |  171 +++
+ kernel/module/main.c                          |   26 +
+ lib/Kconfig.debug                             |   10 +
+ lib/tests/Makefile                            |    3 +
+ lib/tests/lineinfo_kunit.c                    |  855 +++++++++++
+ scripts/.gitignore                            |    1 +
+ scripts/Makefile                              |    3 +
+ scripts/Makefile.modfinal                     |    6 +
+ scripts/empty_lineinfo.S                      |   38 +
+ scripts/gen-mod-lineinfo.sh                   |   50 +
+ scripts/gen_lineinfo.c                        | 1322 +++++++++++++++++
+ scripts/kallsyms.c                            |   17 +
+ scripts/link-vmlinux.sh                       |   43 +-
+ 22 files changed, 3102 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/admin-guide/kallsyms-lineinfo.rst
+ create mode 100644 include/linux/mod_lineinfo.h
+ create mode 100644 lib/tests/lineinfo_kunit.c
+ create mode 100644 scripts/empty_lineinfo.S
+ create mode 100644 scripts/gen-mod-lineinfo.sh
+ create mode 100644 scripts/gen_lineinfo.c
 
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 46dd8d25a6058..8eae1ea2d6eb4 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -858,6 +858,9 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- 		goto out;
- 
- 	mutex_unlock(&module_mutex);
-+
-+	/* Ensure all rcu callbacks issued by the module have completed */
-+	rcu_barrier();
- 	/* Final destruction now no one is using it. */
- 	if (mod->exit != NULL)
- 		mod->exit();
+base-commit: 8cdeaa50eae8dad34885515f62559ee83e7e8dda
+-- 
+2.53.0
 
-make sense?
-
-Sebastian
