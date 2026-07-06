@@ -1,154 +1,334 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C79F1C5D72
-	for <linux-modules@vger.kernel.org>; Mon,  6 Jul 2026 05:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 366683A1D02;
+	Mon,  6 Jul 2026 06:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783314987; cv=none; b=PSJLoFfWfK9+GTgkqnsZJquqjp1WY5+v8iYUnqxrKD5PRq26xNZloYTAKp+/ejd9j3MmnV9shpOkZwPSbslKNy/UpCe5yR2eO1P5xufe+/jVwaCUaoBqYqvhfZQCAWnQI8b98O5umPOfyEr5DB4cKshgzVezJDjqb6L+FSqkFJY=
+	t=1783318785; cv=none; b=pObR3vMC9de4UiH0LUELbadndz6mX/B/4plCxFFoI9nCiKc0Yiwg9GINqlhiWiqW+U+zQBcEip5f4lezQWa6o22m1qg9VxKkB99We5OfXmAoB0gzI/NPUCMsYtT7GsWmRvtOpjlL887WbRKpp4J+cxe4Go1+Uo4ezonrBULvonU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783314987; c=relaxed/simple;
-	bh=QB2F25+RmfPdD25p/cN3YAcuun15Oe90q+NesPFL5zE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hWKxLsPyK9RTtwN8Bs/OMrkp1A6lxssIq6id05x3nciBEorCdiheu1XueD2eBFx9lZg9canHR1htCPo+mK8SNtF8XF8VWq8sLK3mzrZE7gywAXMOCA9U6bBB7rRAyWe1Rg/cYV7WxFPonVL+diXYaP3Ns/B0PRmaiCyYwxRrd/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y5qyoZTM; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y5qyoZTM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E690F1F000E9;
-	Mon,  6 Jul 2026 05:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783314986;
-	bh=+9WNFb2pTW1OEIH0pRDGWLhIx9fm67amwnPthF0yxwA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Y5qyoZTMKAub5ObeUfpPJaXgXYtHOCgQH5RolAJ36KvAs5jbvVOouMC85lSSmeW+X
-	 p7IkoQMhNl3kv41YwAU89qNkHHG0wp7AN29EslXmv9VQvHaPJPcyD7e2sUEVT+g6tq
-	 9HRx8zSR3FuEvlLjRJcCFdeNVVwaXroJU0187wYUMnKFSbuiH+IeUdos1wNfd/utlh
-	 mSsIRZZ06jv8MbFMJ8VolZzCNZPFF99FD+nG1F2oNpjRnbA/ti3aiG7jOBNypBNXpu
-	 8sPLq4jksNTffksyCjKaZQ1Ff0WZuJyPYTm+YzodcfNYinsNkVz9MqBGTJQvRiqdC2
-	 ebkpsvl8IWaqw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3] module: Extend module_blacklist parameter to
- built-in modules
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Aaron Tomlin" <atomlin@atomlin.com>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260706050337.7613-1-atomlin@atomlin.com>
-References: <20260706050337.7613-1-atomlin@atomlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 05:16:25 +0000
-Message-Id: <20260706051625.E690F1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783318785; c=relaxed/simple;
+	bh=UPgrUdj2zJuIcM2CRwF3Ndg48wh45GAuitrkG1THTag=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=lNax9jNAKf0exLu4g0QgBNMnleF1ztMIGeuZJ7+nYzvhMm1WCs58Fm+8w5/op+xOJ0x11C5MifJFReB/zy6K/sW4N7mJ/0MBKEGto3mOdu94+ED0QkFI8/Lm9w8jtGaGQXelbDR6EgJLKQXQ4AE3ATI+0l6gxqc5bUyduFETRuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c2dff70000001609-75-6a4b48fb3220
+From: Byungchul Park <byungchul@sk.com>
+To: linux-kernel@vger.kernel.org
+Cc: max.byungchul.park@gmail.com,
+	kernel_team@skhynix.com,
+	torvalds@linux-foundation.org,
+	damien.lemoal@opensource.wdc.com,
+	linux-ide@vger.kernel.org,
+	adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	will@kernel.org,
+	tglx@linutronix.de,
+	rostedt@goodmis.org,
+	joel@joelfernandes.org,
+	sashal@kernel.org,
+	daniel.vetter@ffwll.ch,
+	duyuyang@gmail.com,
+	johannes.berg@intel.com,
+	tj@kernel.org,
+	tytso@mit.edu,
+	willy@infradead.org,
+	david@fromorbit.com,
+	amir73il@gmail.com,
+	gregkh@linuxfoundation.org,
+	kernel-team@lge.com,
+	linux-mm@kvack.org,
+	akpm@linux-foundation.org,
+	mhocko@kernel.org,
+	minchan@kernel.org,
+	hannes@cmpxchg.org,
+	vdavydov.dev@gmail.com,
+	sj@kernel.org,
+	jglisse@redhat.com,
+	dennis@kernel.org,
+	cl@linux.com,
+	penberg@kernel.org,
+	rientjes@google.com,
+	vbabka@suse.cz,
+	ngupta@vflare.org,
+	linux-block@vger.kernel.org,
+	josef@toxicpanda.com,
+	linux-fsdevel@vger.kernel.org,
+	jack@suse.cz,
+	jlayton@kernel.org,
+	dan.j.williams@intel.com,
+	hch@infradead.org,
+	djwong@kernel.org,
+	dri-devel@lists.freedesktop.org,
+	rodrigosiqueiramelo@gmail.com,
+	melissa.srw@gmail.com,
+	hamohammed.sa@gmail.com,
+	harry.yoo@oracle.com,
+	chris.p.wilson@intel.com,
+	gwan-gyeong.mun@intel.com,
+	boqun.feng@gmail.com,
+	longman@redhat.com,
+	yunseong.kim@ericsson.com,
+	ysk@kzalloc.com,
+	yeoreum.yun@arm.com,
+	netdev@vger.kernel.org,
+	matthew.brost@intel.com,
+	her0gyugyu@gmail.com,
+	corbet@lwn.net,
+	catalin.marinas@arm.com,
+	bp@alien8.de,
+	x86@kernel.org,
+	hpa@zytor.com,
+	luto@kernel.org,
+	sumit.semwal@linaro.org,
+	gustavo@padovan.org,
+	christian.koenig@amd.com,
+	andi.shyti@kernel.org,
+	arnd@arndb.de,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	rppt@kernel.org,
+	surenb@google.com,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
+	paulmck@kernel.org,
+	frederic@kernel.org,
+	neeraj.upadhyay@kernel.org,
+	joelagnelf@nvidia.com,
+	josh@joshtriplett.org,
+	urezki@gmail.com,
+	mathieu.desnoyers@efficios.com,
+	jiangshanlai@gmail.com,
+	qiang.zhang@linux.dev,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	chuck.lever@oracle.com,
+	neil@brown.name,
+	okorniev@redhat.com,
+	Dai.Ngo@oracle.com,
+	tom@talpey.com,
+	trondmy@kernel.org,
+	anna@kernel.org,
+	kees@kernel.org,
+	bigeasy@linutronix.de,
+	clrkwllms@kernel.org,
+	mark.rutland@arm.com,
+	ada.coupriediaz@arm.com,
+	kristina.martsenko@arm.com,
+	wangkefeng.wang@huawei.com,
+	broonie@kernel.org,
+	kevin.brodsky@arm.com,
+	dwmw@amazon.co.uk,
+	shakeel.butt@linux.dev,
+	ast@kernel.org,
+	ziy@nvidia.com,
+	yuzhao@google.com,
+	baolin.wang@linux.alibaba.com,
+	usamaarif642@gmail.com,
+	joel.granados@kernel.org,
+	richard.weiyang@gmail.com,
+	geert+renesas@glider.be,
+	tim.c.chen@linux.intel.com,
+	linux@treblig.org,
+	alexander.shishkin@linux.intel.com,
+	lillian@star-ark.net,
+	chenhuacai@kernel.org,
+	francesco@valla.it,
+	guoweikang.kernel@gmail.com,
+	link@vivo.com,
+	jpoimboe@kernel.org,
+	masahiroy@kernel.org,
+	brauner@kernel.org,
+	thomas.weissschuh@linutronix.de,
+	oleg@redhat.com,
+	mjguzik@gmail.com,
+	andrii@kernel.org,
+	wangfushuai@baidu.com,
+	linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-i2c@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	rcu@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev,
+	2407018371@qq.com,
+	dakr@kernel.org,
+	miguel.ojeda.sandonis@gmail.com,
+	neilb@ownmail.net,
+	bagasdotme@gmail.com,
+	wsa+renesas@sang-engineering.com,
+	dave.hansen@intel.com,
+	geert@linux-m68k.org,
+	ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH v19 02/40] dept: add single event dependency tracker APIs
+Date: Mon,  6 Jul 2026 15:18:50 +0900
+Message-Id: <20260706061928.66713-3-byungchul@sk.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20260706061928.66713-1-byungchul@sk.com>
+References: <20260706061928.66713-1-byungchul@sk.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSbUxbZRTHfe597ksb6m66t0eWOG0UcZEhZDPHZBI+7MMziUZjTBYXdTdw
+	A2VQSGFsmKiwDmWw4SQR4wqkFimmZba22QvjZchmNwKN7STQ0TqYKAyhq3PYjRXEdrpvv5z/
+	//xyPhyR1U5yqaLeUKkYDXKJjldjdSTFmrFC84pf9LWlQn3dxxCe+o2D8dpBDK3Obh6uThzB
+	cC9uZqGuZw3DarNXgKXlkABB/0UWorbjCE7NmgWITPVyMBFbRBD3/cTC7yfPsDD2d5SHSKCV
+	gdsuHtrMzQhmJ/sZMHU4eWhpc2Pomb4gQGBhhQGH+zWYss1iaPl+M5i/NDHwxeleBpZtdgFG
+	O8IY1ixl4HXMCTB8Y5wD9/UfEbhnEvRVe5iHvv5hDPWrSwhqzPc48A+OcOCcCzIw4r2KIeT7
+	TIDOiQADN6eDHHh8oyzEmrbA6dtWHq4NWhjwWjbBmYt1CD691ctDuOkPDGPXexEM1E8zcNl5
+	LnFfAIO5tglB/eUYC647XTwcDe+EJYedz82lds9ZhtZdW+Vpd3s3ovEHzYgudZpYemkxytLO
+	kUWefu7LoD2nfhHo0YFJgVrcB2lH3zxDJxdeoW77MZ5+Hb/F0obIGPPGM++odxUoJfoqxZiZ
+	s19ddDfgZMtHyWHrDReuQZ71DUglEmkHiU3d4R+x3brGJZmXniPB4DKb5A3SU8RzYjYxV4us
+	9PNWctx2AieD9dIeEvU2oiRj6Vlyf/jSw2WNtJO4nE3/S7cSh2vwoUglvUS+W2ljkqxNdELR
+	KzgpJVKHiji6/pMS6Qnyw7dBfBJpLOgxO9LqDVWlsr5kx/aiaoP+8Pb8slI3Snyc7cOVfefR
+	X/63hpAkIl2KBnJfLdZyclVFdekQIiKr26BJS88r1moK5OoPFGPZ+8aDJUrFENoiYt1mTXbs
+	UIFWKpQrlQOKUq4YH6WMqEqtQZX+c3I88qZ1Pqc7W1ZJppRdrdqRguB8l/7Y2dpfF3KyW3an
+	vc2TGdNCzb777wYyQqbGwv79ez185kbNoUbb0w/eax+e25TPrJu/+dE6g7/h+aw/zVRM26v6
+	J+vA49u+OZI1mjO9u3lPYXmflJcfDJWnk/RPyDgamLmb92Tm6y+/oMMVRXLWNtZYIf8LifH4
+	F20DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSbUxScRTG+997+YMs2h1Z3upDja2XuWkvyzpbL6svddPVauttfSnKO0XR
+	DMyy1RKNsrJSFrgCiyhZqQWBltYo09IMXRK9uNS0jSjTwqFQvqBBrS9nv3Oe5zw7H46AFNfy
+	ZgtkmdmcIlMql2AhJdyyqiBujE1KWxIsmgWF6pPQ1ePhwXtVPQWB4UIKDJYqDCH9Qz4U2q7w
+	4OWHfAra71Ui6AkUIvg1pidBXTdJQUjTxIfhkU4+aFUIJh1NCHQuDQkd7U9JqKpWETBkncDQ
+	3+hHoP3swVDap6LAZy5CcNWr50Pfi43wo+cxDya7vxLwITiAwOyZIMBTfwZBSJcO10328Lpu
+	EMNY22sSSrXtCG587ibB39eLoLrpEwLH7XwMX4prSHB7psHbgA9Di/Y8hh8uAwE/rRiM+Q4e
+	uFr7EZTpNQi8Hx0EFNy0YNCV2Sio633EB1f/OAFdOg0BlbbN0GP2UuAsNhHhc8Ou+zGgLy0g
+	wuUbAdq7jwkYMVfw15Uj9pf6IsVW2B8QrPpNCLNV16oQOzaqQexweQHJqovDbeOAj2RP2Y+w
+	5c4BzI4G3mHWETRS7CsTw946O0qwJW1xbN3Vbv7W9XuEq5M5uSyHUyxeu0+YOuSykFmtzFHT
+	JyuVh+zTz6EoAUMvZypMk7wIY3oh09ExQkY4mp7H2C94w3OhgKTdc5ki8wUqIkynNzG+pvMo
+	whQ9n/nd0vh3WUQnMFbLRfwvdC5Taa3/GxRFr2DujZcRERaHPZ2+ZqoYCY1oSgWKlmXmZEhl
+	8oR4ZXpqbqbsaPyBgxk2FP4n84nxklo07N7YgGgBkkwVwbrENDFPmqPMzWhAjICURIsWLEpK
+	E4uSpbnHOMXBvYrDck7ZgOYIKEmMKHEXt09Mp0izuXSOy+IU/1VCEDU7D3Xaj89KnrdXbV05
+	Ur2+y/lkPJCVYnoR2BlcozXGv1dZyiZmHLlksGVf2e3/vv1pL13y3Hi5xXnYPbNX5RxKEnkH
+	WxubkXzwWTA2b7Vkx6PEUMPrmQr/0il32uI2ZONLK7OWSbfXusUPa1TfmjNU+22n6wwf/R0J
+	WsO2E19wzKEJCaVMlS6NJRVK6R9hxjY0SwMAAA==
+X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Iterating the `.initcall.modnames` array locklessly in `initcall_g=
-et_modname()` races with `free_initmem()`, causing a Use-After-Free for con=
-currently loaded modules.
-- [High] The built-in module blacklisting functionality is completely disab=
-led when CONFIG_MODULES=3Dn.
---
+Wrapped the base APIs for easier annotation on wait and event.  Start
+with supporting waiters on each single event.  More general support for
+multiple events is a future work.  Do more when the need arises.
 
-commit aca1118f7ac6c8d2b798e7bb31a70a4f01638aee
-Author: Aaron Tomlin <atomlin@atomlin.com>
-Subject: module: Extend module_blacklist parameter to built-in modules
+How to annotate:
 
-This patch extends the module_blacklist command-line parameter to apply
-to built-in modules by checking them during early boot. It introduces a
-new memory section to map initcalls to module names, allowing the kernel
-to skip the initcall if the module name is present in the blacklist.
+1. Initaialize a map for the interesting wait.
 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 7566815fabbe8..b9b0dc419aeeb 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-[ ... ]
-> @@ -756,6 +756,15 @@ void *dereference_module_function_descriptor(struct =
-module *mod, void *ptr);
->  int register_module_notifier(struct notifier_block *nb);
->  int unregister_module_notifier(struct notifier_block *nb);
-> =20
-> +#ifdef CONFIG_MODULES
-> +extern bool module_is_blacklisted(const char *module_name);
-> +#else
-> +static inline bool module_is_blacklisted(const char *module_name)
-> +{
-> +	return false;
-> +}
-> +#endif
+   /*
+    * Place along with the wait instance.
+    */
+   struct dept_map my_wait;
 
-[Severity: High]
-Does this defeat the purpose of blacklisting built-in modules on kernels
-built without loadable module support?
+   /*
+    * Place in the initialization code.
+    */
+   sdt_map_init(&my_wait);
 
-If a kernel is built with CONFIG_MODULES=3Dn, the command-line parsing and
-state variable in kernel/module/main.c are not compiled. This stub will then
-unconditionally return false, meaning the module_blacklist parameter will be
-silently ignored for built-in modules on non-modular kernels.
+2. Place the following at the wait code.
 
-[ ... ]
-> diff --git a/init/main.c b/init/main.c
-> index 96f93bb06c490..893b20ddcf658 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-[ ... ]
-> @@ -1379,12 +1379,39 @@ static inline void do_trace_initcall_level(const =
-char *level)
->  }
->  #endif /* !TRACEPOINTS_ENABLED */
-> =20
-> +extern struct initcall_modname __start_initcall_modnames[];
-> +extern struct initcall_modname __stop_initcall_modnames[];
-> +
-> +static bool initmem_freed __ro_after_init =3D false;
-> +
-> +static const char *initcall_get_modname(initcall_t fn)
-> +{
-> +	struct initcall_modname *p;
-> +
-> +	if (initmem_freed)
-> +		return NULL;
-> +
-> +	for (p =3D __start_initcall_modnames; p < __stop_initcall_modnames; p++=
-) {
-> +		if (p->initcall_fn =3D=3D fn)
-> +			return p->modname;
-> +	}
+   sdt_wait(&my_wait);
 
-[Severity: High]
-Can this race with free_initmem() and cause a use-after-free if a module
-is loaded concurrently?
+3. Place the following at the event code.
 
-In kernel_init(), free_initmem() is called just before setting initmem_freed
-to true:
+   sdt_event(&my_wait);
 
-kernel_init()
-    free_initmem();
-    initmem_freed =3D true;
+That's it!
 
-At this point in the boot sequence, the rootfs is mounted and user-mode
-helpers are enabled. If a hardware interrupt triggers request_module()
-concurrently, modprobe could execute and invoke the init_module syscall.=20
+Signed-off-by: Byungchul Park <byungchul@sk.com>
+---
+ include/linux/dept_sdt.h | 65 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 include/linux/dept_sdt.h
 
-When do_init_module() calls do_one_initcall(), it would end up in
-initcall_get_modname(). Since initmem_freed is still false, it would
-locklessly scan the .initcall.modnames section while it is actively being
-freed by free_initmem().
+diff --git a/include/linux/dept_sdt.h b/include/linux/dept_sdt.h
+new file mode 100644
+index 000000000000..0535f763b21b
+--- /dev/null
++++ b/include/linux/dept_sdt.h
+@@ -0,0 +1,65 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Single-event Dependency Tracker
++ *
++ * Started by Byungchul Park <max.byungchul.park@gmail.com>:
++ *
++ *  Copyright (c) 2020 LG Electronics, Inc., Byungchul Park
++ *  Copyright (c) 2024 SK hynix, Inc., Byungchul Park
++ */
++
++#ifndef __LINUX_DEPT_SDT_H
++#define __LINUX_DEPT_SDT_H
++
++#include <linux/kernel.h>
++#include <linux/dept.h>
++
++#ifdef CONFIG_DEPT
++#define sdt_map_init(m)							\
++	do {								\
++		static struct dept_key __key;				\
++		dept_map_init(m, &__key, 0, #m);			\
++	} while (0)
++
++#define sdt_map_init_key(m, k)		dept_map_init(m, k, 0, #m)
++
++#define sdt_wait(m)							\
++	do {								\
++		dept_request_event(m);					\
++		dept_wait(m, 1UL, _THIS_IP_, __func__, 0);		\
++	} while (0)
++
++/*
++ * sdt_might_sleep() and its family will be committed in __schedule()
++ * when it actually gets to __schedule(). Both dept_request_event() and
++ * dept_wait() will be performed on the commit.
++ */
++
++/*
++ * Use the code location as the class key if an explicit map is not used.
++ */
++#define sdt_might_sleep_start(m)					\
++	do {								\
++		struct dept_map *__m = m;				\
++		static struct dept_key __key;				\
++		dept_stage_wait(__m, __m ? NULL : &__key, _THIS_IP_, __func__);\
++	} while (0)
++
++#define sdt_might_sleep_end()		dept_clean_stage()
++
++#define sdt_ecxt_enter(m)		dept_ecxt_enter(m, 1UL, _THIS_IP_, "start", "event", 0)
++#define sdt_event(m)			dept_event(m, 1UL, _THIS_IP_, __func__)
++#define sdt_ecxt_exit(m)		dept_ecxt_exit(m, 1UL, _THIS_IP_)
++#define sdt_request_event(m)		dept_request_event(m)
++#else /* !CONFIG_DEPT */
++#define sdt_map_init(m)			do { } while (0)
++#define sdt_map_init_key(m, k)		do { (void)(k); } while (0)
++#define sdt_wait(m)			do { } while (0)
++#define sdt_might_sleep_start(m)	do { } while (0)
++#define sdt_might_sleep_end()		do { } while (0)
++#define sdt_ecxt_enter(m)		do { } while (0)
++#define sdt_event(m)			do { } while (0)
++#define sdt_ecxt_exit(m)		do { } while (0)
++#define sdt_request_event(m)		do { } while (0)
++#endif
++#endif /* __LINUX_DEPT_SDT_H */
+-- 
+2.17.1
 
-[ ... ]
-> @@ -1600,6 +1627,7 @@ static int __ref kernel_init(void *unused)
->  	kgdb_free_init_mem();
->  	exit_boot_config();
->  	free_initmem();
-> +	initmem_freed =3D true;
->  	mark_readonly();
-> =20
->  	/*
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706050337.7613=
--1-atomlin@atomlin.com?part=3D1
