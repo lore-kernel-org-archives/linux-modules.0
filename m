@@ -1,179 +1,213 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8A441F7E8
-	for <linux-modules@vger.kernel.org>; Tue,  7 Jul 2026 15:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6896C3EF650
+	for <linux-modules@vger.kernel.org>; Tue,  7 Jul 2026 15:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783438336; cv=none; b=c6u2O/Ko6XmbDrBuai8DLcjffKbAZnKl5xMpMf4d4I9HGd/Kv4wTmQeKOjvvJZ74vtmACGpO2Vglm++Y8lJy5CJlSyn2VL14XKw9QTXFNm6swM7ucLDE1jUiE3RAV937x26DRFuaidSqrp5+LgNogpop+mU8Z6/8Gictkljf/Fg=
+	t=1783438730; cv=none; b=odT58MvSjIBO4heu163l9TO2oB8kLPeb1WO2ZH7KrSnHWT3wIonJ7MLRBQCgbabNxFM3oQ5q3C9DKhtrDuJdFCCvjV86zAd9LUJl6SgYw6MB22C2a9XFgoRRKEyfbFLIrUQ5p7KjJjwjA+2+B9O1qEM8yJIljGoQ2UX9n0T5CXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783438336; c=relaxed/simple;
-	bh=+pVfGy+q5xijHnzCvygCiL8Dx41ukdWBcc4R5yitQSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rfoD0amdWxe0rFKp/NiP3r8SvjjVp02uKQtYEF3u+1wL1GJnSi9CqQmKrp4sopC8aIxsSW6ieekF2CHqICrbWkKpa2bnvhppNk2Low6GEqJzb+eu2sUhLB0xrznOnfz1kBbwgcp3IRpB3Sh/vGW7W+k1BzqGjMDY8KbY0T/LLkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EC1CHNHE; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1783438730; c=relaxed/simple;
+	bh=SO5eeYPZCjDEPtTUp5vp0e259QcOYfs80Q/ywveYhqA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pKgCwSTV9M4UMZIAlduy9IPehhzGsmm1bsOOrTUywat31M2loE27mA73q8xjGcIq86fiUqLxQpGVgluF+slWz9xuSrv54b7438jB/G8L0fNP64eNkPcMpGjPQJap6OZMuMGHHxIVu8dVlG1VMbpmbU0VUae5tgR1W6UHIVMNwXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Sp9zBXEN; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EC1CHNHE"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-471eeac43bfso4635750f8f.3
-        for <linux-modules@vger.kernel.org>; Tue, 07 Jul 2026 08:32:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Sp9zBXEN"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-493b966dd74so15256555e9.3
+        for <linux-modules@vger.kernel.org>; Tue, 07 Jul 2026 08:38:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783438333; x=1784043133; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iQ+Ftv/1fNBSyhcVrkQAR5aks0BMvykec1ekhSkuJMI=;
-        b=EC1CHNHEwehItqCXht7Y4f5TsH+qbt9eM78rGmFfKITAYW2nNRhQv+/Zbv+WNQ55dM
-         fUZQbTWUxI6tiiTCQD5GPOj1HYN5L1pYa3xT9dI/e/CIV//6XIiqE35HVADHIKYKKJiu
-         tPPcnAaHtzRMbBWUuQgPX1pvojM5Ov6wdieFJ5Z2W4VBWgbFOIB1w4J1DiPOYi5huCit
-         fDVg64vfSQx5kAzu3Flcq4CazioDIKZq9D4cmnHF/jaE+92+c92Y9MbzXusDdw6kEJP3
-         BsEFX54/YkWoAyJbvSwvLFCmgvfEZvrjxohS2fAvy7fq7dKD1z3mZc5mRAZesKpqV9xZ
-         0JGg==
+        d=suse.com; s=google; t=1783438727; x=1784043527; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3FzCn0X+c0BW10b/0YxzB57zNLgSGohyBE3JQzpVoRI=;
+        b=Sp9zBXENbXVuk4pLgRwA07DY1fA0U6i0d3KsNaU72qPMjeU2lUQT22MYYNGI4URgSm
+         nY81jVo81RLZKV+DKwjmqbLwJmsvYBVbeVme/Y8/1KVyMcWs6C/v4AaybK5TZTnTs8N3
+         gjFrmikadN4ppXMuG830cLNTF4XyPPjyWCqWfKWAo5+YfRtnPzn+aySjEZX4ue4xHIoP
+         nl2EXqQRhZvTM0XgjwtH2TwRTkJOPMlz5XyoV0gTsK4SPgIEFlLvRvQ72bttphGenVmN
+         YLjEDYih/ME9p7n04hcodUY9XKoptFyC7Y8iiVvkZlS0WZlJSxJIzrNaQZXcHr4X7ke+
+         m+Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783438333; x=1784043133;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iQ+Ftv/1fNBSyhcVrkQAR5aks0BMvykec1ekhSkuJMI=;
-        b=TLro6vJdn6fz4ycG+xW7K1axIX6kKEkfgUnmZeK2IFQ/rpOrgJRz8CSGWuFkJfyQNC
-         sEL8qcsOSc7UBV6wE7CWLLBWkx7zcCn5feiMrIc+wIOR512ZWGfbf5k8nZjT3KA2koiY
-         1Y60eeo/Wq8r79dzURhVmcllVs+lkr9OAF9A8obyzU4+VYphZk0cuapZVPB7l2ILbezA
-         E5jPnc8hVnSbRCb4inc1PRCtaJGX0EZlmmogwYIfUp2h4nLMTdnRd6QUqm44GO3vLxyf
-         PLn3p/5JevBnvbLSIPnN2Tt1DSn3PZlzZuwazsHPJRy8sItffXE+gHFVArvjfWRhwVgz
-         aX7Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqZ29aIdh1ZMoBD3OsPFKAeo+IuUO86hR2eHZSLz1Crs0mNLWQD3kkYkjeGbxXkjT6R8qKV5NQHFV8RapRZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOBiTwD1VWbloMtJ+2CPHC5nBOcYenGspbEOuFpAGMVKfzead1
-	uU3eUUjgs1rNZIAPlGSsr6cpd33MCgOQrX4CS00u36a4Q+YHS84tBYMQGCq2IRLZqPI=
-X-Gm-Gg: AfdE7cmdX1TkSGkb0XpfNnsbIomMkNHhUDsEpTheazSJ3nPjedw930HtwpuxvwaqKl9
-	ndUX9yyJoNjwNkcafnMAcVs+BIb3UDIO4m6XKJz26sVe7lP2MLHR75pvNV3v8lWtiuhre7RBqZ6
-	qKdQ+kmlfMCQtUa59pOlPTpxgTu5p5UrrcEydka3vU1m6qGMTtRDNWVH5TK7vLGVvm8w8jhcppc
-	JXNkQ550ZJKT8n5/5VF3EKEbJiBCe8Ofla3sslSM86eePfgj4FX4VJpxXEYqIs/Rmx77PP/Oo1S
-	qXMiTbTqiFrFK5LaPVZvG3Hss2NJby4DjILlaHaTdRjXIpAcmVzPpEnqMLDI5/eO1YvXXKqda3J
-	Y0GXUtbL+pDahDMJvvZkUX75rvi792fucBAP06QgTsVgPr6SILojKCx8i4Sjq0EGi7OXEjgHUWj
-	BlQ5miQUVxbqnTBBPolrGQZFkrauoJLR+F+LcnAz03fjLQpk2zEqJo0pOj3nFRtM1P20gHebIuK
-	uuw4LheV8VmW/a6LZQOv6caXuJvIvToeNFecXSKzzsQFVL5sDg5tXfiDoc=
-X-Received: by 2002:a5d:6543:0:b0:475:3a97:8e2c with SMTP id ffacd0b85a97d-47de66a4be0mr5128126f8f.16.1783438332496;
-        Tue, 07 Jul 2026 08:32:12 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039af67sm40509231f8f.17.2026.07.07.08.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2026 08:32:12 -0700 (PDT)
-Message-ID: <0dfe59c2-bf60-40fe-90e6-d6e1003709d0@suse.com>
-Date: Tue, 7 Jul 2026 17:32:10 +0200
+        d=1e100.net; s=20251104; t=1783438727; x=1784043527;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3FzCn0X+c0BW10b/0YxzB57zNLgSGohyBE3JQzpVoRI=;
+        b=DHnKMy8qRJds3V/0mOawnICGwTwiBFqQwXDqmwz9XCxXMnkFU2sxKTGRMVsgqcTlr4
+         d9D7LfyBPQDgqzdTgA8B5ABV0Avk8+MqIWqzAGd8psMWV0I0Uy5WTAtorM6gqs+DF7gj
+         u6olpVkzCPekjRBYc9n/w1Tq9W16Sze0zmShSjS7RRDdQmBBQiZUomtEdk4UALjpHhUh
+         hiWFMoGYRe70oL0J9bUZPgi0Ar7h9LSrkzcLxw7Zq7g6vAfvWqG3UumGlp0j+h0MXnhl
+         YMr+vT8ehwVgNUxvJkzY0r75GjQKK+diNmFALmBY/1gcQACAKyA6FHIamF3Kme+fHCkh
+         yb6A==
+X-Forwarded-Encrypted: i=1; AHgh+RpSsVIWi6mtdSaxkfzOjaAGyLGLAydHJBefOws6V7mPfV5KC1Cczb1l+kz7tkEfEGgXIjHkrK97FtJ1tAYu@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwM0srU3UAD0ssFuoezNMkXLyTWUbfBdcDKKhhTQxN8xO+glyO
+	I1pqxYigdXU4WYP3X+4eOlYt/kFJI9eM/MP1Ry8QueMa9R/m4nh+Vx4t+FerRtbRdDA=
+X-Gm-Gg: AfdE7cnDBhKtrxCbO/Qd6YUuOBwBZSvFxs4WpTJThO97gEwo6Jl5Vp+OLQFbvU5l3Qn
+	DeIDd53NVxW5VcH/NoCI7de4IgMNtfQF3BGQpsak2uIwunSaBkz+/v6YSsN3TuAO9SZQ7iD8dMl
+	pGMPMAkwFKUizEjRar9TtKWP8SEFNSKTDhKWzBG4ioBxIp6tHsKLi0svQ4f4qAyE5mpG+rbiRr1
+	+nuzUu1NPy9X0WR4yIvjOsTpei/e9dyUE/1szSaFXcRmyk51aPRHkvg6f7CvK1Quo6Ch7HobV/l
+	H+IcoZlci5IT4+x6TbAstiEcK8rUJNEb68Pc9eYXOKkWnuwBzUaDk0C+iNB07/6RglW/1bSEyAU
+	Jawq1evZMbLmSFIC1mttWuSy1EPyy+FkvVy83Ka85PFMpTmxrmKB7OGgfs4WPhBLC8i3cHsfUV5
+	nVESqiB6vV7PDPWPLXmoBJlEotyZFbjeJ9MXnuRZpSUriL3HTzGTlTW8H3sY/jJFkpMKjkqmcX2
+	Vr63wdsNjlsVw==
+X-Received: by 2002:a05:600c:810b:b0:492:67df:3dfa with SMTP id 5b1f17b1804b1-493df080788mr55474505e9.34.1783438726830;
+        Tue, 07 Jul 2026 08:38:46 -0700 (PDT)
+Received: from zovi.suse.cz (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0f5b811sm101111785e9.13.2026.07.07.08.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 08:38:46 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Xin Li <xin@zytor.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	David Hildenbrand <david@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	linux-s390@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] x86: Avoid indirect includes through linux/module.h -> linux/elf.h
+Date: Tue,  7 Jul 2026 17:37:04 +0200
+Message-ID: <20260707153819.4172541-2-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260707153819.4172541-1-petr.pavlu@suse.com>
+References: <20260707153819.4172541-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2] ppp: defer channel free to an RCU grace period to
- fix pppol2tp RX UAF
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Qingfang Deng <qingfang.deng@linux.dev>, Breno Leitao
- <leitao@debian.org>, Norbert Szetei <norbert@doyensec.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Taegu Ha <hataegu0826@gmail.com>, Kees Cook <kees@kernel.org>,
- linux-ppp@vger.kernel.org, linux-kernel@vger.kernel.org,
- Guillaume Nault <gnault@redhat.com>, netdev@vger.kernel.org,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-modules@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
-References: <D9C0245B-608B-4884-8A09-F55BA4A9F948@doyensec.com>
- <de2616b3-6edf-4255-ba77-0674e225ab27@linux.dev> <akfjpBVML_1RFF91@gmail.com>
- <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
- <20260706092926.PIlrhRKz@linutronix.de>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260706092926.PIlrhRKz@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/6/26 11:29 AM, Sebastian Andrzej Siewior wrote:
-> + MODULE maintainer
+Several x86 files use ELF-related declarations and currently rely on them
+being provided indirectly through linux/module.h -> linux/elf.h:
 
-+ Paul E. McKenney
+* arch/x86/entry/entry_fred.c: ia32_enabled() -> asm/ia32.h,
+* arch/x86/entry/syscall_32.c: vdso32_image -> asm/vdso.h,
+* arch/x86/kernel/cpu/intel.c: ELF_HWCAP2 -> asm/elf.h,
+* arch/x86/kernel/fpu/xstate.c: elf_coredump_extra_notes_write(),
+  elf_coredump_extra_notes_size(), NT_X86_XSAVE_LAYOUT, elf_note ->
+  linux/elf.h,
+* arch/x86/kernel/process.c: mmap_is_ia32() -> asm/elf.h,
+* arch/x86/kernel/signal.c: get_sigframe_size() -> asm/elf.h.
 
-> 
-> On 2026-07-05 10:57:44 [+0800], Qingfang Deng wrote:
->> On 7/4/2026 at 12:32 AM, Breno Leitao wrote:
->>> On Fri, Jul 03, 2026 at 03:27:00PM +0800, Qingfang Deng wrote:
->>>> AI-review found an issue: https://sashiko.dev/#/patchset/D9C0245B-608B-4884-8A09-F55BA4A9F948%40doyensec.com
->>>>
->>>> An rcu_barrier() call is needed at the end of ppp_cleanup().
->>>
->>> I was initially unclear why rcu_barrier() would be necessary on a kfree path,
->>> but it appears to be required during module unload to ensure that
->>> ppp_release_channel_free() completes before the module's struct rcu_head is
->>> destroyed. Is that the correct understanding?
->>
->> It's required to ensure that all ppp_release_channel_free() callback
->> complete before the text segment of the module is unloaded.
-> 
-> So either a rcu_barrier() in ppp's module_exit() callback or a
-> synchronize_rcu() instead of the call_rcu(). And all this because the
-> module RCU callbacks pending which can be invoked after the module has
-> been removed. There is a synchronize_rcu() during module exit but this
-> is after the module code is gone.
-> 
-> I'm curious how many modules have a call_rcu() within their code but
-> don't have anything to enforce its completion before module removal is
-> complete? Wouldn't something like
-> 
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 46dd8d25a6058..8eae1ea2d6eb4 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -858,6 +858,9 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->  		goto out;
->  
->  	mutex_unlock(&module_mutex);
-> +
-> +	/* Ensure all rcu callbacks issued by the module have completed */
-> +	rcu_barrier();
->  	/* Final destruction now no one is using it. */
->  	if (mod->exit != NULL)
->  		mod->exit();
-> 
-> make sense?
+Add the missing includes to these files in preparation for removing the
+linux/elf.h include from linux/module.h.
 
-This is discussed in Documentation/RCU/rcubarrier.rst and
-Documentation/RCU/Design/Requirements/Requirements.rst. The latter
-contains:
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ arch/x86/entry/entry_fred.c  | 1 +
+ arch/x86/entry/syscall_32.c  | 1 +
+ arch/x86/kernel/cpu/intel.c  | 1 +
+ arch/x86/kernel/fpu/xstate.c | 2 +-
+ arch/x86/kernel/process.c    | 1 +
+ arch/x86/kernel/signal.c     | 1 +
+ 6 files changed, 6 insertions(+), 1 deletion(-)
 
-| Loadable Modules
-| ~~~~~~~~~~~~~~~~
-| 
-| The Linux kernel has loadable modules, and these modules can also be
-| unloaded. After a given module has been unloaded, any attempt to call
-| one of its functions results in a segmentation fault. The module-unload
-| functions must therefore cancel any delayed calls to loadable-module
-| functions, for example, any outstanding mod_timer() must be dealt
-| with via timer_shutdown_sync() or similar.
-| 
-| Unfortunately, there is no way to cancel an RCU callback; once you
-| invoke call_rcu(), the callback function is eventually going to be
-| invoked, unless the system goes down first. Because it is normally
-| considered socially irresponsible to crash the system in response to a
-| module unload request, we need some other way to deal with in-flight RCU
-| callbacks.
-| 
-| RCU therefore provides rcu_barrier(), which waits until all
-| in-flight RCU callbacks have been invoked. If a module uses
-| call_rcu(), its exit function should therefore prevent any future
-| invocation of call_rcu(), then invoke rcu_barrier(). In theory,
-| the underlying module-unload code could invoke rcu_barrier()
-| unconditionally, but in practice this would incur unacceptable
-| latencies.
-
-I don't know if the last part about unacceptable latencies is still
-relevant. I haven't done any measurements myself.
-
+diff --git a/arch/x86/entry/entry_fred.c b/arch/x86/entry/entry_fred.c
+index fb3594ddf731..ea3bb4298065 100644
+--- a/arch/x86/entry/entry_fred.c
++++ b/arch/x86/entry/entry_fred.c
+@@ -9,6 +9,7 @@
+ 
+ #include <asm/desc.h>
+ #include <asm/fred.h>
++#include <asm/ia32.h>
+ #include <asm/idtentry.h>
+ #include <asm/syscall.h>
+ #include <asm/trapnr.h>
+diff --git a/arch/x86/entry/syscall_32.c b/arch/x86/entry/syscall_32.c
+index 31b9492fe851..12fceffc99ef 100644
+--- a/arch/x86/entry/syscall_32.c
++++ b/arch/x86/entry/syscall_32.c
+@@ -12,6 +12,7 @@
+ #include <asm/traps.h>
+ #include <asm/cpufeature.h>
+ #include <asm/syscall.h>
++#include <asm/vdso.h>
+ 
+ #ifdef CONFIG_IA32_EMULATION
+ #define __SYSCALL_WITH_COMPAT(nr, native, compat)	__SYSCALL(nr, compat)
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index abb3984336eb..18cf40f08557 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -17,6 +17,7 @@
+ #include <asm/cpufeature.h>
+ #include <asm/cpu.h>
+ #include <asm/cpuid/api.h>
++#include <asm/elf.h>
+ #include <asm/hwcap2.h>
+ #include <asm/intel-family.h>
+ #include <asm/microcode.h>
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index a7b6524a9dea..8b90bf86a742 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -7,6 +7,7 @@
+ #include <linux/bitops.h>
+ #include <linux/compat.h>
+ #include <linux/cpu.h>
++#include <linux/elf.h>
+ #include <linux/mman.h>
+ #include <linux/kvm_types.h>
+ #include <linux/nospec.h>
+@@ -26,7 +27,6 @@
+ #include <asm/msr.h>
+ #include <asm/tlbflush.h>
+ #include <asm/prctl.h>
+-#include <asm/elf.h>
+ 
+ #include <uapi/asm/elf.h>
+ 
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 85435044e33c..e40f7f3d3489 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -54,6 +54,7 @@
+ #include <asm/mmu_context.h>
+ #include <asm/msr.h>
+ #include <asm/shstk.h>
++#include <asm/elf.h>
+ 
+ #include "process.h"
+ 
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 2404233336ab..0fe2d7a6b1af 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -29,6 +29,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/rseq.h>
+ 
++#include <asm/elf.h>
+ #include <asm/processor.h>
+ #include <asm/ucontext.h>
+ #include <asm/fpu/signal.h>
 -- 
-Thanks,
-Petr
+2.54.0
+
