@@ -1,37 +1,21 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F549422549;
-	Mon,  6 Jul 2026 18:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABCA136B048;
+	Tue,  7 Jul 2026 02:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783361181; cv=none; b=lWre/ScDu8bT9gcIMlHG8tm5k0HuwM6UmfwWIzQE0Ng7b4wkTP2b0JrZVmvAF7kKCHD7p+uWXQsIAXw0GhKFPT3gngU4XZ3W8pZ6lxkzYU5yam4xSGy+CID8JH6+7zCOQVL12kLtmTFpQgjXxA9CySY7LaiQppt2vMWHKn5BEio=
+	t=1783391756; cv=none; b=avezIVHor5HBINqgHTabGyzkFeCNg794O0UTbP0YuELdXWqwPMgtJW5CC9z9lU+vkbs0LB04oMH5FDkOmcTdy6OSm1I76xvNG9kX9Sikx9O2rJ/Dr3E01HzP5zu7sUanoFnbCntE6P9hpGO8LNiocbRwCuZIXVA5BjCHsRKK8zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783361181; c=relaxed/simple;
-	bh=WSrxhZ3K3aHd+oacRAsc/khrD9rBmmLfoF539Nq0u78=;
+	s=arc-20240116; t=1783391756; c=relaxed/simple;
+	bh=4aXH2f9ytQjDBaSOD98MPjwilmVXY5Gbzhe6oue0oYM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=govuGuGGEytB6D5rxJrZaN1xwVOXsq2EzjnD9vP922e/ybGk/aqV/nudPbCgA9/54xz4qS9n/ZbY9ruVJ8l4X8SG46so3IMjJKISMjE00YcIfaeBwGj+FV3Mo8n4JqZ4rRzHHHAibMO6jSPv+R4zfthXjbFrZwu8D59Lqcwho38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CNyUy7kr; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CNyUy7kr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=7OW/CenuU9P13pzjhjZutuMsDUz3ebL4YDkxxEUpTq8=; b=CNyUy7krT2KWgEwmWVKxtIQ+mF
-	Vb+1q+gyB5yQGtWUUUTFfkVXSRepuw7fyFqIY66jb6ov+a2TSQuU6Oeko21f10IdvUo87ND796N2s
-	r4dJq4T0v6JLzeGf9VmqXcqhhRS0zxb+AYnr/OkLGsRdGJ59LoP8x6HtyxyIaDGX/UNF4eV4mx/6j
-	9DFL/3RA2rxLGItPLNRlN3OyyNrc4LrBZnn6Z3pAqvn4XXv6D9Sm5JmxAl/Nx6Vi/43ITWBd3Tatn
-	UF0bFlXL9IwSqecAJqVY3MLm3w3NDEriZxsXwEytou0y28YZK6qZ/ZV3pvVIppH/oIVxHPm218vXX
-	ibjZRXUw==;
-Received: from willy by casper.infradead.org with local (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wgnhQ-0000000GLqy-1n2W;
-	Mon, 06 Jul 2026 18:05:44 +0000
-Date: Mon, 6 Jul 2026 19:05:44 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Byungchul Park <byungchul@sk.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CrknILNZmzbBrxGUn5HMTs3x9e9J87LTdTXOBHJRMXSSyWYy2WRJ3g2VKdTcT/io+4KWKAPM4ymWr5jdhlu1DXlgfmo2H6K42xrRaAfADWYcIysL52js83cVjJDtYDBccIgf0ZAZ1jHUf5FIK1FL9vN/GG6Bz3FOv1O0NprSxtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c45ff70000001609-b3-6a4c66043553
+Date: Tue, 7 Jul 2026 11:35:42 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: Matthew Wilcox <willy@infradead.org>
 Cc: linux-kernel@vger.kernel.org, max.byungchul.park@gmail.com,
 	kernel_team@skhynix.com, torvalds@linux-foundation.org,
 	damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
@@ -97,9 +81,10 @@ Cc: linux-kernel@vger.kernel.org, max.byungchul.park@gmail.com,
 	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
 	tmgross@umich.edu, rust-for-linux@vger.kernel.org
 Subject: Re: [PATCH v19 22/40] dept: track PG_locked with dept
-Message-ID: <akvueAxPl8aoLvMR@casper.infradead.org>
+Message-ID: <20260707023542.GA33746@system.software.com>
 References: <20260706061928.66713-1-byungchul@sk.com>
  <20260706061928.66713-23-byungchul@sk.com>
+ <akvueAxPl8aoLvMR@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -108,54 +93,206 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260706061928.66713-23-byungchul@sk.com>
+In-Reply-To: <akvueAxPl8aoLvMR@casper.infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUybZRSGfd7vNtS8qyM+jsVoVVy2dI5lJsdoyKJ/3kSNS/g3k2lZX6Wz
+	wGwBhwRTYEysiF1dIbQgXefqRMiw3diAdOvYZ1VMO9jWlW/TVpdSpqOulo9iiy7u33XOfefK
+	+XE4Um5nNnCasgpRV6bSKhgpJY3nOJTUe2/s2xaKAkxMh2m4WeeloMnVTsO1W/UUJJdsJDQO
+	rFKwYr7CQiI1zoKlDkFrwExC0H+ehIW+NAOxi/cQWGbDDFijNhbi00M0rE7+RoAznCagy+HO
+	VFr/YKDN4kdw6soUAs+JegYiptMkjIYfBZ/lcwbigQ4C5vsYsNd7aAj8HEPQaTMjiIY8BDQc
+	O8lAa6eLgoGZQRYCsWUCJlrNBHzvehOmnVEK2u4wYGv7nQBL7xABKWc3C07Dc2AbGaVhebYA
+	Vu3lMPmlhQLf1E0aYlEzA2cMMyy4bl9GkBibJaCnOUqCJ7QFmlYSCEYHOxho7jtNg8GWpMHv
+	/YmG47cCBPgPf0FD0BRB0DvvYHaqhWRjCyV0u/sJofH6CiP0fN2DhKVFMxISxxtIodGUGS/O
+	3SWFxb9uMMKPDix889kiIRweUQoD1klWOHguxAp2V6Vw8FKc3qXcLX1FLWo1VaLuhcJ3pSV/
+	9kbI/baCA+5uD2tAC/lGJOEwvwOPXz9PPeB29w9rTPHP4l8u2YksM/zzOBhMkUbEcev5TXju
+	1HYjknIkf+RJfLSln812HuML8bnx+2ss4wGb7EfYbEnONyM815ym/g3WYV97eI1JfjMOpu8Q
+	WSnJ5+Fv01x2LcncMJ2MkVnO5Z/B3v6rRNaD+V8leDCS/u/QJ/CFE0HKhHjrQ1rrQ1rr/1o7
+	IruRXFNWVarSaHdsLaku0xzYure81IUyf+usXX77LLrnLxpGPIcUObI+4+v75LSqSl9dOoww
+	RyrWy/I3ZVYytar6Y1FX/o6uUivqh1EeRykel22//5Fazr+vqhA/EMX9ou5BSnCSDQYECx3D
+	T+flblRoTw5Njrlv7/m7prK4Wjn20kzyUMunl72pwtzygWM3puJnJw5NUbOdqZ11TQ0vS/aG
+	k0VY5tu4bsTx6rbOpbvsVwI392HVLp+xvfi7o127HwHixRFlUS3jfUudI9RESNOZT4a6EvqQ
+	K3+xtqlCsDw1XyMxaF4rVlD6ElXBZlKnV/0DA5Tr8bMDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTH8zzP7b2XZtVrZfMGEhLry0wzcTI0J3PzJVnCzXyJcR+2+EWb
+	cZXypmkdA5NFKDRWJKY0toRWtKLUBXkrrUxwZVi2MmUOKttgA1ZZKti0jg15CSDF1mXRLye/
+	8z///8n5cFgij0qSWHX+KVGTr8pV0FJKemBH6Wbq2L7sdwMTUjDoz8BIICiB30q6KJiZNlBw
+	qbmBhiXbNwwYWqsl8OOgjoL+ppsIAjMGBHOLNgL69mUKlkw+BqbnhxkwlyBY9vgQWPwmAkP9
+	3xFocJdgeNYSpSHcPYXAPBakoSpUQsGkowKBddzGQOiHDHgauCOB5dEJDIOzEQSOYBRDsOss
+	giVLDlypdcXiln9oWHzQR6DK3I/g6tgoganQIwRu358IPF/raHhsvEVgILgCfpmZpOGe+TwN
+	T/2XMPzdQoNd55GA/6cwghqbCcH4Hx4MpdeaabDUtFLQ/qiDAX/4OYYRiwnDzdb9EHCMU9Br
+	rMWxc2Mu5xqwVZXiWHmCwdx4B8O8o57ZXYeEOf0FSqh3tWFB/3CJFhouNyBhccGEhOm6UiLo
+	jbG2OzJJhDLXl0Jdb4QWFmZ+pQXPrJ0S7tfywvVzC1iofLBZaLeOMgf3HJZ+kCnmqgtEzZad
+	R6VZ/zY+JidtWwtd9R6mGD3bWI4SWJ5L56tdTirOFLee//l7O44zzb3NDw3Nk3LEsoncJj7i
+	TitHUpZwF1P4qxfamLhnNbeT7xyefckyDnij/SITN8m5CsRHKqLUf4NV/L3q4EsmnJIfioZw
+	fCnhkvkbUTYuJ8RuCMyFSZzf5NbxXW092Ihk1tfS1tfS1ldpOyL1KFGdX5CnUuduS9XmZBXl
+	qwtTPz+R14piX+n46nnlbTQ9kOFFHIsUb8hayvdmyyWqAm1RnhfxLFEkyjZuikmyTFXRaVFz
+	4ojmi1xR60XJLKVYI/v4U/GonDuuOiXmiOJJUfP/FLMJScVox8rOTzqN207vYrZ3HAzNjvUd
+	ej/tQ+9b78gHC4uFhYq6bP9HqUfW9w4cakJlzhTnsfdu/I5GjG7Pck96dI//4Srf9hppzxZb
+	d8YtX3Ll3W/DE86IUuFOYJo6XOfGy9YOW9OaJRuUuhFvn1Lc9VfSZ/evJDam56lG16YYdIev
+	TWUqKG2WaquSaLSqF3VSn4uRAwAA
+X-CFilter-Loop: Reflected
 
-On Mon, Jul 06, 2026 at 03:19:10PM +0900, Byungchul Park wrote:
-> Makes dept able to track PG_locked waits and events, which will be
-> useful in practice.  See the following link that shows dept worked with
-> PG_locked and detected real issues in practice:
+On Mon, Jul 06, 2026 at 07:05:44PM +0100, Matthew Wilcox wrote:
+> On Mon, Jul 06, 2026 at 03:19:10PM +0900, Byungchul Park wrote:
+> > Makes dept able to track PG_locked waits and events, which will be
+> > useful in practice.  See the following link that shows dept worked with
+> > PG_locked and detected real issues in practice:
+> >
+> >    https://lore.kernel.org/lkml/1674268856-31807-1-git-send-email-byungchul.park@lge.com/
 > 
->    https://lore.kernel.org/lkml/1674268856-31807-1-git-send-email-byungchul.park@lge.com/
+> > @@ -219,6 +220,7 @@ struct page {
+> >       struct page *kmsan_shadow;
+> >       struct page *kmsan_origin;
+> >  #endif
+> > +     struct dept_ext_wgen pg_locked_wgen;
+> >  } _struct_page_alignment;
+> 
+> I may not understand this quite correctly, but I think that tracking
+> PG_locked dependencies in the struct page has both false positive and
+> false negative problems.
+> 
+> Imagine we have a file mapping M1 containing folio F1 at index 0 and F2
+> at index 1.  It is correct locking order to lock F1 before locking F2
+> (for example when doing writeback).  Later, M1 has its folios reclaimed
+> and returned to the free pool.  Then each is added to mapping M2, this
+> time with folio F2 at index 8 and F1 at index 9.  Now the correct order
+> to lock these folios in the order F2 followed by F1.
 
-> @@ -219,6 +220,7 @@ struct page {
->  	struct page *kmsan_shadow;
->  	struct page *kmsan_origin;
->  #endif
-> +	struct dept_ext_wgen pg_locked_wgen;
->  } _struct_page_alignment;
+First of all, I appreciate your feedback.  Thanks!
 
-I may not understand this quite correctly, but I think that tracking
-PG_locked dependencies in the struct page has both false positive and
-false negative problems.
+That case doesn't generate any dependency unless any other waits are
+involved in.  That should be handled in xxx_nested manner e.g.
+folio_lock_nested() that I need to introduce.  The work is in progress.
 
-Imagine we have a file mapping M1 containing folio F1 at index 0 and F2
-at index 1.  It is correct locking order to lock F1 before locking F2
-(for example when doing writeback).  Later, M1 has its folios reclaimed
-and returned to the free pool.  Then each is added to mapping M2, this
-time with folio F2 at index 8 and F1 at index 9.  Now the correct order
-to lock these folios in the order F2 followed by F1.
+> I don't see a part of this patch where we clear pg_locked_wgen when the
+> page is returned to the page allocator.  Maybe I missed that.
 
-I don't see a part of this patch where we clear pg_locked_wgen when the
-page is returned to the page allocator.  Maybe I missed that.
+You are right.  pg_locked_wgen doesn't get cleared.  However, DEPT works
+this way:
 
-I think we should be tracking PG_locked dependencies in the owner
-of the folio.  For files, that would be in the struct address_space.
-For anon memory, I think that's in the anon_vma, but if somebody told
-me it was in some other structure, I wouldn't argue with them.
+   folio_lock()
+      wait_for_pg_locked_cleared()
+      set_pg_locked() // (1) update pg_locked_wgen to the current wgen
 
-This requires slightly more complexity than lockdep currently has.
-We don't want to use a lockdep class for each folio, obviously.  So we
-need something to say "I already have folio F1 locked, is it OK to lock
-folio F2?".  Essentially figuring out how we can track all folios in a
-given mapping the same way, and making sure that we don't deadlock on
-folios in the same mapping.
+   ... // there might be other waits
 
-If F1 and F2 are in different mappings, it's not a deadlock if F1 is in a
-filesystem mapping and F2 is in its backing dev.  It's also not a deadlock
-if F1 and F2 are both filesystem folios and the inodes are both locked.
-See vfs_lock_two_folios() in fs/remap_range.c.
+   folio_unlock()
+      clear_pg_locked() // (2) check if there have been any waits since (1)
 
-I have much less knowledge about anonymous memory locking order.
-Maybe it doesn't happen.  Or about locking one anon and one file folio.
-For slab memory, we don't sleep on PG_locked (it's used as a spinlock bit).
-For other kinds of memory ... I don't know.  Page migration is fun.
+In other words, it's guranteed that pg_locked_wgen has been updated e.i.
+(1) when DEPT refers to pg_locked_wgen e.i. (2).  So I don't think it's
+a problem.
+
+> I think we should be tracking PG_locked dependencies in the owner
+> of the folio.  For files, that would be in the struct address_space.
+> For anon memory, I think that's in the anon_vma, but if somebody told
+> me it was in some other structure, I wouldn't argue with them.
+
+I think it's a good point but it's a classification issue.  folios owned
+by struct address_space should be classified to e.g. address_space_class
+and ones owned by struct anon_vma should be classified to e.g.
+anon_vma_class.  I will work on it to apply the insight you just gave
+but better do it as follow-up patches since the initial patchset is
+already too big to get reviewed.
+
+> This requires slightly more complexity than lockdep currently has.
+> We don't want to use a lockdep class for each folio, obviously.  So we
+> need something to say "I already have folio F1 locked, is it OK to lock
+
+From DEPT's perspective, folio_lock(F1) and folio_lock(F2) are waits and
+folio_unlock(F1) and folio_unlock(F2) are events.  Since DEPT tracks
+dependencies with specified classes between waits and events, DEPT's
+interest in the following example is to detect a situation like:
+
+   < context X >
+
+   folio_lock(address_space_class'ed F1)
+   ...
+   folio_lock(anon_vma_class'ed F2)
+   ...
+   folio_unlock(anon_vma_class'ed F2)
+   ...
+   folio_unlock(address_space_class'ed F1)
+
+   < context Y >
+
+   folio_lock(anon_vma_class'ed any folio)
+   ...
+   folio_lock(address_space_class'ed any folio)
+   ...
+   folio_unlock(address_space_class'ed any folio)
+   ...
+   folio_unlock(anon_vma_class'ed any folio)
+
+However, the following pattern should be manually annotated by
+developers like using folio_lock_nested() or something.  DEPT cannot
+work with it automatically:
+
+   folio_lock(address_space_class'ed F1)
+   ...
+   folio_lock(address_space_class'ed F2)
+   ...
+   folio_unlock(address_space_class'ed F2)
+   ...
+   folio_unlock(address_space_class'ed F1)
+
+or
+
+   folio_lock(anon_vma_class'ed F1)
+   ...
+   folio_lock(anon_vma_class'ed F2)
+   ...
+   folio_unlock(anon_vma_class'ed F2)
+   ...
+   folio_unlock(anon_vma_class'ed F1)
+
+These should be explicitly annotated by developers if it's intended:
+
+   folio_lock(address_space_class'ed F1)
+   ...
+   folio_lock_nested(address_space_class'ed F2)
+   ...
+   folio_unlock(address_space_class'ed F2)
+   ...
+   folio_unlock(address_space_class'ed F1)
+
+or
+
+   folio_lock(anon_vma_class'ed F1)
+   ...
+   folio_lock_nested(anon_vma_class'ed F2)
+   ...
+   folio_unlock(anon_vma_class'ed F2)
+   ...
+   folio_unlock(anon_vma_class'ed F1)
+
+> folio F2?".  Essentially figuring out how we can track all folios in a
+> given mapping the same way, and making sure that we don't deadlock on
+> folios in the same mapping.
+
+At the moment, as I told you, DEPT cannot work with dependencies between
+the same class'ed folios.  However, it'd be much better if DEPT can work
+with even those cases.  Could you provide a scenario where a deadlock
+happens between the same class'ed ones?  Any idea how to detect for the
+cases?
+
+> If F1 and F2 are in different mappings, it's not a deadlock if F1 is in a
+> filesystem mapping and F2 is in its backing dev.  It's also not a deadlock
+> if F1 and F2 are both filesystem folios and the inodes are both locked.
+> See vfs_lock_two_folios() in fs/remap_range.c.
+
+Yeah.. DEPT is a tracker to track dependencies between waits and events
+even across different contexts, but not a magic unfortunately.  That
+lock ordering issue - with the same class'ed ones - should be resolved
+in the manual manner as vfs_lock_two_folios() does.
+
+> I have much less knowledge about anonymous memory locking order.
+> Maybe it doesn't happen.  Or about locking one anon and one file folio.
+> For slab memory, we don't sleep on PG_locked (it's used as a spinlock bit).
+> For other kinds of memory ... I don't know.  Page migration is fun.
+
+Anyway, the sophisticated classification you mentioned is necessary for
+DEPT to be better especially for folio locking mechanism.
+
+Thanks again!
+
+	Byungchul
