@@ -1,82 +1,200 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722F9422558;
-	Tue,  7 Jul 2026 15:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011604314BD;
+	Tue,  7 Jul 2026 16:39:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783439019; cv=none; b=S2KMuNWmXAhD/M5bXnmN8Ab+DIo4nYlwFEipM+mQE/4V3/smwpXi/ZVcRxTLsXWbZzMTbS4vVUwVy2OIIl5pLvGJy+Tuvb6rLBbOm+g9ZkSt8mER+hzplXnNl1QY/OwKMCCFLnvrRBqi+mQvkLtp4yB4sUqSAZ73xdEFMa1YkmY=
+	t=1783442343; cv=none; b=ldMsu+Y0oByvxCfXZ0jikUTkgEsWkjVgo0xPb5jlA/Oh+0Fjr375I98txEnLZgGv7O75zzm27fm/+/9B5xk0rql9tsosBux6AOryI1nkCoTvlhpyrIr6tWVjJtriy0wg0Iuq1MYXqPSJ4y/ONDHVhHHHEiOn79Rz2Zqz3/wD2+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783439019; c=relaxed/simple;
-	bh=+GVbdGSoJTePcS2gPtQnWIffV0SWeJP60naWeIcP7fY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JCVA/owMQNM3rTmvTIgzHuI/JY1BQN6xIhpJtbzhTmeUAMS/V2fNjuIFLY/wvvR+XLKfI0acAODxiZe6xiaNKf9xvlEJl+9yXXwpWLX6FDPsVaQS8zgzoPO6L2ycxk8SYvul+uf5HjDMrTes5BfuWj/bBX5YBGUHRrU9tQhlpsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oc3Thh8C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783442343; c=relaxed/simple;
+	bh=UsnAi76uOSA/XPHHYDSeZk1k/YxpguYAv8uXw+bn09k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M2Oj60CsVNpuNR9NEaebibRTU/COQBDr25uJGceymPhhAF0g4ZDFWonaAI9gN5YquhidXRka/H+P5xw3QwL5X7d9BxCltZP8kkxGWiuRyUipdbRYs9PkX38/jxDbzl7R1E+YsEOIy+O1gSGWLIiUTxgx40Rt9WEHziL02b5V89U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mR7lrv4q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oc3Thh8C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2901F000E9;
-	Tue,  7 Jul 2026 15:43:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mR7lrv4q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF16B1F00A3A;
+	Tue,  7 Jul 2026 16:39:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783439018;
-	bh=+GVbdGSoJTePcS2gPtQnWIffV0SWeJP60naWeIcP7fY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oc3Thh8CwJK9OwgRdVho2rvosqwBgXCKICT4ajwLwjIo0cub+fWQMgBWMoYIlmlib
-	 WY8OxBuN3hwSTFoEHhoA/2dtKWNJkbicplIAe0Wssz7cJ8LqVviYRLt2X72bAqNw7A
-	 8fGcGp3lrJOex2WNXvAab/qoNtP5avhHtZppfPQEMBKOjXBj3GaryDVxiFf0aEXlM5
-	 FP1hwVnHqQoEEtVYeCprryUJiYP+bzB79yvtemKrd+VuL7KaiTiZhJCaDiah5yY2+n
-	 S4+8Vo0MebmixVA6SkWQS7WReNUFgpPs28gWW8lSPFanz7nAgK2uUE/C2rDIy//ECR
-	 XJYgAoL6E5csA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/4] tpm_crb_ffa: Include linux/slab.h for kzalloc_obj()
- and kfree()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Petr Pavlu" <petr.pavlu@suse.com>
-Cc: kvm@vger.kernel.org, "Heiko Carstens" <hca@linux.ibm.com>, linux-modules@vger.kernel.org, "Alexander
- Gordeev" <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org, "Vasily
- Gorbik" <gor@linux.ibm.com>
-In-Reply-To: <20260707153819.4172541-4-petr.pavlu@suse.com>
-References: <20260707153819.4172541-1-petr.pavlu@suse.com>
- <20260707153819.4172541-4-petr.pavlu@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 15:43:37 +0000
-Message-Id: <20260707154337.CE2901F000E9@smtp.kernel.org>
+	s=k20260515; t=1783442341;
+	bh=K+JEjuBM0OYzZSHnI6spcjojqKR6WTBMaW+xSWEmd5s=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=mR7lrv4qGTf6jmHqXm72+Kj48QsW7RImC8W8FkWZP7dj6uJwQ0NeNflCYzTab78Cu
+	 HNFz6KWxc3f/LJ+AEyCPmb+YB599UcadmZ7hMPT9EByIBqSQMSPZXa45p9ypHIGO3P
+	 iCpy/5bvaoZ0eIVVKGZT2m112eqoEsdLR3054RjVb2MMS5jtTcqFSyF0Zec3+iWjhQ
+	 OULDrDo0USxPj/0oh6E0lpAT3blLxHdnsvlrT25nGyAOt/XpR27waRfBa5HTpNfIMo
+	 LIZ5rjrPIgGUQcMyORsGikAjj2ifpBUEXFffI/MSYYgvtqmJufWzF6hn9W7DzTjNe4
+	 Hspf77jT/EjOQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 57847CE0AD3; Tue,  7 Jul 2026 09:39:01 -0700 (PDT)
+Date: Tue, 7 Jul 2026 09:39:01 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Qingfang Deng <qingfang.deng@linux.dev>,
+	Breno Leitao <leitao@debian.org>,
+	Norbert Szetei <norbert@doyensec.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Taegu Ha <hataegu0826@gmail.com>, Kees Cook <kees@kernel.org>,
+	linux-ppp@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Guillaume Nault <gnault@redhat.com>, netdev@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org
+Subject: Re: [PATCH net v2] ppp: defer channel free to an RCU grace period to
+ fix pppol2tp RX UAF
+Message-ID: <7ff3af97-1c10-4f46-84ae-ffbf757f7e9e@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <D9C0245B-608B-4884-8A09-F55BA4A9F948@doyensec.com>
+ <de2616b3-6edf-4255-ba77-0674e225ab27@linux.dev>
+ <akfjpBVML_1RFF91@gmail.com>
+ <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
+ <20260706092926.PIlrhRKz@linutronix.de>
+ <0dfe59c2-bf60-40fe-90e6-d6e1003709d0@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0dfe59c2-bf60-40fe-90e6-d6e1003709d0@suse.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The commit message incorrectly claims that the file uses `kzalloc_o=
-bj()` instead of `kzalloc()`.
---
+On Tue, Jul 07, 2026 at 05:32:10PM +0200, Petr Pavlu wrote:
+> On 7/6/26 11:29 AM, Sebastian Andrzej Siewior wrote:
+> > + MODULE maintainer
+> 
+> + Paul E. McKenney
+> 
+> > 
+> > On 2026-07-05 10:57:44 [+0800], Qingfang Deng wrote:
+> >> On 7/4/2026 at 12:32 AM, Breno Leitao wrote:
+> >>> On Fri, Jul 03, 2026 at 03:27:00PM +0800, Qingfang Deng wrote:
+> >>>> AI-review found an issue: https://sashiko.dev/#/patchset/D9C0245B-608B-4884-8A09-F55BA4A9F948%40doyensec.com
+> >>>>
+> >>>> An rcu_barrier() call is needed at the end of ppp_cleanup().
+> >>>
+> >>> I was initially unclear why rcu_barrier() would be necessary on a kfree path,
+> >>> but it appears to be required during module unload to ensure that
+> >>> ppp_release_channel_free() completes before the module's struct rcu_head is
+> >>> destroyed. Is that the correct understanding?
+> >>
+> >> It's required to ensure that all ppp_release_channel_free() callback
+> >> complete before the text segment of the module is unloaded.
+> > 
+> > So either a rcu_barrier() in ppp's module_exit() callback or a
+> > synchronize_rcu() instead of the call_rcu(). And all this because the
+> > module RCU callbacks pending which can be invoked after the module has
+> > been removed. There is a synchronize_rcu() during module exit but this
+> > is after the module code is gone.
+> > 
+> > I'm curious how many modules have a call_rcu() within their code but
+> > don't have anything to enforce its completion before module removal is
+> > complete? Wouldn't something like
+> > 
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 46dd8d25a6058..8eae1ea2d6eb4 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -858,6 +858,9 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+> >  		goto out;
+> >  
+> >  	mutex_unlock(&module_mutex);
+> > +
+> > +	/* Ensure all rcu callbacks issued by the module have completed */
+> > +	rcu_barrier();
+> >  	/* Final destruction now no one is using it. */
+> >  	if (mod->exit != NULL)
+> >  		mod->exit();
+> > 
+> > make sense?
 
---- Patch [3]: [PATCH 3/4] tpm_crb_ffa: Include linux/slab.h for kzalloc_ob=
-j() and kfree() ---
-commit a56e4cf89267d12126bd70f7981a05c846959016
-Author: Petr Pavlu <petr.pavlu@suse.com>
+There was some discussion of doing exactly this back in the day, but
+at that time there were many modules that didn't do call_rcu() at all,
+let alone call_rcu() with a function defined in that module.  And yes,
+there were performance concerns.
 
-tpm_crb_ffa: Include linux/slab.h for kzalloc_obj() and kfree()
+Now rcu_barrier() has seen some performance work in the meantime, but
+careful benchmarking would be required to justify the above patch.
 
-This commit adds the missing linux/slab.h inclusion to tpm_crb_ffa.c.
-It removes the reliance on indirect inclusion through linux/module.h.
-This prepares for the eventual removal of linux/elf.h from linux/module.h.
+That said, some automation would be very good, given that this sort of
+bug happens from time to time.
 
-> tpm_crb_ffa: Include linux/slab.h for kzalloc_obj() and kfree()
+> This is discussed in Documentation/RCU/rcubarrier.rst and
+> Documentation/RCU/Design/Requirements/Requirements.rst. The latter
+> contains:
+> 
+> | Loadable Modules
+> | ~~~~~~~~~~~~~~~~
+> | 
+> | The Linux kernel has loadable modules, and these modules can also be
+> | unloaded. After a given module has been unloaded, any attempt to call
+> | one of its functions results in a segmentation fault. The module-unload
+> | functions must therefore cancel any delayed calls to loadable-module
+> | functions, for example, any outstanding mod_timer() must be dealt
+> | with via timer_shutdown_sync() or similar.
+> | 
+> | Unfortunately, there is no way to cancel an RCU callback; once you
+> | invoke call_rcu(), the callback function is eventually going to be
+> | invoked, unless the system goes down first. Because it is normally
+> | considered socially irresponsible to crash the system in response to a
+> | module unload request, we need some other way to deal with in-flight RCU
+> | callbacks.
+> | 
+> | RCU therefore provides rcu_barrier(), which waits until all
+> | in-flight RCU callbacks have been invoked. If a module uses
+> | call_rcu(), its exit function should therefore prevent any future
+> | invocation of call_rcu(), then invoke rcu_barrier(). In theory,
+> | the underlying module-unload code could invoke rcu_barrier()
+> | unconditionally, but in practice this would incur unacceptable
+> | latencies.
+> 
+> I don't know if the last part about unacceptable latencies is still
+> relevant. I haven't done any measurements myself.
 
-[Severity: Low]
-This isn't a bug, but there appears to be a typo in the commit subject.
-Did you mean kzalloc() instead of kzalloc_obj()? Looking at
-tpm_crb_ffa_probe() in the driver, it correctly calls kzalloc().
+Actual measurements would most definitely be needed!
 
-> The drivers/char/tpm/tpm_crb_ffa.c file uses kzalloc_obj() and kfree(),
+Alternatives include:
 
-[Severity: Low]
-This isn't a bug, but the same typo is also present here in the commit
-description.
+o	Provide a patch like that above, but only execute the
+	rcu_barrier() in some debug mode.  If your code works when
+	that debug is enabled but does not otherwise, you add the
+	rcu_barrier().
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707153819.4172=
-541-1-petr.pavlu@suse.com?part=3D3
+o	If debug is enabled, make rcu_do_batch() check the function
+	before invoking it.  If the function is not mapped, issue a
+	diagnostic, and don't try to invoke the function.  (But is
+	there a sufficiently cheap way to check for the function not
+	being mapped?)
+
+o	Make the page-fault code check this possibility.  (But it would
+	need to know that rcu_do_batch() was involved, which could no
+	doubt be arranged.)
+
+o	Make call_rcu() keep track of the fact that it was passed a
+	function defined in a module, and set a flag that caused the
+	module-exit code for that module to do rcu_barrier().  The
+	trick here would be doing this without unacceptable increases
+	to call_rcu() overheads.
+
+o	Some sort of static analysis that determines that call_rcu()
+	was passed a function defined in a module and either issues
+	needed diagnostics or (somehow) letting the module-unload
+	code know that rcu_barrier() is needed.
+
+o	One challenge for many of these alternatives is that the module is
+	already gone.  Maybe a KASAN-like trick that tracks the module's
+	old memory for some time afterwards?  Or maybe the user usually
+	knows which module was just now unloaded?  (Except for modules
+	being dependent on each other...)
+
+o	Your ideas here!!!
+
+							Thanx, Paul
