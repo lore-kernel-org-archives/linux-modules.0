@@ -1,117 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64AE375F6C
-	for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2026 02:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461263FADF7;
+	Wed,  8 Jul 2026 07:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783478509; cv=none; b=PNSLnxrzKeGGZhUp4gC+EhpvgsAvKWicS4/HZP6ghDiB4cf113zZ9F7lDSMfMONkrQ9Irk2osOUPK6OWJBZO8b7vBDDPzGgPptbMnIJ9TTtuWRzWzRybkBOirnE4xfjZRGYNq9TpXeoTCYbX/4XX1xZ3aQXzSAYR36oJOzbylz8=
+	t=1783496959; cv=none; b=o1poZhEqH/XSvnG1++dePw7EuQ8qTYsxgYxEUUNIjuMaL+zmseoN756mlUWw5IdQFGupRR2w6/RJISp8pA2iiTR0j9u/AVwdkmdrBI1Wu++h/qfP3T0SEntW0xiz85Ghim/R+Fvvi4VzYdcBahdynLoG8CpYOr1p/9dWYillqeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783478509; c=relaxed/simple;
-	bh=nGe2XgekSJGt9bn2fUazHU1h/nIv6fQirnMw0M6iTpQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=l0yWGVOLcECRBRIl2bjqoLxSZlP3NTZbS5/tC7VYSOhijhElSCFJVokgx3xOl2LEWBy2gVmWpWGKgZ5RP5eZiughqIxDCOB1wukPSUBbsHhzAhrPJ/IefIjVKE3RD619e+zW5T3s3cEhVzDyVFyXtHmR3vUoGFhEuoAuWq1Qh8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b+1vuZg5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783496959; c=relaxed/simple;
+	bh=KEf4o7R7ZogucJeIjRsnOJwG+bKMIbkuRzlX3TWvFa8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eTw4GZa85ENGdpQVuwm3O0SMFKj+HIg6XCwc/LJWVcfH4MM7vjYBfrHLmXsuD51VPLeHrgMFyx02/CLfhSplOlSZuCVhn6crlWxCgc8gi/DHbcMJOtt8yJJYgxToq/MOzMWULIYa1TSKCxW2+54y04dd8x/HM+CcZXlHOInfJdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hJEuMYy/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hOymlkcG; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b+1vuZg5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 777E71F000E9;
-	Wed,  8 Jul 2026 02:41:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783478507;
-	bh=CYYcLX6j+6rkzw6OOapXwFbq6F4yyNdKuEWGnkImX58=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=b+1vuZg5oPDCKOgGqnFSQ3njuCnRK0Vda/gXu8rtSDs7N4BCrxe0xqH/7yGWMwbI8
-	 tWFLEw/hu1oegLdWV3qIOyHL33RQ2zVmz17/6bbJJNSjPzQ8KR/kZtmKy9WzZX9yKR
-	 s0yOcy3BMoJkT40xSypM/6vzFfzTd9E2Q2tlEKrX0625UydOIUVsDkrpb8IuEH2sY4
-	 fnxGU4Wm4sr6vRigNA/vqb2tuww2gYSGJr42aALDwnf5YvXIasTMZ1dzGDXmLFkqPn
-	 HBNZvUn5hESYeB2ip/BExcfXRWtRnlX2D3DHj+hZ/4gQ9/NcE4csJ7P0G9g/NxQGTS
-	 dy/vYJV7JBDDQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 23/24] dyndbg: change __dynamic_func_call_cls* macros
- into expressions
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jim Cromie" <jim.cromie@gmail.com>
-Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260707-dd-maint-2-v6-23-381f3edb0045@gmail.com>
-References: <20260707-dd-maint-2-v6-0-381f3edb0045@gmail.com>
- <20260707-dd-maint-2-v6-23-381f3edb0045@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 08 Jul 2026 02:41:47 +0000
-Message-Id: <20260708024147.777E71F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hJEuMYy/";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hOymlkcG"
+Date: Wed, 8 Jul 2026 09:49:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1783496945;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q/MW1MNnBl7YATXC2WRzPF6J/dhdpeXEHWQTTfhE+8s=;
+	b=hJEuMYy/5qoHZcEgqMxU1DpTpcKT/FZzz6iZo004DGHcv6lq59xZiRwApY4crju1VxHxsd
+	amr1gtjfk6Em43kW+dv3mHa4fGwXS4r0YYHdHmaEIN3R7u1ognTg/OhVsyp0YQcXBDnT0K
+	XDyz1kbjokykibY3ZJBntyypKLdHnXEnQvFSER7t3rtGUnWqGlado6GVZnwSti5fWSUfmc
+	2SWEgWtDSIhC6BpL35hUXmWO/B6D/ZUPy5FzYXzbFVtKyuMi5IflVi9cYV4swFTUghTlmn
+	U7hJRjVZKRoSZ96BIHSnOT/j09nohLH0zplmR15bxM0hbrvOjwMa4ESc+1A8HA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1783496945;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q/MW1MNnBl7YATXC2WRzPF6J/dhdpeXEHWQTTfhE+8s=;
+	b=hOymlkcG3Mc9Q9C3Zzp0LGrlXG1OoASkQtelud0hLlqpgfb67BQ+HIem9JkHJRJqTCRisT
+	PwwxTYmh5hXyBCCQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Qingfang Deng <qingfang.deng@linux.dev>,
+	Breno Leitao <leitao@debian.org>,
+	Norbert Szetei <norbert@doyensec.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Taegu Ha <hataegu0826@gmail.com>, Kees Cook <kees@kernel.org>,
+	linux-ppp@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Guillaume Nault <gnault@redhat.com>, netdev@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH net v2] ppp: defer channel free to an RCU grace period to
+ fix pppol2tp RX UAF
+Message-ID: <20260708074904.xnpi0mlh@linutronix.de>
+References: <D9C0245B-608B-4884-8A09-F55BA4A9F948@doyensec.com>
+ <de2616b3-6edf-4255-ba77-0674e225ab27@linux.dev>
+ <akfjpBVML_1RFF91@gmail.com>
+ <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
+ <20260706092926.PIlrhRKz@linutronix.de>
+ <0dfe59c2-bf60-40fe-90e6-d6e1003709d0@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0dfe59c2-bf60-40fe-90e6-d6e1003709d0@suse.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] API Consistency / Build Breakage Trap: Dynamic debug wrappers evalu=
-ate to int when enabled but void when disabled
---
+On 2026-07-07 17:32:10 [+0200], Petr Pavlu wrote:
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -858,6 +858,9 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+> >  		goto out;
+> >  
+> >  	mutex_unlock(&module_mutex);
+> > +
+> > +	/* Ensure all rcu callbacks issued by the module have completed */
+> > +	rcu_barrier();
+> >  	/* Final destruction now no one is using it. */
+> >  	if (mod->exit != NULL)
+> >  		mod->exit();
+> > 
+> > make sense?
+> 
+> This is discussed in Documentation/RCU/rcubarrier.rst and
+> Documentation/RCU/Design/Requirements/Requirements.rst. The latter
+> contains:
 
---- Patch [23]: [PATCH v6 23/24] dyndbg: change __dynamic_func_call_cls* ma=
-cros into expressions ---
-commit 003daac5c2950ded79f06209b5d0ab4dfeb11a5a
-Author: Jim Cromie <jim.cromie@gmail.com>
+I am aware of this. It is just not the first time I stumble about this.
+But maybe with the AI review these days there won't be a miss.
 
-dyndbg: change __dynamic_func_call_cls* macros into expressions
+> I don't know if the last part about unacceptable latencies is still
+> relevant. I haven't done any measurements myself.
 
-This patch modifies the __dynamic_func_call_cls* macros to use statement
-expressions instead of do-while loops, allowing them to return 0. It also
-updates the fallback dynamic_hex_dump() macro to ensure it behaves
-consistently by returning 0, allowing debug macros to be used inside
-conditional expressions.
+There is a synchronize_rcu() later on. I think I could replace it with a
+call_rcu() so we might end up even. I was thinking about about it last
+time I was touching modules but somehow I stopped where I stopped.
+The question is just, is it worth doing it or is it reasonable to expect
+that it is done correctly.
 
-> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-> index 355f2cb117334..8822f9a3605f6 100644
-> --- a/include/linux/dynamic_debug.h
-> +++ b/include/linux/dynamic_debug.h
-> @@ -238,24 +238,26 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
->   * (|_cls):	adds in _DPRINT_CLASS_DFLT as needed
->   * (|_no_desc):	former gets callsite descriptor as 1st arg (for prdbgs)
->   */
-> -#define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {	\
-> +#define __dynamic_func_call_cls(id, cls, fmt, func, ...) ({	\
->  	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);	\
->  	if (DYNAMIC_DEBUG_BRANCH(id)) {				\
->  		func(&id, ##__VA_ARGS__);			\
->  		__dynamic_dump_stack(id);			\
->  	}							\
-> -} while (0)
-> +	0; /* match no_printk return value */			\
-> +})
-
-[Severity: Low]
-Does this introduce a build breakage trap for configurations where
-CONFIG_DYNAMIC_DEBUG is disabled?
-
-While this macro now evaluates to an int (0) when enabled, the fallback
-macros used when dynamic debug is disabled often evaluate to void.
-
-For example, dev_dbg() falls back to dev_no_printk(), which evaluates to vo=
-id:
-
-include/linux/dev_printk.h:
-#define dev_no_printk(level, dev, fmt, ...) 				\
-	({								\
-		if (0)							\
-			_dev_printk(level, dev, fmt, ##__VA_ARGS__);	\
-	})
-
-Similarly, drm_dbg() falls back to the __drm_dev_dbg() function which retur=
-ns
-void, and print_hex_dump_debug() falls back to a void inline function.
-
-If a driver developer uses these macros in a boolean expression (such as
-if (cond && dev_dbg(...))), it will compile successfully during development
-with CONFIG_DYNAMIC_DEBUG enabled, but will break the build with an invalid
-operands to binary && error when compiled without dynamic debugging.
-
-Could the fallback macros be updated to consistently return 0 as well to
-prevent this mismatch?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707-dd-maint-2=
--v6-0-381f3edb0045@gmail.com?part=3D23
+Sebastian
