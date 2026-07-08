@@ -1,67 +1,68 @@
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FB23B71DA
-	for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2026 02:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49543B777D
+	for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2026 02:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783477136; cv=none; b=hJZXSQvVX7eWh8daNOgFrtkYTIcuoq/AZuPRtbp7iDGRfygiajXpNGobIwKgx4sfhOec+vktUS0sntIH7wJngvONSI7/SUcpDi9M6DYLd8Tt/EIa3FeqeiiFi/oYHnVon4bvIZmWzwvDWvlaATU2iYXUsAIBsOCoKHqJ7Nh3aXY=
+	t=1783477138; cv=none; b=X+U+rPZexOIjFsljatE1sQOaQYLthq2GXrsg1Z4mcj8w+8ad/rv3TXOpBZOtkaBOKahc2nOAaZyKW/pfY3v10+Gf3atBMQbGhVRWM13pfoEg1slJGkQi5Krfv9e5PAKYb6cjOMcPJ0+48hly0ZAvg7dxJ7zOmnTwWlaXJF8NX+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783477136; c=relaxed/simple;
-	bh=RzrIxar2pUCMOS3uvTB/QLvw+jvQ/WW5WK4QNk+y9is=;
+	s=arc-20240116; t=1783477138; c=relaxed/simple;
+	bh=5spgXU4kgDNgBoy+8aa3tT4HXinOsojD5H8veWj6VKI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qNo7gFB20RZXUnoBZPgCpOx2pox8IeurItQiwbDyPQ7NUCuILizA9CrVwO9NsYsC3kIe9jq794RoOzVgUrUe37rk7ZbsaUNrXtnTRWhd3l0TvDhtDcdaK9JzqhbzAiznnBdFU136TwHIlyhldpVYUOuDPsMBJ3sKjYpML2Xml4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RawzE/oM; arc=none smtp.client-ip=209.85.167.177
+	 In-Reply-To:To:Cc; b=jGzehwftJAndRPnBIveQXbEF+XhKBIgQZ09JXSuIiACGZqA03u/dOoSK9FxRe7O19U8Tmny7bvifxWcowQ2hefKbnudkoxWkG32rzxUwMepJRZ0e3K6PTIXRAKOSdmA5R6mLFDHOKv5xtUeTdCicjUXMcjDud+LWiklSGnhu8os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWWZhMPP; arc=none smtp.client-ip=209.85.167.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RawzE/oM"
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-491f5e6d564so114259b6e.1
-        for <linux-modules@vger.kernel.org>; Tue, 07 Jul 2026 19:18:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWWZhMPP"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-49c86d1d21cso75811b6e.3
+        for <linux-modules@vger.kernel.org>; Tue, 07 Jul 2026 19:18:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783477131; x=1784081931; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783477133; x=1784081933; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QOLvA6jbnfc/c27LIRV0n7mgdpMF8Pu4CkvMzdxT5Oc=;
-        b=RawzE/oMue/piQV++icXw0F+RDPbPpDEUvGqUB7VF97m6IqcGARSA7HeK7Hp4jjZNp
-         tDt9yK1BnsklU1cS3BOwcUiSykywzAllsfJroPhnWIlAp8iPi2zWo9yyBhIWh2Trj2bD
-         H0w3o2diliuFb+bFhU/fTgZmR76an9ulJVBg3cYrcgjr4N5z1bXBR5b+VLQvQoh90LQG
-         8fbDPvPl5/zWXu9iPFsb6Lbqk5onbZC6OhmPkHjgq1Q7G/vCQ2FlmdQEMbdyUy703DDc
-         X0sbQUM5exOzEsXqsFRXtR+WTwpf6jXrO2Eu8BceTwt3i2h6X7v7qXX19Ne/J4t4kUeX
-         NggQ==
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=JKUFTzg0G70dO3HqLrBX7k0JpOC9/pO/bICFDvAx8Ek=;
+        b=iWWZhMPPoEi9/VtY6wfJ2iZk93wcc+9fRzE8l29XuNrlnPzFQk3JrhP51CMnv1nH/0
+         SAW7msaPGL7njE/qhq8crId5toI22fI/g3VI9ETc6+oTnONJmoQVIBnBtSlMp5T0GxY3
+         UYykncGoDAsxLZVpEFJboSMtpAizf1YLEwEurWE2yJbNMkJ9FqqzbaVGJeCKAzfFl91V
+         B6C1923lZajUOD2tEU2ty8Q6O+zCQuSZvhwk6iz4GhgOG3Baho6Wo6aetjbanGLrhSoD
+         HHo+WPF10lQWWWpKKBppIRT67xP72ETIvkiygdta9onnYknwGv1yCAFV2CIKwlpFjPkT
+         hJMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783477131; x=1784081931;
+        d=1e100.net; s=20251104; t=1783477133; x=1784081933;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QOLvA6jbnfc/c27LIRV0n7mgdpMF8Pu4CkvMzdxT5Oc=;
-        b=KV+MQQzeD15ETBFcnS1iy8lOQES/JQnuyJAOMl5r9IkRZPdVdGMMWPJ7jOwzcV63X7
-         XcG8nIsvb5vlQJNe7Eq0ytAshDmOo6GV0AoBxKokrKnoeaBed9lZgNdcuHu4590nwr2+
-         5atvQPsGhLawJaS53yycLFDit5pGCoDjeJFe8Zt71uzL9WVrKh40h1Du2dbhSp+FPiO/
-         nM8VANsnZn0lVC7MDM2UbksZm2Nv6MbkutCKCr51+R8PrOOT3eeS4XJu/LBQrgE+kvWJ
-         oCWu/OCgV2B/G2c02Q1Pp3TAiyISsQXaaRt0LA5Fq/b1VmVQH4UvbSLbNOG1u4OIfkyz
-         BEMA==
-X-Forwarded-Encrypted: i=1; AFNElJ+uXTR17z7RlqzoHEuDS6YRcMOIzqLaZJtJhdjP8LDape0tjQ5+dtA3CF7Dinqgna1hkJiIH5HDsOsxfxra@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsAf7SSjupEAG6TphG1Dwa5nSEXYKBNG36RLFjyVV2O7JDrZx/
-	4/jzMIVoaAD8kDF2xIUCSmYveS5ZS7NcQFR1SlI5TXRXDVEjbqcrren+
-X-Gm-Gg: AfdE7cknO1dQvX3kvxpsWVF3q8F2lr59vZ3sCjEvy7WVav4dar6h6ljLkWr08aUwm81
-	lp3lckVfNtNArq8qk5baTEcIHjEKyDuGYCHUJ1hyvosvJFPRatFmvd+IQzUwePGVn1u4r6eV9ii
-	yeaYXF7WBQg4aNjGTxHP7SuPyPLapb2APD7zwH2r0wAr+4lOeCiFda3ltXN5HbxJ5VCTyRqciM3
-	ekBidcamSTeBcaEneNMoPpA78j0ck/b95XavE8Sc/qkGlITIOs0hfqT3zAoBfZGvfb6rvHydtyf
-	LWy8ooGKAtDD8q8tCLB6t6L7pQEJQgzf9V6WoMzFGuJIjEfj2VPSFH/Djere/QQg+X5KnricE/6
-	X2VNczYfrZIPa3gdZG+/ubuViT15CxKarv/aE7oUASIkmz4vYw5ZDoOvlM+pb/t9C3ImTBXNy/5
-	8f0/53iEEAut25+eru5dhyEG8dmboo7LSFGSNcLYoz8+z8qI712Bg=
-X-Received: by 2002:a05:6808:5282:b0:486:5466:e41f with SMTP id 5614622812f47-4a204dfcdddmr356853b6e.38.1783477131430;
-        Tue, 07 Jul 2026 19:18:51 -0700 (PDT)
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JKUFTzg0G70dO3HqLrBX7k0JpOC9/pO/bICFDvAx8Ek=;
+        b=NDRe5iJXZb/TR0bBcgFDDmK4UpJj5m5faS9NBZf2i/er7BoYqQ3cVs1GOefvG+bZoh
+         Ze4wzwLOr2ZyboL5HcJ5/zeLMqNX2aUayOcEaefVtv4E36bFaX3nv/44836GeMRr/S3z
+         l6oxWYzZykFqLxS5WZ6uXEwwAZyjj4aL8KEBLERTuXPPwYi99KuH7t2PrjR4a0vimwHd
+         wvxjuSQfXOX6b7UVprTvDMQ5yig0wnIm2ytD/+RtrZAw6e5JSBoVwivjOsM4XwTcoFVf
+         m46A2r692OqvP1h+P8WAxJuGHdd5wuD3sVkBnYqJ76Zwj3PJp8VV6VJZpsT7BLJ1voZM
+         3Wbg==
+X-Forwarded-Encrypted: i=1; AFNElJ8l20rpqL98LfmqWtKfusO89JYqd1I7NMTRIBFpF6tG9o77SNaWr2+YoJdejDPhBbJPFS0uInthdPww5MRT@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLyPySVbakkBqHaXqGfbTl8gEBFaSGytIbBrtgBqW5P3uzDZqc
+	icB2HaRiCrouklzO+nKRijqdpUBOnGBveLTKcCZGw9GVHO/d+UEAPNelKac6Qg==
+X-Gm-Gg: AfdE7ckQZlTUiIn0FOHaYvSanWJX3r6H4Nwp/PiwqHgD8EMnYglh4tL+rPdAj7i0sbY
+	w/brzz0gSP1e7X/XlYVHOIRyLCl656/V8cPR5rFVyBS/nWpgoa03WQExvnR8rJezVPs2jRaVe53
+	GM9bNP3ujFh+pzYx3MDxKEG9XfFzLI6ApsnIAAou/e1GqbUS1kD1Pkf8De9ISV10m7m3FbAZEnc
+	bFTqdR/tcpxgOuSjChfUBMw4cmHB9L65VFqXJhcsrxPv1kV65CWansWp5V6CPykGSTTKNibJdH6
+	I6X59IXq+fLI0uV93+uRXtiwQH4qUuBpWkh41+mfD48hg8ew312y5aW+7lemwDRc6c32kzKLYK3
+	vWoBSfkjZ7C2wmwLFPU9cxmhmfakOLX47bCWacKPtRSDe25vjZgK+6uRz6soFcmd0nAK1Z6Y9ow
+	IxIv5x7FpbgAsRNQrcYk9DJvQfVqZTHyJfKWuFB8BZ62US/qhoiic=
+X-Received: by 2002:a05:6808:1528:b0:492:5684:7ab3 with SMTP id 5614622812f47-4a203dbf7e0mr332446b6e.21.1783477133285;
+        Tue, 07 Jul 2026 19:18:53 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4a1aa006f74sm799975b6e.0.2026.07.07.19.18.49
+        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4a1aa006f74sm799975b6e.0.2026.07.07.19.18.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 19:18:50 -0700 (PDT)
+        Tue, 07 Jul 2026 19:18:52 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 07 Jul 2026 20:18:14 -0600
-Subject: [PATCH v6 14/24] dyndbg: use KBUILD_MODFILE for unique builtin
- module names
+Date: Tue, 07 Jul 2026 20:18:15 -0600
+Subject: [PATCH v6 15/24] dyndbg: refactor param_set_dyndbg_classes and
+ below
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,7 +71,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260707-dd-maint-2-v6-14-381f3edb0045@gmail.com>
+Message-Id: <20260707-dd-maint-2-v6-15-381f3edb0045@gmail.com>
 References: <20260707-dd-maint-2-v6-0-381f3edb0045@gmail.com>
 In-Reply-To: <20260707-dd-maint-2-v6-0-381f3edb0045@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -84,204 +85,162 @@ To: Andrew Morton <akpm@linux-foundation.org>,
  Petr Pavlu <petr.pavlu@suse.com>
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
- linux-modules@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
+ linux-modules@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783477102; l=8855;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783477102; l=6125;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=RzrIxar2pUCMOS3uvTB/QLvw+jvQ/WW5WK4QNk+y9is=;
- b=4pdYgovF1y3kKIJY82j0T/no333FMDF5fzRY2h/fx9JHNadGa2pvTJOqoUfZuFklQ55qGYPf1
- Tar3TCfcnkUDklwUc2pomUMYzZVTNDPTSxfOp9++JLHtY0kEWMLy2AE
+ bh=5spgXU4kgDNgBoy+8aa3tT4HXinOsojD5H8veWj6VKI=;
+ b=IM5YfUy/gVnf8P+Id90JgQdcRUk6B2mNg+DUT9DRhrBL5g3XqL5wewP4tIFCKj5kallkfJbO9
+ tRT9kSCznPRDRxWelmzihsYNf7d1+Jrz3x3cA9JOXecKv5+yg/YSeT5
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Historically dynamic-debug gets its module names from KBUILD_MODNAME.
-This works well for loadable modules, as the module loader has always
-required them to have unique names, but for builtins it is basically
-kbasename(srcfile), which sadly gives us many modules named "main".
+Refactor the callchain below param_set_dyndbg_classes(1) to allow
+mod-name specific settings.  Split (1) into upper/lower fns, adding
+modname param to lower, and passing NULL in from upper.  Below that,
+add the same param to ddebug_apply_class_bitmap(), and pass it thru to
+_ddebug_queries(), replacing NULL with the param.
 
-IOW, it makes this ambiguous:
-  bash-5.3# echo module main +m > /proc/dynamic_debug/control
+This allows the callchain to update the classmap in just one module,
+vs just all as currently done.  While the sysfs param is unlikely to
+ever update just one module, the callchain will be used for modprobe
+handling, which should update only that just-probed module.
 
-since it would affect all 4 independent modules named main:
-  bash-5.3# ddgrep =m
-  init/main.c:1265 [main]initcall_blacklist =m "blacklisting initcall %s\n"
-  kernel/power/main.c:49 [main]pm_restore_gfp_mask =m "GFP mask restored\n"
-  kernel/module/main.c:2862 [main]move_module =m "\t0x%lx 0x%.8lx %s\n"
-  drivers/base/power/main.c:149 [main]device_pm_add =m "Adding info for %s:%s\n"
-
-We can improve this by using KBUILD_MODFILE for dyndbg's modname in
-builtins (which is unique), and KBUILD_MODNAME for loadables (which is
-already required/guaranteed to be unique by module-loader):
-
-The above control-file entries then become:
-  init/main.c:1265 [init/main]initcall_blacklist ...
-  kernel/power/main.c:49 [kernel/power/main]pm_restore_gfp_mask ...
-  kernel/module/main.c:2862 [kernel/module/main]move_module ...
-  drivers/base/power/main.c:149 [drivers/base/power/main]device_pm_add ...
-
-While this is a user visible change; [params] becomes [kernel/params]
-etc, it is not a behavior change; we now match the query-module
-against the subsystem/module name or its kbasename (the
-simple-modname), which as before, matches all 4 modules.
-
-This allows queries to be specific when desired: "module init/main",
-while preserving the existing meaning of "module main"
-
-The deeper reason for this change is not obvious.  If any builtin
-"main" module were to add a classmap, it would attach to all "main"
-modules.  If 2 "main" modules defined separate classmaps, both modules
-would inadvertently share both classmaps.  Since classmaps map
-classnames to 0..62, and independently defined classmaps are most
-likely to start at 0 (unless author is planning to share the 0..62
-range with other classmaps), we have a setup for later reserved range
-conflicts.  Having unique names prevents future conflicts.
-
-This solution isn't perfect:
-1. it changes displayed [params] to [kernel/params] etc
-2. its mostly redundant with "filename */main.*"
-3. Ideally, queries like "module power", "module module", "module
-   base/power" might be better but would break old queries.
-
-Adding classmaps to the builtins named "[main]" is unlikely, so this
-change isn't absolutely necessary, but it seemed proper to at least
-address the latent problem.
-
-Adjust Documentation with "simple modname" and "subsystem modname".
+In ddebug_apply_class_bitmap(), also check for actual changes to the
+bits before announcing them, to declutter logs.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v5: move ahead of array-slice patch to silence sashiko complaint about it
-v4: call match_wildcard_hyphen() to allow dash vs underscore modname equivalence
-v3: use KBUILD_MODFILE to give unique modnames for builtins
+v2: move RvB after SoB
 ---
- Documentation/admin-guide/dynamic-debug-howto.rst | 42 +++++++++++++----------
- include/linux/dynamic_debug.h                     | 15 ++++++--
- lib/dynamic_debug.c                               |  3 +-
- 3 files changed, 38 insertions(+), 22 deletions(-)
+ lib/dynamic_debug.c | 51 +++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 39 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
-index 9c2f096ed1d8..99bbae37d34e 100644
---- a/Documentation/admin-guide/dynamic-debug-howto.rst
-+++ b/Documentation/admin-guide/dynamic-debug-howto.rst
-@@ -38,12 +38,12 @@ You can view the currently configured behaviour in the *prdbg* catalog::
- 
-   :#> head -n7 /proc/dynamic_debug/control
-   # filename:lineno [module]function flags format
--  init/main.c:1179 [main]initcall_blacklist =_ "blacklisting initcall %s\n"
--  init/main.c:1218 [main]initcall_blacklisted =_ "initcall %s blacklisted\n"
--  init/main.c:1424 [main]run_init_process =_ "  with arguments:\n"
--  init/main.c:1426 [main]run_init_process =_ "    %s\n"
--  init/main.c:1427 [main]run_init_process =_ "  with environment:\n"
--  init/main.c:1429 [main]run_init_process =_ "    %s\n"
-+  init/main.c:1179 [init/main]initcall_blacklist =_ "blacklisting initcall %s\n"
-+  init/main.c:1218 [init/main]initcall_blacklisted =_ "initcall %s blacklisted\n"
-+  init/main.c:1424 [init/main]run_init_process =_ "  with arguments:\n"
-+  init/main.c:1426 [init/main]run_init_process =_ "    %s\n"
-+  init/main.c:1427 [init/main]run_init_process =_ "  with environment:\n"
-+  init/main.c:1429 [init/main]run_init_process =_ "    %s\n"
- 
- The 3rd space-delimited column shows the current flags, preceded by
- a ``=`` for easy use with grep/cut. ``=p`` shows enabled callsites.
-@@ -59,10 +59,10 @@ query/commands to the control file.  Example::
- 
-   :#> ddcmd '-p; module main func run* +p'
-   :#> grep =p /proc/dynamic_debug/control
--  init/main.c:1424 [main]run_init_process =p "  with arguments:\n"
--  init/main.c:1426 [main]run_init_process =p "    %s\n"
--  init/main.c:1427 [main]run_init_process =p "  with environment:\n"
--  init/main.c:1429 [main]run_init_process =p "    %s\n"
-+  init/main.c:1424 [init/main]run_init_process =p "  with arguments:\n"
-+  init/main.c:1426 [init/main]run_init_process =p "    %s\n"
-+  init/main.c:1427 [init/main]run_init_process =p "  with environment:\n"
-+  init/main.c:1429 [init/main]run_init_process =p "    %s\n"
- 
- Error messages go to console/syslog::
- 
-@@ -161,17 +161,21 @@ file
- 	file kernel/freezer.c	# ie column 1 of control file
- 	file drivers/usb/*	# all callsites under it
- 	file inode.c:start_*	# parse :tail as a func (above)
--	file inode.c:1-100	# parse :tail as a line-range (above)
-+	file inode.c:1-100	# parse :tail as a line-range (below)
- 
- module
--    The given string is compared against the module name
--    of each callsite.  The module name is the string as
--    seen in ``lsmod``, i.e. without the directory or the ``.ko``
--    suffix and with ``-`` changed to ``_``.  Examples::
--
--	module sunrpc
--	module nfsd
--	module drm*	# both drm, drm_kms_helper
-+    The query string is compared against the subsystem module name of
-+    each callsite, as shown in the control file, or its simple name.
-+    The simple module name is the string as seen in ``lsmod``,
-+    i.e. without the directory or the ``.ko`` suffix and with ``-``
-+    changed to ``_``.
-+    Examples::
-+
-+        module nfsd        # simple modname (as from lsmod)
-+	module init/main   # subsystem modname (as in control file)
-+	module */main	   # any subsystem ending in main
-+        module main	   # simple modname, selects same as above
-+	module drm*	   # both drm, drm_kms_helper
- 
- format
-     The given string is searched for in the dynamic debug format
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 9ae1accb9bf6..da9e5c35bc43 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -10,6 +10,17 @@
- 
- #define __DDEBUG_ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
- 
-+/*
-+ * Pick the best name for the module:
-+ * KBUILD_MODFILE includes the path (e.g., drivers/usb/core/usbcore) for built-ins.
-+ * Fall back to KBUILD_MODNAME for modules (loader requires unique names).
-+ */
-+#ifdef KBUILD_MODFILE
-+# define DDEBUG_MODNAME KBUILD_MODFILE
-+#else
-+# define DDEBUG_MODNAME KBUILD_MODNAME
-+#endif
-+
- /*
-  * An instance of this structure is created in a special
-  * ELF section at every dynamic debug callsite.  At runtime,
-@@ -121,7 +132,7 @@ struct ddebug_class_param {
- 	static struct ddebug_class_map __aligned(8) __used		\
- 		__section("__dyndbg_classes") _var = {			\
- 		.mod = THIS_MODULE,					\
--		.mod_name = KBUILD_MODNAME,				\
-+		.mod_name = DDEBUG_MODNAME,				\
- 		.base = _base,						\
- 		.map_type = _maptype,					\
- 		.length = (sizeof(_var##_classnames) / sizeof(_var##_classnames[0])), \
-@@ -160,7 +171,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
- 	static struct _ddebug  __aligned(8)			\
- 	__section("__dyndbg") name = {				\
--		.modname = KBUILD_MODNAME,			\
-+		.modname = DDEBUG_MODNAME,			\
- 		.function = __func__,				\
- 		.filename = __FILE__,				\
- 		.format = (fmt),				\
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 2e321b7eb957..ce42e03f1600 100644
+index ce42e03f1600..0fc9cd14e2d2 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -239,7 +239,8 @@ static int ddebug_change(const struct ddebug_query *query,
+@@ -615,9 +615,10 @@ static int ddebug_exec_queries(char *query, const char *modname)
+ 	return nfound;
+ }
  
- 		/* match against the module name */
- 		if (query->module &&
--		    !match_wildcard(query->module, dt->mod_name))
-+		    !match_wildcard_hyphen(query->module, dt->mod_name) &&
-+		    !match_wildcard_hyphen(query->module, kbasename(dt->mod_name)))
- 			continue;
+-/* apply a new bitmap to the sys-knob's current bit-state */
++/* apply a new class-param setting */
+ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+-				     unsigned long *new_bits, unsigned long *old_bits)
++				     unsigned long *new_bits, unsigned long *old_bits,
++				     const char *query_modname)
+ {
+ #define QUERY_SIZE 128
+ 	char query[QUERY_SIZE];
+@@ -625,7 +626,9 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+ 	int matches = 0;
+ 	int bi, ct;
  
- 		if (query->class_string) {
+-	v2pr_info("apply: 0x%lx to: 0x%lx\n", *new_bits, *old_bits);
++	if (*new_bits != *old_bits)
++		v2pr_info("apply bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
++			  *old_bits, query_modname ?: "'*'");
+ 
+ 	for (bi = 0; bi < map->length; bi++) {
+ 		if (test_bit(bi, new_bits) == test_bit(bi, old_bits))
+@@ -634,12 +637,16 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+ 		snprintf(query, QUERY_SIZE, "class %s %c%s", map->class_names[bi],
+ 			 test_bit(bi, new_bits) ? '+' : '-', dcp->flags);
+ 
+-		ct = ddebug_exec_queries(query, NULL);
++		ct = ddebug_exec_queries(query, query_modname);
+ 		matches += ct;
+ 
+ 		v2pr_info("bit_%d: %d matches on class: %s -> 0x%lx\n", bi,
+ 			  ct, map->class_names[bi], *new_bits);
+ 	}
++	if (*new_bits != *old_bits)
++		v2pr_info("applied bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
++			  *old_bits, query_modname ?: "'*'");
++
+ 	return matches;
+ }
+ 
+@@ -652,6 +659,7 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+  * param_set_dyndbg_classes - class FOO >control
+  * @instr: string echo>d to sysfs, input depends on map_type
+  * @kp:    kp->arg has state: bits/lvl, map, map_type
++ * @mod_name: module name or null for all modules with the classes
+  *
+  * Enable/disable prdbgs by their class, as given in the arguments to
+  * DECLARE_DYNDBG_CLASSMAP.  For LEVEL map-types, enforce relative
+@@ -659,7 +667,9 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+  *
+  * Returns: 0 or <0 if error.
+  */
+-int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
++static int param_set_dyndbg_module_classes(const char *instr,
++					   const struct kernel_param *kp,
++					   const char *mod_name)
+ {
+ 	const struct ddebug_class_param *dcp = kp->arg;
+ 	const struct ddebug_class_map *map = dcp->map;
+@@ -682,8 +692,8 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
+ 				KP_NAME(kp), inrep, CLASSMAP_BITMASK(map->length));
+ 			inrep &= CLASSMAP_BITMASK(map->length);
+ 		}
+-		v2pr_info("bits:%lx > %s\n", inrep, KP_NAME(kp));
+-		totct += ddebug_apply_class_bitmap(dcp, &inrep, dcp->bits);
++		v2pr_info("bits:0x%lx > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp));
++		totct += ddebug_apply_class_bitmap(dcp, &inrep, dcp->bits, mod_name);
+ 		*dcp->bits = inrep;
+ 		break;
+ 	case DD_CLASS_TYPE_LEVEL_NUM:
+@@ -696,7 +706,7 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
+ 		old_bits = CLASSMAP_BITMASK(*dcp->lvl);
+ 		new_bits = CLASSMAP_BITMASK(inrep);
+ 		v2pr_info("lvl:%ld bits:0x%lx > %s\n", inrep, new_bits, KP_NAME(kp));
+-		totct += ddebug_apply_class_bitmap(dcp, &new_bits, &old_bits);
++		totct += ddebug_apply_class_bitmap(dcp, &new_bits, &old_bits, mod_name);
+ 		*dcp->lvl = inrep;
+ 		break;
+ 	default:
+@@ -706,16 +716,33 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
+ 	vpr_info("%s: total matches: %d\n", KP_NAME(kp), totct);
+ 	return 0;
+ }
++
++/**
++ * param_set_dyndbg_classes - classmap kparam setter
++ * @instr: string echo>d to sysfs, input depends on map_type
++ * @kp:    kp->arg has state: bits/lvl, map, map_type
++ *
++ * enable/disable all class'd pr_debugs in the classmap. For LEVEL
++ * map-types, enforce * relative levels by bitpos.
++ *
++ * Returns: 0 or <0 if error.
++ */
++int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
++{
++	return param_set_dyndbg_module_classes(instr, kp, NULL);
++}
+ EXPORT_SYMBOL(param_set_dyndbg_classes);
+ 
+ /**
+- * param_get_dyndbg_classes - classes reader
++ * param_get_dyndbg_classes - classmap kparam getter
+  * @buffer: string description of controlled bits -> classes
+  * @kp:     kp->arg has state: bits, map
+  *
+- * Reads last written state, underlying prdbg state may have been
+- * altered by direct >control.  Displays 0x for DISJOINT, 0-N for
+- * LEVEL Returns: #chars written or <0 on error
++ * Reads last written state, underlying pr_debug states may have been
++ * altered by direct >control.  Displays 0x for DISJOINT classmap
++ * types, 0-N for LEVEL types.
++ *
++ * Returns: ct of chars written or <0 on error
+  */
+ int param_get_dyndbg_classes(char *buffer, const struct kernel_param *kp)
+ {
 
 -- 
 2.55.0
