@@ -1,72 +1,68 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8DE3264FD
-	for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2026 01:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A063B388D
+	for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2026 01:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783473688; cv=none; b=Dbv5b0PEwf/MXkBn6JSU6uh3mvAgs9vs0AsWKFPmiQkxZJK9Hy0Nu/t2ZR8EWYjvrM/0tyvOMwUQ5oUQZ/sinsH79RmE/SoQpXiwReAYN++P/rFYw4hsl8+3L/gMLEIsUspxWAYlfIooxPq39WsIyXLmhmuqCzhdFUvKeo4EKFk=
+	t=1783474392; cv=none; b=bWhuONvsogn6Z0garm/M7tnSAz7YjUDz0SHnR/2gXPx3YkxrrEtKVqVm1lZtC5wHT3P2VOnW6Uu8aLB+spwtTBGTgD0pUUur9TDqv1cJHg/P9sBBW8yHPGhTjocdaq2ZUuHDnozv5zfaNs3geXrwEZMn3bBLahEEponRDggShMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783473688; c=relaxed/simple;
-	bh=0iDTC6iQ7HU2MRhmbhyR3vQ+Xx/rnAbImlk5nSbmjrI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=klGmOtVpcCPHvSBdBHDtKBXWrIALXVTCqznJRC2eNw77J26ytrcpGqywaJMX8HhpffMOPlJaUyRFrAYr3hQd1JInUlCs9FUONATQkJYEDQ9nvbeXeQQGi44v78/3/bXGZqL1Owa6AkM7kOJipyDYPcLj3Nb/Q7V3QUE2pWHOG/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gxv/QB00; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
+	s=arc-20240116; t=1783474392; c=relaxed/simple;
+	bh=8FWSK4uzI/NHn4iQH/BVX3NVrmJPL2ZYn8lrMMJ9BeQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=YpCitgUPSJ27Nxm2hl44DHgcG3QsXMIabSvRezNEpYToQ+7JFZsIbSBI1Y877cx/yHDV1RpP31Qhjou/YgKraZzVHOXpK1a+FIjp7wFZ/ZTKDZpoa0IKENJn/DsTEP7FTndrRasxyfOlY3J2/RxeoM0wEeeynuUyqU5PcKeCcY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=liHU33q4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gxv/QB00"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-845a29d8c1eso306453b3a.2
-        for <linux-modules@vger.kernel.org>; Tue, 07 Jul 2026 18:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783473685; x=1784078485; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:mime-version:date:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=49r50tPsVjGlL5O8jUrDgUaT0UYvkKRZ1jOzYL8QtlQ=;
-        b=gxv/QB00cWmFuFZCNTCCvh/S4FAH81kd665Ipt6qhyqqVtDidmUlG9Mtov3qR4rEH3
-         3vim1RneqCYqL4XUAwQ58m6+s+W5R5EHtl0IFViHet0LXxANTLKAimK3UAMoxXcuFA4z
-         w0v9EZdeqUx0XQbvMJujfpvM1908CI/xaqTeboNuBF25QfWzrdHHD7bnzwDCaBEf/+2q
-         B5UX6lOKm+u9WrrSifGKkp4/HkE32yx0dbT3NJAXA4vGGsxVufYIabcQb7Jc5uJhushO
-         S60u/e/+xWCVepW17odDI2LWYjxQOZXJHYko6xbKeyIMmSQNfVWxu7fWSlNLWhUTQdl0
-         nIiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783473685; x=1784078485;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=49r50tPsVjGlL5O8jUrDgUaT0UYvkKRZ1jOzYL8QtlQ=;
-        b=gZ4ywN6HIb8KOlW6sjWcy6psDjLXNh0MdTp7abxLMuRhX+JvHxz1wug783ueX4DTx8
-         Vsmeb5NIZLZwWb6o7rzz8sbHJ2JEyLwzFoZmTeAfk+PPHbcz1M4mKmW7XkIp+62jrvSC
-         /cTDU9PAWBywzpX93F9HweyDY5WnRlKUiMnjHbpTuqDLzC6ZY9YJnrCA5vlkxXgicb8j
-         Au/h+5bpB7sChA8PxBLDuShUwQYAT0VZghe1nICo7tpH01kecL1037e8Uh0ctXsXb4FA
-         8HU3kSLm1Ee3G8/+yJ/7s968yEAfcPP5yBRghqle0B2LbMUCsXLR1BleHnL2GhlLCyZk
-         r0lQ==
-X-Forwarded-Encrypted: i=1; AHgh+RohHBPkARFcVqrklDzwphtVCeVxoK0YH8A8jyg/ZsBRllTEV/VRkl2DITaJDrnuptMKFmqLE3TpsEuNJIa1@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGlRCSAWXXxbfs9E+Rzze3J0iCCj6Mq0o9nrvtbHmk5V6RVqez
-	nTxODrDEO6AIXq4ymaMnO+KeHWIppmiunNNxRW3otSMuhG0r0xG8zxIFv5P/Mf6g57IF4Y+J+zT
-	f3g==
-X-Received: from dldyr15-n2.prod.google.com ([2002:a05:701b:450f:20b0:139:b637:8de6])
- (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:7a9c:b0:3bf:9c93:ac44
- with SMTP id adf61e73a8af0-3c0bcfea4bcmr140843637.19.1783473684556; Tue, 07
- Jul 2026 18:21:24 -0700 (PDT)
-Date: Wed,  8 Jul 2026 11:21:07 +1000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="liHU33q4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D4A1F000E9;
+	Wed,  8 Jul 2026 01:33:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783474381;
+	bh=Op3Uz8ZBxYO3GbEZ+og9YRZKbg/2ljL83BmD0AV1AaM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=liHU33q4ewc1+VfesfQvHzZAqRimzAOsc5YxE2Hd1u1nXbDT65YLVC3d3Q4jB7bBU
+	 20VFR8I9uBHRE6EkHh4nqC1agXrVRDKQTHSzad+mYw4enPbvi+VBygtEzwyWANLy9j
+	 xuaWYbmcLHy6Ofe9Yhq6zw5IGdnxeA/PcGC5AFv9W9DnxpQqaoYZk7Y51SRbor0fVr
+	 nzTrYaqqO7NoCKZvoesZ1BlaYvFLQsspPrcstc8y9YYXuqIaigO4ayPVcF97AZdCAO
+	 lcQ1J38PcY/r7Hv0G2KyQKeHzEkxYA/QHpyxvoqOoTbiBYjuVDVOyj76scIc3V9Yzw
+	 szCpObxSfOr0g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] module: validate string table section types
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?VGhpw6liYXVkIFdla3N0ZWVu?= <tweek@google.com>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <20260708012107.1621513-1-tweek@google.com>
+References: <20260708012107.1621513-1-tweek@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 08 Jul 2026 01:33:01 +0000
+Message-Id: <20260708013301.C4D4A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
-Message-ID: <20260708012107.1621513-1-tweek@google.com>
-Subject: [PATCH] module: validate string table section types
-From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
-Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Siddharth Nayyar <sidnayyar@google.com>, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+
+Pre-existing issues:
+- [High] The patch fixes an out-of-bounds read vulnerability for string tab=
+les by ensuring they are of type SHT_STRTAB, but fails to address the exact=
+ same vulnerability class for several other ELF sections (e.g., .modinfo, .=
+gnu.linkonce.this_module, __version_ext_names, __ksymtab).
+- [High] Iterating over sections in lookup functions triggers an out-of-bou=
+nds string read for SHT_NULL sections due to missing sh_name bounds checkin=
+g.
+- [High] Validation logic for section headers accesses sechdrs[0] out of bo=
+unds if e_shnum is 0 and e_shoff is near the end of the file.
+--
+
+--- Patch [1]: [PATCH] module: validate string table section types ---
+commit e8e815fedf365febe70f5870d807616d37946281
+Author: Thi=C3=A9baud Weksteen <tweek@google.com>
+
+module: validate string table section types
 
 In elf_validity_cache_sechdrs, section sizes and offsets are validated,
 unless the section type is SHT_NULL or SHT_NOBITS.
@@ -82,61 +78,147 @@ elf_validity_cache_strtab.
 Validate that both string section headers are of type SHT_STRTAB before
 caching them.
 
-Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
----
- kernel/module/main.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 46dd8d25a605..7cbc8f0e28c6 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2011,6 +2011,7 @@ static int elf_validity_cache_sechdrs(struct load_inf=
-o *info)
-  * Specifically checks:
-  *
-  * * Section name table index is inbounds of section headers
-+ * * Section name table type is SHT_STRTAB
-  * * Section name table is not empty
-  * * Section name table is NUL terminated
-  * * All section name offsets are inbounds of the section
-@@ -2038,6 +2039,11 @@ static int elf_validity_cache_secstrings(struct load=
-_info *info)
-=20
- 	strhdr =3D &info->sechdrs[info->hdr->e_shstrndx];
-=20
-+	if (strhdr->sh_type !=3D SHT_STRTAB) {
-+		pr_err("Invalid ELF section name table type: %u\n", strhdr->sh_type);
-+		return -ENOEXEC;
-+	}
-+
- 	/*
- 	 * The section name table must be NUL-terminated, as required
- 	 * by the spec. This makes strcmp and pr_* calls that access
-@@ -2204,7 +2210,7 @@ static int elf_validity_cache_index_sym(struct load_i=
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 46dd8d25a6058..7cbc8f0e28c61 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2011,6 +2011,7 @@ static int elf_validity_cache_sechdrs(struct load_i=
 nfo *info)
-  *        Must have &load_info->index.sym populated.
-  *
-  * Looks at the symbol table's associated string table, makes sure it is
-- * in-bounds, and caches it.
-+ * in-bounds and of type SHT_STRTAB, and caches it.
-  *
-  * Return: %0 if valid, %-ENOEXEC on failure.
-  */
-@@ -2218,6 +2224,12 @@ static int elf_validity_cache_index_str(struct load_=
-info *info)
- 		return -ENOEXEC;
- 	}
-=20
-+	if (info->sechdrs[str_idx].sh_type !=3D SHT_STRTAB) {
-+		pr_err("Invalid ELF symbol string table type: %u\n",
-+		       info->sechdrs[str_idx].sh_type);
-+		return -ENOEXEC;
-+	}
-+
- 	info->index.str =3D str_idx;
- 	return 0;
- }
---=20
-2.55.0.795.g602f6c329a-goog
 
+[Severity: High]
+This is a pre-existing issue, but does the validation logic in
+elf_validity_cache_sechdrs() access sechdrs out of bounds if e_shnum is 0
+and e_shoff is near the end of the file?
+
+The overflow check evaluates to 0 > positive if e_shnum is 0 and e_shoff is
+less than info->len, allowing the check to incorrectly pass:
+
+elf_validity_cache_sechdrs() {
+    ...
+    if (info->hdr->e_shoff >=3D info->len
+        || (info->hdr->e_shnum * sizeof(Elf_Shdr) >
+            info->len - info->hdr->e_shoff)) {
+    ...
+}
+
+The code then sets sechdrs and blindly accesses sechdrs[0], reading past the
+end of the user-provided module buffer:
+
+elf_validity_cache_sechdrs() {
+    ...
+    if (sechdrs[0].sh_type !=3D SHT_NULL
+        || sechdrs[0].sh_size !=3D 0
+        || sechdrs[0].sh_addr !=3D 0) {
+    ...
+}
+
+>   * Specifically checks:
+>   *
+>   * * Section name table index is inbounds of section headers
+> + * * Section name table type is SHT_STRTAB
+>   * * Section name table is not empty
+>   * * Section name table is NUL terminated
+
+[ ... ]
+
+> @@ -2038,6 +2039,11 @@ static int elf_validity_cache_secstrings(struct lo=
+ad_info *info)
+> =20
+>  	strhdr =3D &info->sechdrs[info->hdr->e_shstrndx];
+> =20
+> +	if (strhdr->sh_type !=3D SHT_STRTAB) {
+> +		pr_err("Invalid ELF section name table type: %u\n", strhdr->sh_type);
+> +		return -ENOEXEC;
+> +	}
+> +
+
+[Severity: High]
+This is a pre-existing issue, but does iterating over sections in lookup
+functions trigger an out-of-bounds string read for SHT_NULL sections due to
+missing sh_name bounds checking?
+
+In elf_validity_cache_secstrings(), bounds validation of sh_name against the
+string table size is explicitly skipped for SHT_NULL sections:
+
+elf_validity_cache_secstrings() {
+    ...
+    if (shdr->sh_type =3D=3D SHT_NULL)
+        continue;
+    ...
+}
+
+Later, section lookup functions like find_any_unique_sec() iterate over all
+sections and blindly pass the unvalidated info->secstrings pointer to strcm=
+p():
+
+find_any_unique_sec() {
+    ...
+    if (strcmp(info->secstrings + info->sechdrs[i].sh_name,
+               name) =3D=3D 0) {
+    ...
+}
+
+Could this cause an immediate out-of-bounds memory read when strcmp()
+executes if an attacker sets a huge sh_name on a SHT_NULL section?
+
+[ ... ]
+
+> @@ -2218,6 +2224,12 @@ static int elf_validity_cache_index_str(struct loa=
+d_info *info)
+>  		return -ENOEXEC;
+>  	}
+> =20
+> +	if (info->sechdrs[str_idx].sh_type !=3D SHT_STRTAB) {
+> +		pr_err("Invalid ELF symbol string table type: %u\n",
+> +		       info->sechdrs[str_idx].sh_type);
+> +		return -ENOEXEC;
+> +	}
+> +
+
+[Severity: High]
+This is a pre-existing issue, but while this patch fixes an out-of-bounds
+read vulnerability for string tables by ensuring they are of type SHT_STRTA=
+B,
+does the same vulnerability class exist for other ELF sections?
+
+Since elf_validity_cache_sechdrs() skips bounds checking of sh_offset and
+sh_size for SHT_NULL and SHT_NOBITS sections, lookup functions can match
+sections by name while ignoring sh_type.
+
+For example, elf_validity_cache_index_info() looks up .modinfo by name and
+caches it without validating its sh_type:
+
+elf_validity_cache_index_info() {
+    ...
+    info_idx =3D find_any_unique_sec(info, ".modinfo");
+    ...
+}
+
+Similarly, in elf_validity_cache_index_mod(), the .gnu.linkonce.this_module
+section rejects SHT_NOBITS but fails to reject SHT_NULL:
+
+elf_validity_cache_index_mod() {
+    ...
+    if (shdr->sh_type =3D=3D SHT_NOBITS) {
+    ...
+}
+
+And in move_module(), the loop skips SHT_NOBITS but calls memcpy for
+SHT_NULL:
+
+move_module() {
+    ...
+    memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
+    ...
+}
+
+Could a malicious module supply these sections with type SHT_NULL and an
+arbitrary, unvalidated sh_offset, leading to out-of-bounds reads or copies?
+
+>  	info->index.str =3D str_idx;
+>  	return 0;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708012107.1621=
+513-1-tweek@google.com?part=3D1
