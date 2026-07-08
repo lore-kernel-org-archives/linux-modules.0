@@ -1,45 +1,38 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016F2362143;
-	Wed,  8 Jul 2026 13:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0E02222C5;
+	Wed,  8 Jul 2026 14:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783519016; cv=none; b=fCbO+pYdXlgtym5vpApBv9I/QfUpe788mgk99WBJwZ313Z51wrOS5UkOSWY5Ai8VQAfJ4cuzSaWcLO1Q0cRkUDUpsb12qqUQrjUzLXw27WN2+td6EZycPJl3PpihkhDhKHYz9+ZhebZgrTP9D9YCnMd++Bw+Cx24l78M+cZQraE=
+	t=1783519305; cv=none; b=tpUcAawF2rWJ6mGA4sjLXx3J0lfGNi3pumY8AjMYqMucl3WLqm851inoYcZXVH2vL/+BwP/44w8gCHUsMf7MiqyTPQhEGra/P6MH9haOSNZag0RmOfNR7MhiePRV1p+jbzvIMwwMLPWRS+9SBTFjz0kc1o3fsiFM5VirmVzd8K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783519016; c=relaxed/simple;
-	bh=ypqZAI1oU5JGm8/KBes9kuxTMKNdF+eggwaTNnsX/60=;
+	s=arc-20240116; t=1783519305; c=relaxed/simple;
+	bh=YC/qCa48WRz1F+/u1eBG35P/dZUcvcWdqRTkbNtiX2E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CHISI0RShFWAxcdAn9gq18QvVNSIUOMqbDdic4RMk18tcNjkkJLh4UPiU2yCRaWDOZ7l8ECesjctEY3FlmSaKnUjXMD/xRA64CL0w1qZzlDLOQdHUoihBOQWtb1d54zMP3HCN0A+H1ZrI72aOivKdSwN7JwaVjBfnn0Q5i1ox/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kts+Lrlw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=o23ljR+q; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=IH7VMKqYhQPdFx772Q8zrLf3SRyI87+ZJQkYjPdNy7ATtj2KafbFSAIewUjI8F5MT5DiKnYkFtkQdmINZsEHTHyCqjI9h9Gr0He1y56CZDK+AO3Io1z6JLTAvcnzNEDN6YXVjdZ38QnPRiL6WwywAv2OIokre11B0xOFl9sQ16A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Apu/OFOx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kts+Lrlw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="o23ljR+q"
-Date: Wed, 8 Jul 2026 15:56:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1783519013;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/V/epasgT8Yu7gP0faBZj8vgD9Xn8KwZKX1Je5vr8BI=;
-	b=kts+LrlwbgtCLiPMljMBa4w+f9wrnW0MQWCXjB2ngOMBoLe5/NNKbDXJzDGwxIKL3m4ETj
-	Q+5xZkLq1PabsFGyLadLSreAwYAvtDsfaTtYcmG1fKlHszCi0v993Um+SuxLN2S2x/SG5N
-	uuWO4DEn/QehpKSv2uGL/naFZZzNWXTIN3uHjN3sLIn79/gq2rSUBNnzvVA6AXmrzHkjXY
-	IsIxiNJE9vXEayEPOk3/3pAwJwnFUHg99zlWvyiBc0YwTQ36LybduUc4dCZJfpXr6MSq6c
-	X4OnDTjKUI6QXfOW6uWJucw8w4bqz99kBSasUSBu9vLJSXFVKN1Rv8bpOsjI1A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1783519013;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/V/epasgT8Yu7gP0faBZj8vgD9Xn8KwZKX1Je5vr8BI=;
-	b=o23ljR+qd4kbANJJhPpv5c1eR9QZj4D3ewIVk6k6zz8twCFj9c2oXOOhLT4ekS1eS8AQaf
-	tEKZOZlN3UZ79rCw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Qingfang Deng <qingfang.deng@linux.dev>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Apu/OFOx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA26F1F000E9;
+	Wed,  8 Jul 2026 14:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783519303;
+	bh=9iuqA1JnRaIWvxE2q0j98cwoSE0yjUDKHKevIN01wxQ=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=Apu/OFOx4X6HeghfBzTIPllEGxDwqvapdQz8PF7LNNg9dqdzhoK8mu9wyjGR+7hKs
+	 V2MLFHaxAhv9b5v1fi+L8g/ZYWNT8+5SJiSPR2EIVgSc8ewS1nUU2M+FNihm8mQomc
+	 lQj6IoGpYmhyzplQY+9ghnXi8NmBfU6WueIKfv9wjz2Jw2Z046dFOD5lEuEs7iFF1k
+	 dTUAqQ5Yl7xd6L28zrKOCEShE5YjRSzhVPcudjlo+IzHPqvLo38V4OcZRW4oT9CGC8
+	 zb4ABjulHNgaDxMR3qIrvejR4OHvojRlHzp8vK6QgoR6YH/4rMFvPm5t1qdndGpDl1
+	 PGv9OPJBWnRtw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id A57B0CE04B1; Wed,  8 Jul 2026 07:01:43 -0700 (PDT)
+Date: Wed, 8 Jul 2026 07:01:43 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Qingfang Deng <qingfang.deng@linux.dev>,
 	Breno Leitao <leitao@debian.org>,
 	Norbert Szetei <norbert@doyensec.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -52,51 +45,51 @@ Cc: Qingfang Deng <qingfang.deng@linux.dev>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org,
-	"Paul E. McKenney" <paulmck@kernel.org>
+	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org
 Subject: Re: [PATCH net v2] ppp: defer channel free to an RCU grace period to
  fix pppol2tp RX UAF
-Message-ID: <20260708135651.zl03TEfr@linutronix.de>
+Message-ID: <b78eb36d-3d3e-4a08-ba8e-a1cdb084c41b@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 References: <D9C0245B-608B-4884-8A09-F55BA4A9F948@doyensec.com>
  <de2616b3-6edf-4255-ba77-0674e225ab27@linux.dev>
  <akfjpBVML_1RFF91@gmail.com>
  <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
  <20260706092926.PIlrhRKz@linutronix.de>
  <0dfe59c2-bf60-40fe-90e6-d6e1003709d0@suse.com>
- <20260708074904.xnpi0mlh@linutronix.de>
- <bef05178-4856-4b62-9c3b-62bf636c239d@suse.com>
+ <7ff3af97-1c10-4f46-84ae-ffbf757f7e9e@paulmck-laptop>
+ <20260708091147.O1d41Vi0@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bef05178-4856-4b62-9c3b-62bf636c239d@suse.com>
+In-Reply-To: <20260708091147.O1d41Vi0@linutronix.de>
 
-On 2026-07-08 15:04:32 [+0200], Petr Pavlu wrote:
-> As RCU usage in modules is now more common, I see an argument for the
-> module loader to invoke rcu_barrier() during module unload to make RCU
-> usage easier. In general, module unloading is a rare operation, so even
-> if it becomes somewhat slower, I don't expect it to be a significant
-> issue.
+On Wed, Jul 08, 2026 at 11:11:47AM +0200, Sebastian Andrzej Siewior wrote:
+> On 2026-07-07 09:39:01 [-0700], Paul E. McKenney wrote:
+> > Alternatives include:
+> > 
+> > o	Provide a patch like that above, but only execute the
+> > 	rcu_barrier() in some debug mode.  If your code works when
+> > 	that debug is enabled but does not otherwise, you add the
+> > 	rcu_barrier().
+> > 
+> > o	If debug is enabled, make rcu_do_batch() check the function
+> > 	before invoking it.  If the function is not mapped, issue a
+> > 	diagnostic, and don't try to invoke the function.  (But is
+> > 	there a sufficiently cheap way to check for the function not
+> > 	being mapped?)
+> 
+> In both cases you would see a backtrace and the name of the last
+> unloaded module. And since we don't see a lot of these reports, people
+> either don't run into this because it does not exist or RCU is quick
+> enough.
 
-Okay.
+Good point, the splat from calling the no-longer-mapped function should
+call out the offending module.  So maybe our debug code is good enough
+already.
 
-> One problem is that I'm not sure where the new rcu_barrier() call should
-> be placed. The prototype adds it before calling the module's exit
-> function. Would this actually fit all modules? From a quick look, I can
-> see that various modules call it at different points during their exit.
-
-I don't know why you would use call_rcu() in your module_exit()
-(pointing to the same module). But you could have call_rcu() invoking
-kmem_cache_free() and destroying that cache (kmem_cache_destroy()) in
-your exit path. From that perspective it would make sense to flush all
-calls before invoking module_exit().
-
-> -- 
-> Thanks,
-> Petr
-
-Sebastian
+							Thanx, Paul
