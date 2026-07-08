@@ -1,134 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E60613A86C
-	for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2026 19:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783538581; cv=none; b=e1UyjZoF8zmwkwBeAdZwZwFw+18kDs+fmBLg0kixanDMMeK8KXCzMq98iVzngCPaeZnq5m6cj1bf422TP9+TjwRlZICgq1V3+vO/agtj5yi4h4HdUzG13nPUd1A6r0DMG95cLkV2jCGcvJd32NNIGUapX4sxR8EPgQUkGJ2+e+I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783538581; c=relaxed/simple;
-	bh=l46bk59LoaQ368wvxM0PymzLodnRAjgzuE5p5cEVxeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CSBlZEJLmqXHQ8h7JYWz6ci8AHIMcRZjqXs3/1jp1VESi4pDZ2aiSRjvv46WYYrzNh4ds1ZZAKOb9ojj+mBzOeikARq++V2Amm9hJ5IIFmyAbbtACtFuWl2exekp20ba0eLyFrOk2QkdUAiHQ8+YAZgSovYSHfhc1PU1tYSLZAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kINeXGfx; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92D03A2576
+	for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2026 19:29:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783538954; cv=pass; b=dAYfAt8BRK3IaftbzWbBb1We0akmfQheLHUfeL3/C/j9/7pAxGCEjjoB2DRPbaF+n5QEBShRE3ObW5p22rSwOAak49P+L49/QuNGyUf0hmV06DegseMfFuQG54a2sl1Lu6CopMkMWqHwdzApG+x4CkXhLIFEaPngSPXDaDyjzLA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783538954; c=relaxed/simple;
+	bh=esUPZMaeDhSEKuB3vyh8QdBpdwB8JbRv1S8jpJLODZU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U8tHLPuh3EBRmYs3QH8sHsIL1HLBW+UrETtZDS5mm3n7kNI40IrR5Xh1r5S9StdrzpbXoidq4X3zNiOzpco+2N05mhLr+fX+8uYeBS1lgrgiC75KUJrFIMFnyLKbKurFOyyoQUG3gR8i7NU/hznLLXnsFqYC2OiHlkb6ZR5z9QY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zrtyeo5D; arc=pass smtp.client-ip=74.125.224.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kINeXGfx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 949181F00A3A;
-	Wed,  8 Jul 2026 19:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783538578;
-	bh=FYJtPnw6io7HML0+Q2Jwb8XG3Bo50PtR+mx0w4NXwGM=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=kINeXGfxIAqdpJQiCRS6B8lxZEaY8radhjXKbmgCtIAHA6eYORxOqsje/ChCnuiDr
-	 26/VObUUsoG1blM4MhHMXphEn98KLReqRI8MBN6IhOUipCh/yuu2PQZidCeNu7AM5o
-	 KSQ7M+3KrdRt5yK8bKoCuEZwkpCrsRxx+U5Csn+XzfUbLsazuQhOCOBxrrh3f08alv
-	 t2HjEkBFW+tIEvNbKlpTlYEn4A8GAojBrBGQtoFSZw8k13wmQhTBRTlWxyCCGHPNlE
-	 UWUYz1ioQPKZFLVw7te2/FFrt+hSsEX9+j8fyFYex9DPhFatL9wW+2ivUOT4TJYdbk
-	 I8C1GXa0Wffjg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 61543CE074A; Wed,  8 Jul 2026 12:22:58 -0700 (PDT)
-Date: Wed, 8 Jul 2026 12:22:58 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org
-Subject: Re: [PATCH net v2] ppp: defer channel free to an RCU grace period to
- fix pppol2tp RX UAF
-Message-ID: <70060a4e-4630-487f-8ecc-4408e23268d4@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <D9C0245B-608B-4884-8A09-F55BA4A9F948@doyensec.com>
- <de2616b3-6edf-4255-ba77-0674e225ab27@linux.dev>
- <akfjpBVML_1RFF91@gmail.com>
- <87111f02-5b7a-4185-8364-2faba650578b@linux.dev>
- <20260706092926.PIlrhRKz@linutronix.de>
- <0dfe59c2-bf60-40fe-90e6-d6e1003709d0@suse.com>
- <20260708074904.xnpi0mlh@linutronix.de>
- <bef05178-4856-4b62-9c3b-62bf636c239d@suse.com>
- <20260708135651.zl03TEfr@linutronix.de>
- <20260708190003.gmLFJGYo@linutronix.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zrtyeo5D"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-6662551100bso226498d50.0
+        for <linux-modules@vger.kernel.org>; Wed, 08 Jul 2026 12:29:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783538952; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NBp4TMsNMURSLOhqHGKX3fkPlukCno5noyUZCqO3pzb0TtZEqh+3LpHMmMuXvT/fN8
+         6U/x9a7vh54Jc7kXdSQJEYxfvdgx3and4+u0/NYrtq+KuiIHMa+kwUkYDGKiyoDC7hqR
+         h0kROds29o6b4yCzM7+QY+Fv4OoOdEd6n13G2W0odr3J0+A/46G/CRMgOZYWFKW2VxkK
+         +ywB6ncfay2kZUCIcVb+vGsbqQAtCKZF5r9EeHovGhiJ6IulnuCgVu5f+j+COswYiPNq
+         X3D8S1uiuDEbQrxjBgSSKAEMfrSt9F4Gjo0mmRc81KpU+G++8GOgAeXCSaS9dzP7naCC
+         7Uyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=esUPZMaeDhSEKuB3vyh8QdBpdwB8JbRv1S8jpJLODZU=;
+        fh=5cs6b6d7Xpq2ANmcE1sW6J73OLOoOdfaXy4E0BsYxz0=;
+        b=jrXJuK/NHBRswV2Rs2Zn+eVGFwHwt1nGap6HVkkR+BZXmVchx2a+U+Jx196wczN6FG
+         07iiiMB/2VTeTzqIl5SugG97ZD/bVN3/448VWOwcU4gQORppxjTCt8dhq5aya3rB6S9M
+         U1TmMw43Xnq02abPYF30AZTZEoBaQo6W7P4YwT2dVLcTyTUmEk5wnGwsO0y4m5weJdJE
+         Bf90yK8eJxP1Qz3V/Vqzj0VxckCUc0AR0l6/lsSfeetfIuSGdBVDtGP8YnAADsrMNRES
+         U80SPCaw9q0OiOSwu+Gb5liD/9++TgNHDSjDE3ggVhYM4FFGrPAhDfXPjwHVW7Y+yexO
+         LPQA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783538952; x=1784143752; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=esUPZMaeDhSEKuB3vyh8QdBpdwB8JbRv1S8jpJLODZU=;
+        b=Zrtyeo5Dn6rbI2V6sJdtgOYEoYlabL3nTMSUtKPH20BhgP3frh/oT2/MoifJcwa4wL
+         Nj3QoWtyyoGNdXpnp3MLEZyBglnb6XKarWDJh1nS+VxjgmVieQMuY9mhwQ+w8ll7RiHh
+         H7ggTJrpmlKyHkWdylfi8kM2B7uLVCsbeo0FEUEaYOTPi+7b/Ii0V4MyA87zD09mVKlm
+         /ROQnRS1VNo4jRI8T+71sU/8K9OM4i+ezOK+mlMwh1swtWgTKoKI66vMkDTKxx/F94rp
+         2DYINwX5C5RhVLrwza7fkHTwprLE5MSe/N5DtL2hmFX2w7yqg0u3lLMxh105qI7oG3iu
+         34yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783538952; x=1784143752;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=esUPZMaeDhSEKuB3vyh8QdBpdwB8JbRv1S8jpJLODZU=;
+        b=LDIJUEGSoj3l4CEcmgC5fn6cuG+70LedxH3QDij1tmQ1yQfIePIoPzEAEouQyDK/Xd
+         3dCKuUMK0r74hBhRqBanfXblbxfuX+9icDNm2XpuG99H5VI5mqjIQrgEr2xZgEjbs84/
+         nb8tAZRBGso4wZ3l0YFAHbjSQtRfNLx71iXVoNHMxqwaNTTWtupQ2ZuDcR6s5DES5V4O
+         0Jc7SDogODvJNAM7+tL93JfscRvx6y2CV63/bw7Z3/2hxA5GCWWq6WHtTOxu3k3+/t1w
+         DbELqqyGKq35JlgpGMryeGbeSjOy+A/lej3DcRTg3xivP+xQiPjFrXsC3qjfjjIdn8rf
+         hHBw==
+X-Gm-Message-State: AOJu0Yw+7Zrcc3XESasCEdUNMio5zELrOdwsQPEzCuuOZddMrgjInIDa
+	FvhFXgUGMTs9VP1AbgEueLk8MKoHsx+G1lwiDbq8DlLlzAqRTZWWr0IdVkIv3qft1/K8CUN6tAG
+	wrcON+TZWCbGJ0w+e14dl9N8R4fQ9fTddnw==
+X-Gm-Gg: AfdE7cnX257koqEUWi4YF8Gl+SDRRgu23M+DGtELBfD7wqEas1MKHZJ/wH7HXpp/Vkk
+	d9Fmrb7ZpAz6qSDoLoeMGSqrgV0/ZMqckjtY4FGs+T1WbqavmF4Ozltzmz9xxgrvTOHxy/857t+
+	4iT0Qok3h/DMsHEhr6iJexy/zfi6rNQzMQg8hjhPbnrl2pY+QMaNA1Oz1pXGIRgUurQ8REMn7bI
+	ENe+JNWcH+HWEc9rI2QirVq7zBJlNbuPM3NgYp36NcosN8lPszyLRLhUGzcJ+zzc/7Dhw==
+X-Received: by 2002:a05:690e:4803:b0:667:648a:d05d with SMTP id
+ 956f58d0204a3-6679f0b6cb9mr2240010d50.39.1783538951867; Wed, 08 Jul 2026
+ 12:29:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260708190003.gmLFJGYo@linutronix.de>
+References: <20260707-dd-maint-2-v6-0-381f3edb0045@gmail.com>
+ <20260707-dd-maint-2-v6-15-381f3edb0045@gmail.com> <20260708022913.E3D9A1F000E9@smtp.kernel.org>
+In-Reply-To: <20260708022913.E3D9A1F000E9@smtp.kernel.org>
+From: jim.cromie@gmail.com
+Date: Wed, 8 Jul 2026 13:28:46 -0600
+X-Gm-Features: AVVi8CcGWf-yvZRaz7uKpbWe3R_UDgHW5F3UfrE6h9rIgLwMf_mAYfqNisNfPwY
+Message-ID: <CAJfuBxykm2wyG+UOvYqjO_uJBuo52ArGApHn2nmgRu4i+WwccA@mail.gmail.com>
+Subject: Re: [PATCH v6 15/24] dyndbg: refactor param_set_dyndbg_classes and below
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-modules@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jul 08, 2026 at 09:00:03PM +0200, Sebastian Andrzej Siewior wrote:
-> -*, +module +Paul.
-> 
-> On 2026-07-08 15:56:53 [+0200], To Petr Pavlu wrote:
-> > > One problem is that I'm not sure where the new rcu_barrier() call should
-> > > be placed. The prototype adds it before calling the module's exit
-> > > function. Would this actually fit all modules? From a quick look, I can
-> > > see that various modules call it at different points during their exit.
-> > 
-> > I don't know why you would use call_rcu() in your module_exit()
-> > (pointing to the same module). But you could have call_rcu() invoking
-> > kmem_cache_free() and destroying that cache (kmem_cache_destroy()) in
-> > your exit path. From that perspective it would make sense to flush all
-> > calls before invoking module_exit().
-> 
-> Paul, are the RCU callbacks always invoked in FIFO order?
-> If we put the module unmap into a call_rcu() (instead of the current
-> synchronize_rcu()) would we invoke the callback's of the module's
-> callback before the unmap of the module? Or is this not guaranteed due
-> callbacks on CPU0 vs CPU1 are executed in different order?
+Hello,
 
-The RCU-callback ordering guarantees are quite weak:
+The concern regarding old_bits in param_set_dyndbg_module_classes()
+appears to be a false positive based on a misunderstanding of the
+initialization order.
 
-o	If callback A executes call_rcu() that queues callback B, then
-	A will be invoked before B.  (Just in case anyone had any doubt.)
+This is a sysfs parameter callback. By the time it is invoked, the
+module has already been probed and ddebug_sync_classbits has updated
+the module's pr-debugs to match the current parameter value.
+Therefore, the global state (dcp->bits) correctly reflects the
+module's state at the time of the callback. Using dcp->bits as
+old_bits ensures we only toggle bits that have actually changed; using
+0 as a baseline would result in redundant queries for settings already
+synchronized during the probe sequence.
 
-o	The callback queued prior to a call to rcu_barrier() will be
-	invoked before any that are queued after return from that same
-	call to rcu_barrier().
-
-The current *implementation* orders callbacks queued on a given CPU
-(but please see below), but there are absolutely no ordering guarantees
-among CPUs.  To see why, consider the following sequence of events:
-
-o	CPU 0 does an "rm -rf" of a large file tree containing huge
-	numbers of small files.  This results in an RCU callback being
-	queued for each file.
-
-o	CPU 0 queues RCU callback A.
-
-o	The corresponding grace period completes, so CPU 0 starts
-	invoking callbacks.
-
-o	CPU 1 queues RCU callback B.
-
-o	The corresponding grace period completes, so CPU 1 invokes
-	callback B.
-
-o	Meanwhile, CPU 0 is still working off its RCU callback backlog.
-
-o	CPU 0 eventually invokes RCU callback A
-
-Worse yet, if we here in RCU-land ever allow a given CPU's callbacks
-to be offloaded or deoffloaded while that CPU is online, then there
-really will be cases where callbacks queued even by a single given CPU
-get invoked out of order.  And there are people who would dearly love
-us to make this happen.  (The last time we tried, we were inundated in
-odd race conditions, but maybe we will come up with a better way.)
-
-So these RCU callback ordering guarantees are probably too weak for your
-use case.
-
-> Because if the FIFO order is guaranteed then it would be cheapest
-> solution. But it would require a rcu_barrier() in kmem_cache_destroy()).
-
-What you maybe *could* do is to have the two RCU callbacks communicate,
-so that the last one to be invoked did the work of both of them.  For
-example, use a shared variable initialized to 2, then have each callback
-do atomic_dec_and_test(), with the "winner" doing the work.
-
-Would that do the trick?
-
-							Thanx, Paul
+Thanks,
+Jim
