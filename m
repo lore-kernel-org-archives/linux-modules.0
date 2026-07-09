@@ -1,67 +1,67 @@
 Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BF93E5591
-	for <linux-modules@vger.kernel.org>; Thu,  9 Jul 2026 09:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642903FF1D5
+	for <linux-modules@vger.kernel.org>; Thu,  9 Jul 2026 09:23:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783587752; cv=none; b=cBXB9PuMtH3z3qg6ZGegm7psZr40i0ca7YDqxXouWuGmG9x1lIeR8Txy0fMrQZfS+It85nwemz4UE9/yrzAZOxq2r6qPsyxNe7DYt/hoQhgNGIVY/90ctHWBjeAqQQHUbjthtvGc6lToEcpfgHnPuxyHVVYm+uEP4z3v/+7w1kw=
+	t=1783589022; cv=none; b=Lg1MIi3I4BXZzSZEsgqnzOGyEQ9z1UlbFCVBYXMT6ahCFqj82ZwpVw5ds5Fmz07PsmwiQbsUwkC1JUoV5r600EZ/BUs/HKmO1YIGwrVbsCm+Fwapw9rI6i27BuxYceYOsWgPjwqapUh2q+3GlyWxuJE7ZLYycORlkOCjBJth20I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783587752; c=relaxed/simple;
-	bh=yC1sjjYLThUFHqGoQD2sQL9TFY2ezs034KA29+O9Vdo=;
+	s=arc-20240116; t=1783589022; c=relaxed/simple;
+	bh=ugjTvsW7OPBUbId7o5OdCJlPpCtJimKjzsZpUdRwtbk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PANDr/e6uSgt1i1gjD6lfwrrVwUq2QTtFKEg+8ZV/gAWMI+nYqU+ZwKakAe+E20x8KYxvugcnr09L0jsYLfWrPnm5vgdKVdGJZksKpzISGkQiCG1KEzLbVyGIUInryLnB+9UFZHbneCxC+bLb3NlrvSo7rFEhdNP4XjTne0v16A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=O/NRCGTR; arc=none smtp.client-ip=209.85.221.43
+	 In-Reply-To:Content-Type; b=lA34yYzVQ0AMoo8aUo8lJ0IkzqGPJB0I4rCRfcVlBSBM/fG3bckAzIwk0DNeaFxaODuxSsxXJI5gNk8/KU9XJ+BoOoCcvD8emTL71ghHzD0ehe8TeABWNTDqrhtRKDJRTjNy5oIVlWsFrpQpvOGsKmatKg91QhoXsdD8gwWMLUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PkysJBkT; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="O/NRCGTR"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-472326ca506so1132866f8f.2
-        for <linux-modules@vger.kernel.org>; Thu, 09 Jul 2026 02:02:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PkysJBkT"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-476d8e647e9so519402f8f.0
+        for <linux-modules@vger.kernel.org>; Thu, 09 Jul 2026 02:23:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783587749; x=1784192549; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1783589020; x=1784193820; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=d0Wr/vs3pPNDtkRH3jKbQ+uHfzn6g6MnSZd5SVyEqvs=;
-        b=O/NRCGTR1c5CqPYucGgMtKnKj5UW69i6ry59IsKIXA8uYdd+RrX1jad3bYc4bOIZgE
-         VF8EM5YtJKVx4KHSGoAbLLFEAdb1QmaQTLPxX/754Xs4+lLNTDHsPUtJBQz0XApjzh/D
-         rJl6PmlfyjOG6Z2qad8qSkOT7Meb14MQCjqbYB3gU6IuLqJvptDl4Yda5qwFUzYyIiJ/
-         tKy4ycutBTqL3AQUPBAdSLmENX7Hd6wMlN83Dkdtf68voD1NF8VV/VrvBTAR+5cyOuHh
-         rJT9LTAj4aRBcbDUeO1kaW/iY7cpsic7eLhvZI2onM8ToLmzxQSKzTGPk0sRSPhs+emj
-         517w==
+        bh=VTVYBQvEkKaNaBd+wNBZ0176hbApIof794YXIpaDqoc=;
+        b=PkysJBkT/2ubq7Rs/W9EvuXitlJ1Wj/zurEHVRefIQpRw76rym0XbCKa56QUN42nfT
+         KsximHxCU0sWa4rul/a5MhrADKlEt56rXwyWogJLNLgBzHS4dUt+OLXuz0Q+5MnClX+F
+         kAytoKaIGE+UgwPg/zf7ZGzS2BvXxvNBZL6ZJYrWrXHBpESOUgzDgJKPFmAzvMgX7oYM
+         X+TH0K1ZgtRG2ARjrWOTHD+MeCjsgiV6ZW3jcsacMynLUXRGkR2xtJq3OQOxe/wwmoJW
+         kJrhDHGugkzJ6ZpwLErSu+JutNOklN08uio/N7v0Mb8/h4W/MJ3zdI+gSPZn/FK0CK1J
+         Zigw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783587749; x=1784192549;
+        d=1e100.net; s=20251104; t=1783589020; x=1784193820;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=d0Wr/vs3pPNDtkRH3jKbQ+uHfzn6g6MnSZd5SVyEqvs=;
-        b=lEdxfPJfT4g6RBdqibN2ukcmnJpBMtPMEbM8DQYNiJk0c3RM1KiotWymRMtUueTddw
-         iybw9zzod6Y+Vemfffmvt45bMKufJZdATGzWW2gk7Rtj1wJVUDI46sCDsWPQHfK2B9kY
-         qB9dU9WMaqQnbe/KuXPoBhGDsr/lrvxpZQgXhSgrUrudm9p6IWdxxuaTfwSsf6pNsXcx
-         u2fWFIViTZPv1bUjxU0YjIW5tq3vmqaF5+D2hzyKKPQTBo2+ULQc1UN/BVJ0JhmcHDRP
-         VgqtMfL9Zfp2myBQjFeSP0krWJPH1mYGmeb9mc5JR3cVEEpCL2mGoBCUEMHPBxBuzEZv
-         FYpQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro3kQsIYCGGqANMiKpkQMz9dVqQ+Jya19mODUdkVQSNHU2UjJG/givebN+Qf1ebdzgGUlWl421Ga4wz6vpw@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgsPuMNL9lNhm+f9zZeVvXazUP7P+ZiPVBLyamEilCKT50USA6
-	sqtKgWkwwe+IowqNXgO+E5OdEN9SlixVVh5zN2/tRSyA2PyrGaktmDHspXIiIyviWio=
-X-Gm-Gg: AfdE7ckLee8ClrDm1WcCdeqQYAIKygZUppRFOrpAIkeFhjMJyavXaawTNw8kLMTIhJF
-	R3bV2AoADOr2Z9Na9wVcwGspqxFq0ODBGk9Ub0nEbsMOY2mLPwWpw1hWrbDd6VgyALUwiwB56EC
-	wqvVvdYDbnOuRo1/j235p7EEnA+qABsvuaTZUwiOlCGgiQ1WtsvVO1Yv/aPf558oCT+Mw1yg48/
-	OEgtVfdcAdbTqVvM4kVW4f9hrg7V6VJ31bgv4ikyfjRu0Ff5asFI3bZhAJ4P7j04VS3dafFFcXQ
-	F5tSBfgO45YAym9hO5wqp0St5Ys02vERz/fEbdmZWss0t4oxy/cFYpM+Wa3S8qmusc/GHvItx8+
-	eU4kTC5cP67oTgtgaRB37fRSiyORtKuNp5hNWPkFB+8QxSkKBgiBAgSX5piQtgf1Ent/Gx3IuRL
-	ACWPzWbxjRLgo4WpofKiIkQGEYStzT2EUmTA==
-X-Received: by 2002:a05:6000:2385:b0:476:8a:5 with SMTP id ffacd0b85a97d-47df076a5d5mr6135243f8f.34.1783587748960;
-        Thu, 09 Jul 2026 02:02:28 -0700 (PDT)
+        bh=VTVYBQvEkKaNaBd+wNBZ0176hbApIof794YXIpaDqoc=;
+        b=m7iAkk+g4L2kAwg94r3EcZKtzBBDtI9+fvRuqTGgFS4APRtvOAPh6uRETtgEPACxHb
+         /CLOS5LcdKUVElApY3BxIvjLBuf5M8HQtvScvFrnQ7eKAizNWeJhurYVDVEJG/A9lNVw
+         H1j6kC4PCHm8Sp4wiE4a4ru4wRPncfg643E9OqSE0qW00RSW6y3AXkyBEh7bL8BNKRnf
+         mr5fTln15sQ2+xODDaDwZO1efLMbWAhy9AQmGzqS6quQb1d5MZgxrrI2dmeDYCf2tf3L
+         UR48zHPSSoflP+aVm4+yy3Stap3q4BEonOMl053xBS2Oz9T3abqFqy0xZmJ7eE10NwMr
+         xs7Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rq9ueqV7I5tWDQktEeHo7o70tZAnFN5Aux0uQAMl7u7DhgSYpigIuznkMLFrYPZNfVIVB5DL2H8Xi1cXTab@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQtOdwO0CZdYtY0G09RocCc9MdzE+PdCk0I1ZlbV/UuxK4Yh7r
+	NtuSntZBJkecjWblyEN6omfVNif7gCFvhPpmiy9+V1Hmt+dk5RvnOig5mf+UoV2CifM=
+X-Gm-Gg: AfdE7ck6INOlve+eICVQcECxT4OpLYTFakQ7hRbeWexMZWx5gMt8vHDDEShOwFfMu8r
+	J2Im5Oj9ZLksrFPLNClHdxftXnCr8RrfJYS3a9KuPoaS30qiIG7YwDOa3QKVVvUPDg9PcGnK/CS
+	xzS6s+y+xVHfhHcWhmtK1VBmjGFTzHGEuppnj0KORO2/Dj/s+w9ufpK0NVt+3dzCAh7nneqrO7w
+	08PYnKF1kccC8gfnmZgOV0N2PK1Md2bRO871AlfYvOGta26/CApql6BJ8Jy0XJNfolndQf0AWip
+	IslnjS+sH4xrCV4Zw2FYznadCCbTpTfdm1NSGoDAkjWcXhvOdnblKxezSFFYKqdJUKBzzIJ4pjP
+	7rcChmKEhc5BhmtWqdhGPhGBdkXeUu3C/OWTOLmfFiQBaOtYsz25MuPz66iB6nu501/s9vEvOjO
+	Qlve9F9Yz9gwNvpv8oRcjIQFqxrXCQeBggNw==
+X-Received: by 2002:a05:6000:4709:b0:475:f0d1:eb69 with SMTP id ffacd0b85a97d-47df07c5accmr6852609f8f.54.1783589019599;
+        Thu, 09 Jul 2026 02:23:39 -0700 (PDT)
 Received: from [192.168.42.79] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9e4d780csm50519133f8f.11.2026.07.09.02.02.28
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9e4d6e4csm47272862f8f.10.2026.07.09.02.23.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jul 2026 02:02:28 -0700 (PDT)
-Message-ID: <837ef587-c8aa-479a-9b20-597fb987d051@suse.com>
-Date: Thu, 9 Jul 2026 11:02:27 +0200
+        Thu, 09 Jul 2026 02:23:39 -0700 (PDT)
+Message-ID: <945d18e3-13b8-453b-89fd-05229ab37e96@suse.com>
+Date: Thu, 9 Jul 2026 11:23:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,45 +69,56 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] module: Remove unnecessary module::args
-To: Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>, Matthew Wood
- <thepacketgeek@gmail.com>, linux-modules@vger.kernel.org,
+Subject: Re: [PATCH] module: validate string table section types
+To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Siddharth Nayyar <sidnayyar@google.com>, linux-modules@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20260604110455.1608038-1-petr.pavlu@suse.com>
+References: <20260708012107.1621513-1-tweek@google.com>
+ <33fba1b5-d107-46cd-896f-bd2539a4a0b6@suse.com>
+ <CA+zpnLfpNPoVt8ZrN8AcjNhyYHfB3G-VbykVUNZLjQhsqiP=8g@mail.gmail.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260604110455.1608038-1-petr.pavlu@suse.com>
+In-Reply-To: <CA+zpnLfpNPoVt8ZrN8AcjNhyYHfB3G-VbykVUNZLjQhsqiP=8g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/4/26 1:04 PM, Petr Pavlu wrote:
-> Historically, various parameter-handling code kept pointers into
-> module::args, most notably the charp support. However, in 2009,
-> commit e180a6b7759a ("param: fix charp parameters set via sysfs") changed
-> charp parameters to kstrdup() the input string as well. As a result,
-> module::args now mostly wastes memory.
+On 7/9/26 3:56 AM, Thiébaud Weksteen wrote:
+> On Thu, Jul 9, 2026 at 1:40 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>>
+>> On 7/8/26 3:21 AM, Thiébaud Weksteen wrote:
+>>> In elf_validity_cache_sechdrs, section sizes and offsets are validated,
+>>> unless the section type is SHT_NULL or SHT_NOBITS.
+>>>
+>>> Later, elf_validity_cache_secstrings and elf_validity_cache_index_str
+>>> access the section name table (.shstrtab) and symbol string table
+>>> (.strtab) headers without first ensuring that their types are
+>>> SHT_STRTAB. If a section type is SHT_NULL or SHT_NOBITS, sh_offset has
+>>> not been validated and may reference out-of-bounds memory when
+>>> dereferenced in elf_validity_cache_secstrings or
+>>> elf_validity_cache_strtab.
+>>>
+>>> Validate that both string section headers are of type SHT_STRTAB before
+>>> caching them.
+>>
+>> The module loader should normally at least get through the signature and
+>> blacklist checks without crashing due to a corrupted module ELF file.
+>> Failing to validate the offset+size of .shstrtab means the module loader
+>> could crash before the blacklist check, so I believe it is useful to add
+>> this validation.
+>>
+>> How did you run into this issue? Was it observed in practice with the
+>> GNU or LLVM toolchain, or with some manually crafted module?
 > 
-> Reviewing all kernel_param_ops and module_param_call instances shows that
-> the last code still relying on module::args remaining valid for the
-> module's lifetime is simdisk_param_ops_filename. Update it to use kstrdup()
-> and then remove module::args.
-> 
-> Petr Pavlu (2):
->   xtensa/simdisk: Avoid referring to module::args
->   module: Remove unnecessary module::args
-> 
->  arch/xtensa/platforms/iss/simdisk.c | 38 +++++++++++++++++++++++++----
->  include/linux/module.h              |  4 ---
->  kernel/module/main.c                | 15 ++++++------
->  3 files changed, 41 insertions(+), 16 deletions(-)
-> 
-> 
-> base-commit: e43ffb69e0438cddd72aaa30898b4dc446f664f8
+> Thanks for the review Petr. I found the issue while reading the code.
+> I am working on a separate commit that reuses some of the ELF parsing
+> logic (in a different subsystem, with simpler assertions). I was able
+> to confirm with a basic PoC (reusing a valid .ko and replacing the
+> type and offset of .shstrtab).
 
-Thanks Max and Aaron for the review. Queued now on modules-next for
-v7.3-rc1.
+Thanks for the explanation. The change looks ok to me.
+
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
 -- Petr
