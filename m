@@ -1,67 +1,67 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B86AE2D0C84
-	for <linux-modules@vger.kernel.org>; Thu,  9 Jul 2026 08:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178F03E5A01
+	for <linux-modules@vger.kernel.org>; Thu,  9 Jul 2026 08:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783586755; cv=none; b=jyLTCGR8TrJncZFrS8nZ/lFtcCoibFuW2lU5VTb22pnNVttkRfKcK3LVduYIhQa9R23ZR1ilskt6y9tN1P46f1kT3lomskDTxA4/PLR5P4M2SB1uOjBY238ZfPKUSGud1PYEb0WPRwYSzeWMLjie8cCIOlwANwN/0cbA4/AYdGY=
+	t=1783586997; cv=none; b=upAJ2sn9cAQIAW4OVunqL1N9cWsiCxjzC/uO11Hs1im4T+x21BXZ2XPclV1D2DCXa287zxj55XfkQ8oHtOEbBHm3WjwFKxts5Ns/J+98hzLP+hormu5O62umL9rwOhlFgZOy66tD92EPLcNeJF7+jew5/IBAyOj3KQQCdGWuS8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783586755; c=relaxed/simple;
-	bh=ynT6B9doQBr4QnMKJT8OvOstsRR5sbOUWDQiApjd+Kc=;
+	s=arc-20240116; t=1783586997; c=relaxed/simple;
+	bh=D3G7vyx1LaryI7C/ZaZOPVqV5turY+pAK3gJb0LWiRk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HHrLQ0kM/D1KyjnbavTFKJmyQ/ZTMJVobarMRKrgHk0sx6cdBqF15LvQTNJ+EYtLHA4GSSanmeGccDC52o7nJXio6hnzm3/UpvJPDPwS3uCru/ry8a9VqMUZE+5kLE74HnE8g9cmw211Da13ZQmBMCOwMKrIevt33Wx3jtNTDSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZR5FXLin; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:Content-Type; b=FS1e2YJaZf/026gakivkj0d6dNJowBQQORoT0tjxZdGDnooHBZlUO6N35MB1FnNNMETVYgOvzU6FaBfk1kUhh8qohZABbl1Ri6+vHUZXlxESqCL28DfQSoVXvPkM4d8SPbQqY2zKnDZuolsBtPaIrBT0GQD0uLBUiiWDHMRdW/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NN/CR5eV; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZR5FXLin"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-493d92b7db3so16776925e9.2
-        for <linux-modules@vger.kernel.org>; Thu, 09 Jul 2026 01:45:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NN/CR5eV"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4938d5f86f3so4729575e9.1
+        for <linux-modules@vger.kernel.org>; Thu, 09 Jul 2026 01:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783586752; x=1784191552; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1783586993; x=1784191793; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2H1sJlDeDwrabVk5ic1tNKSA+bZv0m1/b5bTIxeOaRc=;
-        b=ZR5FXLinlC1HDJZCgpxMIKhXh5Yv09ce9C1YfCEDBc4tr2m8ySJIjUk1pTLNS9PrrF
-         0KNZ4KYx02l04a0eocqCbBeQNL4PuqAbaaipuwaCj20G2K3qlonM6+NTQ1wf2QBzWIVl
-         TvMoMcZOFywDJduJq6LQhXtJjbS0KDtjdRsMg/Q+vRbY0p3JVYCF7NYh0vdgg9r/W2zy
-         yOieJvN1TI+HFRwFNo9wMpCxXkRgfhufveeRHj2cZAA9cnWksxXOdfJJWZn7EGtzRIC/
-         XAd7rC7qGsAqaaDIvSbFG/J4U7T+VmBjgPbOhZAklqXqoXd/yiM075cwYyHYgI1affKb
-         zXHQ==
+        bh=s58vYGL0ZU4Qa0OIc631IRExqLjBaMvN8Phb7wDl8/0=;
+        b=NN/CR5eVKzpEgO8wSrWf/i4GTJ+iV64vk4Y5G/qwMNYyB2JXW4o/TWpCW2aWQ7g9Ua
+         mI61rBcFuEwVcRZHRNoxxafTN/XlS+vdjctCnz4aTt/j1b0MHWgyR48XFeD+Bth1hR2e
+         dUKwFiQPtkUUwuoZA/nXO6dTvdEv6zd4bEHaDxnqaUc3PQ4P6m0VuenFBYGP+cTM8TKU
+         I96MYckzzOkSQ4TtI0SMKqvinJ/qeX0cXlyJb0BxCN5eelqK3ccIcEnf4uFeI46G2D3q
+         iTrq8kcJ9FQ6RU5zEMbEqg0WTwQAyu4IgzAaQ1DVGlTgfEh5o6XVbjjpZ6VgxZhevz3Q
+         sFQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783586752; x=1784191552;
+        d=1e100.net; s=20251104; t=1783586993; x=1784191793;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2H1sJlDeDwrabVk5ic1tNKSA+bZv0m1/b5bTIxeOaRc=;
-        b=ZIe7pNapY/t+Ir0F8hMMAv5P/Xi8ln0QiNA+q5VN2jlSa4TAgXgsUphNjdnCXLW4Sk
-         YvGtlbwh/s2rP8QQ/rtpuKhgha7BvEmruCt4QlChumiXoH65gAePesbFghl5aop4SuRd
-         canefhlz8QskiojG6FMky/wYriqjrT+pL9I1dQ4D0/xiWZduQFPrCuAH71YRWEAg7GYq
-         +BifmkfHOJ9Edlp295MAX3sk1NwHEwwWvhmkAPuE57VbR1vcL1jrQz0h1FKvmHwTZXXn
-         bozKa6fRm1FRub+9sGea/P39vUrPSVsgvqMIIpYv24YvgeFJcYASoNvshGmDhAT/11sB
-         jdaA==
-X-Forwarded-Encrypted: i=1; AHgh+RoMt3MQK3jgjQ3X3DGy8cE31htP48UnojqrqeqTJQBleAHanp2vu2uU+rTn+pdohSZUzY3/vCc6U+EkOXR3@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkfRV7zWoS8IrTNp6S8L+nqN+X+RdfravhWxYX0c0zcKAIOTIQ
-	zwfoGnKLVZIImk+uNd0L3W6HZ3vdoMRwDcA4i6CQa8V70nb2sYqDMXGn0JMkfVignxs=
-X-Gm-Gg: AfdE7ckLxBiRN7FDBKhupT4jR8H1RwrjH1+R+qS098OL1ffCRUY2FIIy/tdElvPpcHZ
-	//kbwZTbKelmZhc7fgjg3di54NcZKc0FDllbkbtseBOddzsbMcvMxXg4T3mdW++fV8/hU7o/nsL
-	0BLP9FABm+HP+Q6a6hhoJz9AsRk3mSUymeRoeMsiNvXu2Xh6z+m42KE04P3MBuoeNTUCfUVqYDy
-	+tiuo2m3hiP7mbWJ4s6oCsF+DX+yrffbKif5CusttfpTCCmLdTc91s4Uq2ImZ9f21F9QNs1+Bhd
-	WeOCww3leHiWjQiRl/sW3h5E75YZ4TxJaDcvLSgwV+f1poAvxnj7TEekfWr1sPzF+9iloPi34w5
-	34T+toh/FjE23vZHfcVn7qPlVyty62C7I65jArbVaR+rPVrg7ubPp7RcoUJirUpG9eoDCFffIn/
-	nUNlvBEHF5MGvM7lkGs/I8utrW6/17mjFIUQ==
-X-Received: by 2002:a05:600c:828c:b0:493:bed9:b53d with SMTP id 5b1f17b1804b1-493e68ee07cmr52838085e9.31.1783586752103;
-        Thu, 09 Jul 2026 01:45:52 -0700 (PDT)
+        bh=s58vYGL0ZU4Qa0OIc631IRExqLjBaMvN8Phb7wDl8/0=;
+        b=YZpXD0+7j0OyFxCGMzak7ky2mg7eEUSvaN2iWHZdkU2QrkzkG/A+i86321J4ZtS+2F
+         fvOqlvqNvEN5Djai+Z7RUlY2KCaf0gp++CnAHdlNuPT58ycura4J8F2oh58ahThtHMIl
+         gxaWBgtJDXiPOi67IB8zg3Xoz+Rc1DMFB+FJRk+93SrX3BC36m3EdMaZOgM/Frrt94e3
+         j5lmjj5Ou5mzM0qvh1x5Ye+d7wdWLLVcoyQgMrYxzyMmLoC7veNHtIxgQ6DbVvsoB+Y+
+         4ljou5RCydh0DcYPdIRIatAHSCMKWz31cvgjhELY0GpG4SgVO+YUzWeRKAutvX0GgRXD
+         Lr7w==
+X-Forwarded-Encrypted: i=1; AHgh+Ro1uX3N5Y1tmffaLGSEjm+192NkW6wKVuDVHftfXFr3fmS9Hbf+MUB1dKD+eivAbTuCDxlCgGqTvBIwPAlF@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywe5TlKeefiFU9mHdTWbsXTYj42DGUWf8kYfth9U3x/4/1MgUYS
+	2JccNqLK76YVCoKnmDU+zJSDemcPZNV6JqxdX+IMhTRL/LcILSgfhOrPjkSXok3JHvo=
+X-Gm-Gg: AfdE7cmsdMFgR5UKcUYRFOpIaUZ8zYTW6HwIR4tEweg1QBWl9Pwvth1GavFqoft+0ee
+	nDDQ2XWhm9J4ylj55wtypeOzxDE+G/o6qKBboKYQHJ8XVjxmhmY5bmacruotqjhtc94kkFlT4XG
+	tHEEk0WNPNGKKYjVsTJBiUvoYV4uyfCwYaGiu3lF8iYEN0URooHTfwMSUOTF+lpoa3b+DBq8wLV
+	YGOqwq32HW//0Jhhz7Ase6u/2Uigvw7hKmhz9ITqQFrF8qkVds/G7czy4XOy9D3UcFfJqzoUKkq
+	Dap0iD4pEBRL1AlZfgkEWOUq3synrctCM9t/PHikVRuled/3wOH0nmyFk38fmsocIyASHN4KgD2
+	Xmwtl9+g89oB9O8jrt3QePXoTTMfznuZBm7/wOVQ3sDASCrtd8Epguc5SRE2a43kJHwGhrcio3A
+	EYJHZ2TTpCB/e/LCT+EwfNmg94SQ9Q4rrEOQ==
+X-Received: by 2002:a05:600c:8885:b0:492:7025:13fd with SMTP id 5b1f17b1804b1-493ec32a1a9mr12943745e9.0.1783586993281;
+        Thu, 09 Jul 2026 01:49:53 -0700 (PDT)
 Received: from [192.168.42.79] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb73ae14sm42599555e9.11.2026.07.09.01.45.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb70a372sm45258815e9.7.2026.07.09.01.49.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jul 2026 01:45:51 -0700 (PDT)
-Message-ID: <833ca499-09aa-4eca-a023-e3a7168066ed@suse.com>
-Date: Thu, 9 Jul 2026 10:45:51 +0200
+        Thu, 09 Jul 2026 01:49:53 -0700 (PDT)
+Message-ID: <19204b0b-8c42-4df2-92a7-26af32e15d50@suse.com>
+Date: Thu, 9 Jul 2026 10:49:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,29 +69,50 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module: procfs: fix signed integer overflow in
- module_total_size()
-To: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
-Cc: samitolvanen@google.com, mcgrof@kernel.org, da.gomez@kernel.org,
- atomlin@atomlin.com, linux-modules@vger.kernel.org
-References: <bl63xtwmzo42pw4636lr75u7duhuejp5tariokl27x3wnvdu24@3xf5cupsskka>
+Subject: Re: [PATCH] module: Remove unused DISCARD_EH_FRAME definition from
+ module.lds.S
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Aaron Tomlin <atomlin@atomlin.com>, Ard Biesheuvel <ardb@kernel.org>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260612133920.1919352-1-petr.pavlu@suse.com>
+ <CABCJKueO3NkVrsR9H6JxFpEf=UsGZ2PCPSrs6hXJh+cdBjikVg@mail.gmail.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <bl63xtwmzo42pw4636lr75u7duhuejp5tariokl27x3wnvdu24@3xf5cupsskka>
+In-Reply-To: <CABCJKueO3NkVrsR9H6JxFpEf=UsGZ2PCPSrs6hXJh+cdBjikVg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/7/26 6:18 AM, Naveen Kumar Chaudhary wrote:
-> module_total_size() returns unsigned int but uses a signed int
-> accumulator. While the result is numerically correct, the type
-> mismatch is misleading.
+On 6/17/26 9:29 PM, Sami Tolvanen wrote:
+> On Fri, Jun 12, 2026 at 6:40 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>>
+>> The linker script scripts/module.lds.S contains an unused DISCARD_EH_FRAME
+>> definition introduced by commit 68c76ad4a957 ("arm64: unwind: add
+>> asynchronous unwind tables to kernel and modules").
+>>
+>> As shown in an earlier version of that patch [1], DISCARD_EH_FRAME was
+>> meant to be used by SANITIZER_DISCARDS in the same file, as follows:
+>>
+>> -# define SANITIZER_DISCARDS    *(.eh_frame)
+>> +# define SANITIZER_DISCARDS    DISCARD_EH_FRAME
+>>
+>> However, in the meantime, SANITIZER_DISCARDS was removed entirely from
+>> module.lds.S by commit 89245600941e ("cfi: Switch to -fsanitize=kcfi").
+>> Eventually, the mentioned commit 68c76ad4a957 only added the new
+>> DISCARD_EH_FRAME definition to this file without actually using it.
+>>
+>> The file include/asm-generic/vmlinux.lds.h contains a similar
+>> DISCARD_EH_FRAME definition for vmlinux to discard .eh_frame sections that
+>> may be present when CONFIG_GCOV_KERNEL, CONFIG_KASAN_GENERIC or
+>> CONFIG_KCSAN is enabled. Testing these options on arm64 with LLVM 19.1 did
+>> not show any unexpected .eh_frame sections in modules.
+>>
+>> Remove the unused DISCARD_EH_FRAME definition from scripts/module.lds.S.
+>>
+>> Link: https://lore.kernel.org/linux-arm-kernel/20220701152724.3343599-2-ardb@kernel.org/ [1]
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 > 
-> Change the accumulator to unsigned int to match the return type.
-> 
-> Signed-off-by: Naveen Kumar Chaudhary <naveen.osdev@gmail.com>
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+Thanks, queued on modules-next for v7.3-rc1.
 
-Queued on modules-next for v7.3-rc1.
-
--- 
-Thanks,
-Petr
+-- Petr
