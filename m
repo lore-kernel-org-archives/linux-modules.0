@@ -1,67 +1,67 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A5B3F0746
-	for <linux-modules@vger.kernel.org>; Thu,  9 Jul 2026 09:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7EF409100
+	for <linux-modules@vger.kernel.org>; Thu,  9 Jul 2026 11:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783590595; cv=none; b=SzaSk6aG0A4d+KnPnyIMVyxkYvdprlTdsY6mdPk/xBqQwmYDoEhtGlsjwdKCS5Md0AcidZ7RAuE0fH+w16rsfWOBwCJLUz22GRmPGi9Y+oY9yjD4rjTY3jAkJBycWWX96LhCWWPSdX4bgRqabXhDNAzRzFqMWXNDqBgiWZdLdW8=
+	t=1783597715; cv=none; b=KvKDDaKdOw4o8ffIH9hLr5vP1ZCscQ6vFnAvgXCneaY+DV3//P8850gyPiNBH+7BmuJQUQmR1if8ImNggw1KV29xbs2m5c90dkDdWebGX4ZXM4wH7zODxJj6mlT7I4TsUMYUz+Bv7s2WfrpX0DP7E4584HbBgj3vEk1KXnwGz50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783590595; c=relaxed/simple;
-	bh=jTFvyUggpn9b7ir5dJXF/0vV6aESSqllkJsE1EJX8x0=;
+	s=arc-20240116; t=1783597715; c=relaxed/simple;
+	bh=YcrbCGbp9yVb3kD+7VwZ981MYBaNshwP+EjRjcaw6ew=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hG307hoUIIqPzmQ4WMOeTdjKcsXppIilYZumiS9tjXr2NlcdYCqDGm8bz+KMHxbRK8sSzaDtInCYlR4CvxTGJQiIzEQwqntEXE6m4//dKozOFif2Tiib/rHqtb94Ckkhr7wP1NCVJHruzXlRxabsCfmTYNxVgrnLGwCS9T/L1fQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PovcRIVX; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:Content-Type; b=pmnEpY1yfkL94anc+ki9CkieY2G+/daUR6N0uL3nFJNIGE4i69Wo/+gUfq5Ks75HqwLZzGJZ6b1EmlG0zm3wXXGTNS4sMrEWUUDmw8cHlC65IiOUHlk2d9HFTZSPnVsa0p1MnxoQc4GWi0JaI/+Rb5mJ6aP57UOYW7NQn2msBbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PaFBy+x+; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PovcRIVX"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-493ba701891so11941585e9.3
-        for <linux-modules@vger.kernel.org>; Thu, 09 Jul 2026 02:49:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PaFBy+x+"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-493c7902f47so13855595e9.1
+        for <linux-modules@vger.kernel.org>; Thu, 09 Jul 2026 04:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783590589; x=1784195389; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1783597711; x=1784202511; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MXemn+RWgfgniHXL+Z+iccp115cwF5wMpUS4nNjdkFs=;
-        b=PovcRIVXEPSF/FJeQlxhlzoXjqZOrbs3CiE5bUYuum/kokSouOcrfuWzkJz+QZ+EEU
-         bXZutBCPHghMPuDpORpgqEkhwf9ItYai/C2Wls7hXpV8JBACI0ISAzSZohMkmVLXApNn
-         fZlxwp5LQbRlt1W9WkBqq04596J259cyQGkTEsx5D5ai1Vpe/8NCZrLqgzS5soekf8Zd
-         N1CUWCeoaHYptaJl5ecJ1ZzDp9e7jZkz7Z27dZDIG4LQ8N1cI1J5HRitdDR0mFAuAiJK
-         tCK2hnhPLuoPo29pU3Y3TxhIiW33KldSOjrnaQ78LbO8JgLXI4Yv8EB+9OvmBldN7dCE
-         StRA==
+        bh=/xhIPKXuDtakaGagT1mNyUeziKP6acuLSpzf74bewak=;
+        b=PaFBy+x+7SHjflPNCa+CDICA8wvgiDxnvtDKWQjjeU9EhcvOyejEfUI6r98O1nJGFu
+         NVp5Zk80Qk2OF9/raQgIZYDp/STvbfY4aZSFRWHHufLmGF3IxiadXQwR86YptPyrH2T/
+         H1ZNEWqd80EM2J5EzfWGSLiJVo9DAiH4p5e9gtldTY15wBjlO2iHakylbjvlJVPIwmK9
+         VGvg1RvG+wfLcWm/OlAjROU+uiNNbakrhyWYcLUffwgf9ALB+0Rt3gD0K5aKIR0TAF46
+         sjqpbW3Z6Jji0OqvCxF2DvGmcDAKtEVkWCIssowaYD+ujzQun4MHVRx2nUyKFaqarEmE
+         CQWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783590589; x=1784195389;
+        d=1e100.net; s=20251104; t=1783597711; x=1784202511;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=MXemn+RWgfgniHXL+Z+iccp115cwF5wMpUS4nNjdkFs=;
-        b=qyCxwKNHiyhHjzEZ12l5YoQ73mmLcqErYIH23UIVSW7PceqEcUweQJW9w54iCb2GPg
-         wVQ/hRp7QT6VG2d03Q3k3ToyHue8i/rL1MMurMG/3wWZuFnfA7cSHQffSIhU6MujtVAa
-         e86ct8pgF8NfJd1ygdKJo1L+uGocfdY3WjX9WOtgTSmrsp9ny41WXkTILVdK6ywFdehI
-         O53dT0oycYjH+VG0zkB5V8dCvVuMMbmS/VidX2ynpIuPBEhhumGrifE7TUgLya/ilV+1
-         YrTJfMx6fL0HG7krVZXuToaE3o/bfDmPXZCoAab36qTtKNhL7uP87/dL/yfxlY55XWmY
-         KHtA==
-X-Forwarded-Encrypted: i=1; AHgh+RqPg5S81HqVL22YY4J5klFD0eFtXdfHs/+yno8l/j6rnE6ZIOfjYrm84vedEcHZZIueGqJjYpRP+TwSf7ha@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJZlIX4ExwxnII60Xwme3a/J49hihpYUXa0Tv0rYcOtprEi7WY
-	HRRVMvjgghebMOaSgY88xCYmCcABQf8QD1ZJ01CWXv2XI6vSi+aHxDYvICXgipBy0bQ=
-X-Gm-Gg: AfdE7cnNMmrohX0fsxuwC2GyiYxcNdnSKptFb/1/L3RTz0m1w0TsE4w2WFplykHrIAV
-	A7vohGONiu3YQ3N5b83WaR/fztdYOKBo0CAOYI5wbNPfcosW5J/e3fpc7vlA2akds4FyDFZTHby
-	gGBPAul7UJX9DSqYofqMMZNJTaE+qX9yNNL7Gflf6qOV7+9O77fo54Di3dS6Grec7tfWd4JJDtC
-	FfqpdhFwwB5e9rBArjWyJz/5KYnP5UjIh+dbwVwwZXUcFdX3W4PTU9e3ODerum8OV9cc4S9rZt4
-	7WARJKRz1cYxfolcu4jFTSjqbl0mTHsl8Zm1tg6ZAA5qKMqQ+Aj64gbmJlO1k98x81DS28rW76N
-	kUeKFybh9pGUJfWRipOjEGBFXPPP8Gbnh3tkt/9GwxVg/nY/KMGF1UuOfPY+kwhgKVj44j5rO7q
-	RQZsXjSzmK51Irh4rdwNVjwz0lQ230G1NlpQ==
-X-Received: by 2002:a05:600c:c1d7:20b0:490:9782:3eb8 with SMTP id 5b1f17b1804b1-493e68c3535mr47652155e9.25.1783590588957;
-        Thu, 09 Jul 2026 02:49:48 -0700 (PDT)
+        bh=/xhIPKXuDtakaGagT1mNyUeziKP6acuLSpzf74bewak=;
+        b=Ivv+2SXrCimLrzGdrkHbuMSJRVhCfJeYSKFQm9RraxWqnHp7mKIsieMFrsqZB7P8TC
+         E5VJFhnXZOXnvhZQovhE9HEUsu4fiAo9QgNKhlxp4T4qvR4qk/fzr6jr/BymE4VGcle+
+         bFISqDnkOQFR27n+KQmL3FwFzOU2h9m4/IfGB9ZnI2I/0dtVNGSj82QlY+whhImYwg5g
+         Tez/OML8GuL7oLGvxn9gpH7Cwkk35RXpCwjvdX5DKbnh9Siu1yrdEveap/9/u/1lP8NK
+         LJzbWrp3QvLpB4+l4vynl4bjgxxaXQkFjoS9gJ6v43cxONRW4ml5DcP4DclNnnN2Pk3m
+         +urA==
+X-Forwarded-Encrypted: i=1; AHgh+RofsEe925TsjeDpLGmc9hbi74I/D4rWgWrZ83Apo/9XaBSMoi4gnA98MjVw9RpPSQ1iXztX5Z7l4tOJ5ufx@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAw0i5fCjsMXxuDAPLxSz98gr8kjVPhZV+b+27oHztfUjio1a8
+	mFX3bAQRE9ScV367u+43iKnreV6Jm94SF8nIbRmi/xqSY7v7tpwcGg/nKR9jfKtFasE=
+X-Gm-Gg: AfdE7cnqq5r3tvisUg3mTlz9dBle3Er4BvI0Qwjt8j5Y6UU1MNgDu/KfcY6u7ndZioM
+	jlMAPLq8LXPA+/23aVg7wi0gwSbAEt9fBvR2oEnmMFHLy+Ee4L4As4GpyhGXDqhXsu0HLzgIV0X
+	wMJW3F2Oue3CxLGUifNJiKz0Rqi23kvU1+dfLXzGP3OBLjkW1M5zrdhs5VCUv1iBKw376NLvEMY
+	0qbgT6IscAry7MlGZXm60U+7cmyiitFhLYeQh1lkXo0suSteyGnQaQZR5J+DWY1hoy4/DM5KApm
+	kEzViPjX9F4ImJ4BMRdEKPXKixO/wBCOT9bFKBPjbGv9GJeHlmblxVjYzeHgta4urDdTZYzwZfc
+	UAfXGaoEN9cH6uIkmTFlIy4Buu5qw4t0aWtsM+agXtdRfbUKA5ZZU8b+2xCk9SVNlOCW7ELIzl0
+	bgf4yxkur2Pfj+rgq5CpWwOfy22HB6T5D19w==
+X-Received: by 2002:a05:600c:3e07:b0:493:de89:61b with SMTP id 5b1f17b1804b1-493e6868766mr66384865e9.26.1783597710634;
+        Thu, 09 Jul 2026 04:48:30 -0700 (PDT)
 Received: from [192.168.42.79] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6d53absm47837275e9.6.2026.07.09.02.49.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6df417sm55696575e9.8.2026.07.09.04.48.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jul 2026 02:49:48 -0700 (PDT)
-Message-ID: <3e2ae6e8-41ad-45f0-a885-131a5711c276@suse.com>
-Date: Thu, 9 Jul 2026 11:49:45 +0200
+        Thu, 09 Jul 2026 04:48:30 -0700 (PDT)
+Message-ID: <52feb9b1-2073-4fcf-b2d1-a7f42f1e72a5@suse.com>
+Date: Thu, 9 Jul 2026 13:48:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,83 +69,37 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] umh, treewide: Explicitly include linux/umh.h where
- needed
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- Philipp Reisner <philipp.reisner@linbit.com>,
- Lars Ellenberg <lars.ellenberg@linbit.com>,
- =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= <christoph.boehmwalder@linbit.com>,
- Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>,
- Alex Elder <elder@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Michal Januszewski <spock@gentoo.org>, Helge Deller <deller@gmx.de>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
- Chuck Lever <cel@kernel.org>, Jeff Layton <jlayton@kernel.org>,
- NeilBrown <neil@brown.name>, Olga Kornievskaia <okorniev@redhat.com>,
- Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
- Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
- Joseph Qi <joseph.qi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Pavel Machek <pavel@kernel.org>,
- Len Brown <lenb@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Danilo Krummrich <dakr@kernel.org>, Nikolay Aleksandrov
- <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
- Jarkko Sakkinen <jarkko@kernel.org>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Kentaro Takeda <takedakn@nttdata.co.jp>,
- Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
- linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
- drbd-dev@lists.linux.dev, linux-block@vger.kernel.org,
- greybus-dev@lists.linaro.org, linuxppc-dev@lists.ozlabs.org,
- linux-acpi@vger.kernel.org, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
- linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev,
- cgroups@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-pm@vger.kernel.org, driver-core@lists.linux.dev,
- bridge@lists.linux.dev, netdev@vger.kernel.org, keyrings@vger.kernel.org,
- linux-security-module@vger.kernel.org
-References: <20260708154510.6794-1-petr.pavlu@suse.com>
- <20260708154510.6794-2-petr.pavlu@suse.com>
- <ak6STbqZd-Q-c56v@localhost.localdomain>
+Subject: Re: [PATCH v2] rust: module_param: return value by copy from `value`
+To: Andreas Hindborg <a.hindborg@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org
+References: <20260601-modules-value-ref-v2-1-12ebbf0510c9@kernel.org>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <ak6STbqZd-Q-c56v@localhost.localdomain>
+In-Reply-To: <20260601-modules-value-ref-v2-1-12ebbf0510c9@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/8/26 8:13 PM, Michal Koutný wrote:
-> Hi Petr.
+On 6/1/26 12:17 PM, Andreas Hindborg wrote:
+> For `Copy` parameter types it is more ergonomic to retrieve the
+> parameter value by copy than through a shared reference. Change
+> `ModuleParamAccess::value` to return `T` by copy when `T: Copy`,
+> and rename the previous reference-returning accessor to
+> `value_ref`. Update the in-tree caller in `rust_minimal`.
 > 
-> On Wed, Jul 08, 2026 at 05:44:29PM +0200, Petr Pavlu <petr.pavlu@suse.com> wrote:
->> diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
->> index a4337c9b5287..60eb994c32ae 100644
->> --- a/kernel/cgroup/cgroup-v1.c
->> +++ b/kernel/cgroup/cgroup-v1.c
->> @@ -16,6 +16,7 @@
->>  #include <linux/pid_namespace.h>
->>  #include <linux/cgroupstats.h>
->>  #include <linux/fs_parser.h>
->> +#include <linux/umh.h>
->>  
->>  #include <trace/events/cgroup.h>
-> 
-> There is kmod.h in here too but it's unnecessary, no module lazy loading
-> in this code.
+> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 
-You're right. I'll remove the kmod.h include from
-kernel/cgroup/cgroup-v1.c. I went through all the files again and it
-seems this was the only place I missed.
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+
+@Miguel, please let me know if I should take this patch on modules-next,
+or if you'd prefer for it to go through the Rust tree.
 
 -- 
 Thanks,
