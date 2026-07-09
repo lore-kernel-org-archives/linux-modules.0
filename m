@@ -1,213 +1,131 @@
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A653DA7C5
-	for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2026 20:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4D043933E
+	for <linux-modules@vger.kernel.org>; Thu,  9 Jul 2026 01:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783543734; cv=pass; b=T/rV4e6VDlSoQi7lMg7M9NwsbTC+BLEXgkPipUIwvEZTOEgLQvNI4EWfHAQMcAsBMO4cNOBX8n/ytjNc+1zYasQp9RJhwiUIdy/0/S/E3l/isWWOqxajs6gS66/nzC6chfeY6s5K6MYL18MpaTv7lKsdkZgEg0o7qZdKfG/JD3M=
+	t=1783562189; cv=pass; b=uiRdYQFjg/jgTkxh1P4OI88EcVrjoQzbu3IJLdX5A312jGULeO6J/iCmLkxbizg5IKrjKcdzoLWHvt3ewqK+QyrlzihtElm9u86t/fMm+Cv5lL4SBK+OXui2PzWU56IyIzXXICPwvHzYLXdtHtSXX1bGeJy7TI1FwaICvoUZMPg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783543734; c=relaxed/simple;
-	bh=9BJdBJoh6bO5JgM9sko/x+9Pye2uwMOLk+dxbigAcs4=;
+	s=arc-20240116; t=1783562189; c=relaxed/simple;
+	bh=YdrxfBRVMx2S7wqSMtA3Ne7fpQWQzgbolKRPlOvBYiU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K0WCj4EESTW2DeavHSl30Dx24CDeSjC02ZhqbuOqTMz4jxOiNrggWfLtZugDn5yj3xqLXyjLQgug73PTQR+oCAQzT+un5RVnDjMDdAKNS6JOJmsspUV18dyqjl/zbsSX2beyGpbel2ChKrab60XaTzgxLwWmPq2CZOwQFAFmagM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l0B/aZXH; arc=pass smtp.client-ip=74.125.224.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=rTBIplsUam+12XoTbEPQIMVBsr6LVS4cSIe8hBF0Y9MfH9EIflyDmmgWFtpZ2A3yXGYUjJGnZaQHywf3su8ytiD7+jCP+oRH5sxRvCdvB4mceahHat8Yd8kX/M0i6mInCycXAtAmsxtiQXd1mrpqQnND+TX89ZQ0T6relErT/3g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AxTtUD/n; arc=pass smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l0B/aZXH"
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-6675db463b9so991466d50.3
-        for <linux-modules@vger.kernel.org>; Wed, 08 Jul 2026 13:48:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783543732; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AxTtUD/n"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-51c10e86e52so80431cf.1
+        for <linux-modules@vger.kernel.org>; Wed, 08 Jul 2026 18:56:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783562186; cv=none;
         d=google.com; s=arc-20260327;
-        b=IabDP1gf/9m2QtzbiwtwidCQdm5TDEUBA7sN7h2HJvd/fwOtHfGbkvj59nmINpjAAp
-         prwGQGB3mtBnzwXe34A5rU1QNi8bpOCzxuOFFj6ah70uSoxSFkq8sqoaAebZOZQFmRw8
-         c+2oH3lnmOMhaT0nASGFKRVmh/ilWW0wmeNAVAe9j5pKXCnKsS+EdzruJXVUnkO9Gc6k
-         z/DTd48k6mTxyoPmC9QqOQu1XOwy+0lLqRvPPs8ACR02LUIXnIDTFn52xvXS699VY/sA
-         NHxrSd05fPhzG5+sBeH3ntn4aObvMJjwd921uV8m2+cx7niJpnpb8dTZLXgy397rj0we
-         r+pw==
+        b=TWaOtuhWvHfzZP9LMBOLONtcnjBz+rvx8z2F8CcB7POChWJUp1YZrDPhs7STUXzI7m
+         qeZ1bhsuWVx+6MazRzBCTpfWyMV5Wob+JidsXGxD9SajGUAhH+cyUiMN3DUPHKtr3iif
+         Qxzgc4xB9+N7MIEMX8tfsVTHTyhXI0vjmBdRg1Rp1iOIazNaAEc5ye7fZqp+CbfHJKmB
+         u2Rzl8DFaZNvMXAmeF2ohPdxKhLBMcmBBto8sfrtsJSTv216FrEbmOY5r6lU+983QT4E
+         N2SgPxnFYG8xo8STl2J4Bv3cew8AH5pTZhQ+i7iHOkaqGYf1pViJdKq1Mm+f/m+kJFJm
+         ngSg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=0Su5iC7GyWFqasMSbo6foK0Ud8wXMN0xjdKWMhHqwlc=;
-        fh=5cs6b6d7Xpq2ANmcE1sW6J73OLOoOdfaXy4E0BsYxz0=;
-        b=HfSQFTmTzM7fy1qj2s+sTTRkbp8ezhX31GxhB0e4C+n4lbtSpH8d2NUzm3Vp815IQQ
-         q63l1o9NERExhQtwbBa1bIhoKU8/x0x2gg5H6jvo1WutQg6E/dzdx74+e7ZLDBT5Zg1X
-         /S3FJFbTmTuCwwaufGQvvK0XvtKL2TMG12G0oG8NEQPSLvYTAnYOsC8lVyzmEi9GoYO8
-         U5MK8o6YrBgh0PdxbzXDjbeyar1gJRtY6M6LEw5heifkn0Xum0gq1Q1FRkW8+esWrfAZ
-         i0COux28tn+fDgk7gXs6WcRQbk6VU2mWg+tHCCj150c2qBd0cTrpxf7M408z4Yfx+ZWp
-         CXfg==;
+        bh=YdrxfBRVMx2S7wqSMtA3Ne7fpQWQzgbolKRPlOvBYiU=;
+        fh=sB7tPIi9CzT/lzACbyg3acMX2iWfaLythQWVP4/hOY8=;
+        b=GbweSoc4MnR1VHoJ0U5Sgcxvg1BVHSPAIGbkkuBh/OYi2TxwJrMURthsp3s/pthHyG
+         YQ7DIGR7Bt8c6Lrn28XskNpGDMnPsvfY1ZDmwZSGxeQz+XN/Kd80Tu1D/Fe0JI3x2NUh
+         Z8Wu5eTrJvxXFl3xKCIU12CePGeQae1BHaCMyaFeC7O24CnkfJqcS2nXnrkwsDTr0JiL
+         2t7/gRWlHK5xQ4qcn0vJwjCGlTzlew6+mfR8GIZyuBxsLAsx5kR30LH0Q8oD39Jth9yn
+         A4D0iZNgBRfk7r+/y4q5jv9f3GPUG0Ky0xBsRbdReMIDKAYchLBuZEnHQVB2tq1n+kZb
+         XIyg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783543732; x=1784148532; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1783562186; x=1784166986; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=0Su5iC7GyWFqasMSbo6foK0Ud8wXMN0xjdKWMhHqwlc=;
-        b=l0B/aZXHJIjAW1CHrPwYrI6BsFNib5buUL1urvZKilqEC9TsteOtvgnkdrwXOfqlFk
-         ClTxONulLw8QWEN2FkO+cpPca5jLjz3AsCFVpq9/XI8Eywe4D+cvMMfV17VZ/nhnEPnn
-         HnUiFTA9KBEjOHDEZ45BUzTFaqRdKa+eY9tJHrlYkwgTvxxGE5FY9EF8wx8N22944U9n
-         RTyi4igILC9UfBbwYKvBXrvytwn99+NALe6WzgMmQI45iRvhHx6G5ikH6dwey5TIdejD
-         WPYm8pHxcGFjYGc4Gv3tWFDRVdfYSE8vqZ/qGdSPDbFCpLPmmloz6g4wuWEUjXJcSz9h
-         F+pg==
+        bh=YdrxfBRVMx2S7wqSMtA3Ne7fpQWQzgbolKRPlOvBYiU=;
+        b=AxTtUD/noe0HxJLoW4psllJkyQ8g6N60TrtbzKt0PdoQu3iZCv0NTe3suekhpM9AXW
+         gzX+RrEfJ74VDXxmVIRbowRLRd2B2gSmMr5flfmzV0sbXFLZ7Tz4OiJrhzdDvpRYtt3P
+         lKuEhpJUaXDsdfqUu+k2r6zWkUM/QDQdQkUqV9Hk3WlL4lQJi2ztPCyuoMGBL0mPmJey
+         WsCxsuzfdP6dMMxQ3csJmAVrhmdhFCXM8dVcYq2hC+jQiQ1ubaZIBjHW/Pq2emTQ8/bI
+         rWzvzwkm6nrlIIO+04RGvFiTlPqmHjV0mn6nK9XlbUr7TeSPdcMCM8fQ9B02t/pzkVDo
+         M2LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783543732; x=1784148532;
+        d=1e100.net; s=20251104; t=1783562186; x=1784166986;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0Su5iC7GyWFqasMSbo6foK0Ud8wXMN0xjdKWMhHqwlc=;
-        b=RFg85+VmTRKvXtiebizVUvcN2GPxxPWsPHt+8rt96VLkD4hM75WgYoehRNscKCj/Wr
-         E4e3LinJfaqHRGBKOaK7pF3kKUMDWGp2Pnm5GIFm/DpLkjETvlA5UAz63F0tl+bYKshk
-         d2qvquN1smt2Je3evNq1qA15ruOj8jrArGxszKMQvEqc7Devy+3zhSBHTfY7ULkCtO5z
-         x2PGmZPQIapGZduk8TP3CIfpTriCr0kiIlOGKEYVkvCq4aUvM3hpC9vGKKOTVnsLtucE
-         W0kDd/xz/pECOoJPUdd5heA14AfbJr8IvfzWHmtFRnFDKil2Imrv7YlRmBhrEuSNR+sF
-         fWOw==
-X-Gm-Message-State: AOJu0YzUK3ByRFkHFF8NrYkPQG7MUNQPmd9lyy349h62Kr6crvEfBCWm
-	ygK0Y/oJXD34dMu0KjYDrjgs65hsU9fEmAiP8zLdVf/0puenZHprDkD+scTyhKXC1XjsQlOgiue
-	H8BXci0LmaOTU2S+lE+f2ArbjBwEbjMTvG8Cp
-X-Gm-Gg: AfdE7cnVSF9dCjgQNHq7Obcw7q+TfXHaavJUccCV+nw/LSQ+hmgOj1lohqYWPxtyFji
-	v9WHvnYUTPZBioVUYQdE1HswAwXBKIL1lvgzdw/dzHBsBOZ6Zn7GEqKnS48wmw6mOefjmAPwWtk
-	VtGAaCV2xOYYVQsaptJaRlBRDn0XVTMU1Ic3w43SRhIButvhYbUGRtymKEvXsarlpNlBIGVveps
-	7YMZTQODn7Wo6x7F4Q+joVdVeQA2QKyfBzzIpEnMrR5U8+T0gpqwz2/9Tf1JHpGD2Ap2ALch44i
-	wTHt
-X-Received: by 2002:a05:690e:1348:b0:667:b08e:2a2 with SMTP id
- 956f58d0204a3-667b08e0ae6mr1729856d50.27.1783543732085; Wed, 08 Jul 2026
- 13:48:52 -0700 (PDT)
+        bh=YdrxfBRVMx2S7wqSMtA3Ne7fpQWQzgbolKRPlOvBYiU=;
+        b=ZEuYSlKzfs2zWXPepvheQkUYuvD2X3V7d7AP1C/0okIZ6c8+8+/slXMuKMr4X3Jl9M
+         vLdA1XGyB5a4NbRnXWM5HcWTcslmV6wQFpbXO/g1fxsjWdsSHpw+FSq+FYRllz2SwXeL
+         sJd3XRCtcMjkZ5CraRwvaXSGFU8GReP35y4uzfUnF9AcnX8SJmOzjaeQzqHZ9C79Wspc
+         a0D51r9px8cWdHUW+4UKVq6cHiVgXt7dpcaC9+zTv5A8Xr1vWMpOGP4KAXAETS40fx6/
+         4nUuDRA4lK4gRxOB2YoFFkjR1gwGGXmGgG/RuTi2ZGtJT51BzmGFfwd2cMfCiuewfu/W
+         AQdw==
+X-Forwarded-Encrypted: i=1; AHgh+Rox1HIOjy2JqeXCRQRCi8XKj1o+9jGROuBid7NBppKPb3m2M+hh8NUjaNnwLYfNiHB3IQWv6FRYJl4R5cja@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfL2EVVwz7ciSftXvSoxfzT+bCuGc7/kBVUjh4fK4GGlA64FaN
+	uxfz7tJ2UyFhJfTEXkYzLZtWU7+Ai8g0K050MdbNmkEzPgeO0NWIQZaErWs3cOhKyOQIecflTg3
+	DyBz91WbSvtAnorgWrsDy1YH7Hqex77PWtVHzoWtH
+X-Gm-Gg: AfdE7clZcv6Nb7zXraP+czkIHvbiG+qHDlfc+R/aj1xa297I7jhQ1aqFyRCjDmv7fZi
+	pHPPSel7NBbdSWy4GGKIkC5zo6eH7p3GfuP2kICAZNNxYIHI3Dj+GCTGTioa/Ay9bxA91WTFkbe
+	aNA3vhTFOy6uoWJBB4Nr2XrR7ba7Q50W4eNBpZAyp/xB8vCjwC7pCzMrNFZXe1O6tzPKaKaB2SL
+	45FqfQizxo9UigX7LAM1ly14WB5ytYgv5yTyrzXQ4s94+uPwe0yZFYOMPuImFwxoGdOOOXPCfSP
+	n5hftdkOe/R24+wMyIC+8Wi46oQ0/3oM6kbPPFc2hXLZrb+zR8xdv9Ox
+X-Received: by 2002:a05:622a:c13:b0:51c:97f:83a6 with SMTP id
+ d75a77b69052e-51c9c622acdmr1638411cf.17.1783562186165; Wed, 08 Jul 2026
+ 18:56:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260707-dd-maint-2-v6-0-381f3edb0045@gmail.com>
- <20260707-dd-maint-2-v6-19-381f3edb0045@gmail.com> <20260708023725.52B9E1F000E9@smtp.kernel.org>
-In-Reply-To: <20260708023725.52B9E1F000E9@smtp.kernel.org>
-From: jim.cromie@gmail.com
-Date: Wed, 8 Jul 2026 14:48:24 -0600
-X-Gm-Features: AVVi8Cef1o43P0BcIrbKibkv5LgOWcV8WhWKRwgZJ3xzNcwlJwrD7Ugwb6QN5b0
-Message-ID: <CAJfuBxx+5i4z77hC5BEDkyegE0FWjGRfBfWM6M_nkk94btfO0w@mail.gmail.com>
-Subject: Re: [PATCH v6 19/24] dyndbg: pin class param storage to u32
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-modules@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20260708012107.1621513-1-tweek@google.com> <33fba1b5-d107-46cd-896f-bd2539a4a0b6@suse.com>
+In-Reply-To: <33fba1b5-d107-46cd-896f-bd2539a4a0b6@suse.com>
+From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date: Thu, 9 Jul 2026 11:56:08 +1000
+X-Gm-Features: AVVi8Cfj32BRp1NgEd23wzicSKCQBg78yZ1hlfisRbrL5qNY5kannCSsPI0Dhps
+Message-ID: <CA+zpnLfpNPoVt8ZrN8AcjNhyYHfB3G-VbykVUNZLjQhsqiP=8g@mail.gmail.com>
+Subject: Re: [PATCH] module: validate string table section types
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Siddharth Nayyar <sidnayyar@google.com>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 7, 2026 at 8:37=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Thu, Jul 9, 2026 at 1:40=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wro=
+te:
 >
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] Support for classmaps with more than 32 classes is broken, cau=
-sing undefined behavior on 32-bit architectures and silent truncation on 64=
--bit architectures.
-> --
->
-> --- Patch [19]: [PATCH v6 19/24] dyndbg: pin class param storage to u32 -=
---
-> commit df6ebc9b56fab43581ec7860d30aab6f33272ee2
-> Author: Jim Cromie <jim.cromie@gmail.com>
->
-> dyndbg: pin class param storage to u32
->
-> This commit changes the storage of dyndbg class parameters from unsigned =
-long
-> to u32 for consistency across architectures. It also shrinks __drm_debug =
-back
-> to u32.
->
-> > diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> > index d99c69b9ad12f..af05f4ae3b55e 100644
-> > --- a/lib/dynamic_debug.c
-> > +++ b/lib/dynamic_debug.c
-> [ ... ]
-> > @@ -643,24 +643,27 @@ static int ddebug_apply_class_bitmap(const struct=
- ddebug_class_param *dcp,
-> >       int bi, ct;
+> On 7/8/26 3:21 AM, Thi=C3=A9baud Weksteen wrote:
+> > In elf_validity_cache_sechdrs, section sizes and offsets are validated,
+> > unless the section type is SHT_NULL or SHT_NOBITS.
 > >
-> >       if (*new_bits !=3D old_bits)
-> > -             v2pr_info("apply bitmap: 0x%lx to: 0x%lx for %s\n", *new_=
-bits,
-> > +             v2pr_info("apply bitmap: 0x%x to: 0x%x for %s\n", *new_bi=
-ts,
-> >                         old_bits, query_modname ?: "'*'");
+> > Later, elf_validity_cache_secstrings and elf_validity_cache_index_str
+> > access the section name table (.shstrtab) and symbol string table
+> > (.strtab) headers without first ensuring that their types are
+> > SHT_STRTAB. If a section type is SHT_NULL or SHT_NOBITS, sh_offset has
+> > not been validated and may reference out-of-bounds memory when
+> > dereferenced in elf_validity_cache_secstrings or
+> > elf_validity_cache_strtab.
 > >
-> >       for (bi =3D 0; bi < map->length; bi++) {
-> > -             if (test_bit(bi, new_bits) =3D=3D test_bit(bi, &old_bits)=
-)
-> > +             bool new_b =3D !!(*new_bits & BIT(bi));
-> > +             bool old_b =3D !!(old_bits & BIT(bi));
+> > Validate that both string section headers are of type SHT_STRTAB before
+> > caching them.
 >
-> [Severity: Medium]
-> Since classmaps can theoretically contain up to 63 classes (as mentioned =
-in
-> the commit message), is there a risk of an out-of-bounds shift on 32-bit
-> architectures?
+> The module loader should normally at least get through the signature and
+> blacklist checks without crashing due to a corrupted module ELF file.
+> Failing to validate the offset+size of .shstrtab means the module loader
+> could crash before the blacklist check, so I believe it is useful to add
+> this validation.
 >
+> How did you run into this issue? Was it observed in practice with the
+> GNU or LLVM toolchain, or with some manually crafted module?
 
-A macro in a later patch (not in this series) limits a classmap to 32 class=
-es,
-which is a practical limit for usability of classmap params.
-As a case in point, drm.debug has only ~10 DRM_UT_* values.
-
-64 is a per-module class-id space, allowing modules to have several classma=
-ps.
-a classmap's base/offset lets it map its 0..31 range into upper class-ids,
-which is how a module can have multiple, non-overlapping mappings.
-
-
-#define __DYNAMIC_DEBUG_CLASSMAP_CHECK(_clnames, _base, _mapty)         \
-        static_assert(((_base) >=3D 0 && (_base) < _DPRINTK_CLASS_DFLT),  \
-                      "_base must be in 0..62");                        \
-        static_assert(__DDEBUG_ARRAY_SIZE(_clnames) > 0,
-                 \
-                      "classnames array size must be > 0");             \
-        static_assert(__DDEBUG_ARRAY_SIZE(_clnames) <=3D 32,
-         \
-                      "classnames array size must be <=3D 32");           \
-        static_assert((__DDEBUG_ARRAY_SIZE(_clnames) + (_base)) <
-_DPRINTK_CLASS_DFLT, \
-                      "_base + classnames.length must be <=3D 62");       \
-        static_assert(((_mapty) >=3D DD_CLASS_TYPE_DISJOINT_BITS) &&      \
-                      ((_mapty) <=3D DD_CLASS_TYPE_LEVEL_NUM),            \
-                      "unknown class_map_type")
-
-So while its currently possible to define a problematic classmap,
-that will not be possible soon.
-
-
-> BIT(bi) expands to 1UL << bi, so if map->length is greater than 32, this
-> shift would exceed the capacity of an unsigned long on 32-bit systems.
->
-> On 64-bit systems, *new_bits is now a u32. When it is combined with BIT(b=
-i)
-> using a bitwise AND, the u32 is zero-extended. Will this cause new_b and
-> old_b to always evaluate to 0 for classes >=3D 32, silently ignoring the
-> requested state?
->
-> [ ... ]
-> > @@ -704,24 +707,24 @@ static int param_set_dyndbg_module_classes(const =
-char *instr,
-> [ ... ]
-> >       case DD_CLASS_TYPE_LEVEL_NUM:
-> >               /* input is bitpos, of highest verbosity to be enabled */
-> >               if (inrep > map->length) {
-> > -                     pr_warn("%s: level:%ld exceeds max:%d, clamping\n=
-",
-> > +                     pr_warn("%s: level:%u exceeds max:%d, clamping\n"=
-,
-> >                               KP_NAME(kp), inrep, map->length);
-> >                       inrep =3D map->length;
-> >               }
-> >               old_bits =3D CLASSMAP_BITMASK(*dcp->lvl);
-> >               new_bits =3D CLASSMAP_BITMASK(inrep);
->
-> [Severity: Medium]
-> Will this silently prevent enablement of classes >=3D 32?
->
-> CLASSMAP_BITMASK was changed to limit the generated mask to 32 bits, but
-> map->length is not restricted to 32.
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707-dd-maint=
--2-v6-0-381f3edb0045@gmail.com?part=3D19
+Thanks for the review Petr. I found the issue while reading the code.
+I am working on a separate commit that reuses some of the ELF parsing
+logic (in a different subsystem, with simpler assertions). I was able
+to confirm with a basic PoC (reusing a valid .ko and replacing the
+type and offset of .shstrtab).
