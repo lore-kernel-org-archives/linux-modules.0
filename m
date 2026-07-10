@@ -1,130 +1,116 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016454343F3
-	for <linux-modules@vger.kernel.org>; Fri, 10 Jul 2026 15:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9E14343F3;
+	Fri, 10 Jul 2026 16:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783699133; cv=none; b=bguuSheFEaDOFduB5UojMmouWkmyVeDDJWamWukDSFLxrYz535+XSBZ8iCjA5GbxBzNZG9VDoAs3aBiUsudHT9tXYLVmNnSpDo5AK9C94mJAUaA15JGG2AGPttDRI6UwuKyuuZBXbzsGyl4/WQWIo/vWOA5GK1A/jpr7qVO/NK4=
+	t=1783699239; cv=none; b=psOJmlRN9BFc/zCXV9pns2X9K+VAEyk8BgVuE4b/czjNXOEHE4gPwGk8O4JSUJBYWUOq6SyN/p6kcjM42vCpgIDbViwIDAZ348BFxZJp6d7tgzmwe6cHjNUffOwKm0adnhh9SnIsXGp/u/aZYR+KTJYuAzn3nG1R00KoOjF8XuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783699133; c=relaxed/simple;
-	bh=0OTiTiVSo0IDemovGfT3is8+e+GAuZ+PEePU+/MbCSk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pOc5ff1g5/SGOsYmXotw2wJhqqOoiqLFscdjnBu2TlABE3WNXdyob7DiUZOg/9ljaH7QvlCV8EpfVNoQa8LfiE5eJn78g6oqdzJymtmj+VgF6bOnPjH12cTiItTfRGFrPDXNfUHsWyDwvkqviCUKLfQNxd5XHksY0z5/3s55llY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WmpG8nVe; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783699239; c=relaxed/simple;
+	bh=dyTGQVpE/XQ20CTj5yKU56GOe+OIRXiPo1pB4wIkTso=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=EamiOPrWtPhRw1BowqudDr7MKWUXr5vWZsXvvRuCWfgjprVdh59X6opn3BtkA9NFoHjqBWQsd2AwIbnmag3WbgH+rqC1Jtr5EHLN24Qd+JQAClhYixZcbsTznVjrdqiBQwyiycrgC90xtnfecgvE55tmpT/tmjBdNoY2yg83oxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=PGXC25HU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XNLBbcLx; arc=none smtp.client-ip=103.168.172.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WmpG8nVe"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-493f4638f4aso8584215e9.3
-        for <linux-modules@vger.kernel.org>; Fri, 10 Jul 2026 08:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783699130; x=1784303930; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Luf6olTEAQbJ7p+MoI/MDGQDIrig7h+9ncRK9wup6Vw=;
-        b=WmpG8nVeD4kja5GqdytCXA5nuic9I2Ry70NaevlPn3gWJP/ahnSYXfv5vkTuLGBmPU
-         5Q8D6OWrUkjsrKlcO7WTbTaIpCUrcgd43GMwJT28Zq2uTkp8iKnnej2DvyawENAu1DtV
-         +zS7latUwe9hGSfd/hhpgkENCb8/udqQi/PEThS7ggETqJDiQdnT8R1aZUNbAm2q2Sg3
-         XgivlXdqgJsl1IdCv6IlxiDx/N7vtM+OiPSJ3T95ZYbXJz5mmnJyWrRD1W6Y2FI/BOkx
-         SBCjVeLr7OzlY2mPA54Bg0SDioVuWutC/LNJSLP+uUiuyLilCn8BtQtiC/KZ7/w5AiSI
-         Nhqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783699130; x=1784303930;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Luf6olTEAQbJ7p+MoI/MDGQDIrig7h+9ncRK9wup6Vw=;
-        b=bGwi2bJBLKv7+NhISMdwd1kRqaCqTWZze0Jg9fs45d1wLhNA3flLctHx5n3sbe42nl
-         znp9c/a/wpEf8CAAeKnsPvVvjdREvBae7doXeQqFDyx9opzyuDPS09oQ9Q/kKcNa6enZ
-         6vdU53KGuXDNhWgdBzABJ66+ERC2XFVCrxnqoVqMcJ2n4+O0JRZeAGd1pHXUZunikZo8
-         BS+0FmQDjOMAE7YBtM3/nnjGCD8/4NwnZU+Dbhzay2BFpjuC4O7JTcqVg9O9XZ6e3RBx
-         DNZxauH/NTQTHt2v3wOS/2jf8joUR6ni/aqQ+V9dEuKnx4M7ngiHngD545IwUgcASZiW
-         XyZg==
-X-Forwarded-Encrypted: i=1; AHgh+Rrdr0rTifNilQHQQIBkFgwsw4ReXoq207NMTyPCh73fz+OXK5vylA/jEolXRioZ8u8uxMezH8dnTX0NNVtB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBjCzHBxjAQq7Qu4rD4l3j+6jihFu4KEk2RVxKRKhKW1hjT/ac
-	EWKy/K4IvsNwLy9w55wi/zszG+Ivu4V35E9f6fKFJUcpaS+GOU32t7aIEBKBMmBaBMg=
-X-Gm-Gg: AfdE7cm+EcpA8Xxz1Z9XUqiDuXCahEKXXVfdAG1LDpCA9JQhgaOZceTHIX+UgEI8ts0
-	LiZ/GTiAZDGMF6U4sKFwwzCmpbvSJipx1y86FnSc/kt3uXau4OpG1ywU4oUrE5tuGqu3Hh8EZvh
-	1y/fhTDQCA64xqHqYYnfROgAirty/X4fnRS5bpeRfFUQw/oLBYdBf33ZhSN3eRKn1hegkM6WXPr
-	Qfi9K0PCWOUGBDkGvp9OhHq387fDHdK+ZT0OaV+crvWzKdPWqlltseLSxY/mEqIsckM/AjSnSL8
-	RVogJdoSPGaau+Z+6GzMdwM4MlNqyvmepWAtv8WlKH32OGcmckZuFfjoE1ifhOtHYsjA9F0Y1YJ
-	3WGWs+f8PIEriP9cZxT1xJzw9ftl+WXByMIL0yPk2W67cla2zlzN51qdsZsslYVdHCvXq15eT+F
-	kn27EVoc3X134xibiaNzWYSNogThRfaW3sPQ==
-X-Received: by 2002:a05:600c:3f0a:b0:490:e974:e006 with SMTP id 5b1f17b1804b1-493e68e8195mr120330845e9.29.1783699130249;
-        Fri, 10 Jul 2026 08:58:50 -0700 (PDT)
-Received: from [192.168.42.79] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-744d6deb2a3sm5447229137.8.2026.07.10.08.58.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jul 2026 08:58:49 -0700 (PDT)
-Message-ID: <bd1f78bc-51b4-44b7-8e3c-7accc9e173f2@suse.com>
-Date: Fri, 10 Jul 2026 17:58:44 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="PGXC25HU";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XNLBbcLx"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 5D7C01400108;
+	Fri, 10 Jul 2026 12:00:31 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Fri, 10 Jul 2026 12:00:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1783699231;
+	 x=1783785631; bh=xh+sDsHpazFTFZx3vfrQLYzWsd6rDYC53w1yN+flPQc=; b=
+	PGXC25HUeUXAcKz/qiHkmChzH1MVOWeYGouVzm/oPp6aGEKRgwEuwgc9ggBcXo/a
+	MHa7n0Ka5JfNwVEs9dLzz2fO/DeUpC2ik4dDp5G63cT+C6hoLHwHGUPfCYLxRUDj
+	fIewVPCOxrt8I7LKDBZKuDeYQdp2E8tgIxYPx6amobDunhsfxhUMquC3/moTDDYG
+	Ds1PBrvobhLG6nE01Bw4W99NpJAhmIcvfiptf8RmiQR81gELlrepXx+7nt7P9NQy
+	o6HJMB1uESObxa6k1CgZd1McWyLzhjwvsFBOQJmupXeuWze7ZI3KmNpgKgknxpjh
+	lA7f4n73uqsBUGsbB6k4KQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1783699231; x=
+	1783785631; bh=xh+sDsHpazFTFZx3vfrQLYzWsd6rDYC53w1yN+flPQc=; b=X
+	NLBbcLx+dqAFyjxgTsIJXUREGwrBA5z3qlTZPQQsThv99A9v1exgNldv/S96GgzK
+	I2NLdmfILaIc1mL39di2p6XaWzOMNiVssQYD2tB8L1zCfAbMX3M1UwNZv/23jApP
+	Z2KUJvprxTi7JV7iJiJdidE8gxKxgGPuF1ZrnlzLU4InZWwcuOero4xdsNlsZTQR
+	2U4Hd988RnGABNZhOEyXJ16+BQmqH+cHioMEb9W0osD7Roj/8McjHCYD+K4J4tA6
+	qAOgDEHNGJwM2BM7A1bnrAIIBgG4dWtZXdvDk4DB1Sn04ZSifcT6ypwSKrNy70We
+	5T/BafO90sZ32PpMZSLTg==
+X-ME-Sender: <xms:HhdRaqIT0_JqhmSC8nMtSXDUZKdKw0gBvx7ukOSUGS0HBIoq0nkDyg>
+    <xme:HhdRas-7aXh8mII-V1zHB7rRzPu9BGHa7xuwaU2ZG5ttlYRewYf07tvxitJspsi-q
+    bWZl8SkfDiukgZ_JbP0m6Hp0yT4Z4maCGb6nFuPwUez5rRfqO4ptW6i>
+X-ME-Proxy-Cause: dmFkZTF/D7XEemVIzhqh+MvGbobD9yHt/GHpuib2UI/WeTSduHiFLfsOdDu67+Vs7J1+x9
+    OQPv9XejemVdWAhKn2RvlCAuIZ6CviPDNJzUmXYsF3o//DFt1MaDxhlSbg3LzNaJZ++R/c
+    fqKsXefeIqA22pR6Ofzhrkb+JE+frVMVnyuvG65qD6L44jpjYzVI1pyGz7lhtbS5qXzH9L
+    egPGMVio56eleQ6ANbxZfdW0xvNM+dUwTRBrmVIUec+AbynVrm2wowhJnA4mRoUcL2TMmQ
+    mqf88FHGYokfZp14VthIdwzvJ/TE1FmGecxWWblFjg2IpLV8Gmwro6wKPqEjmcVO1lWwWZ
+    IqacxR6nex3bAkBr+hbdAi29TWcdtWkFPNZFXyZuKcKudhr5XMiy1iyLjSLLsiavYKt43P
+    5wna7zHq8espFbQhYkGxB4jcFDExoDpk0SWsRXc24AwQktkSpr8ZdAjHKC+uxVAz745JrW
+    lx3LKYCv3/9ABf33dI54aOZqlugobCis2o214E7m+JdRyyxNkUAi3tjf5Ju3c0vQT8VsOS
+    CWrGfZKLFFArp7DNokIe2K5Mwdgiu+iPDgAOAKz5tNCYVzpIXuPxxmldOFKzYtMrQPGgK/
+    HHy2sKeuM8ofVXlwuQ2VD84iwUzqGbA03ygB3LBmJxFT0DO9H8g5nb8UZqsg
+X-ME-Proxy: <xmx:HhdRausLaDPY9U68EWlmLhpHsYW-kT-dwS54wF_IG_4kxAfW-UId-g>
+    <xmx:HhdRasPQzsF3SIaWMVlb_HvUnY9xrWfqIEJkVi0iVO5y6GFjDspNJw>
+    <xmx:HhdRaoc0AS3smy7wAnaN6lA7VrUWG4jTt5vIPFRZHgHDLZSSwJaPXg>
+    <xmx:HhdRark-Qx9AnLvtcRqeI_REz_mc0JKyAKBFIUxzwSxfQhor-vx7aQ>
+    <xmx:HxdRauUHZAp3l_FMvob9KsRom9miHUxu7OTLqqKfAVKTU-0XG3OhJHK2>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 3BAA31820086; Fri, 10 Jul 2026 12:00:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] rust: module_param: return value by copy from `value`
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Andreas Hindborg <a.hindborg@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-References: <20260601-modules-value-ref-v2-1-12ebbf0510c9@kernel.org>
- <52feb9b1-2073-4fcf-b2d1-a7f42f1e72a5@suse.com>
- <CANiq72m3w7L5CmAsFvOpSh_jNk4jL8+A4vz8GEp+E8FY=TJcRA@mail.gmail.com>
- <30e500ce-e9e6-43cc-bbdf-ded7c0ae56cd@suse.com> <alEBInX9gD1M5NAr@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <alEBInX9gD1M5NAr@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-ThreadId: A2UGMrT-rt8g
+Date: Fri, 10 Jul 2026 17:59:59 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Aaron Tomlin" <atomlin@atomlin.com>,
+ "Luis Chamberlain" <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>,
+ da.gomez@kernel.org, "Sami Tolvanen" <samitolvanen@google.com>,
+ "Peter Zijlstra" <peterz@infradead.org>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>, neelx@suse.com,
+ da.anzani@gmail.com, sean@ashe.io, chjohnst@mail.com, steve@abita.co,
+ mproche@mail.com, nick.lane@mail.com,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <33171ccd-038b-4bb8-b796-f104a131c0ee@app.fastmail.com>
+In-Reply-To: <20260708020007.55728-1-atomlin@atomlin.com>
+References: <20260708020007.55728-1-atomlin@atomlin.com>
+Subject: Re: [PATCH v4] module: Extend module_blacklist parameter to built-in modules
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On 7/10/26 4:26 PM, Alice Ryhl wrote:
-> On Fri, Jul 10, 2026 at 10:13:53AM +0200, Petr Pavlu wrote:
->> On 7/9/26 4:13 PM, Miguel Ojeda wrote:
->>> On Thu, Jul 9, 2026 at 1:48 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
->>>>
->>>> @Miguel, please let me know if I should take this patch on modules-next,
->>>> or if you'd prefer for it to go through the Rust tree.
->>>
->>> Please feel free to take it through modules-next, of course.
->>
->> Thanks for the confirmation. Queued now on modules-next for v7.3-rc1.
-> 
-> I'm seeing this error on x86 with latest nightly rust compiler:
-> 
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramaEB4_() falls through to next function _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramhEB4_()
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramhEB4_() falls through to next function _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramiEB4_()
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramiEB4_() falls through to next function _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramjEB4_()
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramjEB4_() falls through to next function _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramlEB4_()
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramlEB4_() falls through to next function _RINvNtCs65fqAZscXCv_6kernel12module_param9set_parammEB4_()
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_parammEB4_() falls through to next function _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramsEB4_()
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramsEB4_() falls through to next function _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramtEB4_()
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramtEB4_() falls through to next function _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramyEB4_()
-> rust/kernel.o: error: objtool: _RINvNtCs65fqAZscXCv_6kernel12module_param9set_paramyEB4_() falls through to next function _RINvNvNtCs65fqAZscXCv_6kernel6devres16register_foreign8callbackINtNtCsbtRzKR1rrUg_4core3pin3PinINtNtNtB6_5alloc4kbox3BoxNtNtNtB6_3pci3irq21IrqVectorRegistrationNtNtB1A_9allocator7KmallocEEEB6_()
-> rust/kernel.o: error: objtool: _RNvMNtCs65fqAZscXCv_6kernel6deviceNtB2_6Device10get_device() falls through to next function _RNvMNtCs65fqAZscXCv_6kernel6devresINtB2_6DevresNtNtB4_3i2c12RegistrationE19devres_node_releaseB4_()
-> rust/kernel.o: error: objtool: _RNvMNtCs65fqAZscXCv_6kernel6devresINtB2_6DevresNtNtB4_3i2c12RegistrationE19devres_node_releaseB4_() falls through to next function _RNvMNtCs65fqAZscXCv_6kernel6devresINtB2_6DevresNtNtB4_3i2c12RegistrationE21devres_node_free_nodeB4_()
-> 
-> I understand this is probably due to a new function in Rust stdlib that
-> is no_return, so probably not caused by this patch even if this is
-> triggering it.
+On Wed, Jul 8, 2026, at 04:00, Aaron Tomlin wrote:
+> Currently, the "module_blacklist=" command-line parameter only applies
+> to loadable modules. If a module is built-in, the parameter is silently
+> ignored. This patch extends the blacklisting functionality to built-in
+> modules by intercepting their initialisation routines during early boot.
 
-I can't immediately reproduce this issue. I tried with linux-next
-(next-20260710), rustc 1.99.0-nightly (af3d95584 2026-07-09) and
-x86_64_defconfig with Rust enabled. What am I missing? Could you send me
-your config and the produced rust/kernel.o off-list?
+Andrew already asked you to provide more background on what you need
+this part for. Do you have a specific driver you need to disable?
 
--- 
-Thanks,
-Petr
+Can't you do the same thing using initcall_blacklist?
+
+> To preserve the existing user-space ABI, "module_blacklist=" is kept
+> as a legacy alias pointing to the same module_denylist variable.
+
+It looks like the denylist is only introduced in the same patch?
+
+That sounds more useful, but would better be done in a separate
+change, and also needs a proper changelog text.
+
+     Arnd
