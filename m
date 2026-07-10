@@ -1,65 +1,82 @@
-Received: from LO0P265CU003.outbound.protection.outlook.com (mail-uksouthazon11022075.outbound.protection.outlook.com [52.101.96.75])
+Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022132.outbound.protection.outlook.com [52.101.101.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3DC24BBF0;
-	Fri, 10 Jul 2026 13:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.96.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8BC264617;
+	Fri, 10 Jul 2026 13:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.132
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783691805; cv=fail; b=hO3Afu1+eu03V1ZuHBptrHzz+8rVh9q4MDRUrd3gTb/TZN1Xn0Szg/9ckByIw/23DnGGmnJt3J9qld24JLVgn6+PnYqGiPb1L/BSO2IEiTYgHxVJ1tvjU3bYkMU+dZXPIaTdLc6X0CoczYPhWphHJrqbCDjtjkqUSO3sCe3nKwA=
+	t=1783691889; cv=fail; b=VyVOlZ5GtoNiN4KKPH3tiqvKbd+JwsYCPLfGWty3Xpak+mugJVE8Fo48Oq0oReMrU2f7GygS9f/YuzpPZ16x/duuAOgsgl51xWT69vUf96fvvaljJem7IvzZmGkyBsbHNtl3oMras18YViM6WIdb7270ghJ4RjhepE47+lsMeKc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783691805; c=relaxed/simple;
-	bh=wipI0/Tviq2lQp+4ATJxSDwh4bKj+fGrmrCqCl8zsNQ=;
+	s=arc-20240116; t=1783691889; c=relaxed/simple;
+	bh=6eJeERqTvv+GRnv6l7TjuRzD7mM+GPY1jDfugYDmxoc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=tD4rZqdRkrC88bHtlMWppGlFIl9AZtRAjd4ySvP/GwrRKryVNATaKBxQ0SuzKsRr2a5aPaUKI/lg/NcnCsPgs2uibjYVsLkK7v+gty9PnAk/U300eYwzqXYIrxBbDmjjw0+9MTlOtygyzZRzzEczVJGvIuCGX/8DSQpCePjnONA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.96.75
+	 Content-Disposition:In-Reply-To:MIME-Version; b=gwSBWujab0UrgUo51G1wKDp6fP9vc1C72Oj6mrVtVEPZbdjdFQYW+lT37HRoraMY0QNMxtTFQtene1dPp4+G9MARwooRGVo8NllcQTwv/GIS1Y4BX+GSl0oa7IiCy7eikZaT+fv8TIsn0uQML4UcL9t12ojlQujaU2fh5Q/Wx/c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.101.132
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=K/eK5FPY1v7UbmkKTGq8vRJgMioQA5UliEDeYgybMQDpd1V8dDw7z6dLjqOPLD47UJFe1FCT28DxGVWi4KQafhjTEFt/Q2NRh9mezfrImORUg7WMRrqwftlsm3sNLAvLvVBx+UMFwwQC7KC52JLh25pQEBbGxDUhocRNNU6XycpApxClvSmB+jCxum+tYL5fQ7bzh+af4G6cBjXmvlK5RwWMZ88c3+m3lNU4258xjy1Wo1FadMR0mQktU5WTWy6yvuZG4Y2dGShDQSWl+YsYJfLx9nugx4if91Ylp8utwkG/hectmRDh2i/D7lgA+e1LbNNKiPSqzlhCRhJa5AH1/g==
+ b=d/UKidZW2yROLKPKhG9FiE0erou4BUfd55Lpt15BZFxg3TnBGnPR22WFAO/P5qeCVZTzla5KVq7FF2+sjL6f/eVU9L8aCA+A9v13lM7J79ByPmXSV1PYBna1DtAaik2hyvjy4laCdRgbioUBXLC4Bsu2FYtS2jE/miouPSlyxPK+PWGvq/gh5oAy2LFEA/OyCKON1T89HSNizgicj4ayd1GVsKNL29AbgMGn+1pZmeJZWElXC7d3/pe/6Caasr/n9gIAbTycOxszYbJr8ToI/OPQ+pXCdVJAgoMz6QcAAWjkwqgACnT6Jgx7VIaRM0WWyH5Es/f/W462mD6eVXlvmw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=SW/ewZIZrlgut/NjKX0iGLfdqS1i70zSTvGhoS7BjWY=;
- b=KrqmDsyl56BiKl1I8vp0lr/2a+DigfcSQ55aMYu6IL5VCP3q2xUdLsQePdlHNtd02nkF0ijAhCFWqZowZWWoY9ir6eiW+FMQgYrtCUE+g0BJ8DvTu+DftaR66Ja2ew1CaP27bM+NkVAglH7g5Kt6WVrW7C5puTsbVFTGGRucOw2Ulgv+R4HNbKEsWT1nqaQWBbUFdGyguH5Ar6vu+qqKnPoSlqe0oxq2A63STG2j18eI4DkeZeacURFrgWFi1HQ4jj0HFQXf5eNDpmoZt8ykFJw1xY4WCx5V9zHeLSYBx/khsvvFnLlstFhNj7P/Y3Sp8ap+B0zUkhtHoKb0u1BPRg==
+ bh=dNuOHlrDEIkjKR9dIyVx0dXJKses962YAhpOz5OyCDA=;
+ b=lphhwxzK+2YMMezx9gCXFikFc8fh60GNYaqcn/uEgPvULionwet/ks1XZC7WgoRlikuNW5mSEDb4KmGWpSwzIhMuODYrOIi6Xi3xBIfHxr4SdkXkiG5rN2rTw+K6NcA4NrXKAs4GCMeLI7tFU5m5cHu9uTxcYHS8WL0PcIEUUk0FkC8GQb+iqBYIqDjRoozdWdRSwDKF4ZwfA+s4scYNhGqfrTHkg41Ilg7LyYc8436wws/Pbl5yXn/QJafbHF6quEKi4CKj7OfdOKQWPXIq1gtW4Wy9LHOU5pUKhMsGhMSTui32I02vQ9zI7XwIroAjHT4OCrtT7okIPgJZm1C8Tg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
  dkim=pass header.d=atomlin.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=atomlin.com;
 Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LO0P123MB6448.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:290::12) with
+ by LO0P123MB6878.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:30b::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.17; Fri, 10 Jul
- 2026 13:56:39 +0000
+ 2026 13:57:59 +0000
 Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0181.014; Fri, 10 Jul 2026
- 13:56:39 +0000
-Date: Fri, 10 Jul 2026 09:56:34 -0400
+ 13:57:59 +0000
+Date: Fri, 10 Jul 2026 09:57:55 -0400
 From: Aaron Tomlin <atomlin@atomlin.com>
 To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Peter Huewe <peterhuewe@gmx.de>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Xin Li <xin@zytor.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	David Hildenbrand <david@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, linux-s390@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-integrity@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] module: Limit ELF includes in linux/module.h to
- uapi/linux/elf.h
-Message-ID: <4ogmo7leahb4p7c2dke7epdtu2nd7lm7nmv6y4axcvcnkcrcd4@dmoguf2nk64j>
-References: <20260707153819.4172541-1-petr.pavlu@suse.com>
- <20260707153819.4172541-5-petr.pavlu@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zjubmoucclkdeek2"
+Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Philipp Reisner <philipp.reisner@linbit.com>, Lars Ellenberg <lars.ellenberg@linbit.com>, 
+	Christoph =?utf-8?Q?B=C3=B6hmwalder?= <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>, 
+	Alex Elder <elder@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Michal Januszewski <spock@gentoo.org>, 
+	Helge Deller <deller@gmx.de>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Trond Myklebust <trondmy@kernel.org>, 
+	Anna Schumaker <anna@kernel.org>, Chuck Lever <cel@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+	NeilBrown <neil@brown.name>, Olga Kornievskaia <okorniev@redhat.com>, 
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, Mark Fasheh <mark@fasheh.com>, 
+	Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>, 
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	drbd-dev@lists.linux.dev, linux-block@vger.kernel.org, greybus-dev@lists.linaro.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	ocfs2-devel@lists.linux.dev, cgroups@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-pm@vger.kernel.org, driver-core@lists.linux.dev, bridge@lists.linux.dev, 
+	netdev@vger.kernel.org, keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 2/2] module: Bring includes in linux/kmod.h up to date
+Message-ID: <xihlbspozbgwhez2byjatscslutapi3j4rjhpzxebtn2wjmk5a@qf62xs6lyd6q>
+References: <20260708154510.6794-1-petr.pavlu@suse.com>
+ <20260708154510.6794-3-petr.pavlu@suse.com>
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260707153819.4172541-5-petr.pavlu@suse.com>
-X-ClientProxiedBy: BL0PR05CA0015.namprd05.prod.outlook.com
- (2603:10b6:208:91::25) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+In-Reply-To: <20260708154510.6794-3-petr.pavlu@suse.com>
+X-ClientProxiedBy: MN2PR07CA0020.namprd07.prod.outlook.com
+ (2603:10b6:208:1a0::30) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  (2603:10a6:400:183::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -68,149 +85,116 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO0P123MB6448:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d4469f2-cbdf-468b-abfe-08dede8b100a
+X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO0P123MB6878:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8889c9a4-a311-464f-0f29-08dede8b401e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|23010399003|7416014|376014|22082099003|18002099003|56012099006|4143699003;
+	BCL:0;ARA:13230040|7416014|376014|1800799024|23010399003|366016|56012099006|4143699003|6133799003|3023799007|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	R9OX+iWT7XwITD4KxXDdAMrd4HaKa/lGWqEOJEuAxeVJx89zZvNpDFAS/U3m3ZFWzFHjV00gQY444Y6Do1cmYnY4FDxOISWsf3sTikeIsWJIOgHJ0iuLcw0iU2mGLuTRzsUxz3fBu/cWT+77CFtESnt5BKB3+ueepppKT8t2I9ZKLpLvJQ6Oa3OYHdbeUACEz7SyekrQUFx+mspnt56OI6l5kC7pLro7Khwwhwhv0nf0SCMedRL9V+TchnvkuR8XuVP1C1ZPw5om98nktt5TTUXJJtmm8Zr18EQiu1gQLRDoVZycqeZc2GeWyuUGhDSIIbyju8M8mD8csbL+JKCe6jaGzTMoyX4vayq3D3FjIA1G1AQXBZKQ/KVpl3EuWKknSSYs1Xt+peUk3d/4AZ+7B6lwxocu8XQXfO1l89DJ28n21pB4fUVsth5SOYBWAdZ9sEjiS0cby1FnArJ+KfqBggBoOCxgu7AK7ousjEw/CkpxLg24JgT0Ny5WMVymCbcabIHV1KfgJFWSsXmef82tG+9191rdPGnkIuNmD5gmLMay1p09y6uAFNFnH8fR6EiqzqsS2/ABaSxMRXY8/lwH53FIlT0a8TeYkxBpLebP5Vk7Ug+shbkDcOphLQ/QxK5QpMpkU2hZDHWb1Cts9xiF0WmnFkQEHOhEesQLJ1B1vtU=
+	mnyvn741YVrPSaa0hwDbGrVtBRz+LIw95ja24e6zj7PbDMuYmcaDImgwK2HHFUGJbbEcU/o/lI/aj1VwebZpFhYjn4UNBPq0Wo0aBJiBiHe3jP82n7XKJZaaOP7aQSDCZkIHBBQoRitq/qc/ChGsRVhQZlLuO2WYFbdcf8mxHWu7lyFgatYFUByozN4BGDpucV3Z22SM6P1zRo1UfSTaESZ0Ck2YBy/WwQwcv7s6DVvTKZAUA4umAJCvnwKcMsWOIgi08wNl8E1PsoN2/mL8YDyYDnpKFa6J8iHkbsvfPLYe2jW/d9HrRHB6z62o53M9QTUxNAUefCfoiuWv9y1twRBkQvwlbble7/lJ+bawqZzE8wkMXVxr8aNr3u9oKAx0C9bxaVT8M6uKiA2rFfEScIE1kEubJz/zDxRHlnnN1Z2P+YER/lissTD9b+xKmRg/Sf8q5f8gDV5IQbo1LzG2awcxOlVf/+PlVTFLkqNRWBCpyhv8+9ohJ1AO+/UjiNB3LydrS89QDbi2A/4WcsSDaUxIIBrD5FuHSS2xZ90O6OvPaDYDeRdk4jD2z7K0DIogiyfS9zQitJX/zxK9aOCKHnmB+56lZ73lkP6/8l4ePv2jmJZnAppaQ4FxeFV4zYMyj/IYVUm0ykOl7VLAcDafxE8hRLZtvkgf9+Z4/XhYakQ=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(7416014)(376014)(22082099003)(18002099003)(56012099006)(4143699003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(23010399003)(366016)(56012099006)(4143699003)(6133799003)(3023799007)(18002099003)(22082099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UnVkaTVSa1gxQnVwOVZLbjJVY0pQYVVRejlTUTRaL0Z3RCs0QllYUmtqcnZm?=
- =?utf-8?B?TzRCc2NwUS9HaXAxK1RyQ2RWRmxvOUIxY29iU0N4eFBqUzFLY2k2OUJaa1ds?=
- =?utf-8?B?MGZzaGdxR1RYaUN1eWVQTTZpdUs0R2l2UmV2aFM1cmdPMFV6dVBFdlZMWkps?=
- =?utf-8?B?S21GVUQ1RHFvOVZCRno3NzIrZTRmUlZRRTVZOVg0cUdZVCtvblQrK3NTblVX?=
- =?utf-8?B?Y0ZtN2tlSlNuMlptdmJLVkdDQVB2TUp4dDNXbGdCUit5ZEFaODh4Z2tTQVla?=
- =?utf-8?B?RG9UQzdTYUhCUGFkcTBzTkhMbURtaCtUS1VJUWNDR1pPRTFiNlBqY3Z1NkVk?=
- =?utf-8?B?NG9Hd1E1cThvcXJCYzk0dDNFaVkrcEhyck4vR21xNnBvdERnK2ZTMW8vc3hW?=
- =?utf-8?B?VW9FMVJBVDBabGY0SXpFV3V4OElNU0xZVXdpVDg2YlZDSlpxTWZjZEVHSnF0?=
- =?utf-8?B?SE5KdDVXdCs3SmFYQk9GaE10N3dXRnNDZGxqZWtZWXdUbGJoNldWZ0ZCRjZj?=
- =?utf-8?B?djE0YjNYOUdlVkMwbDlXWUZSQzZLY0NuZURiZUpxV01aNERTLzR3WEljTnd1?=
- =?utf-8?B?UGxlQkZWZW95SjFwaDc3eUxBeUZlV25yUS9ETmVFR3RpeENsN0ZlZEt3NXZP?=
- =?utf-8?B?VnltUVZQSHowY2I5MVVIRGpOcWY1a3c5TW1DZjVSUzY5STFCS2tHUUxrODl1?=
- =?utf-8?B?eFE5K0RBU2ZZQVNxQnRKbUxMYmVtU2RuaE5Tc1BDbmsvdEROeDkybmRtcHVV?=
- =?utf-8?B?WlVkQWl3R2NuMEs1b1BQUnVJTGN2a0JUSFlTYWk5YTdWRERwbzNrMklmeXBU?=
- =?utf-8?B?YktMczI5RUFhRjVzRmlNWkZQeTMwSDhpTG54R0xUUStCcUpHZEE1SDhKWlZy?=
- =?utf-8?B?ZmtuR3N6bUdWTFg0VjlKMzBOV1Y3SGdGUHlaYlBicWR2UHhyL1AzdDF1Y0Fa?=
- =?utf-8?B?dXl0N2VpUTROZzErOWphRTBQdTJRT2wrZEs5UWhmRXlzcDJVNXdSRFF1VkpQ?=
- =?utf-8?B?K3BNeS9lNk9jUmNMd1B2V0F4UXdNNjFaZnpHYk1CdENoazFuL2M2TktLa0lG?=
- =?utf-8?B?L0paVEZPWDdIb1F5Nncxd3NVa0crZlNvZ2VGU1V6a29RcjErVVFBYmNEcWs5?=
- =?utf-8?B?SlJPWmk3NytmTTZLdGkySUV2V092bmNTK1Zzd1JoWngweXJYWnN6Y3QrVVQ5?=
- =?utf-8?B?cjkrOTFqRzZRUmFTcmFPYkp1UW5QNjZGbkdXMTNoNVkwbCs2a1M0aXNaaCs5?=
- =?utf-8?B?dXVrRmJ4N0VEMjJiVngvUndOcnlFUmJoT0tMeUYxU0k3VHZmN2x1akdjVk1j?=
- =?utf-8?B?cnRRUVhZNFpkZ1BaNzFhVGYvNG5MMUZneUo3Um5MOUtVdTJvRGoxcWVPRlBn?=
- =?utf-8?B?R3NRbkJGdnFJQlhsM2hnZEtDVDF0ZTJUaUxIWXBwaGxmS0xMZElhOUk0TWhh?=
- =?utf-8?B?bHB4ZDhnelQ2RzVFT3lnblJac2gxOFhNaGZsb0RoUmxEaWZLajZ0NE1NeERZ?=
- =?utf-8?B?TVZiMzExK0RhYXdUNnRyN0I4ZE5SbGNIaGozTzFieFR2UlM1cDV2dkZZVU5o?=
- =?utf-8?B?NzJGKzB5VEpnNFJGNHhpZmdqT0tjUG1JNXI2SlpQT1B2NTE5Z2gwWUhNQ0VL?=
- =?utf-8?B?WSs3MU5TMzNlQzQyQnp1YjVsMk1Qa1B6UHk5UW94Q1ExVDk4c0xNZTdCSnNZ?=
- =?utf-8?B?TWROWXVwNWp1eVJIbUl0RCtLQ1Z0TFlJME1VTDBGall2aVNTSjRPQkhwSXhC?=
- =?utf-8?B?YUk4QzFGd0xMbER3Uy9ad0RaSHZ0elo1MEl5RGo3RC8vVkVjNlM1dWtuejNC?=
- =?utf-8?B?c3MwcC9kR2xnaGlpL3NwTjZXN3RoRkFQWFNOMHFaenQ3ZkViTFZ1MmNJZ2t3?=
- =?utf-8?B?cG5NUldPNkIwM1ZZc2I1elRka1F0SHZLcmJuekMxd0NPbktRT3BpMUVVN1dW?=
- =?utf-8?B?ekh2Y2VCdDVtNi9nUGZoSFUxSGkrQjc1YXlacmswOGJQNjJOOGNmQXpOT2VU?=
- =?utf-8?B?VFEreHBJczRvdFg4QlJ2Slh0NVhqSHp5RWJQUWg5Rmt2cy84eU5Nc1hBTnlw?=
- =?utf-8?B?ZDh2WkYwOFhPUDhDTFFzUW51dUlrdnVySlhqWXFyd1JWbjkzOHRuckEyVWc1?=
- =?utf-8?B?M1IwRUNKbkJnWkpDTjNlOWpoMFRFWjJtdTF5MTc0U0x3bDBNODduM2J1VWV4?=
- =?utf-8?B?Vk5ubDdaR0RoaVloK083M0NjUWljK2JwUkVCR2o2eHdZMWhNUGJqc2V1R3BC?=
- =?utf-8?B?blJFSi95cXdUT0MxdFJML1EyamRVQWlxWHBQM3dpOEQrSGplaXFBbVZscEV3?=
- =?utf-8?B?czhvY3ozVXJjVUtiQlZIdzZrZVZGalp3SlBOMW1MYWlmOGJaQmwyZz09?=
+	=?utf-8?B?ZjM4c0FxdHRFbVA2ZVNRdS80bFp5SDQxY3RQYjlGbTB1dDBzUG5zdEhFU2xK?=
+ =?utf-8?B?KzFiM2M3a0QvNHptNUlwYzdNVWZIcWs4dlFteHVzSWczWWduUWNUejBmdEZm?=
+ =?utf-8?B?aVNBdG1BcWpnd215UjYrb2J4TEc0cFFndzJVdURzdHJWV252bjNPdkh6Nnkx?=
+ =?utf-8?B?ODVCN2pHanhmMzVKeXhMM3YyYXhZdExWQzJzdWl0YnhxcERtbUMvaFdvZm5x?=
+ =?utf-8?B?aG0xdmk1cGRwNlNTRzJTajFMU1NzcityMERFQWJDL0NZdDhla09yaERpVlNq?=
+ =?utf-8?B?UjhKbE1DdVdJZS9zMmZXMGQyNjkwK2dhZ2luUU13Z0J3eWowTUhEeTRqcFRq?=
+ =?utf-8?B?elBCS0pTWlhvQWI5K3g0ckRHZU1CQkp0TGx6bk8yNUpWZmRIczB1b2hqYVQr?=
+ =?utf-8?B?WkR5VnB4M2R2MGNwaFo5NkdlQUhVQXd5ZWEvYjVxc1l1dU9hUkcvZ29SOWpK?=
+ =?utf-8?B?c0JrS0E1ZW1BVkNWNjdZYkZHNHljWW9lR3VHWENzcHY1empXbXNPb3ZwOG5I?=
+ =?utf-8?B?aHRiN3JXQTNTQWNnZk1LS0N2RGVNOWMxOHhXWGRsUkxhK3REUG54M21lR0Jr?=
+ =?utf-8?B?WjRra2JCeEVZRzhJNFlteExCZ0lacys2MUNXc0lDUnZ2cVVVT0JiMUpqWXJ2?=
+ =?utf-8?B?VExGdTFVNHM2azlSek5WczR0SDdOVlZseGhmYmlJQmZ1M2plMFExeHhVRG4v?=
+ =?utf-8?B?bytaWFdiSjdWL1dIbGpTNEkxL3FwWjRVdDRXZTBGNFlZNTUyNzJjSXFBNWlk?=
+ =?utf-8?B?a3RvQS9GYTV2T0tzZ3h5RGZDcFplb0NHeXExOVl4M2IybkNVSktIbXJCMmM2?=
+ =?utf-8?B?eU4vWDZrR29CcFlnZVdCd0tRV2J2TzBoeHBqbmtvTWdwZ3RndUl1ZUJ6Tk1q?=
+ =?utf-8?B?ajVVRDIyRHNGTEJ5c3hsQ0N6aEdlaTk0VDZUZDBLeExBVDk3UTlzcmpHdVQr?=
+ =?utf-8?B?cUhmdlNiTlhHUGRSUW96S1pGazVTbjBseTVCY0tqY1ViRjVkNEd6USs1WGUv?=
+ =?utf-8?B?emhDcW5PTitrNGFCK3N4SG1vNXpCR2dwY212SVJYK3VjaTZEZUM5UzVUcjYv?=
+ =?utf-8?B?TXp6bVRoU3BSdWVzaC8rQU95Nndubnd5eFUxQnFyb0JraWZxbTRkVWtLNmpL?=
+ =?utf-8?B?VWRqMnhRRkRsVlJ5VWREeUNZWmFRbnFBMEk2VW9rSmpNem1hWisyTVplREIv?=
+ =?utf-8?B?akFQbEhzVmt5ZjN5VC9wQThQV29uV1pqYlE4dVh5bE85SnRhQmRHbS9wMzdL?=
+ =?utf-8?B?c1NzM1E4UU9iQWlaWUNGSkZUWWVwZDhTMmw2VWcxWjZOZmx5UnBmM3BGb2NW?=
+ =?utf-8?B?ejRXR2FGVlFMR0lzQ3NOUFJCZUVlMmhIOGJweE5oSkhBRGx3b2ZOSXdnVnU5?=
+ =?utf-8?B?ZEFPckdDcTJqNitIYkVjQTZ6VG90WGNUOGlNS3d3MGsrRktMd2V0Vk1qN0Fz?=
+ =?utf-8?B?enovZGxLWWhYdEZMcCswcEtEODZHeWIzZFVPeE9qcWEraUpqR1U4TVd5Q3JE?=
+ =?utf-8?B?OGJJUWdDaldocGhIb21FMURjQ2w4dUZYZ21RNmQzMkNWQkVJR0x2anF3RFJt?=
+ =?utf-8?B?YVVlV01DaFpUVnBIZXA4SGZhdVVBbnFnVEtieWNQRERwZExPNzZpT1ZNQUFO?=
+ =?utf-8?B?dFlyMEh4MEJKTjIzb2NreFFOMTB5MjVQSkpkYUdLekpLc0owbHJPN3RmaW5P?=
+ =?utf-8?B?Y2poRGNsbmlWVGJwN3IxUXlZM3o3UDFQQVVIWkdVNitsZDJIaWlTWGliU3RB?=
+ =?utf-8?B?VTZnbzNRK3IxMnM0ejFJMEwyM0F2TlhHRTVrOWJpUit5VWF4R2VSQmNMd0t0?=
+ =?utf-8?B?Vm9LNStCbTRiYU9xMkdNYVMwR3dCcWx4QnhKMmorcDRYb2xSbkhpUFkxZldC?=
+ =?utf-8?B?WEZmMTUxV1pNdHE5cTFUcFkveklZOW1CM1JWSHdFWGpxVUp3OFpvZ0pYVG4v?=
+ =?utf-8?B?eWpkK20rb1BOUEZHUFdIUjJucHZ0cjQwNHZIMHRJaEZPbUlzRXE4OHV4STN3?=
+ =?utf-8?B?a24zTWlLYnR5QzMyL3FnaWdpVWVmZldHNStkWjNkaUVHaWNidVNNM2tVK1Nx?=
+ =?utf-8?B?cHVJMkNYbE5zOElrY24rSy92V1VlWTh3S2lVTWE5S1ZQQU50SzJmbVdsaThK?=
+ =?utf-8?B?Q096SWdvQlRSNHMvZWpBSncyM2ZnUk1UU3BJNFZDY01kS00wOS9hNncxWHZH?=
+ =?utf-8?B?amtYNmRidWJwVkNNangwdWNXWUxxUitDSjVwM3RaWHBOVkt5S2VHWUQ4cDU3?=
+ =?utf-8?B?OGZ6OHhHRVFzaWE0dmdPMkZWNlZsN2ZFQklMcFhCRmdWc0pqM3djSjNPSEh6?=
+ =?utf-8?B?eGpaS05KTWFBZ2xBZ2xuU3VWWHVyaVpteWI2UXByMW5EYlVXZ01LUT09?=
 X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d4469f2-cbdf-468b-abfe-08dede8b100a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8889c9a4-a311-464f-0f29-08dede8b401e
 X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2026 13:56:38.7948
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2026 13:57:59.3246
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8jN2+PY2eerX6S1dvp+H1W+So9hwhh6gd4U39A8DRjp9529QRel7+nlxPLB9RxOBvCmcNNaxAk1RiOtCVmS2UQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB6448
+X-MS-Exchange-CrossTenant-UserPrincipalName: hDwfhxFpj9eN2nNEFrA5KAidckTs70TyYQaw5oNwhBSjWpXN0ngpfIvW4gAKhWaf72JIUvICyafxXZ+msFt7yQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB6878
 
---zjubmoucclkdeek2
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 4/4] module: Limit ELF includes in linux/module.h to
- uapi/linux/elf.h
-MIME-Version: 1.0
-
-On Tue, Jul 07, 2026 at 05:37:07PM +0200, Petr Pavlu wrote:
-> The linux/module.h header is included by every *.mod.c file to provide
-> `struct module` and other related definitions. This makes it a "hot"
-> header, so it should avoid pulling in unnecessary definitions.
->=20
-> The header currently includes linux/elf.h but this is largely unnecessary
-> because it requires only the base ELF structures, such as Elf_Ehdr and
-> Elf_Sym, which are declared in uapi/linux/elf.h.
->=20
-> Replace the linux/elf.h include with uapi/linux/elf.h. On x86_64_defconfi=
-g,
-> including linux/module.h alone results in 2.2 MB of preprocessed data. Th=
-is
-> change reduces that to 1.5 MB.
->=20
+On Wed, Jul 08, 2026 at 05:44:30PM +0200, Petr Pavlu wrote:
+> Including linux/kmod.h alone results in 1.5 MB of preprocessed output, even
+> though it provides only a few functions and macros.
+> 
+> The header currently depends on:
+> 
+> * __printf() -> linux/compiler_attributes.h,
+> * ENOSYS -> linux/errno.h,
+> * bool -> linux/types.h.
+> 
+> Include only these files, reducing the preprocessed output to 10 kB.
+> 
 > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 > ---
->  include/linux/module.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 7566815fabbe..7661faadbedd 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -17,7 +17,6 @@
->  #include <linux/cleanup.h>
->  #include <linux/kmod.h>
->  #include <linux/init.h>
-> -#include <linux/elf.h>
->  #include <linux/stringify.h>
->  #include <linux/kobject.h>
->  #include <linux/moduleparam.h>
-> @@ -29,8 +28,9 @@
->  #include <linux/srcu.h>
->  #include <linux/static_call_types.h>
->  #include <linux/dynamic_debug.h>
+>  include/linux/kmod.h | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/kmod.h b/include/linux/kmod.h
+> index 9a07c3215389..b9474a62a568 100644
+> --- a/include/linux/kmod.h
+> +++ b/include/linux/kmod.h
+> @@ -2,17 +2,9 @@
+>  #ifndef __LINUX_KMOD_H__
+>  #define __LINUX_KMOD_H__
+>  
+> -/*
+> - *	include/linux/kmod.h
+> - */
 > -
->  #include <linux/percpu.h>
-> +
-> +#include <uapi/linux/elf.h>
->  #include <asm/module.h>
-> =20
->  #define MODULE_NAME_LEN __MODULE_NAME_LEN
-> --=20
+> -#include <linux/umh.h>
+> -#include <linux/gfp.h>
+> -#include <linux/stddef.h>
+> +#include <linux/compiler_attributes.h>
+>  #include <linux/errno.h>
+> -#include <linux/compiler.h>
+> -#include <linux/workqueue.h>
+> -#include <linux/sysctl.h>
+> +#include <linux/types.h>
+>  
+>  #ifdef CONFIG_MODULES
+>  /* modprobe exit status on success, -ve on error.  Return value
+> -- 
 > 2.54.0
->=20
+> 
 
-Thank you Petr. LGTM.
+LGTM. Thank you.
 
 Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
-
---=20
+-- 
 Aaron Tomlin
-
---zjubmoucclkdeek2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEeQaE6/qKljiNHm6b4t6WWBnMd9YFAmpQ+g0ACgkQ4t6WWBnM
-d9aq9RAAsLy6+NOcgwZEYAtqHH2Vs/cK9PSXklxGAJTZg1PJpqeZA7SusemTQ4bm
-YKpQ7gLSZcSe+n0pRNoVwgw70vx/b3614wy0RSoZASNZmZgCjOxBt2rTadZ2aY3T
-MPrE9bcrm7NvN3c4iujaRJZ0S/XGnkleJgIsO17NTX7u9d8IWwCyLn3AHqnrd52i
-a8F+PFehXnCQDdoN8RDmOV9JbmmwIcLGBZG/3H0FNW67bs2d/zXK1vJVxzevzQng
-mpJDL5odKHknjoYbCoyoeLNP78cvwbTRuDcbpXm92ldjQQSj+3/I82m1I8RwDasn
-YPImKQlbeO/EhXUnyk5xJiKC7GO9yRSNeWtR8TdZrI2iFqLApFfHcA8G9AH+7aUy
-cPk2QbujDbdiuE8O8543UmAVR8+famKXHQi9JFYqVvFiAjYTurpkDe9l7B6Qe6mX
-Lm7ahNj8KiwSkj3bxqKkQwTY1MKcYCsNsjh6Sv2pmfo+gk188kYAAaUKzwr1+xl6
-uuIqyJtMMlavCbdA16P46NlI9FmD9SeND3cYJjK1bANTfUWViTTurQ/YfN+pEd/V
-6fbCQUQhXP27kvg/e/x85vAXn7FoFlUzF+wQCz/3iMpVb4SPLlgxmRByHvh9Ra60
-dz28uSikieachFtGH0F+UPGaO2T0WnsfBWsmDAdSV1h3gH9x2Ao=
-=f5TE
------END PGP SIGNATURE-----
-
---zjubmoucclkdeek2--
