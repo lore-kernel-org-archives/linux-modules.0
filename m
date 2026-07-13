@@ -1,25 +1,25 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021136.outbound.protection.outlook.com [52.101.95.136])
+Received: from CWXP265CU008.outbound.protection.outlook.com (mail-ukwestazon11020082.outbound.protection.outlook.com [52.101.195.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F4633A708;
-	Mon, 13 Jul 2026 12:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF154071E5;
+	Mon, 13 Jul 2026 12:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.195.82
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783944818; cv=fail; b=tR8fRj1TUHqaoLqdhpn3aFci8JxMD5BKh009OeYtqFR3X/6/CUpiPbS3Q9xqkHl3bTSNr/tJGQ9ul9OxJbSwjygVcFqju8o/ktnH01IhlF4z46ja6YneHRFppyewKRlyHlwqgw2Fc7odO53YN3BGIxKypTsvJUI3nEuIJipPRYE=
+	t=1783944887; cv=fail; b=l5l6BkvXlh/LAyzFNPCk+BGgChr7j97RDfttqgiYnvkzlLnbbQQp78k8t8KPDiZpMdO86Q38y7wVewfvMyodYtjCY7dTzHGqndoLQZzogzOyArd5LakfGynGR5FVQQPqBX7+N5L78MD95qWOV+gLMtFc1wlYCclnH4m5JCsQQ9E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783944818; c=relaxed/simple;
-	bh=taUgO+5rB4+Dy57bSkXQFXGut5quVfVAVRQ90sYdswE=;
+	s=arc-20240116; t=1783944887; c=relaxed/simple;
+	bh=DOMpWfacbuBPqRclKOUcsc5EvrGyJzMVEyWvDWY2bJA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Urum7ovoKKR31u+kJx23U9KU3pFDZlTO7X0i1EMYgDE4EaiaStjlYvkWyuT1hyr6hc0r2brRSkLZRyqSTtYZYRi/mmQwG3qpl3QGMdYSzQHiNNnnyB6DCWDwUkb4LWphSEp+seGumMTQJPHvADHefBVpiwsgM48gLSDIiC9bXeo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.136
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uPUvR4s5Hi/YpjOgJyzeadIOW6tFT7MVQLdQdGiTe7fOI+vTuAfrmJLZvk7kPzQcqIffO97Ui0FqXDb3FhmVaJEJkPUfzKT4M1mKqsA0p7A5tQ/8a1Z2uEd2R6Fgm939RNb9oErPJdq9hx2glJz9yfmeWf4MPM4bpLhsSLS1fK4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.195.82
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JCq4sPm0aorg2Qlce/Mc6KALN3zLlFgROlp5ZPWzmKGZv9+/KepLEcIE/41gKE7f3WqsPxiytlQOCm3ZNkWIZ+TxFmu7U/NO9NM4A0Otg2Hb6VqZ+yBc5sty+bSZyxXKha896UIoKNYSY3abQmDNvJ0U9NEse5Kdt+hcUkBxx7sVMwGKil++EBZO2nhOD/wM1GXInlnPZlEK5waDc/top16C7T/ca4/q550ZOh/lhoKAz08gGptaw73TjoKP0sg3qy7w+HSGNX6pydK9XRYQYIPariBh18Syw2mzl9zoa/dSnK0cCPTxjObJaDcpBDPruEmsBVF5bjJ+ftyhI+Kanw==
+ b=TMIvu67r1wk8/M4yZFwNc/NGkx9JBYCj3hTvuWFz86HqT2xP79H9eDikIGUh1IiOuMEYOjJVkiQbeIpsXpCLQZCL2Ulututz/lWKBU1OKIFHKKiU0w0HT0B6KdMIl4rISyB23C9v5M4UKbQ5zz2qojsexAXbV+uPS170goEPEGKIzKpVcMgoZBgrspi64mlVjIhczM9A9Qh8Z3qUBeJSCGP28XLxxiEWfkLauQ2cTZstccwN+8ilowt57Vy+gN1lFjDZnWOFOlqfRppVjYL3JHpz9DhQz9wZBKfcJQOHOLu3eUfaUdyLDSiRVVPXMYrUmTif3ItvSNCLHOUSPFgqbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=ll2oz5U503hPxFQQ7GdCwE31jTpf8NA4iQID/EpTBAk=;
- b=G7diUHklCuFFlr6gWBc91NksXAtkW+zirlL9ClYsrtJLwAcNME1SkKN42M1SDivOeMOvgFPE6NSGzzdfzq0KWfrl5hg9cAVMO9g5xJXq82VdtyhYG5xDUBLBxg0TOne9emsbNIkPYg68Gva+uhVGnK8P4QwS3gRFVgzaJL6tC0kPC4eUWu8+Vn9PyH5ON41GPG468kO2y3wBEdfaWth7bMJBNwfTib7fFc9AjKY1l0aBGUBRQdXF5nQ4kd5eMmbvaVpb49Oqefk2yclioC40Xcn0TR5Wa2XnwK6AaPr6D9YeTEYb/aYb4HukoveUU/X6o6ZJWCIc4E+JOt5OW8k9vw==
+ bh=LGxI3/Kg8ZEb7PzOhU/8rQAnF7GMFHmuJq5QYVTSuEo=;
+ b=AbrlyRnvnR1ViqO61A+lJTyxVCNBvG80S40pWEwhqIQYamZV5Km1fn1lVhrFVoSDCDmLA91bPkfJwq0xPikujwn64aMdxBrCgaHzPuzvA7r3mfhNaOZGUvOoMPF1xrPCSqU3qlLcs6BeKaNxu46+/E+NQ1SNqKvlBMXsx0tZcXlhhtFqjxzT8gSSOajB+QOwa1Ke10nDMAH4OF9zbD6PrAndPqnizkTBKUno1NEI9dqA086Na9XObVbDyMIJtXjntN3Bka7sOrijRVvXiRccTyv9//pMU6A0MMJye4YTx4me2AxPlUY4gn3lMmf2KJDt6Nzhk5on7x+lWlZPaoWHEQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
  dkim=pass header.d=atomlin.com; arc=none
@@ -29,32 +29,29 @@ Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
  by LO0P123MB7261.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:336::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.19; Mon, 13 Jul
- 2026 12:13:31 +0000
+ 2026 12:14:42 +0000
 Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0202.018; Mon, 13 Jul 2026
- 12:13:31 +0000
-Date: Mon, 13 Jul 2026 08:13:26 -0400
+ 12:14:40 +0000
+Date: Mon, 13 Jul 2026 08:14:36 -0400
 From: Aaron Tomlin <atomlin@atomlin.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	da.gomez@kernel.org, Sami Tolvanen <samitolvanen@google.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, neelx@suse.com, da.anzani@gmail.com, sean@ashe.io, 
-	chjohnst@mail.com, steve@abita.co, mproche@mail.com, nick.lane@mail.com, 
-	Linux-Arch <linux-arch@vger.kernel.org>, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] module: Extend module_blacklist parameter to built-in
- modules
-Message-ID: <ea7kdjwoucecvetzf73ce5dpda3l3etb6i75bks6deekfu6mb6@ooptba3x2oh3>
-References: <20260708020007.55728-1-atomlin@atomlin.com>
- <33171ccd-038b-4bb8-b796-f104a131c0ee@app.fastmail.com>
- <in7aczdvb22suqhao6uzsjkh22tgyx2qug4i6efdxyfiuj72ba@k6fr4oc27kim>
- <78ec1da5-11ae-4c35-a08e-cc88a5d083f4@app.fastmail.com>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: =?utf-8?B?VGhpw6liYXVk?= Weksteen <tweek@google.com>, 
+	linux-modules@vger.kernel.org, Daniel Gomez <da.gomez@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Siddharth Nayyar <sidnayyar@google.com>
+Subject: Re: [PATCH] module: validate string table section types
+Message-ID: <j46ht6nbnztkkkjbcxgx2aq5msszjsvxg7cwffxdrxciihbzen@p6q6k6hakgzy>
+References: <20260708012107.1621513-1-tweek@google.com>
+ <99301e32-b067-4d0a-a087-2c77b1fe0a90@web.de>
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <78ec1da5-11ae-4c35-a08e-cc88a5d083f4@app.fastmail.com>
-X-ClientProxiedBy: BN0PR04CA0072.namprd04.prod.outlook.com
- (2603:10b6:408:ea::17) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <99301e32-b067-4d0a-a087-2c77b1fe0a90@web.de>
+X-ClientProxiedBy: MN2PR06CA0026.namprd06.prod.outlook.com
+ (2603:10b6:208:23d::31) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  (2603:10a6:400:183::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -64,140 +61,76 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO0P123MB7261:EE_
-X-MS-Office365-Filtering-Correlation-Id: 044109e0-9483-48db-b10e-08dee0d82714
+X-MS-Office365-Filtering-Correlation-Id: 221577d9-0ff9-40e0-e426-08dee0d85085
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|23010399003|18002099003|22082099003|6133799003|56012099006|5023799004|4143699003|3023799007;
+	BCL:0;ARA:13230040|376014|366016|1800799024|23010399003|18002099003|22082099003|56012099006|4143699003;
 X-Microsoft-Antispam-Message-Info:
-	s14csgBQpwM5pNV5V1/PABTUm62dPnEZh7S+ktoczqG5xxe72EiylWTQlmO4CCF4IwpDvZCf+MnEDeXkYc4ZNLHtLa1MliQ3WS3fmmMIwJwagugfzVFaEFfjrvc6mvjJwPOMtVbto+qP7xixZ6eAEtkkwtvoKkZAkvyRBVFTs+mizKsEinjtbanot0a2v3Cg5ZDcZQjDZk0Mgm7mxaVtx/CjxxPW8RD+IbyuiuVZ/N4rywOf70dGha3iBCOjHF4OiwQGtJVhQd6HLfGRG+/endv58907p336vRP6amqp9/WK3XSiQcOI+v6/YSE6jf9gB+/az5IWN1j1c0jSHjKhlf+/07oOnuDAzRtN4M/W4TYrrvu2NF7BCVfKiJqjyQfvNAu3AXi1S8c24p9u7Jzb5887h9EDQlbxP1s//nt325B0vxGFwb0GriaefMZyvPs0b36UJYrsyhoyvXyIv5mwbP6DnzPMFtp5O0VtSDxabkCsmiOgtHkZsBpxGmmmw3LcYrSuNWYXEY98WQPD0wfTkAxLThSKcdI/F81phprUPvVgq6v6WVXwxzJA5uS1UKENkzFW1qu3Mvz8NLIPinrg06/xHFJh8B/YsjJd+C8sHb5dwSv6RYdbMr1SSxOAWkHTPO/pjdAUeFqwCmK2/UyRCCNtSvSfcw4zVEnlhsRgllI=
+	z0Q+3Q4Z/o4Urb9vPyUsEFtMaEgvtid8OKwtL0myuiH+tx5B0c+tj2Sigm1H9VV1A7GU0y6L7el3uvKMFiMpebqyjcV6nl7eZs571bRcHS3/ZRJhXcR/ifTi11lBTxAAwMDeH2TMg1MNYnx4RaifvCDHRoZrmVI9wW0oVTWuZugD37uQRDH+vuDZxhnoh2ZFV5+njHIKiFbY37B9nULWyW1IfU73GVC2zvcRtprDLFK3RbcDHjsVUC0ny0ly/f5BTVmZJrd8WcaRb+zUnwUtV+edOqfLNnP4x/UAT5KjwpheZJwGyTyNTTvvlq70i84Oy+2nniK5oK9zDqj4+H7tTgRzpLdo3d1MgxzVnwbJT7JIQT+/0Njfb0b/Ter4Vo/jJ1wivBAx0FqpWbY3sY6LrxgGSihwnBuyLexNbd1epVAiWfz2l66mychstHi5zB0oZUpxtO3oc8ZTz2ji7rJOOF1QY7atR/yRvB3nfg+5IVe2Ddgx02Tfyfx14FReQfsB/AVdG8QUuYOmmVattCWEEYufoku1vm8SndpPFVwd+NcDLlRgri8m+7wGT43I3kcAU5GdsKOtbszsLArI7boFpH09eVuyt/1g0TnOD8uAR1j3V552BF0M+K4LIkyVyOVe/vsZJh0szgjyHu8DKfWM6Q4VU2Cov2+2/8dZkayaxPo=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(23010399003)(18002099003)(22082099003)(6133799003)(56012099006)(5023799004)(4143699003)(3023799007);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(23010399003)(18002099003)(22082099003)(56012099006)(4143699003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dE5jVG5CeUU3RlhkeUIwWWxObDBjVmgxUlkyRGVzKytxZmJjamZ4RzJjMG9s?=
- =?utf-8?B?dTN5K21ZV2paQjcrdUxPdmFway9JUUI5N3ExQkNaaWRXQXp0d05PZmV2bFNB?=
- =?utf-8?B?alQra25jaVhuMlpJVzRiMHZ3d2k1MHNzWGpsdXl5ZE9pa3d6eW5kemR0b0xp?=
- =?utf-8?B?VEhDdmtiN3VIay85TFMxbVN6NmtHSWlEdTVqekl3d1c5NTluWllLUVk2aUcw?=
- =?utf-8?B?VVRNMUs1MlhOQS9mMVBzNUFxb3ZOMHlhUlp4ekJMV1hSeEwya2xqTFhyRjF2?=
- =?utf-8?B?VVZFdlYvVmZkaWhMS004YjRreWVNYmxuY2JVeTM0eVRKWU9JVys4dUsvZHlo?=
- =?utf-8?B?UElhM3llcHV3elN0Tk9NeVJQTW00VjJQeGNKMHF5b1M1MExRM05wVDJuU2s1?=
- =?utf-8?B?L0JnTkVrUXZFTGdobG9nWEdEWnkxR0lNcTZ2THl5N3VmR3JiQndJUElidThw?=
- =?utf-8?B?VUJSRExwb3RaNHgvTHVhNXBsOTM3QW81ZnRYN2VsbENheFBTbitWb2JPaG5w?=
- =?utf-8?B?V0VFdDFmSGE1emFXUlFNYmdqZHB1dVBRVkQzQVprWHd5RGhyLytCZGtnY05I?=
- =?utf-8?B?VU02VW5uQjVMb2JxVUZKZTRMV3dUbDYwZDB6UnNIcWVQKy93YXVaYjYzRVh5?=
- =?utf-8?B?V01xZDNMbzB2NU1wVzNwMlhEVTBkYVgwby9HNSszSnM4TGtLY21WMXhJa0h5?=
- =?utf-8?B?M1NpQWtsdkFiUmxyVEdpVVUySCtCeDVQVWljbE84emYxVmc5QjR6Z1VxQzZ6?=
- =?utf-8?B?b01xOFdhbGRQSDlFcnl5NUZZRVNEanNFbDlBMjdnWXdBclhublFTMmFVdHJ1?=
- =?utf-8?B?ZlZWRU9iQnpWSDhZMUoxMHFLLzE4MzdWNVFRd2tycW12K3IyWDlBb3RTcm5o?=
- =?utf-8?B?eForcnMvSTcvZ0NDWmtBZ0lMajd3VEdab0JzMnA3a1hPM20rMFpjWlNBWG5B?=
- =?utf-8?B?TU9Fb0tHSGg0M2RlVVF3a0tVRGVsVWJ0ZmVGekpvYmlMMnNzZFNwZEtVbitr?=
- =?utf-8?B?MFIvZ3dJaUwzTHFHOUhKc3o0VDRSQ0h0aCtUZUI3M1NXU0xnNDBmMjN2L1NN?=
- =?utf-8?B?U2toc3RUUG9yWG55Wk1XR3lsRE5MSStiSzdyU2pxTWM5UGd2RkVGTHhZV0Jy?=
- =?utf-8?B?bUxBZm9rWEhJVnZUWXhVdjJpQlN4RE05aVZoN20yYndLUmROMTg0eFVXbGpa?=
- =?utf-8?B?UCs3Y3pVN0szaldWbzZzOWx0NHdDcFpmWVB5ME1ra2xUcXhoZ2czdVpLaE1h?=
- =?utf-8?B?aDFzUW9sbEdLcURIcmlNUFIrd1ZoMVJzNTVMRXJjUmdPYXQzZ0dNdnJqdkQz?=
- =?utf-8?B?blB0OS9JL1lha0JMLy9LUHBLNEI0aGZQK2xFdlBtSXM5c1d5eUtyb3djeENN?=
- =?utf-8?B?L3ZUTUVpTGUxOWlxTnAwMjdqRnhuUDdoZVN6L1YrK0V6OWs5cHl0ZU55TCtj?=
- =?utf-8?B?YzljcHZKWWZkREZJRzhKVjA2eU1JVGFTMTRQZFR6T29VMnRaek1tV1p0YWlO?=
- =?utf-8?B?Ky9IbmRrV2pNZVk1dFpnTHBxblpwakpFVzV5bW1zTHgxRStkTVMxVy9RbGhC?=
- =?utf-8?B?MVlUdVFmSUxocHVEYjZDTnh0dHZQd0JsRk1pb0s2SlY2YUFiQnN5OVN4bisy?=
- =?utf-8?B?TDJxM291Tithc0lBVDM4TmpORW90cXpUTmYzUjNDRkIrYWdiT2lINlk2MFFE?=
- =?utf-8?B?ejVuWTFkaEx2eHUveHcvRXR3VzRyUWNPYmEreVF3SG5aNVIvNlF2Y0I5RW1R?=
- =?utf-8?B?d0xFQVI5RDE2Y2VEUnN1WHJmU2VSUWxkTm96eFpZMzlIM3BESkhCYTQ2Kysw?=
- =?utf-8?B?eTFMcUtwbTkwRXY1SDlnbHdJeS8yV0p2Q29JYTdpbXZTeEE3dG0wRDg4OTdz?=
- =?utf-8?B?UjVUcG45Q3pqOVpOeXQvTTNEYUMrTWVmZ2Yvdk91N3RSQWhqQlV0cG1FeGtu?=
- =?utf-8?B?NGprZGhVOThuM2d6dVJzMis2Z05wOHlXNGJJcWJ6ZTFsekVaZTk4OGRWd1dW?=
- =?utf-8?B?TW1XUXJkZ2ZGVEZERmJ4YjhuWjI4T2lsK3Q4NHN6azVLblRXWjl2WFpqdWZR?=
- =?utf-8?B?Q1p3Q0JzMzY0ZFBmaFJqdGVXVHJLVHI1NmJJdTNxMjBzMHBOdUZtTXl3RnFM?=
- =?utf-8?B?WTF3OVRFQzRWSi9RbjhGNlBLSTBLZkY0YWRDNVAvSEtmUGJVMTdKVjNaZXpq?=
- =?utf-8?B?ekVibEg0bjgyc3F5V0pVWjdsbVFlVFA4MGZaSFRaUnF1OWJ2SFdLam9aRncv?=
- =?utf-8?B?RjN6ekdHWTJ1SGtFRHhXV3VUTks0UjNSZ0NXNENzTTc0ZkxtZVJDeWhOME1V?=
- =?utf-8?B?ajB6am15L3dmVlJOS2FNVXI3enN3d0o4S2pVQzBwK0NRNzdEeWtnQT09?=
+	=?utf-8?B?d01TTXh1WDErQm5WMGZ1L3ZkaE10VXFLK2hhQ0Z5ZDFVTk9PdEt5QThWUjhi?=
+ =?utf-8?B?eUJQYzRXdEhSbWRYR1ErMGxhb28yY01MSEVlMWZOUnd0cnF2Njd3czk3Ymxn?=
+ =?utf-8?B?cFhDVUsyT2Z0RS9HMVBxc1JzNGh3TGJ5Wkg0M1NFSzRQYTFkK0ZKMjBVRjVv?=
+ =?utf-8?B?clMrREpoMGU1dEpjSyt2L0hHL1RRSmNKUXZobVV5NU5rMUJENEdMd3hWMVBH?=
+ =?utf-8?B?Q2xLQmpKU0RhN0l1NjZLbUUxSGNxSXFoUDJBMk1qODJJa0U0djJwTzVjQWpk?=
+ =?utf-8?B?L0x5Sy9Xck9QOUpoa3pZWkxLeEpocTRWd1RNZ2o2NTVqV3hvbVVwSEFJSmJn?=
+ =?utf-8?B?clRMY05TejVpSVlNRTVIaFZueTFFcmdXK3dOWmdEMVJCUFQ3RDdFaWMvSTNm?=
+ =?utf-8?B?WFFnbmZWazRRa2pTbmx5MDZjNWc5TzhTZUdEb3hMU3ZTT0EyTllmQXY1Y2lP?=
+ =?utf-8?B?ZlFsd2FLS0wvTmtYdDNBeDBHTTNkMWRtR0NSVWJIbHkxN2dHbXpQY1d5SjBr?=
+ =?utf-8?B?bEJCOVFDY3hDVGIxT0YvREk0ZlpTSDAwWlFlTXJRcjJ5OS9oVlk4NGIrUmpH?=
+ =?utf-8?B?T2c0QUUwdFQzRUtBWHpZdVVXRS9QM2dwc2NvL3pvMGFZZTBNWWtUNGMxN2ZK?=
+ =?utf-8?B?TE95OXg0QmQweG5RbHpGNkV0S3dBeTNBZHFNZXdmdHM1eFplVWZPQ3pPMjVa?=
+ =?utf-8?B?aHdINHhuNzBjS3piam5DMWJUUGNseXdvSFdIQkVBS08rMytYQU9kTkFnd0xl?=
+ =?utf-8?B?Z0pvM3lSdFpnRmUzZEp1eTJjeG4vVmhjODlFcC9wMVJKVlpzaFNQU05HaXJm?=
+ =?utf-8?B?cTFvQThxME9maGcvZnRUTjU0UnIwTDh3V1ViSEp2ZWM0Ymk1WVlsSGhjV2Jq?=
+ =?utf-8?B?M05GcE9zWlVIUDkweXNwS0N3eFA1YzU5TEg0SjV0TkwyTEJXRFNReXJHMWha?=
+ =?utf-8?B?U0JOdTJKV3pKU0R6TDJMMU5KWUhzOS82c2hKeWF5UFQ3dTJXekNYRFJ0M29Q?=
+ =?utf-8?B?TFVldjc3OEJJZDZIeER5UGFmVmFvb1Fkai9WZDZRYnlUdlJXUzk4S0NIYk1R?=
+ =?utf-8?B?WFRFTXdUMjc2dnpJaVRtVHVWdGtaKy9DY1BpeCt4NG1rMm1XMmZSc3MyZC9w?=
+ =?utf-8?B?Ti80VFN4YzZLVEZSbmdPdXVKTTU0UTloTFRpSVJzSVl2VnNTdVNHU0RpcHMw?=
+ =?utf-8?B?Sk1CdS92SjhTenVEcEsyUVQ3QXo5TlgwdGVETGFwaDY5OHpMWk12a2RjS2VN?=
+ =?utf-8?B?M1NxMi9yeXBBYVpTUWdNZ1RnQ0llb0FzVUhWSTBqRGJRWTJoNk10TzNaeFU5?=
+ =?utf-8?B?WVNIanc3aWpHamkzTERPc25aUlBrYTlWVjlaNFg2OFhTQ2t6OER3NFhVa2p2?=
+ =?utf-8?B?QWh3dzNlemkrOFQxZkFEallROTB6MVFzWnlVYUp4UGtpeHg0WldITEl5ZndL?=
+ =?utf-8?B?UnFCOGlWbUsrVWRQdC9WZjcwaVRCSXdVcGw4OENnL01pdDllMFdwUm1lazNl?=
+ =?utf-8?B?WnlzYUhQNHdrNHcrVjFENVFlQVBtWlVZNHNZOEFEY2ljd3UvQWZ2V2xEdFpr?=
+ =?utf-8?B?UW5nRkpHaUh2bjY1VC9BcVBwZ3EweWQyNGJiSytYckc2L2ZFb0JLQnVMZTZF?=
+ =?utf-8?B?eTJGeCtqcmgrc1krUWxuYU1NdGlzSlhSMkUrT3pQRllibDQwbnc4WGxiRnBr?=
+ =?utf-8?B?a2JkaWI0RGxkSEdicjJUS29LTGs5TSt5MENuZk5HRkl0akxCem5ZS3lQMjJV?=
+ =?utf-8?B?aEM4S0xBUUkraWNucWlqWlVWQTg2TWtJZzNuYnVOZ2lmbE9IK1dGaitsNzRP?=
+ =?utf-8?B?TFZFYi9kUFNmRkZzZEIranJacWxPUTl4UW1DUzREbHRNa2cwS0ZjcnJMUng1?=
+ =?utf-8?B?SGEycFFPUFVlNlBSN2JHek9RV1o1L1pTaHE0N1dKd1crTkd2N2NPaHB5Qkt5?=
+ =?utf-8?B?NGRXU0tUdW1CZG03MmNrSll3ZFlSYW5HMnczUEJSZEFxTU1rb2FLWjRpd2Z0?=
+ =?utf-8?B?U05ucThTOVREZDlvZEgvZlNrTTB1cklPM25LL0I4cnFzYm9qeGJXQmhDaTl5?=
+ =?utf-8?B?aWxTTTBPUTNLTWw0aXd0WGdUdEFEVDkzcFZZbDUrUDBtUEFTdGRxcXZjRHNS?=
+ =?utf-8?B?TVR3YmpZTms0QUE3NWpoZDVLdUNEekxZSFRwLzhSYUUweE01NktTeWs4RDA3?=
+ =?utf-8?B?YUdqalRjd1dLK09SUlVwTmlxVG5CV0dmSDR2VmNIQ28wUVVxQStMd3BJdkhP?=
+ =?utf-8?B?cms1TW0yUjVKbDZzY3hsS3MweFArSDlCMnZ6MXY5OGFuWTRUWmlkNmR6TDdP?=
+ =?utf-8?B?Z2k3QXpMQ2tnYlBMUm9aWXA4VFRkaDhIL0E0a1pwQ3krbnJMNzRDdz09?=
 X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 044109e0-9483-48db-b10e-08dee0d82714
+X-MS-Exchange-CrossTenant-Network-Message-Id: 221577d9-0ff9-40e0-e426-08dee0d85085
 X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2026 12:13:30.8742
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2026 12:14:40.2968
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rhN04NJooWxl8dAA9CE6Vo5iyYmMmErxOp6tRQWRrwiNTeoqoHgJ0OMu9cg0piJJayyKlss1LPmWlOxQnk5K/w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9ZAuZO3+0korzV/+QzHrDMpx2CKJDAXik5dI5zWp4z7CcZ0TBaw7cTWBVU8m4kwQD7pSNHIXh6mUpP7vufcZmw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB7261
 
-On Mon, Jul 13, 2026 at 10:32:14AM +0200, Arnd Bergmann wrote:
-> On Sat, Jul 11, 2026, at 01:13, Aaron Tomlin wrote:
-> > On Fri, Jul 10, 2026 at 05:59:59PM +0200, Arnd Bergmann wrote:
-> >> On Wed, Jul 8, 2026, at 04:00, Aaron Tomlin wrote:
-> >> > Currently, the "module_blacklist=" command-line parameter only applies
-> >> > to loadable modules. If a module is built-in, the parameter is silently
-> >> > ignored. This patch extends the blacklisting functionality to built-in
-> >> > modules by intercepting their initialisation routines during early boot.
-> >> 
-> >> Andrew already asked you to provide more background on what you need
-> >> this part for. Do you have a specific driver you need to disable?
-> >> 
-> >> Can't you do the same thing using initcall_blacklist?
-> >
-> > The primary motivation for this patch is to provide consistent
-> > administrative control.
+On Fri, Jul 10, 2026 at 10:23:00AM +0200, Markus Elfring wrote:
+> …
+> > Validate that both string section headers are of type SHT_STRTAB before
+> > caching them.
 > 
-> Ok, it sounds like you don't actually need it then.
-> 
-> > Regarding your suggestion to use initcall_blacklist=, while it is certainly
-> > a capable mechanism, it is fundamentally considered a debugging facility
-> > intended for developers.
-> 
-> I don't see much of a difference here, it's clearly still only a
-> debugging tool to me, not a general administrative interface: turning
-> off a random built-in driver likely causes undefined behavior later
-> if there are any other drivers (built-in or loaded) that depend on it.
-> 
-> Overall I don't think it's worth the added complexity.
+> How do you think about to add any tags (like “Fixes” and “Cc”) accordingly?
 
-Hi Arnd,
++1
 
-I appreciate your candour, but I must respectfully disagree with the
-assessment that this is merely a debugging tool with no practical
-necessity.
-
-The requirement stems from large-scale infrastructure management and
-configuration consistency. System administrators rely on standard
-provisioning scripts across diverse hardware. If a distribution arbitrarily
-alters a kernel configuration, changing a module from loadable (=m) to
-built-in (=y), the administrator's module_blacklist= directive is suddenly
-and silently ignored. This creates a severe policy enforcement gap.
-
-Regarding the distinction between initcall_blacklist= and
-module_blacklist=, the difference lies entirely in ABI stability.
-To use initcall_blacklist= requires the administrator to know the exact
-internal C function name of the initialisation routine (e.g.,
-foo_driver_init). This is an internal kernel implementation detail, subject
-to change without notice, and entirely undocumented for users. Conversely,
-the module name is a stable, well-known, and documented user-facing
-identifier. Providing a stable interface for administrative policy is the
-very definition of a general administrative tool, rather than a developer
-debugging facility.
-For example, consider CVE-2021-43267. A system administrator can now use
-module_blacklist=tipc which would cover both built-in and loadable module
-configurations.
-
-To address your concern regarding undefined behaviour, disabling a built-in
-driver carries the exact same dependency risks as preventing a loadable
-module from loading via the traditional blacklist. In both scenarios,
-dependent drivers will naturally fail to probe or initialise. System
-administrators who apply denylists are already expected to understand the
-hardware and software dependencies of the modules they are explicitly
-disabling.
-
-I understand your hesitation regarding added complexity. However, with the
-fast-path optimisation suggested by Sami (which bypassing the scan entirely
-if the parameter is unused), the overhead is essentially zero. I believe
-bridging the logical gap between how we treat =m and =y modules is well
-worth that minimal footprint.
-
-
-Kind regards,
 -- 
 Aaron Tomlin
