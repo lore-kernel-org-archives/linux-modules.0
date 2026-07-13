@@ -1,66 +1,66 @@
 Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09AF3A963E
-	for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2026 08:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC70D3A5E97
+	for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2026 08:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783930441; cv=none; b=Hl8are7mr9XZoS83BGpEVwAZZfCDff2DML0nQ+9kCMSa5onYDJ38PF88rQg19AN9NXOoQdvtiLT5UtJLZexxvoamUh2DGRGK03IsqgvD3KYgPymcpEHdOJ+1l1/nMfUMz6W47ZEBy/NtGoCOzIHq5FJegQOI0cyTBF5uNYU1QSI=
+	t=1783930606; cv=none; b=syxXLJ/kCDZbU+k2n8gYA4jvZGChfslTNKrsTyw1/XdxSQ0MX09FH4cC6GzV6GLVramzBh4UP+X/2P/BrMIPxmjLdVt9vdktKXZ60O2gSa7ehH6sa0ZTYorhFfd9aZGDVBWvqbKNE9OOkOfczKlsx2f2mNtbd/RZXVJ5POvJ/tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783930441; c=relaxed/simple;
-	bh=IE62m8iSP+rZUY8t9Usf2nywYiJ3//tW/RHG7c6stSw=;
+	s=arc-20240116; t=1783930606; c=relaxed/simple;
+	bh=GT0aA4Hs0v+V8d/oRMBUp9nulXdAlA703EAOOYn8eTY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=a9VLoOEF1i01ZBf6rM/5pe2WNUdLRS7mIaRj6YJiuIXl6EZ/4mm7JpzHRYROAKeWG2xpg9RFS46I3b39N4tENMLDTwM/gx3QCfnB+rR+Yx+3nXv5mch+BaHWH7/RRO18crR6NyYeVI/3jjCdy7+Wme7HA3D/UaL2lw5urPCjX2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dMpPHE7o; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=E+/wSVlEMHBJPmwgSrbTeHwn/YaxVsNIynawWuzATr75HXnfSAHLqcFUI4TrgUupnnsi+R+8c1J7rs9lEt8DdOFPHNjEAASNO4emlpLATkVROm4zC5Y0GyA/IPCul46xQ80zf34Z+Z7LGglr6+6bPhJ20lHB/2d8jW6SmyxowVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CBy4T9Oc; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dMpPHE7o"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-493bfc3b84aso12903265e9.0
-        for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2026 01:13:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CBy4T9Oc"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-492488f8583so43118355e9.2
+        for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2026 01:16:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783930438; x=1784535238; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1783930602; x=1784535402; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CzA7AdLdyanHGDYnO7UeyFW4jvO3vgqbYi0TkaDMqeo=;
-        b=dMpPHE7od2YOc7JyBd9MJbNSdEtZzgfKVioldewuTPjyvB03ym4gRs8/wL7lQ1Cetm
-         ueXamYpq7WBcSbWz/S8mzE3/fiv0R54Q0kKksTDr6QJhAf1NJmXUyGLeX+T46ji881xP
-         mfQXi4Ijj64GnfVlRf5mmP9bD2boxI2euSNoNrGrTm2rrHSnQ2NfBC/iNnVc+B4TOXKh
-         f4ZcT7JXjLqHtGEUc1I+6D+sImN7adruv4GRxAvz7w8HfefFJvsrgD8u7g+iVmt3arev
-         sCVDm7PxuMsEfegYPaKmN81lpQkQsnFBpdVyZQZRmWrSUxgS+GL/xQKfYXvMr5/wWvGe
-         3ItA==
+        bh=Gq7CBsOOfXmcQmDqY44O8+unztSFjXGh8YCUzgZnM2I=;
+        b=CBy4T9Oc1W9slLmuqbek3QiQXa0pY8mAs59+mPaRd4L5Z/MBnekMl9+qdPCafhy+H3
+         kKcXEzG9cTHhj+4+WercAoOnZt88DMFs1ygG04i1DZA2cHQTuP5mfJyahApznK9XxXqT
+         bytziYHBwdS0gm0mzxC4DrhpOirK+VHpCxDjzqyiQFeNJxd+3DFfxUO7S8E94orvpnF5
+         o/KOJm+5J7AzK2LoIPwlsX+9GJvcxAnv8Gcrn6rxKpAirad8iF2VlYpC2Z+d/mUX6dDI
+         Kol5hknYHC1C/8SeNDSgIJcXTQgbXcnazfK/gTH2rdZE9TrXWzi/aN6pJ1TaRYIHUm4d
+         JIaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783930438; x=1784535238;
+        d=1e100.net; s=20251104; t=1783930602; x=1784535402;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CzA7AdLdyanHGDYnO7UeyFW4jvO3vgqbYi0TkaDMqeo=;
-        b=o1+i19kiU/IfvpTOeeegcEFAN6yDs1+JggQgO2W7zPx+A0ttPJZtW9XFnBapxXTK1u
-         bim0Uh08xBILApyu2IhKeRciHngIr5XTPpfQS57E/AikTzqB/ItRIF9lmazl73V1Ks9q
-         tozDvpfkk1E0wnrdQUofu2RLqdIxAoJzsu/0+JEwuiWnGAsTdMti7fxovp2/LXqGuxpQ
-         r8HzeoeLcoTU2hu5DGx502NXx0lJQmiHOx9kwitw+1vmbJNXmBbPVkjAPoTl61NtvRsC
-         Kr13ZPm75d7Ly4QCBPoxAbZ+PgV/U+IWHqaqxYaLpTMHsKGG7HEZ3PPY9Xlpw+eIa5PR
-         M93g==
-X-Forwarded-Encrypted: i=1; AHgh+RpA5YVc5nmcPeyCtB0qHlw6y8gOpPL2ILdclUJhcP1OXpcUgKdjwO/x9YqXsDtRQf8hL8vC7zI5pfZwx78p@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAtiw4tleA5TiHqiKpfHGg3NBWnZspXdSSEi0gpBajJXcrdeH5
-	cH3q1o8DNWH332D0pNWMbqVVAFNqeO1mDY3y4CPGRMDCyAx6biTLqEVJQHlxE9w4xyLTIShx2+F
-	Pb+jueE3ALeP7EJNg+Q==
-X-Received: from wmbje14.prod.google.com ([2002:a05:600c:1f8e:b0:493:beda:c864])
+        bh=Gq7CBsOOfXmcQmDqY44O8+unztSFjXGh8YCUzgZnM2I=;
+        b=L6Fsw6BaEl3F9dUfcRCZ0hAAc35XGXlVaZN9IKN/w1O2Yoo8r7/NYYZc3oTKCqDfDY
+         odV5ZOQm+qVDO1Tz8z4CGpZStly+D47hZO05qWMAnl9xJ7OcbTW4hb+sp1VdEIFvCVJf
+         YcaZpewYpPamJo7htgpoSoy4+fv6P2EQNUNCv6hSqrfyEnwWVco99bohHoUWORNNPA+c
+         9LQJHqH4KzrhvcBZChQH1L3Qa/a55ORNZv9qetoMcqSCGxhWDUhIn+OJ/lD9oJyIx5kf
+         Z8YDHax3zImJCJxPsruvgXd9fO0XsBGp+VNPhjRx1gNn3F/E7xVezWpvUSEYUAUIKcBa
+         latA==
+X-Forwarded-Encrypted: i=1; AHgh+RrTuJ/YXi2JWN9iy4dDPYSK5uqrQdUrVxRDRlIkAUXaeW0PHnCIbQ8pLJA3PHUHBTgxORHnyvqjOYiz8Z28@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu3M3IzmFtGifDgBZDI0MIXpVo/9CVSAAOecSrBnzDoiQGwptq
+	BBX/6Yqn2b8nH5ZpqIqzZbq7MCxUX0y/sbBZlk5uoQDiiC5c2hGpRCSF4YUc9MDrREvzqy5Xf/k
+	qcfRCvv1ERSN0zmHxEg==
+X-Received: from wmrn16.prod.google.com ([2002:a05:600c:5010:b0:493:d1b8:3df5])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:8710:b0:493:e81c:fc9 with SMTP id 5b1f17b1804b1-493f87e5198mr88665935e9.15.1783930437954;
- Mon, 13 Jul 2026 01:13:57 -0700 (PDT)
-Date: Mon, 13 Jul 2026 08:13:56 +0000
-In-Reply-To: <20260713-fix-fops-owner-v8-8-2495cfa82d47@linux.dev>
+ 2002:a05:600c:464a:b0:492:7083:e5a with SMTP id 5b1f17b1804b1-493f882b117mr52089545e9.31.1783930601636;
+ Mon, 13 Jul 2026 01:16:41 -0700 (PDT)
+Date: Mon, 13 Jul 2026 08:16:40 +0000
+In-Reply-To: <20260713-fix-fops-owner-v8-10-2495cfa82d47@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev> <20260713-fix-fops-owner-v8-8-2495cfa82d47@linux.dev>
-Message-ID: <alSeRIaps6QSqxJE@google.com>
-Subject: Re: [PATCH v8 08/10] rust: binder: use `LocalModule` for `THIS_MODULE`
+References: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev> <20260713-fix-fops-owner-v8-10-2495cfa82d47@linux.dev>
+Message-ID: <alSe6PsvdrSYP_Z0@google.com>
+Subject: Re: [PATCH v8 10/10] rust: module: update MAINTAINERS to cover module.rs
 From: Alice Ryhl <aliceryhl@google.com>
 To: Alvin Sun <alvin.sun@linux.dev>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
@@ -86,17 +86,35 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <ga
 	netdev@vger.kernel.org, linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Mon, Jul 13, 2026 at 02:45:29PM +0800, Alvin Sun wrote:
-> Replace the `THIS_MODULE` static reference in the binder fops with
-> `this_module::<LocalModule>()`, consistent with the move of
-> `THIS_MODULE` into the `ModuleMetadata` trait.
+On Mon, Jul 13, 2026 at 02:45:31PM +0800, Alvin Sun wrote:
+> Module types now live in `rust/kernel/module.rs` alongside
+> `rust/kernel/module_param.rs`. Update the MODULE SUPPORT file pattern
+> from `rust/kernel/module_param.rs` to `rust/kernel/module*.rs` so both
+> files are covered.
 > 
+> Cc: Petr Pavlu <petr.pavlu@suse.com>
 > Assisted-by: opencode:glm-5.2
-> Reviewed-by: Gary Guo <gary@garyguo.net>
-> Acked-by: Danilo Krummrich <dakr@kernel.org>
+> Link: https://lore.kernel.org/rust-for-linux/8ea21b29-9baf-4926-a16f-7d21c5a1a1b8@suse.com
 > Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e035a3be797c4..74733de3e41ee 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17984,7 +17984,7 @@ F:	include/linux/module*.h
+>  F:	kernel/module/
+>  F:	lib/test_kmod.c
+>  F:	lib/tests/module/
+> -F:	rust/kernel/module_param.rs
+> +F:	rust/kernel/module*.rs
+>  F:	rust/macros/module.rs
+>  F:	scripts/module*
+>  F:	tools/testing/selftests/kmod/
 
-Most other Rust Binder commits use 'rust_binder:' prefix rather than
-'rust: binder:'.
+Is there a reason why this is a separate commit from the commit that
+introduces rust/kernel/module.rs file?
 
 Alice
