@@ -1,191 +1,121 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B03283C83
-	for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2026 16:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783958529; cv=none; b=NcrwPmYUnnZWf32P8HV5XqCKrCvemT7Ojx2Uga2J7ZMKAwfvx+IUUGj9RXn1G8thLFeItrycRGlo1bM/q08cDrI6arIELpNCgVxfPJbjQQgtcbZLidOAUDT5/jPS7jj1aL5oYXatc2k2Somty7ZbuqiOTMqcN0x85KAaGMuLhZE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783958529; c=relaxed/simple;
-	bh=EMPIvQ9f61dOFBUBMC4kCdeDHzW0UPnMbzHxxxEEbBQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rA5xSFzUhdv4q/PoAk8QqLBjLS64j9Jk9x+GzcUWUU3AfJsgnJv/VBro65bt5cJ0cs0qm32eI5byIlSaW8T8qmcx8PH1BESY6uMum++USYiMB01ioAPKQgmC9UMpeIbcWXEajvu09X/Ml4+jaLF+C8SuFsPS/HMBdHcIyQxIxFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=L0QXbr93; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8F935E1C1
+	for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2026 23:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783985886; cv=pass; b=u3WBQgAb5GA7EdPBo0yei8NNEkYRmzOp7IUQ0loUb/iTa3f7gALhfUdHqUbszRtb7c7gYSLcLuTKpCBLqUeLNFDFM2xlfb+KOfTBPWTDv81l9kBgmXMYKs8+QL2o1Zocjc0km3Ja8uT1uWO3t33NoF74opZ49r3Tw9jmzpC1UHY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783985886; c=relaxed/simple;
+	bh=eFTiNkhrPO8WSMO+GRp2GynqUrMhkRKJhxOxNfS22+8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V4ffanAaoETPyuZ2qWPwC+9rp1ErPXnNwkmAScw3DwV9O/cjZLPvrmhlnN6Z0xlaGzaudpaGAt75wbT32meQW1pVAya5t/+BdKY0XIOF4jb1LXVAvX2EP/eQNym1X6bEpsuZ1An/p8RWxpR4G6DJOPVBzG46Xnc6Rcj9+SbbG0A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D5vPG6dM; arc=pass smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="L0QXbr93"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-493c7902f47so30793015e9.1
-        for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2026 09:02:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D5vPG6dM"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-51c15a5b265so121881cf.0
+        for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2026 16:38:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783985884; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lOLRIk/WFH7Xa4scqMmJuit2KM3G/1P+AELDSDtaKekaRt1NZitlCwQQ+GFUodYOi9
+         vUv0cEPAO/kyMLSLX0i+GwwvnR+fId0r0LPh2vrOKpZJves9tEdGsu6jxsNUu/jdIolR
+         t6aijeOlsX+K/KLljqHsil8JFXbkE9wwacDuEVMU3Q2I33QqGAVgklbrZlA6t2cFs2kk
+         4EAa5HyAydP7+mTZrb6OZod8xSL7QDvGl1R7jGkYSYeD/CJLu8D2pF0dlx7tFdLsoOe7
+         UWSxhSlEN2fcMHhSlvGmrmcHne2qbr5uRYSLxbsTaQXYr0Jxo5iY/K3+9k53x6Q1pF7B
+         6GBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=eFTiNkhrPO8WSMO+GRp2GynqUrMhkRKJhxOxNfS22+8=;
+        fh=EnigytA0VB3s6MzdGBUBTKIhHTd98qEF+h20RTUUbxQ=;
+        b=iCDhurnpiHAbAKMr6daObF9/jr+KogrehTGloKvmc6YOcC0xTb7sT3djm+87oD7lWG
+         NfBlIj0slU0SDr8Pg3yBT4lJA3s1y86hQQygez3mFmouHj02IA1duoFKyT/ehleIcG40
+         FFX3NZ2ehs1LUUo19hLjd7BN33HQNV+eptUwJqPcyXtcTm4mfc4xBqwq/3mzOtH+VMX9
+         J/i302DVyJcbdoG9uobJ3bPCAGlnS9BCpYQo7NM/B93T3thECUbLu4RgeImx7PKxe6eI
+         HYvgYPrqEkJkYvxns8ahnMDF3egR+jhVAC4h4v6dkELMx2HQ3I+5wvdjXlbDM7VUzOPZ
+         dI5w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783958526; x=1784563326; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dzLBfZsmv8ck2KA4fjQuTLH7P1bbLfgsRuWph8WedGs=;
-        b=L0QXbr93HTfJh7IquV91jQuDCU4gn1GMZFcKTZDipw8GitGCxIxh9wsYydIZRqZ08X
-         MiYI9dfAZROworqsCCn8E/gcyE2CidCMdFsUiQ/wBpGrcBx40ujBKNPoytn+QyFGDhQ3
-         wQE6fpWklhbbubtB0+bX4mnEJ2gb2RP1VmzsQWEw/PBFuDLDs2K7hL+zVU72x/9BJWgb
-         o0pIQ9JJl9RIJyTw4iOYKAChg47lKLf+3sUONFWwOyczienRff5ANSQ21GVZ1HKPEXWM
-         82Y8eyCNPWy1NMySwhD+ybCTCLcCPIHmT4pgoOGnuZM/hHb6wEeEFHAmjAn2bund/Q33
-         0OwA==
+        d=google.com; s=20251104; t=1783985884; x=1784590684; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=eFTiNkhrPO8WSMO+GRp2GynqUrMhkRKJhxOxNfS22+8=;
+        b=D5vPG6dMgqWQrHJPcQQwcMsI22GGB7ichbYYLuch8nCo7Q41+MsLzZbYIblYWO/KQz
+         Xf/8hiiCW0qVO5yj+VVrlYKKI9A8sBBokoj79OReHP0g3SEai50TcEhpnoCUAQYMfvgH
+         PKFpg1f/5IqlHPj+/GzuAiKDWyQ/0RT2GVfuvpvru0UOiASCB60pL31Vx9NJNTUVQw46
+         lANxHMfvCIDajYHyukuOtpL0vp5fhg5M5txXX7RpcvUn0VTCZfCRAGyQ/hDtkVY0v8Y9
+         WXpJn9+5u3Ow+3Sb7xl3aDir8Vdp9mtdJD8RDg2SqF4uvvMEVxIfmc/VSeUtZmNSelbk
+         VTqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783958526; x=1784563326;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dzLBfZsmv8ck2KA4fjQuTLH7P1bbLfgsRuWph8WedGs=;
-        b=F/Qcpku8v3cdm6t+23K3iUw2IyeSeZgnlE/A6fQ6HcyKh1IlqxZhFzbRrvHDZMpX1F
-         UohKFhWlbh5DZqkfkz1Yf5nPc5n4ijoA7egYt/IVsjTCbrtJ53Ow7EfqbY6AOu8QQ/Sj
-         AAWRnu9sMu3tIeUDfOCwjRd4xhHhYTxk1L5oRlx8OHQS88wMwmOYLUDsr1b+fbJ1IXBm
-         xL/nwlOtkjGwJ26S2n8+9xyOx99YtAuWZgjegJ4RYsDChii8djfT1H1LxC1A/3s0poE7
-         D08ZzkaF3Aj6PXsgIX/ytaQc1JbYh+dL+eOz3UNToUN5q3TZ9eJ0l+PdMc4K1YhBD5Y/
-         d5nQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rprt4bOdCOJqyVCxLUh9pNS6fKBEZD16bUa/8EszLvNk6B+9CDuZlSEeaghqtZyeRQpCVdqD9fTWIJlV7gA@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9A+sN9WoqY+qa95L2Kgde1ETV88ASzXuabzmEAf4crgqXAcvz
-	FXCudergziauCFqXPDfuDaL3uEwgUQbDb/6A6ESVW7XPkkUF8AoceE0sDId/uQSq4M8=
-X-Gm-Gg: AfdE7cnHTlLucsKByuRMsHU3eNVQGY+bySDnVjkY3C3KpLFMEcTnZC6e6rNij0ntOAf
-	jB0MtQMv1uezcHVVx/MpneDGp6J0zNbrqvTLVBSZZclr1G6Sbm1eaksCz/qY8lJGAeGjtqkI7FK
-	VuoqwO6plIJSSDl8s9a4AqfbwM/t7LllBkx+U9w6LmjPLXIXIFNVtyK0rq5e9dfDsgq3chQ1opF
-	GqL3Ix+LUcgki4nabpMTGrE2/RgPuX3gzVjXimiG6wCUJnGmuJBNpoxnS30waaXGFx/6ziPwCgO
-	1MNO0wYvuJ8cdx+jBd0fFhHzM6RIkK9V6wLYXY4+H1k7aIIE9jiJZKIGn7rEsCnWNhB83vccyUI
-	m59HcGCBCuAYUlIStVCveOmb8nK/4O1+4X1YWC+ChXM1DE18YXWY1UpH7eExObVAnnYxzcdP2ic
-	R4Vl4NQ2W+Y/UvbW2P18D2bq6NDbEk/4YAHOkocURio8qC
-X-Received: by 2002:a05:600c:8119:b0:493:b6e4:fb2b with SMTP id 5b1f17b1804b1-493f882cc20mr90387845e9.25.1783958526083;
-        Mon, 13 Jul 2026 09:02:06 -0700 (PDT)
-Received: from [192.168.42.79] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4950a2f951asm5002855e9.14.2026.07.13.09.02.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2026 09:02:05 -0700 (PDT)
-Message-ID: <c54ab73d-8b96-4dcc-8847-63c54da6b799@suse.com>
-Date: Mon, 13 Jul 2026 18:02:04 +0200
+        d=1e100.net; s=20251104; t=1783985884; x=1784590684;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eFTiNkhrPO8WSMO+GRp2GynqUrMhkRKJhxOxNfS22+8=;
+        b=V3wQxGWBc+md/rvI5Nj66azpiTHS+bs3mk7JpTb4RH3ZHe6SB0qgY+hqO8rpbC2ZeQ
+         dSmn6eEPXasCj3vAhuUOgTtr7GJo8sVqbCjPpNgU7q/F+Zj6Qj6J8yLNCXiNOImzSTWW
+         rudaK6VnsCJEDYIwLHdz2YvP6p70mhOWITv8rP2lbdeiVrt4ClkQD1DDZi6M7/WLkMoH
+         ydoC1UG7ZpaB8jChAq+tGI9xy4sPsAv1qjcV2TIEoFe3Pb6rjCO8n8p6HP0HxYqrJNa/
+         7Mg+Ql8WX+LtVSg1jgxFe2uU/AuJaB2wDrCUmdUwUoPjotN46hUppp/4MkmEDCrtjR/r
+         q9vg==
+X-Forwarded-Encrypted: i=1; AHgh+RrEGTcgkWrpEA5/4vyrmCy0C7fxEkodnvnVl8FPnFLKsB5TgPfOQadTY8uyie8nhLK6Dc92Ntfj0T/9W8Hv@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1fIpMThu58uy2Oo5KOlZc/jkTyDyu77Dyvz1+hqS/jlwYEKGR
+	+VkZrq27YWci195o63N+n7Snj/TR1fYpg6PRKHI0GRS8T6jGMJKWe5WO6ke/TCFth8HIqmvdVqm
+	f3XrCgE/8oxWElFhy/qcriXMCe4fbG3QOLbxds6ZG
+X-Gm-Gg: AfdE7cmdGJL8sKj/8QfSVxytROvnfPLYJGghVnX5m1dge1dxj5LLrIpyH7pSLvYtZeb
+	VghqUP4i9r3S+xf98DDwMKFy3/05qRPzZQp6Q2tyvKh7CsbsHEuTlsJqrDUNwcUheoC6Rradt/Y
+	l+G4kxlHkMhXqHffmSfciplj1eWPZksnt/Lv82yP+QXtIjEoyLZSFqyQ/wGpVcr6m0ZxKz+66d9
+	4RLWemfmTCRPh+xDNfHa98Aos1nU10vUY6rSn6kYMm9h0ipASvosMfsJjX77UNzN2kLHu7mfyRd
+	d3CQqcb6Klf33alEkGYOJqzRHFcSvtR8VjU9G5cUKiaLhMRb0gxcYSt8ZGW7F8g3gKk=
+X-Received: by 2002:a05:622a:1f13:b0:517:5d71:84e5 with SMTP id
+ d75a77b69052e-51d7bc99378mr8915051cf.5.1783985883619; Mon, 13 Jul 2026
+ 16:38:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] module: Extend module_blacklist parameter to built-in
- modules
+References: <20260708012107.1621513-1-tweek@google.com> <99301e32-b067-4d0a-a087-2c77b1fe0a90@web.de>
+ <j46ht6nbnztkkkjbcxgx2aq5msszjsvxg7cwffxdrxciihbzen@p6q6k6hakgzy>
+In-Reply-To: <j46ht6nbnztkkkjbcxgx2aq5msszjsvxg7cwffxdrxciihbzen@p6q6k6hakgzy>
+From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date: Tue, 14 Jul 2026 09:37:46 +1000
+X-Gm-Features: AVVi8CcJGo64LxQEPtx3X_t29il-FQ0A5z2tgYJacB2J1rJp3H7oBMeK4yohNUU
+Message-ID: <CA+zpnLexK1qbCxpwQdP76B+F0JqCFJL3rEWnp8xShbLbepvuXA@mail.gmail.com>
+Subject: Re: [PATCH] module: validate string table section types
 To: Aaron Tomlin <atomlin@atomlin.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- da.gomez@kernel.org, Sami Tolvanen <samitolvanen@google.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, neelx@suse.com, da.anzani@gmail.com,
- sean@ashe.io, chjohnst@mail.com, steve@abita.co, mproche@mail.com,
- nick.lane@mail.com, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260708020007.55728-1-atomlin@atomlin.com>
- <33171ccd-038b-4bb8-b796-f104a131c0ee@app.fastmail.com>
- <in7aczdvb22suqhao6uzsjkh22tgyx2qug4i6efdxyfiuj72ba@k6fr4oc27kim>
- <78ec1da5-11ae-4c35-a08e-cc88a5d083f4@app.fastmail.com>
- <ea7kdjwoucecvetzf73ce5dpda3l3etb6i75bks6deekfu6mb6@ooptba3x2oh3>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <ea7kdjwoucecvetzf73ce5dpda3l3etb6i75bks6deekfu6mb6@ooptba3x2oh3>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Markus Elfring <Markus.Elfring@web.de>, linux-modules@vger.kernel.org, 
+	Daniel Gomez <da.gomez@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Siddharth Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/13/26 2:13 PM, Aaron Tomlin wrote:
-> On Mon, Jul 13, 2026 at 10:32:14AM +0200, Arnd Bergmann wrote:
->> On Sat, Jul 11, 2026, at 01:13, Aaron Tomlin wrote:
->>> On Fri, Jul 10, 2026 at 05:59:59PM +0200, Arnd Bergmann wrote:
->>>> On Wed, Jul 8, 2026, at 04:00, Aaron Tomlin wrote:
->>>>> Currently, the "module_blacklist=" command-line parameter only applies
->>>>> to loadable modules. If a module is built-in, the parameter is silently
->>>>> ignored. This patch extends the blacklisting functionality to built-in
->>>>> modules by intercepting their initialisation routines during early boot.
->>>>
->>>> Andrew already asked you to provide more background on what you need
->>>> this part for. Do you have a specific driver you need to disable?
->>>>
->>>> Can't you do the same thing using initcall_blacklist?
->>>
->>> The primary motivation for this patch is to provide consistent
->>> administrative control.
->>
->> Ok, it sounds like you don't actually need it then.
->>
->>> Regarding your suggestion to use initcall_blacklist=, while it is certainly
->>> a capable mechanism, it is fundamentally considered a debugging facility
->>> intended for developers.
->>
->> I don't see much of a difference here, it's clearly still only a
->> debugging tool to me, not a general administrative interface: turning
->> off a random built-in driver likely causes undefined behavior later
->> if there are any other drivers (built-in or loaded) that depend on it.
->>
->> Overall I don't think it's worth the added complexity.
-> 
-> Hi Arnd,
-> 
-> I appreciate your candour, but I must respectfully disagree with the
-> assessment that this is merely a debugging tool with no practical
-> necessity.
-> 
-> The requirement stems from large-scale infrastructure management and
-> configuration consistency. System administrators rely on standard
-> provisioning scripts across diverse hardware. If a distribution arbitrarily
-> alters a kernel configuration, changing a module from loadable (=m) to
-> built-in (=y), the administrator's module_blacklist= directive is suddenly
-> and silently ignored. This creates a severe policy enforcement gap.
+On Mon, Jul 13, 2026 at 10:14=E2=80=AFPM Aaron Tomlin <atomlin@atomlin.com>=
+ wrote:
+>
+> On Fri, Jul 10, 2026 at 10:23:00AM +0200, Markus Elfring wrote:
+> > =E2=80=A6
+> > > Validate that both string section headers are of type SHT_STRTAB befo=
+re
+> > > caching them.
+> >
+> > How do you think about to add any tags (like =E2=80=9CFixes=E2=80=9D an=
+d =E2=80=9CCc=E2=80=9D) accordingly?
 
-Note that a gap will still exist if the administrator previously
-blacklisted a specific loadable module using the blacklist command in
-/etc/modprobe.d/ instead of the module_blacklist kernel parameter.
+Thanks for the suggestion. I can't seem to find any relevant commit
+for Fixes. There are
+ec2a29593c83e ("module: harden ELF info handling") and potentially
+3c5700aeabd87 ("module: Factor out elf_validity_cache_secstrings")
+Both of these commits already intended to harden the parsing. I don't
+think there is any regression here.
 
-> 
-> Regarding the distinction between initcall_blacklist= and
-> module_blacklist=, the difference lies entirely in ABI stability.
-> To use initcall_blacklist= requires the administrator to know the exact
-> internal C function name of the initialisation routine (e.g.,
-> foo_driver_init). This is an internal kernel implementation detail, subject
-> to change without notice, and entirely undocumented for users. Conversely,
-> the module name is a stable, well-known, and documented user-facing
-> identifier. Providing a stable interface for administrative policy is the
-> very definition of a general administrative tool, rather than a developer
-> debugging facility.
-> For example, consider CVE-2021-43267. A system administrator can now use
-> module_blacklist=tipc which would cover both built-in and loadable module
-> configurations.
-> 
-> To address your concern regarding undefined behaviour, disabling a built-in
-> driver carries the exact same dependency risks as preventing a loadable
-> module from loading via the traditional blacklist. In both scenarios,
-> dependent drivers will naturally fail to probe or initialise. System
-> administrators who apply denylists are already expected to understand the
-> hardware and software dependencies of the modules they are explicitly
-> disabling.
-
-The dependency risk is somewhat greater with built-in modules. Consider
-two modules, A and B. Module A exports fun_a() that is used by module B.
-fun_a() depends on state initialized in A's init function.
-
-If both modules are loadable, then B can be inserted only after A has
-been loaded successfully, that is, A is not blacklisted and its init
-function completes successfully.
-
-If A is built-in and blacklisted, nothing prevents B from calling
-fun_a() and potentially encountering an undefined state.
-
-That said, it seems the same problem can already occur today if A is
-built-in and fails to initialize, since do_initcall_level() doesn't
-check the return value from do_one_initcall().
-
-> 
-> I understand your hesitation regarding added complexity. However, with the
-> fast-path optimisation suggested by Sami (which bypassing the scan entirely
-> if the parameter is unused), the overhead is essentially zero. I believe
-> bridging the logical gap between how we treat =m and =y modules is well
-> worth that minimal footprint.
-
-I see the point from a consistency perspective.
-
--- 
-Cheers,
-Petr
+As for Cc:, I can't think of anyone who should be explicitly added. If
+you have any suggestions, please chime in.
