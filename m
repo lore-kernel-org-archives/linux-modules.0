@@ -1,135 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634733B27C6
-	for <linux-modules@vger.kernel.org>; Wed, 15 Jul 2026 16:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20E641A543;
+	Thu, 16 Jul 2026 11:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784132771; cv=none; b=G+SuTpDh734zjtgWUISYr2W3N0Pwwn0zBt9rHcYF9p2qHmsNmcjzDq6JiE1WrowRd1BoT806MRcgJZJzmzKogHwcRdJoHa/xYGs3Yc10LI/tOCivk0quwLPngvBcQxI+9Xa2OrmKgpbiGD0jRELw7y1QkHh1nVzm85j9YJLpvIw=
+	t=1784201533; cv=none; b=YiP5wEukwCOnNZRypdIU2g+00uBSgQrokrKNuDl1dFrzNfm4wbwukxp6cIxv5aZ8aby1yh3hWP0SPFMgVkrRRRwrhgwXhxT/SZVx0VzewCvJB5jeDdkpvEUf695twFy75Ljg2XPQy03kuAQwg6Ta+rFW/WarPnbr4iOK+2sGM3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784132771; c=relaxed/simple;
-	bh=PNS/ueX4d6mleSXcn6W4bjvW1KtY3Y1R2ir+U4Ptgic=;
+	s=arc-20240116; t=1784201533; c=relaxed/simple;
+	bh=Trz811rFu66hjh5PpSzoKZHnybwWvPe1KbzVP++vxWM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YG5jXjl3YSKqlY8RWu5SBLo7Ob3dXl5CqRYJCEFR+qclojY1viW/9vHpJ6t3rdyPqZN0UR/wpB1ciudc3h+CD6aSTVxrx2aYoB2T6YnjcWBNiD4KXSy+A6fEdNl5cIKpiyL72qPTC2naRCNmyVfRVaaBbAj9Sws01DlnfP0UAYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H67mKeGW; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=n5XjvdcVV/uTYzNq5aP+xtVIaQ24RaFIzLQaCW/1BEnJ5WNEMpmS3bND8Ltt5T+UEXXaLwPfZJVbf5Dj5tXKO3d/eGf4iQgu8R3Qr69KVW7oFq2EqBckQSZI1/XD5+QQMZ04wD+q0j7rYIT6DDgk+OmlZcCQB+qtGLSEfYcCp5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8LD+AjH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H67mKeGW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E7E91F00A3F;
-	Wed, 15 Jul 2026 16:26:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8LD+AjH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3432B1F000E9;
+	Thu, 16 Jul 2026 11:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784132770;
-	bh=Zxt757ZyGmJFxK3kQdoQ0L6dZbLw05n5OC5xfr/awlE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=H67mKeGWYT7qpBD+nA7stQv2/+oxl25lbPXjCyX05CUC6A60MVK+EMl9M54UyIZCM
-	 2YIaR37uldalD0V2o5viT5L2IQf3RSOo8lh58Xawk/ac+vGql35Jy2wEgFVDZahiSI
-	 deNQl3Idt7pA5XvpGylCCV3pDKAEmD+7ojD1F7q26nof9cOal65Os4xQ8mwcr9zy09
-	 as6/5PRWvyplfrV5mD9Rl3yonMtpXwLgLsTkKS94mBGfXpR+BuliYWaK2iaeMDw36V
-	 eHqqQ/UiNeLtd3u/MxR7WeUvXSj02cjeZVTqtAMRxTppB5IgKchQqmpQs+jFO7cQ0R
-	 fzUh7pE+EugLw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id D373FCE074A; Wed, 15 Jul 2026 09:26:09 -0700 (PDT)
-Date: Wed, 15 Jul 2026 09:26:09 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+	s=k20260515; t=1784201532;
+	bh=FMlVj/7YoKPmap5SOctpNnUocp1sDIMWHSXFoQ3DJ0o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Q8LD+AjHX9wLIW1+g4foVEe6EPDVgeAI9/mu1UPl00HKqye1EriRck3p8y31w3FTX
+	 qyCOVTHGnjvi4z1uXBZDED/2bnU7jaRmjVO1nV+3PLpoAphfIM1yFxedv1XWScwwX5
+	 iyy7PjHO0yKRvMhiPJ9CRGV6ji7dSnQs5v6GP/rj12eThB/DwTvsMgVMgAVR84tN3M
+	 Sw2tQKVUZ2RwMQSlxJ2K8pQHj8yl+9iKKW1o/rEXg7D1AK+u2Ho7ce2Ln6p70r5Aw2
+	 iAdpaatcjLBKdMVMIeh4rf+MyKYGslybmdG7uaQIO6C42HEGyfeu5rrdD00rg9f2Oy
+	 ilaUSbdNzxYZA==
+Date: Thu, 16 Jul 2026 07:32:11 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Richard Weinberger <richard@nod.at>,
+	Juergen Gross <jgross@suse.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Vlastimil Babka <vbabka@kernel.org>, Helge Deller <deller@gmx.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Vivian Wang <wangruikang@iscas.ac.cn>,
+	Zhen Lei <thunder.leizhen@huawei.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org
-Subject: Re: [PATCH net v2] ppp: defer channel free to an RCU grace period to
- fix pppol2tp RX UAF
-Message-ID: <18709a40-7c72-45d4-a76b-3b82b6b7f1ff@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260706092926.PIlrhRKz@linutronix.de>
- <0dfe59c2-bf60-40fe-90e6-d6e1003709d0@suse.com>
- <20260708074904.xnpi0mlh@linutronix.de>
- <bef05178-4856-4b62-9c3b-62bf636c239d@suse.com>
- <20260708135651.zl03TEfr@linutronix.de>
- <20260708190003.gmLFJGYo@linutronix.de>
- <70060a4e-4630-487f-8ecc-4408e23268d4@paulmck-laptop>
- <20260714160104.jK83e41c@linutronix.de>
- <b7b5a7f1-7d09-4181-9257-ea9272325ef2@paulmck-laptop>
- <20260715082518.3z_iDNrR@linutronix.de>
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 0/4] kallsyms: embed source file:line info in kernel
+ stack traces
+Message-ID: <aljBOy_fIepzRqmY@laps>
+References: <20260709163833.3851179-1-sashal@kernel.org>
+ <CAMuHMdUCAX642tSJhvG_Ku6Y=D8GK3owbyed9qkhzPpgrU1kdg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260715082518.3z_iDNrR@linutronix.de>
+In-Reply-To: <CAMuHMdUCAX642tSJhvG_Ku6Y=D8GK3owbyed9qkhzPpgrU1kdg@mail.gmail.com>
 
-On Wed, Jul 15, 2026 at 10:25:18AM +0200, Sebastian Andrzej Siewior wrote:
-> On 2026-07-14 10:47:58 [-0700], Paul E. McKenney wrote:
-> > On Tue, Jul 14, 2026 at 06:01:04PM +0200, Sebastian Andrzej Siewior wrote:
-> > > On 2026-07-08 12:22:58 [-0700], Paul E. McKenney wrote:
-> > > > The RCU-callback ordering guarantees are quite weak:
-> > > …
-> > > So this is not working.
-> > > 
-> > > > What you maybe *could* do is to have the two RCU callbacks communicate,
-> > > > so that the last one to be invoked did the work of both of them.  For
-> > > > example, use a shared variable initialized to 2, then have each callback
-> > > > do atomic_dec_and_test(), with the "winner" doing the work.
-> > > > 
-> > > > Would that do the trick?
-> > > 
-> > > This would work but we would have to fix each one or make it slower for
-> > > everyone in the common case. So I think adding a rcu_barrier() to module
-> > > unload wouldn't be that bad and Petr did not say "get out" so ;)
-> > 
-> > I am not opposed to rcu_barrier() in module unload.
-> > 
-> > But just to fill out the other similar situations...
-> > 
-> > In addition to call_rcu(), there is call_srcu(), call_rcu_tasks(),
-> > and call_rcu_tasks_rude().  I think that we can rule out call_srcu()
-> > as ridiculous because there could have been an arbitrarily large number
-> > of srcu_struct structures passed to call_srcu() along with callback
-> > functions defined within this module.  For their parts, call_rcu_tasks()
-> > and call_rcu_tasks_rude() are special-purpose functions that are rarely
-> > used and could therefore be ignored.
+On Fri, Jul 10, 2026 at 12:04:56PM +0200, Geert Uytterhoeven wrote:
+>Hi Sasha,
+>
+>On Thu, 9 Jul 2026 at 18:38, Sasha Levin <sashal@kernel.org> wrote:
+>> Changes since v6
+>> ================
+>>
+>> - Address Sashiko AI review comments.
+>
+>What does that mean?
+>Please list the changes, so reviewers know what to look at.
+>Thanks!
 
-[ Just to be clear, I doubt that these problems all need any better
-  solution than the status quo.  After all, any added mechanism can easily
-  produce more bugs than it consumes.  I just want people to be aware. ]
+Sorry! I've missed your mail.
 
-> Regarding srcu, module unload should have cleanup_srcu_struct() which
-> would flush pending item, no?
+There were a few smaller changes, mostly on the kunit tests side, here it is:
 
-Unless the srcu_struct was global, but the callback was located in
-this module.
+   - Bound lineinfo lookups to the resolved symbol's start so it stops stale annotations on __init code and __pfx_* padding
+   - gen_lineinfo: handle SHT_REL .rel.debug_line (i386/arm32 modules)
+   - gen_lineinfo: bias all exec sections, drop foreign DWARF sequences; cover .noinstr.text (kvm.ko)
+   - __aligned(8) + static_asserts on the blob structs — fixes 32-bit layout mismatch (i386/m68k)
+   - SLEB128 decoder: do the shift unsigned
+   - KUnit: skip instead of fail when =m without KALLSYMS_LINEINFO_MODULES
+   - KUnit: dereference_function_descriptor() for target addresses (ppc64 ELFv1/parisc)
+   - KUnit: volatile accumulator in lineinfo_target_many_lines() (compilers fold it otherwise)
+   - KUnit: OPTIMIZER_HIDE_VAR for the mid-function address — fixes objtool !ENDBR warning
+   - KUnit: new regression tests (init-text stale annotation, 5-byte SLEB128 decode)
 
-> > But what about things like timers and hrtimers?  Or are people already
-> > doing the right thing for such things?
-> 
-> Right. What people often did wrong with timers is that they enqueued a
-> timer then forgot about it and released the memory with the timer
-> active. Then someone who got all the timer bugs assigned came up with
-> debugobjects.
-> 
-> This checks only that the memory is not released while the object is
-> active. It does not verify the callback.
-
-Ah, so *that* is where debugobjects came from!  ;-)
-
-> I think it depends on what we want to achieve. We could iterate over all
-> RCU callbacks checking if it belongs to the memory that we intend to
-> free. The same could be done for timers, too. They should be caught by
-> debugbjects unless they leak the memory…
-
-Iterating over RCU callbacks is a no-go, except maybe under extreme
-debugging levels.  There can easily be millions of those things!
-
-> The rcu_barrier() before module_exit() would ensure the callbacks are
-> done before a possible kmem_cache_free() where the cache is removed in
-> the exit function. Now I see that for !SLUB_TINY there is a barrier if
-> the cache has sheaves (kmem_cache_destroy() ->
-> kvfree_rcu_barrier_on_cache()). Buh…
-
-;-) ;-) ;-)
-
-							Thanx, Paul
-
-> Sebastian
+-- 
+Thanks,
+Sasha
