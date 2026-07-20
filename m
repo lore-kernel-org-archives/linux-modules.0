@@ -1,125 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CED416129
-	for <linux-modules@vger.kernel.org>; Mon, 20 Jul 2026 12:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B8A416D00
+	for <linux-modules@vger.kernel.org>; Mon, 20 Jul 2026 12:28:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784550334; cv=none; b=DHQ0lEjsrzGX8MHO/CD63HnvUQUJGO61WQcBt2cUp2Oxg/BLanVEVPTeVgQbReHyIuSdAayuQ7dhuR/hGHWdBb+WJO6yvjTuT+QmFVSJX3bRkttNtCU6U7QH+LLnYEm+KzNodwqgXYYnCZOWhXv4x5vITMykb6XehVk+tbjDL+A=
+	t=1784550495; cv=none; b=inGlphXdKucoTwsKbtrRZikbSFVs4CVs5kdmKQa3mLk/HYtZr+ozH4kZ+MSe53RnMtDTYffN4gWVgNRUp7zdJsBlC8LHEwnX6ISmGqyWv6AVvgfDgGqhJrCQf+ZWWyLZJ1PGokeXegLFGtI3VQqBMUfLtHL00Ur7j7NZVPEXujk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784550334; c=relaxed/simple;
-	bh=n/e1wSqOX8oEDMFB3nq8xhaIE4N1Tl96VGoPEGGgMOo=;
+	s=arc-20240116; t=1784550495; c=relaxed/simple;
+	bh=cznt05DNdVq2kbP256tYRbxZr0ffH1GxHcBevzAjrJE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Mju5wV3CMba50q023EIYziYXBnpfNsB8Z0AERAxbz0JZeCH6NgWFdTQeP5gi/pomgSB/V9WOb+WjiBOh1Wl9LGIk1GowpMpNBpgavWlRahMkgGy/vMHMU8CuTJC53yr7ms+rznfzih+p/t0+sdx2rxrV/ggzQERkqL9jNjI3Dyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2LqxLWz; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Tao1jRX53EQD7nNqctGwKtgWclQvL144YZSBjihdxdXTkoCOrDJdi6qPsOCAeqRThPVVKcSRhDahULyvVh97JS7oIIfIYRLZNetiNu5ncTfxLsRBOARM54J9nlYMX6uB7lp5+cAI0tO6v3hmTc3nAsSfrkd/BlyJlo0ogK9UkZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWsHdhI/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2LqxLWz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9661F00A3A;
-	Mon, 20 Jul 2026 12:25:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWsHdhI/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702481F000E9;
+	Mon, 20 Jul 2026 12:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784550333;
-	bh=UR3tvcIs9OVx6sBrxweZR4SpWTo2ymL55ECjQmqXnp4=;
+	s=k20260515; t=1784550492;
+	bh=XHOJXE02LRB/mPgF6CI0CrOf4iHQ9D53rrCrg2qq/64=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D2LqxLWzMHs33pmkUmvBOZ59QXukX6wXF5p2ImqVE+zTTcbed9tPvUXr48xFTifhY
-	 0U00QMUF6/uXOHMRCI6X8PPwjmxSBakCvv0tw4JWbTv3GLz619FHAzweBQQJ5VwhhA
-	 bLqEdvlFRm3oR4i9c5toh0Gv6WUcabOnYNNTzBoY5gk3Sp/KgMGeByCQzMMXB+dJZJ
-	 S1s26hLjq+PmUHX+iM9mZx/yXYean/3WM56yBFWZJVFUpKsaKwjOezbIRYVdZ8CoY4
-	 LS7IbkqVWmb603y2PqU/dzsMdl4L7ML/LBYVK0PajCpjA+Wrr/DmJqTnsLxXBbu19D
-	 u+bRDUPScBB+A==
+	b=hWsHdhI/3TY+ZaHQPlgIK9ROYhmCBJz8xR14QBqExIEpPN9ufta1YrRtygY5Bc447
+	 aY56Eutyo1pAqVSS/dMQuHgs9G7xHGvLR5mIjhKmHV0SG0kngeNl71rJAzDbOhEebh
+	 IM03Kq2rjji+kbKC2nl7NixPd68XSUQYxdq1PNeJivdwFrBezWb82v+oRb5PSLyJdq
+	 NqGKNEAZaqCXM3gE6hjob31B0hi38vS9RQxt83sv7kypym4hE1ZKHADAP5otz54JOE
+	 9jvUK5CR0mYRZ4aCI2cRDZqAmXzPkiw81lIhCA9CqNdRjnk4Ws5y6a0cZCDbE7JmRi
+	 mxAeuRT4V7TyA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/5] module/dups: Use scoped guards for kmod_dup_mutex
+Subject: Re: [PATCH 2/5] module/dups: Inform duplicate requests about the
+ result directly
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Petr Pavlu" <petr.pavlu@suse.com>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260720121621.750661-4-petr.pavlu@suse.com>
+In-Reply-To: <20260720121621.750661-3-petr.pavlu@suse.com>
 References: <20260720121621.750661-1-petr.pavlu@suse.com>
- <20260720121621.750661-4-petr.pavlu@suse.com>
+ <20260720121621.750661-3-petr.pavlu@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 12:25:32 +0000
-Message-Id: <20260720122533.1F9661F00A3A@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 12:28:11 +0000
+Message-Id: <20260720122812.702481F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] Mixing goto-based cleanup labels with scope-based cleanup (scoped_g=
-uard) in the same function.
+
+New issues:
+- [High] Dropping `kmod_dup_mutex` prematurely without acquiring a referenc=
+e leads to a Use-After-Free and data races.
+
+Pre-existing issues:
+- [High] A `request_module_nowait` call can erroneously complete a concurre=
+nt `request_module` duplicate tracking object prematurely.
 --
 
---- Patch [3]: [PATCH 3/5] module/dups: Use scoped guards for kmod_dup_mute=
-x ---
-commit 3299ca2ac8ae46392f412ae7c186f4907e7f8201
+--- Patch [2]: [PATCH 2/5] module/dups: Inform duplicate requests about the=
+ result directly ---
+commit 5b4a732b8aa814f2e4a78fd3e59bb299a50f8a41
 Author: Petr Pavlu <petr.pavlu@suse.com>
 
-module/dups: Use scoped guards for kmod_dup_mutex
+module/dups: Inform duplicate requests about the result directly
 
-This patch replaces explicit mutex_lock/unlock calls for kmod_dup_mutex
-with scoped_guard to shorten the code and clarify the lock's scope.
+When kmod_dup_request_announce() announces the completion of
+a request_module() call to duplicate waiters, it queues a work item to
+invoke kmod_dup_request_complete(), and only that function calls
+complete_all().
+
+This adds an arbitrary delay that is unnecessary and provides little
+benefit. Call complete_all() directly from kmod_dup_request_announce()
+instead.
+
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
 > diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-> index f0bdd7560d7e7..a62619ec057ed 100644
+> index e1828e865edde..f0bdd7560d7e7 100644
 > --- a/kernel/module/dups.c
 > +++ b/kernel/module/dups.c
 
 [ ... ]
 
-> @@ -122,10 +121,13 @@ bool kmod_dup_request_exists_wait(char *module_name=
-, bool wait, int *dup_ret)
->  	INIT_DELAYED_WORK(&new_kmod_req->delete_work, kmod_dup_request_delete);
->  	init_completion(&new_kmod_req->first_req_done);
+> @@ -246,23 +221,22 @@ void kmod_dup_request_announce(char *module_name, i=
+nt ret)
+>  	 * that is owned by the current task.
+>  	 */
+>  	kmod_req =3D kmod_dup_request_lookup(module_name);
+> +	mutex_unlock(&kmod_dup_mutex);
+> +
+>  	if (!kmod_req)
+> -		goto out;
+> +		return;
 > =20
-> -	mutex_lock(&kmod_dup_mutex);
-> +	scoped_guard(mutex, &kmod_dup_mutex) {
-> +		kmod_req =3D kmod_dup_request_lookup(module_name);
-> +		if (kmod_req) {
-> +			get_kmod_req(kmod_req);
-> +			goto dup_req;
-> +		}
-> =20
-> -	kmod_req =3D kmod_dup_request_lookup(module_name);
-> -	if (!kmod_req) {
+>  	kmod_req->dup_ret =3D ret;
 
-[Severity: Low]
-Does this mix scope-based cleanup with goto-based cleanup in the same
-function?
+[Severity: High]
+Does unlocking kmod_dup_mutex here leave kmod_req unprotected?
 
-Looking further down in kmod_dup_request_exists_wait(), there are still
-several goto statements that jump to an out label for manual cleanup:
+If a thread is preempted after unlocking the mutex but before writing to
+kmod_req->dup_ret, could delete_work execute, drop the refcount to zero,
+and free kmod_req? This would result in a use-after-free when the preempted
+thread resumes and attempts to write to kmod_req->dup_ret or call
+complete_all(). Should we hold the mutex longer or acquire a reference?
 
-	if (!wait) {
-		/* ... */
-		*dup_ret =3D 0;
-		goto out;
-	}
-=09
-	ret =3D wait_for_completion_state(&kmod_req->first_req_done,
-					TASK_KILLABLE);
-	if (ret) {
-		*dup_ret =3D ret;
-		goto out;
-	}
+> +	/* Inform all the duplicate waiters to check the return value. */
+> +	complete_all(&kmod_req->first_req_done);
 
-	*dup_ret =3D kmod_req->dup_ret;
+[Severity: High]
+This is a pre-existing issue, but can this prematurely complete a concurrent
+request_module() call?
 
-out:
-	put_kmod_req(kmod_req);
-	return true;
+When request_module_nowait() is called, it skips adding a tracking object to
+the dup_kmod_reqs list, but continues to execute call_modprobe() and
+unconditionally calls kmod_dup_request_announce().
 
-According to include/linux/cleanup.h, the expectation is that usage of
-"goto" and cleanup helpers is never mixed in the same function. All resourc=
-es=20
-that need a "goto" cleanup should either be converted to scope-based cleanu=
-p,=20
-or none of them should.
-
-Should put_kmod_req() be converted to use scope-based cleanup as well, or=20
-should this function avoid using scoped_guard() to keep the cleanup pattern
-consistent?
+If a concurrent request_module() call had created a tracking object for the
+same module, the nowait thread's lookup will find it and call complete_all(=
+),
+prematurely waking up all duplicate waiters before the original modprobe has
+actually finished. Does this function need to verify the caller owns the
+request before completing it?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720121621.7506=
-61-1-petr.pavlu@suse.com?part=3D3
+61-1-petr.pavlu@suse.com?part=3D2
