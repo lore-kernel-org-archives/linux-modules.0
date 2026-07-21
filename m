@@ -1,160 +1,206 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CF5418A58
-	for <linux-modules@vger.kernel.org>; Mon, 20 Jul 2026 13:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70EE341050
+	for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 13:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784554130; cv=none; b=nAGyQmkwrzHGKDK5YvUouPXLRtJikqD06hyLVBUGwBpJB14LyNHpfI4fEuFJNM1R2un4qQeEHdA4Wf06e/IMsAaGcLlBfdYqD4wF4E784VRYIeL6Oti6s9OB1L/ipaNPBuGXWyTH2kYPaL9Vv7ZdXrcnXyKwZLMZxQpO9N43nmI=
+	t=1784639563; cv=none; b=UggnnMVIJ84ziQYifRWttlNAebpKd+iDsQzzbHF1xedkUdKoem3nIiIH85v74d3nlr1XvvVuUWYRX2jD5JfwnK1PMLhm2ScZ0Bn1TUvMct0RxVsvqcxoNz09Xm8QqENzTfU4/WCiy2F1aV1bfRgo4mZcersplbsUte/W2aAxAjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784554130; c=relaxed/simple;
-	bh=a1dT4T2rg25BuLqB3IXHvcJ/DhyM0LaFghciO/e5KnE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V8NAS1LaYt2n570rLr7hsoQFfGAAu9LZ0zdDVxkJhwDO8X6MpEYJC0eOSebiciXfeLEAOZw3XjGVHrKnOH8rNDnNLUJrevrR4UPAn6w2dUqQ+sWzVtDhJW7PNz6/qvB4z/p0kKeAWcPkUSbUy36D8fjICUMKlzdfqogJRjAjxFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=etkG0Zr3; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1784639563; c=relaxed/simple;
+	bh=nS5SJQmwq8NU5ulEg4x+lVkufqolSp3mR/z1Mkjawbc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K28Wpt+wrMnx51piQUtRdjdOk9y6Qixddsn+8EGYMe9ruOc8XW7o0s9JXCPf7FBGjwLUxw6DzMpSaqGUcAJT4LeBciy+JnVi0DKzAr4xzaJh6EcPIbcpRkoHjrTAYso24zIAnZaORN8/zVFDaiGchfvO32H0LX03OYHG/8lBSu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dEanDhrt; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="etkG0Zr3"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4953e04ef16so43176855e9.2
-        for <linux-modules@vger.kernel.org>; Mon, 20 Jul 2026 06:28:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dEanDhrt"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-47f81a3ccf9so409812f8f.0
+        for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 06:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784554127; x=1785158927; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6/czDj3io+OIqwlJnYUmkw5KpDAkmwxo4+tPoyggzt8=;
-        b=etkG0Zr31NfBlQDZqcy0sJMwennnyMil44DbN/z69ZgH/WCZ1QN0nYi8dE3OJO4etk
-         T0jBz4BoSbxQaHaIFqtE5ok+0z8Sj0RDrKmz8LQXZ5+bN7LV/Mcvm5a9fWu2yYVXElnN
-         XSin5OYiNzzckpjlhFA9AkWH/1vJIlZRql3t0wU0FK1ElisQx1cOSUf+3Da/gW+vxxBU
-         LRmLl+oTIWq47dyijmfipjHNkvgK1mimlZQXUSm8ZCrlpIVr+y1fvlt0RvFpX51mv5ag
-         vj6c1LIPbPrtVUpSE8uhDAFQjo5xYfjZWm+CNByF4uTDVPDQ1iMBgfKgvW1CI2ScqdyB
-         eMbQ==
+        d=suse.com; s=google; t=1784639559; x=1785244359; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vXH/AcaDYaWjD1D7W7UeWMormFqpNiZzAjn7k+W0SEQ=;
+        b=dEanDhrt+jUSTiBzkZBe0IDLwLG75pM5Ej1XjXee8zrpLAmD21ET04fM4I4lSVGfIW
+         Q+my3B99PjL/v3z/hKeBaEWBvESw9aih0ETnhmnxgmsV8yWAICVR863KOzNO3Q6s3zEa
+         AsP7Etn7j7ODIbZAjvTfuEYqOUEIsm7vfo3jqniyHInAEsa8pv3nsw27xExEGpRa3Y9x
+         MfXam53sX3lIDX0uGAnDaqX6iiaAP5givXlPKLnjV9hK/UcKtu3pnpVVebROttjRDlly
+         xxuIg53CAha66tiu3ZOo2YqVicN5ea8F68oJW63P6K3AXhXD14C5DsdnTeOlMgWZtwiA
+         bODA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784554127; x=1785158927;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1784639559; x=1785244359;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6/czDj3io+OIqwlJnYUmkw5KpDAkmwxo4+tPoyggzt8=;
-        b=rKrH7vX9BLf7SJpmcDlNqxfmRGr3JTq0yJcSc2ZOp2eKMOjLTnLTH1bVmjXc/ObSlx
-         UcD1WgRucwESN5X9S2FoQ4aQGqdt3jAWv7u4yqs6LHlg4oxAN8lYb8mf0uKkD7Humj8L
-         yI2rtHrMQAfLT3Ey3QrzDRYKC/QOJvmHfMF2zi5V6WcdOkydebOaIrpGk95Tvy/MwBN7
-         JeR3D+4LSDui/m57ROc7WbfY1BybGJTdnDQbuOyMhptBohg6DaLWyeH6oWO8BJmm5rz8
-         dbTqlx9NYYnrUkdsIO0ZVU8Z7HSIjiQtuuEufo7/QFP+tCSnZP3l2Y/4F4S87XE+vFZ2
-         BtSw==
-X-Gm-Message-State: AOJu0Yw7JOW9srba5aVPlgYZSO8tv2KAeL0pJV+kvkuBfSZY0Hdp+z76
-	stOwVruy01vJjOJuFli+RBGe6t8IuRwbuExbmUt0eaGLFVZKGwC+kX3d16Ag269Jl5yLUwIioRM
-	AsyX3sik=
-X-Gm-Gg: AfdE7ckrQu53jou+tHV56896pQohNA++MWt9aXcpKI19kOgfL5BQSxfSqcobNYgWlai
-	K5ohsx6WAONCPL39D+RaQ7C0h3ZTV1in1SneYY9SKOkJ0IFtDojiiLnzIXB1ZzIq7adFL770HUA
-	tQmlBqLG+4CxT2bkvZ23dO9QX5qENll/2891+kuzLf+mH/FmrYps7DWbW+WEprki9d8KJrI4L6R
-	SO9sHlwDLj2fyZ2mcXgEho9BtzL594ECYAi8yxRuwRZnkPy9kdteXuBihRrGgs2qpCeUXPBBbr/
-	K3v8jdRWRqNNMNbyOnJQDpT519beScGC5f5iZJkkDH8a0ag2rPXWcd4vjKUKF6tXYJc8Z/kGpJJ
-	COK8LDIhElUGbBha8LKaB0caVVqY1zXobm1YuLxoaXkerGZcD9RUIfr2ocu1hLg5txgvrmibCZg
-	n2Xk55Y3Z7aNFJI0gmjTtejZALyrZN16VVFUN3mehsTQOOBa7I4A==
-X-Received: by 2002:a05:600c:4505:b0:493:f176:dc69 with SMTP id 5b1f17b1804b1-4954a413087mr149688055e9.37.1784554127449;
-        Mon, 20 Jul 2026 06:28:47 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63eeece9sm28679042f8f.37.2026.07.20.06.28.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jul 2026 06:28:47 -0700 (PDT)
-Message-ID: <e4087c28-c79e-4261-8881-68034fada860@suse.com>
-Date: Mon, 20 Jul 2026 15:28:46 +0200
+        bh=vXH/AcaDYaWjD1D7W7UeWMormFqpNiZzAjn7k+W0SEQ=;
+        b=B/1D8ZcbNR103n1Awa4N3VjKik4hSOnNYtv2JaSmKQcFNYSnugUe7EsSjl22nAxLAf
+         QQvTTptV7pNcpGHLWKbrRgseJA0plaYhUuwA+d5Qskv6VfKu2HDFR1yp+uUwZp3Z7OMO
+         R8XQRONlBP5/FKIkHVm5+hYkKBSKMueZLJ9OhVhYKJhfeE1IQfFBsi7C29r1lf3bRU5J
+         fgyeJXu2uDanWfbY9GTbZOnhh9dDXiGmTMmE9JP6TBy+U6x4Ol4b3OaSpnbMe4suiH++
+         N81Q0EeUmc2Tri85nUFNGqRPGaH5EIppMyjZw5sJRZEE3QMtHPsRBv5UxS6hOgbeRejn
+         kIYg==
+X-Forwarded-Encrypted: i=1; AHgh+RpcITcDupvqCUExe9I5FjzMxkMZPtLU/9TlAaGNkLKyagrz1HlKrlMnc4BHpxI9Suqq2shon7yCkaqofOLB@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoOh26ibiNabgkNazhxpHg+5OeZoPfhFLF+wIr+dUWfQoeYNP5
+	Fr64sHBMIdJeISWvi58EQz57OkIkcoJTgUwBJPWzvptk8y8udhSJwnz0ZIrjKQD5JmY=
+X-Gm-Gg: AR+sD12qkc1YgE/fSeb3vua6Eef45/aeKmMX6tCR3rZAQgCmk9XfAeoUgxU/LP7X1v7
+	anRXRUGcLxq6Ld6Sx6qWpg6YSeijBrDVMHAhJaHBOsTJ/+IQzry30ritTLHBsGasDIiBSw8fo+N
+	JqXNNfe/ekKc45nq78ogw7bX6hFt0yMI+dP1Qts+iGa2j8mB/aSXD12YQaUDoj4WpKwQ4afGz4U
+	/r0akl39uj6x67HLF8c990AcXe0eP/S+mGzqik0on6vdzBMNt+L1FStKJz4VU1kGGFIa78zmqTd
+	+bPp6TpaD7naqpBve+iYgj9a6/M/F3m+bobH30sMMSxxCsmggoYAXBt65EMyo66jDMeXE5X8HSm
+	nKsn36dY3yTJE5sOVGrNnrpB3JBN3TvXtpJ3YiJqFU4z63GkDjl5PbFtAWbk+RdG3pPzDbkaUyA
+	==
+X-Received: by 2002:a05:6000:2084:b0:47e:81aa:3832 with SMTP id ffacd0b85a97d-47f6230e614mr22543209f8f.16.1784639559042;
+        Tue, 21 Jul 2026 06:12:39 -0700 (PDT)
+Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63ee9281sm42070938f8f.36.2026.07.21.06.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 06:12:38 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Philipp Reisner <philipp.reisner@linbit.com>,
+	Lars Ellenberg <lars.ellenberg@linbit.com>,
+	=?UTF-8?q?Christoph=20B=C3=B6hmwalder?= <christoph.boehmwalder@linbit.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Michal Januszewski <spock@gentoo.org>,
+	Helge Deller <deller@gmx.de>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Chuck Lever <cel@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>,
+	Mark Fasheh <mark@fasheh.com>,
+	Joel Becker <jlbec@evilplan.org>,
+	Joseph Qi <joseph.qi@linux.alibaba.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Pavel Machek <pavel@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc: linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	drbd-dev@lists.linux.dev,
+	linux-block@vger.kernel.org,
+	greybus-dev@lists.linaro.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-acpi@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev,
+	cgroups@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	driver-core@lists.linux.dev,
+	bridge@lists.linux.dev,
+	netdev@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v2 0/3] Bring includes in linux/kmod.h up to date
+Date: Tue, 21 Jul 2026 15:11:24 +0200
+Message-ID: <20260721131207.803760-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] module/dups: Use scoped guards for kmod_dup_mutex
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-modules@vger.kernel.org
-References: <20260720121621.750661-1-petr.pavlu@suse.com>
- <20260720121621.750661-4-petr.pavlu@suse.com>
- <20260720122533.1F9661F00A3A@smtp.kernel.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260720122533.1F9661F00A3A@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/20/26 2:25 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] Mixing goto-based cleanup labels with scope-based cleanup (scoped_guard) in the same function.
-> --
-> 
-> --- Patch [3]: [PATCH 3/5] module/dups: Use scoped guards for kmod_dup_mutex ---
-> commit 3299ca2ac8ae46392f412ae7c186f4907e7f8201
-> Author: Petr Pavlu <petr.pavlu@suse.com>
-> 
-> module/dups: Use scoped guards for kmod_dup_mutex
-> 
-> This patch replaces explicit mutex_lock/unlock calls for kmod_dup_mutex
-> with scoped_guard to shorten the code and clarify the lock's scope.
-> 
->> diff --git a/kernel/module/dups.c b/kernel/module/dups.c
->> index f0bdd7560d7e7..a62619ec057ed 100644
->> --- a/kernel/module/dups.c
->> +++ b/kernel/module/dups.c
-> 
-> [ ... ]
-> 
->> @@ -122,10 +121,13 @@ bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
->>  	INIT_DELAYED_WORK(&new_kmod_req->delete_work, kmod_dup_request_delete);
->>  	init_completion(&new_kmod_req->first_req_done);
->>  
->> -	mutex_lock(&kmod_dup_mutex);
->> +	scoped_guard(mutex, &kmod_dup_mutex) {
->> +		kmod_req = kmod_dup_request_lookup(module_name);
->> +		if (kmod_req) {
->> +			get_kmod_req(kmod_req);
->> +			goto dup_req;
->> +		}
->>  
->> -	kmod_req = kmod_dup_request_lookup(module_name);
->> -	if (!kmod_req) {
-> 
-> [Severity: Low]
-> Does this mix scope-based cleanup with goto-based cleanup in the same
-> function?
-> 
-> Looking further down in kmod_dup_request_exists_wait(), there are still
-> several goto statements that jump to an out label for manual cleanup:
-> 
-> 	if (!wait) {
-> 		/* ... */
-> 		*dup_ret = 0;
-> 		goto out;
-> 	}
-> 	
-> 	ret = wait_for_completion_state(&kmod_req->first_req_done,
-> 					TASK_KILLABLE);
-> 	if (ret) {
-> 		*dup_ret = ret;
-> 		goto out;
-> 	}
-> 
-> 	*dup_ret = kmod_req->dup_ret;
-> 
-> out:
-> 	put_kmod_req(kmod_req);
-> 	return true;
-> 
-> According to include/linux/cleanup.h, the expectation is that usage of
-> "goto" and cleanup helpers is never mixed in the same function. All resources 
-> that need a "goto" cleanup should either be converted to scope-based cleanup, 
-> or none of them should.
-> 
-> Should put_kmod_req() be converted to use scope-based cleanup as well, or 
-> should this function avoid using scoped_guard() to keep the cleanup pattern
-> consistent?
-> 
+The usermode helper declarations were previously provided by linux/kmod.h
+but commit c1f3fa2a4fde ("kmod: split off umh headers into its own file")
+moved them to linux/umh.h in 2017. Add explicit includes of linux/umh.h to
+files that use usermode helpers and remove linux/kmod.h where it is no
+longer needed.
 
-Fair, I'll clean this up.
+Also add a missing include of linux/sysctl.h to kernel/time/jiffies.c.
 
-Sashiko also reported the same issue in a reply to patch #5.
+Finally, clean up linux/kmod.h so that it includes only the headers that it
+actually requires, importantly removing the compat linux/umh.h include.
 
--- Petr
+This cleanup is motivated by trying to reduce the preprocessed size of
+linux/module.h, which includes linux/kmod.h. The linux/module.h header is
+included by every *.mod.c file to provide `struct module` and other related
+definitions, so it should avoid pulling in unnecessary dependencies. Note
+that this series doesn't immediately improve the situation, since most of
+the files included by linux/kmod.h are, for now, also included by
+linux/module.h through other paths.
+
+Apologies for the wide distribution. Acked-bys are appreciated.
+
+Changes in v2:
+- Remove the linux/kmod.h include from kernel/cgroup/cgroup-v1.c.
+- Add a missing include of linux/sysctl.h to kernel/time/jiffies.c.
+- Link to v1: https://lore.kernel.org/linux-modules/20260708154510.6794-1-petr.pavlu@suse.com/
+
+Petr Pavlu (3):
+  umh, treewide: Explicitly include linux/umh.h where needed
+  time/jiffies: Include linux/sysctl.h for proc_int_u2k_conv_uop(), ...
+  module: Bring includes in linux/kmod.h up to date
+
+ arch/x86/kernel/cpu/mce/dev-mcelog.c |  2 +-
+ drivers/block/drbd/drbd_nl.c         |  1 +
+ drivers/greybus/svc_watchdog.c       |  1 +
+ drivers/macintosh/windfarm_core.c    |  1 +
+ drivers/pnp/pnpbios/core.c           |  2 +-
+ drivers/video/fbdev/uvesafb.c        |  1 +
+ fs/coredump.c                        |  2 +-
+ fs/nfs/cache_lib.c                   |  2 +-
+ fs/nfsd/nfs4layouts.c                |  2 +-
+ fs/nfsd/nfs4recover.c                |  1 +
+ fs/ocfs2/stackglue.c                 |  1 +
+ include/linux/kmod.h                 | 12 ++----------
+ kernel/cgroup/cgroup-v1.c            |  2 +-
+ kernel/module/kmod.c                 |  1 +
+ kernel/power/process.c               |  2 +-
+ kernel/reboot.c                      |  2 +-
+ kernel/time/jiffies.c                |  1 +
+ kernel/umh.c                         |  2 +-
+ lib/kobject_uevent.c                 |  2 +-
+ net/bridge/br_stp_if.c               |  2 +-
+ security/keys/request_key.c          |  2 +-
+ security/tomoyo/common.h             |  2 +-
+ 22 files changed, 23 insertions(+), 23 deletions(-)
+
+-- 
+2.54.0
+
