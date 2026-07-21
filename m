@@ -1,196 +1,298 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6287364E85
-	for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 13:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E8E3C5523
+	for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 20:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784639573; cv=none; b=mj9ZxCUClvfnccSw609ZcKgJihcSc7U/pDTQWDR4py4p2I5JrCd2ke2sSyFlxQBROircXbeKrW0Fw8CWDz1N4IGfCxqOyyFzbY8Ttcir8mVNWKpIdVFuwkHAnA55rezJt4b0PowS7iiQnL2sRKYQBqcmYRp2wx5Llav6R9qmxvo=
+	t=1784667435; cv=none; b=ifU7Wth2HYv3tfId9YBWUPgblRfGi4Fc+FUqE2JT1MYAX5k2yEcDNY9/R+0gBqN1eJagn7+nikZZn39mnMjZRFXS2uGp2iZao2ULJRjIzb87g98C04P/xQ6bTB+5t8PtupHvewh9vNgwvWYXYRX3Czh8/gWPPwPlmi3HkeBbUlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784639573; c=relaxed/simple;
-	bh=roviBJb1B7iQhUITwXosnTCAe4xvx3i/dIY5PCDwenw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m606iEXWER+LemYj6iLAvfwWGRqd9SXx/nbPrafkB4JbKXFMIlCkPF5224NVNp5g8uTE6pNBgsZ/cY7SNcffu5P6qiOHR29Ctt1OQTyi3JS+GBxWH7QmhZ7TlRb0Kw4qnTU//tzuHGsXXxnbD8JrCBrqueGoqzD92mxsMwXAQXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LoGxvBpD; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784667435; c=relaxed/simple;
+	bh=HSLmyNqqlC5f/lDHCkwX2D39xGcapCKnPGT/JRUn8pQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ELLHD591iskuXl2EgVjxDuBJyASzRhdBgJf7S250wxqKfzaKHd2XEDnRMF5d5kct/VKwWb+KFMb8xACPDHIw+zCkdHk7+xza43ZHQVCKsBCeRWq2WuBeHxFNy46xyGoHhsRfIUgIIOPaL6sa4Iz+jvWFm72upWKQ5rngo5fHgHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q7R2RXrP; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LoGxvBpD"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-47f64ca1c2dso849097f8f.2
-        for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 06:12:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q7R2RXrP"
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7e9f829d75aso5522345a34.0
+        for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 13:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784639565; x=1785244365; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=LZcY8JywvKXANV4b4Y/mnnGxXAY43BzjPnwULQV05KI=;
-        b=LoGxvBpDEU586mANHKg0AlOVLSwjxUwcerLWqBCuDTqB3BKr12xDPuAeaITf0OJ5u7
-         pW5MXZkNE0Spz9kUiB9YFRowyZ0wzFTcuAQcWOmZNSNocM1lGunteIJ6qMNsP+7LQHCn
-         K9g4hWqiodIzksvb86yTlUcAOgIE59cm3keL138dQdp2+Aqm72Oe/K9ovJombOHk9b77
-         q7K21gZoQ5BwAZI8RwxdUwRFZcTCvQniV3IZouqx83co77jWHl0m4ZIhqH83wfbTdKJo
-         gJdyjf/44/40tPfp4ckSZbjo5gpkBplWyQ2sI3AVC3OjkfeUBdeeMBulLolpi/ubh9oF
-         H8Aw==
+        d=gmail.com; s=20251104; t=1784667431; x=1785272231; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=qbpzhZprvzL7jC81RqT6ZTBnFe6RFMUwroybvguCBv0=;
+        b=q7R2RXrPGw9+iivRrZn5po2Uewp85S07tfBcR3w+KtU0hnBnGqQifXve40dAUCA5y2
+         wbSgWbzzNwK58x8VRpCRrCrStAMxL3KARzNqCvX5TiiTH6KPj5VOH6NLsz3Ta9/eLviA
+         LBgIyBO94W55OfNvB0+uUm7MUTugku58FYXSevkA2thBEABQPYltl3sVOyLtvz2bo38f
+         YD8o4ZHbKsoZd9F5xMSaCdJ+vaugmIIoNg3/8YJUs7hg5xyp0qTsVU+Z4L4diC4CBcf6
+         162bDIqUbZzQaAVkrxxHH5uMPwtHR/RFkPoeZz5dSTYVLiWMwDZ1j20iJAgLaDj/TOWP
+         880w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784639565; x=1785244365;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LZcY8JywvKXANV4b4Y/mnnGxXAY43BzjPnwULQV05KI=;
-        b=nHsqZQG2Lm5fWNNr3yRcIoALbuZtwz/u4M2USxMbSnJiNOZbkxGst+JQyAzwJuRVIG
-         zylnFzZPTIWvD+5wj2uVbah4dL+mEO6BYMf7rAMCq2VxBfBn1Pk98uR8/tP7LLkmgQAF
-         hYYBKeJxtRiOxyOxpGmtinpvVEWbfkat9+kFAKGXfvfWbG7MOgZ97Jue/hrcGvbyCaEa
-         1GJVRUcRhSIGIvLE4t9vJ4pZ6WmEfQnUa7F6a+0jVKA/lTnHF/yk9m/yMZQbfbwUuWLA
-         zIq4LC7bTtwft+BxZPxmjPdvWxSau0IHEfdPL8bYt6Ji/jeKHtc7ZJ3PIKwJgY9w3D7/
-         PHJQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rpi+gIcJlC7ydpBgIg5yULQCHrY3PsxHqKNWpxOoPp848lbXGVXCjwqz2NDGewMWlVSOxP3aN94sb+OO4FR@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKkIASrtuF5XMaXr7vgxXaNI65rDkoyUzf/UVHGpezF4s9uzlS
-	BclW2x9Wx1cqLRAb1si4n5Xud9pAAt+vy1HLAmz3p5q5mE5+1ZtOLAfN54H6KrM9+k0=
-X-Gm-Gg: AR+sD12YOFv/KX8EWngibeOxAEzAXmObnOJcS/spL8Csm1YW9ZMhgYpnS+5IX6B0901
-	Pgja3RbvBvRFBaM+76t5QcqzfAnXwxue4OItVVq6pFx2m2gFDCd3gpuiGm2MGM3G+ejYK+i1q3B
-	c9ocEDuBwnDDCDOdiZF4wF9X4SDDAT3JOBJJfq85jJPK5hpWqABksBAscjbm/xOYmovVV380E4L
-	CpTQFwezEmu41ohhSuEgLsB6XHR6FwYUiE81vjwtc8udkpY+YmpGMOfGFZZBkGJYnvKbH3Ypn7h
-	GVec9cg3+S1Oc2rtW2ly9Bt1MPo5w726EpL5qu96d+/wmd6xaBXcIVYq7CNsr9GFiG0+z18FaGK
-	QwWIrYyshQULHabB/45eBG/tABbuROc7aPJ7pvOrMg9uo/rieyquv7EUuxDTmCV9E7KwawEE2kg
-	==
-X-Received: by 2002:a5d:64e8:0:b0:47f:6fbd:8a17 with SMTP id ffacd0b85a97d-47f6fbd8e65mr15616435f8f.59.1784639564680;
-        Tue, 21 Jul 2026 06:12:44 -0700 (PDT)
-Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63ee9281sm42070938f8f.36.2026.07.21.06.12.42
+        d=1e100.net; s=20251104; t=1784667431; x=1785272231;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=qbpzhZprvzL7jC81RqT6ZTBnFe6RFMUwroybvguCBv0=;
+        b=HotyN5uSrWyKuUwv++7qAes1AUSD5a+K9d2p8cdRiU4GSk8gM6b2+Trgc64rmaY8oq
+         S/SG06aNzRO//q+MU9y1y/5i67Pr51Jw7wncltPQ/tPaV6NeyJz+d5kpZC9XjlCUW0dF
+         B1mfVYXrPN0teymApvmLJG/Kg/O84vqQ+JPxQYd4YB4F95QTFXgzM82LWiQ6wYTsgGPd
+         /Za/8QxOorlweyqmfyKeL7ZqxK+fe5OiN+GnAqIweoytnxqvwXTQ7UddaTclyYLX4XN9
+         MPtBNzfUU2sDDfGV5E+64wgf02MdNJpzfgXh4UqRdzOD8nrKBfPcH+cu3bkpUURx/C3h
+         HLKQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrjZcCRKCT/FmUmhWdwDSlHz4/ibk4dDRwQfZHk40QE59LUWe5tQV77x1xKgsw+Wp2APcuBNCw6Ytsy62Pf@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzJccfYZExcyxO+BwR+DkEhhb61gfLDGOaSL8//19qulBNWKDN
+	L/WMn82xhX6MDalTpHSAaYmTVzhoWPg7pQY+my8mJA7xvV0aVrR5/7ROdtwhYQ==
+X-Gm-Gg: AfdE7ckY4SFStmOT3dqh5aUqcEOJ6lEjZDNH80mk1w9ay50a9rEUh2LWBgEKwBjsWtN
+	r4NRw2J8UxGS7WArYamjKzArIvlVIXAyc7t9Cd8/YL+Iza0rA3A5wqHQkZNQq+ShdoMUqJJaUJT
+	GODJK7Oauu0yWg7kmCpFSY2dhARg85r2P9N6YfeIhMhocRUrUQah6W+VI05OMhFhPcZ/RqaiGZ+
+	GpMkC9DDouyLzno9ICtoFnu/78c7K6sM3uoHYEUilH48CsPABT0y4kwv24ZaLLZHTb+Csvkut2s
+	L1yTUKLUJFMelOaWdVH5ws37jN0d0xqBhI/t2f/Uz4t1qs8NNda34QYQoFQTYVi9n19olUHOpGV
+	S7JN8PWS7TXL4TaoVuF9GFHaMtaG181GOTokcLhhLSc0n3usMeV2ZG4/JiUb3aUdB/jr2jQwZT0
+	PKGZM1KxWkUomrNB0jSOY46lqy24PRxk2WgjQwg2PPn8towinV+ZQrmBF2YqpyOma7LNgVZbvw1
+	PEOW/1gGFuQxMa5eMEdCDveFQ==
+X-Received: by 2002:a05:6830:700a:b0:7e9:e0f3:b914 with SMTP id 46e09a7af769-7ed9aa59b8amr11454589a34.13.1784667431085;
+        Tue, 21 Jul 2026 13:57:11 -0700 (PDT)
+Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
+        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 06:12:44 -0700 (PDT)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Philipp Reisner <philipp.reisner@linbit.com>,
-	Lars Ellenberg <lars.ellenberg@linbit.com>,
-	=?UTF-8?q?Christoph=20B=C3=B6hmwalder?= <christoph.boehmwalder@linbit.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Michal Januszewski <spock@gentoo.org>,
-	Helge Deller <deller@gmx.de>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Chuck Lever <cel@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	Mark Fasheh <mark@fasheh.com>,
-	Joel Becker <jlbec@evilplan.org>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc: linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	drbd-dev@lists.linux.dev,
-	linux-block@vger.kernel.org,
-	greybus-dev@lists.linaro.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-acpi@vger.kernel.org,
-	linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev,
-	cgroups@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	driver-core@lists.linux.dev,
-	bridge@lists.linux.dev,
-	netdev@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v2 3/3] module: Bring includes in linux/kmod.h up to date
-Date: Tue, 21 Jul 2026 15:11:27 +0200
-Message-ID: <20260721131207.803760-4-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260721131207.803760-1-petr.pavlu@suse.com>
-References: <20260721131207.803760-1-petr.pavlu@suse.com>
+        Tue, 21 Jul 2026 13:57:10 -0700 (PDT)
+From: Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v7 00/29] fix dynamic-debug classmaps API for DRM
+Date: Tue, 21 Jul 2026 14:56:49 -0600
+Message-Id: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/13RS27DIBAG4KtYrEsEw2DsrHqPqgteTpBquwUXt
+ Ypy904SVbG9QRqG7xcMF1ZiTrGwY3NhOdZU0jxRYV4a5s92OkWeAtUMBLRCg+Qh8NGmaeHATes
+ 1gjA9LYzAZ45D+rmHvb1TfU5lmfPvPbvCbfc/Rq1jKnDBXa+MkmCt6NTriVofBz+P7BZT1ZO2Y
+ nODqoiildoBSheU31NcU9hQJCp7KxG17rTt9lQ/qdlRTRRwAHD0FjfAnrZraja0Jao6OagYnBC
+ o1/T6mGGOX9/0D8tjkMzZEjn1x7Qcm2oOwLNHOnz9A3SSw5K8AQAA
+X-Change-ID: 20260521-dd-maint-2-76c542079420
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Jason Baron <jbaron@akamai.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Simona Vetter <simona@ffwll.ch>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Jim Cromie <jim.cromie@gmail.com>, stable@vger.kernel.org, 
+ Arnd Bergmann <arnd@arndb.de>, Louis Chauvet <louis.chauvet@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=8836;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=HSLmyNqqlC5f/lDHCkwX2D39xGcapCKnPGT/JRUn8pQ=;
+ b=oFSZGGaTYP15h5jzOe5WHoYI0xiibB/2BmYKd1+zJ6fzliY8bP3Mc7kWXJ+scKnr8xqXJrjjY
+ +oLZz0O0YrlAR14Qij1VrOtntdWRv13KJp1GGkUmCFKGJvu8CHOUePF
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Including linux/kmod.h alone results in 1.5 MB of preprocessed output, even
-though it provides only a few functions and macros.
+This series fixes problems which broke CONFIG_DRM_USE_DYNAMIC_DEBUG=Y.
 
-The header currently depends on:
+Briefly, the bug was that the handling of drm.debug settings occurs
+when drm.ko is up/ready, long before drm drivers and helper modules
+are up/ready.  So they missed the enablement.
 
-* __printf() -> linux/compiler_attributes.h,
-* ENOSYS -> linux/errno.h,
-* bool -> linux/types.h.
+The fix is to split DECLARE_DYNDBG_CLASSMAP in 2; a client-server
+scheme where drm calls DYNAMIC_DEBUG_CLASSMAP_DEFINE, and drivers call
+DYNAMIC_DEBUG_CLASSMAP_USE.  Now when a driver is modprobed, dyndbg
+sees the _USE record, follows it to the classmap _DEFINition, finds
+drm's drm.debug param which the classmap is wired to, and applies its
+setting to the driver module.
 
-Include only these files, reducing the preprocessed output to 10 kB.
+The patchset, by chunks:
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+1. tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+   moved to front
+   available from start to validate each following commit
+   "fingerprint" based.
+
+2. DRM setup
+   enable code under test thru entire series
+   remove BROKEN on CONFIG_DRM_USE_DYNAMIC_DEBUG
+   fix ccflags-y in Makefile - build with -DDYNAMIC_DEBUG_MODULE
+   probably omit this for merge
+
+3. vmlinux fixes for i386 misalignment crash
+   cleanups needed,added too.
+
+4. cleanups, preps, etc
+   unused code removal
+   callchain refactors, struct re-structuring,
+   verbose debug reduction
+
+5. The API fix
+   new __dyndbg_class_users section
+   new test_dynamic_debug_submod.ko
+   selftests - reproduce the drm-drivers scenario
+
+Not included:
+   a few drm-core adaptation patches
+   75+ 1-liner-ish DRM patches to +DYNAMIC_DEBUG_CLASSMAP_USE
+   patches validating DYNAMIC_DEBUG_CLASSMAP_* args at compile-time, etc
+
+There are 2 user-visible changes I should note:
+
+1. change an ERROR condition displayed in dynamic_debug/control,
+from "class:unknown, _id:1" to "class:_UNKNOWN_ id:1"
+
+This only happens if a classmap is incorrectly defined.  Such a
+problem should be caught in review, and should be SHOUTED about.  And
+since classmaps are BROKEN for DRM (its only user), this affects no
+users.  Followon patches will catch more classmap definition errors,
+but not this particular one.
+
+2. change builtin module names, displayed in dynamic_debug/control,
+from simple "[main]" to subsystem "[init/main]" etc.  This corrects an
+existing naming ambiguity, which is disallowed for loadable modules by
+the module loader.  To preserve legacy query behavior, "module main"
+will select all of "[*/main]".
+
+NB: the current ambiguity prevents cleanly adding classmaps to
+builtins named "[main]".  Such an addition is quite unlikely, so this
+change could/can be dropped, but it seemed proper to point it out and
+correct it.
+
+3. revert a change in classmaps-v1 (2022) which enlarged __drm_debug
+from (unsigned) int to long int.  64 categories of drm-debug is well
+past reasonable and useful.  The param is now a u32, for clarity.
+
+NB: 63 class-ids allows 2+ classmaps per module.
+
+PS: shortened cc list to stay under gmail's 500/day limit,
+pls cc folks you think should see this.
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/linux/kmod.h | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+Changes in v7:
 
-diff --git a/include/linux/kmod.h b/include/linux/kmod.h
-index 9a07c3215389..b9474a62a568 100644
---- a/include/linux/kmod.h
-+++ b/include/linux/kmod.h
-@@ -2,17 +2,9 @@
- #ifndef __LINUX_KMOD_H__
- #define __LINUX_KMOD_H__
- 
--/*
-- *	include/linux/kmod.h
-- */
--
--#include <linux/umh.h>
--#include <linux/gfp.h>
--#include <linux/stddef.h>
-+#include <linux/compiler_attributes.h>
- #include <linux/errno.h>
--#include <linux/compiler.h>
--#include <linux/workqueue.h>
--#include <linux/sysctl.h>
-+#include <linux/types.h>
- 
- #ifdef CONFIG_MODULES
- /* modprobe exit status on success, -ve on error.  Return value
+- rebased onto v7.2-rc4
+- applies clean to mm-nonmm-unstable@376804729797
+
+- move selftest script to front, always there for validating, bisecting.
+- substantial rewrite of test script. now fingerprint based.
+- move DRM patches to front, for more thorough build-tests
+- drop statements-to-expressions, the compile error no longer exists.
+- sashiko fixes - all, I hope
+- Link to v6: https://lore.kernel.org/r/20260707-dd-maint-2-v6-0-381f3edb0045@gmail.com
+
+Changes in v6:
+
+previous versions split the 1st chunk into a separate submission, in
+an attempt to get past gmail's 500 msgs/day limit, and to ease review.
+
+This complicated application; although the 2nd chunk had the b4
+dependency on the 1st, this fact was missed by sashiko, which
+therefore couldnt apply it.
+
+A followon series adds compile-time and runtime checks to fail-fast if
+classmaps are used incorrectly.
+
+Changes in v5:
+
+move KBUILD_MODFILE ahead of array-slice, to address sashiko
+complaints which were fixed by later patches in V4.
+
+Changes in v4:
+
+Dyndbg previously used KBUILD_MODNAME to provide module-name, this
+works well for loadable modules (module loader requires unique module
+names), but for builtin modules, is effectively kbasename, and is not
+guaranteed unique.
+
+So we get 4 modules named "main": init/main, kernel/power/main,
+kernel/base/power/main.  This ambiguity is visible in user-space since
+the beginning of dyndbg.
+
+Now suppose kernel/{,base}/power/main want to define classmaps to
+categorize the various pr-debugs they have.  The current code finds a
+module's classmaps by strcmp on modname, so init/main will match
+against classmaps defined by both kernel/{,base}/power/main.
+
+The current code will also map "main" classes to kernel/*/power/main,
+so they will probably work at first, but 2 independent classmaps can
+both use class-ids 0-N, but will conflict if they're both used by a
+module.  Then we have classmap overlaps and unpredictable results.
+
+v3:
+- move #includes to top of files,
+- drop redundant ALIGN(8) in dydnbg.lds.S: DYNDBG_SECTIONS macro
+- add Reviewed-by tag (thx Petr)
+
+v2:
+- avoid BOUNDED_SECTION in modules, dont need _start & _end symbols.
+- sets 0 address to the sections, not just whatever current is.
+
+---
+Jim Cromie (29):
+      params: fix a pr_debug(" %p ") use - already in MM-*
+      selftests/dyndbg: Add kselftest script to verify dynamic-debug
+      drm: Fix incorrect ccflags-y spelling inside Makefile
+      drm: fix config dependent unused variable warning.
+      drm: Mark CONFIG_DRM_USE_DYNAMIC_DEBUG as unBROKEN
+      vmlinux.lds.h: refactor BOUNDED_SECTION_* macros into bounded_sections.lds.h
+      vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+      vmlinux.lds.h: Fix ALIGN(8) omission causing NULL ptr on i386
+      vmlinux.lds.h: remove redundant ALIGN(8) directives
+      dyndbg.lds.S: fix lost dyndbg sections in modules
+      dyndbg: factor ddebug_match_desc out from ddebug_change
+      dyndbg: add stub macro for DECLARE_DYNDBG_CLASSMAP
+      dyndbg: reword "class unknown," to "class:_UNKNOWN_"
+      dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
+      dyndbg: drop NUM_TYPE_ARGS
+      dyndbg: bump num-tokens in a query-cmd from 9 to 15
+      dyndbg: reduce verbose/debug clutter
+      lib/parser: add match_wildcard_hyphen() for agnostic matching
+      dyndbg: use KBUILD_MODFILE for unique builtin module names
+      dyndbg: refactor param_set_dyndbg_classes and below
+      dyndbg: tighten fn-sig of ddebug_apply_class_bitmap
+      dyndbg: replace classmap list with an array-slice
+      dyndbg: macrofy a 2-index for-loop pattern
+      dyndbg: pin class param storage to u32
+      dyndbg,module: make proper substructs in _ddebug_info
+      dyndbg: move mod_name down from struct ddebug_table to _ddebug_info
+      dyndbg: hoist classmap-filter-by-modname up to ddebug_add_module
+      dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
+      selftests/dyndbg: enable FT_classmap_inheritance
+
+ Documentation/admin-guide/dynamic-debug-howto.rst  |  42 +-
+ MAINTAINERS                                        |   2 +
+ drivers/gpu/drm/Kconfig.debug                      |   1 -
+ drivers/gpu/drm/Makefile                           |   3 +-
+ drivers/gpu/drm/drm_print.c                        |   7 +-
+ include/asm-generic/bounded_sections.lds.h         |  32 +
+ include/asm-generic/dyndbg.lds.h                   |  22 +
+ include/asm-generic/vmlinux.lds.h                  |  68 +-
+ include/drm/drm_print.h                            |   2 +-
+ include/linux/dynamic_debug.h                      | 257 +++++--
+ include/linux/parser.h                             |   1 +
+ kernel/module/main.c                               |  15 +-
+ kernel/params.c                                    |   4 +-
+ lib/Kconfig.debug                                  |  24 +-
+ lib/Makefile                                       |   3 +
+ lib/dynamic_debug.c                                | 607 +++++++++------
+ lib/parser.c                                       |  58 +-
+ lib/test_dynamic_debug.c                           | 145 ++--
+ lib/test_dynamic_debug_submod.c                    |  14 +
+ scripts/module.lds.S                               |   2 +
+ tools/testing/selftests/dynamic_debug/Makefile     |  10 +
+ tools/testing/selftests/dynamic_debug/config       |   8 +
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 847 +++++++++++++++++++++
+ .../dynamic_debug/syslog_hash_validation.sh        | 384 ++++++++++
+ 24 files changed, 2089 insertions(+), 469 deletions(-)
+---
+base-commit: 6946cd5d0aa4dd10a414ddcb7a10844fdb0ad345
+change-id: 20260521-dd-maint-2-76c542079420
+
+Best regards,
 -- 
-2.54.0
+Jim Cromie <jim.cromie@gmail.com>
 
