@@ -1,69 +1,68 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21558443AB7
-	for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 20:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22F2442139
+	for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 20:57:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784667452; cv=none; b=XZVOHnjQM9Q+4m3GCgSg7ky5sW3hXEQAf2CnwWCKWilDchtrqroJh+Z7ODfDXjnyOglc2dHa/tKpNrSTBYEfh2WFefbVJhoe6bk7MFW8gYjNjt/Oqp8rgkLPQ0yVsrCD8GoV38JMXDs+aeuthY+BH4cMt3cUVxo7VEd8DtGbRys=
+	t=1784667454; cv=none; b=BEwaphP5xrvWrH+mAXY0hf4rwq1vPjkkJqs2RSDARvKPo62CrlmyamCjPwyGLC8qQ4RbUUwe2PaC8isEjrMFa2YzHLriAxgt6l1lMJ9peVWPehDOhC8Y3qGl9wqmdoi7x0PAfa5/7aKp6mW6hQ+64dTPJo02T2uZMDIjZfsoinE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784667452; c=relaxed/simple;
-	bh=yfxjNCD2FfV6WQ7UCS9hJEIU3/cj9TtYhccgD7F2GOk=;
+	s=arc-20240116; t=1784667454; c=relaxed/simple;
+	bh=xMZm/oO0FtfekjkxZIUS9OIoDKqTmliEkK4gwpH/mIw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hsLboOKYH7pUzixJVF8PyT17Arn+vXP9UrzkpkHkEl52SThpYozZyoJaYOnfgJ4LZAk3P45xqet3/rxnVcr4xZG933/A0zbexdPhwUNQ/fIzXuUoCHIVcYj1jfns8KR5GU/0LaoJU22NuYqO9hN0gvRWfdvtF+29CNfqFuwCEHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f1i7zzSs; arc=none smtp.client-ip=209.85.210.48
+	 In-Reply-To:To:Cc; b=AQ/MKXLjM1s1r6wHeFZtx4tUXWFu5mY2YJymqlDr5CgzP5uhxTOVJFDoAbZ0PDbVvRDkoP+lgJtBympfTG/Z7qRiMSjHLqcfIimjA7GNFFTm0CYSi5/IHHNpid9pQFOIAidy3WF/Wt9PvS5jKyX6GNAk1Jf8un++rV+2WELciV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YoGCrNfW; arc=none smtp.client-ip=209.85.210.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f1i7zzSs"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7eb4d532e65so4555439a34.0
-        for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 13:57:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YoGCrNfW"
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7e9f5637634so5328098a34.3
+        for <linux-modules@vger.kernel.org>; Tue, 21 Jul 2026 13:57:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784667447; x=1785272247; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784667450; x=1785272250; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Tkpd6XZrbayv1qGlRLm5NJZ/GcnFTR7uIhPPki4vU/s=;
-        b=f1i7zzSs4MTch98HP2skO47zoVs0bqER2ez+3htfcbfXAsm0gGHd5pq/lXgpfbKpjz
-         nL0g8N4UNVCvt5/G9AP1ZmAzvo2OuEBuQ1h9/ZzHJ5bZF3WiJXtmpUWzf4lU0vQl16nr
-         lk0eRNeu2EXDBRsGdQt6NwTPtWZH0Eouokc5gyC5o1NHXCp7ppwiOBf2Er6kscyKxNrG
-         hlvrAD6RIMBrWh4VV80JUbtvpl4gUxvZINIl1fvBTRVG8isomQe7OIAX2XS0NDYURW7x
-         b9RFgj9lQWzmajle98vqfdB3s9FwXMUUNuKGpRRsFpsuRE8IwEGHG2roA0nMORiZiC6t
-         G4sQ==
+        bh=N2eu41/ydt/uEYD6twBRH38ATPyPlKojYjlAenMFyI8=;
+        b=YoGCrNfWrqDAmmlaGYv7F01W+OJuf9b9QtC3hh3VJ54KpR9/h4CFp6FN0OicFc0Q8D
+         LtTodknSbF7U9x5xzVhOeU6oct3P7L1h+VtJ2rzH9LlATlOZ9XCX9Cgee/1iHngH8l3F
+         1xcGAll4H4XcyJT8RnfJufF3zVX8EctjJTPP+cSMaLza80yrLmyb8Ul8M6Ve6FwOIivd
+         Do2v2xDQb6s51cqeEd0865Noz9yj8g7bxo6QRwpS5USqSNpa+GB1T8C5NubibRLqK/+1
+         aESAc79Ws/QOCx5PQxLRMzvADeIoRZs/8PQ6XiE6mOZM80IzRFtjHslo3ivszsqfhLiu
+         HLkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784667447; x=1785272247;
+        d=1e100.net; s=20251104; t=1784667450; x=1785272250;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Tkpd6XZrbayv1qGlRLm5NJZ/GcnFTR7uIhPPki4vU/s=;
-        b=ipk1sugppJGCivsH7auO788iiXMTdYfG4GBg+52RP4yu5+hWyJ3VlzVLVUYCc/GMjI
-         5BJCr9hlJCMu+PmHcVAYbTrWHKJw+gjvwhLGnMwqYJ/oy7nAcJzcYNw8oK6SFsLAGNWu
-         HCXxZGVzlwcBrEt0+g8xG2yppXvggeUzgIlbOTBqeLHayxhPgBh10zhDbjEQbfNo4Hmx
-         cDlO5eK6stYGIsg7vz6l19BheZ2KBl0YQ+Duj0qFTo/Xse43hWxeZvzfnmU5/6XTeXvg
-         S8LRTeP/zlMXvK9I9fPjdi4VAGZUWMr+1qQt7gpExLlH6jSvBq+IPWxF7Qwm07HGhtg2
-         yrSg==
-X-Forwarded-Encrypted: i=1; AHgh+Rpdb7yy3RZDwO0icFzmneQwOsTh3uV5iRVbp1E/svKTJx/V0R48HmO0WeK+HdbninesgPIzVNobD1dEilF4@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUsgmVvg4Clk0JkLWjYa4n3EXq6eTIaUrV4i8b+2cjUjs3Ooaa
-	GGNpoLSBuLBXyHNI0phuGnAkSeXJhJCZUirogPGOJ14lr3I5QayGSH5JO3eAyA==
-X-Gm-Gg: AfdE7cmJ609kgpA3iCqg2WU4rLaVI5hC4pUxkVOB6vIm/4abRyPJZu6ENk3iyqtQft/
-	r0YZBCFyq04tSRY9N1Xab/7nZ0LsxU4u7osJTLvl/l95Zjy1gddv4wI/S5RsYvardJ4E2P4s7cL
-	cDsf2YoZ9OTDmQoIM/E0mzz3ODVZFdhx7kNaXHd9/zMeNY8lkvqEbQY+8wRLmSwDajOyJbh78h9
-	h0BZIRPyosLRMzwfiTIGuOTwdk9g6cU10kDy41IMtgnND2XgilXflkb1saivHbzbN/vLgXBn+ok
-	FHkbSXlE6LKSeEhzGrYbETiXGm2SR1pz+IPm8vdoOV6vx941rLeLlZu0whOomSuSBBd0tost9oC
-	fVIYAOvvkmo1QVuMH5MU9bEXaQQ+4duvQHexRCLb2jKa+XyZQtJLEJMXeyYwTobQMFunxzOnrL3
-	l1QK11MNZFfB0KtT01B7sdTokgdHtvAZtPOKEuS86AO5DSGuwWZv6ZRSXGEioX8mRC1BAbMcfg+
-	si7DtfsafY3fAL23N1sqNMUZA==
-X-Received: by 2002:a05:6830:909:b0:7e9:dbbe:5af9 with SMTP id 46e09a7af769-7eda4d70994mr10261926a34.31.1784667447247;
-        Tue, 21 Jul 2026 13:57:27 -0700 (PDT)
+        bh=N2eu41/ydt/uEYD6twBRH38ATPyPlKojYjlAenMFyI8=;
+        b=j1Zqi2sCX3GmP+2ruC3/RukOCvxN0Wi8I+7X03aEfhNeBVN7oIU42KD5QJb5zxmNDP
+         fg7vtaTXe6u9ZRwaJB/KJhqrmeJ6xrrLeI37GPscEdQlVMgMequKgoNxRkaGej7Jks3L
+         X68ie0QwQvnsKxp7MfQBT//rShgDkNY8XXQ6MHA/VQnCUKzvfrXOo1fD3nZnzCOwP149
+         SWqfY0IKJzXmAu/i/mQQNWaHITIYJDWzKukGmdY7iuHomnctnGGNGhEcJ8c05bAvwVuB
+         dWI62tZ/zG4qsRcgUhTJhsxkGjXW24NFUCi0qUOnwtlkdR2PxWokqZ2cbyNOJAo8aCgF
+         LbHg==
+X-Forwarded-Encrypted: i=1; AHgh+RqFRPTImsg5n4A1a6QVFqWeVN4I0uj7cshJEwkrOl88IY1mXroP9Z16wmGhA+ewmXE+Kjf/hf1CqNhmeagr@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXyrV3j6HbGRXaLt4ynO/I5DWsTed/YKmYhxsIgwMKSunz01NO
+	hYSEjyWGPLqhFe+jUbnWJuDk84YwUult1UYmWd7XY+5ZXENKaDKA+sod8MEi+Q==
+X-Gm-Gg: AfdE7clWjOBjF4sDlVfxi45Sr2P7uwp2gOX2BqUrO4F+Qpfa/iF6YxE6GNE0UHQYNqZ
+	wCGkkUnxuQOX5RwASsUzw/pRV9+LYSG9K540HO9y6uRIGYmJpgxLdGrrbcoWeFq/7xjusH8cXr3
+	afp/5gxBKnKnObpBTlPyDkMVWny5LzfNXiMW7j6nCJrA5PSGptjsFXbtsZm0PI+04mDWrx0x+JF
+	DemlgdM8ssB0xrmJ4bdykxNxl1jx+R0sg1AWfUUg1ne/j/wBVpHqgfz04NgGhRDNsK9a1YkMCuZ
+	XDUIjtButxpkGKRN4wT2Y+sx9p+Jih2PTCgABCp5J0tSusP+/GFXz660LGaPqBmTJT7+ZQUOBEe
+	4wB5I2vRus/9wkRCQvUsp4ocQCOQnJecGOI8nTiD1UzvkdNsuSQ3aoI/dxbrgdx43spIbIdEtXq
+	Er5ypfdy9qziTwrdQklkjk9A2/33zalUsCbsCNNwrfDsxJnuLnZUH5QKl7JNRun1uDpt9aHY+e4
+	LbYG9EM6Sp/qvDpGoNRl9YEXkhgkM677pL+
+X-Received: by 2002:a05:6830:349e:b0:7e6:fe3a:b777 with SMTP id 46e09a7af769-7ed9aa23f9bmr12810053a34.13.1784667449716;
+        Tue, 21 Jul 2026 13:57:29 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.26
+        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 13:57:26 -0700 (PDT)
+        Tue, 21 Jul 2026 13:57:29 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 21 Jul 2026 14:57:02 -0600
-Subject: [PATCH v7 13/29] dyndbg: reword "class unknown," to
- "class:_UNKNOWN_"
+Date: Tue, 21 Jul 2026 14:57:04 -0600
+Subject: [PATCH v7 15/29] dyndbg: drop NUM_TYPE_ARGS
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -72,7 +71,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260721-dd-maint-2-v7-13-010fbe73b311@gmail.com>
+Message-Id: <20260721-dd-maint-2-v7-15-010fbe73b311@gmail.com>
 References: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 In-Reply-To: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -86,49 +85,56 @@ Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  Jim Cromie <jim.cromie@gmail.com>, 
  Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=1375;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=1542;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=yfxjNCD2FfV6WQ7UCS9hJEIU3/cj9TtYhccgD7F2GOk=;
- b=QF5cQMK6T8UD1YJz5nk2AJgW01BgHiDFKzY+xuJZdV3zwDHcNIHgMuD2tCQNxi+sv49R3fsxO
- T3mOec9MvhtCAxvyJpnSu43qxs3y9ZYtOKNNAHiEMVbFgE2WhPqbHCp
+ bh=xMZm/oO0FtfekjkxZIUS9OIoDKqTmliEkK4gwpH/mIw=;
+ b=N77P9AtjJFwy7FzRMr8In7kiy43wJO+O2C4iqOk47TEdDfFmP812nSRahvaUv1gzRqFViN7n8
+ qgDCrRgljrVB76lmYlUQv1NGsjwiR6T6qctOUDgUkjgZ+pHvjsdGWoP
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-When a dyndbg classname is unknown to a kernel module, the callsite is
-un-addressable via >control queries, and therefore uncontrollable.
+ARRAY_SIZE almost works here, since array decl is complete.
+But define it locally, named __DDEBUG_ARRAY_SIZE, to avoid
+include conflicts with  boot/<something> on some arch.
 
-The control-file displays this condition as "class unknown, _id:N"
-currently.  That spelling is sub-optimal/too-generic, so change it to
-"class:_UNKNOWN_ _id:N" to loudly announce the erroneous situation,
-and to make it uniquely greppable.
-
-NB: while this might be seen as a user-visible change, this shouldn't
-disqualify the change:
-
-a- it reports a classmap coding error condition, which should be
-   detected in (or before) review.
-b- SHOUTING the error makes it more visible, uniquely greppable.
-c- the classmap feature is marked BROKEN for its only current user.
+no functional change
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- lib/dynamic_debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v7: actually use macro
+v5: drop include, it causes redefined probs in /boot/* for some arch.
+v2: include linux/array_size.h, correct commit subject, review after sob
+---
+ include/linux/dynamic_debug.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 577a07916072..a86e1d5845e6 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -1170,7 +1170,7 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
- 		if (class)
- 			seq_printf(m, " class:%s", class);
- 		else
--			seq_printf(m, " class unknown, _id:%d", dp->class_id);
-+			seq_printf(m, " class:_UNKNOWN_ _id:%d", dp->class_id);
- 	}
- 	seq_putc(m, '\n');
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index 9607121c3072..baf5c0853f45 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -8,6 +8,8 @@
  
+ #include <linux/build_bug.h>
+ 
++#define __DDEBUG_ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
++
+ /*
+  * An instance of this structure is created in a special
+  * ELF section at every dynamic debug callsite.  At runtime,
+@@ -122,11 +124,9 @@ struct ddebug_class_param {
+ 		.mod_name = KBUILD_MODNAME,				\
+ 		.base = _base,						\
+ 		.map_type = _maptype,					\
+-		.length = NUM_TYPE_ARGS(char*, __VA_ARGS__),		\
+ 		.class_names = _var##_classnames,			\
++		.length = __DDEBUG_ARRAY_SIZE(_var##_classnames),	\
+ 	}
+-#define NUM_TYPE_ARGS(eltype, ...)				\
+-	(sizeof((eltype[]) {__VA_ARGS__}) / sizeof(eltype))
+ 
+ extern __printf(2, 3)
+ void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...);
 
 -- 
 2.55.0
