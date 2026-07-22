@@ -1,80 +1,81 @@
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D863938887B
-	for <linux-modules@vger.kernel.org>; Wed, 22 Jul 2026 09:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA857473C77
+	for <linux-modules@vger.kernel.org>; Wed, 22 Jul 2026 09:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784711775; cv=none; b=LUEJhmfjBMW35+NsCPmT6W8HxhH52BdfWe57ufIJWEBTheV+97h9w1B4BpAjczcrhSp7cYdSFs2LarM2S2kgAWmFHShTnTg8qwiknfWhK/WcN3KHlSEcrdyH5DUzFEoLBYokcqbppcPR75OCB+tIQI0aGWcHG/rHN/XaYKBLoOg=
+	t=1784711779; cv=none; b=HBNrKkMdduK3gO8RU/mDBeHofLa3ziGtWT3z0PcXW94onK5pvUJPhIxM33LL9uvRZqrcgJ4gEOnvWRVxaEH0X5id+66rrprkKXVUWov7XCe7yg7IgFo1TpC/JVeDJ6HGuWbH9TsWiRDz6UDipGf/zD8N0F7Nlm8s7bzEQM1okCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784711775; c=relaxed/simple;
-	bh=WHTeaknv78De6KO44hwqgZ7aTIPj60igzBhp6OOHFoQ=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=dn99T2pUAiRR1E6stDjnu8+lAwaMxeAKSIsO/Ro+yeg9tusu2K3XgG9yPv4T/TpPeR/fN+/OVslbae2pLldt1bo/Ejm0dihE7pj4ys6cZUuk9IiLrwIyh/bn/4K4W+jXa3kK/AVXk8JyGyoRKJSBor53YTOP4AHmqUgQ6EzeTPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gR/kh9uF; arc=none smtp.client-ip=209.85.221.72
+	s=arc-20240116; t=1784711779; c=relaxed/simple;
+	bh=YS3Fmynk4Vu065pQWcNaIi3zvRzKJ7fDLNwk2VrvdWo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=qxwIujuIx0yV1QABFWsz4rBfswzLTkyVNuNxTJnVGs7Y7556ktqXbbrZuFRLd+wd0mxohCamStFAZBxcfXwlJHWnSUlLalnHq5BEtTg26iVBNkhNzgHmd8mI6Oy+N+4cUWkBX2+Q5GeV9IcyBQm4kJ8KgAm1PraV/mPimnHyPUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SSP5xUb8; arc=none smtp.client-ip=209.85.208.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gR/kh9uF"
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-47f24a50f0cso11343212f8f.3
-        for <linux-modules@vger.kernel.org>; Wed, 22 Jul 2026 02:16:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SSP5xUb8"
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-69c20d1d150so8060989a12.0
+        for <linux-modules@vger.kernel.org>; Wed, 22 Jul 2026 02:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784711772; x=1785316572; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XnwvnzL9yajO681ECkplP5nrBBFaUwXqggP7vnGCUwo=;
-        b=gR/kh9uFrzVGOnsMjiFz6NxGibxNH5nF29WUTCuXnrFEy6oQ7xZUk8TK/vDzUXIW5N
-         qAti8ky6yaGQjOZcDSpBsiKD2qFq/Rf9kM+557zroLvH1/1P6H47lMFpclqBQKHWG+JG
-         uHZN14WD+/afkZMouRoXwnhfNWw0SuQMXwR7+NFChzR/t/2ba641LMQhTPJKmK1Rh6dD
-         vadX1UK4uY1HrleuNSHOHyTK3y3Lnn0WQwefeFPS5YzZfJjMOhZjilupIyzJDGE9Ak7/
-         FtZHA57yqEIpsPTpj/Bzxxd5I/pQM8EwXli2c6b9j+dTnXNeKbK0hVX9wy7Hv/Xyp4Dg
-         dIIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784711772; x=1785316572;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1784711776; x=1785316576; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XnwvnzL9yajO681ECkplP5nrBBFaUwXqggP7vnGCUwo=;
-        b=VSXg8sTCWu/4VaFq6LyRb4BgcqcGKioliF1k5upCbAmoxJpkRBotokdbwEMF+vIkIL
-         zLfjdisrILTrK74XbBDgbvufC2ZQmFAYcqi9Fg7C4tK9C7oGGO2jkEMjGSIyTc6tPhlG
-         FfrB/kk36kyk0qaHTcOau1f362j2uhNI9uE/M96klWq+251I742+AunXfZibekQQ1gkt
-         IhZuwqWPGBK1DxSqfpUCJzSYVa9EXvjmPviH4y33SwXIuv0dC9jDDrI1SbNZi5kHcLsV
-         yECrqG4KXDVDuxgaUNnd6yiDvcYhxaasjLY5nbZccMQM04xjOtFwy7AGZ4psLK1r+D3W
-         +7QQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoVM6hkSCwuU4JkFbWGoBDaURqkh8Lk/Gi4bE9QHeVyMdL95jCoU/F5PAB2CaJREKrpAUNBE2LgDxn56Dv0@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4Y6xNL51O0xBh44ZiLyAWlY1Oa5BkjcwXwwPRphl3uYYQMETd
-	WrEYOpgvV3qbsWSFoPsJja+t0+H/FSybVhnAvV28gE81DmN0ekGBBioLgOBxl6Y8m5vtOFwhtTz
-	QAjEfa7eJ47gq5fHVVQ==
-X-Received: from wrnd1.prod.google.com ([2002:adf:e841:0:b0:46c:d068:1ef8])
+        bh=fy37Ri9YIz6ZPyFsdkNre42EGivj6QW6c9T4HBOMel8=;
+        b=SSP5xUb8jBbiBRcl2OSRVX98UaqLtcRAehMeYD/uFSIovNEuZ5wMdUY5HDWzQuYME8
+         L3Q6ZtGmOCA21ZF2YBnRfyNmrbULNOFf+eXcr0rTf0a7KZ/JJRsJ3LFCm7044BVXNBgD
+         UHlEVxqG88YIpwkvOLm38WCj0IZhnmnqo1yHlf/FiyK3OocMO6Dh2Z8UqgaKWQ2F0Do8
+         ptpjrOAUjPSeE92yQhGFNSCtFur172iUa4yVrjI7yU1LU11thaIC9l1U1KywEbhw7cOL
+         uESVLkRwsnOHfaudGvQhVnOB/r8LEsjZxs6LP2x5xqOu0gHRnkaxW6Nfb7BcdQOIFtqQ
+         AdGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784711776; x=1785316576;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fy37Ri9YIz6ZPyFsdkNre42EGivj6QW6c9T4HBOMel8=;
+        b=ppjPA20ueTZkmwhHdJvxbGgF6YfwGVtSzBn1T8inXhK+a4toVOWkGs9BmXAVFQCCYk
+         pm3Ijm0AICg/efVMBf/ryUl/Ayq41OX3IlLDiD/pW+YZxYVGWvkX1tZd4SLidkPU1Tiw
+         8p5Yz+reefimBdRdgTB5nGguPRwrvF7cvHIXKTAMbkY/YThvEoKZn2VOrj+7l+a7ixp8
+         zx8TKdqvNPuRDReNwz4w0+ys7bZ6ExK126xzP/h39B+c6XbW6Q/fc58DSGO8xicP+Dw9
+         VUDLAqlu/mpAC25joktJscSulkYO4AldDhn0ZtEPGLp9a1pVjXIWCi7BoVT8DGwnOrVs
+         bNqA==
+X-Forwarded-Encrypted: i=1; AHgh+Ro2nxYsk8MVeP4ZGOlv2rj4sddhDed7Xfu2jDN6o/qnCdXnCa7IGtVE4iNx4X2F/2Zer+ii/P/2+4Llsl+i@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjV3ySQ+vJhvaRU3XRPPLq8D7QkIMFPXpUjnF6pB1CoMefANS6
+	cv2vibfneNB0vwfJB3iYcE11NGw6FjCJ0/fcMOUV/zdQ+KUeNnd0Gny/WOn5bcmSxMAzM+vRNtD
+	b9B+f2hrYHojxaPjCiw==
+X-Received: from ejfx13.prod.google.com ([2002:a17:906:a4d:b0:c12:697d:b9f0])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:1882:b0:47f:5c33:5eb9 with SMTP id ffacd0b85a97d-47f6233c20amr25186040f8f.52.1784711771641;
- Wed, 22 Jul 2026 02:16:11 -0700 (PDT)
-Date: Wed, 22 Jul 2026 09:16:01 +0000
+ 2002:a17:907:60cc:b0:c1c:3705:dde9 with SMTP id a640c23a62f3a-c1c3705e054mr91273766b.64.1784711775265;
+ Wed, 22 Jul 2026 02:16:15 -0700 (PDT)
+Date: Wed, 22 Jul 2026 09:16:03 +0000
+In-Reply-To: <20260722-setonce-populate-v1-0-fa7455c26c42@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAFGKYGoC/x3MQQqAIBRF0a3IHyeog6K2Eg20XvUhVNQiiPaeN
- DyDex/KSIxMg3go4eLMwVfoRtC8W79B8lJNRplWdUbLjBL8DBlDPA9bIFdje9dqC6cXqllMWPn +l+P0vh9Z3b0eYgAAAA==
-X-Change-Id: 20260721-setonce-populate-f2a9b61aeb1d
+References: <20260722-setonce-populate-v1-0-fa7455c26c42@google.com>
 X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1771; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=WHTeaknv78De6KO44hwqgZ7aTIPj60igzBhp6OOHFoQ=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBqYIpVERMIl8h/BGdn1orEWFHvlODd2hyo0IQJL
- 38oV1M/+MqJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCamCKVQAKCRAEWL7uWMY5
- RtZjEACqLldS6wAFVn6M3USar454sSGS44ygerOkuBV2Bv3lvTMOh8ezyzHqndQkpeQArGQ+FOQ
- qSLlZCsWZWtWQcZrShCXwmKUovT+g+6Ark+Un+VMlXWnbrTIl5IGPpHqrwSgYC972yzEJCx2GzS
- fuXn0vMsUza8QgcdiCQk5O4MJJRE7ag3FW2qc86JtDbBhvvJGOMK3U7NNuqPwxHtJWMkxkbtW4X
- qh19FcoHu2OpkkKz76cSHZ/WCK6JS/1+Iu6fTF05+rP6qi9u8LnDDFP8bb7c92IYJ9nogbukuy9
- ttRGb3TmHY0vsjf8DQsPp2RJ8KvqAGwO/ToCLiJKbnv4oifbMERi1fVyvFmT3+97AIlf4dOKTDj
- 1e2BTsCvZ5oXHYQwmk6YoIXgtCrZ6QZpkLaiSBYHlXrGNtypWHJLqoqNCKd9FBXMcBcpPePMa8Q
- jjDJqKieCXNkBwtETm7c1XRBQDAEiRf3O65BGojyiCDIknV3OLyGEgwYHb/kUI88podGfQpqcnB
- 8/xyewFxgbqgDsr57KN+JL7+3HKj0nNtsRn7wvxB5+YFfo0X1ayWXF8NYCbejk1SCCv8ttyp2LV
- Zp5bEyn9OmxrY1ib3WM/U/nb9OWHExj8mL11WXgnoP/HFxk4VT4L98xUBv6MDKCS9oJwUNAr3Kq LqMcPGpGzuZA5dA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3202; i=aliceryhl@google.com;
+ h=from:subject:message-id; bh=YS3Fmynk4Vu065pQWcNaIi3zvRzKJ7fDLNwk2VrvdWo=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBqYIpZlnR5r3GHmC1/FYMSNnDKWRI2sTd2Ccy2c
+ Wmxh6BdjE6JAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCamCKWQAKCRAEWL7uWMY5
+ Rg9OD/wIyDyEpfmqc72tRFWwWjifv2M5J+dXWO5bI1owZFLjoN+qloMJOeq+T9l3ELsHO2qW/2c
+ NywU9nNrj1DVaZ2mgsdfH+P8TKEKOYvZjfKqCSfPfwmZcrM5j+M9FC6QNA8Wqlg+qg1Jn+3iPgH
+ znS4RrASUWE+ns3BSx79z6svYO5KUCJefKa9LHO6eab9N1+hc5r48t70jQJvbdsJG6dZHgVWaqv
+ HdCwAScNPhtl6r3kikGp3XIBOOEwAOs6joXmPXKvuJxpncn65IO5ZU/w3zmJtPZh4jOOK4AXvHs
+ lqb3Vxv0vidryGAqKq3365w7pXbGmJ4pjjocjC4/DyFzvfqYFeeu1rTQ5gbS33R2F+z3a29L4vr
+ dBG2FTgKtmV2LkrHgIn4F986mDrop4xGWfqK4PCfEeKV08DZ52cSFL1fukMR6epA3f1xPcv49PX
+ BJjG87jJWm/pz+6dSoQ4+G+8JhNWl/737CBWcjqRYQO5YJUi0+/RcOc5EHR4ijw3ZiUjOinYm4+
+ qUEH+q+cdq9JgGN9mlxFAfGKdrHrS6XF2ohMRDO/HPU4EljxWalnBrveDrKb+c6tFMxBIpp3QXs
+ 52JFVAi9DR1R8qZ9nwGAr8dkGZYqwsPqTuvNWxoWLPDfBzPeS1xiAqdAQih9qhEuWQTRH9Ahk0z 2a1Z7WAPSU5/nwQ==
 X-Mailer: b4 0.14.3
-Message-ID: <20260722-setonce-populate-v1-0-fa7455c26c42@google.com>
-Subject: [PATCH 0/3] rust: sync: add SetOnce::try_get_or_populate()
+Message-ID: <20260722-setonce-populate-v1-2-fa7455c26c42@google.com>
+Subject: [PATCH 2/3] rust: sync: add SetOnce::try_get_or_populate()
 From: Alice Ryhl <aliceryhl@google.com>
 To: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, Lyude Paul <lyude@redhat.com>, 
 	Daniel Almeida <daniel.almeida@collabora.com>, 
@@ -113,24 +114,74 @@ However, this is somewhat tricky:
 By using a user-provided lock, we do not have to worry about these
 issues inside SetOnce.
 
-This series is based on char-misc-next.
-
 Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 ---
-Alice Ryhl (3):
-      rust: sync: return `Result<&T, T>` from `SetOnce::populate()`
-      rust: sync: add SetOnce::try_get_or_populate()
-      rust_binder: use SetOnce::try_get_or_populate()
+ rust/kernel/sync/set_once.rs | 43 +++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 39 insertions(+), 4 deletions(-)
 
- drivers/android/binder/process.rs | 16 +++--------
- rust/kernel/module_param.rs       |  8 +++---
- rust/kernel/sync/set_once.rs      | 58 ++++++++++++++++++++++++++++++++-------
- 3 files changed, 56 insertions(+), 26 deletions(-)
----
-base-commit: 2cedf2272f1bb42471e646868ac572cc5752bd91
-change-id: 20260721-setonce-populate-f2a9b61aeb1d
+diff --git a/rust/kernel/sync/set_once.rs b/rust/kernel/sync/set_once.rs
+index a78f8c8e87db..d9cc598a8d78 100644
+--- a/rust/kernel/sync/set_once.rs
++++ b/rust/kernel/sync/set_once.rs
+@@ -2,11 +2,18 @@
+ 
+ //! A container that can be initialized at most once.
+ 
+-use super::atomic::{
+-    ordering::{Acquire, Relaxed, Release},
+-    Atomic,
+-};
+ use core::{cell::UnsafeCell, mem::MaybeUninit};
++use kernel::sync::{
++    atomic::{
++        ordering::{
++            Acquire,
++            Relaxed,
++            Release, //
++        },
++        Atomic, //
++    },
++    lock, //
++};
+ 
+ /// A container that can be populated at most once. Thread safe.
+ ///
+@@ -104,6 +111,34 @@ pub fn populate(&self, value: T) -> Result<&T, T> {
+         }
+     }
+ 
++    /// Get the value, or populate it if it's missing.
++    ///
++    /// This method is useful to avoid spinning on the internal atomic state. If all writers call
++    /// this method with the same lock, then they are synchronized with each other and it's
++    /// guaranteed that no caller will attempt to invoke [`SetOnce::populate`] more than once.
++    pub fn try_get_or_populate<F, E, U, B>(&self, lock: &lock::Lock<U, B>, f: F) -> Result<&T, E>
++    where
++        B: lock::Backend,
++        F: FnOnce() -> Result<T, E>,
++    {
++        if let Some(value) = self.as_ref() {
++            return Ok(value);
++        }
++
++        let mut to_insert = f()?;
++        loop {
++            if let Some(value) = self.as_ref() {
++                return Ok(value);
++            }
++
++            let _guard = lock.lock();
++            match self.populate(to_insert) {
++                Ok(value) => return Ok(value),
++                Err(ret) => to_insert = ret,
++            }
++        }
++    }
++
+     /// Get a copy of the contained object.
+     ///
+     /// Returns [`None`] if the [`SetOnce`] is empty.
 
-Best regards,
 -- 
-Alice Ryhl <aliceryhl@google.com>
+2.55.0.229.g6434b31f56-goog
 
