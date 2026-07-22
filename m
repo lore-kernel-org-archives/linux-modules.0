@@ -1,56 +1,56 @@
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA857473C77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C495C48094A
 	for <linux-modules@vger.kernel.org>; Wed, 22 Jul 2026 09:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784711779; cv=none; b=HBNrKkMdduK3gO8RU/mDBeHofLa3ziGtWT3z0PcXW94onK5pvUJPhIxM33LL9uvRZqrcgJ4gEOnvWRVxaEH0X5id+66rrprkKXVUWov7XCe7yg7IgFo1TpC/JVeDJ6HGuWbH9TsWiRDz6UDipGf/zD8N0F7Nlm8s7bzEQM1okCo=
+	t=1784711780; cv=none; b=Mt3jw5YTXfw8eyq8SwAZspS3ge0LApozFGiZqxWQNInqSS6G9fhe4eYuephJNt3F29eTW8kcqJGTfLAZ5aoT9Wwza6Q3OoQnq9lbXphZqJK3Us4M990cw6P581+emxH5guow+oOesgDK56bzA+Oi4GDu/+t1FqVcUeoIpCSMrKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784711779; c=relaxed/simple;
-	bh=YS3Fmynk4Vu065pQWcNaIi3zvRzKJ7fDLNwk2VrvdWo=;
+	s=arc-20240116; t=1784711780; c=relaxed/simple;
+	bh=u4jslRub/PBLu8EohlDte+iH8SJg/CCqcBJNUYKCNsc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qxwIujuIx0yV1QABFWsz4rBfswzLTkyVNuNxTJnVGs7Y7556ktqXbbrZuFRLd+wd0mxohCamStFAZBxcfXwlJHWnSUlLalnHq5BEtTg26iVBNkhNzgHmd8mI6Oy+N+4cUWkBX2+Q5GeV9IcyBQm4kJ8KgAm1PraV/mPimnHyPUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SSP5xUb8; arc=none smtp.client-ip=209.85.208.69
+	 To:Cc:Content-Type; b=jDEWI4ODbyOKnrq+Dx9MrybJaDNUmeUljx38LC08D9M72lmSnQcPRa+vhF8U1ilID/MJ6sIrGsIyOOc+RUVW8ydoD/5SugIhrqKrxu69bVhpc1Lhgci7XTGcfhM6MOVFrIixh0NOok9cwqeRTTsEvYN6cEwY7tN+CiacNNScrBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sZjO3thq; arc=none smtp.client-ip=209.85.128.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SSP5xUb8"
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-69c20d1d150so8060989a12.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sZjO3thq"
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-493e94719e7so83043915e9.0
         for <linux-modules@vger.kernel.org>; Wed, 22 Jul 2026 02:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20251104; t=1784711776; x=1785316576; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=fy37Ri9YIz6ZPyFsdkNre42EGivj6QW6c9T4HBOMel8=;
-        b=SSP5xUb8jBbiBRcl2OSRVX98UaqLtcRAehMeYD/uFSIovNEuZ5wMdUY5HDWzQuYME8
-         L3Q6ZtGmOCA21ZF2YBnRfyNmrbULNOFf+eXcr0rTf0a7KZ/JJRsJ3LFCm7044BVXNBgD
-         UHlEVxqG88YIpwkvOLm38WCj0IZhnmnqo1yHlf/FiyK3OocMO6Dh2Z8UqgaKWQ2F0Do8
-         ptpjrOAUjPSeE92yQhGFNSCtFur172iUa4yVrjI7yU1LU11thaIC9l1U1KywEbhw7cOL
-         uESVLkRwsnOHfaudGvQhVnOB/r8LEsjZxs6LP2x5xqOu0gHRnkaxW6Nfb7BcdQOIFtqQ
-         AdGw==
+        bh=V6wf+HdlcLWSsWAu2Uuz3MUCnLI4Q7ndCuVYUgFzi1s=;
+        b=sZjO3thqtdj4nAwsIzEsaG3vNemylX4sNtZYgNTEkFk74LoUJes2z11X1MNN8G9BwT
+         fH7SBXDI/YS4+4gPmWd8eyawRZc+xXiNH2Xx03v9fifh4v/xmAfPMGJi8K6Qu4HR/y/X
+         ItEjQayJ/0alLDlZQutyCi7Lo6gprmx+CQZ6T9ZEYiMOnveTauF7P3dE6rO/Hqv13aB7
+         yXuycY+iH20Vpe6PPlbPTC6n0gv3t6OMgkF9tdzp4WzI2IVJA14NMV0RlfwxgDEzTd+v
+         1ASoBBD8X7YHhYrP2j52y4ac8XGeCQrXA91IA4G56nOCVgA04+CtahB5S2EPUNwJGEnr
+         2HPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1784711776; x=1785316576;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fy37Ri9YIz6ZPyFsdkNre42EGivj6QW6c9T4HBOMel8=;
-        b=ppjPA20ueTZkmwhHdJvxbGgF6YfwGVtSzBn1T8inXhK+a4toVOWkGs9BmXAVFQCCYk
-         pm3Ijm0AICg/efVMBf/ryUl/Ayq41OX3IlLDiD/pW+YZxYVGWvkX1tZd4SLidkPU1Tiw
-         8p5Yz+reefimBdRdgTB5nGguPRwrvF7cvHIXKTAMbkY/YThvEoKZn2VOrj+7l+a7ixp8
-         zx8TKdqvNPuRDReNwz4w0+ys7bZ6ExK126xzP/h39B+c6XbW6Q/fc58DSGO8xicP+Dw9
-         VUDLAqlu/mpAC25joktJscSulkYO4AldDhn0ZtEPGLp9a1pVjXIWCi7BoVT8DGwnOrVs
-         bNqA==
-X-Forwarded-Encrypted: i=1; AHgh+Ro2nxYsk8MVeP4ZGOlv2rj4sddhDed7Xfu2jDN6o/qnCdXnCa7IGtVE4iNx4X2F/2Zer+ii/P/2+4Llsl+i@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjV3ySQ+vJhvaRU3XRPPLq8D7QkIMFPXpUjnF6pB1CoMefANS6
-	cv2vibfneNB0vwfJB3iYcE11NGw6FjCJ0/fcMOUV/zdQ+KUeNnd0Gny/WOn5bcmSxMAzM+vRNtD
-	b9B+f2hrYHojxaPjCiw==
-X-Received: from ejfx13.prod.google.com ([2002:a17:906:a4d:b0:c12:697d:b9f0])
+        bh=V6wf+HdlcLWSsWAu2Uuz3MUCnLI4Q7ndCuVYUgFzi1s=;
+        b=eUvmun6GiG0A3ND+Wh2DiGH7czmM4jau7YeSVTJh8nhf3U3WPRPap/pOOvRDNHyIz3
+         MoKWPOu3Pn51hNumSlsGZxifiIGAnWSBHXFuAARa0lDWQLQg8UVqS86p16dYAoKztwtt
+         0pgMrGwqIv0Nok4SqItZa2xuGNIfjXDTQwKZOXLiwF+PKanTNpeLuHnG4hAgopnw2drN
+         bxz9JaV2e9S+rF8vUWbI65D2wXMsHhkXRCSL6slMciF0TM/9QldFSPLhMlXDYGhfgM9k
+         6yTuL6sZci8BhKlQ7wyeOi1OAGKe2d6kwlE3wu+uqBDO8J89dJ/CWf1Fi+j/KYnUlmPV
+         ctVw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq8clv5G/78hK50M1x1MNhDr7OWGE9PR4tVxeUw/BuFBdhgdtfAALUWM64BZiolyS5e4jHCebI7935ZnFFX@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5JHuz9f9lOyAx2bAfigTGcAfXVRlFVBqUFsGV+7ylqJAziP3n
+	uAJyezd/8jdwk9njPYjeJGPlCHF9QSNQNdPQh5JiTsKelpBMbZ1PGor7T/dDammtStsR4LvkGM0
+	IEgJO8rg/rjc9JDJqYA==
+X-Received: from wmjq24.prod.google.com ([2002:a7b:ce98:0:b0:495:58ee:fab7])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:60cc:b0:c1c:3705:dde9 with SMTP id a640c23a62f3a-c1c3705e054mr91273766b.64.1784711775265;
- Wed, 22 Jul 2026 02:16:15 -0700 (PDT)
-Date: Wed, 22 Jul 2026 09:16:03 +0000
+ 2002:a05:600c:4e88:b0:495:636b:e519 with SMTP id 5b1f17b1804b1-495636bea4dmr113274575e9.21.1784711773573;
+ Wed, 22 Jul 2026 02:16:13 -0700 (PDT)
+Date: Wed, 22 Jul 2026 09:16:02 +0000
 In-Reply-To: <20260722-setonce-populate-v1-0-fa7455c26c42@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -60,22 +60,22 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260722-setonce-populate-v1-0-fa7455c26c42@google.com>
 X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3202; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=YS3Fmynk4Vu065pQWcNaIi3zvRzKJ7fDLNwk2VrvdWo=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBqYIpZlnR5r3GHmC1/FYMSNnDKWRI2sTd2Ccy2c
- Wmxh6BdjE6JAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCamCKWQAKCRAEWL7uWMY5
- Rg9OD/wIyDyEpfmqc72tRFWwWjifv2M5J+dXWO5bI1owZFLjoN+qloMJOeq+T9l3ELsHO2qW/2c
- NywU9nNrj1DVaZ2mgsdfH+P8TKEKOYvZjfKqCSfPfwmZcrM5j+M9FC6QNA8Wqlg+qg1Jn+3iPgH
- znS4RrASUWE+ns3BSx79z6svYO5KUCJefKa9LHO6eab9N1+hc5r48t70jQJvbdsJG6dZHgVWaqv
- HdCwAScNPhtl6r3kikGp3XIBOOEwAOs6joXmPXKvuJxpncn65IO5ZU/w3zmJtPZh4jOOK4AXvHs
- lqb3Vxv0vidryGAqKq3365w7pXbGmJ4pjjocjC4/DyFzvfqYFeeu1rTQ5gbS33R2F+z3a29L4vr
- dBG2FTgKtmV2LkrHgIn4F986mDrop4xGWfqK4PCfEeKV08DZ52cSFL1fukMR6epA3f1xPcv49PX
- BJjG87jJWm/pz+6dSoQ4+G+8JhNWl/737CBWcjqRYQO5YJUi0+/RcOc5EHR4ijw3ZiUjOinYm4+
- qUEH+q+cdq9JgGN9mlxFAfGKdrHrS6XF2ohMRDO/HPU4EljxWalnBrveDrKb+c6tFMxBIpp3QXs
- 52JFVAi9DR1R8qZ9nwGAr8dkGZYqwsPqTuvNWxoWLPDfBzPeS1xiAqdAQih9qhEuWQTRH9Ahk0z 2a1Z7WAPSU5/nwQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4250; i=aliceryhl@google.com;
+ h=from:subject:message-id; bh=u4jslRub/PBLu8EohlDte+iH8SJg/CCqcBJNUYKCNsc=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBqYIpZN1A+6gDJtKxTSNtQ+QUZnSQ+eyH+mifN5
+ gc2kpqtgZaJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCamCKWQAKCRAEWL7uWMY5
+ RtptD/0am6a0c66NvBFWZW2Nw8qvMbfsQ7z5ejBurSxnIC0W3Fk12HDapsg1fBGeEQnnZq+U7oD
+ mARdTk+ifzUqVJwefmcgX5u6Mzvcm0g6K6sEar9EPQr4aVUtJ2yEAUuvEGeVyx1szusd6eID5Ri
+ WPn6hfzvW9YMeiCNBeYEbJBgp+wvzV/WLwHAlPrLlVqH9/sVE1DF1UEkO0CqE89tWnZRWCsaBiJ
+ sg7PcJlDEtZl1FkfrW3bKw+lwPut7frasv4fmMnDwHdrC7XhqH5MdEwqzSIDgMFv82wD7Uh63zA
+ SeP+oZpv3HyeXDDoZburITwY/sqqsc0dM+yVFjctlPGPFMpkwqw6TT9YFgCv3IU8+C9wVvNixrd
+ ppEbEukJ0c3qjKt1FiqiONqdCpGF5O62Lt1nxPyDiTTCo91h12tkjCZjgNskMRvxRJkwm1Y8lat
+ NZ1tB2XfqgsXshennGUZ1tiZRjPqTCG/bkbsqe2jyJqNOzCF/qZ6QpwHxo/eex6c7kIxdgcfFpq
+ dHVXKBlk4FN4t9WKsFe+UIDJUHQDY/zfpTo4cT4OvDy29HiHv5eNdsFjshzOTCBsHcNmQ6kp0HI
+ uFUaOLIXr9/2wX0Q1ahBHb6/X792S4D25LN7purjrRPSgeuoBVTj7E5fNb5q6u8mDI7ahfLzJqc wRbsdDsVNi1ezwQ==
 X-Mailer: b4 0.14.3
-Message-ID: <20260722-setonce-populate-v1-2-fa7455c26c42@google.com>
-Subject: [PATCH 2/3] rust: sync: add SetOnce::try_get_or_populate()
+Message-ID: <20260722-setonce-populate-v1-1-fa7455c26c42@google.com>
+Subject: [PATCH 1/3] rust: sync: return `Result<&T, T>` from `SetOnce::populate()`
 From: Alice Ryhl <aliceryhl@google.com>
 To: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, Lyude Paul <lyude@redhat.com>, 
 	Daniel Almeida <daniel.almeida@collabora.com>, 
@@ -92,95 +92,110 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
 	Alice Ryhl <aliceryhl@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-The SetOnce::populate() method does not internally synchronize callers
-that fail to populate the value with the successful call. This means
-that naive loops using as_ref() and populate() can lead to spinning on
-the initialization, which is best avoided. Thus, provide a helper that
-avoids this issue using a user-provided lock.
+When `populate()` succeeds, there's no way infallible way to get the
+value that was just inserted. By returning &T in this case, such
+infallible access methods become possible.
 
-One potential alternative is to change populate() so that the failing
-caller actually does synchronize with the successful call to populate().
-However, this is somewhat tricky:
+Additionally, when `populate()` fails, the provided value is dropped.
+This has two disadvantages:
 
-* There are users of SetOnce that construct it in const context, and we
-  currently don't have the ability to do that for most locks, so we
-  cannot easily add a lock to SetOnce.
-* Just spinning on the atomic is undesirable unless we disable
-  preemption in the success path. If we do disable preemption, then that
-  raises complications for handling the PREEMPT_RT case.
-* It also raises questions about deadlocks if populate() is called from
-  irqs.
+1. If the caller holds a lock, the value is dropped under said lock.
+2. If the caller wishes to use the same value for something else, they
+   can't, because it's lost.
 
-By using a user-provided lock, we do not have to worry about these
-issues inside SetOnce.
+Changing the return value to Result<&T, T> handles all of these cases.
+
+Rust Binder is updated to avoid a warning about an unused Result.
+Additionally, ModuleParam is updated to correctly translate the new
+return value to the right target values.
 
 Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 ---
- rust/kernel/sync/set_once.rs | 43 +++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 39 insertions(+), 4 deletions(-)
+ drivers/android/binder/process.rs |  5 +++--
+ rust/kernel/module_param.rs       |  8 ++++----
+ rust/kernel/sync/set_once.rs      | 15 +++++++++------
+ 3 files changed, 16 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/android/binder/process.rs b/drivers/android/binder/process.rs
+index 1778628d8acd..d486bf7c0b8a 100644
+--- a/drivers/android/binder/process.rs
++++ b/drivers/android/binder/process.rs
+@@ -1801,8 +1801,9 @@ pub(crate) fn poll(
+ 
+                 let poll = PollCondVarBox::new(c"Process::poll", kernel::static_lock_class!())?;
+                 // Reuse our existing lock to synchronize callers initializing.
+-                let _guard = this.node_refs.lock();
+-                this.poll.populate(poll);
++                let guard = this.node_refs.lock();
++                let _ret = this.poll.populate(poll);
++                drop(guard);
+             };
+ 
+             table.register_wait(file, poll);
+diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
+index 6541af218390..8f0bd085badf 100644
+--- a/rust/kernel/module_param.rs
++++ b/rust/kernel/module_param.rs
+@@ -77,10 +77,10 @@ pub trait ModuleParam: Sized + Copy {
+         // SAFETY: By function safety requirements, this access is safe.
+         let container = unsafe { &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<T>>()) };
+ 
+-        container
+-            .populate(new_value)
+-            .then_some(0)
+-            .ok_or(kernel::error::code::EEXIST)
++        match container.populate(new_value) {
++            Ok(_) => Ok(0),
++            Err(_) => Err(EEXIST),
++        }
+     })
+ }
+ 
 diff --git a/rust/kernel/sync/set_once.rs b/rust/kernel/sync/set_once.rs
-index a78f8c8e87db..d9cc598a8d78 100644
+index 139cef05e935..a78f8c8e87db 100644
 --- a/rust/kernel/sync/set_once.rs
 +++ b/rust/kernel/sync/set_once.rs
-@@ -2,11 +2,18 @@
- 
- //! A container that can be initialized at most once.
- 
--use super::atomic::{
--    ordering::{Acquire, Relaxed, Release},
--    Atomic,
--};
- use core::{cell::UnsafeCell, mem::MaybeUninit};
-+use kernel::sync::{
-+    atomic::{
-+        ordering::{
-+            Acquire,
-+            Relaxed,
-+            Release, //
-+        },
-+        Atomic, //
-+    },
-+    lock, //
-+};
- 
- /// A container that can be populated at most once. Thread safe.
+@@ -31,12 +31,12 @@
+ /// assert_eq!(None, value.as_ref());
  ///
-@@ -104,6 +111,34 @@ pub fn populate(&self, value: T) -> Result<&T, T> {
+ /// let status = value.populate(42u8);
+-/// assert_eq!(true, status);
++/// assert_eq!(Ok(&42u8), status);
+ /// assert_eq!(Some(&42u8), value.as_ref());
+ /// assert_eq!(Some(42u8), value.copy());
+ ///
+ /// let status = value.populate(101u8);
+-/// assert_eq!(false, status);
++/// assert_eq!(Err(101u8), status);
+ /// assert_eq!(Some(&42u8), value.as_ref());
+ /// assert_eq!(Some(42u8), value.copy());
+ /// ```
+@@ -78,8 +78,9 @@ pub fn as_ref(&self) -> Option<&T> {
+ 
+     /// Populate the [`SetOnce`].
+     ///
+-    /// Returns `true` if the [`SetOnce`] was successfully populated.
+-    pub fn populate(&self, value: T) -> bool {
++    /// Returns `Ok(value)` if the [`SetOnce`] was successfully populated with the provided value.
++    /// Otherwise returns an error containing the value that this call attempted to insert.
++    pub fn populate(&self, value: T) -> Result<&T, T> {
+         // INVARIANT: If the swap succeeds:
+         //  - We increase `init`.
+         //  - We write the valid value `1` to `init`.
+@@ -95,9 +96,11 @@ pub fn populate(&self, value: T) -> bool {
+             //  - We release our exclusive access to `self.value` and it is now valid for shared
+             //    access.
+             self.init.store(2, Release);
+-            true
++            // SAFETY: By the type invariants of `Self`, the value is initialized and will stay
++            // that way.
++            Ok(unsafe { &*self.value.get().cast() })
+         } else {
+-            false
++            Err(value)
          }
      }
  
-+    /// Get the value, or populate it if it's missing.
-+    ///
-+    /// This method is useful to avoid spinning on the internal atomic state. If all writers call
-+    /// this method with the same lock, then they are synchronized with each other and it's
-+    /// guaranteed that no caller will attempt to invoke [`SetOnce::populate`] more than once.
-+    pub fn try_get_or_populate<F, E, U, B>(&self, lock: &lock::Lock<U, B>, f: F) -> Result<&T, E>
-+    where
-+        B: lock::Backend,
-+        F: FnOnce() -> Result<T, E>,
-+    {
-+        if let Some(value) = self.as_ref() {
-+            return Ok(value);
-+        }
-+
-+        let mut to_insert = f()?;
-+        loop {
-+            if let Some(value) = self.as_ref() {
-+                return Ok(value);
-+            }
-+
-+            let _guard = lock.lock();
-+            match self.populate(to_insert) {
-+                Ok(value) => return Ok(value),
-+                Err(ret) => to_insert = ret,
-+            }
-+        }
-+    }
-+
-     /// Get a copy of the contained object.
-     ///
-     /// Returns [`None`] if the [`SetOnce`] is empty.
 
 -- 
 2.55.0.229.g6434b31f56-goog
