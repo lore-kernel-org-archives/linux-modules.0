@@ -1,161 +1,117 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FED3F23B5
-	for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 08:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83D635BDC2
+	for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 08:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784795214; cv=none; b=gtPCuUjqJzXC1tXuQ4U1mIvt85GnOo9wNS6ZhzwVLKJTP9oJsjNmWglYaOGf6E5TXr9RKCIX+0pXa0qFJJW+v1iirSLyhXspX0Y/2N305Q+0Lq5NE0LqmH910UzS4og1XHqgDJ280JQ+a3/XEvTujt3MA9bDao1mEWyAcbcQqC8=
+	t=1784796074; cv=none; b=aztyu43HTIsTBfKYkT285gmqwF9pUARWNWvImIKMls9F4/9WWPzTvloGQ5DKKhqcwvHU+c+nmbrZFEjLMuDFpdasiX5rRlzrRDHLJz70Gd2OT88zLJ8F+p3bhfpz95UHJuAHpaodE4OwqUdX/c6Ib6mqzWmjo94mETt2C9aOKnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784795214; c=relaxed/simple;
-	bh=IgiwPhZRnCmibJAtp5gN92zy47gDauD1GBlPirNJdlA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KNUy7PhwGfvSkKDr9xDm2mpNXrBfT/st1l9zfrSMriRpNscBOCWwScUsPx6gPAy+YhnNrtug++kHkl7Msnb5/XM1Q0TCLSJTOMvM0z02iJrtKE9psYpcyzjNR4fHcM8tJOkPb6jNqltbKd+w5yJ3TKQJ3fDLxDnKlrJJGaTNlcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JdlypoLI; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JdlypoLI"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4956242332dso3356775e9.2
-        for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 01:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784795205; x=1785400005; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=KUb/Fmtm5YHhP1LhLkb3EnQ0f20iq+ZT2Qlt/e1gqvQ=;
-        b=JdlypoLI/UrpB1pSB6RxGkJgYfJNCbQncXnslppynrmhia+uxqmml2HuKkvy0qf0Xj
-         afmj9ozsnS1IdFUPRS00dKTS/q8Bp5lEGMdGwkbuqOYhT0CNCcEpIXWccaAWlGGGx7T6
-         +I7Bpn3XjvdPIkXSIKPuck1C9vNRkFfPX2j2ibSoqKnTT7tXMntVIgcoc6q6TR2l+AlT
-         heYoZSb3iAGa4z1+OWZyNIppBYWmarPLo0TXS3yJklLPGfMKMhJqAuiaLp7ljRRL0wSw
-         Vq19BTWv+j3AWDGGQwtBSttoL3qCFE8BPv+Fbn1VJW3hi1CzsJAxnaRN7YgWoOAlkrrQ
-         w1lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784795205; x=1785400005;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KUb/Fmtm5YHhP1LhLkb3EnQ0f20iq+ZT2Qlt/e1gqvQ=;
-        b=Gjq+QFzNZxgbjTeIcf+wKu8/wjsRgFMrh5C7PuKPCJuMLw8szcG27x8IOCZt3zvbkm
-         k7QlI3UNGmQ1PuvgKQ01RSxiVTXT9CFs302cFCzEf1aLX7HAHxNNWuTPdzBX0/xz/Rj1
-         /9jMA7nZ2TVe8PZPxRi2CS0ceF4DOL6SaUv0SJD5GSkRTEopCYjlERFqvPRNhlkRWxAK
-         RQMwULSBF4MFKYYehjptVRQm0k8FaHggqDJEv7VgrZ+C89fnTBU+0p3wEsD4CmS3AOEO
-         euva0RNHBp5wTgd3Gu3I6crw0Pe2ABE9/f8WhTK7nuPkp+JKxbc1NlT8TNTKoGAbmDDF
-         qkaQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rp5MmWXonKEsZaXrsJyQuQOMOXfCgQTqworFs0uwRnisjP/lqdfZVirprI0MfYQpGG/9LgoXaHX7oEjxAH4@vger.kernel.org
-X-Gm-Message-State: AOJu0YxL4R2FUo5tNrqeswQ5JCMHAKqlc2cIu+tDHgguaUpLsgmC0SBq
-	7l6q0PH1kaMvThJqNU5o1TQ5dUyiA+U9lurC6YhEbGiak/ucVlBZafjk3NZnf+IXsYI=
-X-Gm-Gg: AR+sD11+/TxTTNTQTCzf16vDByJn+wqG/q9tC5pKF5dsdch2mTvIkl+Qi6psdyTphqa
-	3cJ2sQwLoH5Q4sAsCijc0CV9A9OqYltSs4rpBbuu0701W7Ybpx7/eIzgHhKXa0PZM5lY5bgMipo
-	oFqoTzcABiMKcu/Uq/445zWSouKc181o9V8uH83IpUMkC6+qwAdENRRIjaWdT9Ih2ssopGRipUe
-	PWwCjt8bcyr4eeU1yG63rqaKO7OnG6AE/WE/iFbVrbIxINyD4hyAdVGmRaDT9GtYtuWVUUm6z/X
-	LTXFpSW8N4khhtuJ9NcJI3eyq5dgSvYHnwUaGXtAYWDgbSeh6dUJ7exC87Vq5B5r51RqRtp4bmo
-	MgWHuKo0R4kx08J+7KL98VU0k7yzG6tRHUvB1w35Qps0ZWUKvC5OILMS8OYSjV4Jf6P39SzHzXg
-	==
-X-Received: by 2002:a05:600c:6a96:b0:495:641a:bd3f with SMTP id 5b1f17b1804b1-49573cd03f0mr14489445e9.13.1784795204743;
-        Thu, 23 Jul 2026 01:26:44 -0700 (PDT)
-Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a4f9a1csm124831645e9.5.2026.07.23.01.26.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 01:26:44 -0700 (PDT)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] module/dups: Clean up includes
-Date: Thu, 23 Jul 2026 10:25:56 +0200
-Message-ID: <20260723-module-stats-rcu-v2-6-bd582261fae3@suse.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260723-module-stats-rcu-v2-0-bd582261fae3@suse.com>
+	s=arc-20240116; t=1784796074; c=relaxed/simple;
+	bh=QgfrTGjZNTarXKYM1bihCRmwJ/2KOEG5Q2WnTTx/rCY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=OXbVY8uDR35vBlxLkOkBN9Y4I4DszJQycsG3JM1jLURMCeBxOdRzK5sztKE76lLvtY1F4YS6Rb0hROLKsZ94hPgI0DiD6J2a8iHKrtYp3XI0iWpsK7/SAG5kGSHCQKMIwxwyowF8AytqiGhPTgsV0iMKbqUbuG1Ot+LGiHD8ttE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F631F00A3D;
+	Thu, 23 Jul 2026 08:41:13 +0000 (UTC)
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 1/6] module/dups: Inform duplicate requests about the
+ result directly
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Petr Pavlu" <petr.pavlu@suse.com>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <20260723-module-stats-rcu-v2-1-bd582261fae3@suse.com>
 References: <20260723-module-stats-rcu-v2-0-bd582261fae3@suse.com>
+ <20260723-module-stats-rcu-v2-1-bd582261fae3@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 23 Jul 2026 08:41:12 +0000
+Message-Id: <20260723084113.64F631F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
-The kernel/module/dups.c file relies on the following definitions and
-associated functions:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-* module_param() -> linux/moduleparam.h,
-* DEFINE_MUTEX() -> linux/mutex.h,
-* LIST_HEAD(), list_for_each_entry(), ... -> linux/list.h,
-* refcount_t, refcount_inc(), ... -> linux/refcount.h,
-* MODULE_NAME_LEN -> linux/module.h,
-* completion, complete_all(), ... -> linux/completion.h,
-* delayed_work, work_struct, ... -> linux/workqueue.h,
-* lockdep_assert_held() -> linux/lockdep.h,
-* strcmp(), memcpy() -> linux/string.h,
-* container_of() -> linux/container_of.h,
-* DEFINE_FREE(), __free(), scoped_guard() -> linux/cleanup.h,
-* kzalloc_obj(), kfree() -> linux/slab.h,
-* pr_debug(), pr_warn() -> linux/printk.h,
-* WARN() -> linux/bug.h,
-* TASK_KILLABLE -> linux/sched.h,
-* HZ -> linux/param.h.
+Pre-existing issues:
+- [High] Lack of reference counting on `kmod_dup_req` allows Use-After-Free=
+ vulnerabilities when duplicate waiters or concurrent announcers race with =
+the 60-second deletion timer.
+--
 
-Update the file's include list accordingly.
+--- Patch [1]: [PATCH v2 1/6] module/dups: Inform duplicate requests about =
+the result directly ---
+commit a68253df788049311e521e9217563df8d2aeb41e
+Author: Petr Pavlu <petr.pavlu@suse.com>
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- kernel/module/dups.c | 32 ++++++++++++--------------------
- 1 file changed, 12 insertions(+), 20 deletions(-)
+    module/dups: Inform duplicate requests about the result directly
 
-diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-index 80e1638ac34a..872db6159b48 100644
---- a/kernel/module/dups.c
-+++ b/kernel/module/dups.c
-@@ -7,30 +7,22 @@
- 
- #define pr_fmt(fmt)     "module: " fmt
- 
-+#include <linux/bug.h>
-+#include <linux/cleanup.h>
-+#include <linux/completion.h>
-+#include <linux/container_of.h>
-+#include <linux/list.h>
-+#include <linux/lockdep.h>
- #include <linux/module.h>
-+#include <linux/moduleparam.h>
-+#include <linux/mutex.h>
-+#include <linux/param.h>
-+#include <linux/printk.h>
-+#include <linux/refcount.h>
- #include <linux/sched.h>
--#include <linux/sched/task.h>
--#include <linux/binfmts.h>
--#include <linux/syscalls.h>
--#include <linux/unistd.h>
--#include <linux/kmod.h>
- #include <linux/slab.h>
--#include <linux/completion.h>
--#include <linux/cred.h>
--#include <linux/file.h>
-+#include <linux/string.h>
- #include <linux/workqueue.h>
--#include <linux/security.h>
--#include <linux/mount.h>
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/resource.h>
--#include <linux/notifier.h>
--#include <linux/suspend.h>
--#include <linux/rwsem.h>
--#include <linux/ptrace.h>
--#include <linux/async.h>
--#include <linux/uaccess.h>
--#include <linux/refcount.h>
- 
- #include "internal.h"
- 
+    When kmod_dup_request_announce() announces the completion of
+    a request_module() call to duplicate waiters, it queues a work item to
+    invoke kmod_dup_request_complete(), and only that function calls
+    complete_all(). This adds an arbitrary delay that is unnecessary and
+    provides little benefit. Call complete_all() directly from
+    kmod_dup_request_announce() instead.
 
--- 
-2.54.0
+> diff --git a/kernel/module/dups.c b/kernel/module/dups.c
+> index 1d720a5311ba0..b063bc423aa81 100644
+> --- a/kernel/module/dups.c
+> +++ b/kernel/module/dups.c
+
+[ ... ]
+
+> @@ -230,17 +205,17 @@ void kmod_dup_request_announce(char *module_name, i=
+nt ret)
+> =20
+>  	kmod_req->dup_ret =3D ret;
+> =20
+> +	/* Inform all duplicate waiters to check the return value. */
+> +	complete_all(&kmod_req->first_req_done);
+> +
+>  	/*
+> -	 * If we complete() here we may allow duplicate threads
+> -	 * to continue before the first one that submitted the
+> -	 * request. We're in no rush also, given that each and
+> -	 * every bounce back to userspace is slow we avoid that
+> -	 * with a slight delay here. So queueue up the completion
+> -	 * and let duplicates suffer, just wait a tad bit longer.
+> -	 * There is no rush. But we also don't want to hold the
+> -	 * caller up forever or introduce any boot delays.
+> +	 * Now that we have allowed prior request_module() calls to go on
+> +	 * with life, let's schedule deleting this entry. We don't have
+> +	 * to do it right away, but we *eventually* want to do it so to not
+> +	 * let this linger forever as this is just a boot optimization for
+> +	 * possible abuses of vmalloc() incurred by finit_module() thrashing.
+>  	 */
+> -	queue_work(system_dfl_wq, &kmod_req->complete_work);
+> +	queue_delayed_work(system_dfl_wq, &kmod_req->delete_work, 60 * HZ);
+
+[Severity: High]
+This is a pre-existing issue, but could this delayed work cause a
+use-after-free since kmod_dup_req lacks reference counting?
+
+If a duplicate request thread waits on first_req_done in
+kmod_dup_request_exists_wait() without holding a reference, and is preempted
+for over 60 seconds after waking up, the deletion worker could call kfree()
+on kmod_req in kmod_dup_request_delete(). When the waiter resumes, reading
+kmod_req->dup_ret would result in a use-after-free.
+
+Additionally, could queue_delayed_work() here race with an actively
+executing teardown? If two threads concurrently call
+kmod_dup_request_announce() for the same module, and the second thread calls
+it exactly when the 60-second timer fires, it could re-arm the timer while
+the first worker thread clears the pending bit but blocks on
+kmod_dup_mutex. The second thread would release the mutex, the worker would
+proceed to free kmod_req, and the re-armed timer would later fire on freed
+memory.
+
+> =20
+>  out:
+>  	mutex_unlock(&kmod_dup_mutex);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723-module-sta=
+ts-rcu-v2-0-bd582261fae3@suse.com?part=3D1
