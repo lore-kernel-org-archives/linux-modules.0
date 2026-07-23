@@ -1,62 +1,64 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FE23F1676
-	for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 08:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C784335C6AF
+	for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 08:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784795206; cv=none; b=t9FT8cf4LGeyHcFV7LcQg6hehHw58rmhARvd4GKOftJCH0DalI21dgw4mS1YIMVrAiInG4BgB0HT3OfqZuTGzfh9FEVyb82fClwSovLa6bpzgHeMBNqh+CMPA2A2ejvgHJXIuyDcTzWiQfyy+GcZGkso1pR0osFMdc8KuIGqKDg=
+	t=1784795208; cv=none; b=NETSQ+vPPvovipcfzIgqIq1+erTZDjT7nYNANHgFtr82bg3bT1o0A+PofZNgnHoK4GFVkAC2TOSbRitxOW2syncybZ2/Q4mqrjzo6QGWtQ1Cn2HErnTrYfciUHdX8Y5P71NITaTLlHAiertTQMudsA677nnAMdCLnfKxuom9nzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784795206; c=relaxed/simple;
-	bh=x1665O34iDWpkSUEK5Br8PyhNHtKW/uRIZhK4yZtSSc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KN24Ul5fLp6nvOh+uhP6jEi0cWgWaKSjRiLd9FIqI0ae2Vw7ZIWKj7YQcNNdIQvwADZPt4O3t3BZ7+5dKxTdELM6A+YJQRKvOoGUb8VM/z6lQQ3Hf58ehD4BkkSt83uqH4PtGRtJut4LzmcpsjXRRr6qMwHgmNKN+rXDUoPH5is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gw3BpuMn; arc=none smtp.client-ip=209.85.128.47
+	s=arc-20240116; t=1784795208; c=relaxed/simple;
+	bh=49xIm8JVVxA1IO8RnKUTcUahhuvMP7ZhANoSnO5slgk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H8wkGMoRotcpxqY9as/TNzwlI2E3xShne41c2qQNjPbFf/57QsKpExccKj29TvelLl6onLQ2gXL/IEJPuedKT/3/pIkCV0lFa8FYLuFNC3i6XKlRtK2nOBc1ZeXVq4Zy2xIAdzyvpINRvHupy11BVmdZX0AEwpGBxHNDodKNios=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eLxTLKJV; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gw3BpuMn"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4954a32cf1eso1644875e9.3
-        for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 01:26:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eLxTLKJV"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4955de8797cso1657075e9.3
+        for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 01:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784795201; x=1785400001; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=taDXBDLfJreid50wwQtpNDT0Y3B21nm5cTBQO6Vm0Rg=;
-        b=gw3BpuMnTCAkaRhKpQ1pu87BvQIeQyX9f05cloCi7aLqxfkYcHRaGYEN1cErIhVWrW
-         T1vLkz3gsrlp7Mkpab0AEvSlLFtqUCSIxeb4pGVepTtOPuO4DF2I89h0hpjMmizIOZVI
-         j6LmzQMPQsMv1fb9pnEidsMCa6p78vvqKne5K9vJvoCu1bewF5CBF2zA7RSmC4gtucEt
-         WXI4j9STdzuuiOY2Vw2K2lzklskX1IF7ykwO/KOnzFccDlvS1KiV6lJ2CVBPMpeKKeKR
-         8ZkFGPRiOxTjA2VOK/uBHupLXd5kVssgPesTYuDORGG0Ug/emfkv2hXpth6//m6vgttA
-         EnrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784795201; x=1785400001;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=suse.com; s=google; t=1784795202; x=1785400002; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=taDXBDLfJreid50wwQtpNDT0Y3B21nm5cTBQO6Vm0Rg=;
-        b=pLQZN9xGgm2VYGNIrd1sh48h8Va3v5dtSsKChMo/9A2hx2chuH2md0Q8EidDRsr1tg
-         RzZ5FMkNWMpvO8HP8+0NbLVTZQApCPG3jjMCJRgMtCy24Yjq9h8RvZm+OIJSwO+5Mswo
-         lWOgVvfJ2fAegU0lh74Xq82gmTboUHFzjEUjJaiN+zkubGvTv7zZMkLfqtae1x1bvfxy
-         k6uz1OPIPOmsz7WYoPAaaJ0RGxc+LSb3EMGwftVeXCFmnFoyp2T5hEGSyiesQdRC9yxQ
-         PddGU3Dgt4Xk8NWNF8wtb3LGjSG/vTYNOYysNR5nHI6vBurKQ0KdYIkxpSMGREsgcazO
-         cYNA==
-X-Forwarded-Encrypted: i=1; AHgh+RpcxJkiyh95GkKkom3jRXEqml19ctPvKe7HOfF/cbN+XfeWNatbgC1cL2EPwkiXMEWr0MU3X1VwCQg/YPH1@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY/E5UXEUiAUjhfFprg8QLLXuDp1l93mX7NNdWsIbj6q+m9CIZ
-	nVz1tEweO5H0n7JTQ4PpwQOmtQin6F45LO6VD82+Ttr2sjatUpoahsAKgw5vltS6UFQ=
-X-Gm-Gg: AR+sD10ZnrjWRdZbs1uh4MPBor1s+Ot9K1OZndekvIC0sIwn7BdMaGhPA+wELWbaXDZ
-	S98/IJ7QQCC/FYryNCDiM0GrFOH5DceV+NoK8PSdXgFSutcfe9svDRXz1dxPWn4NFuulTGYwFSs
-	zsCz25sX7hVVOAcyqI2KpGOQai43ihjJv2W/15/nJkZm5y69gT0WwOMnnp45Yaxf5mKPmmotC/5
-	EaG2K0uZ6H/49ks/fEqq6gASei7KwKPPVrNCLoIn1WZBXWfZucNg43FFnsw8gAqlGWX/ctXzxPF
-	6sHQpzv/irUfVOE3LmjtMCuO2hejUNMp0nAd4kLAAqsqd2KpsfSOpc+XNMNqM1/VKpv931oDh2r
-	EONRjJXp63GeBgvGkVeptvvFrwcslroN51C0hwiVWrGOJKszS/siincfKyce86DtuYkdQ5rdR2w
+        bh=ejMHszX4krSpU2meGRfcTBBnbHvAJ6f3bfAgNnoNb/s=;
+        b=eLxTLKJVjJCqGrGhTDGpCarD1GOJuWMD1R3YmU1GRm0spBdzx9x1a1ax1Y7z5S7P9V
+         nV5Bp64PXrBKL6h/1u9IX4vJ/i2ohtqCQ8ILvx0QyKmAegkcruwFUAegADN4n/EMlN3O
+         ruTizbYyjD0THON711TAtLhlMRBx70Khce9yW3fubgd0bNs+4h/tPUYNbQvJRn8qWmM3
+         4zFfj7X1LJogk+VAmU7nem/nbIz/YUtC/0sn70vEeY5625jUFHBtow69iC8tMwh7sZhq
+         rSaqJ56aESqe3Ie5SV+5/AgltH/54rHoCMwqeIw+zd8XpKBlUkrqdjRTo8rXSGrfm6XL
+         vb8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784795202; x=1785400002;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ejMHszX4krSpU2meGRfcTBBnbHvAJ6f3bfAgNnoNb/s=;
+        b=fG+18R4lL4KkmFi57MdIMhmBJNgUb7yBnzRi7+o7NHrzAprP9MtkdROrzuH9ur1+Ip
+         ncpgrlZF+ywyB4FAMA8nLL0cK4ovnsyQ2h9FNGafBLzEdSewWT1JO7A5GwOywonvQYxv
+         Tkqps1SDM5VoD8eyEXAIN+gyh02f0T1fiW2Ivw0JoWF7PO1B3rtNb5/rjb9tK4cfXLu6
+         IZvw8codtVt8MAvk9dx/GnfoehPNS8PV3ans3GCe3WC2pHF2kVySiIzp+krX+FoLFihI
+         XfyxbKIDKtNGyFsUabL0x7SzOieHyE4Vuy4e6fTKtde0BupFg7/UrQYAubr2qrm5bYV9
+         baYg==
+X-Forwarded-Encrypted: i=1; AHgh+Ro91Bn8PHpxOhchVEPowWAr5kcnc9Kbcqq9tosk5UEKENLnqv/VQjDmTemywa1uIpXZtag+d1eSUJDJH3va@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1apdBB/Nn++sFiftqjGsjFeiQXzPBrF6hY2yft24cDlWeH0Wz
+	NcIEMRHC6vIP7U2Mof86LNSawpjHVE8z5faybNdw0cqv1g7VH3KBC5bmDDTEle4diEg=
+X-Gm-Gg: AR+sD13hiXJeZ0QXmmjmxOzYD2DIhlIW7XvmK/6EXE63AWmPXLG/j2DRVCuOcwC77F6
+	4iet/HNcxMURLtXI5Ti6p1VEzfrKkm2f7PGnLoXK656Cs2R3p8gxd1fAryqu9Y9mfTceRwZm5cI
+	o9LTA+aT1RSAjhKbfVzI5KIMuyklimpeCZEgsJ7/g5471gtQykVQRNmW+xEKKZivq22qRfnVEls
+	d13cSknS/+pcF2Zkj9edLSevcZZzUolPV5c5v09t9MW2kuiwRdr9e3ykD1xIbIDqOJzh1P5N/HD
+	uYck0FZEt0xWZqbfe8GD/2qTQ8OvTslgeWKD2p/gzHXo6b372l7IWQCFtXz+BCWfMR+cQMYRgjM
+	m/wq4mwfWcWMoQNnnFWzLHxMqPjrBxCaKmaVNX+gxIODHcpGyzDE3wPRfaqH9mT8av9chXpYlJA
 	==
-X-Received: by 2002:a05:600c:3b86:b0:494:6baa:ccef with SMTP id 5b1f17b1804b1-49573ccd0b5mr22026435e9.11.1784795200947;
-        Thu, 23 Jul 2026 01:26:40 -0700 (PDT)
+X-Received: by 2002:a05:600c:a0a:b0:495:4dea:f7f5 with SMTP id 5b1f17b1804b1-49573ce968emr25120595e9.29.1784795202251;
+        Thu, 23 Jul 2026 01:26:42 -0700 (PDT)
 Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a4f9a1csm124831645e9.5.2026.07.23.01.26.40
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a4f9a1csm124831645e9.5.2026.07.23.01.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 01:26:40 -0700 (PDT)
+        Thu, 23 Jul 2026 01:26:41 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -65,10 +67,12 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 Cc: Aaron Tomlin <atomlin@atomlin.com>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/6] module/dups: Fix a use-after-free and improve the code
-Date: Thu, 23 Jul 2026 10:25:50 +0200
-Message-ID: <20260723-module-stats-rcu-v2-0-bd582261fae3@suse.com>
+Subject: [PATCH v2 2/6] module/dups: Fix use-after-free in kmod_dup_req lifetime handling
+Date: Thu, 23 Jul 2026 10:25:52 +0200
+Message-ID: <20260723-module-stats-rcu-v2-2-bd582261fae3@suse.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260723-module-stats-rcu-v2-0-bd582261fae3@suse.com>
+References: <20260723-module-stats-rcu-v2-0-bd582261fae3@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -76,35 +80,181 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20260722-module-stats-rcu-ff0dfc986be6
 Content-Transfer-Encoding: 8bit
 
-Simplify how the kmod dups code informs duplicate requests about the
-result, fix a potential use-after-free when waiting on a duplicate request,
-and make several general improvements to the code.
+The kmod dups code uses RCU to ensure that a kmod_dup_req instance is freed
+only after it is no longer referenced. When releasing an instance, the
+kmod_dup_request_delete() function removes the kmod_dup_req from the
+dup_kmod_reqs list, waits via synchronize_rcu() and finally frees it.
+However, this doesn't work correctly because parallel users referencing the
+instance in kmod_dup_request_exists_wait() don't enter an RCU read-side
+critical section. This can result in a use-after-free.
 
-Note that the use-after-free fix depends on the code simplification
-implemented in the first patch.
+The kmod_dup_request_exists_wait() function may need to hold a valid
+reference to a kmod_dup_req instance across a blocking wait until the
+corresponding modprobe command completes. This makes it unsuitable for RCU.
 
+Fix the issue by changing the lifecycle management of kmod_dup_req to use
+reference counting.
+
+Fixes: 8660484ed1cf ("module: add debugging auto-load duplicate module support")
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
-Changes in v2:
-- Fix handling of concurrent request_module_nowait() and request_module()
-  calls.
-- Avoid unnecessary kmod_dup_req allocations.
-- Avoid mixing goto with scope-based cleanup.
-- Link to v1: https://patch.msgid.link/20260720121621.750661-1-petr.pavlu@suse.com
+ kernel/module/dups.c | 56 +++++++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 40 insertions(+), 16 deletions(-)
 
----
-Petr Pavlu (6):
-      module/dups: Inform duplicate requests about the result directly
-      module/dups: Fix use-after-free in kmod_dup_req lifetime handling
-      module/dups: Avoid unnecessary kmod_dup_req allocations
-      module/dups: Use scope-based cleanup helpers
-      module/dups: Use strcmp() to compare module names
-      module/dups: Clean up includes
+diff --git a/kernel/module/dups.c b/kernel/module/dups.c
+index b063bc423aa8..99661236490a 100644
+--- a/kernel/module/dups.c
++++ b/kernel/module/dups.c
+@@ -30,6 +30,7 @@
+ #include <linux/ptrace.h>
+ #include <linux/async.h>
+ #include <linux/uaccess.h>
++#include <linux/refcount.h>
+ 
+ #include "internal.h"
+ 
+@@ -38,13 +39,12 @@
+ static bool enable_dups_trace = IS_ENABLED(CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE);
+ module_param(enable_dups_trace, bool_enable_only, 0644);
+ 
+-/*
+- * Protects dup_kmod_reqs list, adds / removals with RCU.
+- */
++/* A mutex-protected list of active kmod requests. */
+ static DEFINE_MUTEX(kmod_dup_mutex);
+ static LIST_HEAD(dup_kmod_reqs);
+ 
+ struct kmod_dup_req {
++	refcount_t refcount;
+ 	struct list_head list;
+ 	char name[MODULE_NAME_LEN];
+ 	struct completion first_req_done;
+@@ -52,12 +52,24 @@ struct kmod_dup_req {
+ 	int dup_ret;
+ };
+ 
++static void get_kmod_req(struct kmod_dup_req *kmod_req)
++{
++	refcount_inc(&kmod_req->refcount);
++}
++
++static void put_kmod_req(struct kmod_dup_req *kmod_req)
++{
++	if (refcount_dec_and_test(&kmod_req->refcount))
++		kfree(kmod_req);
++}
++
+ static struct kmod_dup_req *kmod_dup_request_lookup(char *module_name)
+ {
+ 	struct kmod_dup_req *kmod_req;
+ 
+-	list_for_each_entry_rcu(kmod_req, &dup_kmod_reqs, list,
+-				lockdep_is_held(&kmod_dup_mutex)) {
++	lockdep_assert_held(&kmod_dup_mutex);
++
++	list_for_each_entry(kmod_req, &dup_kmod_reqs, list) {
+ 		if (strlen(kmod_req->name) == strlen(module_name) &&
+ 		    !memcmp(kmod_req->name, module_name, strlen(module_name))) {
+ 			return kmod_req;
+@@ -86,10 +98,10 @@ static void kmod_dup_request_delete(struct work_struct *work)
+ 	 * just returning 0.
+ 	 */
+ 	mutex_lock(&kmod_dup_mutex);
+-	list_del_rcu(&kmod_req->list);
+-	synchronize_rcu();
++	list_del(&kmod_req->list);
+ 	mutex_unlock(&kmod_dup_mutex);
+-	kfree(kmod_req);
++
++	put_kmod_req(kmod_req);
+ }
+ 
+ bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
+@@ -105,6 +117,7 @@ bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
+ 	if (!new_kmod_req)
+ 		return false;
+ 
++	refcount_set(&new_kmod_req->refcount, 1);
+ 	memcpy(new_kmod_req->name, module_name, strlen(module_name));
+ 	INIT_DELAYED_WORK(&new_kmod_req->delete_work, kmod_dup_request_delete);
+ 	init_completion(&new_kmod_req->first_req_done);
+@@ -136,10 +149,12 @@ bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
+ 		 * keep tab on duplicates later.
+ 		 */
+ 		pr_debug("New request_module() for %s\n", module_name);
+-		list_add_rcu(&new_kmod_req->list, &dup_kmod_reqs);
++		list_add(&new_kmod_req->list, &dup_kmod_reqs);
+ 		mutex_unlock(&kmod_dup_mutex);
+ 		return false;
+ 	}
++
++	get_kmod_req(kmod_req);
+ 	mutex_unlock(&kmod_dup_mutex);
+ 
+ 	/* We are dealing with a duplicate request now */
+@@ -169,7 +184,7 @@ bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
+ 		 * calls bail out right away.
+ 		 */
+ 		*dup_ret = 0;
+-		return true;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -184,12 +199,14 @@ bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
+ 					TASK_KILLABLE);
+ 	if (ret) {
+ 		*dup_ret = ret;
+-		return true;
++		goto out;
+ 	}
+ 
+ 	/* Now the duplicate request has the same exact return value as the first request */
+ 	*dup_ret = kmod_req->dup_ret;
+ 
++out:
++	put_kmod_req(kmod_req);
+ 	return true;
+ }
+ 
+@@ -199,15 +216,25 @@ void kmod_dup_request_announce(char *module_name, int ret)
+ 
+ 	mutex_lock(&kmod_dup_mutex);
+ 
++	/*
++	 * Look for a kmod_dup_req previously added in
++	 * kmod_dup_request_exists_wait(). Note that a request_module_nowait()
++	 * without its own kmod_dup_req entry can announce a result of
++	 * a concurrent request_module() call.
++	 */
+ 	kmod_req = kmod_dup_request_lookup(module_name);
+-	if (!kmod_req)
+-		goto out;
++	if (!kmod_req || completion_done(&kmod_req->first_req_done)) {
++		mutex_unlock(&kmod_dup_mutex);
++		return;
++	}
+ 
+ 	kmod_req->dup_ret = ret;
+ 
+ 	/* Inform all duplicate waiters to check the return value. */
+ 	complete_all(&kmod_req->first_req_done);
+ 
++	mutex_unlock(&kmod_dup_mutex);
++
+ 	/*
+ 	 * Now that we have allowed prior request_module() calls to go on
+ 	 * with life, let's schedule deleting this entry. We don't have
+@@ -216,7 +243,4 @@ void kmod_dup_request_announce(char *module_name, int ret)
+ 	 * possible abuses of vmalloc() incurred by finit_module() thrashing.
+ 	 */
+ 	queue_delayed_work(system_dfl_wq, &kmod_req->delete_work, 60 * HZ);
+-
+-out:
+-	mutex_unlock(&kmod_dup_mutex);
+ }
 
- kernel/module/dups.c | 169 +++++++++++++++++++++++----------------------------
- 1 file changed, 77 insertions(+), 92 deletions(-)
----
-base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
-change-id: 20260722-module-stats-rcu-ff0dfc986be6
+-- 
+2.54.0
