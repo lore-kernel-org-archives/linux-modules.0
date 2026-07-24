@@ -1,226 +1,216 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022105.outbound.protection.outlook.com [52.101.101.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840EB488DBB
-	for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 18:44:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188052DF153;
+	Fri, 24 Jul 2026 00:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.105
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784832302; cv=pass; b=T1VvTwKtZ7ThF2R1xYXLLhCvpGhdwNi/pUtnmJc+Sk5syUX5qHxOrtZBPr/mQkDqunkQMtESh0bG6WcGua2VuIokTKwLDisUcLEvAnf46oX02nt0CCRfGn1ywVu9n1ikOOhtYS0MLCw3wKbQW5K4gFMKKVc+seMvxwndST6Uh88=
+	t=1784854025; cv=fail; b=cj6qdP5mZIz4Kbw4cLpVYx+78BL6n4JMlOhPnYCk6N3Kgr85eGNkIztq2ePYYyje4qlN8bYXSi71iTZXQV5om5JimHVoesNGm4lghjJsNk1CcP8DwDhIYUyGwIYPjbtHij4Kv+lDmQ6STnEtxWen141/3uh5RGgdAmBBU0NqDzY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784832302; c=relaxed/simple;
-	bh=yg9/TuPXxiIR3f/K2GQ63dB4YPeSX1mhjvPFI9kMu+U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cFV3jOXlndzzJIc+JCE4KUVLKvSwsnWqaPFJarBoIgWHVlFOuS11VZd3kQsumBI2J5L3D6KFw3axVfzcB9LjAMSrw6VI80dNti2sv5BB4+1Y7XX9C6vh+k63SjoBtB3RCVL10A40qgoCgVrEEQAauXKSlqICCdSx25pczox2250=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WHVGOMxj; arc=pass smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WHVGOMxj"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-8114a4542b2so9858627b3.1
-        for <linux-modules@vger.kernel.org>; Thu, 23 Jul 2026 11:44:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784832293; cv=none;
-        d=google.com; s=arc-20260327;
-        b=HjhApq5BjUey1VQtYY2Kg1BkTuf0sEWRwJp2+f54vvPEc8rSjGAF2N4PoexI75HCri
-         JdhF/OoCkFwVY9VxdVH2b+3UE16fWxDEpTW9vRvQYDIR4PZ2U8Ni9QuPZPN4xnDAiM2r
-         H7RCz358GS+ys1v96hxgGAWWiuH5JFkoJt4Q15Zbt72X827ft3xrZxg11+byukJ30d58
-         aBIvviy697a1IF+hs+jDz4lU7cZsmI3TrKbA8o2CJoEwawQb+/zN+6XxZHhvYQJf0AOp
-         X2nfttpdhIRvaGbhPZlWzhRiseR4C0UIbGaQFwHxwz3csZ4o2TuAKLLFh+UvyOv5ORAs
-         ZHUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nWE1XQk5hMIg4yF/U3X0RJddhBOGdBRI/GnQd18cQ84=;
-        fh=REQp+dKrLXXaq7FH8uX2sfygwWcSkviirvlohRP55IA=;
-        b=F5oCPi9N3QJqwvyYIZd4hfDc9yk/ja1eYTIsb3Rd5Qha/siAb0X+GDPvNiQg2loFQD
-         +G8CnbMpollsW4bymNvCJoezRiUA8eex7ieQHCZYktw1m73qzpM2Gg2xQ1bTye8bVupI
-         ghQnH4FelZKA8C5eG+20akOWPlxYuTF1vw8MsrwchHPpbkc8Nu8yQov9s+WSpWCnhGVK
-         9fm9RsSKAyCFIn0QDrvmk4LQxTMYUnMbm0G238wLb0TvV0GEKmF8kseIJ8JAyxxOcTzV
-         R0IPB2IymSzwarYpZxmQ2W15gKdQ8Xurxvxjeym8YRmev4O0eEG7KgrrgAbywY0lNg5L
-         ktUQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784832293; x=1785437093; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=nWE1XQk5hMIg4yF/U3X0RJddhBOGdBRI/GnQd18cQ84=;
-        b=WHVGOMxj1CWLzGT3NGmOvhKggzzfbnWq4lvD2JgvQQZUDQ/oDWohCe31+QBM7LjWac
-         oVrpGyt5Bb/ufN7HAeYGjlYzoUpYrXJU0BX+kzLHj6JkVUlEIavwNHr3vTjosX2FXb6Z
-         1GOjPTXeVYqFUfO+K98XGxrj8C407CPGzzZP8i2RoVt99IAcXeMq8PkLr7YKWJgbDvl+
-         VOs5T5g47Ia3voa9zAkkgLh8KaYQoHNJwtbYPdMzR9ipPY5gXV4DaNGk+lRgmACr8PCH
-         ZgWE6/on/Luw/p4HojcEa2a81+J05BKNTznnJvyHsOSFhUxrIa/CY7O3HkXjDVz0Fd/r
-         qKzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784832293; x=1785437093;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nWE1XQk5hMIg4yF/U3X0RJddhBOGdBRI/GnQd18cQ84=;
-        b=Aa/UHsryVWpfd2sL+QMwZlMivDVaKJBekoizssQdTKG12WcOezPEZrkm2noiOBV+Ir
-         OJcOsqLPFZkenAhYfj6uH1QNusoh83dR2oUMxQKIE0xep4XZafR0d/OX0tyFLkxQ6Qv5
-         Vxj1vpaP7P1fybAcRe920+V3tES5+JEg/fp+/DVWTB1TmwHmcbhIuJSOCSiWmpILCN6e
-         D1i97yfqe/bAkv8wfg+N47k2N54IUX5H+KPa34v+hUiexNsBtj9LIlSPXjZflVBHZVW6
-         1AHU6gCY7in6zlKQ+eFcaHWVSY5rJrewcMNa+psAk7U5gxzbwn4nfFxfDlfoAOcg3eOe
-         SQrQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrTaxcEL6SfEULGchP4HoPbChJ0VJO5ZvEXzdDqe/Y7aErGCAPB2xanpLt5l7/gDr84yq8O/VyDpa50Lp1n@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/mz/wZ3PuT88HgoAQwZaHeSKTbmqxVQDFAXGgQ+Ihi8hGG+wI
-	z7/dhy+S3oz4ZEnISG0LqqjAmhnTC+D37+kyrUk6rb+GNw7tM7YX3GRyx4IrvjLdL+XXHMjP09c
-	kjk3nhQ80Xa+qgt6B7+wptuSwvZKqyoaNQw==
-X-Gm-Gg: AR+sD11dyweLVNoTuV4E3Fcp88PHtBgeKzUVUcyBbSWDbHxZrscbXgpOXOo5Zu++ITS
-	i75FoSJkGQT1hkaMIZLrCz6Hj1H1KMxg5cAuO+SooueAL6v/N6OybHW/16py9UFntMmt+dEAeXC
-	rSSPe+Uih5apYScenRYfGV9bOQgkqEpHNzFd2JUVE5IQiBU/qheV/5Lxg+HreKVRoOedkiUeTuz
-	BI6tJaIkT97BB2hlEVfgFesqxK9rfp36wbmuMJ8YoYVFfyw053PQE+1zBznpo315nvcwys7oU8+
-	CA53qGEyMrEcjUbti6R6HIEHrLo5VPZv9CwSdaCx
-X-Received: by 2002:a05:690c:6181:b0:81e:76a6:4fa4 with SMTP id
- 00721157ae682-81f4c3641b3mr13865687b3.51.1784832293409; Thu, 23 Jul 2026
- 11:44:53 -0700 (PDT)
+	s=arc-20240116; t=1784854025; c=relaxed/simple;
+	bh=lQfUSQqbJWdf8x8ItuN7vvWQUSV+4NZzNJOyRFd4XoY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=or4gZwzynoTszUfgICxOemo3zD2PPgQF5yaYuVLgrIstPk4QxfPNxmJuzbBRYYoI0A7jhLYONJ5XjAzmPCcD6TPkSKP8TwoPtr9ASUkemiJbGQzEvjZzsWHwz5nzssQeAMJY3u6r5aqqOLTBH8CvaKjpbz8EgICttMYUgV9tE6c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.101.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=w/PohHr3I3Uoc+S9akWjATt3sYtM031Mk9Am3iRlUcC7hOOBXA+vq561DbV6SbaL+M9GhDneYSpzJkPmYdUYU4STn9LDq9KK9wxYIPR6uD6Cd0P1HDffO2sMtTXWqoymH5+t2TMin+CssLD+zRnj02PspkLXFkN3sjRWw8hNvyhYgOWVaXo26OIupGlMBaELcpkyspjpyaR0JOq8McyYRo/SQWEjrnOcUyK8P1NMyYkOXTy2jkqstmwDv8rkPR5mQ+eg8lS+prypMekJGSMsIe9oLoD1wxXPfXpj5K2ctP+swQkZ3AuOg057YU8C/OcFbeTKch0WSLS4+AUmz5HQ1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
+ bh=JVoRuTps+/sJ8nBdG8ttgFCUgdpI4quah9Tqm0/+lhk=;
+ b=auN9O+/FcWWEU613YjXgjUfMmD2O9g2jAbcSW/J4tbetaHQLTcMG9fibqSgDeM4fwVXplcVSz1UUM7RsMHdkC/qeqmpI7zqiLuPagjWz6gQYfYZZqeRIP20Cyzr5nOYQd6nDy8tCFyw7BZOuYipwCT/Pzb/lcydHTJcL96tdaxatvNmmL5kcpIkborx6apJc9ZX9tqG6vSoegaBFF42RGwhn1TULGabi2rKrJW1pk+CUr3UZEIBrDdfar+RbF7DCGaIgefoYvbIF5RtLwi9/6BZFZK+T5NVnTF82msPg/77Xe/AJStTq8tffgylJsBA4yGxI44iTzK4Z1jibNCQN+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
+ by LOYP123MB3103.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:e1::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.10; Fri, 24 Jul
+ 2026 00:47:00 +0000
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0245.010; Fri, 24 Jul 2026
+ 00:46:59 +0000
+Date: Thu, 23 Jul 2026 20:46:54 -0400
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: arnd@arndb.de, mcgrof@kernel.org, da.gomez@kernel.org, 
+	samitolvanen@google.com, peterz@infradead.org, akpm@linux-foundation.org, 
+	mhiramat@kernel.org, neelx@suse.com, da.anzani@gmail.com, sean@ashe.io, 
+	chjohnst@mail.com, steve@abita.co, mproche@mail.com, nick.lane@mail.com, 
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] module: Extend module_blacklist parameter to
+ built-in modules
+Message-ID: <nqjc3us7zcb5c5z4jnvku7eho427lk2buqkcf766ujxev5rh5v@5y7npk6z2lyx>
+References: <20260718190121.378314-1-atomlin@atomlin.com>
+ <20260718190121.378314-2-atomlin@atomlin.com>
+ <2cada244-171d-45cb-a6f0-46e6a09375c7@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2cada244-171d-45cb-a6f0-46e6a09375c7@suse.com>
+X-ClientProxiedBy: BN9P221CA0010.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:408:10a::13) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:183::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
- <20260721-dd-maint-2-v7-20-010fbe73b311@gmail.com> <20260721211144.5FF051F00A3A@smtp.kernel.org>
-In-Reply-To: <20260721211144.5FF051F00A3A@smtp.kernel.org>
-From: jim.cromie@gmail.com
-Date: Thu, 23 Jul 2026 12:44:27 -0600
-X-Gm-Features: AUfX_myewH6u9zWxn6egOOnD6NQMr2PYuX2LLJqaFPr4esqlMtuMqkOK2XVFRr4
-Message-ID: <CAJfuBxzqPPui3TRsyncnbS_CLyyh6pU2=1mkO=JsPEVwa_v9Rg@mail.gmail.com>
-Subject: Re: [PATCH v7 20/29] dyndbg: refactor param_set_dyndbg_classes and below
-To: sashiko-reviews@lists.linux.dev
-Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LOYP123MB3103:EE_
+X-MS-Office365-Filtering-Correlation-Id: 33690e9c-bf9a-43a7-dd6a-08dee91d1183
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|23010399003|18002099003|22082099003|4143699003|10067099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	mWSG5jzNDaYuasR0VrrvKTVtQSqel4rYFp450L0elPC7YVT3PAQUu30oldZfHExsZzmKDWTYq4vE+2FR+EAsUj5ujITXRGiCGRs5yFRFoVm+qYgoUhMYYcpG/b462N/y5sOwRuVtFLEMyEgrqZhnQnBmuMhDxbvAaORlQU+qnu5HDfdw5Lz21Z4gGzccQxPMgi47WAjbQ6S8Wn1Y1aRMWmC2uJSyhUNDIB/+EQ5aAk+T35mN5V0ZfPz8JueGdeUS5HnQuttC4Up+9ACbVQRwL0//eLGQy9WSGGRa2MvEu1eq/GiXc2YAp76TYtD9Ry6NVvNrqlspli3b+Oo/0pQ6igKJnP0xDwX4Ei9qcyOxGv6uVA+9VTzjvAD1PlBZWL6JRf3+cAjO1se/+ZKN3DxCZlLOvVYRay1gQK66JYYHuFq1JEN+GWSRb5fCktQ9YyR6x+sEX6c/BDbisDVdw5X4iooFVWvpWB/RBySxhFKxz/xdRtwgtYuIABt+EXHHy7DHbnxIBx286gq9Wn1Bfi8XiBKsGhMlby7y7QuWafRJa6MGo13XQVKcfzlV2kyHrjbIJWsAU4+LQsQ53TX/51uFnuY0JMQqdwsQ0BFymXjemFHOU49KKlVe1IzeHb+A1aERJwTbaGXlB2yeGKa8hYsJJRf6014nA/LNl3TNQI5EP+E=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(23010399003)(18002099003)(22082099003)(4143699003)(10067099003)(56012099006);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dVNRQ1hscVc1YVREUkpxYzBWQTZQK0ZNbW5xNS91OVB1L3U1OFFoN3ZuRDgr?=
+ =?utf-8?B?ajhjbFRibTg5VTJTbmpTdkZ2VlkyMWdNTG5zZmxlZ1FCZVhOUmQrcjMzMjYy?=
+ =?utf-8?B?ME1NSkNyd2VUa0FhUitoVE1YNGhJb1lyZTcrTzdWTGpVUWY1Yzd6aGtobnBS?=
+ =?utf-8?B?SjZwcUlISnp4c0NhY1dKNzNVaTZiVFZ0RVVsdjhyRUM2Q3Vxb2NRQlpwdmgw?=
+ =?utf-8?B?K01BaGpsQ2tFRHMxQllScjVJYk40bFl3OXUzc1hoU0hpd1MxVWtUeXVjeFpq?=
+ =?utf-8?B?YTEvSFg2dVJjNVdYQ0oxWFgrUHhxUE5hVTVCVWZZMWtpeGp0cGloaFJiUlJr?=
+ =?utf-8?B?TjNmbk1vUFB5bDFlV0cxbDNVK3B5bHF4N0FlQXNFSFpJWDZNSHc4TlcySkhx?=
+ =?utf-8?B?RUxYYXQ2Qm5zTnE4OWk0UTR1NFozQVpWcjRTTENsN0lIYTlBbmtVM05KV2xY?=
+ =?utf-8?B?bEptckVxc3BWQUxpRDdrNHlJOExtR2NMcElZQkpmSGZiMklad09MN2hqYnk3?=
+ =?utf-8?B?aXBiY2NXeE5TVG5ESDVESDIrN1JFc3VGWHh2TDkzYjZmNTBnelBIS0ZmNnpN?=
+ =?utf-8?B?c0hjZEVQSFBzazBSZzRPVDZHaUJtMHJ4QjhiWlc1WXhUdmZWazQ4bitaS3dP?=
+ =?utf-8?B?U0lncmNtZXNCdWNjNERtaU1kaU1EcWVhd2tlT0ZiSTRHdjkwU2RhVEdUdFJB?=
+ =?utf-8?B?ZkdEVUtrR0xTaVdsYWdCZ0V4czNnZ29HK3cwaE1obXh0U1VFUm1wWkVoQ0VC?=
+ =?utf-8?B?NnZMQVJnMFBYRWdORTNyQndFbHhoZ3JiRFI3VmpjbGhOOXdDdURKQWg3Zm9W?=
+ =?utf-8?B?R04vZWp1TjBFWFNtVmc3cXo3blFUWHBYLzh0RXZYSDU0Q3pOV2M1cnl3bDRz?=
+ =?utf-8?B?MCtXV3plSm5jaUZUVXVsbnBUT1JjSXBoZkZaeGNWS05PRUFkS1c1WERDQ1hj?=
+ =?utf-8?B?TTVuK3NvWDQzVVl5S1ozZVpvcTlaQ2pIRUF6RXd5cWs1U1cyWXRnUGMzRjhC?=
+ =?utf-8?B?dDg4ZWFiN05TTG9rZnZaZVpaN3V1N2wvRjMwVkFsbEdWamZlSVN4bDU0c1Bi?=
+ =?utf-8?B?eVBYTUN4bUdpaHFoK1N3SkhjL05rUDYrUjZqUjlPUVpnUythNGxSaFNNM202?=
+ =?utf-8?B?RWw3Q1ZJR2d4ZW9XSUdJSldzZFlhbmpsZ1c2bTVtQzVMTmZZZi9YRndqVCtD?=
+ =?utf-8?B?OHNRMUVxRmpiUC81V1RuTGVrcEtyZUVFNnNBWldzY2hyZ3FLRlVLL1lIekl1?=
+ =?utf-8?B?RGhmMytna1hlZzZ4UEsrMzhSNUw0ckQ3Y3doa3BWVDRYL291c2trRnI0eXMz?=
+ =?utf-8?B?c0Nnb1V6MVVnMmVXV0xqc0pVNEFDQ0Q2NnN6am8vU1lsKzZSekNOTlpaOUVK?=
+ =?utf-8?B?V0p1c0kxRG9SdUFXaFFlYnZzZUhnVHNuV3RubFVrVUFzeElZT01WZHJTYWR5?=
+ =?utf-8?B?N1FsYUJxQ09HVmlLWHJCWnRrQTJOUC91aVdQbUovdGI1Y3BBcVg0b3FacGJO?=
+ =?utf-8?B?c3E1VnNKN3h2WHJqNEdHM01RbTMrMnJ6c3hxODNVS2lpSTNYczVzdE95Z2d2?=
+ =?utf-8?B?ZFFhTGF5cGZueEZkbU90ZjR0RDFsMERiSyt4clBEY0JNcXZCQnNDWjJ3T2cz?=
+ =?utf-8?B?Vkdlc2F3WVc4NUxFc2pJM0c2bUNobGVBMVRZT2NmcmhWcWsrb2t5OXY5YVh6?=
+ =?utf-8?B?dWhWaEFyMXFhRVllemM0OSs4ZWh5MHVSTXI4THJCWkY1UW90TnpHVEh6Ty9J?=
+ =?utf-8?B?Wm9RVHduSkM4bUp4M3pzNmlnd2xhU2NMNkR4ZHZDbEoycFY1VHMvc2YrMU81?=
+ =?utf-8?B?dG9rSTRqZUZMeVlyamkrYVN2YzhpWWZPc0tHMXRNRHhuQVlqUFhob1FQU3pB?=
+ =?utf-8?B?SFcwWkVFWU1ncGlwWTgycVhpdDF2d2ovSVkxcUljbVRUNm1lM2lWVU4yakpS?=
+ =?utf-8?B?RDVPckw0ZGpyQlFIdW8vV0YwclRRTjhEd2QxSFBsYmRuMnB2L1NyWnFaUjlR?=
+ =?utf-8?B?M3k1UHVSc21rUWJCYy9mTVJtUjNDaWNxSkNSaG41ZXM0eXh2Qk5QK0FwVUcz?=
+ =?utf-8?B?OGZubEJJZU9oWXJva2VSeXdueXQyd1daMzBYVkdabEtKMUJjbWg3c3lwWG1v?=
+ =?utf-8?B?ejVNcGVXMjNhYldWOHBua3JVYWc5MWpFZkJqa2xvUU9ZQjY2YTlxUTlEUnZN?=
+ =?utf-8?B?NkJmZnY0T21IdWhlVUZZQWlkUlBwNTFMakdmTkpocTdhNGZSOEQ4TDgvcy80?=
+ =?utf-8?B?Tit2VjZkYnlQa3JyVWsxYnI0QlZzWHdZTkZ0YWk3bnl6MnBwd0FGbys1dTk5?=
+ =?utf-8?B?Q0lXNWMzRHlyTGdXQ3dJSlQxd2hZcFdCa1diNTlqdWZRbzlEVHNtdz09?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33690e9c-bf9a-43a7-dd6a-08dee91d1183
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jul 2026 00:46:59.3384
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nsEhrndrRB9+6gdTkP9+t6Mccj0nyl7E42oJMD/fNo0DVQXEhVUBvQ5EEVFgGsq/iRSArMgb+ar+5wUtCmCyZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LOYP123MB3103
 
-On Tue, Jul 21, 2026 at 3:11=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] The refactored `param_set_dyndbg_module_classes` is structural=
-ly incapable of correctly applying existing global classmap settings to new=
-ly loaded modules, and it corrupts the global state.
-> --
->
-> --- Patch [20]: [PATCH v7 20/29] dyndbg: refactor param_set_dyndbg_classe=
-s and below ---
-> commit fd7e6888285afde6b911cef67e7e2452e7180dba
-> Author: Jim Cromie <jim.cromie@gmail.com>
->
-> dyndbg: refactor param_set_dyndbg_classes and below
->
-> This commit refactors the param_set_dyndbg_classes callchain to support
-> module-specific classmap updates, primarily intended for modprobe handlin=
-g.
-> It splits the function into upper and lower parts, threading a modname
-> parameter through to ddebug_exec_queries. It also adds a check in
-> ddebug_apply_class_bitmap to skip printing if bits haven't changed.
->
-> > diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> > index f66e5373e61e2..a619cefd801f7 100644
-> > --- a/lib/dynamic_debug.c
-> > +++ b/lib/dynamic_debug.c
-> [ ... ]
-> > @@ -625,7 +626,9 @@ static int ddebug_apply_class_bitmap(const struct d=
-debug_class_param *dcp,
-> >       int matches =3D 0;
-> >       int bi, ct;
-> >
-> > -     v2pr_info("apply: 0x%lx to: 0x%lx\n", *new_bits, *old_bits);
-> > +     if (*new_bits !=3D *old_bits)
-> > +             v2pr_info("apply bitmap: 0x%lx to: 0x%lx for %s\n", *new_=
-bits,
-> > +                       *old_bits, query_modname ?: "'*'");
-> >
-> >       for (bi =3D 0; bi < map->length; bi++) {
-> >               if (test_bit(bi, new_bits) =3D=3D test_bit(bi, old_bits))
-> >                       continue;
->
-> [Severity: Medium]
-> When applying the current global state to a newly probed module, will thi=
-s
-> continue statement incorrectly skip all configuration queries?
+On Wed, Jul 22, 2026 at 03:57:54PM +0200, Petr Pavlu wrote:
+> > diff --git a/include/linux/init.h b/include/linux/init.h
+> > index 40331923b9f4..1cf163715264 100644
+> > --- a/include/linux/init.h
+> > +++ b/include/linux/init.h
+> > @@ -271,7 +271,28 @@ extern struct module __this_module;
+> >  		__initcall_name(initcall, __iid, id),		\
+> >  		__initcall_section(__sec, __iid))
+> >  
+> > -#define ___define_initcall(fn, id, __sec)			\
+> > +#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+> > +#define __initcall_fn_ptr(fn, __iid, id)	__initcall_stub(fn, __iid, id)
+> > +#else
+> > +#define __initcall_fn_ptr(fn, __iid, id)	fn
+> > +#endif
+> 
+> Nit: I suggest moving the __initcall_fn_ptr() definition into the
+> existing '#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS' block that defines
+> ____define_initcall() to make the code shorter and group the related
+> implementations.
 
-this is a param callback. the modprobe has finished, and the modprobe
-args setting classmaps
-are already done.  the param-callback only handles param updates
+Hi Petr,
 
+Thanks for the thorough review.
 
-> Since old_bits represents the global state, test_bit() will evaluate to t=
-rue
-> when applying the same global configuration to a new module, silently
-> skipping required query updates.
+Done. Moved __initcall_fn_ptr() into the existing #ifdef block in init.h.
 
+> > diff --git a/include/linux/module.h b/include/linux/module.h
+> > index 7566815fabbe..fc1525e8f63c 100644
+> > --- a/include/linux/module.h
+> > +++ b/include/linux/module.h
+> > @@ -86,7 +86,8 @@ extern void cleanup_module(void);
+> >   * builtin) or at module insertion time (if a module).  There can only
+> >   * be one per module.
+> >   */
+> > -#define module_init(x)	__initcall(x);
+> > +#define module_init(initfn)					\
+> > +	____define_initcall_modname(initfn, 6, .initcall6, __initcall_id(initfn))
+> 
+> The initcall numbering and section naming should remain defined only in
+> one place, in include/linux/init.h.
+> 
+> Could something like the following work?
+> 
+> In include/linux/module.h:
+> 
+> #define module_init(initfn) __builtin_module_initcall(initfn);
+> 
+> In include/linux/init.h:
+> 
+> #define __define_initcall_modname(fn, id)				\
+> 	__define_initcall(fn, id)					\
+> 	static const char __initstr_##fn[] __used __aligned(1)		\
+> 		__section(".init.rodata") = KBUILD_MODNAME;		\
+> 	static const struct initcall_modname __modname_##fn __used	\
+> 		__section(".initcall.modnames") = {			\
+> 			.initcall_fn = __initcall_fn_ptr(		\
+> 			    fn, .initcall##id, id),			\
+> 			.modname = __initstr_##fn			\
+> 		};
+> 
+> #define __builtin_module_initcall(fn)	__define_initcall_modname(fn, 6)
 
+Adopted this suggestion. This keeps the initcall section naming and level
+numbering localised strictly to include/linux/init.h.
 
->
-> >               snprintf(query, QUERY_SIZE, "class %s %c%s", map->class_n=
-ames[bi],
-> >                        test_bit(bi, new_bits) ? '+' : '-', dcp->flags);
-> >
-> [ ... ]
-> > @@ -683,8 +693,8 @@ int param_set_dyndbg_classes(const char *instr, con=
-st struct kernel_param *kp)
-> >                               KP_NAME(kp), inrep, CLASSMAP_BITMASK(map-=
->length));
-> >                       inrep &=3D CLASSMAP_BITMASK(map->length);
-> >               }
-> > -             v2pr_info("bits:%lx > %s\n", inrep, KP_NAME(kp));
-> > -             totct +=3D ddebug_apply_class_bitmap(dcp, &inrep, dcp->bi=
-ts);
-> > +             v2pr_info("bits:0x%lx > %s.%s\n", inrep, mod_name ?: "*",=
- KP_NAME(kp));
-> > +             totct +=3D ddebug_apply_class_bitmap(dcp, &inrep, dcp->bi=
-ts, mod_name);
-> >               *dcp->bits =3D inrep;
->
-> [Severity: Medium]
-> Does this code inadvertently corrupt the global state if a module-specifi=
-c
-> override is applied?
+> > +static const char *__init get_builtin_modname(initcall_t fn)
+> > +{
+> > +	struct initcall_modname *p;
+> > +
+> > +	for (p = __start_initcall_modnames; p < __stop_initcall_modnames; p++) {
+> > +		if (dereference_function_descriptor(p->initcall_fn) ==
+> > +		    dereference_function_descriptor(fn))
+> 
+> Using dereference_function_descriptor() looks unnecessary.
 
-the param belongs to a module, its not "global".
-and I dont know what override means here.
-the callback MUST update the internal state, or error out.
+Agreed, removed dereference_function_descriptor() in get_builtin_modname()
+and switched to direct pointer comparison.
+
+> Nit: This hunk leaves three consecutive blank lines after
+> module_frob_arch_sections().
+
+Acknowledged.
+
+I will include these updates in v7.
 
 
-
-
-> It appears that *dcp->bits (the global parameter state) is unconditionall=
-y
-> overwritten with inrep, even when a mod_name is provided.
-
-the param belongs to a module. so does the param state.
-
-> Should the state update be conditional on mod_name being NULL, to prevent
-> modprobe handling from modifying the global state?
->
-> >               break;
-> >       case DD_CLASS_TYPE_LEVEL_NUM:
-> > @@ -697,7 +707,7 @@ int param_set_dyndbg_classes(const char *instr, con=
-st struct kernel_param *kp)
-> >               old_bits =3D CLASSMAP_BITMASK(*dcp->lvl);
-> >               new_bits =3D CLASSMAP_BITMASK(inrep);
-> >               v2pr_info("lvl:%ld bits:0x%lx > %s\n", inrep, new_bits, K=
-P_NAME(kp));
-> > -             totct +=3D ddebug_apply_class_bitmap(dcp, &new_bits, &old=
-_bits);
-> > +             totct +=3D ddebug_apply_class_bitmap(dcp, &new_bits, &old=
-_bits, mod_name);
-> >               *dcp->lvl =3D inrep;
->
-> [Severity: Medium]
-> Similarly, is the global *dcp->lvl state unconditionally overwritten here
-> when a module-specific override is applied for LEVEL_NUM map types?
-
-the state belongs to the module.
-
->
-> >               break;
-> >       default:
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721-dd-maint=
--2-v7-0-010fbe73b311@gmail.com?part=3D20
+Kind regards,
+-- 
+Aaron Tomlin
