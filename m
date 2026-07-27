@@ -1,107 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0BC625;
-	Sat, 25 Jul 2026 20:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A4C4908A9;
+	Mon, 27 Jul 2026 07:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785011472; cv=none; b=aTgBjb9cj0tsiNCIRNgwNLQgX0d4hZvqBukP+Rg2l7tWTaje0908uRIqsphDDLpNn90NS7itft0NcPZn0kT/lLzw0lkWg+AGJ+lbKUrBFyLPInQnST1u4p1GrXrFF2jSYORyEQQo4xyOyaRpTavkuvEMlc1C2OJHvum7JLtMtJs=
+	t=1785138498; cv=none; b=e7p8OplOr+fwcyiUVgdQaqRzgEwlMhnZiGdaESfzQlNIp2jTI932lJ39WP88s9meI7Z3dPfg7WO4gEcc8G41Yg6STMfiV/CBL9ZcZPsocJ2M45lOK8uDRePTPB6JXH+RfWegC84rVgNgKaHTzFUV1iphA/ipx03T6QDU8b9j3yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785011472; c=relaxed/simple;
-	bh=e6KMoD3bd5/q6p3xQeg23qgiuejFXySUo/aGZ6esyCc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=JKAGydDvVpvukxAV9Q1NF4vPSEA0b15yWfsrQ+p8Z/gHAJTBkG3dE+5eiVca8cKXSa3+Noh0ZRnip2j1grPveDwhnKx5JBqbrqP+cZ/zdtyC9p92rmeO423HfMKXTQCZvNPA2mBE33TwVY9FNnKOF7f2Gxtd/dBn9DwNGDP2Zzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hAfTn9kP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785138498; c=relaxed/simple;
+	bh=je38862WqI6csR6Tw7QL4GiqzebSyLQAdq1BP0Do8oo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ri80I6LM0waXb4ssIO75EYPNuaGqZxXD9pgOoXnkVYeJPrT8S4eWU2+luJ1EsUbuEK7wh76TwC3EixFSTaVa3tEfbZ8ZE36MT6vXplWzfMY607I60UsDVkB/SlGTY8M0nlWwBdsFGG4I5E7xsZuyOY/118L/53RyA/kjvwyinQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CBkWPhc1; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hAfTn9kP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFFA01F000E9;
-	Sat, 25 Jul 2026 20:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785011470;
-	bh=e6KMoD3bd5/q6p3xQeg23qgiuejFXySUo/aGZ6esyCc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=hAfTn9kP3ZABFKIwidJBkzkwUEnV03/r5N7p8kmUos3uDtUKUWtEJzQPpdypzC87s
-	 s8zXrjsDbl2M4eM1W7J86H4KiLLuZnMtxMMILtEw98qiQcngdzhm3Z933lwVaUuZ1u
-	 NLkyUWEUlaRXQiJD2BrV3+doGFNu5m2sLbsSq0EGZklaA6R4wtvLOLLa2OnPQe5qNl
-	 qRc/eqpUyUDjcyObmg1ruSpXH9PI078U1i4aarlF7k3SAVuPPwJdBfCiYHUHqv1JgK
-	 gHSHbd+Pb+4KEwvFVr0Xj05kVhoMd7+HPlRE8f80fEhbz02ckPWPFwbzdqixw/v4UL
-	 pVfAw00n8dMXA==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Petr Pavlu <petr.pavlu@suse.com>, Tony Luck <tony.luck@intel.com>,
- Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>, Dave
- Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Philipp Reisner <philipp.reisner@linbit.com>, Lars
- Ellenberg <lars.ellenberg@linbit.com>, Christoph =?utf-8?Q?B=C3=B6hmwalde?=
- =?utf-8?Q?r?=
- <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>, Johan
- Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Michal Januszewski <spock@gentoo.org>, Helge Deller
- <deller@gmx.de>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
- Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Trond Myklebust
- <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, Chuck Lever
- <cel@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown
- <neil@brown.name>, Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo
- <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, Mark Fasheh
- <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, Joseph Qi
- <joseph.qi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner
- <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
- Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez
- <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
- Tomlin <atomlin@atomlin.com>, Pavel Machek <pavel@kernel.org>, Len Brown
- <lenb@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Danilo
- Krummrich <dakr@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Ido Schimmel <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, David
- Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, Paul
- Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, Kentaro Takeda <takedakn@nttdata.co.jp>,
- Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
- drbd-dev@lists.linux.dev, linux-block@vger.kernel.org,
- greybus-dev@lists.linaro.org, linuxppc-dev@lists.ozlabs.org,
- linux-acpi@vger.kernel.org, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
- linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev,
- cgroups@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-pm@vger.kernel.org, driver-core@lists.linux.dev,
- bridge@lists.linux.dev, netdev@vger.kernel.org, keyrings@vger.kernel.org,
- linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] time/jiffies: Include linux/sysctl.h for
- proc_int_u2k_conv_uop(), ...
-In-Reply-To: <20260721131207.803760-3-petr.pavlu@suse.com>
-References: <20260721131207.803760-1-petr.pavlu@suse.com>
- <20260721131207.803760-3-petr.pavlu@suse.com>
-Date: Sat, 25 Jul 2026 22:31:07 +0200
-Message-ID: <874ihmke0k.ffs@fw13>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CBkWPhc1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ZS
+	tcuhfdE7XxAahWW2ecan0c6zEbfCVD7CPTonvHjSo=; b=CBkWPhc1I89BZjYVgz
+	2ISa/fi0husOK1ZC2jKDPaF2RFEHOebY9qtFwtzHf7y/lM2AmLMIbkwnEJFcqIA6
+	318vwueZQwqLNa2xArFLKj/qz/EMjp/1zteiJgY7VP37trSOeZBwc7uxWLSnn6ZD
+	/ajRq0ym5l46ubQLp7lN4FmrU=
+Received: from fedora (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id PigvCgA3UdQJDWdq26SaJw--.39752S2;
+	Mon, 27 Jul 2026 15:47:21 +0800 (CST)
+From: Ju Nan <junan76@163.com>
+To: egg12138@foxmail.com
+Cc: jpoimboe@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux@armlinux.org.uk,
+	pmladek@suse.com,
+	Ju Nan <junan76@163.com>
+Subject: Re: [PATCH v3] ARM: module.lds: fix unwind metadata for merged .text sections
+Date: Mon, 27 Jul 2026 15:47:09 +0800
+Message-ID: <20260727074708.115112-2-junan76@163.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <tencent_08845B64E5F38EB7FA1779982A071AB4A607@qq.com>
+References: <tencent_08845B64E5F38EB7FA1779982A071AB4A607@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PigvCgA3UdQJDWdq26SaJw--.39752S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZF48uFyrZFyDGFWDArW7CFg_yoWDurgEg3
+	Wvq34Utw17W34Duws8Ar4YyFyDWr4UWF17Jay8AFZIyr40qrsIvw1rAr90vF17Xa1xurZ3
+	ua43XrZ8uwn7tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUUxR65UUUUU==
+X-CM-SenderInfo: pmxqt0ixw6il2tof0z/xtbC0wm5a2pnDQkD8wAA3x
 
-On Tue, Jul 21 2026 at 15:11, Petr Pavlu wrote:
+I ran into exactly the same on a STM32MP157A-DK1 board (dual Cortex-A7,
+ARMv7 AEABI, CONFIG_ARM_UNWIND=y).  An out-of-tree module whose functions
+GCC had placed in .text.unlikely (merged into .text by module.lds.S) left
+its .ARM.exidx.text.unlikely section unregistered, so an Oops inside the
+module produced an empty backtrace:
 
-> The kernel/time/jiffies.c file uses proc_int_u2k_conv_uop(),
+  Call trace:
+  unwind: Index not found bf102018
 
-jiffies.c uses ...
+With this patch applied, the module's exidx is coalesced into a single
+.ARM.exidx output section, module_finalize() registers it against .text,
+and the full module backtrace is restored:
 
-> proc_int_k2u_conv_kop(), proc_int_conv(), proc_dointvec_conv() and
-> proc_doulongvec_minmax_conv(), which are declared in linux/sysctl.h. It
-> currently relies on this header being included indirectly through
-> linux/module.h -> linux/kmod.h. Add the missing include in preparation for
-> removing the linux/sysctl.h include from linux/kmod.h.
+  Call trace:
+   do_the_crash [oops_null] from level_one+0x8/0xc [oops_null]
+   level_one [oops_null] from level_two+0x8/0xc [oops_null]
+   level_two [oops_null] from trigger_write+0x18/0x20 [oops_null]
+   trigger_write [oops_null] from full_proxy_write+0x54/0x78
+   full_proxy_write from vfs_write+0xd0/0x49c
+   vfs_write from ksys_write+0x6c/0xf4
+   ksys_write from ret_fast_syscall+0x0/0x54
 
-Can you please split that spaghetti sentence into paragraphs?
+Tested on Linux 7.1.4
 
-https://docs.kernel.org/process/maintainer-tip.html#changelog
+Tested-by: Ju Nan <junan76@163.com>
 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-
-Other than that.
-
-Acked-by: Thomas Gleixner <tglx@kernel.org>
