@@ -1,151 +1,177 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A22E447810
-	for <linux-modules@vger.kernel.org>; Tue, 28 Jul 2026 17:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD837472760;
+	Tue, 28 Jul 2026 19:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785260849; cv=none; b=guMVRlL2eW/7tuv+hRgA8zd3PrnwWva4MmIqiDwFrjYM068E1jAS/dnGyKU9X7nEL+8IdSZrby5HYDtRALd5p6VMRzV6d2zSXuLe6XyQ6UzQJxp/0kf7xqQL4Tkxzih8dDwGmLU0SCTZ4XPFqGZ70UMrIdh9JBpBdetg9vYdqSg=
+	t=1785266562; cv=none; b=JZPZHUt4KvKdXYNqtW/jUEBvNeepwwUDY4MZeINXNFRcx0a0vfvWqb+A5il/1tULKJo4UWGYrin9kqzMj/2VcYSSIfMjtgFwbmNRJ7dKDJqOaTKx5x7mW9FI8BCIdHHmAI4oVSY6/P67f9dLu7bK2hyLuihevPzwGT14zcGTyl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785260849; c=relaxed/simple;
-	bh=cvgOO9VY6sXUSf8H1fV20vduS2+7NkQ85QrE+boeM0Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nhVpdMY1phqAEfIyi3W4y7S+/V+/3belsUQBIyw+Hy3y1vzjkfePIN0xX5aSr3BPQGPbJ4lT5UiAGCEZNCGnbmnfsFmvF5TJBddPQfSqRCKIf2QfAQOGZYB5duT65QcLjqewYw7EVzLE+gmBYZp9z98JURkUqO4R0meLvwGcQ5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/ztJ5Pw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785266562; c=relaxed/simple;
+	bh=RAybM5FwJCEXR6lQQGedKuEkTpFAt+pqpKOXqQeptXg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EA3z/sGt6yGkqMUK/m5dMKbekHMHriLDBrZjMWz1VEuwCnLc+6J9c2biQ+xqTgfY6LtUvv7Oo8oGueuPV4E9KDPI2+WqgCrFCVH8dQxjwD9LQIYPQDClUWlayE0cE5kl1Feg3pVDwrsTKuIeO2yFlRiCNV/KnRqyXC8aCSv1vCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SJDjusYW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/ztJ5Pw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F221F000E9;
-	Tue, 28 Jul 2026 17:47:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SJDjusYW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3EC1F000E9;
+	Tue, 28 Jul 2026 19:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785260847;
-	bh=bnMlMuCSMG0fro89gHmoieLWNPFMpnMwEh99LausLtE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=J/ztJ5PwimU1cxOYEsLJr0jCwFXPurbRbUdjG+R95ULfZLqZWgAPxjCIW9R5boNlD
-	 HTcyKRwnR7UQHcp+g9qXIFJb9pXYafxyeHnReMp4zelpAnEelpM9ojNb5OriHU2mv3
-	 H39yiVmmSVtkb2YMOTEFjLv8K6QZ+V/Tk/euI4qvblqB/2OTNpZQk6i6x5bHemRHbM
-	 HuGEsCGHKVE0wctgaoyhGAlLPEDy43anGaTR8vaLBDpJEC30afO2FHSiI5h37u/TvW
-	 Chj43YnWMoH8aEeuW99tN6NIbcaCUbC8D1ifKgOmkjKSHrLcKygSRPvUroxnjzo3ak
-	 Ct06nDJpZLy/w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] module: reject malformed .modinfo sections
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Laxman Acharya Padhya" <acharyalaxman8848@gmail.com>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260728173318.63736-1-acharyalaxman8848@gmail.com>
-References: <20260728173318.63736-1-acharyalaxman8848@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 17:47:27 +0000
-Message-Id: <20260728174727.A2F221F000E9@smtp.kernel.org>
+	s=k20260515; t=1785266559;
+	bh=Sg7X61+HXElaIBwpC5DPgqG06SdxhEtH8T/5QF3gGBk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=SJDjusYWkQMn2jsrf3H5zsXY+niEzuNpEN0xhA2ntLi3CPQmzP0lDfPSONKYYJQZM
+	 j06TuAZgDKWQfIlTBmPtOwwGgZf6OAjeILlkP4GDfVszyRqZRbqUKFU/GMRvJsRSFt
+	 38G5xk1FgQ2hd985eoJPV50itBz3wh3pkOCZQwMivrcyS4I6/3CII3eV9vnb4IZphj
+	 3vrTcKqbhKmUcIZDnbGqQ2oxLquRD/y+dawcg44PGzdbzFdlFtIybwrp0gktbq4QGD
+	 kzp7HFf07zAB2sZzm0YTiVpDoL00dCZeOqPgOjyzWcJ9U6BcHaYj4G02SohIGnzevn
+	 OkCREhvB00Nug==
+From: Sasha Levin <sashal@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Sasha Levin <sashal@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Richard Weinberger <richard@nod.at>,
+	Juergen Gross <jgross@suse.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Helge Deller <deller@gmx.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Vivian Wang <wangruikang@iscas.ac.cn>,
+	Zhen Lei <thunder.leizhen@huawei.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 1/4] kallsyms: embed source file:line info in kernel stack traces
+Date: Tue, 28 Jul 2026 15:22:33 -0400
+Message-ID: <20260728192234.443651-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <e063df8e-3396-4ce9-9e66-27681af17fbc@suse.com>
+References: <20260709163833.3851179-1-sashal@kernel.org> <20260709163833.3851179-2-sashal@kernel.org> <e063df8e-3396-4ce9-9e66-27681af17fbc@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Mon, Jul 27, 2026 at 01:53:36PM +0200, Petr Pavlu wrote:
+>I'm unable to reproduce these numbers. Could it be that the "stripped"
+>vmlinux here still includes debug information?
 
-Pre-existing issues:
-- [High] The `.modinfo` section bypasses bounds validation if its type is s=
-et to `SHT_NOBITS`, allowing arbitrary `sh_offset` and `sh_size` values tha=
-t lead to out-of-bounds kernel memory reads.
-- [High] The patch fails to protect against out-of-bounds reads if the `.mo=
-dinfo` section is completely omitted, falling back to an unvalidated `SHT_N=
-ULL` section offset.
---
+Yup! the figure was taken from an unstripped vmlinux, so it was really
+reporting DWARF size. Will fix, and state the recipe inline so it's
+reproducible. Your numbers reproduce here exactly:
 
---- Patch [1]: [PATCH] module: reject malformed .modinfo sections ---
-commit 7548fa1ced4767f35fb298eeab3978cae911d641
-Author: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+  no lineinfo:          51.1 MiB
+  lineinfo, before 3/4: 69.1 MiB  (+18.0 MiB / +35.3%)
+  lineinfo, after 3/4:  59.1 MiB  ( +8.0 MiB / +15.7%)
 
-module: reject malformed .modinfo sections
+>Nit: It might be worth explicitly mentioning libelf as a dependency [...]
+>libelf and libdw are available on Arch in libelf, not elfutils.
+>[...]
+>Nit: Without more context, elfutils could be understood to mean the eu-*
+>utilities [...]
+>Nit: Again, I suggest mentioning both libelf and libdw for clarity.
 
-This commit attempts to prevent loaders from reading past the end of the
-.modinfo section by rejecting empty sections and those that are not
-NUL-terminated before parsing them.
+Will fix.
 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 528690ba160bd..91e20cd1e6ac9 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2082,6 +2082,8 @@ static int elf_validity_cache_secstrings(struct loa=
-d_info *info)
->  static int elf_validity_cache_index_info(struct load_info *info)
->  {
->  	int info_idx;
-> +	Elf_Shdr *info_shdr;
-> +	char *modinfo;
-> =20
->  	info_idx =3D find_any_unique_sec(info, ".modinfo");
-> =20
+>Nit: raw_offset can be declared as `unsigned long` [...] Similarly here,
+>raw_min can be declared as `unsigned long`.
 
-[Severity: High]
-This is a pre-existing issue, but does the early return when info_idx is 0
-leave us vulnerable if a module omits the .modinfo section completely?
+Will fix.
 
-When the subsequent early return for info_idx =3D=3D 0 is taken, info->inde=
-x.info
-remains 0. Subsequent calls to get_modinfo() will use info->sechdrs[0].
-While elf_validity_cache_sechdrs() validates the size and addr of section 0,
-it doesn't validate sh_offset:
+>The fallback output printed by echo includes -lz. Is this library really
+>required by gen_lineinfo?
 
-kernel/module/main.c:elf_validity_cache_sechdrs()
-        if (sechdrs[0].sh_type !=3D SHT_NULL
-            || sechdrs[0].sh_size !=3D 0
-            || sechdrs[0].sh_addr !=3D 0) {
+No. Will drop it.
 
-When get_next_modinfo() processes this, it uses this unvalidated sh_offset
-to calculate modinfo, which is immediately passed to strncmp():
+>Does gen_lineinfo need to define own hash map [...] Could it be replaced by
+>the shared functionality in scripts/include/hashtable.h and hash.h?
 
-kernel/module/main.c:get_next_modinfo()
-        char *modinfo =3D (char *)info->hdr + infosec->sh_offset;
-        ...
-        for (p =3D modinfo; p; p =3D module_next_tag_pair(p, &size)) {
-                if (strncmp(p, tag, taglen) =3D=3D 0 && p[taglen] =3D=3D '=
-=3D')
+Will fix.
 
-Could this lead to an out-of-bounds read if sh_offset points outside valid
-memory?
+>Programs under the scripts/ directory normally use xmalloc() [...]
+>The return value of strdup() should be checked for NULL.
 
-> @@ -2095,6 +2097,18 @@ static int elf_validity_cache_index_info(struct lo=
-ad_info *info)
->  	}
-> =20
->  	info->index.info =3D info_idx;
-> +	info_shdr =3D &info->sechdrs[info_idx];
-> +	modinfo =3D (char *)info->hdr + info_shdr->sh_offset;
-> +
-> +	if (info_shdr->sh_size =3D=3D 0) {
-> +		pr_err("empty .modinfo section\n");
-> +		return -ENOEXEC;
-> +	}
-> +	if (modinfo[info_shdr->sh_size - 1] !=3D '\0') {
+Will fix.
 
-[Severity: High]
-This isn't a bug introduced by this patch, but does accessing modinfo here
-pose a risk if the .modinfo section type is set to SHT_NOBITS?
+>Nit: This can be simplified [...]
+>Nit: scripts/include/array_size.h provides ARRAY_SIZE().
+>These two lines are unnecessary as the same code is repeated below.
 
-In elf_validity_cache_sechdrs(), offset validation is explicitly skipped
-for SHT_NOBITS sections:
+Will fix.
 
-kernel/module/main.c:elf_validity_cache_sechdrs()
-        case SHT_NOBITS:
-                /* No contents, offset/size don't mean anything */
-                continue;
+>I think using well-known top-level directories in the kernel tree [...] is
+>rather fragile. [...] An alternative approach would be to pass $srctree and
+>$objtree to gen_lineinfo
 
-Since info_shdr->sh_size and sh_offset are unvalidated for these sections,
-could modinfo[info_shdr->sh_size - 1] read from unmapped or arbitrary memor=
-y?
+Agreed, will do it that way. Reading them with getenv() rather than -D:
+kbuild already exports objtree, srctree and srcroot, and kconfig reads them
+the same way, so no Makefile change is needed. Each gets registered both as
+spelled and as realpath() so a symlinked tree matches either form, longest
+match wins.
 
-> +		pr_err(".modinfo section isn't NUL terminated\n");
-> +		return -ENOEXEC;
-> +	}
-> +
->  	/* Try to find a name early so we can log errors with a module name */
->  	info->name =3D get_modinfo(info, "name");
->
+On your two caveats: realpath() is applied only to the roots, never to a
+DWARF path, since generated sources need not exist when gen_lineinfo runs --
+DWARF paths get purely lexical normalization. And srcroot is what covers M=
+external modules, whose sources are under neither srctree nor objtree.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728173318.6373=
-6-1-acharyalaxman8848@gmail.com?part=3D1
+I'll keep kernel_dirs[] as a last-resort fallback rather than deleting it,
+so an object built outside all three roots degrades as it does today instead
+of dropping to a bare basename.
+
+Worth noting the rework is not just cosmetic: 1136 of 4450 filenames here
+carried a "./" prefix from DWARF directory entries (addr2line shows it too),
+which normalization removes, folding the file count to 4354.
+
+>I think using ELF_C_READ_MMAP is normally preferred. Even better, this
+>could use ELF_C_READ_MMAP_PRIVATE to avoid opening modules as read-write
+
+Will fix.
+
+>The program has inconsistent error handling.
+
+Will fix.
+
+>This output clutters the build log [...] It should probably be hidden
+>behind a --verbose option and printed only when KBUILD_VERBOSE=1.
+
+Will fix.
+
+Separately, working through your review turned up two bugs, both of which
+v8 will fix with regression coverage:
+
+- Module lineinfo blobs are malformed. emit_section_table() emits the .Lhdr
+  label before its .balign 4, so table_offset (.Lhdr - .Lroot) points into
+  the padding and the kernel reads the header 1-3 bytes early.
+
+- The symbol-boundary check added in v7 over-corrected. Functions whose only
+  line row deduplicate() had collapsed, or that never had a row at their own
+  first byte, stopped resolving: 5017 here, including 1542 .cold fragments,
+  all __probestub_*, and the __ia32_sys_* compat wrappers. v6 printed these
+  correctly.
+
+Thanks for the thorough review.
+
+-- 
+Thanks,
+Sasha
