@@ -1,251 +1,175 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A203F4854;
-	Tue, 28 Jul 2026 08:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E8541D659
+	for <linux-modules@vger.kernel.org>; Tue, 28 Jul 2026 10:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785227959; cv=none; b=oNndGPtFC/KzYuUrRKK5la9+H5i6z+oq2gaBOJwy034GfIghukRPHbV1KUw8vRypr1uZbGmF4sjYO29bU4a3EkpNOEnu14ARpobFZKsvagtf+esfvdttvqX0bNZzt8pfF64YnnB6SyEOrHGUBIF9XE7q3QnN1sM44k6WNpzTA9o=
+	t=1785235595; cv=none; b=KgtG+ju77s9Gr3IYnvQoJsTlyEDNUIimy2hfaMZ/9u+FJinz1EYd/urbsv4jNJwlTv/aO8m99Yz6nmlEDJ4YzD6sePdBrKKxEloRtmMYkvSVxpYPdOU+3jJUhToKQbqExDpETp55AKpNFLdY6mUbaduSwIJ6xSYOcWNRW6p6h20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785227959; c=relaxed/simple;
-	bh=CRg/Nh54HZ99tMwpElMnVNEMdGg+zKH3+U7LRFD/tYE=;
+	s=arc-20240116; t=1785235595; c=relaxed/simple;
+	bh=xOrAplYyS+pNrXAKjyHCqHir2UTZzh7Gyle/Rd7RHV4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bqBHKO1dwoD2r2Oj8kVI02H1qOFidffjnjySXDiMMsdD5QV5ms+VR//BLDBqO/SY2yCjiDzeMud/EbVBkb/JFhn10M1Iy+P2pD0DlyHIloZZ6WtKGFRPQDVZZLPiwuwB1AVBhI3O5vezQy5okTe+dV0PWlV4Z9BMHmOkvuAVWl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D+tASYGg; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=Pr71FqlmW46wErnKES6kM3E1uQxE9yINJXHOhQ6mYLd71dn6Vyw8FN3CE+SvZpd04u9T0B2CDham7gvHi1yOzs3MFjS0WZBA1BYDzI6eXiZNtjFX1ZX9CIBuNPYsMIftuEDUmh6kycROLNb/sFWvtvsmBYh9cKiB0xGDAyqKbOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UuE0DD2L; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D+tASYGg"
-Message-ID: <a9dde63a-5f2d-494b-95dd-7567879de38d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785227954;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QbXjOIDNQAqLnMcNmNhhIkcZFnXKaj7v9jSB+IKjoGY=;
-	b=D+tASYGgBFHhUl7vxy1SvTJuUlL1fyINBlClOvQ9K4T3edtuSqXNpaYIxcusYBqtHtCGKn
-	4YFV+wfUruytiAPKlK/iMkIxiHxJeSoVj5BDR22K0phFcndN0nozhMJatVZeJF2M3nsdd0
-	JVFwwEIRGf5pB3U4V6tfCHcV69RCL/I=
-Date: Tue, 28 Jul 2026 16:38:44 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UuE0DD2L"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4728c12ba97so2208248f8f.0
+        for <linux-modules@vger.kernel.org>; Tue, 28 Jul 2026 03:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1785235592; x=1785840392; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FIC3b/7o8AMFrBQ283uf6ujNtCi93IZpkLlkVl6wgK0=;
+        b=UuE0DD2LlbosO/+IjEubNwaItrz04MSnydiTWKGmG9OfK0JZSjGa//On+3IdEphGaA
+         BfttduW5214Dk+GxX/j2lE68FYh+xDCfPiRXrq1IfcQnOxwY421jgT7akj4ZVRDwofUs
+         zDqzQaMxIQ8mGGtnl/i+QzZJwBx/E29sJkxdXil5Ug1p7sB3+MTIqq1BUA+kUFE0P5OR
+         4CQlZjwC4IE/FlR1j+Ghd/6qKGAH/ysWD6YW8mZhPlcaZgQ6N7AkDi7MJQliiTJGTlJc
+         pNxnSVPvmFp1O/AjdUcwZolSwWhzoKD4S/v0mc1izYhjor/vvUSeTbskgVmr6RhnDAcn
+         zgAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785235592; x=1785840392;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FIC3b/7o8AMFrBQ283uf6ujNtCi93IZpkLlkVl6wgK0=;
+        b=I/HaEjf2d4jOsCHBIaWq521CDYLe9+fEUaUlYYny9CeO3TPqRFjgXnwLz4bqhylGUg
+         n2vSM+p8ybTrhgFDR1eaP4EfBD5SRLU0AihJU41mVpjV+JFF9UrVpMMJ9LwG562NkLDZ
+         qV7eZdwRXMBCv0E9hrzkXW7sdmsfCZaWKDwi40+CCqPqfCCTJ4TydkXUbhoJdizBRqdk
+         yaj6Rj1BrH/t/ZJoSwfQUDcciPWKCdvBfqec41/myLPQajYaAPXwGM70towafrZsjmkK
+         GQrsW3IOD6ttaBgBi5RzJJ0kmB+TZ1bmKfZykvfyVz+T/2xZyQ0ir93kq6eYAaKP6s2Y
+         SIjQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrRkVPR4d2QIgP5nusEuKuUpdDpsJQ8j4elPMU5PtOi3xWpPZs0yQhKII7HWiJuYKlDpNh7Yo4gx1YoRCOE@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+56ZHIox5T/aiGNS9vYnJ4PfADuQqCxpfA0QwDWWPfJ8QzwTO
+	m5o3U1YNcblKYA+oDwgm5HisxIeNzA/0CXGrMRw7EEsnyzt9a7K/20z/gvGxuUcQ7wg=
+X-Gm-Gg: AR+sD11SeMu5EBVHCujjN15NhXmPfzCj9p6Hvpvdssi71KTxzGs5/2GFWo2AyTqTPbV
+	r76l/2N48u5ohv+cSjYPMrCOEui9hFQCYQ/zz9ycRrM8ZI2OKcWS8gkxMA/+q5qVRO5nlVt+mUi
+	m6TPsmoMmstuHt344NfbvQbEJ+Vq+rzuH5jTHN69EZl/RFvHVdxcftOM0+8nchIjAjj8Z5xZSG5
+	iY0S6ejDslg1sM4e88SAWxjl9P5OmJuET8SyqgU9mqzbJitYwY+UsnOBN7+U4ak85Bwv6ygDEJ4
+	Ilkmrpq0FT1sxuTuGAVewfmhkqljuxZrtPY3JH+C4JRg6bfQpGIzmtCyRhFUZ1z0lNzaDGt/+k8
+	EaQi1ZICjoyW72zAFVoYz54+/n9/TDMuiMktowfgiGGV/XwTa2+GXaLpN2l8X2SFkAZevo12LdH
+	MjgMKqXxnmEkUaZFH0TXfdZpiuX1bS8OOALjDQFiM=
+X-Received: by 2002:a05:6000:1884:b0:47f:9096:3c54 with SMTP id ffacd0b85a97d-47fb1ecc318mr2141112f8f.11.1785235591768;
+        Tue, 28 Jul 2026 03:46:31 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85c6e9a2sm59717727f8f.35.2026.07.28.03.46.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jul 2026 03:46:31 -0700 (PDT)
+Message-ID: <dfe25916-0f2e-44ed-8f49-d7448a0e28fa@suse.com>
+Date: Tue, 28 Jul 2026 12:46:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v9 00/10] Fix missing fops.owner in Rust DRM/misc
- abstractions
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
- driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org,
- nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-pci@vger.kernel.org, Boqun Feng <boqun@kernel.org>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann
- <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
- Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>,
- Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>,
- Igor Korotin <igor.korotin@linux.dev>,
- FUJITA Tomonori <fujita.tomonori@gmail.com>,
- Bjorn Helgaas <bhelgaas@google.com>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
- Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
- Carlos Llamas <cmllamas@google.com>
-References: <20260723-fix-fops-owner-v9-0-c1c3af7f7bcb@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Alvin Sun <alvin.sun@linux.dev>
-In-Reply-To: <20260723-fix-fops-owner-v9-0-c1c3af7f7bcb@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] params: fix charp corruption on allocation failure
+To: Jiacheng Yu <yujiacheng3@huawei.com>
+Cc: samitolvanen@google.com, rusty@rustcorp.com.au, hannes@cmpxchg.org,
+ yosry@kernel.org, nphamcs@gmail.com, liuyongqiang13@huawei.com,
+ linux-modules@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260728085518.3865621-1-yujiacheng3@huawei.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260728085518.3865621-1-yujiacheng3@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-Hi Miguel,
+On 7/28/26 10:55 AM, Jiacheng Yu wrote:
+> param_set_charp() stores charp parameters in allocated memory after slab is
+> available, and releases the previous value when the parameter is updated.
+> 
+> The previous value is released before the replacement allocation succeeds.
+> If kmalloc_parameter() fails, the setter returns -ENOMEM with the parameter
+> left as NULL.
+> 
+> Failing zswap's compressor update before zswap is initialized can later
+> trigger:
+> 
+>   BUG: kernel NULL pointer dereference, address: 0000000000000000
+>   RIP: 0010:strcmp+0x10/0x30
+>   Call Trace:
+>     zswap_setup+0x3b1/0x490
+>     zswap_enabled_param_set+0x5b/0xa0
+>     param_attr_store+0x93/0xe0
+>     module_attr_store+0x1c/0x30
+>     kernfs_fop_write_iter+0x116/0x1f0
+> 
+> Allocate and copy the replacement first, then replace the parameter value
+> only after allocation succeeds.
+> 
+> Fixes: e180a6b7759a ("param: fix charp parameters set via sysfs")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jiacheng Yu <yujiacheng3@huawei.com>
 
-Back in v3, Gary suggested this series go via the rust tree.
-Would you be happy with that, or would you prefer a different
-path? If so, is there anything else needed from my side?
+It makes sense to me for param_set_charp() to have commit-or-rollback
+semantics. The set callbacks of other standard parameters behave this
+way, with the exception of array parameters.
 
-Best regards,
-Alvin
-
-On 7/23/26 10:10, Alvin Sun wrote:
-> During tyr debugfs development, a kernel NULL pointer dereference was
-> encountered after `rmmod tyr` while gnome-shell still held /dev/card1 open:
->
-> ```
->    [158827.868132] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
->    [158827.868918] Mem abort info:
->    [158827.869177]   ESR = 0x0000000086000004
->    [158827.869519]   EC = 0x21: IABT (current EL), IL = 32 bits
->    [158827.870000]   SET = 0, FnV = 0
->    [158827.870281]   EA = 0, S1PTW = 0
->    [158827.870571]   FSC = 0x04: level 0 translation fault
->    [158827.871043] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000108dec000
->    [158827.871623] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
->    [158827.872242] Internal error: Oops: 0000000086000004 [#1]  SMP
->    [158827.872246] Modules linked in: tyr sunrpc snd_soc_simple_card rk805_pwrkey snd_soc_simple_card_utils rtw88_8822bu display_connector rtw88_usb rtw88_8822b snd_soc_rockchip_i2s_tdm snd_soc_hdmi_codec
->    rtw88_core]
->    [158827.872337] CPU: 4 UID: 1000 PID: 11276 Comm: gnome-s:disk$0 Tainted: G                 N  7.1.0-rc1+ #331 PREEMPT
->    [158827.880534] Tainted: [N]=TEST
->    [158827.880535] Hardware name: FriendlyElec NanoPi R6C/NanoPi R6C, BIOS v1.1 04/09/2025
->    [158827.880538] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->    [158827.880542] pc : 0x0
->    [158827.880547] lr : _RNvNtCs257m05FHVbX_3tyr2vm8pt_unmap+0x8c/0x12c [tyr]
->    [158827.880578] sp : ffff800083c236b0
->    [158827.880579] x29: ffff800083c236d0 x28: ffff00013f8a0000 x27: 0000000000000000
->    [158827.880585] x26: 000000000000007c x25: ffff000108e6ed80 x24: 0000000000401000
->    [158827.880590] x23: 0000000000000000 x22: 0000000040000000 x21: 0000000000001000
->    [158827.880595] x20: ffff00010f778138 x19: 0000000000400000 x18: 00000000ffffffff
->    [158827.880600] x17: 000000040044ffff x16: 045000f2b5503510 x15: 0720072007200720
->    [158827.880606] x14: 0720072007200720 x13: 0000000000401000 x12: 0000000000400000
->    [158827.880611] x11: ffff800083c239d0 x10: ffff000141e4fd88 x9 : 0000000000000000
->    [158827.880615] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000400000
->    [158827.880620] x5 : ffff00013f8a0000 x4 : 0000000000000000 x3 : 0000000000000001
->    [158827.880625] x2 : 0000000000001000 x1 : 0000000000400000 x0 : ffff00010f778138
->    [158827.880630] Call trace:
->    [158827.880632]  0x0 (P)
->    [158827.880635]  _RNvXs6_NtCs257m05FHVbX_3tyr2vmNtB5_9GpuVmDataNtNtNtCsgmSOfgXi5CZ_6kernel3drm5gpuvm11DriverGpuVm13sm_step_unmap+0x3c/0x120 [tyr]
->    [158827.891166]  _RNvMs4_NtNtNtCsgmSOfgXi5CZ_6kernel3drm5gpuvm6sm_opsINtB7_5GpuVmNtNtCs257m05FHVbX_3tyr2vm9GpuVmDataE13sm_step_unmapB13_+0x18/0x34 [tyr]
->    [158827.891187]  op_unmap_cb+0x78/0xb0
->    [158827.891196]  __drm_gpuvm_sm_unmap+0x18c/0x1b4
->    [158827.891204]  drm_gpuvm_sm_unmap+0x38/0x4c
->    [158827.891209]  _RNvMs5_NtCs257m05FHVbX_3tyr2vmNtB5_2Vm7exec_op+0x1cc/0x254 [tyr]
->    [158827.894085]  _RNvMs5_NtCs257m05FHVbX_3tyr2vmNtB5_2Vm11unmap_range+0x124/0x188 [tyr]
->    [158827.894105]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeNtNtCs257m05FHVbX_3tyr3gem8KernelBoEBK_+0x44/0xd8 [tyr]
->    [158827.894125]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeINtNtNtCsgmSOfgXi5CZ_6kernel5alloc4kvec3VecNtNtCs257m05FHVbX_3tyr2fw7SectionNtNtBL_9allocator7KmallocEEB1r_+0x3c/0x100 [tyr]
->    [158827.894147]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeINtNtNtCsgmSOfgXi5CZ_6kernel4sync3arc3ArcNtNtCs257m05FHVbX_3tyr2fw8FirmwareEEB1p_+0x94/0x190 [tyr]
->    [158827.894167]  _RNvMs4_NtNtCsgmSOfgXi5CZ_6kernel3drm6deviceINtB5_6DeviceNtNtCs257m05FHVbX_3tyr6driver12TyrDrmDriverE7releaseBW_+0x30/0x98 [tyr]
->    [158827.899550]  drm_dev_put.part.0+0x88/0xc0
->    [158827.899557]  drm_minor_release+0x18/0x28
->    [158827.899562]  drm_release+0x144/0x170
->    [158827.899567]  __fput+0xe4/0x30c
->    [158827.899573]  ____fput+0x14/0x20
->    [158827.899579]  task_work_run+0x7c/0xe8
->    [158827.899586]  do_exit+0x2a8/0xac4
->    [158827.899590]  do_group_exit+0x34/0x90
->    [158827.899594]  get_signal+0xaac/0xabc
->    [158827.899599]  arch_do_signal_or_restart+0x90/0x3e8
->    [158827.899606]  exit_to_user_mode_loop+0x140/0x1d0
->    [158827.899613]  el0_svc+0x2f4/0x2f8
->    [158827.899620]  el0t_64_sync_handler+0xa0/0xe4
->    [158827.899627]  el0t_64_sync+0x198/0x19c
->    [158827.899632] ---[ end trace 0000000000000000 ]---
-> ```
->
-> The root cause: `fops.owner` was `NULL` in Rust DRM drivers, so the kernel
-> never blocked module unloading while file descriptors were open. This leads to
-> use-after-free when drm_release (or other fops) is called on freed module code.
->
-> The series moves `THIS_MODULE` into the `ModuleMetadata` as a const, threads it
-> through `#[vtable]` to set `fops.owner` in DRM/miscdevice, and updates configfs
-> and rnull to use `this_module::<LocalModule>()`.
->
-> Assisted-by: opencode:glm-5.2
-> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 > ---
-> Changes in v9:
-> - Rename the binder commit prefix from `rust: binder:` to `rust_binder:`
->    to match the in-tree module name.
-> - Link to v8: https://lore.kernel.org/r/20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev
->
-> Changes in v8:
-> - Remove unused `crate::LocalModule` import in rnull configfs.
-> - Link to v7: https://lore.kernel.org/r/20260627-fix-fops-owner-v7-0-33cd3990edf0@linux.dev
->
-> Changes in v7:
-> - Use `crate::LocalModule` in `configfs_attrs!` and silence `clippy::crate_in_macro_def`, per Gary's review.
-> - Link to v6: https://lore.kernel.org/r/20260624-fix-fops-owner-v6-0-5295e333cb3e@linux.dev
->
-> Changes in v6:
-> - Update MAINTAINERS to cover the new `rust/kernel/module.rs`.
-> - Link to v5: https://lore.kernel.org/r/20260624-fix-fops-owner-v5-0-aa1cba242f05@linux.dev
->
-> Changes in v5:
-> - Add `#[inline]` to the `this_module()` helper.
-> - Fix configfs doc comment to reference `crate::LocalModule` instead of
->    bare `LocalModule`.
-> - Link to v4: https://lore.kernel.org/r/20260623-fix-fops-owner-v4-0-0daf5f077d5c@linux.dev
->
-> Changes in v4:
-> - Move module-related types into a new `rust/kernel/module.rs`.
-> - Migrate binder from the `module!`-generated `THIS_MODULE` static to
->    `this_module::<LocalModule>()`.
-> - Reorganise the series so that every commit builds independently, and
->    drop the legacy `THIS_MODULE` static once all users are migrated.
-> - Link to v3: https://lore.kernel.org/r/20260622-fix-fops-owner-v3-0-49d45cb37032@linux.dev
->
-> Changes in v3:
-> - Renamed vtable associated type `ThisModule` to `OwnerModule`
-> - Added `this_module()` helper for ergonomic `THIS_MODULE` access
-> - Refined vtable macro implementation: one-liner detection and single `defined_items` set
-> - Reordered commits to place doctest fallback before vtable auto-insert
-> - Link to v2: https://lore.kernel.org/r/20260521-fix-fops-owner-v2-0-fd99079c5a04@linux.dev
->
-> Changes in v2:
-> - Merged old `static THIS_MODULE` and v1's `MODULE_PTR` into a single
->    `ModuleMetadata::THIS_MODULE` const
-> - `#[vtable]` macro now auto-inserts `type ThisModule`, removing all per-driver
->    manual patches from v1
-> - Added configfs & rnull usage site updates and doctest `LocalModule` fallback
-> - Link to v1: https://lore.kernel.org/r/20260519-fix-fops-owner-v1-0-2ded9830da14@linux.dev
->
-> ---
-> Alvin Sun (10):
->        rust: module: move module types into `module.rs`
->        rust: module: add `THIS_MODULE` const to `ModuleMetadata` trait
->        rust: doctest: add LocalModule fallback for #[vtable] ThisModule
->        rust: macros: auto-insert OwnerModule in #[vtable]
->        rust: drm: set fops.owner from driver module pointer
->        rust: miscdevice: set fops.owner from driver module pointer
->        rust: configfs: use `LocalModule` for `THIS_MODULE`
->        rust_binder: use `LocalModule` for `THIS_MODULE`
->        rust: macros: remove `THIS_MODULE` static from `module!`
->        rust: module: update MAINTAINERS to cover module.rs
->
->   MAINTAINERS                                |  2 +-
->   drivers/android/binder/rust_binder_main.rs |  3 +-
->   drivers/block/rnull/configfs.rs            |  5 +-
->   rust/kernel/auxiliary.rs                   |  2 +-
->   rust/kernel/configfs.rs                    |  9 ++--
->   rust/kernel/drm/device.rs                  |  3 +-
->   rust/kernel/drm/gem/mod.rs                 |  4 +-
->   rust/kernel/i2c.rs                         |  2 +-
->   rust/kernel/lib.rs                         | 75 +++-------------------------
->   rust/kernel/miscdevice.rs                  |  4 +-
->   rust/kernel/module.rs                      | 80 ++++++++++++++++++++++++++++++
->   rust/kernel/net/phy.rs                     |  6 ++-
->   rust/kernel/pci.rs                         |  2 +-
->   rust/kernel/platform.rs                    |  2 +-
->   rust/kernel/usb.rs                         |  2 +-
->   rust/macros/lib.rs                         |  6 +++
->   rust/macros/module.rs                      | 34 ++++++-------
->   rust/macros/vtable.rs                      | 41 +++++++++++++--
->   scripts/rustdoc_test_gen.rs                | 16 ++++++
->   19 files changed, 189 insertions(+), 109 deletions(-)
-> ---
-> base-commit: b7e5ac83cb16f7ffd11dc23736f84276602100ed
-> change-id: 20260519-fix-fops-owner-e3a77bb27c6c
-> prerequisite-change-id: 20260519-miscdev-use-format-9ab7e83b1c11:v3
-> prerequisite-patch-id: 405b334ff0d48ad350014f05a2321bdbaa025400
-> prerequisite-patch-id: 604b631c81d5423f4ebb2e12ba2d22e9ce371bfc
-> prerequisite-patch-id: cb550d94cefe01920e0d3ced2b2bcbecd76f3907
-> prerequisite-patch-id: 3bc830839742591460cb86d9472c04f4686dc600
-> prerequisite-patch-id: 571058244bc8c7088638d2e3225713011246c7e9
-> prerequisite-patch-id: 347c5a3c6dbef9832bfce8419fc23e6e08ba477f
-> prerequisite-patch-id: 3e202d988b56b88446f7535e90d3f00cf5f15701
->
-> Best regards,
+>  kernel/params.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/params.c b/kernel/params.c
+> index a668863a4bb6..e4f2b71dde1e 100644
+> --- a/kernel/params.c
+> +++ b/kernel/params.c
+> @@ -261,6 +261,7 @@ EXPORT_SYMBOL_GPL(param_set_uint_minmax);
+>  
+>  int param_set_charp(const char *val, const struct kernel_param *kp)
+>  {
+> +	char *tmp;
+>  	size_t len, maxlen = 1024;
+>  
+>  	len = strnlen(val, maxlen + 1);
+> @@ -269,19 +270,20 @@ int param_set_charp(const char *val, const struct kernel_param *kp)
+>  		return -ENOSPC;
+>  	}
+>  
+> -	maybe_kfree_parameter(*(char **)kp->arg);
+> -
+>  	/*
+>  	 * This is a hack. We can't kmalloc() in early boot, and we
+>  	 * don't need to; this mangled commandline is preserved.
+>  	 */
+>  	if (slab_is_available()) {
+> -		*(char **)kp->arg = kmalloc_parameter(len + 1);
+> -		if (!*(char **)kp->arg)
+> +		tmp = kmalloc_parameter(len + 1);
+> +		if (!tmp)
+>  			return -ENOMEM;
+> -		strcpy(*(char **)kp->arg, val);
+> +		strscpy(tmp, val, len + 1);
+
+What's wrong with the plain strcpy() here?
+
+>  	} else
+> -		*(const char **)kp->arg = val;
+> +		tmp = (char *)val;
+> +
+> +	maybe_kfree_parameter(*(char **)kp->arg);
+> +	*(char **)kp->arg = tmp;
+
+Sashiko reports [1] that there is a pre-existing use-after-free window
+between freeing the old parameter and updating kp->arg. However, this
+issue doesn't appear to be valid because any concurrent access to
+a writable charp parameter should be protected by kernel_param_lock().
+This is documented include/linux/moduleparam.h [2].
+
+>  
+>  	return 0;
+>  }
+
+[1] https://lore.kernel.org/linux-modules/20260728075803.AA13C1F000E9@smtp.kernel.org/
+[2] https://github.com/torvalds/linux/blob/v7.2-rc5/include/linux/moduleparam.h#L124
+
+-- 
+Thanks,
+Petr
