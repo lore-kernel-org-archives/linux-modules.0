@@ -1,143 +1,125 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF457439F75
-	for <linux-modules@vger.kernel.org>; Tue, 28 Jul 2026 12:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906EC3A4508
+	for <linux-modules@vger.kernel.org>; Tue, 28 Jul 2026 17:33:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785243471; cv=none; b=uabgvw6ZzpDuswSl48xi2OJnNm7mDyQoBs/bqenMLsGNxsVOIM44EzNFmDMtgAnhiiUJc4yUZoX4oBH80tpRD5noZtieQvyKUK5iU76fnbASzFrla9ly1YJoyzeChknjuZ82lxmCUkJ33YdzsRtQQepls57WCnX7BMrHvRI345g=
+	t=1785260006; cv=none; b=iZwvjL+kuPLFrfQ0m4XJH/aVJ6prt6cgQHR341GcrhUon6K4qecdIWO07N9KvJdggxMwE3ZWDQslum+rON+L3lYF1u0OCgyNggj24ePkTuOuRIaUvdDQs/aHfIl3AbSVCPeQD6//onFsiRkc6zPHR+ae/AeUI/QsUNZUyA40kzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785243471; c=relaxed/simple;
-	bh=TW87QvdQZ8BHmUf8Z7mT2GUcz8XaXspQ0T5WESzY1Rc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LzuxXydK9Jb8kHlIB4Eo6xnAu+rarbJEdPQoYOmK+Rn2ijrIhdnJO1uTC5yRvExcrZ3EFa0h4rqbEF8Y1G53GIkuCx1SCyGg53d9sw58GVIU+kBcvghHbhafpS44uifcmI6rc98kr5eTnG2FQ2rIFp/EFdLWfU9DL4tcLWAlKMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EtU99ShT; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1785260006; c=relaxed/simple;
+	bh=PdUOJu99HkI5PeygkebEZNSzMyeA4frwgEEHVNgJeJk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=naZ6zQ/IDRFR8DatmBBN0mSoA+PyQjCy2II3TYPhYqbRhpTuPH3b02kZEw/jYlj0LlBikj0SJsGTNUDSbLEGY2HevNEDBy31oOuWkvmDTZenrh301VM5z3kYJTXSS8uAq6AFb8h2dxDMiUne81nKN2guIfeMNdVIXL5QEXRAvv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6U5PQu8; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EtU99ShT"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-47f3b39f2a1so3243563f8f.2
-        for <linux-modules@vger.kernel.org>; Tue, 28 Jul 2026 05:57:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6U5PQu8"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cf52d15d88so1591125ad.2
+        for <linux-modules@vger.kernel.org>; Tue, 28 Jul 2026 10:33:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1785243468; x=1785848268; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7c8BG2Wsd8VTOe0aUX7OoWEuZQdz0YbW80d8DVt3rm0=;
-        b=EtU99ShTBJaSbqs4DUrs9ar+Tlx+Ityu8XqvzO6++0RjOqGZO8eZj21WV3Fnlmlufc
-         3VRRqHL1JY81RCijQjbmGAO39ncah3R1WyaJcRWynwEpNls+wvjmB064kUZVFOQAugnw
-         zMyjOyZW3BmjSQxu2tIG5Ui327Pix1QYQzWgjb+K/8vpLFMRiDi+YhDDlF0saLTOOsUz
-         vAC7zP43rY22DvdAAOQsi9FXPtiMHeoa3MVpVmzgq4ImgLAdPUZsm4Ly3VLONJwML2EG
-         Srg8hDY8iIVfyHy0tQlX42+/u2SXoO7ekUR5jICkRS2hxzrF/71o8GeEFneo8wYSA3Sf
-         Pamw==
+        d=gmail.com; s=20251104; t=1785260005; x=1785864805; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rb0WF0n1RxlJGwkmjohF8baQfdZt5q+eDoAvueXnK6s=;
+        b=U6U5PQu8gpdu9pILXDAq+yCrt0pgtenvlY1aE7FDBqE0vmC9KjiNV/wO6bQmZ9fNWG
+         y5XnlGBBFD1+a/kxB+/DS7LixNq+9TFfl+tDlU6AypcVP41qMK1O/Rf5WjNhtTCqumDc
+         eEQq7hCGmXpzcJhsjCQxiwAgU1HHMlGk++jV/P2JCGXDvrXm+Badh1I6iYfDyvwz/1wT
+         etlMzmKhS3vIShxrkMNV2GNVLop6JuUBfFTg+WgNs3M9I8DLGyz3EwQhLSTufJUVI4Xh
+         vXWk/uo9BsXoYcrFyyHqLgu3s4siWWdbvrr6lNIets3MHfXcaFywMJGnF6TLjD+EC1Dg
+         Farg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785243468; x=1785848268;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1785260005; x=1785864805;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7c8BG2Wsd8VTOe0aUX7OoWEuZQdz0YbW80d8DVt3rm0=;
-        b=TpSxSbPtuyqE2VeWXPnRdlHf4k4IoaKJZT8vWS21tcxkME0Us1blW1dHGVtGCHwXvb
-         SyGyUVpT1ldyqd/45rpDCKzZA5MJO4YEV4F8y6wNDqZIMkjFgjiZli2aaANEO3/mUVDY
-         r1+tnaO6yz63HnjFWuz2xE1b0UZndfSu+xuOVib5QAcmZKP+nmVDOWCFvbKFD8onLGHn
-         I3FvXLLMC+W81e/ZtWUSs5S/6NShWPE36ZhKb2GtoGzpyEUENGdfz5hazdOPGDT9WEvv
-         3suvjsc0v9NfQvR9xx/5doBEBxK0FC2PUrwqgzEtBvGZsOS4ZfdKB5GCbI9Sump+kEV9
-         F/vQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpUF+4LeIjTAnoC+JS4hsAJI2pQ51geEwHkGxKAQ9Kta4Yu10m8gLkOC3xBqlnHGOANYo7qhHvsyVFPWkl7@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwD1uDmIJhc7OOmjrWcm/KPRLUXOTVAXnr0VqCTra5d/Gd5gU5
-	fbDk4A+nzzOkv3Na+i6Fp5i2kZ2eqaX7x226+vNuAiOwNlkHTYi22bi/vB9ilCqrTIaH67qdkwe
-	dxQ5sgMU=
-X-Gm-Gg: AR+sD13sovotNcDwwN2zdLTWR8iJ+w2joHend64Kc4kzblWwY4CqHOjMQCfx2cwascB
-	jKjrhTbKX5vg49q3KaxYKjIsxW6KsmDKepDeU2J/oG9OrJzNMMd3ozFfURYvHIIrPkDn7RBRQ8T
-	A6mQ3ib6UJ6kHnjM3Jdl0n+g5b5WNHN51P3bJY2sXrC86R173kWCQGZtIWYWioCUseZt9NaQTL8
-	UbUt4/SrNvKO3xrTgJ21h3bhmjBXH/FuZKgwRL3xMEMlXqtXjGM1NgDttwurmEBX/dXDhrToUj9
-	sP6oca+FsLXv2h5oM6YCdH/raG0QYqYjCsiajB8+BQM7xkM4wL5iJ0JoWjP/nDFoLT1YJj9oSr7
-	1vWlgI+ZZWrOC+rNj4+fy6JihCQJ/yuU5P35SEoE6zTcIr/LYt+/MGCbaPKJ4zomu1/snp0BvN/
-	urmUYRQm6dq9Tz2HpKh0VUgj0CVnUlS2/oAtw58pA=
-X-Received: by 2002:a05:6000:22c5:b0:47f:838c:4256 with SMTP id ffacd0b85a97d-47fb1e6cd19mr2838433f8f.16.1785243468095;
-        Tue, 28 Jul 2026 05:57:48 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85c67339sm61318643f8f.31.2026.07.28.05.57.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jul 2026 05:57:47 -0700 (PDT)
-Message-ID: <ff0b7cdd-8fa7-4cb8-9e21-6a7204809766@suse.com>
-Date: Tue, 28 Jul 2026 14:57:47 +0200
+        bh=rb0WF0n1RxlJGwkmjohF8baQfdZt5q+eDoAvueXnK6s=;
+        b=jS5EYn30MY1FosWaY2v1+lZWziyvnYNjEfYbsQXLq7j5O3KFcRpV0Pj/41TDH9kW2J
+         xaiesvG9ITa9PW6C1I8dEmD0GLSBHKf2QiAqKgFOpwwXzP8m4RxWYFEHgYT03n/CJO5a
+         bTz4OKG2NAheKddV5iHWkmdl/hppqBaJpYXX6G+HpAnFJJlijUuZ84uYKmbSaDKAeOCH
+         mnD90yYvGYlJkxqE0XMQAXwRHo/jL0BsdqSMbNYTWgvh36srZhN0BAyhldDLAzceTZcn
+         9lCy5Z8KbV/rnoghnYdHB9SDfLt6f9L/iVlQEKpLrIdir8VBrIeGNmazAe7shDJJkc57
+         FYEA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr/vlShMsuuZ+AqFgdFfYafhsxAwhoO8TGOYxGyI+bIwhcCsxWm1Q5CM5M+SpEO8b1Vd+dA9cTyj+DMTzwL@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEwr+4b3WTaEZsbsdn0gO1o63J9UdCYl1omkmEE0LqkCLEJ2Bi
+	42RVOghQYN2qpRn2k0mRFnXwa0cmH+zaepeW7ZpQFLlv3SvQ0gSnuU8X
+X-Gm-Gg: AR+sD13dgscIc1RzWS3nnhJQoug/zNuZsrC60PfFJZSA1OvHODB3hS+S96JD4WVAiwv
+	VNSahJSxLfEXmWAMf4cGUiq21/86ANNQ/kuSxIvxg2Cm4aarKW/M4f46MM38VucbwlItA2KyaIS
+	yuWue20vzgmUyYzpiq2giOwFCcfdrUXo/2JNbD+16Qd8S3eCC9D0AKDXovDgWaVrvvSKBIucFsn
+	a6gkddlrBT45Jzr9FjPC99wmwuA9pWQdqUe2X4wpFhe+04gcEUPejuvPCsFgC/lWxVhRVBctCyN
+	9MKXBL3x3PbKzmP1+APn5CwPIIMOBJpvTFzgpGqbC4ZCsTxuzMYzcOenV9fZPGlOWo6fXR4cp92
+	+6GParMTue6sxklT4wBYbTySJFwaff77ypwk38lFjCWuO0uTkFZWExh4Et0f38VlFcUCIBf4EVm
+	2c/+dtXa4X+RZCEoB2RapufkLxCVph6JpW4zkkQ4cv1cFEE60gUBvYmP6MDLOhe70B8E+PiDBKI
+	roAMyhK2Fd9/vwLRBVIv+mPuveWvZr9yF4o
+X-Received: by 2002:a17:903:2281:b0:2c9:b8b7:5d1c with SMTP id d9443c01a7336-2d015b0a013mr38436345ad.16.1785260004859;
+        Tue, 28 Jul 2026 10:33:24 -0700 (PDT)
+Received: from localhost.localdomain ([2405:acc0:1306:9d5b:e192:4a0c:2079:ffb7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504bb29b2sm802360eec.13.2026.07.28.10.33.21
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 28 Jul 2026 10:33:24 -0700 (PDT)
+From: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+To: samitolvanen@google.com,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org
+Cc: atomlin@atomlin.com,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] module: reject malformed .modinfo sections
+Date: Tue, 28 Jul 2026 23:18:18 +0545
+Message-ID: <20260728173318.63736-1-acharyalaxman8848@gmail.com>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] params: fix charp corruption on allocation failure
-To: Jiacheng Yu <yujiacheng3@huawei.com>
-Cc: samitolvanen@google.com, rusty@rustcorp.com.au, hannes@cmpxchg.org,
- yosry@kernel.org, nphamcs@gmail.com, liuyongqiang13@huawei.com,
- linux-modules@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260728085518.3865621-1-yujiacheng3@huawei.com>
- <dfe25916-0f2e-44ed-8f49-d7448a0e28fa@suse.com>
- <c9643f86-f196-4c99-8129-2314a33a990f@huawei.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <c9643f86-f196-4c99-8129-2314a33a990f@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/28/26 2:22 PM, Jiacheng Yu wrote:
-> On 28/07/2026 18:46, Petr Pavlu wrote:
->> On 7/28/26 10:55 AM, Jiacheng Yu wrote:
->>> diff --git a/kernel/params.c b/kernel/params.c
->>> index a668863a4bb6..e4f2b71dde1e 100644
->>> --- a/kernel/params.c
->>> +++ b/kernel/params.c
->>> @@ -261,6 +261,7 @@ EXPORT_SYMBOL_GPL(param_set_uint_minmax);
->>>  
->>>  int param_set_charp(const char *val, const struct kernel_param *kp)
->>>  {
->>> +	char *tmp;
->>>  	size_t len, maxlen = 1024;
->>>  
->>>  	len = strnlen(val, maxlen + 1);
->>> @@ -269,19 +270,20 @@ int param_set_charp(const char *val, const struct kernel_param *kp)
->>>  		return -ENOSPC;
->>>  	}
->>>  
->>> -	maybe_kfree_parameter(*(char **)kp->arg);
->>> -
->>>  	/*
->>>  	 * This is a hack. We can't kmalloc() in early boot, and we
->>>  	 * don't need to; this mangled commandline is preserved.
->>>  	 */
->>>  	if (slab_is_available()) {
->>> -		*(char **)kp->arg = kmalloc_parameter(len + 1);
->>> -		if (!*(char **)kp->arg)
->>> +		tmp = kmalloc_parameter(len + 1);
->>> +		if (!tmp)
->>>  			return -ENOMEM;
->>> -		strcpy(*(char **)kp->arg, val);
->>> +		strscpy(tmp, val, len + 1);
->>
->> What's wrong with the plain strcpy() here?
-> 
-> Functionally, plain strcpy() is fine here.  The preceding
-> strnlen(val, maxlen + 1) either finds the NUL byte within the limit or
-> rejects the string, and the new allocation is exactly len + 1 bytes.
-> 
-> However, when this patch rewrites the line to use tmp,
-> checkpatch --strict reports the following warning:
-> 
->     WARNING: Prefer strscpy over strcpy
-> 
-> Since the line is being rewritten anyway, I changed strcpy() to
-> strscpy() to follow that preference:
-> https://github.com/KSPP/linux/issues/88
+get_modinfo() and module_next_tag_pair() parse .modinfo as a sequence of NUL-terminated tag=value strings. elf_validity_cache_index_info() caches the .modinfo section index and immediately calls get_modinfo() to find the module name for early error reporting, but it does not verify that the section is non-empty or NUL-terminated first.
 
-I don't see a benefit to using strscpy() here. The length of the string
-is already known and the tmp buffer is correctly sized, so using
-`memcpy(tmp, val, len + 1)` seems most appropriate to me.
+A malformed module can therefore make the loader read past the end of .modinfo while searching for a tag.
 
+Reject empty .modinfo sections and sections that are not NUL-terminated before parsing them.
+
+Signed-off-by: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+---
+ kernel/module/main.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 46dd8d25a..7450319f9 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2083,6 +2083,8 @@ static int elf_validity_cache_secstrings(struct load_info *info)
+ static int elf_validity_cache_index_info(struct load_info *info)
+ {
+ 	int info_idx;
++	Elf_Shdr *info_shdr;
++	char *modinfo;
+ 
+ 	info_idx = find_any_unique_sec(info, ".modinfo");
+ 
+@@ -2096,6 +2098,18 @@ static int elf_validity_cache_index_info(struct load_info *info)
+ 	}
+ 
+ 	info->index.info = info_idx;
++	info_shdr = &info->sechdrs[info_idx];
++	modinfo = (char *)info->hdr + info_shdr->sh_offset;
++
++	if (info_shdr->sh_size == 0) {
++		pr_err("empty .modinfo section\n");
++		return -ENOEXEC;
++	}
++	if (modinfo[info_shdr->sh_size - 1] != '\0') {
++		pr_err(".modinfo section isn't NUL terminated\n");
++		return -ENOEXEC;
++	}
++
+ 	/* Try to find a name early so we can log errors with a module name */
+ 	info->name = get_modinfo(info, "name");
+ 
 -- 
-Thanks,
-Petr
+2.51.2
+
