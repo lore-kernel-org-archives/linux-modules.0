@@ -1,116 +1,156 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571683909BF
-	for <linux-modules@vger.kernel.org>; Wed, 29 Jul 2026 17:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF533AAF6F
+	for <linux-modules@vger.kernel.org>; Wed, 29 Jul 2026 17:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785346971; cv=none; b=S3rOuzfodyPMCBVF3jdfhqVe+hOl3rNSdh7Gnhep1ejdeMUb9+BN/Gyz8cHtD9pU+ZhtjHIRin22bXT0mfjlZMBbo4oSRZXdSasq+SfJCe8fCVydNYZEVSe7nbICk0MkMM3obyfiDmRZpfcRPX3p2lHSOzm+mTn0aBklYvFDjhw=
+	t=1785347924; cv=none; b=ChzDiHoHwhjWyCFC5yHqZrmfN1NzXpUyWL9bVNWliDaQdmH8E57SuMfl13F9wt0Ea3RqsSSG5uKYfp1xD4gLNioO6994Ug2gja5/KeuwUydlGUc96XHeEmoSCEeO+SzmKiF0SWSLIVETdONL/oRIN00JeYjX9etiXK8LHKxvTPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785346971; c=relaxed/simple;
-	bh=/d7YZesbgIhTfsBT0OxeHqZOSsValIyxaDC9X7ELh9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VT5K3w3sOQGVFTWtD+mFrSodEa7VWmEmmbBdHt+OunPIy1WH4TH9CoRpJpHOVAAJzgezkOlkXMg4yBZDRETFfYIJxxzz9AqNledCHEZINI8xWS53sadGM1yyaPFiBFfpK2WTRUhshMW/iqw4qHeI8JjfQkIe1J1Cz7QUuQnTVgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XOpIKzYF; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785347924; c=relaxed/simple;
+	bh=NEO6v8cndrVcHRDhdKUInRxpVow4micaHOZcmrmZfvE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=UiCEYF3GiYxKlBtxV+EVZkPJCCNGY/x9oxo3zP9JanyopTH7w/ofIDSU92U1a4gKT4KhmJMvE9ZtusfnriuXJX2t/dZJPGleBh8KYr/wc52zXHPluZgJeYbuulpFq8ZucILx93Z0AefkhSFdME0toCBggxrv914rKn/H2+U4ZYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LfKx39Al; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XOpIKzYF"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cf41bab353so22207905ad.0
-        for <linux-modules@vger.kernel.org>; Wed, 29 Jul 2026 10:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785346964; x=1785951764; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SUHRuCCMeHTWfkl2PV/NItIGRfvsS3lSuL6WFFN9DwM=;
-        b=XOpIKzYF4BoV327aT9HOcwZ8wpiFv/JFyjL1U0tiYMY3zGIWjkQWdaT6eqO/jWcByH
-         atdMD/id4sCf62p5OufSSzDwvDX5/oOpW0OwkUqakul/Kvh+GQHT3uBWNYq7VIjZssMT
-         pdCjuqm4y2HL03UOFaMrxuRVLHQQzMwYOAzGP1udq3qGDr4UM2wy+npbN8wo2Gfqbr1n
-         UpbORKO8xdcVbEJa3irwdpTMmxWM3SC+2hJUDdepLQQfAplXZvJQk0P71OcB5fOSS9sm
-         W4UmNoNzAEKaeWvoANDTpY222dvwgjUsWfds3XzaWBREoFI2/tPKqkFlxKY1p3zDmTo2
-         odAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785346964; x=1785951764;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SUHRuCCMeHTWfkl2PV/NItIGRfvsS3lSuL6WFFN9DwM=;
-        b=B3s484JyoMUVNNF2T+1WaHts/wv3anG96sPslQt0xu7uU6z85zWlH7c5pSMcmTPleC
-         LpXfehwlBd6d1bPCKtRELYSzs3R86ozwsiGYsbyjkSe8Rp7bBo3rCEWnkBOjCFemeOFz
-         KOCLQyn86juSUR6YYgX6O8BN22ShlWM1Kpulsx1Uy1S3voISmHo3C2rkV9by28yuztNR
-         sXP5lVMk8asVs+wlQVmtoCxLY4jX+vDzRbz+7RaJ07BKOrtN12IRcRb1XGbKtDRAzeuv
-         ncoBmBclklbs5/8Il5UCGTTBMqQYuZE/JVHRSZUKcGjyp/p5CB4tnmU/FSBJydXPLX0h
-         /I1w==
-X-Forwarded-Encrypted: i=1; AHgh+Ro+4aG4jzvS75XrFUCziICLF473Z/B1KPHXGMjEG/Yv3vH33enJlIRkJS0lw1a2kDnuuu1d2ADTq8EZPgCu@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWZ4zgRc+xCbFI9byYWEJBy0Vr9S4lBgUwfGliD5dxyRIgOgrD
-	FJeRGlDgirXMEThZqRZQvxgKsoA4qJpvFNhlwTDwaUAIHhnD7n7bO944
-X-Gm-Gg: AR+sD11c0Cw0S/ohvShpS+n1ZaegsTjjMwlKpB7YuEtwBIbiWGiypGeeVPWMtuaBk0L
-	WK4nSavLmN6uxLCKDLZScHEsXbguts5zCf2cb7kYm8qVJ4Ntl6uX0WzQchM7bDH/x7CazUYZMhM
-	4wWZJm4rw5huI2dGqT2gWGTH//9QvzyGSbjq+5lPHTZ7xYBIHXezBAFkjkxTaXyr6QrQsoBscFW
-	nGjFoLTrsASaef8UkCF5fhcoqYwfHAvQOHwzgtjb8TOTQiqlr2oDn3NLJ+o+5GLfmcjiPLT2TXH
-	LR3B9x1qGwMGdaPAWmKyKugAJsNeRlpQTsZtsci8XioMVz1fQ1PonPY9cp86QFbCGeJHkew2w77
-	R/IdVc1JQOGS5pkyxk4I4jh0GA9XGVmP0uzaZeQj41RrTAbDEFhzCc73Rr2yopshsq93XgZZuqg
-	JW+USOFbsZMtv6L5pYANU9/Rq0VDKVHcfPF91mAYi50/PsMs1P6hzzURhGMcPR1Gd8oRBraMgJu
-	bkEr8M29TnNl/4F45tItZ+wfuIly9fFL38GErSdBhYyKofl2vFXa4s5NZ27t2rqKo7PODFiyUuN
-	JyQIkrQ=
-X-Received: by 2002:a05:6a21:7106:b0:3c3:a4f4:c5c1 with SMTP id adf61e73a8af0-3c8ba60b296mr8362835637.60.1785346963929;
-        Wed, 29 Jul 2026 10:42:43 -0700 (PDT)
-Received: from localhost.localdomain ([101.251.7.10])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504cc64c2sm12446128eec.19.2026.07.29.10.42.39
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 29 Jul 2026 10:42:43 -0700 (PDT)
-From: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] lib/bug: ignore non-allocated module bug tables
-Date: Wed, 29 Jul 2026 23:27:34 +0545
-Message-ID: <20260729174234.86242-1-acharyalaxman8848@gmail.com>
-X-Mailer: git-send-email 2.51.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LfKx39Al"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D551F000E9;
+	Wed, 29 Jul 2026 17:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785347915;
+	bh=tCuitixg4MSFTrpz6Eajo+LEkDZHosEHSR3nH36IRF4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LfKx39AlhFP0mlS1K63gAItPXxksagV6fBvTjWRjyBuc0OmgKHQyyGT/qOuBAE1AX
+	 fZtanrgZ0nX6Z5iNt0V1yebf7g4UyEP/+tY/G2zJ5BCQPmQknNxg0jo3nRzEpG7r0f
+	 B31G0zFtDvCc9H/L2NIdj2c/jwPCmeoDQkyphvqbiURH+CwPxNfvsMyk27P2bbu5Kq
+	 QM2ZKHp+qe5N1B23jTIGtVumdQUF4eL4x7lqxU2A+XKEEeBNfHb5E14aX4gjD+Zzlh
+	 ab6FPH4ccHUqu1J6cZRWPiNJkwnMWg7DG0NyxQJvfuApzRHA5ONNQLo9SmcKtweVg4
+	 cMPyXMr3NMIig==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] lib/bug: ignore non-allocated module bug tables
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Laxman Acharya Padhya" <acharyalaxman8848@gmail.com>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <20260729174234.86242-1-acharyalaxman8848@gmail.com>
+References: <20260729174234.86242-1-acharyalaxman8848@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 29 Jul 2026 17:58:34 +0000
+Message-Id: <20260729175834.E1D551F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-rewrite_section_headers() initially sets sh_addr for every section to its
-address in the temporary module image. Only SHF_ALLOC sections are later
-copied to module memory and have sh_addr updated.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-module_bug_finalize() accepts any section named __bug_table. A malformed
-module can therefore leave mod->bug_table pointing into the temporary
-image, which is freed after loading. A later BUG/WARN lookup would then
-scan freed memory.
+Pre-existing issues:
+- [High] Systemic Use-After-Free (UAF) due to missing SHF_ALLOC validation =
+across multiple subsystems.
+- [High] Integer overflow in module layout calculation leading to out-of-bo=
+unds reads.
+--
 
-Require the bug table section to be allocated before retaining its
-address. Valid modules are unchanged because __bug_table is allocated.
+--- Patch [1]: [PATCH] lib/bug: ignore non-allocated module bug tables ---
+commit 2f65def59be64b4d6ec8eb77329b4e7bc9acac8c
+Author: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
 
-Fixes: 7664c5a1da47 ("[PATCH] Generic BUG implementation")
-Signed-off-by: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
----
- lib/bug.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+lib/bug: ignore non-allocated module bug tables
 
-diff --git a/lib/bug.c b/lib/bug.c
-index 7c1c2c27f..44966ead1 100644
---- a/lib/bug.c
-+++ b/lib/bug.c
-@@ -94,7 +94,8 @@ void module_bug_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
- 	/* Find the __bug_table section, if present */
- 	secstrings = (char *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
- 	for (i = 1; i < hdr->e_shnum; i++) {
--		if (strcmp(secstrings+sechdrs[i].sh_name, "__bug_table"))
-+		if (strcmp(secstrings + sechdrs[i].sh_name, "__bug_table") ||
-+		    !(sechdrs[i].sh_flags & SHF_ALLOC))
- 			continue;
- 		mod->bug_table = (void *) sechdrs[i].sh_addr;
- 		mod->num_bugs = sechdrs[i].sh_size / sizeof(struct bug_entry);
--- 
-2.51.2
+This commit updates module_bug_finalize() to require the __bug_table section
+to have the SHF_ALLOC flag set before retaining its address. This prevents a
+malformed module from leaving the bug table pointing into the temporary
+module image, which is freed after loading.
 
+> diff --git a/lib/bug.c b/lib/bug.c
+> index 7c1c2c27f58e7..44966ead1e5fa 100644
+> --- a/lib/bug.c
+> +++ b/lib/bug.c
+> @@ -94,7 +94,8 @@ void module_bug_finalize(const Elf_Ehdr *hdr, const Elf=
+_Shdr *sechdrs,
+>  	/* Find the __bug_table section, if present */
+>  	secstrings =3D (char *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+>  	for (i =3D 1; i < hdr->e_shnum; i++) {
+> -		if (strcmp(secstrings+sechdrs[i].sh_name, "__bug_table"))
+> +		if (strcmp(secstrings + sechdrs[i].sh_name, "__bug_table") ||
+> +		    !(sechdrs[i].sh_flags & SHF_ALLOC))
+>  			continue;
+
+[Severity: High]
+This is a pre-existing issue, but does this same vulnerability exist in oth=
+er
+subsystems that look up sections by name without checking SHF_ALLOC?
+
+For example, in module_cfi_finalize() it assigns the section address to
+mod->kcfi_traps without verifying the SHF_ALLOC flag:
+
+kernel/cfi.c:module_cfi_finalize() {
+    ...
+    if (strcmp(secstrings + sechdrs[i].sh_name, "__kcfi_traps"))
+        continue;
+    mod->kcfi_traps =3D (s32 *)sechdrs[i].sh_addr;
+    ...
+}
+
+Similarly, in unwind_module_init(), unvalidated ORC section addresses are
+saved into the module structure:
+
+arch/x86/kernel/unwind_orc.c:unwind_module_init() {
+    ...
+    mod->arch.orc_unwind_ip =3D orc_ip;
+    mod->arch.orc_unwind =3D orc;
+    ...
+}
+
+There is also module_init_ftrace_plt() which saves the unvalidated ftrace
+trampolines address retrieved via find_section(), which ignores flags:
+
+arch/arm64/include/asm/module.h:find_section() {
+    ...
+    if (strcmp(name, secstrs + s->sh_name) =3D=3D 0)
+        return s;
+    ...
+}
+
+If a malformed module provides these sections without the SHF_ALLOC flag,
+would their sh_addr similarly point to the temporary module image buffer
+and cause a use-after-free when the buffer is freed?
+
+>  		mod->bug_table =3D (void *) sechdrs[i].sh_addr;
+>  		mod->num_bugs =3D sechdrs[i].sh_size / sizeof(struct bug_entry);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but can an extremely large
+section size cause an integer overflow leading to an out-of-bounds read
+here?
+
+If a malformed module provides a section marked with SHT_NOBITS and
+SHF_ALLOC, elf_validity_cache_sechdrs() explicitly skips size validation:
+
+kernel/module/main.c:elf_validity_cache_sechdrs() {
+    ...
+    case SHT_NOBITS:
+        /* No contents, offset/size don't mean anything */
+        continue;
+    ...
+}
+
+Then, in module_get_offset_and_type(), adding a massive 64-bit sh_size to a
+32-bit offset truncates the result:
+
+kernel/module/main.c:module_get_offset_and_type() {
+    ...
+    mod->mem[type].size =3D offset + sechdr->sh_size;
+    ...
+}
+
+This wrap-around results in a small allocated memory layout size. However,
+since module_bug_finalize() uses the original un-truncated 64-bit sh_size
+to calculate mod->num_bugs, would a subsequent kernel warning or bug
+trigger iteration far beyond the actually allocated memory?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729174234.8624=
+2-1-acharyalaxman8848@gmail.com?part=3D1
