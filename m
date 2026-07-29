@@ -1,121 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BED4BC003;
-	Wed, 29 Jul 2026 14:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571683909BF
+	for <linux-modules@vger.kernel.org>; Wed, 29 Jul 2026 17:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785335042; cv=none; b=DC09xxX3+hMFiy46ScKl03agQ1LTydG9rSN2RMTlADVdFMbi7XMkLw3rUjfez6FWNYoJu6VbwUSHlDuGCcyvSQuhG3Mq2PqR+9rF3rM8+wbnwB+Y4BFsXZKWM88iF3sZ8jEsiurVLa0cOrzkNrVf9er6YZ4Sk/WKDP61uWcfSu0=
+	t=1785346971; cv=none; b=S3rOuzfodyPMCBVF3jdfhqVe+hOl3rNSdh7Gnhep1ejdeMUb9+BN/Gyz8cHtD9pU+ZhtjHIRin22bXT0mfjlZMBbo4oSRZXdSasq+SfJCe8fCVydNYZEVSe7nbICk0MkMM3obyfiDmRZpfcRPX3p2lHSOzm+mTn0aBklYvFDjhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785335042; c=relaxed/simple;
-	bh=0d7Rg5BwmRCIW23il/Hg/oCp4Mj+VT5u/4XHQmf4cco=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cwxs/ylG1TkG/v1ihHlGUAl1OgLZHgFveSFcWMFoeU1MM0yp8FLszZrTyYbHDcBDU/HIE8ogGZ+J0ZJLzLhqtbTgG6xWIN3zXlnE03bMxp1S5jjIL9Ykm4XyNQw4WUcG2N3W/CxTzzY6OY1eU3ubHsK9d3fgmHxSokprCZAvWLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDquwMYS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785346971; c=relaxed/simple;
+	bh=/d7YZesbgIhTfsBT0OxeHqZOSsValIyxaDC9X7ELh9g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VT5K3w3sOQGVFTWtD+mFrSodEa7VWmEmmbBdHt+OunPIy1WH4TH9CoRpJpHOVAAJzgezkOlkXMg4yBZDRETFfYIJxxzz9AqNledCHEZINI8xWS53sadGM1yyaPFiBFfpK2WTRUhshMW/iqw4qHeI8JjfQkIe1J1Cz7QUuQnTVgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XOpIKzYF; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDquwMYS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178D11F00A3A;
-	Wed, 29 Jul 2026 14:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785335040;
-	bh=y9UyaQqkrLiI46oxG56D41N9AHaltzW+DnQMUtlsBPM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=KDquwMYSo7uSPcUN9wd/bZQoVsSAjgd9xqrM+h8o7uwn97TsU6oaA5uIeC9Isa30F
-	 nsgVGX3ckvebUDdcSrE4M2Psn7gDAfezKf9O/ozGHeKAh0u11pMK50x21x2TmE7etM
-	 6WfilRjgelOmlmajCRi++9Z/S7LzD43eq23rgZb7j1GZGqEVvs18W0Ts3LLwkHGADa
-	 YRLwaCma2sgtSw+Y7397NW7JI5iNk/Bf+6YlaBWQBRZ+dF026xIR6iPJFg6C5dGzNs
-	 9V5UEj2T0jaX1dnobok7q6luxhm1wS9BMjnqbSAH3JaKtOmzA6ZdOJs8cip5nCaycx
-	 MyUy71riqnDhw==
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 46552F40067;
-	Wed, 29 Jul 2026 10:23:59 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Wed, 29 Jul 2026 10:23:59 -0400
-X-ME-Sender: <xms:_wxqar4dqBD2UAAZYJY34tWY_iHnd6QVQZdXpLmfybgsZBLOP8jiNQ>
-    <xme:_wxqasktGF7SvayUbSIIPR0A9On3GIMuf1-cnlvroNrz3_Xc3GdrzqOchfzROAyT_
-    qvpxVdU6Te-daG7Ef3bv01bd9sdyuhadw98fJZ_3fe2cLARtt_pAAM>
-X-ME-Received: <xmr:_wxqatJtAumgstpLM75MPTXTDohpVguK96DiqmFYd1mjt2n8Vktl9H6ki3wzkqLtgwFKMhWw28RYo4sqcZhUz0-o_rcGI2G5>
-X-ME-Proxy-Cause: dmFkZTEUCb/Ik8dMdiU33XRhWM/MkjrbXq4BUWZITAMXRIWXU3ukziOWVQOlDPQuT3pxXy
-    2JUeF17IZZULjTQQPvBGbTlCrZVL4q+IJGXbd1djwJGzrKbpjOioRIMDQaDXfY6zKBiBzi
-    n9kccYewLMKDoOvxjrbtN7fgit+1yxM1riZT7geVdDw8iUfDtjWmFpzPw2nfzxEcczn+k+
-    lTgOgpyDTnO6sf3qQdvX9cvjoECY6I3wPQJjaHVdBJduLJO3z1DtZgkgUUbW75J4pLJ1qO
-    axJsxwk+HKO67iam5m36MvKWKglmWZ4LegVBM6StD2SI0glcgFb68lzbawTiDhxcoJIwCe
-    6TTWyCwsiuF3JZ35KYwCTXm4DN0S3BfJdRGfpp69D2vv9ns3F9QHA/bHovfNkbvCPucdgw
-    ZhcKZ9PmrKE8nguGR2b1xJ0HbZCesQIcmo6MlD3Zoeik9pM7OCTfM2ulcBGkMnDTlyrT6F
-    7sXtPamMMQ9fhxfRmBjGuJvOHxgTWWFjVdfIedj8z3K5oEuHz8XckAl+PQXYfiL2AO8JME
-    EFOGa7y9EfR5Rdg7vR7FbGrcpFXNkR4Oe5vNcI5ZhDWW4VOY/wobdLDGerw0qOlIW05qBi
-    D1HN5EiTN24OHvEoDqHhblgDHyFV038UZbu/x1hkmGvhJlNt1ixxJMKePTmw
-X-ME-Proxy: <xmx:_wxqatG1dYxb6gyr1LPHjaALYRVTOP-0y2uPXA-9AldnSb0CWbEGQA>
-    <xmx:_wxqauNv4bJW-VEpxvX2rzFKC4Fs_3ZrkGNJ_AOpDEOPXYGwsGjg-A>
-    <xmx:_wxqan-moiWXkXWgsEwsDyXdYks8cerIb3r4zJLj7JpiFjp_2IrCiQ>
-    <xmx:_wxqar5Qs5VGb5job0fOWXXu0Yo7CPE15qnww5-jVZy4EF8mLiYfVA>
-    <xmx:_wxqasUmVQpUzlU06Y-tlqcqCE_FnV61n1S-nhvhlm8Qz6qZd_oJFG79>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Jul 2026 10:23:58 -0400 (EDT)
-Date: Wed, 29 Jul 2026 07:23:57 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Gary Guo <gary@garyguo.net>,
-	Lyude Paul <lyude@redhat.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Carlos Llamas <cmllamas@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XOpIKzYF"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cf41bab353so22207905ad.0
+        for <linux-modules@vger.kernel.org>; Wed, 29 Jul 2026 10:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785346964; x=1785951764; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SUHRuCCMeHTWfkl2PV/NItIGRfvsS3lSuL6WFFN9DwM=;
+        b=XOpIKzYF4BoV327aT9HOcwZ8wpiFv/JFyjL1U0tiYMY3zGIWjkQWdaT6eqO/jWcByH
+         atdMD/id4sCf62p5OufSSzDwvDX5/oOpW0OwkUqakul/Kvh+GQHT3uBWNYq7VIjZssMT
+         pdCjuqm4y2HL03UOFaMrxuRVLHQQzMwYOAzGP1udq3qGDr4UM2wy+npbN8wo2Gfqbr1n
+         UpbORKO8xdcVbEJa3irwdpTMmxWM3SC+2hJUDdepLQQfAplXZvJQk0P71OcB5fOSS9sm
+         W4UmNoNzAEKaeWvoANDTpY222dvwgjUsWfds3XzaWBREoFI2/tPKqkFlxKY1p3zDmTo2
+         odAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785346964; x=1785951764;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=SUHRuCCMeHTWfkl2PV/NItIGRfvsS3lSuL6WFFN9DwM=;
+        b=B3s484JyoMUVNNF2T+1WaHts/wv3anG96sPslQt0xu7uU6z85zWlH7c5pSMcmTPleC
+         LpXfehwlBd6d1bPCKtRELYSzs3R86ozwsiGYsbyjkSe8Rp7bBo3rCEWnkBOjCFemeOFz
+         KOCLQyn86juSUR6YYgX6O8BN22ShlWM1Kpulsx1Uy1S3voISmHo3C2rkV9by28yuztNR
+         sXP5lVMk8asVs+wlQVmtoCxLY4jX+vDzRbz+7RaJ07BKOrtN12IRcRb1XGbKtDRAzeuv
+         ncoBmBclklbs5/8Il5UCGTTBMqQYuZE/JVHRSZUKcGjyp/p5CB4tnmU/FSBJydXPLX0h
+         /I1w==
+X-Forwarded-Encrypted: i=1; AHgh+Ro+4aG4jzvS75XrFUCziICLF473Z/B1KPHXGMjEG/Yv3vH33enJlIRkJS0lw1a2kDnuuu1d2ADTq8EZPgCu@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWZ4zgRc+xCbFI9byYWEJBy0Vr9S4lBgUwfGliD5dxyRIgOgrD
+	FJeRGlDgirXMEThZqRZQvxgKsoA4qJpvFNhlwTDwaUAIHhnD7n7bO944
+X-Gm-Gg: AR+sD11c0Cw0S/ohvShpS+n1ZaegsTjjMwlKpB7YuEtwBIbiWGiypGeeVPWMtuaBk0L
+	WK4nSavLmN6uxLCKDLZScHEsXbguts5zCf2cb7kYm8qVJ4Ntl6uX0WzQchM7bDH/x7CazUYZMhM
+	4wWZJm4rw5huI2dGqT2gWGTH//9QvzyGSbjq+5lPHTZ7xYBIHXezBAFkjkxTaXyr6QrQsoBscFW
+	nGjFoLTrsASaef8UkCF5fhcoqYwfHAvQOHwzgtjb8TOTQiqlr2oDn3NLJ+o+5GLfmcjiPLT2TXH
+	LR3B9x1qGwMGdaPAWmKyKugAJsNeRlpQTsZtsci8XioMVz1fQ1PonPY9cp86QFbCGeJHkew2w77
+	R/IdVc1JQOGS5pkyxk4I4jh0GA9XGVmP0uzaZeQj41RrTAbDEFhzCc73Rr2yopshsq93XgZZuqg
+	JW+USOFbsZMtv6L5pYANU9/Rq0VDKVHcfPF91mAYi50/PsMs1P6hzzURhGMcPR1Gd8oRBraMgJu
+	bkEr8M29TnNl/4F45tItZ+wfuIly9fFL38GErSdBhYyKofl2vFXa4s5NZ27t2rqKo7PODFiyUuN
+	JyQIkrQ=
+X-Received: by 2002:a05:6a21:7106:b0:3c3:a4f4:c5c1 with SMTP id adf61e73a8af0-3c8ba60b296mr8362835637.60.1785346963929;
+        Wed, 29 Jul 2026 10:42:43 -0700 (PDT)
+Received: from localhost.localdomain ([101.251.7.10])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504cc64c2sm12446128eec.19.2026.07.29.10.42.39
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 29 Jul 2026 10:42:43 -0700 (PDT)
+From: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, Miguel Ojeda <ojeda@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Tamir Duberstein <tamird@kernel.org>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH 2/3] rust: sync: add SetOnce::try_get_or_populate()
-Message-ID: <amoM_QJkwwoqsGHJ@tardis.local>
-References: <20260722-setonce-populate-v1-0-fa7455c26c42@google.com>
- <20260722-setonce-populate-v1-2-fa7455c26c42@google.com>
- <DKB42GHIZ8VZ.17ASJME0HTP5A@nvidia.com>
+	Aaron Tomlin <atomlin@atomlin.com>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] lib/bug: ignore non-allocated module bug tables
+Date: Wed, 29 Jul 2026 23:27:34 +0545
+Message-ID: <20260729174234.86242-1-acharyalaxman8848@gmail.com>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DKB42GHIZ8VZ.17ASJME0HTP5A@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 29, 2026 at 11:05:55PM +0900, Alexandre Courbot wrote:
-[...]
-> > +    /// Get the value, or populate it if it's missing.
-> > +    ///
-> > +    /// This method is useful to avoid spinning on the internal atomic state. If all writers call
-> > +    /// this method with the same lock, then they are synchronized with each other and it's
-> > +    /// guaranteed that no caller will attempt to invoke [`SetOnce::populate`] more than once.
-> > +    pub fn try_get_or_populate<F, E, U, B>(&self, lock: &lock::Lock<U, B>, f: F) -> Result<&T, E>
-> 
-> From the API perspective, this still leaves the option of calling the
-> method concurrently with different locks. What happens in this case?
-> 
+rewrite_section_headers() initially sets sh_addr for every section to its
+address in the temporary module image. Only SHF_ALLOC sections are later
+copied to module memory and have sh_addr updated.
 
-Calling this function with different locks is not a correctness issue
-(SetOnce::populate() already handle the synchronization). User may want
-to synchronize different groups of writers with different locks.
+module_bug_finalize() accepts any section named __bug_table. A malformed
+module can therefore leave mod->bug_table pointing into the temporary
+image, which is freed after loading. A later BUG/WARN lookup would then
+scan freed memory.
 
-Regards,
-Boqun
+Require the bug table section to be allocated before retaining its
+address. Valid modules are unchanged because __bug_table is allocated.
 
-> > +    where
-> > +        B: lock::Backend,
-> > +        F: FnOnce() -> Result<T, E>,
-> > +    {
-> > +        if let Some(value) = self.as_ref() {
-> > +            return Ok(value);
-> > +        }
-> > +
-> > +        let mut to_insert = f()?;
-[...]
+Fixes: 7664c5a1da47 ("[PATCH] Generic BUG implementation")
+Signed-off-by: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+---
+ lib/bug.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lib/bug.c b/lib/bug.c
+index 7c1c2c27f..44966ead1 100644
+--- a/lib/bug.c
++++ b/lib/bug.c
+@@ -94,7 +94,8 @@ void module_bug_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+ 	/* Find the __bug_table section, if present */
+ 	secstrings = (char *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+ 	for (i = 1; i < hdr->e_shnum; i++) {
+-		if (strcmp(secstrings+sechdrs[i].sh_name, "__bug_table"))
++		if (strcmp(secstrings + sechdrs[i].sh_name, "__bug_table") ||
++		    !(sechdrs[i].sh_flags & SHF_ALLOC))
+ 			continue;
+ 		mod->bug_table = (void *) sechdrs[i].sh_addr;
+ 		mod->num_bugs = sechdrs[i].sh_size / sizeof(struct bug_entry);
+-- 
+2.51.2
+
