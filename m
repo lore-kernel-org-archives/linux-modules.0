@@ -1,133 +1,114 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9880C31AA87
-	for <linux-modules@vger.kernel.org>; Thu, 30 Jul 2026 01:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 452123EDE57
+	for <linux-modules@vger.kernel.org>; Thu, 30 Jul 2026 09:11:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785374855; cv=none; b=Efa4f0ipY7gHqNhnF7FM9pFF4ynKhwU16gbS0w2ozxJKwnqB10syv9GAzD3qoS7nT9gTd7MC8rct+gNr0M4JieMOtWXH3Hwsu19cI2JXRCGPv1cxLNPR/k+We+PkkHwfzXqa0qYhKSXbmrqUMiPsR4D5aTDBTXU7nFzIVVriYBA=
+	t=1785402713; cv=none; b=GaY15Ot4lIqF8nhN0FQsOUgkImyQjZwgQ9+lbhoBN2oCMtL3FSGRwin/nOUSUy2C/v1dgNM1evrFUFAUnO+brsGn2DroIxftAxP1iD5730G3XXSu06kW1oryn4mpSlW0R0QZfScp9ZeAJEoiknhVStsdKaXURgk4j4+1HRSX4s0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785374855; c=relaxed/simple;
-	bh=tIwcbniDW6VXqHvpN78sWxrvYYnAIMu+XG9BFSaRj3Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=uPW9jwa05jre8+ltHRvdisCQ4IG7x321ne8CuRlEKcDHZ8RzoIlCggKjKW3L0APvphsfHy9odOSKpAoW8UJc7Kp8PVsPFHSoXxvAENRiuROdEMgPtB9cUtR0/9WrawlnPa+y7tjbXRUkuCC+6Ul8jLnJo3uTdoD9BGIW1A9zD1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=4MXaFguS; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1785402713; c=relaxed/simple;
+	bh=k8MrRN1zHzHirQ+riz3nZa56KdQtvZYEXwt1G83rtDE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=dE/6+cLWZolfJP3CBpKPAbZuP0gdWr+6tm5m6cUw1q/lxEezaXX+JuliXcG1XqwMz55ZGkrdet5zzckSK0D6zoBDK60PV1JOhKGoen6GuZYnnlZ9vPtPs023yA7MIq/ftqjrjvqtnozIiXY9QbMarficy2/0wPlJvmn5mckusEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ija4nvhU; arc=none smtp.client-ip=209.85.128.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="4MXaFguS"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=omWFYfLHi7FK1zZhRRQJ3JLk8jsZITDHCEyH4nDr6/Q=;
-	b=4MXaFguS6e+7hJfr3xf3vcqqomBK3QSXIDxiMVwMCowTlLVtCUcytvYwlPo5GVMF1gnmbIsm7
-	MWqPUZzXut4s39Kq8g34H6jHx2NfRRHI76CNMRNCvQKKkT+zs9ocU+lu+MXSOr2yhqZ6T2QHKRh
-	+GtRUdw/Ss6lgv8dqauPISw=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4h9WXm2s3cz12LG8;
-	Thu, 30 Jul 2026 09:18:00 +0800 (CST)
-Received: from whupemo500009.china.huawei.com (unknown [7.152.184.116])
-	by mail.maildlp.com (Postfix) with ESMTPS id D64DB4056D;
-	Thu, 30 Jul 2026 09:27:29 +0800 (CST)
-Received: from [100.103.109.247] (100.103.109.247) by
- whupemo500009.china.huawei.com (7.152.184.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 30 Jul 2026 09:27:29 +0800
-Message-ID: <7999fae9-d15f-422b-a539-5af43a4f33c0@huawei.com>
-Date: Thu, 30 Jul 2026 09:27:28 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ija4nvhU"
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-495495ad5ddso12197575e9.3
+        for <linux-modules@vger.kernel.org>; Thu, 30 Jul 2026 02:11:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785402709; x=1786007509; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rzY0lsTJjXWVanRyLSlFEy2hFBQ+8J2ffhaSCqEExvg=;
+        b=Ija4nvhUGD3duWELd8PduG2kaTNeX7BTY+MRSDaapsffIMUENv4VWXYlHZ/TAbGb65
+         bZETqWwIVOjPf3pRYi3hH2+Gvt29y/iIGOwrouInStAZgCMkSeY6Zp1o0At07x9dwz/A
+         71Pwvcm4Bb2j7LxhmohYvJPvRjgZKNjvhFtwX6vPeoeU36rJKbnUTtdy8OzuyiaB/NIe
+         jctxoWbjc2pFnH4ywh+tZRsarcw50rgCsEz3fsIvqfx6T0S2ytGBxv4+48sl9fUm5ZMl
+         59+Fw/F6TEouAsz1GEDs0WKEqAlgd3MLPhmV18Q1moe+QO+QBlqy9QYTgmX7CSVzRm7W
+         SbLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785402709; x=1786007509;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rzY0lsTJjXWVanRyLSlFEy2hFBQ+8J2ffhaSCqEExvg=;
+        b=WZPYAXYqT/zhBo8bcxwIUKfALmNPVUW8yqFH0EGdgP4+gdrFpTsKKwUALpT41EfRhD
+         NX8Ti45L9g7Ner8JXlYBB03MNGRzA9GM1Xgfm5W+sJxG//4DrgFYt7TtibDH6omgBIQu
+         gXAmorj9s0fm6AH0oDtENh9Jd6/iTuVRNQdHcvbM1vpf4RZ5BS7WEvk6pnQ1B62TTrwq
+         t7kMm4cCzwZHMWL3LjnJRyYev9U5nnZmK6NMg2YUxEg7LB0qyT9hI/GtnGNxaRvJc0PP
+         EGpSkHmw4AX0I9M32oXGY9QYw2/bkLty16Vt4PGTqVJR89JgUy/u41CMUGqkdeqY4V5l
+         Qg1A==
+X-Forwarded-Encrypted: i=1; AHgh+RqgPyNTacuWbYLwXxg4ZKhzQD9pJSkOFR4YfIYnq/qotPKXQaXg7oAEnBfR8Uch/ve1ACtP4c5BbJl6xoS+@vger.kernel.org
+X-Gm-Message-State: AOJu0YztoyUt5/iZUME42pvCRyZ4s1+7rse1R7oYwb3IiLIU7B5eMhqL
+	NtwoWCBDcOyXWzCOptDsNRdM6cvilEnzm+ql/F11ls+lZV36AIn/ZN9qtqJddkWw9WJo+RCxjWn
+	AZRotPrzBda8OjwgIMA==
+X-Received: from wmbhn27.prod.google.com ([2002:a05:600c:a39b:b0:495:5edc:795b])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:1505:b0:495:4df2:b8c1 with SMTP id 5b1f17b1804b1-49800ebbf5dmr13261205e9.35.1785402709283;
+ Thu, 30 Jul 2026 02:11:49 -0700 (PDT)
+Date: Thu, 30 Jul 2026 09:11:47 +0000
+In-Reply-To: <DKB42GHIZ8VZ.17ASJME0HTP5A@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] params: fix charp corruption on allocation failure
-To: <sashiko-reviews@lists.linux.dev>
-CC: <linux-modules@vger.kernel.org>
-References: <ff0b7cdd-8fa7-4cb8-9e21-6a7204809766@suse.com>
- <20260729123243.790023-1-yujiacheng3@huawei.com>
- <20260729113900.693C71F00A3A@smtp.kernel.org>
-Content-Language: en-GB
-From: Jiacheng Yu <yujiacheng3@huawei.com>
-In-Reply-To: <20260729113900.693C71F00A3A@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemo500009.china.huawei.com (7.152.184.116)
+Mime-Version: 1.0
+References: <20260722-setonce-populate-v1-0-fa7455c26c42@google.com>
+ <20260722-setonce-populate-v1-2-fa7455c26c42@google.com> <DKB42GHIZ8VZ.17ASJME0HTP5A@nvidia.com>
+Message-ID: <amsVU-1o_zNOIOts@google.com>
+Subject: Re: [PATCH 2/3] rust: sync: add SetOnce::try_get_or_populate()
+From: Alice Ryhl <aliceryhl@google.com>
+To: Alexandre Courbot <acourbot@nvidia.com>
+Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, Lyude Paul <lyude@redhat.com>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, 
+	"Onur =?utf-8?B?w5Z6a2Fu?=" <work@onurozkan.dev>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Carlos Llamas <cmllamas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Tamir Duberstein <tamird@kernel.org>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
+On Wed, Jul 29, 2026 at 11:05:55PM +0900, Alexandre Courbot wrote:
+> On Wed Jul 22, 2026 at 6:16 PM JST, Alice Ryhl wrote:
+> > +    where
+> > +        B: lock::Backend,
+> > +        F: FnOnce() -> Result<T, E>,
+> > +    {
+> > +        if let Some(value) = self.as_ref() {
+> > +            return Ok(value);
+> > +        }
+> > +
+> > +        let mut to_insert = f()?;
+> 
+> This means that `f` can run more than once for a given `SetOnce`, which
+> can lead to problems depending on `f`'s' side-effects.
+> 
+> In the GEM shmem case, we would create a second `SGTableMap`, and since
+> `SGTableMap` assumes it is the sole owner, the last instance to drop
+> would create a use-after-free.
+> 
+> Now this sounds more like a problem with `SGTableMap`, but if we cannot
+> avoid calling `f` at least twice then I think it would help if this was
+> documented.
 
+Hmm ... this is the behavior I want in Binder. Actually creating the
+value is an allocation, but my lock is a spinlock so I cannot invoke f()
+under the lock. This means that each caller will make their own
+allocation, and then we throw away any extras if there are concurrent
+callers.
 
-On 29/07/2026 19:38, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] Use-After-Free race condition due to dangling global pointer during module parameter update.
-> --
-> 
-> --- Patch [1]: [PATCH v2] params: fix charp corruption on allocation failure ---
-> commit c59e6d7e9f9563e1394c57f9eedf07a9bb5f212b
-> Author: Jiacheng Yu <yujiacheng3@huawei.com>
-> 
-> params: fix charp corruption on allocation failure
-> 
-> This patch fixes a corruption issue when param_set_charp() fails to allocate
-> memory for the replacement string. It allocates and copies the replacement
-> first, replacing the parameter value only after allocation succeeds.
-> 
->> diff --git a/kernel/params.c b/kernel/params.c
->> index d3a4ecab4f278..8b25133fed242 100644
->> --- a/kernel/params.c
->> +++ b/kernel/params.c
-> [ ... ]
->> @@ -269,19 +270,20 @@ int param_set_charp(const char *val, const struct kernel_param *kp)
->>  		return -ENOSPC;
->>  	}
->>  
->> -	maybe_kfree_parameter(*(char **)kp->arg);
->> -
->>  	/*
->>  	 * This is a hack. We can't kmalloc() in early boot, and we
->>  	 * don't need to; this mangled commandline is preserved.
->>  	 */
->>  	if (slab_is_available()) {
->> -		*(char **)kp->arg = kmalloc_parameter(len + 1);
->> -		if (!*(char **)kp->arg)
->> +		tmp = kmalloc_parameter(len + 1);
->> +		if (!tmp)
->>  			return -ENOMEM;
->> -		strcpy(*(char **)kp->arg, val);
->> +		memcpy(tmp, val, len + 1);
->>  	} else
->> -		*(const char **)kp->arg = val;
->> +		tmp = (char *)val;
->> +
->> +	maybe_kfree_parameter(*(char **)kp->arg);
->> +	*(char **)kp->arg = tmp;
-> 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but does this sequence leave a
-> deterministic use-after-free window for concurrent readers?
-> 
-> Because maybe_kfree_parameter() frees the old string while the global
-> parameter variable still points to it, any concurrent lockless reader of
-> the parameter might dereference a freed pointer before the reassignment
-> on the next line.
+If GEM shmem wants f() invoked under the lock, then that's just a
+different operation than the one Binder wants.
 
-As Petr pointed out, concurrent access to a writable charp parameter
-is protected by kernel_param_lock(), as documented in
-include/linux/moduleparam.h.No reorder is needed here.
+Do you think we should add both?
 
-> 
-> Could this be safely reordered to update the pointer before freeing the old
-> memory? For example:
-> 
-> 	char *old = *(char **)kp->arg;
-> 	*(char **)kp->arg = tmp;
-> 	maybe_kfree_parameter(old);
-> 
->>  
->>  	return 0;
->>  }
-> 
-
+Alice
