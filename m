@@ -1,171 +1,154 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639541A9B58
-	for <linux-modules@vger.kernel.org>; Fri, 31 Jul 2026 13:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C82428472
+	for <linux-modules@vger.kernel.org>; Fri, 31 Jul 2026 13:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785503936; cv=none; b=W7jkosxGCN7uPL4bFJAohsEQWTMCUFtjn4jhjYMTzWjyxTHCh0iaf1DfsTf48lx4LqbiKkR2RjkV7a3nADV5oGw3cxkJir4WxWeo505zZRllhfRYyVNP0PcICLfNanX7NTP8EDIOWEuxrCOK9VAUL1Jfmgw6tRChLHCtGI0ocjk=
+	t=1785504949; cv=none; b=HKCncRiHFAcJgDXlwOXPUVoMrNdyigOwHY2Dzs1d6Jxo/2bB4s9RQxLPDuaQYWxUOmcmINXrrRJqRbjOXvqG5DIZyaK6ERdM0diZeeWWH1Ua1CXpSm+nEv8s2CumXB1OYEQpJ7764vHMsfnkFMts4zsxqfRaaxk4QRGAos4xShM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785503936; c=relaxed/simple;
-	bh=rmmEuShHu/e6OInQHuCsO8+/VGob18GzHfqm1SIIdF4=;
+	s=arc-20240116; t=1785504949; c=relaxed/simple;
+	bh=5lIqIN4onCpxt8xay3++N/c4GoscyYlJpo1tEjsJVe0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MoFM7Xv/2mPKjuJHIcLhYK4Y0GfgBd4Hzkws1NhN8qelXg2NzmflHbtCw5MMoLjye8KD798C/8mXasp/icq/WI03lbi8haZZap93f2/LG2QvigydxcRdYNUVFmjrbSrPrmmD8CxWLQ5r4rGLz2sH6Whdvu11ydcuhGsr18Ktop4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BeXisBfZ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=JRL0PgavkZAb0ZTc4GhVxpLOGFNJnPB0hqEfmZRCQh5xY1BcntiELg6siltgZZUrzPR5u76PPKJynYl7+zjRR9OSJWbU61Ic7XHcfKjVPPgHnw2yIXXCHETRpHpfDB/oOC9G/FUvKjleZkoA3q30Q/G7lbGMPCUZVgKkvnvXNGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R4yQAOpy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BeXisBfZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B085B1F00A3A;
-	Fri, 31 Jul 2026 13:18:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R4yQAOpy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3850C1F00A3A;
+	Fri, 31 Jul 2026 13:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785503934;
-	bh=vuBjyyrhda2KmNErA01QxtBRl7kwaOXdmmJ4mYKLeys=;
+	s=k20260515; t=1785504947;
+	bh=Z7eahAYvtDz3wbeUwQgpPNU6cmrUk3NyiqVRvjG0+X0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BeXisBfZruUsz7GyOKGU3eUPvOR2Ch1iSyzXHIZJBVrLvIkkmlhYTifbLivS3I3VO
-	 Ts5GiO/wK3odLaCWvwuq2RFP0mSynkbdfQca2YTbSDOgaudgMaTYiQLKtuS5aQ2LRu
-	 wAJOplb1eSfWGuHq5udd3P89yQOZwufBYK4vVY08cFFhtWMBQ3ptIrgwtTKyxrd7F/
-	 t1t7axzWDffss+vZhBsiR4CvIwXUBDxETnYVrIuGt6c6yxXcSjDjoc7pLBn4TeNPqR
-	 aNiPUnIuhsGzjL8KFugRiFBt6BqhoQX192wNiAJM+O56TjDbwQBSXSdXrZXweKxzdu
-	 k70NSs7Ti8LPQ==
+	b=R4yQAOpypbkSmYeq10FoFOYijx+ifBDWizUdBFQLx+K7VXBVJYAXwUx3eVLxQwWnr
+	 jAf2MrWLcig+kAQBB6GlkWzobPoE+Ghb/pAztjVV/lyCv6faLL0es/qRYl5wsYvbhn
+	 WtfrDz8J1BQtEMdEuskxDRyDeb8ivzLy94sXuv2D+WQ8LbAW9yQdwqag/pnbWZjFPf
+	 q1r0SOdwMuhKLGUS04R19Y4Te3PlhToGD24XIdGe6AXQEAg+i3spLtlwIQFGK6mVoQ
+	 Pnih5YiNauoTaDU1asKuAMF4J+8Ep3IxsR+uq2i+P+yaEdzJl1xVk/LknpgFcnYnrN
+	 11iUaY/xb8iHQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] module: remove MODULE_VERSION()
+Subject: Re: [PATCH v2 2/2] module: remove srcversion module attribute
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260731-module_ver_remove-v2-1-c9163858f382@linuxfoundation.org>
+In-Reply-To: <20260731-module_ver_remove-v2-2-c9163858f382@linuxfoundation.org>
 References: <20260731-module_ver_remove-v2-0-c9163858f382@linuxfoundation.org>
- <20260731-module_ver_remove-v2-1-c9163858f382@linuxfoundation.org>
+ <20260731-module_ver_remove-v2-2-c9163858f382@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 31 Jul 2026 13:18:54 +0000
-Message-Id: <20260731131854.B085B1F00A3A@smtp.kernel.org>
+Date: Fri, 31 Jul 2026 13:35:46 +0000
+Message-Id: <20260731133547.3850C1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] Immediate, unphased removal of the `/sys/module/*/version` sys=
-fs ABI and `modinfo` version outputs.
+- [Low] Incomplete feature removal leaves `sumversion.c` as entirely dead c=
+ode that is still compiled.
+- [Low] The `-a` command-line option was not removed from the `getopt` stri=
+ng, causing silent failures if passed.
+- [Low] DRBD modules unconditionally report their version string as `"built=
+-in"` even when dynamically loaded.
 --
 
---- Patch [1]: [PATCH v2 1/2] module: remove MODULE_VERSION() ---
-commit b77f8591ff850600dbc1da5c9c2f45e06be183fe
+--- Patch [2]: [PATCH v2 2/2] module: remove srcversion module attribute ---
+commit 461ecb5f73545c4d962415cbd1b5ef67b64b2f0a
 Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-module: remove MODULE_VERSION()
+module: remove srcversion module attribute
 
-This commit removes the MODULE_VERSION macro and its associated sysfs
-attributes. It redefines the macro to be empty to keep existing code
-building while it is phased out, as module versions do not make sense in
-a unified build.
+This commit removes the srcversion module attribute from the kernel and the
+helper module tools. Since module versions are no longer used, the
+associated logic is dropped.
 
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Daniel Gomez <da.gomez@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>
-Cc: Shyam Saini <shyamsaini@linux.microsoft.com>
-Cc: Kees Cook <kees@kernel.org>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>
-
-[ ... ]
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 7566815fabbe8..209b6a388be7c 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-[ ... ]
-> -#if defined(MODULE) || !defined(CONFIG_SYSFS)
-> -#define MODULE_VERSION(_version) MODULE_INFO(version, _version)
+> diff --git a/drivers/block/drbd/drbd_buildtag.c b/drivers/block/drbd/drbd=
+_buildtag.c
+> index cd0389488f63e..22f1e842f9ced 100644
+> --- a/drivers/block/drbd/drbd_buildtag.c
+> +++ b/drivers/block/drbd/drbd_buildtag.c
+> @@ -10,13 +10,8 @@ const char *drbd_buildtag(void)
+> =20
+>  	static char buildtag[38] =3D "\0uilt-in";
+> =20
+> -	if (buildtag[0] =3D=3D 0) {
+> -#ifdef MODULE
+> -		sprintf(buildtag, "srcversion: %-24s", THIS_MODULE->srcversion);
 > -#else
-> -#define MODULE_VERSION(_version)					\
-> -	MODULE_INFO(version, _version);					\
-> -	static const struct module_version_attribute __modver_attr	\
-> -		__used __section("__modver")				\
-> -		__aligned(__alignof__(struct module_version_attribute)) \
-> -		=3D {							\
-> -			.mattr	=3D {					\
-> -				.attr	=3D {				\
-> -					.name	=3D "version",		\
-> -					.mode	=3D S_IRUGO,		\
-> -				},					\
-> -				.show	=3D __modver_version_show,	\
-> -			},						\
-> -			.module_name	=3D KBUILD_MODNAME,		\
-> -			.version	=3D _version,			\
-> -		}
+> +	if (buildtag[0] =3D=3D 0)
+>  		buildtag[0] =3D 'b';
 > -#endif
-> +#define MODULE_VERSION(_version)
-
-[Severity: Critical]
-Does redefining this macro to empty immediately prevent the version tag from
-being embedded in the .modinfo section of all loadable modules? Could this
-cause a regression for userspace tools like modinfo that might rely on
-extracting this information?
-
-[ ... ]
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 46dd8d25a6058..da8be9788d130 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-[ ... ]
-> @@ -1084,7 +1083,6 @@ static const struct module_attribute modinfo_taint =
-=3D
-> =20
->  const struct module_attribute *const modinfo_attrs[] =3D {
->  	&module_uevent,
-> -	&modinfo_version,
-
-[Severity: Critical]
-By removing this attribute, does this immediately break the loadable module
-sysfs interface at /sys/module/module_name/version? Would it be safer to
-provide a backward-compatible stub or deprecation period before completely
-removing this stable ABI, to avoid regressions in userspace scripts?
-
->  	&modinfo_srcversion,
->  	&modinfo_import_ns,
->  	&modinfo_initstate,
-[ ... ]
-> diff --git a/kernel/params.c b/kernel/params.c
-> index a668863a4bb63..6c5a1eb22b257 100644
-> --- a/kernel/params.c
-> +++ b/kernel/params.c
-[ ... ]
-> -static void __init version_sysfs_builtin(void)
-> -{
-> -	const struct module_version_attribute *vattr;
-> -	struct module_kobject *mk;
-> -	int err;
-> -
-> -	for (vattr =3D __start___modver; vattr < __stop___modver; vattr++) {
-> -		mk =3D lookup_or_create_module_kobject(vattr->module_name);
-> -		if (mk) {
-> -			err =3D sysfs_create_file(&mk->kobj, &vattr->mattr.attr);
-> -			WARN_ON_ONCE(err);
-> -			kobject_uevent(&mk->kobj, KOBJ_ADD);
-> -			kobject_put(&mk->kobj);
-> -		}
 > -	}
-> -}
-> -
+> =20
+>  	return buildtag;
+>  }
+
+[Severity: Low]
+With the removal of the conditional logic in drbd_buildtag(), will this
+unconditionally report the DRBD module version string as "built-in" even
+when it is dynamically loaded?
+
 [ ... ]
-> @@ -968,7 +939,6 @@ static int __init param_sysfs_builtin_init(void)
->  	if (!module_kset)
->  		return -ENOMEM;
-> =20
-> -	version_sysfs_builtin();
 
-[Severity: Critical]
-Does the removal of this function and its call immediately drop the sysfs
-version node for all built-in modules? Could this cause hardware inventory
-scripts or udev rules to fail with ENOENT when they expect the file to exis=
-t?
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index a7b72a81d2482..2e969be7f414c 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
 
->  	param_sysfs_builtin();
-> =20
->  	return 0;
+[ ... ]
+
+> @@ -2327,9 +2306,6 @@ int main(int argc, char **argv)
+>  		case 'o':
+>  			dump_write =3D optarg;
+>  			break;
+> -		case 'a':
+> -			all_versions =3D true;
+> -			break;
+>  		case 'T':
+>  			files_source =3D optarg;
+>  			break;
+
+[Severity: Low]
+Should the 'a' flag also be removed from the getopt() option string earlier
+in main()?
+
+scripts/mod/modpost.c:main() {
+    ...
+	while ((opt =3D getopt(argc, argv, "ei:MmnT:to:au:WwENd:xb")) !=3D -1) {
+    ...
+}
+
+If the deprecated -a flag is passed to modpost, getopt considers it valid
+and returns 'a'. Since the switch statement no longer has a case for 'a', it
+falls through to the default case and silently calls exit(1) without
+emitting an invalid option error message.
+
+[ ... ]
+
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 2aecb8f25c87e..2c2f1d2b40211 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -126,7 +126,6 @@ struct module {
+>  	bool seen;
+>  	bool has_init;
+>  	bool has_cleanup;
+> -	char	     srcversion[25];
+>  	// Missing namespace dependencies
+>  	struct list_head missing_namespaces;
+>  	// Actual imported namespaces
+
+[Severity: Low]
+Since the srcversion feature is being removed, should
+scripts/mod/sumversion.c also be deleted and removed from modpost-objs in
+scripts/mod/Makefile?
+
+The file appears to be dead code now that its only entry point
+get_src_version() is never called, though the function declaration still
+remains further down in scripts/mod/modpost.h.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260731-module_ver=
-_remove-v2-0-c9163858f382@linuxfoundation.org?part=3D1
+_remove-v2-0-c9163858f382@linuxfoundation.org?part=3D2
