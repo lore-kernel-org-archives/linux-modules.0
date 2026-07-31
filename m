@@ -1,138 +1,106 @@
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A0F3AD529
-	for <linux-modules@vger.kernel.org>; Fri, 31 Jul 2026 12:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E5742C515;
+	Fri, 31 Jul 2026 13:03:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785502350; cv=none; b=tFNxniv9EAS0n3RFnAfr3dZoK/LaPzjy6/7jZmCAcV9B1iJVAQ/3egqdNjweFY53MYL0g2T/YI18xKEZxN3JgoSfXQsS4c8gjnVGArO7wgtCKFu6jQyKWISlQRVuD1HBSOBJSSF3GunLDAY1Wd85oMesCSozDvpClYY2R8qvjKw=
+	t=1785502982; cv=none; b=eY6QJAOV6O0cgHAe5wUplstcIK/eokC+VxyA1E7vTqtp2qInbYiYJ+YDAP24p4LTxwdn7gcw5JhnY3s7ocSX46YDErMLxxSatyigpWzHpLsBGsuKE+cTnZUS6JYFNQ0WTlzl17TkUnjMIXa26+SIkuT4uDYZ6Ko4rTgFmx1V7xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785502350; c=relaxed/simple;
-	bh=It7kZwaRx0Ep9+u4doLaOtpLhDjb1kbYQ4dRYkS+gjE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=n/D8SnakilM9f89fdHbdGR6JBA2fXJ9MvgA6uSvPiLjRzKP41xoXwzskQbxUCkv9gO0BBmvalGAyF7c/S8aYZNwpfgDBaMkDaExfowpfKCMiBfjXoZWGPXCeN1jyJgH52pbwUvvyW+lzE5T78ZSFxXTNI2ZeyKPuyuc8iXdN6YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V3m77j6q; arc=none smtp.client-ip=209.85.218.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1785502982; c=relaxed/simple;
+	bh=bLWCrFAN9m0vThC6I8y0IhbGnstlgg2nHWrMKYuN8LM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CKeeAhQ+GjL/70aX6mQOJnCYLtYB/3xNCN+0paSWoCxZJ19qECG9ITUrKvF5vLJzyqF5O1kvIM3iF7YFS/AdI/FEy2ySnbcZ+F9avzfciyWeR+QAeMgjBuiEDFoauqhH7wimSc+uiUfCz19NR1H8hjU0/vNvtmuWQLMQiYxhusI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZGJCtWF4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V3m77j6q"
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c15dfd34e4cso73639566b.0
-        for <linux-modules@vger.kernel.org>; Fri, 31 Jul 2026 05:52:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785502347; x=1786107147; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=l9F+eXGUPJ1CqPpVTZLneozqshrotXXIxuj3EVO2s6o=;
-        b=V3m77j6qEVlpVZIB7mSWb+RSZ5jlxVc7nYZ8GuXk7egJcy2OEGtUZo9X1E5CZlZnwx
-         WtG0eH3VBrE8hPuxfj2urBE9JnWTI5za0zROZnWUVEgEkWfxUzj7caiKK9rsAxtGZAiz
-         59VcTBizjDexs2rVVEMBsujrmheeHoCx+RDbUrTucz11c4pdCrYpp617xiTARW3a5rRx
-         C94U7R6dbTd+fp1zKO6Qnxrs+5bo6MITffgR8sk14w3EA6y5J4qOL5xJu2LggaHasc5i
-         OBmtkEh2JAz1riW631QBlNgDcdZF0I7pFk08Zn3s7M2tgP9wxAVRAY/00DAG/dfnoXiK
-         Lf2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785502347; x=1786107147;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=l9F+eXGUPJ1CqPpVTZLneozqshrotXXIxuj3EVO2s6o=;
-        b=Bw0UnEerHOpgrhV8sg7Zy9ZYJITxPmltEp+OGar23Kh9AOXxVIovBk1Rs+5Ew7PzRW
-         wfe4fGmvQCIDZL/GRCA9ni2WRhclaFi6EESQFvNh6B2wMnCitML9wQ7UlGWhFRDdFWYf
-         Np2DsGGpAF8ZCpZgJjkgNLrlTlLGqPH7MbUzA+lFWlkThoMB9Gm3xvP7czmaRwUEiSZz
-         x8HOXHp4dk6E+5iewFMqXQ0t78NsnFpZzcFfQzlZ6unKKmm9fwibesNd4svUxa8vsne0
-         +I5A8UwBkx0GDElbMBkRgwDn3wgNNfwZZGbEhBvxgm335teAsFKEFrYg2IGvD1ZGDDhF
-         VbZw==
-X-Forwarded-Encrypted: i=1; AHgh+RqygbYUpYBe9VRC/H2h6MOU0e9LbKIpEyLedW1STo6niwsOo8/d4bTQ84JEEETqibVruSkdM2MmB5sLPUWc@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSXPHt9ToaVT4SOp+Luc3acTVOq3LfDJ7SqmwXJxsRayGLQz79
-	LT2cyyvMUHj4Ns+w0rYLr1lPUIbmWnn1e0ZKI0xnZ/8QezF2oe6QS71nnFGRnA/b5nCornAplFD
-	DRKeYDNStL9WcQM7Jdw==
-X-Received: from wmhn21.prod.google.com ([2002:a05:600c:3055:b0:493:dccc:9e0c])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:c0f:b0:c19:5a94:4121 with SMTP id a640c23a62f3a-c1fd1e12753mr109416966b.6.1785502346913;
- Fri, 31 Jul 2026 05:52:26 -0700 (PDT)
-Date: Fri, 31 Jul 2026 12:52:26 +0000
-In-Reply-To: <DKBZLF7RMQE8.2KQJKLGIE0X6N@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZGJCtWF4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3C901F00A3A;
+	Fri, 31 Jul 2026 13:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1785502980;
+	bh=VDgNzLLzldqfhcRMHA2BBCtFqiecgmjA0e2OTYYxoy0=;
+	h=From:Subject:Date:To:Cc;
+	b=ZGJCtWF427tq8SDRAPngVDA2yEBzZaUpgbdf7kRKqqeey/Sl89N5MPqVNV2P2Vf/l
+	 GSlQIPkYmLTcYmphtTAzJ3McSM/WcbfoOdqu8vqUndZ0RZ1g5CDx1t39Vh+dbQ6iXX
+	 406kVdxaqR+jNajJXX3ABli0a/MPmCxEpvhxUMIY=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2 0/2] module: remove MODULE_VERSION() and srcversion
+Date: Fri, 31 Jul 2026 15:02:22 +0200
+Message-Id: <20260731-module_ver_remove-v2-0-c9163858f382@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260722-setonce-populate-v1-0-fa7455c26c42@google.com>
- <20260722-setonce-populate-v1-2-fa7455c26c42@google.com> <DKB42GHIZ8VZ.17ASJME0HTP5A@nvidia.com>
- <amsVU-1o_zNOIOts@google.com> <DKBZLF7RMQE8.2KQJKLGIE0X6N@nvidia.com>
-Message-ID: <amyailSp5MzQQZUY@google.com>
-Subject: Re: [PATCH 2/3] rust: sync: add SetOnce::try_get_or_populate()
-From: Alice Ryhl <aliceryhl@google.com>
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: Lyude Paul <lyude@redhat.com>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, 
-	"Onur =?utf-8?B?w5Z6a2Fu?=" <work@onurozkan.dev>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Carlos Llamas <cmllamas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Tamir Duberstein <tamird@kernel.org>, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMWwqDMBBG4a3IPDeQC7bQrUgRY37bKWrKRENB3
+ HtjffweztkoQRiJ7tVGgsyJ41xgLxX1r25+QnEoJqvtVd+cUVMM64g2Q1rBFDPUEGpde2e9MYZ
+ K9xEM/P0/m8fptPo3+uUY0b7/AMQ5Dil1AAAA
+X-Change-ID: 20260731-module_ver_remove-fd505b32b111
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, 
+ Shyam Saini <shyamsaini@linux.microsoft.com>, Kees Cook <kees@kernel.org>, 
+ Thorsten Blum <thorsten.blum@linux.dev>, 
+ Christoph Hellwig <hch@infradead.org>, linux-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Christoph Hellwig <hch@lst.de>
+X-Mailer: b4 0.16-dev-401aa
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2003;
+ i=gregkh@linuxfoundation.org; h=from:subject:message-id;
+ bh=bLWCrFAN9m0vThC6I8y0IhbGnstlgg2nHWrMKYuN8LM=;
+ b=owGbwMvMwCRo6H6F97bub03G02pJDFk5c75edT0ukeOXuc1j/eyL59/Uf9MSvvjLtH35pfOff
+ fS6VojHdsSyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBE3gQzzHdkv/C53k6HMynk
+ YXX1yUzx/59kNBnmWWUU5zkvzfSw5MxULGI8+eNL+tvlAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp;
+ fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 
-On Thu, Jul 30, 2026 at 11:48:15PM +0900, Alexandre Courbot wrote:
-> On Thu Jul 30, 2026 at 6:11 PM JST, Alice Ryhl wrote:
-> > On Wed, Jul 29, 2026 at 11:05:55PM +0900, Alexandre Courbot wrote:
-> >> On Wed Jul 22, 2026 at 6:16 PM JST, Alice Ryhl wrote:
-> >> > +    where
-> >> > +        B: lock::Backend,
-> >> > +        F: FnOnce() -> Result<T, E>,
-> >> > +    {
-> >> > +        if let Some(value) = self.as_ref() {
-> >> > +            return Ok(value);
-> >> > +        }
-> >> > +
-> >> > +        let mut to_insert = f()?;
-> >> 
-> >> This means that `f` can run more than once for a given `SetOnce`, which
-> >> can lead to problems depending on `f`'s' side-effects.
-> >> 
-> >> In the GEM shmem case, we would create a second `SGTableMap`, and since
-> >> `SGTableMap` assumes it is the sole owner, the last instance to drop
-> >> would create a use-after-free.
-> >> 
-> >> Now this sounds more like a problem with `SGTableMap`, but if we cannot
-> >> avoid calling `f` at least twice then I think it would help if this was
-> >> documented.
-> >
-> > Hmm ... this is the behavior I want in Binder. Actually creating the
-> > value is an allocation, but my lock is a spinlock so I cannot invoke f()
-> > under the lock. This means that each caller will make their own
-> > allocation, and then we throw away any extras if there are concurrent
-> > callers.
-> >
-> > If GEM shmem wants f() invoked under the lock, then that's just a
-> > different operation than the one Binder wants.
-> >
-> > Do you think we should add both?
-> 
-> Possibly... but this would introduce a potential footgun that sleeps
-> while holding a spinlock, unless we limit the run-f-under-lock version
-> to work only with mutexes.
-> 
-> Maybe the proper solution is to fix `SGTableMap` so it supports multiple
-> instantiations. It is, after all, a bit footgunny on its own.
-> 
-> In any case, the current versions should warn users about the fact that
-> `f` can be called more than once imho.
+Module "versions" do not make sense as the kernel is built all at once,
+the "version" is the overall kernel version number, so modules can not
+really be described as having a unique version given that they rely on
+the infrastructure of the whole kernel.
 
-We could extend the naming scheme:
+So remove the version and the srcversion fields as there is no need for
+them anymore.
 
-* try_get_or_populate_once() only invokes f() once, under lock
-* try_get_or_populate_racy() may invoke f() multiple times
+Note, for now, MODULE_VERSION() is just an "empty" define, to keep
+existing code building properly as the tree is slowly purged of the use
+of this over time.  This macro will be removed entirely in the future
+when there are no in-tree users.
 
-Though the _once naming isn't amazing since it still may invoke f()
-multiple times if it fails. On failure, the next initializer gets to try
-again.
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+Changes in v2:
+  - remove version from struct module and the sysfs file
+  - amd driver THIS_MODULE->version logic removal as it's pointless.
+  - add second patch in series to remove srcversion
+  - Link to v1: https://lore.kernel.org/r/2026031341-evolve-repeater-987b@gregkh
 
-Thoughts?
+---
+Greg Kroah-Hartman (2):
+      module: remove MODULE_VERSION()
+      module: remove srcversion module attribute
 
-Alice
+ Documentation/ABI/stable/sysfs-module    | 12 -------
+ arch/x86/tools/relocs.c                  |  1 -
+ drivers/block/drbd/drbd_buildtag.c       |  7 +---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c |  7 +---
+ include/asm-generic/vmlinux.lds.h        |  5 ---
+ include/linux/module.h                   | 58 ++++++--------------------------
+ kernel/module/Kconfig                    | 11 ------
+ kernel/module/main.c                     | 32 ------------------
+ kernel/params.c                          | 30 -----------------
+ scripts/Makefile.modpost                 |  1 -
+ scripts/mod/modpost.c                    | 24 -------------
+ scripts/mod/modpost.h                    |  1 -
+ 12 files changed, 13 insertions(+), 176 deletions(-)
+---
+base-commit: 8ba098e6b6ff0db8edf28528d1552be261af30d4
+change-id: 20260731-module_ver_remove-fd505b32b111
+
+Best regards,
+--  
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
