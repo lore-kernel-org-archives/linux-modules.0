@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F59B78F3A
-	for <linux-modules@vger.kernel.org>; Sat,  1 Aug 2026 14:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A79A306764
+	for <linux-modules@vger.kernel.org>; Sat,  1 Aug 2026 14:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785595372; cv=none; b=VJFwsdmzaeU9t82OLbuJzQrCNuRbsgONFJgd6raUYGomr5lvdz9oBABtxMgFZKPoephYs2otmoGls0prShYLzbtPChsv5oiyVD1hi8cr6kXZHcb6BAsVDZ/9+njkpLC0OA5wL18qiy3sF95SbqcKz0xSxbVSQ4qoTLPYWT2lVDE=
+	t=1785595555; cv=none; b=SXIlhAPVS9gnsc1oQHdWZ7TiTL178xO4EhVjk+3PxzFNHYQqX4It3L91Ce3Xj7N7Qn+xDsiKLvbfEz9ZENaD//F6w+6+yXQQVPJMm+kycPSE3WM8S48DxE9Su8O5nKUo/mQVAc4UbGzF62Lbx5wb8maWjJtExq3wWlt+PIIkQa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785595372; c=relaxed/simple;
-	bh=aCs1jm4FCwR38FuiXOUbWThAe8Tjfsf/+Atxq+qULwQ=;
+	s=arc-20240116; t=1785595555; c=relaxed/simple;
+	bh=jLWjjMI5rougOsUuvQAD4JnqTyuwA33U7FBslxbxMM8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Lc72Kib4qFpgGqtsHhBpMXsb/tndQs3vhSthBZ3rf8Y5BtRyi5XRfEJ2qKl2al/0el7siVlbELJULGwlI/06TNcJQX++/SHyVG1S+T0ajcIWJc3NzfR3f17yCkbWeGAwSQvfJ8jBXsazzpztLju3E17W/QvyzNIWbV0B7e+hRrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6aFq8Zt; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kr92tfcJetVkbddP3l1MpuiaeIXCeLY3Jq7Vo42eTnBNBJjZu2ZE6SA3DsY/zJ4tx8ICm7L6FF7b8lkTgakNTspCX/tFTYmicNJhRWhSd/89CIveV7XwFzXociJaYhFAeblPpzSMAT44jdZAIfVCpZtpA3V4qMEPWVySIiqPG3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=behEUfpv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6aFq8Zt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E347C1F00AC4;
-	Sat,  1 Aug 2026 14:42:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="behEUfpv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817111F00AC4;
+	Sat,  1 Aug 2026 14:45:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785595371;
-	bh=3g4i+AlEk3MiNJT9yOpYaSam1QqhOeMv53dMbTqZmsI=;
+	s=k20260515; t=1785595553;
+	bh=O8wT6C1K0YtAPoxi+8vvmm6Y4ece++XS/hytI4HrEX8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=T6aFq8Zt/Bk+0MJBTD5LWZDJ83sKaUKi8+J09kH5Z5CpEUrl+MagsYwxBLwkfy5O0
-	 KvRoJK5FkEm84tsnFv7egGxHgqWK0+4d3YPrR5DXywt+PxlOXX6PEG1qX/5hsz3XG7
-	 ttZ6JxcF1bev+yM2gGHc1dMB3FU0RAzK81jnBYgq1oOWCfIr3cgtV/C+8nuSJbrd8v
-	 YgkPvvEo+MA72h8p9dm7I6eVx/uFRG80TDol0OQ8P5wMYn1Y7AkxTL/xIB1RnzPgws
-	 DrNijWSOaXkVO5thrjPqeghqBRwJhDBeRZBlWQkwmlgkartUteiyReMrRfVkHZVhY3
-	 vlMzx6aEaZ8iA==
+	b=behEUfpv3s/0FQpz4jI4zAhfWyzvnvKCIGFYNHrtNCZBdFIuw4DrW4/nyDSBstTTu
+	 2a6dUhKkuovSN5M/LX17sO9YRmHfnMs/hFA+yi4Wl8Ysr0ba8WGKQRjBZ+cxPM6Zsa
+	 NVUWE6MIuyOq5+NXj6BrOKGVwjCehMxQVg0az7r1Zd9zwLN/G8tPIhsDBq5SsaicJH
+	 3KWwU53rfHpzwRItDoy8QqmWsykfTPfO99M7EiXi2Q5XjS9u1C3rz+IvMJH6RiMvFB
+	 JMo1/UU+DZgJGVHyN1D+pBObEp8IOtZTaQpK3vLINaBLE+kETys+712X/mLfTq09ZE
+	 jrvTjUTf6ih/w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v8 2/4] kallsyms: extend lineinfo to loadable modules
+Subject: Re: [PATCH v8 4/4] kallsyms: add KUnit tests for lineinfo feature
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Sasha Levin" <sashal@kernel.org>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260801143219.3975824-3-sashal@kernel.org>
+In-Reply-To: <20260801143219.3975824-5-sashal@kernel.org>
 References: <20260801143219.3975824-1-sashal@kernel.org>
- <20260801143219.3975824-3-sashal@kernel.org>
+ <20260801143219.3975824-5-sashal@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 01 Aug 2026 14:42:50 +0000
-Message-Id: <20260801144250.E347C1F00AC4@smtp.kernel.org>
+Date: Sat, 01 Aug 2026 14:45:53 +0000
+Message-Id: <20260801144553.817111F00AC4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -46,156 +46,88 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Integer overflow in `mod_lineinfo_filenames_off()` and `module_loo=
-kup_lineinfo_section()` size calculations bypasses bounds checks, leading t=
-o out-of-bounds memory accesses in NMI/panic context.
-- [Medium] `gen_lineinfo` fails to apply `.debug_info` relocations, causing=
- `dwarf_getsrclines` to read the wrong line program for all CUs except the =
-first in an ET_REL module.
+
+New issues:
+- [Medium] The KUnit test `test_sprint_symbol_format` unconditionally fails=
+ because it mistakenly expects `+0x` for a zero offset.
+
+Pre-existing issues:
+- [High] kallsyms_lookup_buildid() can return negative error codes like -E2=
+BIG, leading to a stack buffer underflow in __sprint_symbol().
 --
 
---- Patch [2]: [PATCH v8 2/4] kallsyms: extend lineinfo to loadable modules=
- ---
-commit 4466d01d38fe10716b6638bf8ed427b3c7f20a03
+--- Patch [4]: [PATCH v8 4/4] kallsyms: add KUnit tests for lineinfo featur=
+e ---
+commit 337c29ff08b7b23d898a00240203617a93c2c906
 Author: Sasha Levin <sashal@kernel.org>
-Subject: kallsyms: extend lineinfo to loadable modules
 
-This commit extends CONFIG_KALLSYMS_LINEINFO to loadable kernel modules.
-It post-processes each .ko at build time to embed a lineinfo section,
-which is used at runtime to annotate stack traces from module code.
+kallsyms: add KUnit tests for lineinfo feature
 
-> diff --git a/include/linux/mod_lineinfo.h b/include/linux/mod_lineinfo.h
-> new file mode 100644
-> index 0000000000000..75d0bfba6ce57
-> --- /dev/null
-> +++ b/include/linux/mod_lineinfo.h
-> @@ -0,0 +1,122 @@
-[ ... ]
-> +static inline u32 mod_lineinfo_addrs_off(void)
-> +{
-> +	return sizeof(struct mod_lineinfo_header);
-> +}
-> +
-> +static inline u32 mod_lineinfo_file_ids_off(u32 num_entries)
-> +{
-> +	return mod_lineinfo_addrs_off() + num_entries * sizeof(u32);
-> +}
-> +
-> +static inline u32 mod_lineinfo_lines_off(u32 num_entries)
-> +{
-> +	/* u16 file_ids[] may need 2-byte padding to align lines[] to 4 bytes */
-> +	u32 off =3D mod_lineinfo_file_ids_off(num_entries) +
-> +		  num_entries * sizeof(u16);
-> +	return (off + 3) & ~3u;
-> +}
-> +
-> +static inline u32 mod_lineinfo_file_offsets_off(u32 num_entries)
-> +{
-> +	return mod_lineinfo_lines_off(num_entries) + num_entries * sizeof(u32);
-> +}
-> +
-> +static inline u32 mod_lineinfo_filenames_off(u32 num_entries, u32 num_fi=
-les)
-> +{
-> +	return mod_lineinfo_file_offsets_off(num_entries) +
-> +	       num_files * sizeof(u32);
-> +}
-[ ... ]
-> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index f23126d804b25..b0e703e29708b 100644
-> --- a/kernel/module/kallsyms.c
-> +++ b/kernel/module/kallsyms.c
-[ ... ]
-> +static bool module_lookup_lineinfo_section(const void *blob, u32 blob_si=
-ze,
-> +					   u32 hdr_offset,
-> +					   unsigned int section_offset,
-> +					   unsigned int min_offset,
-> +					   const char **file,
-> +					   unsigned int *line)
-> +{
-[ ... ]
-> +	/*
-> +	 * Validate counts before multiplying =E2=80=94 sizing arithmetic could
-> +	 * otherwise overflow on 32-bit with a malformed blob.  Each entry
-> +	 * contributes one u32 (addrs), one u16 (file_ids), and one u32
-> +	 * (lines); each file contributes one u32 (file_offsets).
-> +	 */
-> +	{
-> +		u32 avail =3D blob_size - hdr_offset;
-> +		u32 needed =3D mod_lineinfo_filenames_off(num_entries, num_files);
-> +
-> +		if (num_entries > U32_MAX / sizeof(u32))
-> +			return false;
-> +		if (num_files > U32_MAX / sizeof(u32))
-> +			return false;
-> +		if (needed > avail || filenames_size > avail - needed)
-> +			return false;
-> +	}
+Add a KUnit test module (CONFIG_LINEINFO_KUNIT_TEST) that verifies the
+kallsyms lineinfo feature produces correct source file:line annotations
+in stack traces.
+
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index b5eff2ba8e5d7..b0475f1e7f791 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
 
 [Severity: High]
-Can the needed calculation overflow before the bounds check is evaluated?
+This is a pre-existing issue, but could this lead to a stack buffer underfl=
+ow?
 
-If num_entries is maliciously large (e.g., 0x33333334), the calculation in
-mod_lineinfo_filenames_off() sums the array offsets using 32-bit unsigned
-arithmetic (around 10 bytes per entry). This would wrap around modulo 2^32,
-resulting in a small needed value that bypasses the needed > avail check.
-A later binary search on addrs could then access out-of-bounds memory.
+In kernel/kallsyms.c:__sprint_symbol():
 
-The division check on num_entries above only guards against a single u32
-array's size, not the combined 10 bytes per entry.
+    len =3D kallsyms_lookup_buildid(address, &size, &offset, &modname, &bui=
+ldid,
+                                   buffer);
+    if (!len)
+        return sprintf(buffer, "0x%lx", address - symbol_offset);
+   =20
+    ...
+    if (add_offset)
+        len +=3D sprintf(buffer + len, "+%#lx/%#lx", offset, size);
 
-> diff --git a/scripts/gen_lineinfo.c b/scripts/gen_lineinfo.c
-> index a3ee54eaad05d..725a8dfbf011a 100644
-> --- a/scripts/gen_lineinfo.c
-> +++ b/scripts/gen_lineinfo.c
+If a loadable module or BPF program contains a symbol name that exceeds
+KSYM_NAME_LEN, functions like module_address_lookup() return -E2BIG (-7).
+This negative value propagates up through kallsyms_lookup_buildid() and
+bypasses the 'if (!len)' check.
+
+Would 'buffer + len' then point before the allocated buffer, causing an
+out-of-bounds write during the subsequent sprintf?
+
 [ ... ]
-> +static void apply_debug_line_relocations(Elf *elf)
+
+> diff --git a/lib/tests/lineinfo_kunit.c b/lib/tests/lineinfo_kunit.c
+> new file mode 100644
+> index 0000000000000..2e66e8ebb3124
+> --- /dev/null
+> +++ b/lib/tests/lineinfo_kunit.c
+> @@ -0,0 +1,1040 @@
+[ ... ]
+> +static void test_sprint_symbol_format(struct kunit *test)
 > +{
-[ ... ]
-> +	/* Find the relevant sections */
-> +	while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
-> +		const char *name;
+> +	char *buf =3D alloc_sym_buf(test);
+> +	unsigned long addr =3D target_addr(lineinfo_target_normal);
 > +
-> +		if (!gelf_getshdr(scn, &shdr))
-> +			continue;
-> +		name =3D elf_strptr(elf, shstrndx, shdr.sh_name);
-> +		if (!name)
-> +			continue;
+> +	sprint_symbol(buf, addr);
 > +
-> +		if (!strcmp(name, ".debug_line"))
-> +			debug_line_scn =3D scn;
-> +		else if (!strcmp(name, ".rela.debug_line"))
-> +			rela_debug_line_scn =3D scn;
-> +		else if (!strcmp(name, ".rel.debug_line"))
-> +			rel_debug_line_scn =3D scn;
-> +		else if (shdr.sh_type =3D=3D SHT_SYMTAB)
-> +			symtab_scn =3D scn;
-> +	}
+> +	/* Should contain +0x and /0x for offset/size */
+> +	KUNIT_EXPECT_NOT_NULL_MSG(test, strstr(buf, "+0x"),
+> +				  "Missing offset in: %s", buf);
 
 [Severity: Medium]
-Does this miss relocations for ET_REL modules that contain multiple object
-files?
+Will this assertion fail unconditionally due to standard C formatting rules?
 
-This loop collects and applies relocations for .debug_line, but appears to
-omit .rela.debug_info and .rel.debug_info entirely.
+Since test_sprint_symbol_format() passes the exact start address of
+lineinfo_target_normal, the resulting offset is 0.
 
-Without the relocations applied to .debug_info, the DW_AT_stmt_list attribu=
-te
-for all compile units might remain at offset 0.
+When __sprint_symbol() formats a zero offset using '+%#lx/%#lx', the '%#lx'
+specifier omits the '0x' prefix for a zero value, resulting in '+0/' instead
+of '+0x0/'.
 
-> +static void process_dwarf(Dwarf *dwarf, unsigned long long text_addr,
-> +			  struct covered_section *sections,
-> +			  unsigned int num_sections)
->  {
-[ ... ]
-> +		if (dwarf_getsrclines(&cudie, &lines, &nlines) !=3D 0)
-> +			goto next;
-
-When dwarf_getsrclines() is later called in process_dwarf(), will it
-repeatedly read the line program of only the first compile unit, leaving
-most module functions without line info?
+Does this cause strstr(buf, "+0x") to always return NULL and break the test?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260801143219.3975=
-824-1-sashal@kernel.org?part=3D2
+824-1-sashal@kernel.org?part=3D4
