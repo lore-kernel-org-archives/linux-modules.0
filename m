@@ -1,147 +1,201 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198AB276041
-	for <linux-modules@vger.kernel.org>; Sat,  1 Aug 2026 14:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F59B78F3A
+	for <linux-modules@vger.kernel.org>; Sat,  1 Aug 2026 14:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785595175; cv=none; b=NIdyiUxRvayZOQbXEdKk17V7jiK9jLrQpMXBIvKENPG7tgO859QzB6g0tfeH1D5xuqM7CpfK42ZFUfAjbChEGmj4wH3Nagrl3RPsZ08yOirOYK7B5FkIdycVeXzDPPquSNR4AWwkYek9teFzOWDmvDpnX67E8NOAcNn7tCRu7XQ=
+	t=1785595372; cv=none; b=VJFwsdmzaeU9t82OLbuJzQrCNuRbsgONFJgd6raUYGomr5lvdz9oBABtxMgFZKPoephYs2otmoGls0prShYLzbtPChsv5oiyVD1hi8cr6kXZHcb6BAsVDZ/9+njkpLC0OA5wL18qiy3sF95SbqcKz0xSxbVSQ4qoTLPYWT2lVDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785595175; c=relaxed/simple;
-	bh=SB78r8uXdVVAfTnWPkqJs61wSO82ZPc/deyxw45EHpI=;
+	s=arc-20240116; t=1785595372; c=relaxed/simple;
+	bh=aCs1jm4FCwR38FuiXOUbWThAe8Tjfsf/+Atxq+qULwQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=c0fxskuofZY+XrI37h9M4aZjz+qSKi5pdAqDKIK8Ng8taPy2xUlJ6eDirYIRVsfuXjkvmN2XBw1JWz87m9ZwAY/WuuVpbnZB7EZoBGoWnpcTT3rCsS1yU1HBMIp1qYY6I7mX01Js11R0p2XKi3LFzNM9E6hAhyFQlhyl4fya6Ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yejb1dQx; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Lc72Kib4qFpgGqtsHhBpMXsb/tndQs3vhSthBZ3rf8Y5BtRyi5XRfEJ2qKl2al/0el7siVlbELJULGwlI/06TNcJQX++/SHyVG1S+T0ajcIWJc3NzfR3f17yCkbWeGAwSQvfJ8jBXsazzpztLju3E17W/QvyzNIWbV0B7e+hRrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6aFq8Zt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yejb1dQx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B7C1F00AC4;
-	Sat,  1 Aug 2026 14:39:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6aFq8Zt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E347C1F00AC4;
+	Sat,  1 Aug 2026 14:42:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785595173;
-	bh=EZJ+Ll3WJOfRcovQW/nbNKrLU/+G+GC9XZn7s5JE1D4=;
+	s=k20260515; t=1785595371;
+	bh=3g4i+AlEk3MiNJT9yOpYaSam1QqhOeMv53dMbTqZmsI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Yejb1dQxHHIGf92BLC7GkgpBW2+Tgrw8DzIZhdjdRWF7YjM++LRwJr4LnmsB94cMc
-	 CQ7C0pUrjX1em4RwtRqyyTSlrGivzpO5qvYKwASAmoW04p974jDGpcWYNkAZI4PsJ+
-	 AJ7c9u6HeGN5gf4FSQr/387aDrI40PIRAEgBHEp1Kwy3mZGLuofJVdXq4+JkK0wX6M
-	 l9A2s8HQpNm9NAK6WEgmRQDWIXJ6Y2IHaMlGw3QUhFTh/r5dA26U+0AqgTXnZOkXIY
-	 b1Mw7U0nGWsuVp0rvRK2xrBKPLlOVI1L2XcaTVHaT1lE8LetE5DHQ7PYFzhivZEIRs
-	 Uc3ad7il+61ug==
+	b=T6aFq8Zt/Bk+0MJBTD5LWZDJ83sKaUKi8+J09kH5Z5CpEUrl+MagsYwxBLwkfy5O0
+	 KvRoJK5FkEm84tsnFv7egGxHgqWK0+4d3YPrR5DXywt+PxlOXX6PEG1qX/5hsz3XG7
+	 ttZ6JxcF1bev+yM2gGHc1dMB3FU0RAzK81jnBYgq1oOWCfIr3cgtV/C+8nuSJbrd8v
+	 YgkPvvEo+MA72h8p9dm7I6eVx/uFRG80TDol0OQ8P5wMYn1Y7AkxTL/xIB1RnzPgws
+	 DrNijWSOaXkVO5thrjPqeghqBRwJhDBeRZBlWQkwmlgkartUteiyReMrRfVkHZVhY3
+	 vlMzx6aEaZ8iA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v8 3/4] kallsyms: delta-compress lineinfo tables for
- ~2.7x size reduction
+Subject: Re: [PATCH v8 2/4] kallsyms: extend lineinfo to loadable modules
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Sasha Levin" <sashal@kernel.org>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260801143219.3975824-4-sashal@kernel.org>
+In-Reply-To: <20260801143219.3975824-3-sashal@kernel.org>
 References: <20260801143219.3975824-1-sashal@kernel.org>
- <20260801143219.3975824-4-sashal@kernel.org>
+ <20260801143219.3975824-3-sashal@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 01 Aug 2026 14:39:33 +0000
-Message-Id: <20260801143933.95B7C1F00AC4@smtp.kernel.org>
+Date: Sat, 01 Aug 2026 14:42:50 +0000
+Message-Id: <20260801144250.E347C1F00AC4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Missing alignment validation for inner offsets `blocks_offset` a=
-nd `files_offset` from the module lineinfo header, risking fatal alignment =
-traps.
+- [High] Integer overflow in `mod_lineinfo_filenames_off()` and `module_loo=
+kup_lineinfo_section()` size calculations bypasses bounds checks, leading t=
+o out-of-bounds memory accesses in NMI/panic context.
+- [Medium] `gen_lineinfo` fails to apply `.debug_info` relocations, causing=
+ `dwarf_getsrclines` to read the wrong line program for all CUs except the =
+first in an ET_REL module.
 --
 
---- Patch [3]: [PATCH v8 3/4] kallsyms: delta-compress lineinfo tables for =
-~2.7x size reduction ---
-commit cc36cd56474b921c9564d160db461d97e0550634
+--- Patch [2]: [PATCH v8 2/4] kallsyms: extend lineinfo to loadable modules=
+ ---
+commit 4466d01d38fe10716b6638bf8ed427b3c7f20a03
 Author: Sasha Levin <sashal@kernel.org>
+Subject: kallsyms: extend lineinfo to loadable modules
 
-kallsyms: delta-compress lineinfo tables for ~2.7x size reduction
+This commit extends CONFIG_KALLSYMS_LINEINFO to loadable kernel modules.
+It post-processes each .ko at build time to embed a lineinfo section,
+which is used at runtime to annotate stack traces from module code.
 
-This commit replaces the flat uncompressed parallel arrays in kallsyms
-lineinfo with a block-indexed, delta-encoded, ULEB128 varint compressed
-format to significantly reduce the memory footprint.
-
+> diff --git a/include/linux/mod_lineinfo.h b/include/linux/mod_lineinfo.h
+> new file mode 100644
+> index 0000000000000..75d0bfba6ce57
+> --- /dev/null
+> +++ b/include/linux/mod_lineinfo.h
+> @@ -0,0 +1,122 @@
+[ ... ]
+> +static inline u32 mod_lineinfo_addrs_off(void)
+> +{
+> +	return sizeof(struct mod_lineinfo_header);
+> +}
+> +
+> +static inline u32 mod_lineinfo_file_ids_off(u32 num_entries)
+> +{
+> +	return mod_lineinfo_addrs_off() + num_entries * sizeof(u32);
+> +}
+> +
+> +static inline u32 mod_lineinfo_lines_off(u32 num_entries)
+> +{
+> +	/* u16 file_ids[] may need 2-byte padding to align lines[] to 4 bytes */
+> +	u32 off =3D mod_lineinfo_file_ids_off(num_entries) +
+> +		  num_entries * sizeof(u16);
+> +	return (off + 3) & ~3u;
+> +}
+> +
+> +static inline u32 mod_lineinfo_file_offsets_off(u32 num_entries)
+> +{
+> +	return mod_lineinfo_lines_off(num_entries) + num_entries * sizeof(u32);
+> +}
+> +
+> +static inline u32 mod_lineinfo_filenames_off(u32 num_entries, u32 num_fi=
+les)
+> +{
+> +	return mod_lineinfo_file_offsets_off(num_entries) +
+> +	       num_files * sizeof(u32);
+> +}
+[ ... ]
 > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index f23126d804b25..b0e703e29708b 100644
 > --- a/kernel/module/kallsyms.c
 > +++ b/kernel/module/kallsyms.c
-
 [ ... ]
-
-> @@ -540,80 +535,63 @@ static bool module_lookup_lineinfo_section(const vo=
-id *blob, u32 blob_size,
->  		return false;
-> =20
->  	base =3D (const u8 *)blob + hdr_offset;
-> -	hdr =3D (const struct mod_lineinfo_header *)base;
-> -	num_entries =3D hdr->num_entries;
-> -	num_files =3D hdr->num_files;
-> -	filenames_size =3D hdr->filenames_size;
-> +	hdr =3D base;
-> =20
-> -	if (num_entries =3D=3D 0)
-> +	if (hdr->num_entries =3D=3D 0 || hdr->num_blocks =3D=3D 0)
->  		return false;
-> =20
-> -	/*
-> -	 * Validate counts before multiplying =E2=80=94 sizing arithmetic could
-> -	 * otherwise overflow on 32-bit with a malformed blob.  Each entry
-> -	 * contributes one u32 (addrs), one u16 (file_ids), and one u32
-> -	 * (lines); each file contributes one u32 (file_offsets).
-> -	 */
->  	/* Validate each sub-array fits within the remaining blob bytes */
->  	{
->  		u32 avail =3D blob_size - hdr_offset;
-> -		u32 needed =3D mod_lineinfo_filenames_off(num_entries, num_files);
-> =20
-> -		if (num_entries > U32_MAX / sizeof(u32))
-> +		if (hdr->blocks_offset > avail ||
-> +		    hdr->blocks_size > avail - hdr->blocks_offset)
+> +static bool module_lookup_lineinfo_section(const void *blob, u32 blob_si=
+ze,
+> +					   u32 hdr_offset,
+> +					   unsigned int section_offset,
+> +					   unsigned int min_offset,
+> +					   const char **file,
+> +					   unsigned int *line)
+> +{
+[ ... ]
+> +	/*
+> +	 * Validate counts before multiplying =E2=80=94 sizing arithmetic could
+> +	 * otherwise overflow on 32-bit with a malformed blob.  Each entry
+> +	 * contributes one u32 (addrs), one u16 (file_ids), and one u32
+> +	 * (lines); each file contributes one u32 (file_offsets).
+> +	 */
+> +	{
+> +		u32 avail =3D blob_size - hdr_offset;
+> +		u32 needed =3D mod_lineinfo_filenames_off(num_entries, num_files);
+> +
+> +		if (num_entries > U32_MAX / sizeof(u32))
 > +			return false;
-> +		if (hdr->data_offset > avail ||
-> +		    hdr->data_size > avail - hdr->data_offset)
->  			return false;
-> -		if (num_files > U32_MAX / sizeof(u32))
-> +		if (hdr->files_offset > avail ||
-> +		    hdr->files_size > avail - hdr->files_offset)
->  			return false;
-> -		if (needed > avail || filenames_size > avail - needed)
-> +		if (hdr->filenames_offset > avail ||
-> +		    hdr->filenames_size > avail - hdr->filenames_offset)
->  			return false;
->  	}
+> +		if (num_files > U32_MAX / sizeof(u32))
+> +			return false;
+> +		if (needed > avail || filenames_size > avail - needed)
+> +			return false;
+> +	}
+
+[Severity: High]
+Can the needed calculation overflow before the bounds check is evaluated?
+
+If num_entries is maliciously large (e.g., 0x33333334), the calculation in
+mod_lineinfo_filenames_off() sums the array offsets using 32-bit unsigned
+arithmetic (around 10 bytes per entry). This would wrap around modulo 2^32,
+resulting in a small needed value that bypasses the needed > avail check.
+A later binary search on addrs could then access out-of-bounds memory.
+
+The division check on num_entries above only guards against a single u32
+array's size, not the combined 10 bytes per entry.
+
+> diff --git a/scripts/gen_lineinfo.c b/scripts/gen_lineinfo.c
+> index a3ee54eaad05d..725a8dfbf011a 100644
+> --- a/scripts/gen_lineinfo.c
+> +++ b/scripts/gen_lineinfo.c
+[ ... ]
+> +static void apply_debug_line_relocations(Elf *elf)
+> +{
+[ ... ]
+> +	/* Find the relevant sections */
+> +	while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
+> +		const char *name;
+> +
+> +		if (!gelf_getshdr(scn, &shdr))
+> +			continue;
+> +		name =3D elf_strptr(elf, shstrndx, shdr.sh_name);
+> +		if (!name)
+> +			continue;
+> +
+> +		if (!strcmp(name, ".debug_line"))
+> +			debug_line_scn =3D scn;
+> +		else if (!strcmp(name, ".rela.debug_line"))
+> +			rela_debug_line_scn =3D scn;
+> +		else if (!strcmp(name, ".rel.debug_line"))
+> +			rel_debug_line_scn =3D scn;
+> +		else if (shdr.sh_type =3D=3D SHT_SYMTAB)
+> +			symtab_scn =3D scn;
+> +	}
 
 [Severity: Medium]
-Could these inner offsets (like hdr->blocks_offset and hdr->files_offset)
-be unaligned in a malformed blob?
+Does this miss relocations for ET_REL modules that contain multiple object
+files?
 
-The code validates the bounds correctly here, but misses an alignment check
-before these offsets are later added to the base pointer and assigned to
-the u32 arrays.
+This loop collects and applies relocations for .debug_line, but appears to
+omit .rela.debug_info and .rel.debug_info entirely.
 
-If the offsets are not multiples of 4, wouldn't dereferencing tbl.blk_addrs
-or tbl.file_offsets trigger an alignment exception on strict-alignment
-architectures? If this happens during an NMI or panic, it seems like it
-could cause a recursive fault and permanently lose the backtrace.
+Without the relocations applied to .debug_info, the DW_AT_stmt_list attribu=
+te
+for all compile units might remain at offset 0.
 
+> +static void process_dwarf(Dwarf *dwarf, unsigned long long text_addr,
+> +			  struct covered_section *sections,
+> +			  unsigned int num_sections)
+>  {
 [ ... ]
+> +		if (dwarf_getsrclines(&cudie, &lines, &nlines) !=3D 0)
+> +			goto next;
 
-> +	tbl.blk_addrs	=3D base + hdr->blocks_offset;
-> +	tbl.blk_offsets	=3D base + hdr->blocks_offset +
-> +			  hdr->num_blocks * sizeof(u32);
-> +	tbl.data	=3D base + hdr->data_offset;
-> +	tbl.data_size	=3D hdr->data_size;
-> +	tbl.file_offsets =3D base + hdr->files_offset;
-> +	tbl.filenames	=3D base + hdr->filenames_offset;
-> +	tbl.num_entries	=3D hdr->num_entries;
-> +	tbl.num_blocks	=3D hdr->num_blocks;
-> +	tbl.num_files	=3D hdr->num_files;
-> +	tbl.filenames_size =3D hdr->filenames_size;
-> +
-> +	return lineinfo_search(&tbl, section_offset, min_offset, file, line);
->  }
+When dwarf_getsrclines() is later called in process_dwarf(), will it
+repeatedly read the line program of only the first compile unit, leaving
+most module functions without line info?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260801143219.3975=
-824-1-sashal@kernel.org?part=3D3
+824-1-sashal@kernel.org?part=3D2
