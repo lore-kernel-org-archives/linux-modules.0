@@ -1,133 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A79A306764
-	for <linux-modules@vger.kernel.org>; Sat,  1 Aug 2026 14:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEB4389107
+	for <linux-modules@vger.kernel.org>; Sat,  1 Aug 2026 14:45:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785595555; cv=none; b=SXIlhAPVS9gnsc1oQHdWZ7TiTL178xO4EhVjk+3PxzFNHYQqX4It3L91Ce3Xj7N7Qn+xDsiKLvbfEz9ZENaD//F6w+6+yXQQVPJMm+kycPSE3WM8S48DxE9Su8O5nKUo/mQVAc4UbGzF62Lbx5wb8maWjJtExq3wWlt+PIIkQa4=
+	t=1785595555; cv=none; b=eJYndkf8h3ZeTBH2tj1snFlfPxIfDioLa5vDbapWfJSKts9fK7iGFJJwqho4lZ0bVpcPKUvC+vZHPwnEUXf5SO8lnamHOxEqCqTWnmORG2QLHsbT4m2y5mPycXnVJprkH4U5g5Lb7NJ7Qxxy6E+O7cH2m4P6gkZ8H6HgCQj/p10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785595555; c=relaxed/simple;
-	bh=jLWjjMI5rougOsUuvQAD4JnqTyuwA33U7FBslxbxMM8=;
+	bh=5/jaPTp1SxMhv95oCccCnVjOJmvirKTlgOATjvPX7JA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kr92tfcJetVkbddP3l1MpuiaeIXCeLY3Jq7Vo42eTnBNBJjZu2ZE6SA3DsY/zJ4tx8ICm7L6FF7b8lkTgakNTspCX/tFTYmicNJhRWhSd/89CIveV7XwFzXociJaYhFAeblPpzSMAT44jdZAIfVCpZtpA3V4qMEPWVySIiqPG3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=behEUfpv; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=NXJEw3iwu1xafDbgaUMDKNnkLoWDB7nG6Awuk8Y04qC6WTe1hxZeABvNd7xmRzn9SKnh4uwoLXdlRdjUkjDPxYbnJ3JEXfLN4ZNdQ7Ku1vwGh2VHKtOywyLLtEwXiWSNG5z2ZPhASzGVO75u1YIsJu0InKxrAyA8j2i3iIj9nlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLY47xvb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="behEUfpv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817111F00AC4;
-	Sat,  1 Aug 2026 14:45:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLY47xvb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3755B1F00ACA;
+	Sat,  1 Aug 2026 14:45:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785595553;
-	bh=O8wT6C1K0YtAPoxi+8vvmm6Y4ece++XS/hytI4HrEX8=;
+	s=k20260515; t=1785595554;
+	bh=IZusMNt0R2Rm5TbCcPItYt5FudBLuuH0prpLo6O9WSs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=behEUfpv3s/0FQpz4jI4zAhfWyzvnvKCIGFYNHrtNCZBdFIuw4DrW4/nyDSBstTTu
-	 2a6dUhKkuovSN5M/LX17sO9YRmHfnMs/hFA+yi4Wl8Ysr0ba8WGKQRjBZ+cxPM6Zsa
-	 NVUWE6MIuyOq5+NXj6BrOKGVwjCehMxQVg0az7r1Zd9zwLN/G8tPIhsDBq5SsaicJH
-	 3KWwU53rfHpzwRItDoy8QqmWsykfTPfO99M7EiXi2Q5XjS9u1C3rz+IvMJH6RiMvFB
-	 JMo1/UU+DZgJGVHyN1D+pBObEp8IOtZTaQpK3vLINaBLE+kETys+712X/mLfTq09ZE
-	 jrvTjUTf6ih/w==
+	b=PLY47xvbnq8KVFrCZbdm4JsqVGX0EUkQkhrYgoQ8cALhL/qBsnGMYHldwQE3M5L4W
+	 6TCi8C/Tt9jopuAaQaDOt4/msXXyIKySqRZqUOUsk0FSzIZVhRPUoxpYfZI5R5w5GF
+	 xGD9amH1aC4gOEOkC1gXKL5d3VNQGfyBR39UPY8LdwDbaUkQ7A5Ginfv76CGtS7Amd
+	 0DDckidt99/jv92RoHhXuclksmuzrRoG9Qvv/L7U6j8eOrdjLZoL8X5jYv+IDTVwJu
+	 uz1wv9uH1DxMqKaxiP3+mghSm3kl9psyEnR9zTmeOX8cpfgAwVwRNuBc5iEUIg62uN
+	 mY3SQh1Yq/zEg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v8 4/4] kallsyms: add KUnit tests for lineinfo feature
+Subject: Re: [PATCH v8 1/4] kallsyms: embed source file:line info in kernel
+ stack traces
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Sasha Levin" <sashal@kernel.org>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260801143219.3975824-5-sashal@kernel.org>
+In-Reply-To: <20260801143219.3975824-2-sashal@kernel.org>
 References: <20260801143219.3975824-1-sashal@kernel.org>
- <20260801143219.3975824-5-sashal@kernel.org>
+ <20260801143219.3975824-2-sashal@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sat, 01 Aug 2026 14:45:53 +0000
-Message-Id: <20260801144553.817111F00AC4@smtp.kernel.org>
+Message-Id: <20260801144554.3755B1F00ACA@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-New issues:
-- [Medium] The KUnit test `test_sprint_symbol_format` unconditionally fails=
- because it mistakenly expects `+0x` for a zero offset.
-
-Pre-existing issues:
-- [High] kallsyms_lookup_buildid() can return negative error codes like -E2=
-BIG, leading to a stack buffer underflow in __sprint_symbol().
+- [Medium] Use of `snprintf` violates `sprint_symbol` API contract and caus=
+es trace buffer inflation.
 --
 
---- Patch [4]: [PATCH v8 4/4] kallsyms: add KUnit tests for lineinfo featur=
-e ---
-commit 337c29ff08b7b23d898a00240203617a93c2c906
+--- Patch [1]: [PATCH v8 1/4] kallsyms: embed source file:line info in kern=
+el stack traces ---
+commit 8a14a0edefef69e5b032ac47662777d287f71164
 Author: Sasha Levin <sashal@kernel.org>
 
-kallsyms: add KUnit tests for lineinfo feature
+kallsyms: embed source file:line info in kernel stack traces
 
-Add a KUnit test module (CONFIG_LINEINFO_KUNIT_TEST) that verifies the
-kallsyms lineinfo feature produces correct source file:line annotations
-in stack traces.
+Add CONFIG_KALLSYMS_LINEINFO, which embeds a compact address-to-line
+lookup table in the kernel image so stack traces directly print source
+file and line number information.
 
 > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index b5eff2ba8e5d7..b0475f1e7f791 100644
 > --- a/kernel/kallsyms.c
 > +++ b/kernel/kallsyms.c
 
-[Severity: High]
-This is a pre-existing issue, but could this lead to a stack buffer underfl=
-ow?
-
-In kernel/kallsyms.c:__sprint_symbol():
-
-    len =3D kallsyms_lookup_buildid(address, &size, &offset, &modname, &bui=
-ldid,
-                                   buffer);
-    if (!len)
-        return sprintf(buffer, "0x%lx", address - symbol_offset);
-   =20
-    ...
-    if (add_offset)
-        len +=3D sprintf(buffer + len, "+%#lx/%#lx", offset, size);
-
-If a loadable module or BPF program contains a symbol name that exceeds
-KSYM_NAME_LEN, functions like module_address_lookup() return -E2BIG (-7).
-This negative value propagates up through kallsyms_lookup_buildid() and
-bypasses the 'if (!len)' check.
-
-Would 'buffer + len' then point before the allocated buffer, causing an
-out-of-bounds write during the subsequent sprintf?
-
 [ ... ]
 
-> diff --git a/lib/tests/lineinfo_kunit.c b/lib/tests/lineinfo_kunit.c
-> new file mode 100644
-> index 0000000000000..2e66e8ebb3124
-> --- /dev/null
-> +++ b/lib/tests/lineinfo_kunit.c
-> @@ -0,0 +1,1040 @@
-[ ... ]
-> +static void test_sprint_symbol_format(struct kunit *test)
-> +{
-> +	char *buf =3D alloc_sym_buf(test);
-> +	unsigned long addr =3D target_addr(lineinfo_target_normal);
+> @@ -497,6 +567,23 @@ static int __sprint_symbol(char *buffer, unsigned lo=
+ng address,
+>  		len +=3D sprintf(buffer + len, "]");
+>  	}
+> =20
+> +	/*
+> +	 * Append "(file:line)" only for stack-backtrace consumers.  Plain
+> +	 * sprint_symbol() backs %ps, and many existing format strings tack
+> +	 * literal "()" after %ps to indicate a function call ("foo()
+> +	 * replaced with bar()"); appending lineinfo there would produce a
+> +	 * confusing "foo (file:line)()".
+> +	 */
+> +	if (add_lineinfo && IS_ENABLED(CONFIG_KALLSYMS_LINEINFO) && !modname) {
+> +		const char *li_file;
+> +		unsigned int li_line;
 > +
-> +	sprint_symbol(buf, addr);
-> +
-> +	/* Should contain +0x and /0x for offset/size */
-> +	KUNIT_EXPECT_NOT_NULL_MSG(test, strstr(buf, "+0x"),
-> +				  "Missing offset in: %s", buf);
+> +		if (kallsyms_lookup_lineinfo(address, sym_start,
+> +					     &li_file, &li_line))
+> +			len +=3D snprintf(buffer + len, KSYM_SYMBOL_LEN - len,
+> +					" (%s:%u)", li_file, li_line);
 
 [Severity: Medium]
-Will this assertion fail unconditionally due to standard C formatting rules?
+Is it safe to use snprintf() here instead of scnprintf()?
 
-Since test_sprint_symbol_format() passes the exact start address of
-lineinfo_target_normal, the resulting offset is 0.
+The API contract for sprint_symbol() specifies it returns the number of byt=
+es
+stored. If the source file path is very long and truncation occurs, snprint=
+f()
+will return the un-truncated length.
 
-When __sprint_symbol() formats a zero offset using '+%#lx/%#lx', the '%#lx'
-specifier omits the '0x' prefix for a zero value, resulting in '+0/' instead
-of '+0x0/'.
+This can cause caller logic errors. For example, if a kprobe triggers on a
+symbol with a long source path, fetch_store_symstrlen() will allocate buffer
+space based on this inflated return value. When fetch_store_symstring() wri=
+tes
+the truncated string, the tail of the allocated ring buffer remains
+uninitialized. Future callers attempting pointer advancement via
+buf +=3D sprint_symbol(...) could also be exposed to out-of-bounds writes.
 
-Does this cause strstr(buf, "+0x") to always return NULL and break the test?
+Could this be changed to use scnprintf() to ensure it returns the actual
+number of bytes written?
+
+> +	}
+> +
+>  	return len;
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260801143219.3975=
-824-1-sashal@kernel.org?part=3D4
+824-1-sashal@kernel.org?part=3D1
