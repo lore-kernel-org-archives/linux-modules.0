@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA6939185C
-	for <linux-modules@vger.kernel.org>; Mon,  3 Aug 2026 05:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C81380FC3
+	for <linux-modules@vger.kernel.org>; Mon,  3 Aug 2026 05:42:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785735443; cv=none; b=iTmQMew0yAdOtZ3nIgJy66JMObd9mlYLhdVmkHLvmL7t594avOTOSEGD/XSubUYR0FxV18xHYaswhgdxl3gV8/eMHnrEBRhy0+X/4hLp3HA0/rbkckYLe9NcfnySQd61V/bq+ZNklrRgIXJQIQ2GgczCKT1gfeQlvDuHjgPjaa8=
+	t=1785735756; cv=none; b=M8hEXI1OM1j70rdM48fIldmE5+hIFYGBL2kqwgYBDPrKAYW3uHGAQ2L0oO+yjMuFz5pUzRsuwTKsh1aVZigdRWG3gKO4ZTFLH0NDuITD4idQY4J2TnzTgRLta4C2+6K82AkIvTqJ6ktwwobwGmjpjcyS8m6VDLKhi9nXJmOaxQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785735443; c=relaxed/simple;
-	bh=dWrl7y9k96yWZtvZnvsbaLtlTDmNFmOcZe5IkqxOVbM=;
+	s=arc-20240116; t=1785735756; c=relaxed/simple;
+	bh=WkKUNX87DuQkqkOPRSmJwrPUOu0C/xAuh3ctsMAZ0iw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bj8ocySutimUBQ+Z3ACmubwRT36UoLdVGwbw9QLXDHASlCu8T+mUAvqHtSkbCHoAll4SBA43HPdjGqIAZQZMb4lBpc8pIcVJWKvzSLt54dLjxhdr1Dzq9dis9aZ3eHK20GzXPv246llOvf1FaqY4fZWrT61oBxV1iZwFC6c9dZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVBrLFw/; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=crj2jQPEFV8wdfRiqXrN3tZG8IeVsHDJB7c74Hqagk0ZkhpesuNourIKxkXim3v4kn1lBX357v985OGiptHdCbM2zxcGybK8Vm/v4Ooe+C5xc3Umh1sCYqQS3OllLHbEJ1nQlfaB9NB2xj5DABM23My4pm40O5/nKRYc6ykl1Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eht17sB9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVBrLFw/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD7C1F000E9;
-	Mon,  3 Aug 2026 05:37:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eht17sB9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367531F000E9;
+	Mon,  3 Aug 2026 05:42:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785735442;
-	bh=3VI2kKdgmmGt1E+XNE38qwre03y6m/4kLExE4gCmMDg=;
+	s=k20260515; t=1785735754;
+	bh=FUlFgdPQrrnJgNKWTBktu5nia45q+Mo1UXEENpCK7mo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gVBrLFw/EEwuWA2Z2Q9b74Yrg3bzS6N3PSZ4+9sobTBWH/OFQ7oC18t0g2J+UMMne
-	 KIWXSWwYSFqQvh6w779K4RBoAsSt96d5uEWIqTMhMC8af4rBYjXaZdwO8JLTYXEpio
-	 w2ip4SHRikyzTCopCUSY8dwUWBzYKq4naTMoEJeTFEjkEufRBRusPqMMkOOU5tRJFp
-	 dNYWqvm58HOFN3csoj3k6dVVOKdejQs79n59bVFJvvGk3ofykZ8wxrcGzI6wfvDgB+
-	 S5YAv7pRMPBLurUzHzZa09AF7SbU/G2jhMN0A0VZH4LUWU+GBKmDGd+Ct8dfZXaCG/
-	 2ZM9jMp+7dN2A==
-Date: Sun, 2 Aug 2026 22:37:20 -0700
+	b=eht17sB9bSQVZmDlcndw3gUfhO6UI8sD7/iSfDsOjR541p0YI29nCnyn1KqkjdoFC
+	 xBX8V9RXcq30+lIAcnEB3CKjnac/TNmhhc1TOFtDiY8lAv2zsH9ojDPNiIdY417bYm
+	 mcM7og3XUcW8UeTf5yf+BzbIycTRPzOjNA2tIvVNm8QEonYnI7SwP5SnKoK7sUrY4U
+	 I/Z2Y6XMPXq+BuZ56Q41D/ZE10RuEgdSRQBPPEfaKG2xXcDxe3IkKdqgJ04Sv2wvvI
+	 rpWyQz4HU6wHABAdHgIDcx7yOdBHrMRinCbog2LWISHByaA0m7jXMQT1ZU4SRyUnWt
+	 zGn3vPyxXtlQQ==
+Date: Sun, 2 Aug 2026 22:42:32 -0700
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: sashiko-bot@kernel.org
 Cc: linux-modules@vger.kernel.org
-Subject: Re: [PATCH 02/14] objtool/klp: Normalize Module.symvers paths to
- module names
-Message-ID: <zzkvlumnxwpxztjdqiuepabji6nktihnjhy65oofth4fvipn6y@c73eecgpav7f>
+Subject: Re: [PATCH 05/14] objtool/klp: Add .klp.symid for sympos
+ disambiguation
+Message-ID: <7avwg6oos7kjtotwlpcxhy5qiviu5gzhwew2ibjcfccu4vbonu@25ayhrgt7b33>
 References: <cover.1785727106.git.jpoimboe@kernel.org>
- <dbe1b72931bd3c31b751fd0729613d9f2226fff6.1785727106.git.jpoimboe@kernel.org>
- <20260803033711.7C6EB1F000E9@smtp.kernel.org>
+ <64d50f077b569f47883c015cdb7079edb068efe8.1785727106.git.jpoimboe@kernel.org>
+ <20260803034116.43C111F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -44,39 +44,69 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260803033711.7C6EB1F000E9@smtp.kernel.org>
+In-Reply-To: <20260803034116.43C111F000E9@smtp.kernel.org>
 
-On Mon, Aug 03, 2026 at 03:37:11AM +0000, sashiko-bot@kernel.org wrote:
-> [Severity: Medium]
-> Does this assignment leak the original pointer returned by strdup()?
+On Mon, Aug 03, 2026 at 03:41:15AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] Relocations in .klp.symid pointing to discarded sections (.exitcall.exit, .exit.text, etc.) will cause a link-time error when building vmlinux.
+> --
 > 
-> Looking at read_exports(), export->mod is allocated via strdup() right
-> before this check:
+> --- Patch [5]: [PATCH 05/14] objtool/klp: Add .klp.symid for sympos disambiguation ---
+> commit 09454266fcd41f3c022cac215ab86d1269c37d52
+> Author: Josh Poimboeuf <jpoimboe@kernel.org>
 > 
->         export->mod = strdup(mod);
->         if (!export->mod) {
->                 ERROR_GLIBC("strdup");
->                 return -1;
->         }
+> objtool/klp: Add .klp.symid for sympos disambiguation
 > 
->         if (strcmp(export->mod, "vmlinux"))
->                 export->mod = normalize_modname(export->mod);
+> This commit introduces a new .klp.symid section to vmlinux.o to help
+> livepatch reliably determine the sympos of duplicate-named symbols. It
+> emits an array of identifiers and relocations that survives the final link,
+> allowing klp-diff to correlate symbols between vmlinux.o and vmlinux.
 > 
-> When processing module paths with a slash, normalize_modname() returns
-> an interior pointer (slash + 1).
+> > diff --git a/tools/objtool/klp-symid.c b/tools/objtool/klp-symid.c
+> > new file mode 100644
+> > index 0000000000000..cf188cdfa6079
+> > --- /dev/null
+> > +++ b/tools/objtool/klp-symid.c
+> [ ... ]
+> > +static const char * const discarded_secs[] = {
+> > +	".discard",
+> > +	".modinfo",
+> > +	"__tracepoint_check",
+> > +};
+> > +
+> > +static bool discarded_sec(struct section *sec)
+> > +{
+> > +	if (!(sec->sh.sh_flags & SHF_ALLOC))
+> > +		return true;
+> > +
+> > +	for (int i = 0; i < ARRAY_SIZE(discarded_secs); i++)
+> > +		if (strstarts(sec->name, discarded_secs[i]))
+> > +			return true;
+> > +
+> > +	return false;
+> > +}
 > 
-> If this offset pointer overwrites export->mod, the original base
-> address from strdup() is permanently lost. 
+> [Severity: Low]
+> Should the discarded_secs array also include .exitcall.exit and .exit.
+> sections?
 > 
-> While objtool often relies on process termination for cleanup, if these
-> strings are ever freed later, passing an interior pointer to free() will
-> cause an invalid free crash.
+> Because these exit sections have the SHF_ALLOC flag set, the first check in
+> discarded_sec() will not catch them. If they are also omitted from the
+> discarded_secs array, klp_create_symid_sections() will mistakenly generate
+> relocations pointing to them.
 > 
-> Could this be avoided by shifting the string contents in-place with
-> memmove() instead?
+> Since the linker script unconditionally discards .exitcall.exit via the
+> DISCARDS macro, generating relocations against it causes a deterministic
+> link-time error ("relocation refers to a discarded section") when building
+> vmlinux.
+> 
+> Could this happen in practice? Common driver exit handlers (e.g.,
+> module_cleanup used by drivers like cx18 and ivtv) often result in
+> duplicate static symbols like __exitcall_module_cleanup in the
+> .exitcall.exit section when the modules are built-in.
 
-Perhaps, but these are small memory leaks and klp diff frees all its
-memory when it exits so I'm not sure we care.
+I'm not convinced this can happen in practice.  Why would somebody be
+trying to patch or reference a module exit symbol anyway?
 
 -- 
 Josh
