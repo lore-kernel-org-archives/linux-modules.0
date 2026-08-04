@@ -1,32 +1,68 @@
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A6DD3603C2;
-	Tue,  4 Aug 2026 06:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADCD43BCD17
+	for <linux-modules@vger.kernel.org>; Tue,  4 Aug 2026 08:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785824340; cv=none; b=i4XlB51Qb3jry7wbzLQkbbxoRNnO4niKWcMbqGEyz6Py4ImeGnbO3aGNzrD9ZbF0RuoNam4Fj5DarRMkigftOvGMgpXvoH54Z6jZKHps8OItBRwPUxF0lRdEt7F67rHD4Y0y2laNCsZFFV/o3Yuf9mTWKdeQ8+E8BE5AC/tbDuY=
+	t=1785832984; cv=none; b=vBaIGJsb4UbBG9Ys07N3wQ5eRg+btEr73o2y+UdgiH+Tf8yPeRI4DPjJbTW9Cabzg1QddrfRUGf5PZFd5/6T8sCXRWXJiqK+Bn9ohoUi9HZSwX6J3U7gGkVIZCafoNa/Cdqi5Bw8j7kSVaUzlMoZahfABKiBpr3+4Xvee/e+CW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785824340; c=relaxed/simple;
-	bh=5fE3X1Wjtrr36x9FoDny7H2bXEFplz1eLA2gXJUQmy8=;
+	s=arc-20240116; t=1785832984; c=relaxed/simple;
+	bh=6TLC9/7ZoU9gYJEbBF5hXMTDlsm/DxMOhd7D4Yi4qP8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kZs//rMimDx/bxU2RZWgOocWzZ0Zxev2uDaN53m65xHaojvUvGK3kOrOQ3lBXeMIrz2QWF6qiKI6i5ktCyW8H6jPRKgZieuPf0Squ3bqjodLJgqDbisSLNGF9t9l2sYL3YgXD4cvRhrLOfj2XIlqWV9hXyudpwxadL1y42zaF9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=stu.xidian.edu.cn; spf=pass smtp.mailfrom=stu.xidian.edu.cn; dkim=fail (0-bit key) header.d=stu.xidian.edu.cn header.i=@stu.xidian.edu.cn header.b=EY6frFRZ reason="key not found in DNS"; arc=none smtp.client-ip=162.243.164.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=stu.xidian.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stu.xidian.edu.cn
+	 In-Reply-To:Content-Type; b=RCFVD/DQh7o+jaoTBDlh2PfqrjkQjQfHrUmT/P1KxP8xIc6qD1Ux41c1kg9ZSaefdJplFcF++QLia8/gLrftV5UEDOZAYkmDFm6k56ru02Ol1LejkIOkZdnDrkNGPYGIoZARamj2f1Mz+PuRzn79lM4BYFhgkxE0aJrtreqv2RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AOB4ewC2; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=stu.xidian.edu.cn header.i=@stu.xidian.edu.cn header.b="EY6frFRZ"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AOB4ewC2"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-49548e01d02so16721985e9.0
+        for <linux-modules@vger.kernel.org>; Tue, 04 Aug 2026 01:43:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=stu.xidian.edu.cn; s=dkim; h=Received:Message-ID:Date:
-	MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	In-Reply-To:Content-Type:Content-Transfer-Encoding; bh=iwPMobUGJ
-	b9Mp6jsLSzeM4wpVTSjA/s5fET8NykvjHY=; b=EY6frFRZEUZ7gu3TEv4cBWOdJ
-	QJOXaEVBqRQQ4R6zTSIYGWoJf0r00N/0KnOyxnfvjONBOtZVrWXUvbnkIOUbKhIQ
-	gqFdCJHyEcRKeStgkKGLkZ3TAhToQW7AhLsxjznEEo7T87zHOqEODe1Po79cpEn5
-	tuBf4q0KhcgTTieqwE=
-Received: from [192.168.1.110] (unknown [115.53.183.158])
-	by hzbj-edu-front-3.icoremail.net (Coremail) with SMTP id BbQMCkCW+9RAhHFqjD7bAQ--.20798S3;
-	Tue, 04 Aug 2026 14:18:41 +0800 (CST)
-Message-ID: <2459be1a-7507-4bc4-a235-09c18ca6b8a6@stu.xidian.edu.cn>
-Date: Tue, 4 Aug 2026 14:18:40 +0800
+        d=suse.com; s=google; t=1785832979; x=1786437779; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jbldVeeF/KP7W3Olw45BNCoavqWALya2eVZqAm3Zd6k=;
+        b=AOB4ewC2a1Yq7dVc90+FBvOuE3hzctE/+ZkWAPZKaZ3n9jwBTebc8HGri2X+OGdoxz
+         3epvpQU4xlWhDKU09/dpYmlwD/sbOm2w1cpieT3HqesD/UhRQx5CGDHHhVLFEI4f0YUo
+         I1fNWOLE1JgF1Ye5YKh41ugj5EXtzRr+uOoLVTS4z2UpWGqqqJggHVtFzYo1yVWOBdNC
+         UgF+l/VjLHqhCOFrW8bd6UKRDmEx9Qyvl0QCrrL8LYvBSisWD25lUaDux4OHJ2f/hONk
+         z429d3jS+k+XjyisSAta/g8kf4gmX+8zW0rwWEQqXzXlq1FHo5EFmulfNxEot6LBPj/V
+         0U9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785832979; x=1786437779;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jbldVeeF/KP7W3Olw45BNCoavqWALya2eVZqAm3Zd6k=;
+        b=Uq+AQehiO2OVb6aroM3at5qzo4SfZ79cHfoUBSxsM2eegX7BxZ5w9cNst/JmbX5sfx
+         x2sOae/k/R+fgCxSZD/QXhnWC4mCzOWFt8sb+7TKxdtP3MD2UkxwYNusDVXFnYYkNxaT
+         HAkfpsKbgfI6xi4b/FV7bxr+1cfKpBE4TFavRUfcPtlIUvOBs8IO01RIXexQeIzVXVIe
+         ITA5NEBLjmaPSaA1s1cBmzrDdN5lq9wJ0y8ZdB3KTbCvlY0+lmnfe2Ao0+KcoOx9a7Te
+         iq+cNlsfKr40wgrBtp8VOrU7tcO/iDTlxqCSJesCwdsrdhDjhbYxpyRBsgcMLQEuL9pV
+         mIEw==
+X-Forwarded-Encrypted: i=1; AHgh+RpUuJh1Ch3jb7aqa2slweDLSyz/68jqXixUmLuT4WOwqU9IJBvTuxjullK/gHHugCxFPXm4XgfeaX6wp4SW@vger.kernel.org
+X-Gm-Message-State: AOJu0YwF6F7ikybiHPRyiIvnKuX55PmS584F5CAMFlohgo6/GpPxE96g
+	zpkujJFrFiI0j6yxvtV3E6vVO9RiMtn+MC62orue6JR2uCGHe5n02n9jNVg7+57hQEs=
+X-Gm-Gg: AR+sD13qB68wxmWHnTMFj5DejDrUeaLLwF0aH3M2MGeUlRmns3ZxxeFyDo6WCdMFNwc
+	mo4spqHvX4VrQte3Wbd6oy32mdDxia+S+QuLHi0Y49F50rURXh/+BTizZeAfQfmMCSmFrjO4z6M
+	hxwrIRULnlmkYooPigJ+F3WGV3n9nxFDTC+jHlUo/CLmmrvmAE7xkgxNrSKrDrSEtvjcHVKNcgr
+	QcaXs/qkWoMAg7ce0QKHuoTDsfmEdcYqBfj+ns9eqNipc9rD4fvrynLDLERusRe3eJm9bfJ/vba
+	+dy/utmXKuC6hWqK2Ulw+HenT03X+acvFYuQ/Sfc7ZvKNZq4OdsShbprw7ok8L8qyKVpWqaKIfC
+	B/Oe7I5cUMBDKs2XbUGqZKFf4zR1vu4lPJhQXq7Zn+uaMl726+hudlrMz3AaDUnWIjcXqUq0hIf
+	s9lTVRGgSltL6iew8YAf0hN2A2FhVNFPCysgJetYxuGrMqZz4Mg0Zf3F/NQdFItOLEYfQNjXD3h
+	P2iNYRxQ/QFu5GESL1JR9QpEQ==
+X-Received: by 2002:a05:600c:4e89:b0:495:5e3d:15e1 with SMTP id 5b1f17b1804b1-4980c6788f8mr270438195e9.16.1785832978799;
+        Tue, 04 Aug 2026 01:42:58 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd45a1240sm40009708f8f.36.2026.08.04.01.42.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Aug 2026 01:42:58 -0700 (PDT)
+Message-ID: <8d507b50-b5a2-48a8-a4bb-f196ac28b5e4@suse.com>
+Date: Tue, 4 Aug 2026 10:42:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -36,39 +72,106 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] module: fix UAF and GPF in idempotent_init_module via
  heap allocation
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>, Johan Hovold <johan@kernel.org>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
+To: Mingyu Wang <25181214217@stu.xidian.edu.cn>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Johan Hovold <johan@kernel.org>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
 References: <20260717082601.81704-1-25181214217@stu.xidian.edu.cn>
-From: Mingyu Wang <25181214217@stu.xidian.edu.cn>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
 In-Reply-To: <20260717082601.81704-1-25181214217@stu.xidian.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:BbQMCkCW+9RAhHFqjD7bAQ--.20798S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYH7k0a2IF6F1UM7kC6x804xWl14x267AK
-	xVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
-	A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j
-	6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr
-	1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAac4AC62xK8xCEY4vEwIxC
-	4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-	IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-	M4x0Y48IcVAKI48JMxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCF54CYxVCY1x0262
-	kKe7AKxVWUtVW8ZwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
-	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
-	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-	A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7xRMnYFDUUUUU==
-X-CM-SenderInfo: qsvrmiqsrujiux6v33wo0lvxldqovvfxof0/1tbiAQUPEWpwsO5ougAAsM
 
-Hi Luis, Petr, and others,
+On 7/17/26 10:26 AM, Mingyu Wang wrote:
+> During concurrent module loading (e.g., triggered by syzkaller), the
+> idempotent module loading mechanism uses a local stack variable
+> (`struct idempotent idem`) to track the state of waiters.
+> 
+> If a task executing idempotent_init_module() is abruptly terminated
+> (e.g., killed by a fatal signal or otherwise completely exits before
+> reaching the list cleanup paths) after adding its node to the global
+> `idem_hash` list, its kernel stack is prematurely freed and reclaimed.
 
-Gentle ping on this patch.
-Please let me know if there are any updates or if further modifications 
-are needed from my side.
+I'm confused by this description and I'm not sure what problem the patch
+is trying to solve. A task is not normally terminated in the middle of
+a syscall. This could happen only if it hits an oops. However, that
+means there is an earlier bug and the module loader isn't expected to be
+resilient to a post-oops state.
 
+Could you clarify the scenario that you ran into?
+
+-- 
 Thanks,
-Mingyu
+Petr
 
+> 
+> However, the stack-allocated node remains linked in the list. Subsequent
+> module loading attempts that traverse the list will dereference this
+> stale stack pointer, leading to KASAN slab-out-of-bounds reads and
+> General Protection Faults (GPF):
+> 
+>   BUG: KASAN: slab-out-of-bounds in idempotent_init_module+0x54a/0x620
+>   Read of size 8 at addr ffff888106367df8 by task modprobe/433
+>   ...
+>   The buggy address belongs to the object at ffff8881063676c0
+>    which belongs to the cache shmem_inode_cache of size 1392
+>   ...
+>   Oops: general protection fault, probably for non-canonical address
+> 
+> Fix this by dynamically allocating `struct idempotent` on the heap
+> via `kmalloc_obj()`. This decouples the list node's lifespan from the
+> process stack, ensuring that even if the task is abruptly terminated,
+> the global list safely points to valid heap memory until properly
+> unlinked, preventing memory corruption.
+> 
+> Fixes: 9b9879fc0327 ("modules: catch concurrent module loads, treat them as idempotent")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mingyu Wang <25181214217@stu.xidian.edu.cn>
+> ---
+>  kernel/module/main.c | 24 ++++++++++++++++--------
+>  1 file changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 46dd8d25a605..39f05ac4b1a1 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3779,21 +3779,29 @@ static int init_module_from_file(struct file *f, const char __user * uargs, int
+>  
+>  static int idempotent_init_module(struct file *f, const char __user * uargs, int flags)
+>  {
+> -	struct idempotent idem;
+> +	struct idempotent *idem;
+> +	int ret;
+>  
+>  	if (!(f->f_mode & FMODE_READ))
+>  		return -EBADF;
+>  
+> +	idem = kmalloc_obj(*idem, GFP_KERNEL);
+> +	if (!idem)
+> +		return -ENOMEM;
+> +
+>  	/* Are we the winners of the race and get to do this? */
+> -	if (!idempotent(&idem, file_inode(f))) {
+> -		int ret = init_module_from_file(f, uargs, flags);
+> -		return idempotent_complete(&idem, ret);
+> +	if (!idempotent(idem, file_inode(f))) {
+> +		ret = init_module_from_file(f, uargs, flags);
+> +		ret = idempotent_complete(idem, ret);
+> +	} else {
+> +		/*
+> +		 * Somebody else won the race and is loading the module.
+> +		 */
+> +		ret = idempotent_wait_for_completion(idem);
+>  	}
+>  
+> -	/*
+> -	 * Somebody else won the race and is loading the module.
+> -	 */
+> -	return idempotent_wait_for_completion(&idem);
+> +	kfree(idem);
+> +	return ret;
+>  }
+>  
+>  SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
