@@ -1,148 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D69371D11;
-	Wed,  5 Aug 2026 14:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B558E3749F7
+	for <linux-modules@vger.kernel.org>; Wed,  5 Aug 2026 14:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785939478; cv=none; b=UqQvaed1v4dfs+3EtErOL+hIz6anV3M8RvrXZf/KjnhbprK8A1rn012WP7hMACEIceXQlu2b/dk8O86bqw0iqHMq/yYSOUnGXmqbMC+Tux+2pcqmAIdZviTw6ghi2V7GSIpYtfYTo5kaL+YzOVjc5yNW1mSm+7wj59MsJNxJmcc=
+	t=1785941243; cv=none; b=jCrCaI66YjGXMmVvh8IF7Vux6D5dJNjGNFc59BjgI8U3f8MUoNX0gWwSf4UckbWXNMydfvICBiKUOae2ad+BYkLlaC3KMGHCaCYfJ5S0ibyJuXcdKvTJDqgWL9qxqISk5YTMzQPdX6fAS10lBhPK1Ud9kJYhBsrK6bscN80RXAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785939478; c=relaxed/simple;
-	bh=uWC9e7LcKH/SlN+YSHDFxYtxskKsbo31CBg9gUK67yU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CCr2AQAJx1c3csrCNhBG4Likoqz9rqayxry+q4zV5cZm2ZYMvVm1EPRziyuPd0DXWD3GUXsBrA0fdhcHVjOUFqvFNUtM7ROJue9jbX/kW+racVpOx1RqyqrbhtRxQrHLL6Udv4UK1m9qVdUwqAhvkElL3HjYdqCMTIJ0igV5/Ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y1ylVzt6; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785941243; c=relaxed/simple;
+	bh=OsMtavjZJpRs7JOiOiguAbbN9fILxQjVhXldFpwRHic=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bbqiMisoA9GrEUf+K3OZsn6eZAQJXjWzNEqrKiOeCL+smqvvio8WAXx5Y+klivB7cDMLCg5iZ0vnrm9tjqXGj4vn/uaDSNXDkC8DiOTbEtPbQ6b6vnWyylwJzAo71RDqH9DPjsSRsgOzvzy9Vb63mYzTNu/Iv2L+mSMkzoSA4EQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UBeLHJnV; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y1ylVzt6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785939477; x=1817475477;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uWC9e7LcKH/SlN+YSHDFxYtxskKsbo31CBg9gUK67yU=;
-  b=Y1ylVzt6ziUb8Ep38X5FsWUIoWSSV9K+gmEGx9gGur04KE8HD/uO27lC
-   2YlFhnzy3tLGbM9YF+OGw03RmUIspu6aYTxVrfSfiQ+Kw9IFsXOW/7n8H
-   HN0yPw/qzC7E872vNEsLlKiLG4Xx9V5VRE1wbvS6svg76YELuVMAngBVG
-   3NtBEE7Uu8D8U8EPQS/3jJmw+gfWE76fMfBJGOjPirTrIqsb2O3ZyHawx
-   WSc03TX3EEfGdo62uhLJjssFn0FjSwI5NyVOC8y25rH4PsBJ2dVJxhuXg
-   4icKivuX/p/iCL4P67jYO1zExkLZYfK8oEeAWnxUFfNYPxNGwESiu90Hs
-   g==;
-X-CSE-ConnectionGUID: JuxU8lG1Qj6crnwShbU8rA==
-X-CSE-MsgGUID: iBkqexDtS6eP5J6aWrr8Yg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11865"; a="97875329"
-X-IronPort-AV: E=Sophos;i="6.25,206,1779174000"; 
-   d="scan'208";a="97875329"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 07:17:56 -0700
-X-CSE-ConnectionGUID: uhPcnlB8SFqqLvbJguNq6A==
-X-CSE-MsgGUID: /GQAli+DQdyZv3raUxNCyQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,206,1779174000"; 
-   d="scan'208";a="265663189"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 05 Aug 2026 07:17:52 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wrcRJ-00000000Ch7-19zB;
-	Wed, 05 Aug 2026 14:17:49 +0000
-Date: Wed, 5 Aug 2026 22:17:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aaron Tomlin <atomlin@atomlin.com>, arnd@arndb.de, mcgrof@kernel.org,
-	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
-	peterz@infradead.org
-Cc: oe-kbuild-all@lists.linux.dev, mhiramat@kernel.org, atomlin@atomlin.com,
-	neelx@suse.com, da.anzani@gmail.com, sean@ashe.io,
-	chjohnst@mail.com, steve@abita.co, mproche@mail.com,
-	nick.lane@mail.com, linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] module: Extend module_blacklist parameter to built-in
- modules
-Message-ID: <202608052234.AvJ5oSvK-lkp@intel.com>
-References: <20260622140259.2974-1-atomlin@atomlin.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UBeLHJnV"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4954a9e8490so12906165e9.1
+        for <linux-modules@vger.kernel.org>; Wed, 05 Aug 2026 07:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1785941240; x=1786546040; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iH0FlQI8tkDOWcBfTJDeJ0UBlBqaU4FCfRj9gn3PRYA=;
+        b=UBeLHJnV0YPt0zOojn2ByjEgDcZt07/DeT0qOCMEeF4b4o57r2SXwg4WKOGrn7XAje
+         Fc1KBBKTHY/RkqLTOLvs3mRV3A2V91lJutqUVhLFpcaSoSisE3Nt6w8HyRyFENUngNvK
+         Q07waOMTwFtdfb6lQ6DDMVx4CMfc+0h73geQPbE9wIfHoX0TrD3buUHgdk1O25AUL7/C
+         l8b9IE7zOWStDUeScwdxGtYgWZIa/gRn0J0JZMVtH5CpqB+NAt8fQlglPakPlin7ZrIx
+         ZMFnlKZccnyiRgDFnS/3Hw3ZaBOR8CeVoX867m8oA4fNAac78unne2AbytTlyT2Ox16Y
+         464w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785941240; x=1786546040;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=iH0FlQI8tkDOWcBfTJDeJ0UBlBqaU4FCfRj9gn3PRYA=;
+        b=MzbDH+h3E/oRslaHSVYosS11Nh+EGafP/P/ieRlxuTB7S2oL1IZxLJVNkB3rNtS9eR
+         ahLGXoW1j1Kh2ovvATkgYjFmykqiteXaFrHw4P/cotUXdwl0Rmxj5TJnQO2RO4IqD40K
+         rOIRS2+FvBioFVyM2RS/TjCfCmkYSuswCAGTHsr/u2Xmtmz3gNtB0wHko6Iz9Yi9YcRf
+         xTGsy1lYG0iS464dpGi4MgbWRXdXBN0A1KkycoaPx2aAOAKzyMU1AWdbWRdrnZp08hqe
+         gjMwLA9Sc+XcX0lw/ZLEyQ/WRsiHCkgVw72bzwLfps0eJ59fmyupbm0JIhm/nkOI+H1W
+         mpMQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqEDu6DBKggB0gGQefg1wk7wIwO2FYUL5Gh2LwvIH4FJaowW2pB4lpk9rmSr/9MpDsEnIt7SSN3mILQMKAE@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDVGJdpboyXINuCpWqRXANIoUP40jCdDA5ah/o1/FPCe0ltCqK
+	vDcWjnsjTFFXOcnx3ND3P+YHvkVMz1kFUb06iVENymb1olP79dlTbz68w4zKuZT5OFE=
+X-Gm-Gg: AR+sD11o0g61Iu/TOYrw7oV3kTEeoOodZnFN2mnwktYLBT+HWEOwfMr6TAk6dimZ6qz
+	g2pLtiPGQaDEnkloLezlQY5dZXqzseLPxSPhZa+l/dIJ7zL+287J5bx7VVe5IKiqbi331YsePTX
+	y4rjEMoTgnFiPQmJV1QojU25SH+69s1qDkkj4zTwrD8G3XFSDdECpyPT/lVsBnOSB+VxF28a83h
+	YX9NTl0EK6PjwAzFzX8fk7O6bUcsrI6sTDStyepQQzai1zWuzOwwnS7AfGbZ+Bn2XrttB64LUZL
+	yBi3Ob0MXPqscYcwRoa3aTh7MalqSbyDFCq7WT5HVx0EtyNFZ5p7RT9WivANkK3GigUtIFKU/n5
+	6bF+PU8+zBVs4lBhwGCCjRs4iOFzDzrByc++eVynBytxkegtunEY0rPT0J06jY+M1XEacqc3+tC
+	GlsGzDexF85NxM7pv0uxOiHQ1Kqw5fSU9ozeDcbDtSrpT6GXbsMvtCtPPxFTZYHBKjTVnYa3PA+
+	9Ok1kTIWQidZqABF6v483zSDU+lp+vS2WxR
+X-Received: by 2002:a05:600d:8483:b0:494:1f7:8057 with SMTP id 5b1f17b1804b1-4994e339bb8mr64982655e9.1.1785941239789;
+        Wed, 05 Aug 2026 07:47:19 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994f124135sm24468095e9.2.2026.08.05.07.47.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Aug 2026 07:47:19 -0700 (PDT)
+Message-ID: <1951733c-0d8f-4d1d-9da1-fd71d23781de@suse.com>
+Date: Wed, 5 Aug 2026 16:47:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260622140259.2974-1-atomlin@atomlin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module: fix UAF and GPF in idempotent_init_module via
+ heap allocation
+To: Mingyu Wang <25181214217@stu.xidian.edu.cn>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Johan Hovold <johan@kernel.org>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260717082601.81704-1-25181214217@stu.xidian.edu.cn>
+ <8d507b50-b5a2-48a8-a4bb-f196ac28b5e4@suse.com>
+ <f79bc014-a606-4ab5-adfd-1b56dbdc30ba@stu.xidian.edu.cn>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <f79bc014-a606-4ab5-adfd-1b56dbdc30ba@stu.xidian.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Aaron,
+On 8/4/26 12:41 PM, Mingyu Wang wrote:
+> Hi Petr,
+> 
+>> I'm confused by this description and I'm not sure what problem the patch
+>> is trying to solve. A task is not normally terminated in the middle of
+>> a syscall. This could happen only if it hits an oops. However, that
+>> means there is an earlier bug and the module loader isn't expected to be
+>> resilient to a post-oops state.
+>>
+>> Could you clarify the scenario that you ran into?
+> 
+> Thank you for the review. You are entirely correct; the task did not
+> terminate during a normal syscall, but was indeed killed by a prior
+> oops.
+> 
+> Here is the exact scenario discovered during driver fuzzing by our
+> automated virtual device modeling tool, DevGen:
+> 
+> 1. A `modprobe` task (PID 433) concurrently loaded a faulty driver
+>    (the `atlantic` net driver in our trace).
+> 2. It passed the idempotent() check and added its stack-allocated
+>    `struct idempotent` node to the global `idem_hash` list.
+> 3. During init_module_from_file(), the `atlantic` driver hit a fatal
+>    oops in its hardware init path (aq_hw_write_reg+0x39/0x50).
+> 4. The kernel initiated oops recovery, terminating the `modprobe` task
+>    (exited with preempt_count 1) and freeing its kernel stack.
+> 5. The oops recovery path does not clean up the `idem_hash` list,
+>    leaving a dangling pointer to the freed stack in the global list.
+> 6. A subsequent module loading attempt traversed `idem_hash`,
+>    dereferenced the stale stack pointer, and triggered a secondary
+>    KASAN use-after-free and GPF.
 
-kernel test robot noticed the following build errors:
+Thanks for explaining the scenario.
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on linus/master arnd-asm-generic/master v7.2-rc6 next-20260804]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> While the root cause of the initial crash lies within the specific
+> buggy driver, the current stack allocation allows an isolated driver
+> oops to corrupt a global synchronization primitive, preventing any
+> further module loading across the entire system.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/module-Extend-module_blacklist-parameter-to-built-in-modules/20260805-123559
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20260622140259.2974-1-atomlin%40atomlin.com
-patch subject: [PATCH v2] module: Extend module_blacklist parameter to built-in modules
-config: alpha-allnoconfig (https://download.01.org/0day-ci/archive/20260805/202608052234.AvJ5oSvK-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 16.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260805/202608052234.AvJ5oSvK-lkp@intel.com/reproduce)
+An oopsed task can leave behind various kernel structures in an
+inconsistent state, such as unreleased locks, incorrect reference counts
+and leaked objects. It is expected that the kernel may behave strangely
+afterward and this can result in subsequent problems, such as deadlocks
+or crashes.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608052234.AvJ5oSvK-lkp@intel.com/
+Loading a module is a heavyweight operation that injects new code and
+data into the kernel. If it ends in an oops, I think it is fair that no
+additional modules can be inserted. I don't see that the module loader
+is doing anything wrong or behaving differently from other kernel
+components in this regard.
 
-All errors (new ones prefixed by >>):
-
-   init/main.c: In function 'do_one_initcall':
->> init/main.c:1364:24: error: implicit declaration of function 'module_is_blacklisted' [-Wimplicit-function-declaration]
-    1364 |         if (modname && module_is_blacklisted(modname)) {
-         |                        ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/module_is_blacklisted +1364 init/main.c
-
-  1355	
-  1356	int __init_or_module do_one_initcall(initcall_t fn)
-  1357	{
-  1358		int count = preempt_count();
-  1359		char msgbuf[64];
-  1360		const char *modname;
-  1361		int ret;
-  1362	
-  1363		modname = initcall_get_modname(fn);
-> 1364		if (modname && module_is_blacklisted(modname)) {
-  1365			pr_info("Skipping initcall for blacklisted built-in module %s\n",
-  1366				modname);
-  1367			return 0;
-  1368		}
-  1369	
-  1370		if (initcall_blacklisted(fn))
-  1371			return -EPERM;
-  1372	
-  1373		do_trace_initcall_start(fn);
-  1374		ret = fn();
-  1375		do_trace_initcall_finish(fn, ret);
-  1376	
-  1377		msgbuf[0] = 0;
-  1378	
-  1379		if (preempt_count() != count) {
-  1380			sprintf(msgbuf, "preemption imbalance ");
-  1381			preempt_count_set(count);
-  1382		}
-  1383		if (irqs_disabled()) {
-  1384			strlcat(msgbuf, "disabled interrupts ", sizeof(msgbuf));
-  1385			local_irq_enable();
-  1386		}
-  1387		WARN(msgbuf[0], "initcall %pS returned with %s\n", fn, msgbuf);
-  1388	
-  1389		add_latent_entropy();
-  1390		return ret;
-  1391	}
-  1392	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Petr
