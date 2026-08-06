@@ -1,68 +1,68 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9731F44CF59
-	for <linux-modules@vger.kernel.org>; Thu,  6 Aug 2026 11:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CAE389116
+	for <linux-modules@vger.kernel.org>; Thu,  6 Aug 2026 11:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786015186; cv=none; b=cPP2bi7aIuUvLoZlZY5QkolVKVotq/47SpP75eWHEbBx02ueJCOs970sgpP3BnKyPok84/HlqjkbjUsvmtRrugdvFKLzGtMDtQT9t+3DAWrz/gWcSOUah3NAtCHpbm3ylENj4AoHOTnH0LqLCDhjzaer4iVxnueHypZItInhzOw=
+	t=1786015227; cv=none; b=SZU7XOHBCSNjKNrKP+k3zc93tEkK/bPswdSNu50EtcV2HjqXfN1UX5j0B+ASv5Hj5FEYzKUTJeP5B52gsNNB6dfjILd4OS3/WQJLgAlGBqakjwgmCi3wWzGx6oOI519OOoohWlhEtPfuWyO0B+1U2bZV+4f/4Gfska0LjUjZDSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786015186; c=relaxed/simple;
-	bh=CnHpUUI7pdIhBuSRzNEeZEWMMDj4WVealHeIlZkbQAw=;
+	s=arc-20240116; t=1786015227; c=relaxed/simple;
+	bh=PiHaEbFbsbuk3xWfpHJf3iZCAXPgh1x3mz6btgM7DeE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FoSsvSEBejkp29m52sIlzR5iLvBti1687UweUdSK3mh6ROvIuu94S4bDO9EBeSNAhYsVJQibkXBQXnDyZTfovnLkYhS4ez88IOc8oOfoYRTSEfHfF7LrzS07cKc5H/e7z9aj+zNlLwJO1QFEDXKF5Ua62lKNmHRcju9fVsmtR/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PodvnevY; arc=none smtp.client-ip=209.85.221.53
+	 In-Reply-To:Content-Type; b=tXKVUeQt/o8Xi1yLuTby58JS9GIKY9yDrLNQvyUqjISqQ2Wy6yV/biz1NVPLjpUtquT+NuXtfKz04Qs5xgkUBqGOXYDXWX6KP9G0q9W/vM4qQKr7XU+3ILczXNamDbcHdfne/WTPamjN2cGGEAjg433HUW7F49LlJfvr2e9fIMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XNB8HIKq; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PodvnevY"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-47fde295992so703030f8f.0
-        for <linux-modules@vger.kernel.org>; Thu, 06 Aug 2026 04:19:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XNB8HIKq"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-495757ccbc1so22061265e9.2
+        for <linux-modules@vger.kernel.org>; Thu, 06 Aug 2026 04:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1786015179; x=1786619979; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1786015224; x=1786620024; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=akASYRjtF6BO4x5KD3iTDLHDlzLsjhfQ3KKqFIPbzo4=;
-        b=PodvnevYX+E/rWvT399q7mD0i4Px4AxbwYDYg2goNp8E5xaR9qCc9rr2oZtBNYg/kz
-         lfTqFWUzEa+66LKN2uHTUxi1Fxbg4o6vL06Uo7R20QToCtW6PL7uapbr41osiKNFUTQ/
-         bk/4H8ZdbbqHdSOwMCMYdEvWRGlO2speCLZGJvNgYkSN/i1FmZWxBFCPJEEedv+zXe0g
-         1HM+BKFC+KCGcKkHMo93F579CORzCDP+Og9LyfdNbwl4YQU7zFY+UMGQ0wqB2uI26IIk
-         OWo2nhhsQgc8OPWUxNyep4k3r07PPDccC6gMON8DqVWpGi1kPLmGMswD3NIG1jMZfLts
-         5TyA==
+        bh=4iqPDnpSytCdb2l+5MS0mIwH5n9oUyHF76yraGYuJXY=;
+        b=XNB8HIKqooDT0o3V5AMaFLUPQBxeA5pnHhtUu23/9KJquXlDduwwaN57sDwOc/fNgD
+         Q5f9g02wLhtrmbGsIjD6xSRbBKQuXhkWWNh5N15SzPMb0smJrytKJIdSTDL5goyXr0i5
+         w6a1ZR3PU1LZaqDYddAynK5shLUnZXoQJDoFsmS3Mmm5tbXKQ/dQBcTzjCUJfloTISAe
+         ben3vG0YFQKDUir8IV6M12I9FHssCUNPqyjwZlCOUtzgPl55Gr7SKY9vkTHjemeXfgDZ
+         QauclwcPUU1/BcbtvE1gMrfJWOLhYaqLm0FedgOSiZH04M+iiY0LdbPx4Y13vNhnjGte
+         GiDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786015179; x=1786619979;
+        d=1e100.net; s=20251104; t=1786015224; x=1786620024;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=akASYRjtF6BO4x5KD3iTDLHDlzLsjhfQ3KKqFIPbzo4=;
-        b=Ywo/EV7Rq634vlVK65qcuvHGrDCxIUT385pywoOO3sH0aUhB2pqa+kKqkB3CQJrWX8
-         BgI59Y/0t3y1s9Jsa7StEj9V9ea8ilfItZ4cwI1H0q03rAOZJLlHTOpn4csZg0UvYwZM
-         KS9htMA0NTgTTVFKRl+Nif+bL1iQuS1dQ2yGC+g9sXeTbnMNhlsuqU8vSeyAN9cwrljX
-         mdY/xEEO2iuB6+FEyTGxFIZEYKH2SXU1kf45cQ2K/Qju9KXtMdLe7SCfQ4dRFu+N2nFg
-         bFeWhTHH6hEvz7DSlCYf5O9yhbFo1HqGKr+v5A/OKfRIWi90dc9d8AumlDALeU6a1c63
-         6kFw==
-X-Gm-Message-State: AOJu0Yxz8yzNT82tQM5Sq8JSdAqWCwaLhLguX6DZt5LyHrit5Su9Kd0n
-	JT6wsZVyXWr5Zf6QPQCFSxyeUzy/JAV0gR6hKtqkUFNrvJerCM8urlO99aQTpIn9/fzTMRvtSjp
-	/FNr6h/c=
-X-Gm-Gg: AR+sD12eC3Qlp7pWn3cXfeomw82jNQObARDD6lrtO2F+j+ZN7y2Ws3IiE0w0HVH/AhN
-	IrfzDuzoH5zXbjhmOeDK48nEWo3xioR+36WENvTfDo8alup4pCiGQAOPBP5+pNllFWpa+iu6ZYx
-	HPTyieYl7mrLjHKTVSAUXWZ7iCXOfNlr5nkHS/5kE9wk7hQT48c0OwHMhFDFOU2J7JoeWz44Owg
-	xKY0+slpl38qjrwWdhSuhMSMU7gCBaRN/YJfzdnBsWulpxvd2DN8KZdFNNhI8d3+HVlz/GKRbY4
-	Fud1hwNOfCymTpNmK/j7K0WF9PC/vMZaTk0/R3vI2QZ0nEdiLfdBwoBw9FCQhSPMcbHO+v7l6Uj
-	d+1prs5qc+OVB6u5YQk+gZZl2NzoGY6fNb843bD1S2U7Vr39M835lcAmW4y5hES8dTNATxdPWKc
-	3T79Mo6uqjJlJnvSMMiqbiWDB1KKWF5uEYLs6jXNA0oOojlX6FmT+PmTYGPAeE+95kQ5UlbEqRH
-	LkFZbQFt9RWNEmJEAWk/tf0FA==
-X-Received: by 2002:a05:6000:4007:b0:47f:ec53:1d2d with SMTP id ffacd0b85a97d-47ff4cc3307mr8830084f8f.7.1786015179457;
-        Thu, 06 Aug 2026 04:19:39 -0700 (PDT)
+        bh=4iqPDnpSytCdb2l+5MS0mIwH5n9oUyHF76yraGYuJXY=;
+        b=ibSv4v4HlaRU7ZuuravopfnyoX9BveQEpJeOBH+G2Mqn7clGLgJU3etMr1AlwLAYiz
+         2w2cEUkYbcdZE0k129+Rq9+cK+1KM/6vq/mOHVVVW+8s0HP2eTI4Ddw3cnDO6ZW65JZS
+         M3khpNL1nEk/AmrvTMonADxx0+Vo+/tiva2K90Ypswow8V4kKKgkWXLoaMTDNSBimidB
+         d99IGMxRQsvmFgz+Qt/goILSIM2Tsk9Pcz1GhyZtiXpPhk3Ywkc3EzXhxwTSSs851gpi
+         fVjLp2rDuKlPuzljKNho5wppqvBkX3jvuVT2PWx2AKRUAAqzfyqbqRndI5RlTYxvzTtE
+         iqJw==
+X-Gm-Message-State: AOJu0Yz1mXe0TZE+77+2FZ7v9FAyPEhCRoqyYqtgdly+74koZ7vLflsE
+	5jJUHalrdPpsnHiVZU9hRuG+qtC4vIyxSMRdsIRv7SlSP6EUVKAM3sZSf9MY9zc+TdS/9MuMGUi
+	pO5WZMN0=
+X-Gm-Gg: AR+sD10QC7PxXNnQEwJTp9h8znACjyyNZV3ivvfn3wW1NMM3iQSplupzm6cUMcibXeJ
+	+O+wtdkqklNTEuRnUNHcdN7abvXrEX2rabvpOkSFP3Okf3Z9IW3E2xbhcX4g++sWFOYo4qfS/ef
+	wadZMI+tFrLSkm8H3qBI4P1EfEk/FYjPg2wl7wE4kAHn47QqG87JONs7og0gBa0lArQniqIoCOM
+	KAo1EQy4RIG4Kh0mMVHouQZZuhX6XuQQpADFA/C0iEaD+wRheahyhqvCLeLzcvoS2moLGRbVcTY
+	7MLAZU1slRQ5TNV9ngtjWIaLCvAOWkQijCtDYEeOuo07fZx1Pbmo1dGth7XojrR/euNWR92eHiL
+	l8Os5aT8fOFi1qF1IgqOPDSneA79ylhdfa1t0tHfOR6dPZPwC+62na9AIE2Z2wVtGqdVR5fQWkE
+	rQKu+L38kYBFqGYCeGTiTbv0ZAiOFDvECu+uQtjyfGtHxYhzega2E9ACroQ4bt/flKTBGGRxalq
+	PO645GJOrBHrb+z1xLfRAhrSC5B2n/ALRJF
+X-Received: by 2002:a05:600c:a47:b0:496:c379:b2a1 with SMTP id 5b1f17b1804b1-4994e71296fmr181515805e9.2.1786015223817;
+        Thu, 06 Aug 2026 04:20:23 -0700 (PDT)
 Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff7b3279dsm4987381f8f.36.2026.08.06.04.19.38
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499541b525dsm67037675e9.0.2026.08.06.04.20.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Aug 2026 04:19:39 -0700 (PDT)
-Message-ID: <b8371d0a-b5f5-4091-8bcc-c6d337452f5c@suse.com>
-Date: Thu, 6 Aug 2026 13:19:38 +0200
+        Thu, 06 Aug 2026 04:20:23 -0700 (PDT)
+Message-ID: <c2075a81-4e2d-417b-a5c0-3909c063591b@suse.com>
+Date: Thu, 6 Aug 2026 13:20:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,24 +70,23 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/6] module/dups: Inform duplicate requests about the
- result directly
+Subject: Re: [PATCH v3 3/6] module/dups: Avoid unnecessary kmod_dup_req
+ allocations
 To: sashiko-reviews@lists.linux.dev
 Cc: linux-modules@vger.kernel.org
 References: <20260806-module-stats-rcu-v3-0-2b0331106f00@suse.com>
- <20260806-module-stats-rcu-v3-1-2b0331106f00@suse.com>
- <20260806092534.4B8E41F000E9@smtp.kernel.org>
+ <20260806-module-stats-rcu-v3-3-2b0331106f00@suse.com>
+ <20260806094202.A5A981F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260806092534.4B8E41F000E9@smtp.kernel.org>
+In-Reply-To: <20260806094202.A5A981F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/6/26 11:25 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+On 8/6/26 11:42 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
 > Pre-existing issues:
-> - [Critical] Re-arming `delete_work` while it is currently executing leads to a Use-After-Free and timer corruption.
-> - [High] Waiters sleep in `wait_for_completion_state()` without holding a reference to `kmod_req`, allowing `delete_work` to free the structure out from under them.
+> - [High] A `request_module_nowait()` call can prematurely complete a concurrent `request_module(wait=true)` request, causing synchronous waiters to proceed before the module is actually loaded.
 
-The series fixes these use-after-free problems in patch 2.
+This behavior is intentional.
