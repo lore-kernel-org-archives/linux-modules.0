@@ -1,68 +1,32 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B558E3749F7
-	for <linux-modules@vger.kernel.org>; Wed,  5 Aug 2026 14:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EAE13ACF17;
+	Thu,  6 Aug 2026 01:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785941243; cv=none; b=jCrCaI66YjGXMmVvh8IF7Vux6D5dJNjGNFc59BjgI8U3f8MUoNX0gWwSf4UckbWXNMydfvICBiKUOae2ad+BYkLlaC3KMGHCaCYfJ5S0ibyJuXcdKvTJDqgWL9qxqISk5YTMzQPdX6fAS10lBhPK1Ud9kJYhBsrK6bscN80RXAU=
+	t=1785979865; cv=none; b=tT0BaFiw0Zr99a/JUGCXj4lhOG3bx32Px+E5SYM2g+4o9v3Fsiygxlup9xK4LOLhYJ7/VblHQ/tu6F5jEl+J22GZBMtKEh/ec1J5YJY9QlZtlZMvNvD5RwqhRzQd72L8NsuxntUHcGvHm8UV8YIdndFgpWlkBY0zXOlHalxGUyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785941243; c=relaxed/simple;
-	bh=OsMtavjZJpRs7JOiOiguAbbN9fILxQjVhXldFpwRHic=;
+	s=arc-20240116; t=1785979865; c=relaxed/simple;
+	bh=Gm133SdNSU5loWI6t0dGujNfsaLWX6SzhkSafhy/m2U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bbqiMisoA9GrEUf+K3OZsn6eZAQJXjWzNEqrKiOeCL+smqvvio8WAXx5Y+klivB7cDMLCg5iZ0vnrm9tjqXGj4vn/uaDSNXDkC8DiOTbEtPbQ6b6vnWyylwJzAo71RDqH9DPjsSRsgOzvzy9Vb63mYzTNu/Iv2L+mSMkzoSA4EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UBeLHJnV; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 In-Reply-To:Content-Type; b=M7BYRWkYsCuDe/G1wu3LSEkta+WQlPqrwernH7omB1tzBtsOpzFzNNQvsBjKelP44lkRzkdM1vthUZ0LVXCHVLfFZFzhqmkJPgBcBhmbcgKvroZ6zxqdqojyQ1uNTVMmDDNrsZFYOscrOgJdeHaaHIoJk9SQ7/ZfmMlKZZYSK1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=stu.xidian.edu.cn; spf=pass smtp.mailfrom=stu.xidian.edu.cn; dkim=fail (0-bit key) header.d=stu.xidian.edu.cn header.i=@stu.xidian.edu.cn header.b=7F8WrUdF reason="key not found in DNS"; arc=none smtp.client-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=stu.xidian.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stu.xidian.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UBeLHJnV"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4954a9e8490so12906165e9.1
-        for <linux-modules@vger.kernel.org>; Wed, 05 Aug 2026 07:47:21 -0700 (PDT)
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=stu.xidian.edu.cn header.i=@stu.xidian.edu.cn header.b="7F8WrUdF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1785941240; x=1786546040; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=iH0FlQI8tkDOWcBfTJDeJ0UBlBqaU4FCfRj9gn3PRYA=;
-        b=UBeLHJnV0YPt0zOojn2ByjEgDcZt07/DeT0qOCMEeF4b4o57r2SXwg4WKOGrn7XAje
-         Fc1KBBKTHY/RkqLTOLvs3mRV3A2V91lJutqUVhLFpcaSoSisE3Nt6w8HyRyFENUngNvK
-         Q07waOMTwFtdfb6lQ6DDMVx4CMfc+0h73geQPbE9wIfHoX0TrD3buUHgdk1O25AUL7/C
-         l8b9IE7zOWStDUeScwdxGtYgWZIa/gRn0J0JZMVtH5CpqB+NAt8fQlglPakPlin7ZrIx
-         ZMFnlKZccnyiRgDFnS/3Hw3ZaBOR8CeVoX867m8oA4fNAac78unne2AbytTlyT2Ox16Y
-         464w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785941240; x=1786546040;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=iH0FlQI8tkDOWcBfTJDeJ0UBlBqaU4FCfRj9gn3PRYA=;
-        b=MzbDH+h3E/oRslaHSVYosS11Nh+EGafP/P/ieRlxuTB7S2oL1IZxLJVNkB3rNtS9eR
-         ahLGXoW1j1Kh2ovvATkgYjFmykqiteXaFrHw4P/cotUXdwl0Rmxj5TJnQO2RO4IqD40K
-         rOIRS2+FvBioFVyM2RS/TjCfCmkYSuswCAGTHsr/u2Xmtmz3gNtB0wHko6Iz9Yi9YcRf
-         xTGsy1lYG0iS464dpGi4MgbWRXdXBN0A1KkycoaPx2aAOAKzyMU1AWdbWRdrnZp08hqe
-         gjMwLA9Sc+XcX0lw/ZLEyQ/WRsiHCkgVw72bzwLfps0eJ59fmyupbm0JIhm/nkOI+H1W
-         mpMQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqEDu6DBKggB0gGQefg1wk7wIwO2FYUL5Gh2LwvIH4FJaowW2pB4lpk9rmSr/9MpDsEnIt7SSN3mILQMKAE@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDVGJdpboyXINuCpWqRXANIoUP40jCdDA5ah/o1/FPCe0ltCqK
-	vDcWjnsjTFFXOcnx3ND3P+YHvkVMz1kFUb06iVENymb1olP79dlTbz68w4zKuZT5OFE=
-X-Gm-Gg: AR+sD11o0g61Iu/TOYrw7oV3kTEeoOodZnFN2mnwktYLBT+HWEOwfMr6TAk6dimZ6qz
-	g2pLtiPGQaDEnkloLezlQY5dZXqzseLPxSPhZa+l/dIJ7zL+287J5bx7VVe5IKiqbi331YsePTX
-	y4rjEMoTgnFiPQmJV1QojU25SH+69s1qDkkj4zTwrD8G3XFSDdECpyPT/lVsBnOSB+VxF28a83h
-	YX9NTl0EK6PjwAzFzX8fk7O6bUcsrI6sTDStyepQQzai1zWuzOwwnS7AfGbZ+Bn2XrttB64LUZL
-	yBi3Ob0MXPqscYcwRoa3aTh7MalqSbyDFCq7WT5HVx0EtyNFZ5p7RT9WivANkK3GigUtIFKU/n5
-	6bF+PU8+zBVs4lBhwGCCjRs4iOFzDzrByc++eVynBytxkegtunEY0rPT0J06jY+M1XEacqc3+tC
-	GlsGzDexF85NxM7pv0uxOiHQ1Kqw5fSU9ozeDcbDtSrpT6GXbsMvtCtPPxFTZYHBKjTVnYa3PA+
-	9Ok1kTIWQidZqABF6v483zSDU+lp+vS2WxR
-X-Received: by 2002:a05:600d:8483:b0:494:1f7:8057 with SMTP id 5b1f17b1804b1-4994e339bb8mr64982655e9.1.1785941239789;
-        Wed, 05 Aug 2026 07:47:19 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994f124135sm24468095e9.2.2026.08.05.07.47.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Aug 2026 07:47:19 -0700 (PDT)
-Message-ID: <1951733c-0d8f-4d1d-9da1-fd71d23781de@suse.com>
-Date: Wed, 5 Aug 2026 16:47:18 +0200
+	d=stu.xidian.edu.cn; s=dkim; h=Received:Message-ID:Date:
+	MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	In-Reply-To:Content-Type:Content-Transfer-Encoding; bh=Gm133SdNS
+	U5loWI6t0dGujNfsaLWX6SzhkSafhy/m2U=; b=7F8WrUdF6bA8aLKbfX98fHgjh
+	LHg18AmHuZKEFRyyJCTlAFY46hWCp+GDaO8N6LYzleDqRefDbOzzPNWnqod17Xuo
+	Wx9qe7MpSSjBSnXtug1L0pY73XLjOYHh6xaDAlkMXzR8Wlu+dRoWYI/cY+j14qpi
+	FSfVa/zRFEiHdjNzL8=
+Received: from [192.168.1.110] (unknown [115.53.185.89])
+	by hzbj-edu-front-3.icoremail.net (Coremail) with SMTP id BbQMCkD2Xde+43Nq0xnqAQ--.40654S3;
+	Thu, 06 Aug 2026 09:30:38 +0800 (CST)
+Message-ID: <cb04f43b-c86f-44f2-ba13-d172d7e03783@stu.xidian.edu.cn>
+Date: Thu, 6 Aug 2026 09:30:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -72,7 +36,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] module: fix UAF and GPF in idempotent_init_module via
  heap allocation
-To: Mingyu Wang <25181214217@stu.xidian.edu.cn>
+To: Petr Pavlu <petr.pavlu@suse.com>
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
  Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
  Johan Hovold <johan@kernel.org>, linux-modules@vger.kernel.org,
@@ -80,64 +44,48 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
 References: <20260717082601.81704-1-25181214217@stu.xidian.edu.cn>
  <8d507b50-b5a2-48a8-a4bb-f196ac28b5e4@suse.com>
  <f79bc014-a606-4ab5-adfd-1b56dbdc30ba@stu.xidian.edu.cn>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <f79bc014-a606-4ab5-adfd-1b56dbdc30ba@stu.xidian.edu.cn>
-Content-Type: text/plain; charset=UTF-8
+ <1951733c-0d8f-4d1d-9da1-fd71d23781de@suse.com>
+From: Mingyu Wang <25181214217@stu.xidian.edu.cn>
+In-Reply-To: <1951733c-0d8f-4d1d-9da1-fd71d23781de@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:BbQMCkD2Xde+43Nq0xnqAQ--.40654S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFyxXr48Gw18uFy5tr1xuFg_yoW3Zrg_ur
+	WUKryxKw17Kaya9w43Gr1fWFs7Ka9YkryDXay0qFZxC3s3ZFs8AryDt3yfWr43Wa95Krn8
+	Jrs8J3yfZ34j9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb3xYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+	6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+	8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
+	cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z2
+	80aVCY1x0267AKxVW8JVW8Jr1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28I
+	cVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx
+	0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCY1x02
+	62kKe7AKxVWUtVW8ZwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvf
+	C2KfnxnUUI43ZEXa7IU8a0P3UUUUU==
+X-CM-SenderInfo: qsvrmiqsrujiux6v33wo0lvxldqovvfxof0/1tbiAgUPEWpwsH2dlgADsG
 
-On 8/4/26 12:41 PM, Mingyu Wang wrote:
-> Hi Petr,
-> 
->> I'm confused by this description and I'm not sure what problem the patch
->> is trying to solve. A task is not normally terminated in the middle of
->> a syscall. This could happen only if it hits an oops. However, that
->> means there is an earlier bug and the module loader isn't expected to be
->> resilient to a post-oops state.
->>
->> Could you clarify the scenario that you ran into?
-> 
-> Thank you for the review. You are entirely correct; the task did not
-> terminate during a normal syscall, but was indeed killed by a prior
-> oops.
-> 
-> Here is the exact scenario discovered during driver fuzzing by our
-> automated virtual device modeling tool, DevGen:
-> 
-> 1. A `modprobe` task (PID 433) concurrently loaded a faulty driver
->    (the `atlantic` net driver in our trace).
-> 2. It passed the idempotent() check and added its stack-allocated
->    `struct idempotent` node to the global `idem_hash` list.
-> 3. During init_module_from_file(), the `atlantic` driver hit a fatal
->    oops in its hardware init path (aq_hw_write_reg+0x39/0x50).
-> 4. The kernel initiated oops recovery, terminating the `modprobe` task
->    (exited with preempt_count 1) and freeing its kernel stack.
-> 5. The oops recovery path does not clean up the `idem_hash` list,
->    leaving a dangling pointer to the freed stack in the global list.
-> 6. A subsequent module loading attempt traversed `idem_hash`,
->    dereferenced the stale stack pointer, and triggered a secondary
->    KASAN use-after-free and GPF.
+> An oopsed task can leave behind various kernel structures in an
+> inconsistent state, such as unreleased locks, incorrect reference counts
+> and leaked objects. It is expected that the kernel may behave strangely
+> afterward and this can result in subsequent problems, such as deadlocks
+> or crashes.
+>
+> Loading a module is a heavyweight operation that injects new code and
+> data into the kernel. If it ends in an oops, I think it is fair that no
+> additional modules can be inserted. I don't see that the module loader
+> is doing anything wrong or behaving differently from other kernel
+> components in this regard.
 
-Thanks for explaining the scenario.
+Makes sense. Hardening the module loader against a post-oops state is
 
-> 
-> While the root cause of the initial crash lies within the specific
-> buggy driver, the current stack allocation allows an isolated driver
-> oops to corrupt a global synchronization primitive, preventing any
-> further module loading across the entire system.
+indeed unnecessary. I'll drop this and go after the driver bugs instead.
 
-An oopsed task can leave behind various kernel structures in an
-inconsistent state, such as unreleased locks, incorrect reference counts
-and leaked objects. It is expected that the kernel may behave strangely
-afterward and this can result in subsequent problems, such as deadlocks
-or crashes.
+Thanks for the review.
 
-Loading a module is a heavyweight operation that injects new code and
-data into the kernel. If it ends in an oops, I think it is fair that no
-additional modules can be inserted. I don't see that the module loader
-is doing anything wrong or behaving differently from other kernel
-components in this regard.
-
--- 
 Cheers,
-Petr
+Mingyu
+
