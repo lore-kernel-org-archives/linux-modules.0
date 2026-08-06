@@ -1,124 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F32E3F3285
-	for <linux-modules@vger.kernel.org>; Thu,  6 Aug 2026 09:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E34C37C92A;
+	Thu,  6 Aug 2026 09:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786009325; cv=none; b=aLX883Lqya9bFp7RGRiPAbt7ycF7btoBFaqFcJO8Y9SWePReXnVr57xW/LvikT1Yc91c/Il5SRt80e7jCKvmFFAxMNjR5yas3H7NNlp4guJB+sBIa7EcgQEZqG1Mlk3re/hngO4t5VKosWT0nLfakpk8YrRW9ifACjzUSjaggsU=
+	t=1786010351; cv=none; b=Kvvn3coKjRv6i3fafna8z6WzWi8DYrtT2JE/1FUcUNvrQfdIORcG1vtwS2dCTe/FVSm46gtnTrqDdlggSLtJcmm5+B+4kG11mCDkOFMILRvHKj39z24VygBOOR/1OIsOzkBxXKYmtzEc7Jx5FCuWh7qUlVKISiu5RdfHGaQFRhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786009325; c=relaxed/simple;
-	bh=tVHP17r468cipyYaUa75+zr4iQR1T/aDllzCui0VRIU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WTWHZsdNqUF7K0taZaGt4BCMaAb5FM6Php//N860ylIJTMmnT9fI0M1PtDKPkrurJmFbgDyZZLJuGTNq3b80GkPxrtPrNCYcaLMXNUIuj6xtfLGKY2ccN6BymqmoO2KbwqwKyqsneRKhW00K3P0O31ZVrc422FVrUtgE84rJxhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=neNb2woO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786010351; c=relaxed/simple;
+	bh=97/nlFpqHy/LEugzRHwOFZ1cN+nhkqEFc/3ZBLZIAdw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rVnmSRJ00OxM/47vCdJDshMIl6EK5Aib9AZc3es8sIKRQuhNNS0yk3yXlNrigdHrW/5uklL65ip7qgKh74WdU8J/1j5FdHcaogQsQlMlULF4bdfcJZkxeOTJFtgkh31tdLtr+qWp4hPwxPh1YQe+C8JVceDhmYfzPMn9YKM7KGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Hb2USHrY; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="neNb2woO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A981F000E9;
-	Thu,  6 Aug 2026 09:42:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786009322;
-	bh=7ckOZE3WKUBxAOJ4X5NMKUQKEgoBm/3J8MmX0bzn/WI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=neNb2woO/gd7bfILWDoVyHp7qrTOMCh6G9uaaAH+GT97Al8/5fsJPRZqn/hw9lYz4
-	 iQAfS6amRirbrYMoegfV6/ptGbj4ftVCCRNPoXtYWZvC1M7EnqFrauotQurCzaFdF5
-	 T20jt3L9EW/RMCedFpXBKVebdwvthDqJRxdAODDq4+/K/iHfoA499pepNWObeVjtJx
-	 tRS8PeZy0YxINhxqTokR5epngmvo0s/3aNPoC4UsdCZlvKvFkkIwp4gz3MqarJFfKR
-	 /7TwgXtK1vCzVbmycfP3aUg5kLT2mGHG5oJD3KTCVz/JAAZKKQK81K53Cn1DdIwg+9
-	 1KjKf5m3Phz0g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 3/6] module/dups: Avoid unnecessary kmod_dup_req
- allocations
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Petr Pavlu" <petr.pavlu@suse.com>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260806-module-stats-rcu-v3-3-2b0331106f00@suse.com>
-References: <20260806-module-stats-rcu-v3-0-2b0331106f00@suse.com>
- <20260806-module-stats-rcu-v3-3-2b0331106f00@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 09:42:02 +0000
-Message-Id: <20260806094202.A5A981F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Hb2USHrY"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ZVBzTOpJvQdc3kvEZNdrQSwpBB+rsEs/rfNxos6CNk4=;
+	b=Hb2USHrYKLxu9v7vqQ111lRpMDKhmY0OX4xfFppo+knkferqSllL2Bz6jRO6u2PN1ypgVauy7
+	pwegRKCzQ6IemGTWa0Ul0Ahvu9KpKOhMK6zQc+wnjnF6tvVmxA3SJm+H20h8HU7CaSBTonKXTlI
+	UgFU4xjlXfk1dUJMlvB6uyA=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4hG2YW4h2vz1prNF;
+	Thu,  6 Aug 2026 17:49:19 +0800 (CST)
+Received: from kwepemj100009.china.huawei.com (unknown [7.202.194.3])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7EAF44056E;
+	Thu,  6 Aug 2026 17:58:53 +0800 (CST)
+Received: from DESKTOP-A37P9LK.huawei.com (10.67.109.17) by
+ kwepemj100009.china.huawei.com (7.202.194.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Thu, 6 Aug 2026 17:58:52 +0800
+From: Xie Yuanbin <xieyuanbin1@huawei.com>
+To: <petr.pavlu@suse.com>
+CC: <atomlin@atomlin.com>, <da.gomez@kernel.org>, <egg12138@foxmail.com>,
+	<jpoimboe@kernel.org>, <liaohua4@huawei.com>, <lilinjie8@huawei.com>,
+	<linusw@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-modules@vger.kernel.org>,
+	<linux@armlinux.org.uk>, <mcgrof@kernel.org>, <rostedt@goodmis.org>,
+	<samitolvanen@google.com>, <xiaojunzhe1@h-partners.com>,
+	<xieyuanbin1@huawei.com>
+Subject: Re: [PATCH] ARM: unwind: modules: Fix the mismatch between .ARM.exidx* and .text
+Date: Thu, 6 Aug 2026 17:58:07 +0800
+Message-ID: <20260806095807.24475-1-xieyuanbin1@huawei.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <449549e3-8670-4c9e-a348-0ad3c6a521b2@suse.com>
+References: <449549e3-8670-4c9e-a348-0ad3c6a521b2@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemj100009.china.huawei.com (7.202.194.3)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Thu, 6 Aug 2026 11:40:23 +0200, Petr Pavlu wrote:
+> A fix for this issue was posted previously:
+> 
+> https://lore.kernel.org/linux-modules/tencent_08845B64E5F38EB7FA1779982A071AB4A607@qq.com/
 
-Pre-existing issues:
-- [High] A `request_module_nowait()` call can prematurely complete a concur=
-rent `request_module(wait=3Dtrue)` request, causing synchronous waiters to =
-proceed before the module is actually loaded.
---
-
---- Patch [3]: [PATCH v3 3/6] module/dups: Avoid unnecessary kmod_dup_req a=
-llocations ---
-commit c39253dbe61d24363b967a87af56bd7ef5c557ff
-Author: Petr Pavlu <petr.pavlu@suse.com>
-
-module/dups: Avoid unnecessary kmod_dup_req allocations
-
-This commit defers the allocation of kmod_dup_req until it is actually
-needed, instead of preallocating it before taking the mutex. It introduces
-a helper alloc_kmod_req() to simplify the initialization process.
-
-> diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-> --- a/kernel/module/dups.c
-> +++ b/kernel/module/dups.c
-[ ... ]
-> @@ -138,7 +141,6 @@ bool kmod_dup_request_exists_wait(char *module_name, =
-bool wait, int *dup_ret)
->  		 * If a prior request to this one came through with
->  		 * request_module() though, then a request_module_nowait()
->  		 * would benefit from duplicate detection.
->  		 */
->  		if (!wait) {
-> -			kfree(new_kmod_req);
->  			pr_debug("New request_module_nowait() for %s -- cannot track duplicat=
-es for this request\n", module_name);
->  			mutex_unlock(&kmod_dup_mutex);
->  			return false;
-
-[Severity: High]
-This is a pre-existing issue, but does a request_module_nowait() call risk
-prematurely completing a concurrent request_module() call that is waiting?
-
-If Thread B calls request_module_nowait("foo"), it doesn't create a
-tracking entry because wait is false. If Thread A subsequently calls
-request_module("foo") with wait=3Dtrue, it creates the tracking entry and
-blocks for processing. If Thread C then calls request_module("foo") with
-wait=3Dtrue, it finds Thread A's entry and blocks waiting for it.
-
-Because Thread B used nowait, its execution finishes quickly (waiting only
-for the modprobe binary to exec) and returns 0. It then unconditionally
-announces completion:
-
-kernel/module/dups.c:kmod_dup_request_announce() {
-        ...
-        kmod_req =3D kmod_dup_request_lookup(module_name);
-        if (!kmod_req || completion_done(&kmod_req->first_req_done)) {
-                mutex_unlock(&kmod_dup_mutex);
-                return;
-        }
-
-        kmod_req->dup_ret =3D ret;
-
-        /* Inform all duplicate waiters to check the return value. */
-        complete_all(&kmod_req->first_req_done);
-        ...
-}
-
-Won't this find Thread A's tracking entry, assign dup_ret =3D 0, and wake up
-Thread C prematurely while the module is still being loaded in the
-background by Thread A?
-
-If Thread C receives a success return value before the module is actually
-fully loaded and initialized, could this cause drivers or subsystems to
-attempt to use uninitialized module symbols or hardware features?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806-module-sta=
-ts-rcu-v3-0-2b0331106f00@suse.com?part=3D3
+Oh, sorry, I didn't know about this. Let's discuss it on
+previously posted patch. :)
