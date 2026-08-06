@@ -1,83 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911A53515D5
-	for <linux-modules@vger.kernel.org>; Thu,  6 Aug 2026 04:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B4D41A54B
+	for <linux-modules@vger.kernel.org>; Thu,  6 Aug 2026 09:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785990131; cv=none; b=RiAcUVg/v7FzZCCbi1k+I8/5IW8Cd7mvXPDhCdbKKL+p3bDffOs91Bg9YoTxfxHX6SjFcYWXjnW69cMcWPgWSZcdfLGAANs1GqdhbS6ZJ5s5snbOc00GHaDW8IFHBdvVa2s5VpOtPIJ2bmglbKKgHWbT1owmTJNYggnsITPvBlA=
+	t=1786007499; cv=none; b=VZ2+i4n1OqwSnAoJcZEPnnbwyzh1t1RLNBZ9MtpiiDWmMXcCiD8AcYj5hgSMB6Jn/GWnd9UwqteOeZ3dpsXJW7zCea+0OEOM3fKNOIuypNn+y/STF/ZazcWxBS/2xK+iuaT+nMzj/UYQqVNBu1F/7nN70azsZ4JRSNZdb4ukoMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785990131; c=relaxed/simple;
-	bh=Ow5Xs3EpWzHvNnuTKZ8FXdWQBf9J3pmr5UhcJ6gJaPs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KvDN1+UTcbHMkC95QayaC27ZtYNLmffOmVtd3nXrK7LnyxbuBAkuwPmSnD2SNZt1R4pA7xYtow6qk71w7uUwj2amUV/uX9+02GAW+XNY7/zVi/gbBETimq94crpUsMgh8Rm3U8LLEyQWTSAntbu842HDGPX7C49iEhn9ppbosUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lasoo9VK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786007499; c=relaxed/simple;
+	bh=wau/1WIhil7ujIFDcaCDVHnYKSig4PeZPXDhG0IZ0Nc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tPLizFfUj6d3PbcBwO6JVhijqs3g71R/gv2k8aPK7ZC1aNrQeU8O0/DICh0OJUEdyOWwlfBFLRXKbdypjjt0DAPxxnpUMmHpoSa/BGkgG+j9So1hIXczu398h5Wb/SuP8EOleN8UzktWY5VLcCBMrwuLiDzqtASGEvWnu+9eEKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SXvZmTbk; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lasoo9VK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC531F000E9;
-	Thu,  6 Aug 2026 04:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785990130;
-	bh=86R/37CwWBYkyYBcd5X+taka84gctscb5NVK/3ASQv8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lasoo9VKYPHITn8pH3BPa6ohStPa6lp8mqVRMrdOvd3k+oNVMCtW+Hx12X5snuLRd
-	 ZSZxzzJNTdcx3GLB4kxTx33T+6yvsbRJLmbralmGS7pEgHU/cIbzEVcPnov0i+9Xvs
-	 Q713kfyx203d95t0OWb4yGpnqbLRq3IQZrand5/qxFs/vxdD0O4cERUUMWj6P2VhiF
-	 zw57we7LyZ3FHNz/6b0vsupldrUZkUSrk5pokuOWVh9qrI180rWmSBQp26nuYviokx
-	 fjZxHzd2aF1+5IvTlicyNZITeQVROmuovqJXvUV7hv1ILf5W3F6doTaziLeFh1xRc6
-	 R1zXx931HYX3A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] ARM: unwind: modules: Fix the mismatch between
- .ARM.exidx* and .text
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xie Yuanbin" <xieyuanbin1@huawei.com>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260806041001.143888-1-xieyuanbin1@huawei.com>
-References: <20260806041001.143888-1-xieyuanbin1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 04:22:09 +0000
-Message-Id: <20260806042210.3CC531F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SXvZmTbk"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-495437bb891so6544585e9.1
+        for <linux-modules@vger.kernel.org>; Thu, 06 Aug 2026 02:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1786007496; x=1786612296; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/7mnnGV5KwgYQKLasYjgSyiYaGHDqpreUuqUW9NAfOE=;
+        b=SXvZmTbkgzBJ6oJEuNR0ljqW2quvnTgR0zwjTQOYsMTuOtPc1O/uIuUtgjoFHQBNc7
+         kXzxJN63W20k7gPKdZ+Iddj18KRDP6f6gJTCvP5eyzgRLttSW6HdbZBkMSylfKXzB7o8
+         hKoqsF0cUGnmvt7Hqb0sQR1uQP8GaONjkJyAHx2QNl62+gjsLeIezIv58HC9LYpTLvFA
+         +1WRlRu++JBQCmAjITPdxf9jyRkCffa4GxDszc1b801LRZfBofaHefXQBIhMWzCDjLVb
+         j9Fa2tYLuWvIsg9NLcnA0OTOZqOnVgQe/VZB5jAwldxHhjc+UxsICjkNW2O3RUeqLE6B
+         hXEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786007496; x=1786612296;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/7mnnGV5KwgYQKLasYjgSyiYaGHDqpreUuqUW9NAfOE=;
+        b=YSkzbJ0hCMJ9ZF3s1Rw8ghArJn5BtdrWqFEg/lbLAIPDQMcrH5l8cR5fKV7he8qSkR
+         XI2NdXMo44BzZ8CkBOTGEyWH9swY24H6ZveFHbmtqDgdBnvHpJyZ+9MUFv73ToEO55Bp
+         NNiwzeYB482xpsfGpIooIKltaYsDfL8StNmNKiV3J8tFj9IaUtPTPzdALxr/kI7FU8bP
+         Ut2ZYjamYds346kNVFULrO6mZ15q7gG3s4tBneSoxqn3XtFC78O4YGnmWJjcTZaKy72T
+         h6nVV4VC7VHy3bGT6x0JpvMT811ellydfWKPhdZPfrdjN2fWot4v0vI8kiJzMVQb50yi
+         XmNw==
+X-Forwarded-Encrypted: i=1; AHgh+Rok0ZtAmfQ0+41/XhMxQqymV2ThrR8qhR59N6y0MK+yr/tB+VStjCw+ZVozWL7CNq7a7LrA1Hs2Y9UhV5zy@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFvnEbnG1lFy6zB1kjuLAYMW88TmT9DiKeQUyWb741zTexSoNi
+	IKRlLFrsiXT5nCrIOEuI7NTWvkJlTN32vl9OphCol3/BTTFukDwewa+/RtgbRc1f+10=
+X-Gm-Gg: AR+sD10lFO2sCOIGfYUq+lyFb4SAudjh2qRa3aBaCp5OkFlticDOTjPxWisqX5hO5aP
+	UJTOduLdsuqcAiiyizToVKCWrwTJ4IeI6BWpa+tV9vnMC/35LEVPVYpIIGvk77pesuHhb8kS7za
+	iQAsNEAkQxouWOCgi2oBjvAg634d/C4jnT+Gj9icg8pozHLzcsXdB1DM+uAu7LFL68Eg1b67GpX
+	mGzDB7fiGn/8M/j2Kqb3g/8JHLXGCv8Bse5psLKZhFoVCYLeu6Pd3bGHpllvwsuXEuxpKqIpINr
+	nfJ1rJO4Cp5msroczARnl88lNXL5xKOPBZlyEvi7BGC/t4RYo8z0iWPSJ8aG2xvHmMiA/aZjnH7
+	h3VoWtBtAiPM9wUmQyG0ll5IkWOfe2BxPwh8Z+XCHAJx7DedUIoLecyjn1PGtgWEMZf/a9R5LD4
+	88OWO7UiWK0d2oXJiuIEgsRP8ykB8/To6swBNrFgxbMCG+g9aBlEbMeUGs
+X-Received: by 2002:a05:600c:a48:b0:495:69eb:27d3 with SMTP id 5b1f17b1804b1-499553f4c4cmr35914785e9.8.1786007495617;
+        Thu, 06 Aug 2026 02:11:35 -0700 (PDT)
+Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994e4c32e0sm93157095e9.0.2026.08.06.02.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 02:11:35 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Aaron Tomlin <atomlin@atomlin.com>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/6] module/dups: Fix a use-after-free and improve the code
+Date: Thu,  6 Aug 2026 11:10:14 +0200
+Message-ID: <20260806-module-stats-rcu-v3-0-2b0331106f00@suse.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260722-module-stats-rcu-ff0dfc986be6
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Typo in the wildcard pattern `[0-9a-z-A-Z_]*` introduces an uninten=
-ded literal hyphen and diverges from the `.text` pattern syntax.
---
+Simplify how the kmod dups code informs duplicate requests about the
+result, fix a potential use-after-free when waiting on a duplicate request,
+and make several general improvements to the code.
 
---- Patch [1]: [PATCH] ARM: unwind: modules: Fix the mismatch between .ARM.=
-exidx* and .text ---
-commit 77bfa32ad8c348a1008e578b132ff69e6108ddd2
-Author: Xie Yuanbin <xieyuanbin1@huawei.com>
+Note that the use-after-free fix depends on the code simplification
+implemented in the first patch.
 
-ARM: unwind: modules: Fix the mismatch between .ARM.exidx* and .text
+---
+Changes in v3:
+- Add received Reviewed-by tags.
+- Rebase the series on modules-next.
+- Link to v2: https://patch.msgid.link/20260723-module-stats-rcu-v2-0-bd582261fae3@suse.com
 
-This commit modifies the module linker script for ARM to merge
-.ARM.extab.text.* and .ARM.exidx.text.* sections. It addresses a stack
-unwinding failure caused by newer compilers splitting sections.
+Changes in v2:
+- Fix handling of concurrent request_module_nowait() and request_module()
+  calls.
+- Avoid unnecessary kmod_dup_req allocations.
+- Avoid mixing goto with scope-based cleanup.
+- Link to v1: https://patch.msgid.link/20260720121621.750661-1-petr.pavlu@suse.com
 
-> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-> index d0f2004289576..0ccf0c205d005 100644
-> --- a/scripts/module.lds.S
-> +++ b/scripts/module.lds.S
-> @@ -39,6 +39,10 @@ SECTIONS {
->  	.text			0 : {
->  		*(.text .text.[0-9a-zA-Z_]*)
->  	}
-> +#if defined(CONFIG_ARM) && defined(CONFIG_ARM_UNWIND)
-> +	.ARM.extab : {*(.ARM.extab .ARM.extab.text.[0-9a-z-A-Z_]*) }
-> +	.ARM.exidx : {*(.ARM.exidx .ARM.exidx.text.[0-9a-z-A-Z_]*) }
+---
+Petr Pavlu (6):
+      module/dups: Inform duplicate requests about the result directly
+      module/dups: Fix use-after-free in kmod_dup_req lifetime handling
+      module/dups: Avoid unnecessary kmod_dup_req allocations
+      module/dups: Use scope-based cleanup helpers
+      module/dups: Use strcmp() to compare module names
+      module/dups: Clean up includes
 
-[Severity: Low]
-This isn't a bug, but there appears to be an extra hyphen in the wildcard
-pattern between z and A. Could this be corrected to match the [0-9a-zA-Z_]*
-pattern used in the .text section just above?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806041001.1438=
-88-1-xieyuanbin1@huawei.com?part=3D1
+ kernel/module/dups.c | 169 +++++++++++++++++++++++----------------------------
+ 1 file changed, 77 insertions(+), 92 deletions(-)
+---
+base-commit: 2600d43b235b029d0ba4f2d3cc71e2137114fde3
+change-id: 20260722-module-stats-rcu-ff0dfc986be6
