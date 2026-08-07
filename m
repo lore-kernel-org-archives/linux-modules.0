@@ -1,92 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D0A282F3A
-	for <linux-modules@vger.kernel.org>; Fri,  7 Aug 2026 01:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5F525F99F;
+	Fri,  7 Aug 2026 02:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786066659; cv=none; b=mlzcSXtls4ggeOn7Bz28u7Wl8F1DY4JKGtf1S4sfCvVUDZV3qXE5KJJUquFa1gPTzTi+hbW1ADmeUUMO9fNYfOsgH/pR1fkoWU2ZaeK08E3b06nOZGGPme33VbAX//I5xYBlsHTlM/r/TLac1sptwsZS3Oikk+sFIqz1NALDKtU=
+	t=1786068866; cv=none; b=fmkJQSQpZJjS9+sSdtLGDOdoPTsuWuVZO26CZiB/o0eba0jHkXyFsz+Xfrd+qItZDNEvSPgAltwrodEP0bwWq/b4K75RQ0ggRXfPv/lxF13jd0AbyJ1uSQYzBxElbygNu8vMDGZ04ejLfWalm9A7VDZteZk7KNWwvmwT3PQrBSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786066659; c=relaxed/simple;
-	bh=Ky40BFjS37i1yJ3xxBZ/TnvRelFsTlojVn8ZVGQgjC0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lVO+ybRf+4xiX+2/mnEjDYAYdLDKNsCLurPiy2zmfG/ls2XjR6MloF0TQaiWoDu7BgHNfxehgtHikSR0rDGFpTczQzK4e7q1HjxVTbJKprKErxkhnt5nZ+3kWLjzasA4hpmbzHa8XILyDz3Vd8QenEpVOq2e3oc0J3VjR18K/xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yup8zWpp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786068866; c=relaxed/simple;
+	bh=wFQy0Ajmq7rXQX3+ulTVvrqXuVPElSo12sQFDaX/GfM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CIcQb4K5gSPj+3fwRU1XLSRDO7L/otJ0+bKeU/tWOT8HK+QVv22wSs91aBdmV03aSAvEvgI66ZRLHT3MiCX21EOIol+jPpjnVJ1UkHgP7nZpdNMvES/0JcYpxIeuGPJ9uqG4+vYRjl2VQ3/wIbbgWM60ZiPLBKWJpuNKJaGbde8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Cds762bF; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yup8zWpp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2BF1F000E9;
-	Fri,  7 Aug 2026 01:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786066650;
-	bh=IYMuRIdxIhcINuVQNFlMKQDQX3vFryl6YNM6ASDl+C0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Yup8zWppM3sESqBFpba7OFLlwXi7saLRxdWc+XCkQEuuPTkfGSC90Nznvdl57xpDA
-	 6Ufh86jm4tgAzsGPSyP0Dupb7CBoQjJ7vtnn9FR1Y5Vm69pSKh9WyGFdDYhqjG+2gM
-	 MPe/tNs3Wn7DoZILc2QQ8qv/DZmsaFXGpyn7S59R98yKCRn9J6A09vl44C2E+QmgCV
-	 s5Od+zepr+ZJv0TfJb2TFe/fe1mSR9P/oNXy619AlCnDnzkAHAL0iFsYFf0oCFpegC
-	 p5ZzaL+H7m90gV87/0/UaW329d9eMumuT4DhwBJTrmA2w4ViDodmo9A6Wsi9Woea1h
-	 5yJRlKm5jN8OQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v9 2/2] module: Rename module_blacklist to
- module_denylist
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Aaron Tomlin" <atomlin@atomlin.com>
-Cc: linux-modules@vger.kernel.org, ojeda@kernel.org
-In-Reply-To: <20260807012601.360452-3-atomlin@atomlin.com>
-References: <20260807012601.360452-1-atomlin@atomlin.com>
- <20260807012601.360452-3-atomlin@atomlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 01:37:29 +0000
-Message-Id: <20260807013730.3A2BF1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Cds762bF"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=zdSEhSWgKAuiPO1HyQjMS5msQKsGOwK8wbTor0f0Eqc=;
+	b=Cds762bFaP1jrL2D+AT8Hf5c+SAHwDOsnPQRTLq87x7755dQ/l9oTbNZXBUIMU8YsnHC2xGWf
+	0apeXmOMABONjdgO3LHqpcYtVuJBbpxKzr/QpYNJRXeBMu4+o28858SxqD7uSg/yRTBRGpfSI6J
+	JnlrLyRiwlW7Oh3m5GVM/d0=
+Received: from mail.maildlp.com (unknown [172.19.163.0])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4hGS9v2ddxz12LGW;
+	Fri,  7 Aug 2026 10:03:47 +0800 (CST)
+Received: from kwepemj100009.china.huawei.com (unknown [7.202.194.3])
+	by mail.maildlp.com (Postfix) with ESMTPS id 803144057A;
+	Fri,  7 Aug 2026 10:14:15 +0800 (CST)
+Received: from DESKTOP-A37P9LK.huawei.com (10.67.109.17) by
+ kwepemj100009.china.huawei.com (7.202.194.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Fri, 7 Aug 2026 10:14:14 +0800
+From: Xie Yuanbin <xieyuanbin1@huawei.com>
+To: <egg12138@foxmail.com>
+CC: <xieyuanbin1@huawei.com>, <jpoimboe@kernel.org>, <linusw@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-modules@vger.kernel.org>, <linux@armlinux.org.uk>,
+	<petr.pavlu@suse.com>, <pmladek@suse.com>, <rostedt@goodmis.org>
+Subject: Re: [PATCH v3] ARM: module.lds: fix unwind metadata for merged .text sections
+Date: Fri, 7 Aug 2026 10:13:28 +0800
+Message-ID: <20260807021328.36897-1-xieyuanbin1@huawei.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <tencent_EB65B78E967A5FF9DD2A591A86A6BD5B1107@qq.com>
+References: <tencent_EB65B78E967A5FF9DD2A591A86A6BD5B1107@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemj100009.china.huawei.com (7.202.194.3)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The comment preceding the module_is_denylisted() call was not updat=
-ed to reflect the new terminology.
---
+On Thu, 6 Aug 2026 22:29:03 +0800, Xiao Junzhe wrote:
+> My reason for including the exact matches is slightly different.
+> AAELF32 defines these section namespaces as .ARM.exidx* and
+> .ARM.extab*; it does not require all ABI-conforming object producers to
+> use the same naming convention as GNU as and LLVM.
+>
+> For example, another producer or future version of GNU/LLVM impl for `as`
+> could validly use:
+>
+>     .text -> .ARM.exidx.text
 
---- Patch [2]: [PATCH v9 2/2] module: Rename module_blacklist to module_den=
-ylist ---
-commit ac79bb8334a6a0d6e2353ff853444d535ab50178
-Author: Aaron Tomlin <atomlin@atomlin.com>
+I have thought about it again. For other sections, the mapping is
+as follows:
+	.xxx -> .ARM.exidx.xxx
 
-module: Rename module_blacklist to module_denylist
+So, if there is an ".ARM.exidx.text", it must be from ".text", and adding
+".ARM.exidx.text" will not cause any other harm. We only need
+to ensure that the merging of the ".text*" sections is consistent
+with the merging of the ".ARM.exidx*" sections, and the current patch
+already satisfies this requirement.
 
-This commit renames the kernel parameter and internal symbols from "blackli=
-st"
-to "denylist" while keeping the old parameter as a deprecated alias. Log
-messages and documentation are also updated to reflect the new terminology.
+I have no other questions about this, so:
+Reviewed-by: Xie Yuanbin <xieyuanbin1@huawei.com>
+Tested-by: Xie Yuanbin <xieyuanbin1@huawei.com>
 
-[ ... ]
+Also, don't forget to submit your patch to Russell's
+patch tracker:
+Link: https://www.armlinux.org.uk/developer/patches/
 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index a9fd6aaedc69c..1a58313649d94 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3381,8 +3381,8 @@ static int early_mod_check(struct load_info *info, =
-int flags)
->  	 * Now that we know we have the correct module name, check
->  	 * if it's blacklisted.
-
-[Severity: Low]
-This isn't a bug, but should this comment also be updated to say "denyliste=
-d"
-to match the rest of the terminology changes in this patch?
-
->  	 */
-> -	if (module_is_blacklisted(info->name)) {
-> -		pr_err("Module %s is blacklisted\n", info->name);
-> +	if (module_is_denylisted(info->name)) {
-> +		pr_err("Module %s is denylisted\n", info->name);
->  		return -EPERM;
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807012601.3604=
-52-1-atomlin@atomlin.com?part=3D2
+Thanks.
