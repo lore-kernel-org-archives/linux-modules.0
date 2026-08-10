@@ -1,168 +1,146 @@
-Received: from mta1.migadu.com (out-64.mta1.migadu.com [95.215.58.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32183B0AD4
-	for <linux-modules@vger.kernel.org>; Mon, 10 Aug 2026 09:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E293B4432
+	for <linux-modules@vger.kernel.org>; Mon, 10 Aug 2026 10:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786354810; cv=none; b=OfeKrcZSYZ2udJAXQySbFhNxAGbpoPhGOt9oRnzldE94bOFQlhQLB8N8f2+s+Au8Hnznk+nK7kPAN7JfByArNEnHd5DSNcsT9M8SrFo9KLOCkEkJOvXWu4tDrgEKeEOcH5qyrx1a/ouHLxy4OzlBDbTg4fUscP687M8Tnr8zDuU=
+	t=1786356197; cv=none; b=Bhx8p4bQUvLttLEIbcqP0YV70pw0W0WDIvcVBE5u3Hhl1rFwKfLX/fWfmmGpBR8k+PpTHYr5y1tYwgs8bhsiE/bfBKnWdEDVJBuvJQcnY82wYtQ8HzN6x9yDjghc9VGBjknZKvo9pNtE5BgQTCzUysYeevGmVHWkfp04fk5/Uh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786354810; c=relaxed/simple;
-	bh=+7z3AP/ISNgtjS8Lqlp+ZNKMBFC0XbB0Gkd40yGE6eg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=A6aQBAkK2RR1r29MTi77KkQNEspF7Sr+gyebA1hEmnkN04ISl8hfnLAGuTsLBh6Ks/xoldEydKd4MWptb7MeylzKgafFr4j5a8AEs2mYCbzwwAeBfJcx2xXCjj+nW1/1Ta+YzbCOAFX5VRmyP381iZDwatDSWFyHDFPe8863QBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X6JETdJL; arc=none smtp.client-ip=95.215.58.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786356197; c=relaxed/simple;
+	bh=Zk4kz/6m1bLx7iWvB/n484IC+Ry0LxTWcxsiqOT9J9I=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ewAlj6NBkdDN7F134aX7s4rlx1Bc1kFqxiPAZrHx8qGvrgAV1BFcQ7Kl+XyzJgWNjaMvh4LCbivQexFD7Sru6tVFtOpM2S3CwWw5X01rRqY+6mxD3z1WAO1uBLjxc7SemHfKp+8xosCG/TjWsH3F2dDqUeUgRR8O/EEtLDtvCrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E5KjvlVv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X6JETdJL"
-X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=+7z3AP/ISNgtjS8Lqlp+ZNKMBFC0XbB0Gkd40yGE6eg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786354805; v=1; x=1786959605;
- b=X6JETdJLrNicIKajmnhxVTliKWjVG6cxTJow4sXQbILvCLiOXKsj1tEzo26qKwfiQ6S8BA+p
- XBBnPYe9+SwRw28+z938Zw4v/cTGcAmm7fp0KqIWYer0e0+XqfAbf4a71KvR+ElfK9ehdVX+6xJ
- F49syguUdUm0vLDLSDXRS+OY=
-X-Envelope-To: linux-modules@vger.kernel.org
-Received: from localhost.localdomain (116.128.244.169)
-	by mta10.migadu.com with ESMTPS id 52b4c21b50599e27;
-	Mon, 10 Aug 2026 09:40:05 +0000
-X-Migadu-Scanner: mta10.migadu.com
-Authentication-Results: mta10.migadu.com;
-	none
-From: Hao Ge <hao.ge@linux.dev>
-To: Suren Baghdasaryan <surenb@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>
-Cc: linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Hao Ge <hao.ge@linux.dev>,
-	stable@vger.kernel.org
-Subject: [PATCH v4 2/2] alloc_tag: fix undetected compressed tag overflow when profiling is disabled
-Date: Mon, 10 Aug 2026 17:39:55 +0800
-Message-Id: <20260810093955.153015-3-hao.ge@linux.dev>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260810093955.153015-1-hao.ge@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E5KjvlVv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C2C1F000E9;
+	Mon, 10 Aug 2026 10:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786356195;
+	bh=74WunDMsQpawcsErWnaBQKO2/y+zEZz3jwGq6qfuV0Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=E5KjvlVv8V+JRUS6ExVYBm+R3V6M18ygCK22xiBFIJWIJ6eHz1ZXXmWMEwi2RT4Ix
+	 m7v4NGqBrbo6sZGpp0tBESj4fKNz5AgzMP7zwBV1u85aelZqxTeNuQUL9NO6+fHsw3
+	 XS5XwJfKKsE8atmexhx6J1CHqpUmYnOzpJkA9603gHcEsAlA6bWf3KKBkbnaTn07Sa
+	 zH6bnN0Qupt4a14qxvoFH1jR02or8m2Y2ygjSoKmAq7gazQohVnQtrRY7JRK3JYlW7
+	 iY5bxZuAq+PiFzwyT3zLQJzSZkbDblV0Q1bQ8HGX0ydtX7MZBCEy4dqOxK/7qnqGLs
+	 ZRVHIRNTZRTIw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 1/2] alloc_tag: move release_module_tags() above
+ reserve_module_tags()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hao Ge" <hao.ge@linux.dev>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <20260810093955.153015-2-hao.ge@linux.dev>
 References: <20260810093955.153015-1-hao.ge@linux.dev>
+ <20260810093955.153015-2-hao.ge@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 10 Aug 2026 10:03:14 +0000
+Message-Id: <20260810100315.B4C2C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-In reserve_module_tags(), the tag overflow check is gated on
-mem_alloc_profiling_enabled():
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-    if (mem_alloc_profiling_enabled() && !tags_addressable())
+Pre-existing issues:
+- [High] reserve_module_tags() silently succeeds and returns a valid-lookin=
+g pointer when mas_store() fails, corrupting the module tags allocation spa=
+ce.
+- [High] release_module_tags() ignores failures from mas_store(), permanent=
+ly leaking the module's maple tree range.
+--
 
-If profiling is toggled off at runtime and a module is loaded whose
-tags exceed the compressed-mode limit, shutdown_mem_profiling() is
-skipped. vm_module_tags_populate() still maps memory for the tags and
-the module loads successfully, but the total tag count now exceeds what
-NR_UNUSED_PAGEFLAG_BITS can address.
+--- Patch [1]: [PATCH v4 1/2] alloc_tag: move release_module_tags() above r=
+eserve_module_tags() ---
+commit 96b4c3fa8241c380a13e2a15009ac553cfc71daa
+Author: Hao Ge <hao.ge@linux.dev>
 
-Once profiling is re-enabled, ref_to_idx() computes each tag's index
-as its position in the alloc_tag array. update_page_tag_ref() masks
-it to alloc_tag_ref_mask before storing in page->flags. Indices
-beyond the mask are truncated and idx_to_ref() resolves them to wrong
-tags.
+alloc_tag: move release_module_tags() above reserve_module_tags()
 
-This silently corrupts /proc/allocinfo: allocated pages get attributed
-to the wrong call sites, so the statistics it reports are wrong.
+release_module_tags() is a cleanup helper. reserve_module_tags() can
+also fail after storing the reservation in the maple tree, in which
+case it should call release_module_tags() to undo it. Move the helper
+above reserve_module_tags() so no forward declaration is needed.
 
-mem_alloc_profiling_enabled() and mem_profiling_compressed are
-independent. Once compressed mode is established at boot, it stays
-active regardless of runtime toggles of mem_profiling.
+No functional change.
 
-Remove the mem_alloc_profiling_enabled() guard. On overflow, shut down
-profiling, release the reservation, and return -EAGAIN so that
-layout_and_allocate() retries with profiling disabled: codetag sections
-are then placed as regular module data and the module loads without
-profiling rather than being rejected entirely.
+> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+> index e93e7fec1f066..96a9196635fea 100644
+> --- a/mm/alloc_tag.c
+> +++ b/mm/alloc_tag.c
+> @@ -493,6 +493,52 @@ static int vm_module_tags_populate(void)
+>  	return 0;
+>  }
+> =20
+> +static void release_module_tags(struct module *mod, bool used)
+> +{
 
-Skip percpu counter allocation in load_module() when profiling is
-disabled, as those counters would never be freed on unload.
+[ ... ]
 
-Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
-Cc: stable@vger.kernel.org
-Suggested-by: Suren Baghdasaryan <surenb@google.com>
-Signed-off-by: Hao Ge <hao.ge@linux.dev>
----
- kernel/module/main.c | 17 +++++++++++++++--
- mm/alloc_tag.c       | 11 ++++++++---
- 2 files changed, 23 insertions(+), 5 deletions(-)
+> +release_area:
+> +	mas_store(&mas, used ? &unloaded_mod : NULL);
+> +	val =3D mas_prev_range(&mas, 0);
+> +	if (val =3D=3D &prepend_mod)
+> +		mas_store(&mas, NULL);
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 46dd8d25a605..c32bb47a573a 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2971,13 +2971,26 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
- 	 * this is done generically; there doesn't appear to be any
- 	 * special cases for the architectures.
- 	 */
-+retry:
- 	layout_sections(info->mod, info);
- 	layout_symtab(info->mod, info);
- 
- 	/* Allocate and move to the final place */
- 	err = move_module(info->mod, info);
--	if (err)
--		return ERR_PTR(err);
-+	if (err) {
-+		if (err != -EAGAIN)
-+			return ERR_PTR(err);
-+		/*
-+		 * -EAGAIN means profiling was disabled but the module
-+		 * can still load without it. Reset state and retry.
-+		 */
-+		rewrite_section_headers(info, flags);
-+		for_each_mod_mem_type(type)
-+			info->mod->mem[type].size = 0;
-+		info->sechdrs[info->index.sym].sh_flags &= ~(unsigned long)SHF_ALLOC;
-+		info->sechdrs[info->index.str].sh_flags &= ~(unsigned long)SHF_ALLOC;
-+		goto retry;
-+	}
- 
- 	/* Module has been copied to its final place now: return it. */
- 	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
-diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-index af44f90379f2..3eba6331174d 100644
---- a/mm/alloc_tag.c
-+++ b/mm/alloc_tag.c
-@@ -950,10 +950,12 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 		int grow_res;
- 
- 		module_tags.size = offset + size;
--		if (mem_alloc_profiling_enabled() && !tags_addressable()) {
-+		if (!tags_addressable()) {
- 			shutdown_mem_profiling(true);
--			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
--				mod->name, NR_UNUSED_PAGEFLAG_BITS);
-+			pr_warn_once("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
-+				     mod->name, NR_UNUSED_PAGEFLAG_BITS);
-+			release_module_tags(mod, false);
-+			return ERR_PTR(-EAGAIN);
- 		}
- 
- 		grow_res = vm_module_tags_populate();
-@@ -975,6 +977,9 @@ static int load_module(struct module *mod, struct codetag *start, struct codetag
- 	struct alloc_tag *stop_tag;
- 	struct alloc_tag *tag;
- 
-+	if (!mem_profiling_support)
-+		return 0;
-+
- 	/* percpu counters for core allocations are already statically allocated */
- 	if (!mod)
- 		return 0;
--- 
-2.25.1
+[Severity: High]
+This isn't a bug introduced by this patch, but does this ignore failures fr=
+om
+mas_store()?
 
+Since mas_store() is called with the maple tree lock held, it forces an
+implicit GFP_NOWAIT allocation. If this allocation fails under memory
+pressure, mas_store() sets mas into an error state without modifying the tr=
+ee.
+
+Because the return value is ignored, the next call mas_prev_range(&mas, 0)
+would immediately return NULL upon seeing the error state, causing the padd=
+ing
+cleanup mas_store(&mas, NULL) to be skipped.
+
+Could this result in the module's maple tree range being permanently leaked
+because the original module pointer remains in the tree?
+
+> +out:
+> +	mas_unlock(&mas);
+> +}
+> +
+> +static void *reserve_module_tags(struct module *mod, unsigned long size,
+> +				 unsigned int prepend, unsigned long align)
+> +{
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does reserve_module_tags()
+silently succeed when mas_store() fails?
+
+If mas_store(&mas, mod) fails due to memory pressure:
+
+	if (mas_is_err(&mas)) {
+		mas.index =3D pad_start;
+		mas_erase(&mas);
+		ret =3D ERR_PTR(xa_err(mas.node));
+	}
+
+Does mas_erase(&mas) destroy the error state in mas.node before it can be
+read?
+
+mas_erase() resets the maple state and walks the tree, overwriting the error
+pointer in mas.node with a valid tree node or NULL. The subsequent
+ret =3D ERR_PTR(xa_err(mas.node)) then reads this non-error node, resulting=
+ in
+ret =3D NULL.
+
+Since ret is not an error pointer, would IS_ERR(ret) evaluate to false,
+causing the function to incorrectly return success?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810093955.1530=
+15-1-hao.ge@linux.dev?part=3D1
