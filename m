@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-58.mta1.migadu.com [95.215.58.58])
+Received: from mta1.migadu.com (out-64.mta1.migadu.com [95.215.58.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72543B0ADC
-	for <linux-modules@vger.kernel.org>; Mon, 10 Aug 2026 09:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32183B0AD4
+	for <linux-modules@vger.kernel.org>; Mon, 10 Aug 2026 09:40:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786354796; cv=none; b=jr0xOQsNHBBo+pWSfYjugDM80EXFTJK5oLJ/OyrIJJhHe/uM0ELWZbXmHm7cKgOVovCpNCTPaefzC9W3mHfdtD7jWBs5iGY1U1XOUimvwTWGjfA5eGMKj6JaJ2CGmN+72TNHiv2JCM5dJFNItJYECu+A120g2HAXhHKE7nlCr6Y=
+	t=1786354810; cv=none; b=OfeKrcZSYZ2udJAXQySbFhNxAGbpoPhGOt9oRnzldE94bOFQlhQLB8N8f2+s+Au8Hnznk+nK7kPAN7JfByArNEnHd5DSNcsT9M8SrFo9KLOCkEkJOvXWu4tDrgEKeEOcH5qyrx1a/ouHLxy4OzlBDbTg4fUscP687M8Tnr8zDuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786354796; c=relaxed/simple;
-	bh=tlcnQ2gSnDSweAJxKqL+Wd2tfNW+VPS5fl701xcZpzM=;
+	s=arc-20240116; t=1786354810; c=relaxed/simple;
+	bh=+7z3AP/ISNgtjS8Lqlp+ZNKMBFC0XbB0Gkd40yGE6eg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SYDtcIDnuL9RORfmQjLqjBI79OrrG43x9SPAuCzq9zxHJyni/5H1JGQKIqlP9dr4Ilxh0OOAYIapXloQnpPCfOClSqe0jQT7RNxT/RCGSsprZ7/GREyNFfnsTA0qeSLsx6oVq9Nxhv6qySHtzCgGe6bsmrMiwBKcYb/HUmHl3x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QhVQmnlU; arc=none smtp.client-ip=95.215.58.58
+	 MIME-Version; b=A6aQBAkK2RR1r29MTi77KkQNEspF7Sr+gyebA1hEmnkN04ISl8hfnLAGuTsLBh6Ks/xoldEydKd4MWptb7MeylzKgafFr4j5a8AEs2mYCbzwwAeBfJcx2xXCjj+nW1/1Ta+YzbCOAFX5VRmyP381iZDwatDSWFyHDFPe8863QBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X6JETdJL; arc=none smtp.client-ip=95.215.58.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QhVQmnlU"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X6JETdJL"
 X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=tlcnQ2gSnDSweAJxKqL+Wd2tfNW+VPS5fl701xcZpzM=;
+DKIM-Signature: a=rsa-sha256; bh=+7z3AP/ISNgtjS8Lqlp+ZNKMBFC0XbB0Gkd40yGE6eg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786354792; v=1; x=1786959592;
- b=QhVQmnlUFgIENngiHOFBkChlBLKBnEmSuAgXzDR/RpSG+dU7kP7sSWHArqQglPtHcidDatb3
- Gd6EoHj42AHRicDURwWPayM+/9fyGNtLEzxEkXCZ/eBaqlW6XbxtwCvbf6H5y+GEIibVJrDN+5o
- RLsk3GGVmakIVLZDXF+exc8Y=
+ t=1786354805; v=1; x=1786959605;
+ b=X6JETdJLrNicIKajmnhxVTliKWjVG6cxTJow4sXQbILvCLiOXKsj1tEzo26qKwfiQ6S8BA+p
+ XBBnPYe9+SwRw28+z938Zw4v/cTGcAmm7fp0KqIWYer0e0+XqfAbf4a71KvR+ElfK9ehdVX+6xJ
+ F49syguUdUm0vLDLSDXRS+OY=
 X-Envelope-To: linux-modules@vger.kernel.org
 Received: from localhost.localdomain (116.128.244.169)
-	by mta10.migadu.com with ESMTPS id ed45d9bbade2a809;
-	Mon, 10 Aug 2026 09:39:51 +0000
+	by mta10.migadu.com with ESMTPS id 52b4c21b50599e27;
+	Mon, 10 Aug 2026 09:40:05 +0000
+X-Migadu-Scanner: mta10.migadu.com
 Authentication-Results: mta10.migadu.com;
 	none
-X-Migadu-Scanner: mta10.migadu.com
 From: Hao Ge <hao.ge@linux.dev>
 To: Suren Baghdasaryan <surenb@google.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
@@ -42,10 +42,11 @@ To: Suren Baghdasaryan <surenb@google.com>,
 Cc: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
-	Hao Ge <hao.ge@linux.dev>
-Subject: [PATCH v4 1/2] alloc_tag: move release_module_tags() above reserve_module_tags()
-Date: Mon, 10 Aug 2026 17:39:54 +0800
-Message-Id: <20260810093955.153015-2-hao.ge@linux.dev>
+	Hao Ge <hao.ge@linux.dev>,
+	stable@vger.kernel.org
+Subject: [PATCH v4 2/2] alloc_tag: fix undetected compressed tag overflow when profiling is disabled
+Date: Mon, 10 Aug 2026 17:39:55 +0800
+Message-Id: <20260810093955.153015-3-hao.ge@linux.dev>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260810093955.153015-1-hao.ge@linux.dev>
 References: <20260810093955.153015-1-hao.ge@linux.dev>
@@ -57,128 +58,111 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-release_module_tags() is a cleanup helper. reserve_module_tags() can
-also fail after storing the reservation in the maple tree, in which
-case it should call release_module_tags() to undo it. Move the helper
-above reserve_module_tags() so no forward declaration is needed.
+In reserve_module_tags(), the tag overflow check is gated on
+mem_alloc_profiling_enabled():
 
-No functional change.
+    if (mem_alloc_profiling_enabled() && !tags_addressable())
 
+If profiling is toggled off at runtime and a module is loaded whose
+tags exceed the compressed-mode limit, shutdown_mem_profiling() is
+skipped. vm_module_tags_populate() still maps memory for the tags and
+the module loads successfully, but the total tag count now exceeds what
+NR_UNUSED_PAGEFLAG_BITS can address.
+
+Once profiling is re-enabled, ref_to_idx() computes each tag's index
+as its position in the alloc_tag array. update_page_tag_ref() masks
+it to alloc_tag_ref_mask before storing in page->flags. Indices
+beyond the mask are truncated and idx_to_ref() resolves them to wrong
+tags.
+
+This silently corrupts /proc/allocinfo: allocated pages get attributed
+to the wrong call sites, so the statistics it reports are wrong.
+
+mem_alloc_profiling_enabled() and mem_profiling_compressed are
+independent. Once compressed mode is established at boot, it stays
+active regardless of runtime toggles of mem_profiling.
+
+Remove the mem_alloc_profiling_enabled() guard. On overflow, shut down
+profiling, release the reservation, and return -EAGAIN so that
+layout_and_allocate() retries with profiling disabled: codetag sections
+are then placed as regular module data and the module loads without
+profiling rather than being rejected entirely.
+
+Skip percpu counter allocation in load_module() when profiling is
+disabled, as those counters would never be freed on unload.
+
+Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
+Cc: stable@vger.kernel.org
+Suggested-by: Suren Baghdasaryan <surenb@google.com>
 Signed-off-by: Hao Ge <hao.ge@linux.dev>
 ---
- mm/alloc_tag.c | 92 +++++++++++++++++++++++++-------------------------
- 1 file changed, 46 insertions(+), 46 deletions(-)
+ kernel/module/main.c | 17 +++++++++++++++--
+ mm/alloc_tag.c       | 11 ++++++++---
+ 2 files changed, 23 insertions(+), 5 deletions(-)
 
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 46dd8d25a605..c32bb47a573a 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2971,13 +2971,26 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+ 	 * this is done generically; there doesn't appear to be any
+ 	 * special cases for the architectures.
+ 	 */
++retry:
+ 	layout_sections(info->mod, info);
+ 	layout_symtab(info->mod, info);
+ 
+ 	/* Allocate and move to the final place */
+ 	err = move_module(info->mod, info);
+-	if (err)
+-		return ERR_PTR(err);
++	if (err) {
++		if (err != -EAGAIN)
++			return ERR_PTR(err);
++		/*
++		 * -EAGAIN means profiling was disabled but the module
++		 * can still load without it. Reset state and retry.
++		 */
++		rewrite_section_headers(info, flags);
++		for_each_mod_mem_type(type)
++			info->mod->mem[type].size = 0;
++		info->sechdrs[info->index.sym].sh_flags &= ~(unsigned long)SHF_ALLOC;
++		info->sechdrs[info->index.str].sh_flags &= ~(unsigned long)SHF_ALLOC;
++		goto retry;
++	}
+ 
+ 	/* Module has been copied to its final place now: return it. */
+ 	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
 diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-index 52aece27b00e..af44f90379f2 100644
+index af44f90379f2..3eba6331174d 100644
 --- a/mm/alloc_tag.c
 +++ b/mm/alloc_tag.c
-@@ -835,6 +835,52 @@ static int vm_module_tags_populate(void)
- 	return 0;
- }
+@@ -950,10 +950,12 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+ 		int grow_res;
  
-+static void release_module_tags(struct module *mod, bool used)
-+{
-+	MA_STATE(mas, &mod_area_mt, module_tags.size, module_tags.size);
-+	struct alloc_tag *start_tag;
-+	struct alloc_tag *end_tag;
-+	struct module *val;
-+
-+	mas_lock(&mas);
-+	mas_for_each_rev(&mas, val, 0)
-+		if (val == mod)
-+			break;
-+
-+	if (!val) /* module not found */
-+		goto out;
-+
-+	if (!used)
-+		goto release_area;
-+
-+	start_tag = (struct alloc_tag *)(module_tags.start_addr + mas.index);
-+	end_tag = (struct alloc_tag *)(module_tags.start_addr + mas.last);
-+	if (!clean_unused_counters(start_tag, end_tag)) {
-+		struct alloc_tag *tag;
-+
-+		for (tag = start_tag; tag <= end_tag; tag++) {
-+			struct alloc_tag_counters counter;
-+
-+			if (!tag->counters)
-+				continue;
-+
-+			counter = alloc_tag_read(tag);
-+			pr_info("%s:%u module %s func:%s has %llu allocated at module unload\n",
-+				tag->ct.filename, tag->ct.lineno, tag->ct.modname,
-+				tag->ct.function, counter.bytes);
-+		}
-+	} else {
-+		used = false;
-+	}
-+release_area:
-+	mas_store(&mas, used ? &unloaded_mod : NULL);
-+	val = mas_prev_range(&mas, 0);
-+	if (val == &prepend_mod)
-+		mas_store(&mas, NULL);
-+out:
-+	mas_unlock(&mas);
-+}
-+
- static void *reserve_module_tags(struct module *mod, unsigned long size,
- 				 unsigned int prepend, unsigned long align)
- {
-@@ -922,52 +968,6 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 	return (struct alloc_tag *)(module_tags.start_addr + offset);
- }
+ 		module_tags.size = offset + size;
+-		if (mem_alloc_profiling_enabled() && !tags_addressable()) {
++		if (!tags_addressable()) {
+ 			shutdown_mem_profiling(true);
+-			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
+-				mod->name, NR_UNUSED_PAGEFLAG_BITS);
++			pr_warn_once("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
++				     mod->name, NR_UNUSED_PAGEFLAG_BITS);
++			release_module_tags(mod, false);
++			return ERR_PTR(-EAGAIN);
+ 		}
  
--static void release_module_tags(struct module *mod, bool used)
--{
--	MA_STATE(mas, &mod_area_mt, module_tags.size, module_tags.size);
--	struct alloc_tag *start_tag;
--	struct alloc_tag *end_tag;
--	struct module *val;
--
--	mas_lock(&mas);
--	mas_for_each_rev(&mas, val, 0)
--		if (val == mod)
--			break;
--
--	if (!val) /* module not found */
--		goto out;
--
--	if (!used)
--		goto release_area;
--
--	start_tag = (struct alloc_tag *)(module_tags.start_addr + mas.index);
--	end_tag = (struct alloc_tag *)(module_tags.start_addr + mas.last);
--	if (!clean_unused_counters(start_tag, end_tag)) {
--		struct alloc_tag *tag;
--
--		for (tag = start_tag; tag <= end_tag; tag++) {
--			struct alloc_tag_counters counter;
--
--			if (!tag->counters)
--				continue;
--
--			counter = alloc_tag_read(tag);
--			pr_info("%s:%u module %s func:%s has %llu allocated at module unload\n",
--				tag->ct.filename, tag->ct.lineno, tag->ct.modname,
--				tag->ct.function, counter.bytes);
--		}
--	} else {
--		used = false;
--	}
--release_area:
--	mas_store(&mas, used ? &unloaded_mod : NULL);
--	val = mas_prev_range(&mas, 0);
--	if (val == &prepend_mod)
--		mas_store(&mas, NULL);
--out:
--	mas_unlock(&mas);
--}
--
- static int load_module(struct module *mod, struct codetag *start, struct codetag *stop)
- {
- 	/* Allocate module alloc_tag percpu counters */
+ 		grow_res = vm_module_tags_populate();
+@@ -975,6 +977,9 @@ static int load_module(struct module *mod, struct codetag *start, struct codetag
+ 	struct alloc_tag *stop_tag;
+ 	struct alloc_tag *tag;
+ 
++	if (!mem_profiling_support)
++		return 0;
++
+ 	/* percpu counters for core allocations are already statically allocated */
+ 	if (!mod)
+ 		return 0;
 -- 
 2.25.1
 
