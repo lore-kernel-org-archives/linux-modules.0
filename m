@@ -1,199 +1,213 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F96F2DC789;
-	Mon, 10 Aug 2026 02:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB672E040D
+	for <linux-modules@vger.kernel.org>; Mon, 10 Aug 2026 03:55:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786327630; cv=none; b=QjU2ms2au4NiVcZATPkJB36l30mL8lfYJNi1IIB6z/FcXekbRBz49HgjqdzbMe+6hkVYCHD3B5QzwzPDtZ82uOjkwgHGhGfuwhTIAi6sgNvoV5q/R234XOFqWR7fq6B5s8ud9HkXTJ+x0235LkIgsPInWpkEv9cv4V6qZt2+VDg=
+	t=1786334141; cv=none; b=rOziMAP6FUH2EWEbRWVe/57Yt+JsM3gjSOoz5Ks3ltR6W4JuAw96u/RoQutl2EpybSkxWmUk6XZB1ij9z5gtcKqom84/c3hhXMeR9gY5qt2WomDRAyiXk25UHNcpIwkyNc4Y4rBc3CZqAdUPqS7n94HZdDnKEIhstrxCobK3YQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786327630; c=relaxed/simple;
-	bh=GAktumss79iUjrqwFgW/jzZTDOuIRd0bFHbvQ/DFkf0=;
-	h=Subject:From:To:Cc:References:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=dkf38WgMeLqSnoAxFPTAW0aAczTvI80dKuG3D2FimDoWkI3wWctE0cug33UrUBeECvVVSwUqSB04hzn5WOF53FyMiy+nWyjL2CrpZEfbF4lnydg2whRtHQPwfymCYBYktcrH9H1KYg1oNAgprbVCQ4E4sOACu3u3ylyePbLMuRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Dxm6FCMnlqP8sLAA--.13961S3;
-	Mon, 10 Aug 2026 10:06:58 +0800 (CST)
-Received: from [10.130.40.83] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJBxb8c4MnlqxSoqAA--.32057S2;
-	Mon, 10 Aug 2026 10:06:49 +0800 (CST)
-Subject: Re: [PATCH v1] module/kallsyms: Filter out local mapping symbols
- during module load
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>
-Cc: linux-modules@vger.kernel.org, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20260808033715.13117-1-yangtiezhu@loongson.cn>
-Message-ID: <71fe6152-65f8-cf30-08d0-004c2a7d922a@loongson.cn>
-Date: Mon, 10 Aug 2026 10:06:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1786334141; c=relaxed/simple;
+	bh=xbix/E3dJTHUwbV3DgNMJvePr490dKzztFBUWutfCr8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dLaXFl3dF/UCdth7YRTIH3StNpbbajcE8Tk8xymQ185990DaEmDoKH5W2s0OGYGHmU7yQEGWRWNfMwbmqdQWUfLj+aSLKLydwBgO4OXjo3FidQPkfGckyXzyDOvLvIx5yrrhQyDEx0h7gEOkN7kF+NibhuUtvqs41OOV4JrZEN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eTK563Nq; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eTK563Nq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E94F1F00A3E
+	for <linux-modules@vger.kernel.org>; Mon, 10 Aug 2026 03:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786334139;
+	bh=jzFHnwF8+RE791kbgBI6mkvSsTNJDuWvEFuCrdii6LY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=eTK563NqaU2FYXG0RHwdITIpVQIMZuhFpr/pOE19yQB6oPo9g1CenaGb+R43+Qoml
+	 BDpH0ko/FnTxkj40TFYUOW0Yjv11kuyxK8JO8yHt8GEIATo/S+/9cb4R1O/xe56qdy
+	 ycnAw3Sf944Y21aw6jNBQGEX8DKB3VKDntj4xdfkLVLqJOXVVlBEBpzSs/wtamK50p
+	 /7S7tTJgXpclgPv6gi04OFe8sYTNUq8Z9rD9f4ehpuzleSdI3WFAhh4ZDGyLW6qM79
+	 3xdHlfYjqRwnMth6h2xJJ7iwSYPI7dE2oqqO1A7Fq80MZXPaNPF/Ua/Naps0dCIYgr
+	 lpfZRPPeMnpWw==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-69c600f76ccso1711439a12.0
+        for <linux-modules@vger.kernel.org>; Sun, 09 Aug 2026 20:55:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rq+BL+jxUBAgxffCpG8rRK2T+E+6OpYyXfYvP/Rsm8MsAkK3dANer4nyrGlChSPrOktRk5xr4l1nKQMel0L@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoQ9o8NXiRRq7+S46h2B4teA9MO3SoVJo7FV6sjebSrUU2hhT9
+	S5AejmQxo1R5VsgoLumIfELwa+qqmIsxkEg42sJdywndtcFQ87OyySbxLGiFsJmGALta2DjYuCL
+	1vfVfJZl4qN54Wd6EQiSjgC86pMK+Eu8=
+X-Received: by 2002:a05:6402:3906:b0:69f:fa13:ed3 with SMTP id
+ 4fb4d7f45d1cf-6a1f2c3ff1dmr8051325a12.16.1786334138211; Sun, 09 Aug 2026
+ 20:55:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260808033715.13117-1-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxb8c4MnlqxSoqAA--.32057S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCw1DuF17Cr1rWr47GF13WrX_yoWrZr13pr
-	15JrWFgF4rJr1jga18CayY9ay5G34kWrZI9as8Gwn3Arn0qFyjv3Z7KF1fZw47ZrsxKr12
-	k3s7ZFy3ta4UJrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-	42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+References: <20260808033715.13117-1-yangtiezhu@loongson.cn> <71fe6152-65f8-cf30-08d0-004c2a7d922a@loongson.cn>
+In-Reply-To: <71fe6152-65f8-cf30-08d0-004c2a7d922a@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Mon, 10 Aug 2026 11:55:26 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5wwuSKZe3k2ZzS2d7bisM+QbVAFGrx72fXXE81-zOq8g@mail.gmail.com>
+X-Gm-Features: AUfX_mwQ9U1z3ySjR5WilGyUrRhCcQT7ZYwKEjDr7hd48QpO61OkhtY-wIcK0Eo
+Message-ID: <CAAhV-H5wwuSKZe3k2ZzS2d7bisM+QbVAFGrx72fXXE81-zOq8g@mail.gmail.com>
+Subject: Re: [PATCH v1] module/kallsyms: Filter out local mapping symbols
+ during module load
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/8/8 上午11:37, Tiezhu Yang wrote:
-> The compiler toolchains generate internal local labels on certain
-> architectures (such as LoongArch) for optimizations and relocations.
+Hi, Tiezhu,
 
-...
+On Mon, Aug 10, 2026 at 10:07=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.c=
+n> wrote:
+>
+> On 2026/8/8 =E4=B8=8A=E5=8D=8811:37, Tiezhu Yang wrote:
+> > The compiler toolchains generate internal local labels on certain
+> > architectures (such as LoongArch) for optimizations and relocations.
+>
+> ...
+>
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > ---
+> > Based on the latest modules-next branch of
+> > https://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git
+> >
+> >   kernel/module/kallsyms.c | 7 +++++++
+> >   1 file changed, 7 insertions(+)
+> >
+> > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> > index f23126d804b2..61dd5c014a59 100644
+> > --- a/kernel/module/kallsyms.c
+> > +++ b/kernel/module/kallsyms.c
+> > @@ -130,6 +130,9 @@ void layout_symtab(struct module *mod, struct load_=
+info *info)
+> >
+> >       /* Compute total space required for the core symbols' strtab. */
+> >       for (ndst =3D i =3D 0; i < nsrc; i++) {
+> > +             if (is_mapping_symbol(&info->strtab[src[i].st_name]))
+> > +                     continue;
+> > +
+> >               if (i =3D=3D 0 || is_livepatch_module(mod) ||
+> >                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
+hnum,
+> >                                  info->index.pcpu)) {
+> > @@ -198,6 +201,10 @@ void add_kallsyms(struct module *mod, const struct=
+ load_info *info)
+> >       src =3D kallsyms->symtab;
+> >       for (ndst =3D i =3D 0; i < kallsyms->num_symtab; i++) {
+> >               kallsyms->typetab[i] =3D elf_type(src + i, info);
+> > +
+> > +             if (is_mapping_symbol(&kallsyms->strtab[src[i].st_name]))
+> > +                     continue;
+> > +
+> >               if (i =3D=3D 0 || is_livepatch_module(mod) ||
+> >                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
+hnum,
+> >                                  info->index.pcpu)) {
+> >
+>
+> Hi module maintainers,
+>
+> Regarding the feedback from the AI bot about livepatch breaking [1],
+> there are two ways to fix it, which style do you prefer?
+I think the first is better.
 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
-> Based on the latest modules-next branch of
-> https://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git
-> 
->   kernel/module/kallsyms.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
+
+Huacai
+>
+> (1) Using continue
+>
+> ```
 > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index f23126d804b2..61dd5c014a59 100644
+> index f23126d804b2..aece7aa49dd4 100644
 > --- a/kernel/module/kallsyms.c
 > +++ b/kernel/module/kallsyms.c
-> @@ -130,6 +130,9 @@ void layout_symtab(struct module *mod, struct load_info *info)
->   
->   	/* Compute total space required for the core symbols' strtab. */
->   	for (ndst = i = 0; i < nsrc; i++) {
-> +		if (is_mapping_symbol(&info->strtab[src[i].st_name]))
-> +			continue;
+> @@ -130,6 +130,10 @@ void layout_symtab(struct module *mod, struct
+> load_info *info)
+>
+>          /* Compute total space required for the core symbols' strtab. */
+>          for (ndst =3D i =3D 0; i < nsrc; i++) {
+> +               if (!is_livepatch_module(mod) &&
+> +                   is_mapping_symbol(&info->strtab[src[i].st_name]))
+> +                       continue;
 > +
->   		if (i == 0 || is_livepatch_module(mod) ||
->   		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
->   				   info->index.pcpu)) {
-> @@ -198,6 +201,10 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
->   	src = kallsyms->symtab;
->   	for (ndst = i = 0; i < kallsyms->num_symtab; i++) {
->   		kallsyms->typetab[i] = elf_type(src + i, info);
+>                  if (i =3D=3D 0 || is_livepatch_module(mod) ||
+>                      is_core_symbol(src + i, info->sechdrs,
+> info->hdr->e_shnum,
+>                                     info->index.pcpu)) {
+> @@ -198,6 +202,11 @@ void add_kallsyms(struct module *mod, const struct
+> load_info *info)
+>          src =3D kallsyms->symtab;
+>          for (ndst =3D i =3D 0; i < kallsyms->num_symtab; i++) {
+>                  kallsyms->typetab[i] =3D elf_type(src + i, info);
 > +
-> +		if (is_mapping_symbol(&kallsyms->strtab[src[i].st_name]))
-> +			continue;
+> +               if (!is_livepatch_module(mod) &&
+> +                   is_mapping_symbol(&kallsyms->strtab[src[i].st_name]))
+> +                       continue;
 > +
->   		if (i == 0 || is_livepatch_module(mod) ||
->   		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
->   				   info->index.pcpu)) {
-> 
-
-Hi module maintainers,
-
-Regarding the feedback from the AI bot about livepatch breaking [1],
-there are two ways to fix it, which style do you prefer?
-
-(1) Using continue
-
-```
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index f23126d804b2..aece7aa49dd4 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -130,6 +130,10 @@ void layout_symtab(struct module *mod, struct 
-load_info *info)
-
-         /* Compute total space required for the core symbols' strtab. */
-         for (ndst = i = 0; i < nsrc; i++) {
-+               if (!is_livepatch_module(mod) &&
-+                   is_mapping_symbol(&info->strtab[src[i].st_name]))
-+                       continue;
-+
-                 if (i == 0 || is_livepatch_module(mod) ||
-                     is_core_symbol(src + i, info->sechdrs, 
-info->hdr->e_shnum,
-                                    info->index.pcpu)) {
-@@ -198,6 +202,11 @@ void add_kallsyms(struct module *mod, const struct 
-load_info *info)
-         src = kallsyms->symtab;
-         for (ndst = i = 0; i < kallsyms->num_symtab; i++) {
-                 kallsyms->typetab[i] = elf_type(src + i, info);
-+
-+               if (!is_livepatch_module(mod) &&
-+                   is_mapping_symbol(&kallsyms->strtab[src[i].st_name]))
-+                       continue;
-+
-                 if (i == 0 || is_livepatch_module(mod) ||
-                     is_core_symbol(src + i, info->sechdrs, 
-info->hdr->e_shnum,
-                                    info->index.pcpu)) {
-```
-
-(2) Using if-statement
-```
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index f23126d804b2..b2b22b3487a8 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -130,9 +130,12 @@ void layout_symtab(struct module *mod, struct 
-load_info *info)
-
-         /* Compute total space required for the core symbols' strtab. */
-         for (ndst = i = 0; i < nsrc; i++) {
--               if (i == 0 || is_livepatch_module(mod) ||
-+               bool is_mapping = !is_livepatch_module(mod) &&
-+ 
-is_mapping_symbol(&info->strtab[src[i].st_name]);
-+
-+               if (!is_mapping && (i == 0 || is_livepatch_module(mod) ||
-                     is_core_symbol(src + i, info->sechdrs, 
-info->hdr->e_shnum,
--                                  info->index.pcpu)) {
-+                                  info->index.pcpu))) {
-                         strtab_size += 
-strlen(&info->strtab[src[i].st_name]) + 1;
-                         ndst++;
-                 }
-@@ -198,9 +201,13 @@ void add_kallsyms(struct module *mod, const struct 
-load_info *info)
-         src = kallsyms->symtab;
-         for (ndst = i = 0; i < kallsyms->num_symtab; i++) {
-                 kallsyms->typetab[i] = elf_type(src + i, info);
--               if (i == 0 || is_livepatch_module(mod) ||
-+
-+               bool is_mapping = !is_livepatch_module(mod) &&
-+ 
-is_mapping_symbol(&kallsyms->strtab[src[i].st_name]);
-+
-+               if (!is_mapping && (i == 0 || is_livepatch_module(mod) ||
-                     is_core_symbol(src + i, info->sechdrs, 
-info->hdr->e_shnum,
--                                  info->index.pcpu)) {
-+                                  info->index.pcpu))) {
-                         ssize_t ret;
-
-                         mod->core_kallsyms.typetab[ndst] =
-```
-
-If you have any more comments, please let me know.
-
-[1] 
-https://lore.kernel.org/linux-modules/20260808035301.C3E6F1F000E9@smtp.kernel.org/
-
-Thanks,
-Tiezhu
-
+>                  if (i =3D=3D 0 || is_livepatch_module(mod) ||
+>                      is_core_symbol(src + i, info->sechdrs,
+> info->hdr->e_shnum,
+>                                     info->index.pcpu)) {
+> ```
+>
+> (2) Using if-statement
+> ```
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index f23126d804b2..b2b22b3487a8 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -130,9 +130,12 @@ void layout_symtab(struct module *mod, struct
+> load_info *info)
+>
+>          /* Compute total space required for the core symbols' strtab. */
+>          for (ndst =3D i =3D 0; i < nsrc; i++) {
+> -               if (i =3D=3D 0 || is_livepatch_module(mod) ||
+> +               bool is_mapping =3D !is_livepatch_module(mod) &&
+> +
+> is_mapping_symbol(&info->strtab[src[i].st_name]);
+> +
+> +               if (!is_mapping && (i =3D=3D 0 || is_livepatch_module(mod=
+) ||
+>                      is_core_symbol(src + i, info->sechdrs,
+> info->hdr->e_shnum,
+> -                                  info->index.pcpu)) {
+> +                                  info->index.pcpu))) {
+>                          strtab_size +=3D
+> strlen(&info->strtab[src[i].st_name]) + 1;
+>                          ndst++;
+>                  }
+> @@ -198,9 +201,13 @@ void add_kallsyms(struct module *mod, const struct
+> load_info *info)
+>          src =3D kallsyms->symtab;
+>          for (ndst =3D i =3D 0; i < kallsyms->num_symtab; i++) {
+>                  kallsyms->typetab[i] =3D elf_type(src + i, info);
+> -               if (i =3D=3D 0 || is_livepatch_module(mod) ||
+> +
+> +               bool is_mapping =3D !is_livepatch_module(mod) &&
+> +
+> is_mapping_symbol(&kallsyms->strtab[src[i].st_name]);
+> +
+> +               if (!is_mapping && (i =3D=3D 0 || is_livepatch_module(mod=
+) ||
+>                      is_core_symbol(src + i, info->sechdrs,
+> info->hdr->e_shnum,
+> -                                  info->index.pcpu)) {
+> +                                  info->index.pcpu))) {
+>                          ssize_t ret;
+>
+>                          mod->core_kallsyms.typetab[ndst] =3D
+> ```
+>
+> If you have any more comments, please let me know.
+>
+> [1]
+> https://lore.kernel.org/linux-modules/20260808035301.C3E6F1F000E9@smtp.ke=
+rnel.org/
+>
+> Thanks,
+> Tiezhu
+>
+>
