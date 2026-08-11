@@ -1,120 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99DD83FCB32;
-	Tue, 11 Aug 2026 06:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF33309F08;
+	Tue, 11 Aug 2026 07:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786430468; cv=none; b=KBFGjKdPLG9fmTSG4IL7mAmpAFhu/VovcaaKjtrw15+3FZghrx7Gl7VpaEHJNgRgRM8uEnJoQLVcPBdfw/+3PHwRmwFbWeTgruXjtgBe99MWcqhECxmGbfGieWBUpODNGs+XThlYpt+n6YIM9jG3OGZ9j2O7ww+/altRAuwOqEk=
+	t=1786432536; cv=none; b=oC/Ch+6XX3Jd2auW875Hth+cZU1+4M+uLYN40LaDQRbQjGPum00A7pcs9kD8p1HqzLda1u2Q13bXWsAuUAcnUfui92iVXVAgDrWMNC2D+1uqBBBp73ddCNvY2spqvMrcmhPHPlw5e/LLLE7D0bN9wKl6RsKg/k9PFiVVaL9U+8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786430468; c=relaxed/simple;
-	bh=Y+g5XGXUpaEPEpNu/2z6EYlrPFXE16lF+w/ttECZ4PY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ihCq6W2OZwjR57BBuomwtFJI31EEgt6tnRG0TVtkp3KlvLIHqWzo9v4yJ6YNKSZgUUc1ce/4dIRqGVpaBTt9t67rNxZIEGJ0rCmY8tRpaI+ffuHi9e6Djt2lYJAmS5q6fz+MIMx7Qxph4olOUeRsxLIPliXn7LvCJ5RwEOJX2O4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VSJb9/OB; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VSJb9/OB"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79F89C4AF12;
-	Tue, 11 Aug 2026 06:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1786430466; bh=Y+g5XGXUpaEPEpNu/2z6EYlrPFXE16lF+w/ttECZ4PY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=VSJb9/OB0joa9XhxpWkPGcjfNW+4y83dpQ9OTeK5wH6MkVHjmoq6o0svtcqQbr1Zr
-	 Gmq2DqwGZj4F5WNh5uKINkpfsT81Nfk5k9bA6EbiK9V9lWfRiaJ8+FNOvQZD/8rtLe
-	 L3k9DYOSgo5odP7RvX1OwDJT+HaMf4cVIOGYWInc=
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 631DDC5B572;
-	Tue, 11 Aug 2026 06:41:06 +0000 (UTC)
-From: Alvin Sun <alvin.sun@linux.dev>
-Date: Tue, 11 Aug 2026 14:39:50 +0800
-Subject: [PATCH v10 08/10] rust_binder: use `LocalModule` for `THIS_MODULE`
+	s=arc-20240116; t=1786432536; c=relaxed/simple;
+	bh=c+gZP4P+2SCGAArVIUWbh7JWbpLAHkPV9zUZmRty/E8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DoEnLvREPH7DC8KDxkuyffjigzZqYEwNLEI95M3wA2dV5rhCSVDwlv0K1FXMZ12JZA9Q8GiBCSJEFsODBX692tzuIV3+w5FAwruTt5bJk6AwlLnvbMhypwpiXCW+TDyEwdapFAieNnHdJ+wo+caOq2qPxSEW3yy/3eu6O4UX92U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8AxntIJzHpq6RcAAA--.319S3;
+	Tue, 11 Aug 2026 15:15:21 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAx3c79y3pqB0kAAA--.1776S2;
+	Tue, 11 Aug 2026 15:15:10 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>
+Cc: linux-modules@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] module/kallsyms: Filter out local mapping symbols during module load
+Date: Tue, 11 Aug 2026 15:15:07 +0800
+Message-ID: <20260811071507.24043-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260811-fix-fops-owner-v10-8-7e71776f9dbe@linux.dev>
-References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
-In-Reply-To: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
-To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
- Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
- Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
- Igor Korotin <igor.korotin@linux.dev>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
- Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
- Carlos Llamas <cmllamas@google.com>
-Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
- driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
- nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786430463; l=1425;
- i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
- bh=Y+g5XGXUpaEPEpNu/2z6EYlrPFXE16lF+w/ttECZ4PY=;
- b=wuist2Y7evoWdYNP5wCetrUO8g0Zyp2qFyp/lrFrzl5GEv+uOR39Tkb7fGA3n/X+NR1byOdye
- R8btYsCJOWWARHHJavwcrV9JguGqWiKKnZeebYGpLkBpHBurbz3rCRn
-X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
- pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
-X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
- auth_id=684
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAx3c79y3pqB0kAAA--.1776S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFyDXry8Xr13GF1xZFWftFc_yoW5Zw17pr
+	n0k3yFqr48JF15Ka1kuws0gFy5GrWkWrWYgFn8K34fAFn5XFyYva1xtw13u3y7Xrnakryx
+	Kayvv3W3Za4UAagCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
 
-Replace the `THIS_MODULE` static reference in the binder fops with
-`this_module::<LocalModule>()`, consistent with the move of
-`THIS_MODULE` into the `ModuleMetadata` trait.
+The compiler toolchains generate internal local labels on certain
+architectures (such as LoongArch) for optimizations and relocations.
 
-Assisted-by: opencode:glm-5.2
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Acked-by: Danilo Krummrich <dakr@kernel.org>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+While these local labels are filtered out during runtime lookups in
+find_kallsyms_symbol(), they still leak into the permanent symbol
+tables of loaded modules, because layout_symtab() and add_kallsyms()
+do not check for the mapping symbols during layout generation.
+
+Consequently, tracing tools like bpftrace resolve identical addresses
+into confusing local labels instead of actual clear C function names.
+
+Fix this by adding is_mapping_symbol() checks directly into the symbol
+tracking loops of layout_symtab() and add_kallsyms(). This prevents the
+mapping symbols from entering the module's memory symbol arrays at load
+time.
+
+For livepatch modules, core_kallsyms.symtab must remain a complete copy
+of the original ELF symbol table to prevent delayed relocation failures.
+Therefore, enforce is_livepatch_module() checking to skip the filtering
+for livepatch modules.
+
+Reproduce steps:
+
+1. Set up a LoongArch VM with "-accel kvm":
+
+   $ sudo qemu-system-loongarch64 -serial stdio \
+     -machine virt -cpu la464 -smp 4 -m 4G \
+     -bios /usr/share/edk2/loongarch64/QEMU_EFI.fd \
+     -nodefaults -no-reboot -nographic -accel kvm
+
+2. Use bpftrace to capture kstack when vCPU is scheduled out:
+
+   $ cat trace_sched.bt
+   kprobe:kvm:kvm_sched_out
+   {
+           if (pid == $1) {
+                   print(kstack());
+           }
+   }
+
+   $ sudo bpftrace trace_sched.bt `pgrep -o qemu-system`
+
+Test results:
+
+1. Before this patch (Confusing stack with local labels):
+
+        kvm_sched_out+0
+        __schedule+1584
+        schedule+48
+        .LVL3767+36
+        .LVL3801+8
+        .LVL285+12
+        .LVL425+44
+        .LVL1419+20
+        kvm_exc_entry+260
+
+2. After this patch (Accurate stack with function names):
+
+        kvm_sched_out+0
+        __schedule+1584
+        schedule+48
+        kvm_vcpu_block+112
+        kvm_vcpu_halt+104
+        kvm_emu_idle+284
+        kvm_handle_gspr+1316
+        kvm_handle_exit+456
+        kvm_exc_entry+260
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/android/binder/rust_binder_main.rs | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v2: Fix livepatch support as pointed out by Sashiko bot.
 
-diff --git a/drivers/android/binder/rust_binder_main.rs b/drivers/android/binder/rust_binder_main.rs
-index dc1941cd2407b..d6ceebbd5f94e 100644
---- a/drivers/android/binder/rust_binder_main.rs
-+++ b/drivers/android/binder/rust_binder_main.rs
-@@ -17,6 +17,7 @@
-     bindings::{self, seq_file},
-     fs::File,
-     list::{ListArc, ListArcSafe, ListLinksSelfPtr, TryNewListArc},
-+    module::this_module,
-     prelude::*,
-     seq_file::SeqFile,
-     seq_print,
-@@ -318,7 +319,7 @@ unsafe impl<T> Sync for AssertSync<T> {}
-     let zeroed_ops = unsafe { core::mem::MaybeUninit::zeroed().assume_init() };
+ kernel/module/kallsyms.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index f23126d804b2..aece7aa49dd4 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -130,6 +130,10 @@ void layout_symtab(struct module *mod, struct load_info *info)
  
-     let ops = kernel::bindings::file_operations {
--        owner: THIS_MODULE.as_ptr(),
-+        owner: this_module::<LocalModule>().as_ptr(),
-         poll: Some(rust_binder_poll),
-         unlocked_ioctl: Some(rust_binder_ioctl),
-         compat_ioctl: bindings::compat_ptr_ioctl,
-
+ 	/* Compute total space required for the core symbols' strtab. */
+ 	for (ndst = i = 0; i < nsrc; i++) {
++		if (!is_livepatch_module(mod) &&
++		    is_mapping_symbol(&info->strtab[src[i].st_name]))
++			continue;
++
+ 		if (i == 0 || is_livepatch_module(mod) ||
+ 		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
+ 				   info->index.pcpu)) {
+@@ -198,6 +202,11 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
+ 	src = kallsyms->symtab;
+ 	for (ndst = i = 0; i < kallsyms->num_symtab; i++) {
+ 		kallsyms->typetab[i] = elf_type(src + i, info);
++
++		if (!is_livepatch_module(mod) &&
++		    is_mapping_symbol(&kallsyms->strtab[src[i].st_name]))
++			continue;
++
+ 		if (i == 0 || is_livepatch_module(mod) ||
+ 		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
+ 				   info->index.pcpu)) {
 -- 
-2.43.0
-
+2.42.0
 
