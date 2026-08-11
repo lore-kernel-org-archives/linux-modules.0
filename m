@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A703FC5DD;
-	Tue, 11 Aug 2026 06:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E7F408611;
+	Tue, 11 Aug 2026 06:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786430467; cv=none; b=LiGbqnyYptlC/gx5b3QRJdMaR74ah+BweD1eWILLexUHIw/lGwR5mIyAr47ZADydJpF3co1v9wcl1AzwGt5kVFGQ3kzXzTbxkztMUBFsHjY4SuD6LR1jiBtFB9iJaS3+K+FIO4+kj2WyS2/t+Qf5Bf44x1AZxlNmlmxjKl08uY0=
+	t=1786430467; cv=none; b=kgnLPJYHQzo71qbC8kGxAZtMyyCEhMXga6CdJKeq6gqUcoAt8Gmc8gakOR8vauB63gupDssP7PYDFmD/mqd3RwdCjgF0+WOwOxR45Xh/ojf117eg7sijjGN2T4yV4BD3U0Gna47YAKo5dJvb4tF20+hrnGn4nvnTyL2UliWCMu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786430467; c=relaxed/simple;
-	bh=4Odon41wn3POG2a/8uxgoozDkAx9LipJnGNGbya68aQ=;
+	bh=VfzbZNd9bdUa4BN3WHg5N3MuqGNhCA7R5iDzpO0AVjE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rbT21S6/UIFFU2Dm7tVOMA2agYeWAXdQlHcxDQz1XZPfoz4rG4k8E2azdMWWvJMUBdmMT8ahCeXC35bgGW/hubbJ8HX2lAnfLZnVFdUnH41TJzY9mcmvds0HxfLwPagBFSctT4+2txw1Q/Zgg4uF9/TdI85k0PvTS0Bl12+xGkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=k5cY7JJs; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=R0hsgzJxmxRFB2zXBPI0vlT9Qfa9gEcKe7YcMei3JatYwInMYP3nNXBUIWG19H/25UVF3bTO12V+kDfIWsbzs9Q46Hntl7fNStvNnQkIxi1ee+tWvlWfD9d57AUH39nvJgQYIH52GW37RQXy9ndxonRCAoGSIEsE57uhQ54MKUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NZMU6BNp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="k5cY7JJs"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 24FC9C2BCFF;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NZMU6BNp"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A026C2BCF4;
 	Tue, 11 Aug 2026 06:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1786430466; bh=4Odon41wn3POG2a/8uxgoozDkAx9LipJnGNGbya68aQ=;
+	t=1786430466; bh=VfzbZNd9bdUa4BN3WHg5N3MuqGNhCA7R5iDzpO0AVjE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=k5cY7JJsugmfCg74kXPW43wgpSf9z++eX37e34YE/HVltGFqobp6+42YjQ5bhEQEx
-	 wO+UXprUO4NEAwMC0vn3Q6fW70uVqMJFl0o2qYfqOOGjW2uifBfv2ghrkoxCoDhuXn
-	 iEYtrGmUnY041jMmNQSjM5Jc5VK+8yheP9O31y9o=
+	b=NZMU6BNp7lj/LcoSD+X4mAu1qz7LI+8Kaf351PiJwEj9LykJN69+TP1xnAKFsFMax
+	 56Z0D51R4aE/qXbCMnxDPOtHJmWMgoYvPYlcvY1lR/1dhxN9CEwGHGxzNFwQ9I/xDQ
+	 3Y4BELaOo3T9xXtQ8QHxpm439lzaEXoFLUU0Qam8=
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CAD4C5B573;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F273C5B574;
 	Tue, 11 Aug 2026 06:41:06 +0000 (UTC)
 From: Alvin Sun <alvin.sun@linux.dev>
-Date: Tue, 11 Aug 2026 14:39:45 +0800
-Subject: [PATCH v10 03/10] rust: doctest: add LocalModule fallback for
- #[vtable] ThisModule
+Date: Tue, 11 Aug 2026 14:39:47 +0800
+Subject: [PATCH v10 05/10] rust: drm: set fops.owner from driver module
+ pointer
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,7 +37,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260811-fix-fops-owner-v10-3-7e71776f9dbe@linux.dev>
+Message-Id: <20260811-fix-fops-owner-v10-5-7e71776f9dbe@linux.dev>
 References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
 In-Reply-To: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
@@ -70,19 +70,19 @@ Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
  linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
  linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786430463; l=1377;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786430463; l=1921;
  i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
- bh=4Odon41wn3POG2a/8uxgoozDkAx9LipJnGNGbya68aQ=;
- b=5jzWxvtwEM0NRDV/ItXwJKlqZLPjSdPgzdn4CbZtR6SbhakWPFbJPR4lYpQlRmLkk0OlgTZs7
- 4Snb5CFs1AZBTNvViiofuBpxSUZ1p6eK98KNCffcLTzVQ/84Q8ecmMa
+ bh=VfzbZNd9bdUa4BN3WHg5N3MuqGNhCA7R5iDzpO0AVjE=;
+ b=d4F2HSgrhOfkX+lYUKfNjW1DIuNhdyt8fUln5qoPruM6cFTKHU4bqLtTN5ew0uiQMZZlRGIlM
+ 3K64Q9fCk7NDRF5tZYWTNN462LU1Z7b/GSP/YptEYVqRfe9P2jb350s
 X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
  pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
 X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
  auth_id=684
 
-Add a `LocalModule` struct with a null-pointer `ModuleMetadata` impl
-in the doctest harness, so that `crate::LocalModule` (auto-inserted
-by `#[vtable]`) resolves correctly when there is no `module!` macro.
+Change `create_fops()` to accept an owner module pointer instead of
+hardcoding `null_mut()`, ensuring the kernel correctly tracks the
+module owning the DRM device's file operations.
 
 Assisted-by: opencode:glm-5.2
 Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
@@ -91,36 +91,41 @@ Acked-by: Danilo Krummrich <dakr@kernel.org>
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 ---
- scripts/rustdoc_test_gen.rs | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ rust/kernel/drm/device.rs  | 3 ++-
+ rust/kernel/drm/gem/mod.rs | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
-index d61a77219a8c2..9913f78650365 100644
---- a/scripts/rustdoc_test_gen.rs
-+++ b/scripts/rustdoc_test_gen.rs
-@@ -232,6 +232,22 @@ macro_rules! assert_eq {{
+diff --git a/rust/kernel/drm/device.rs b/rust/kernel/drm/device.rs
+index 477cf771fb10e..73fbd551f0811 100644
+--- a/rust/kernel/drm/device.rs
++++ b/rust/kernel/drm/device.rs
+@@ -203,7 +203,8 @@ const fn compute_features() -> u32 {
+         fops: &Self::GEM_FOPS,
+     };
  
- const __LOG_PREFIX: &[u8] = b"rust_doctests_kernel\0";
+-    const GEM_FOPS: bindings::file_operations = drm::gem::create_fops();
++    const GEM_FOPS: bindings::file_operations =
++        drm::gem::create_fops(crate::module::this_module::<T::OwnerModule>().as_ptr());
  
-+/// Dummy module type for doctest context.
-+struct LocalModule;
-+
-+use kernel::{{
-+    str::CStr,
-+    ModuleMetadata,
-+    ThisModule, //
-+}};
-+use core::ptr::null_mut;
-+
-+impl ModuleMetadata for LocalModule {{
-+    const NAME: &'static CStr = c"rust_doctests_kernel";
-+    // SAFETY: `try_module_get`/`module_put` handle null module pointers gracefully.
-+    const THIS_MODULE: ThisModule = unsafe {{ ThisModule::from_ptr(null_mut()) }};
-+}}
-+
- {rust_tests}
- "#
-     )
+     /// Create a new `UnregisteredDevice` for a `drm::Driver`.
+     ///
+diff --git a/rust/kernel/drm/gem/mod.rs b/rust/kernel/drm/gem/mod.rs
+index c8b66d8168719..a7ba1453d40b9 100644
+--- a/rust/kernel/drm/gem/mod.rs
++++ b/rust/kernel/drm/gem/mod.rs
+@@ -387,10 +387,10 @@ impl<T: DriverObject, Ctx: DeviceContext> AllocImpl for Object<T, Ctx> {
+     };
+ }
+ 
+-pub(super) const fn create_fops() -> bindings::file_operations {
++pub(super) const fn create_fops(owner: *mut bindings::module) -> bindings::file_operations {
+     let mut fops: bindings::file_operations = pin_init::zeroed();
+ 
+-    fops.owner = core::ptr::null_mut();
++    fops.owner = owner;
+     fops.open = Some(bindings::drm_open);
+     fops.release = Some(bindings::drm_release);
+     fops.unlocked_ioctl = Some(bindings::drm_ioctl);
 
 -- 
 2.43.0
