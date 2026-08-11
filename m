@@ -1,312 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312C21A3160
-	for <linux-modules@vger.kernel.org>; Tue, 11 Aug 2026 14:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786458176; cv=none; b=FYfaCD5pmUuDvHuRjEgbVIfhVDOb3nvNurp7y5UraxCr7no0j6AIDQwVFUakWqkSMFG3Rqf373P/pK/1aHpkRnlz9+3K/FjHnZH752QkxjqGl0XrdVvHq4xy/RS8IJ4MyvKTaRV6W32v16f9X6aWJzyhJ+IU6lgu8J6ftHGvebI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786458176; c=relaxed/simple;
-	bh=InG/EN0VK9xEGxyZcSw7jCQdc/LWkm1csF7/qexU6Ic=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65CF1F4631
+	for <linux-modules@vger.kernel.org>; Tue, 11 Aug 2026 15:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786462574; cv=pass; b=ds3KSeirpwH6e9dfStI54f8T48RyKKYboNbUp1QnrOUND9TJWnOFdVvIfEktaczJ/9/qBWGri0Km4de1DYx9YIlqgjSVk/FYifONTTcy9MzbxLDtokbC/PdIEXCfQWS4yVvtMTzks9iW6XyLxwWtclZINhLQsvgQN38K9GkIXAw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786462574; c=relaxed/simple;
+	bh=UGjmBnLSskHI7nXRul6AYIWNR9+V1zLg5q/EQLIYSSk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZiNX4BXhqMUimlZHxREENxCPuy0aqRi1e7M/kwiFr8wcs85rTdV0iEEJyUqyVSZe3oh4Oxb/2TSzURN5/hxkBBfuV9233OmSjgfm88Kowffsflst8N7jYq6OcKHckAIUUZ2tXP2g9GKXq73h8tQ/Z2G1wHOIr6alT5cE+IcZYTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+frrvV2; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=WWQJPvfgkjctQ5obVbkNdlN8g9g96ViLXU0BQwEOgtv44C+uUyxRgLQt5EdnC7ABb+jNb/P648l4QCpN8Jy3zdYhvGZjR3DC8I4PA5P/zi7BU0NPI8RcsdIk521fFVbxAM9vcIzelsbA4aYnmWHvEcsPcoehoNTqtF3J+VPeHZA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DgpjdAuX; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+frrvV2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDAA71F00ACA
-	for <linux-modules@vger.kernel.org>; Tue, 11 Aug 2026 14:22:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786458175;
-	bh=CQer8aIiyVf6i0zzNRz3PRCSvJUJgcXE48zhJpc4OSE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=F+frrvV2eam3e2P0jTSRek2Qoi+r/PpKYvFo2Iw9d0tJhiBuD+pOdNLF7/eNn1wxZ
-	 5zrW5bHFt8kfP9L384cRtg/QMRucq0Wbbh8OyvK0G2KabEZ842mWmA5Fxc0WVrDHG2
-	 8qNA+hOPovFGRUkupC/SW/fUlPfYiGrVdkMBqzRSfofUFb6iT/xN+c3EshHnYe/g2+
-	 J+Llai3ufEu6HkKx6VyRRe/tD0S4v5nw1g5U82b9hcDFtHjVdBWyWKAKruHvevgNKZ
-	 p2tti/KRGTt+dcgx9yAePPtYhh47S9TDLN6buw5xjwqsW983ulU2OnNawknZHrhn9J
-	 3ooajffQzGweA==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6a17c04563fso3786388a12.3
-        for <linux-modules@vger.kernel.org>; Tue, 11 Aug 2026 07:22:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RqtItVpCtSVbFG30/DkzSCL/zi8JTlkz2d7pYnzPGMrr9coIUswNO+2/DFBQkFg4j/lBAtDk9f3VHTQf3uH@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywpgjmq+ODMpYxGXji8no9KEU1hb4t2veYI+sEsfKEMy6xK+av/
-	IcuRelRFGL2NV9rD+WaJnkK/fs7NWa/ab1jPu6MMv4YKw4Q1O+k0Y+trtDAz+sXJtreEca0f5t2
-	7G4LlhIyXX32JHz47AWOCErbCy2GxQ3Q=
-X-Received: by 2002:a05:6402:2417:b0:6a1:ffc4:e4b9 with SMTP id
- 4fb4d7f45d1cf-6a3644aeb16mr2031075a12.9.1786458173515; Tue, 11 Aug 2026
- 07:22:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DgpjdAuX"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51c15a5b265so272741cf.0
+        for <linux-modules@vger.kernel.org>; Tue, 11 Aug 2026 08:36:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786462572; cv=none;
+        d=google.com; s=arc-20260327;
+        b=FOvgfbJL77OYDC/Oiqp1Oue9pBNs4TtvmpnjtBu/1hdqvmeuuND4v1zXmNhfgDWq8b
+         oF7fJ2XuBlGpFN2CWWUyCbbrflJUYmRLgDnTvr8+2ZCqIXh/G7S5MJMBjfrISUctuZDx
+         ukBXh473mV/5C6egR/qyx8XdxTZ+wlC/wbYH8fkS5rH0pklCC8mHg34IZzHc7F/GIr+S
+         0tlWThU+y7+l/JvLDqtbSKSpvn6LySXrgalrrSnnZezoCVkkMGmTNWFioyGFDNdGzhXA
+         kCilaAUJPhyFOCElXq8UDgmZuSLkO6yno8Qmd5wxIeKJkGLRHYkUK7xNQzdnPSnuMWLH
+         pGOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QSbnyX+X/byoPpEOsc6XvB0JapembmgEXtZ5bd+IWFE=;
+        fh=PmrsZp46NP7J1Xk6Gq6i25M/2oUb/83AJOQu6qh3ifU=;
+        b=SS0C65YyaYjoQXTD9/kGAI79xr85Vtb+q1powfELkdJQJ43hIc2/DLfry+/8AHZZiE
+         bornE4AIA9YZpXAPGpb6MgSzW4sT6uKDN1vf6WDOXjhQ68LHT+JmZtF+1sggMGgaiAng
+         p4u21Jm/wloYWxnMhUuLxWorYl9yVx3X1huQ4tZsHHjI02Cps5gIZHa3BTswn7Om336D
+         4S6upS++en0dKhqHoR1K/7SNmaTkcNSbjADef5A2oIvr2M8XYM7bR/CkcojskU3vHFAd
+         03V1EOHl+Yvl/qrrDbwpaLtviV1SmGloByAdOq7ze/kYGM1HZqORhQmFkUrkM79KP0lK
+         Ntcg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786462572; x=1787067372; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QSbnyX+X/byoPpEOsc6XvB0JapembmgEXtZ5bd+IWFE=;
+        b=DgpjdAuXck+ooks6lh+VokUHAu2N57XesXUZSRJZrydy8euaH+rF9Kdl5HPxD0Rqrq
+         i4F0MvGIrqFhpcJ+KhwSSG5pYY5PxHJhefYa4btEZ6ht0mIXKpB7KHiVxJiq0yJC0mq+
+         6/+5dPco2R5YwhGtbw6YhIyvUIuu9pNF0ap5pW4lFEVLJddyyu4uFzcuTUQ2eYLJqnoi
+         qQr1Bvm87KVSKGmwiOF5ZeMNczE3O+jzaiv1xRR7NJdrOkTokfSV/JEcsdlHZ3LM9nOH
+         2B5SFVFvA1SQ3j9uw+L5BDgxugja5e8ZiwphM0YIHM7i5QUjWqD7sKP0MZcyA9UyAHNX
+         tmOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786462572; x=1787067372;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QSbnyX+X/byoPpEOsc6XvB0JapembmgEXtZ5bd+IWFE=;
+        b=rfU9koUOyjJv1GmGL6t9W0ZUBAOQk06sa4hBH1fL19KqNSo15lzv1/xGAnzY7mZXMj
+         d84MbpIw8csV0pCFjNhEKosH6/BcuOlLUV21StzBMIOj3WGlSSXoZ51pIwBIjDxWFwcU
+         qM9EsU/Kh4ZhvXFjxeVZ+y+ok7yhPaZb00klwmehIWYS0BqevL6cmQYwKQL34v6/JYPD
+         g7peeoORoOO988E6wFkeCke8U1SUcMMBiyxHl+ySueALjbxBZRPE1ax5yFg94XlmwJjR
+         EO/lnnOKeSaEJEmJqcUZTau68EQJJrQ2HLP+Xpg6/uf+1RlX7MNSgKlPsUBaOyUXpZt1
+         7/Xw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq9dgf8DlJee/4CWQphxZPE6p93H9f4nbP2vgpIIjOvVVaEKwys+CHXxL4AOY1kI9HOANn8gLWhvl4GFavp@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6eSHRN4AnvgUe/EXUCE8leEcPtm8wyMUKUw5PmHp9+iR3/8zz
+	EuUOjmS1Co9Mswdqe51As+lPqfuCnMGMqXAMktuGSxVPLdXOHbICt9KHyna+DnmjPXksw8Al8+4
+	Gb0D1/AP+dca1euOZMW2TZOaVcDF8gubgnGchP4Bx
+X-Gm-Gg: AR+sD11zlX+anA/bOks4E4fWzjX4sFb5ReGR1M/zdUqJkmTWYaoSbIOz7usx16RIxz5
+	Zk649qIl/dJa0a3K4u4nYfachWv1HnpJvAeodSPPxyugX/L0taI2C6fN6qioDybetBnLokrYRbv
+	u3jimIMbWyzP35ksjJ/fkv9OOgJCostEyhNCB/dU5G0ObOMPB9cOkM0Nr9NF3XlKnl4xaLQDSV3
+	cBjUVwIeBZGRUsXArK+IjDnjUgCjrutpM0B9bokQYavo2c9/Afllzr/DX0tYkfHOaFxn1txYD/S
+	0NBIsfXrMN7xF5+easu6dL9EoOoe+/yCRpk7uTOkHNfpI1Gd9dZtfWDe9t0EjXVM62e6SuYhdA=
+	=
+X-Received: by 2002:a05:622a:190c:b0:517:5d71:84e5 with SMTP id
+ d75a77b69052e-52d580d6162mr12122271cf.5.1786462570992; Tue, 11 Aug 2026
+ 08:36:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260811071507.24043-1-yangtiezhu@loongson.cn> <39a48465-22b6-4b18-9f7e-ce258513181b@suse.com>
-In-Reply-To: <39a48465-22b6-4b18-9f7e-ce258513181b@suse.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Tue, 11 Aug 2026 22:22:41 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5qN2=LEbVS+hd5Uohq6OKHgkxEWLg4GNukYFBmjEABHg@mail.gmail.com>
-X-Gm-Features: AUfX_mzWId4lMwTXHu3AJgdPiGUt_E_DKuFDt_gQN8CSl88uYh5KpOKtj0VI_Ng
-Message-ID: <CAAhV-H5qN2=LEbVS+hd5Uohq6OKHgkxEWLg4GNukYFBmjEABHg@mail.gmail.com>
-Subject: Re: [PATCH v2] module/kallsyms: Filter out local mapping symbols
- during module load
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20260810093955.153015-1-hao.ge@linux.dev> <20260810205251.3fce0ec86ee20925fd577c26@linux-foundation.org>
+In-Reply-To: <20260810205251.3fce0ec86ee20925fd577c26@linux-foundation.org>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Tue, 11 Aug 2026 08:35:59 -0700
+X-Gm-Features: AUfX_mxmFUMMJNxASySaJAk1Wiidb9lbuMMRd31WwigRad3YmpinKxeeQ1tv5kQ
+Message-ID: <CAJuCfpFRWcjB2MwVUS0j9=yFRDLWZdumovBoBi-xkwGW+y2Viw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] alloc_tag: fix undetected compressed tag overflow
+ when profiling is disabled
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Hao Ge <hao.ge@linux.dev>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, Petr,
+On Mon, Aug 10, 2026 at 8:52=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Mon, 10 Aug 2026 17:39:53 +0800 Hao Ge <hao.ge@linux.dev> wrote:
+>
+> > v3 was a single patch. After discussion with Suren and Andrew we went
+> > for a more graceful approach: rather than failing the module load on
+> > overflow, let it load without profiling. Once profiling is disabled,
+> > codetag_needs_module_section() returns false, so on retry the codetag
+> > section is placed as regular module data.
+> >
+> > A new patch (1/2) is added to move release_module_tags() above
+> > reserve_module_tags(), since the overflow path now has to call it and
+> > the helper sits below it.
+>
+> Thing is, [2/2] has cc:stable but it requires [1/2] to be able to be
+> compiled.  [1/2] doesn't have cc:stable so we're asking -stable folks
+> to backport a patch which doesn't compile.
+>
+> Resolve this by using the same Fixes: and cc:stable in both patches.
+>
+> > release_module_tags() is what module unload calls to drop a module's
+> > reservation from the maple tree. By the time reserve_module_tags()
+> > detects the overflow it has already stored that reservation, and the
+> > -EAGAIN return skips vm_module_tags_populate(), so the backing pages
+> > never get mapped. If reserve_module_tags() returns without calling
+> > release_module_tags(), the stale entry keeps pointing at that unmapped
+> > range; when the module is later unloaded, release_module_tags() walks
+> > it and panics.
+>
+> AI review had a lot to say about this patchset.  Some pre-existing, some
+> not:
+>         https://sashiko.dev/#/patchset/20260810093955.153015-1-hao.ge@lin=
+ux.dev
 
-On Tue, Aug 11, 2026 at 8:20=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> On 8/11/26 9:15 AM, Tiezhu Yang wrote:
-> > The compiler toolchains generate internal local labels on certain
-> > architectures (such as LoongArch) for optimizations and relocations.
-> >
-> > While these local labels are filtered out during runtime lookups in
-> > find_kallsyms_symbol(), they still leak into the permanent symbol
-> > tables of loaded modules, because layout_symtab() and add_kallsyms()
-> > do not check for the mapping symbols during layout generation.
-> >
-> > Consequently, tracing tools like bpftrace resolve identical addresses
-> > into confusing local labels instead of actual clear C function names.
-> >
-> > Fix this by adding is_mapping_symbol() checks directly into the symbol
-> > tracking loops of layout_symtab() and add_kallsyms(). This prevents the
-> > mapping symbols from entering the module's memory symbol arrays at load
-> > time.
->
-> This optimization looks sensible to me. Kallsyms in vmlinux also
-> normally doesn't include information about local labels (.L<xyz>) and
-> mapping symbols ($a, $d, ...), so it should be ok not to track them in
-> modules either.
->
-> Note that the patch description mixes up these two symbol categories,
-> presumably because the existing is_mapping_symbol() function conflates
-> them as well.
->
-> >
-> > For livepatch modules, core_kallsyms.symtab must remain a complete copy
-> > of the original ELF symbol table to prevent delayed relocation failures=
-.
-> > Therefore, enforce is_livepatch_module() checking to skip the filtering
-> > for livepatch modules.
-> >
-> > Reproduce steps:
-> >
-> > 1. Set up a LoongArch VM with "-accel kvm":
-> >
-> >    $ sudo qemu-system-loongarch64 -serial stdio \
-> >      -machine virt -cpu la464 -smp 4 -m 4G \
-> >      -bios /usr/share/edk2/loongarch64/QEMU_EFI.fd \
-> >      -nodefaults -no-reboot -nographic -accel kvm
-> >
-> > 2. Use bpftrace to capture kstack when vCPU is scheduled out:
-> >
-> >    $ cat trace_sched.bt
-> >    kprobe:kvm:kvm_sched_out
-> >    {
-> >            if (pid =3D=3D $1) {
-> >                    print(kstack());
-> >            }
-> >    }
-> >
-> >    $ sudo bpftrace trace_sched.bt `pgrep -o qemu-system`
-> >
-> > Test results:
-> >
-> > 1. Before this patch (Confusing stack with local labels):
-> >
-> >         kvm_sched_out+0
-> >         __schedule+1584
-> >         schedule+48
-> >         .LVL3767+36
-> >         .LVL3801+8
-> >         .LVL285+12
-> >         .LVL425+44
-> >         .LVL1419+20
-> >         kvm_exc_entry+260
->
-> The description should mention that this change affects what appears in
-> /proc/kallsyms, as that is the important part. bpftrace is only one user
-> of this data and apparently gets confused because it does not apply any
-> filtering of its own, unlike perf which has is_ignored_kernel_symbol().
->
-> >
-> > 2. After this patch (Accurate stack with function names):
-> >
-> >         kvm_sched_out+0
-> >         __schedule+1584
-> >         schedule+48
-> >         kvm_vcpu_block+112
-> >         kvm_vcpu_halt+104
-> >         kvm_emu_idle+284
-> >         kvm_handle_gspr+1316
-> >         kvm_handle_exit+456
-> >         kvm_exc_entry+260
-> >
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > ---
-> > v2: Fix livepatch support as pointed out by Sashiko bot.
-> >
-> >  kernel/module/kallsyms.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >
-> > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> > index f23126d804b2..aece7aa49dd4 100644
-> > --- a/kernel/module/kallsyms.c
-> > +++ b/kernel/module/kallsyms.c
-> > @@ -130,6 +130,10 @@ void layout_symtab(struct module *mod, struct load=
-_info *info)
-> >
-> >       /* Compute total space required for the core symbols' strtab. */
-> >       for (ndst =3D i =3D 0; i < nsrc; i++) {
-> > +             if (!is_livepatch_module(mod) &&
-> > +                 is_mapping_symbol(&info->strtab[src[i].st_name]))
-> > +                     continue;
-> > +
-> >               if (i =3D=3D 0 || is_livepatch_module(mod) ||
-> >                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
-hnum,
-> >                                  info->index.pcpu)) {
-> > @@ -198,6 +202,11 @@ void add_kallsyms(struct module *mod, const struct=
- load_info *info)
-> >       src =3D kallsyms->symtab;
-> >       for (ndst =3D i =3D 0; i < kallsyms->num_symtab; i++) {
-> >               kallsyms->typetab[i] =3D elf_type(src + i, info);
-> > +
-> > +             if (!is_livepatch_module(mod) &&
-> > +                 is_mapping_symbol(&kallsyms->strtab[src[i].st_name]))
-> > +                     continue;
-> > +
-> >               if (i =3D=3D 0 || is_livepatch_module(mod) ||
-> >                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
-hnum,
-> >                                  info->index.pcpu)) {
->
-> It is better to avoid duplicating the same logic in layout_symtab() and
-> add_kallsyms(). The function is_core_symbol() can be renamed to
-> something like is_kept_symbol() and can be solely responsible for
-> deciding what to keep.
-I'm sorry but I think Tiezhu's patch is simpler and cleaner. :)
+Yeah, some of them are not related to this change but at least one does.
+I need to address the unrelated ones. Will do that as a separate patchset.
 
-Huacai
 >
-> The following prototype shows my suggestion:
 >
-> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index 0fc11e45df9b..c86879cc5b66 100644
-> --- a/kernel/module/kallsyms.c
-> +++ b/kernel/module/kallsyms.c
-> @@ -75,23 +75,29 @@ static char elf_type(const Elf_Sym *sym, const struct=
- load_info *info)
->         return '?';
->  }
 >
-> -static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
-> -                          unsigned int shnum, unsigned int pcpundx)
-> +static bool is_kept_symbol(struct module *mod, const struct load_info *i=
-nfo,
-> +                          unsigned int symnum, const Elf_Sym *src)
->  {
->         const Elf_Shdr *sec;
->         enum mod_mem_type type;
+> offtopic: alloc_tag isn't getting allmodconfig build coverage at this
+> time because:
 >
-> +       if (symnum =3D=3D 0 || is_livepatch_module(mod))
-> +               return true;
-> +
->         if (src->st_shndx =3D=3D SHN_UNDEF ||
-> -           src->st_shndx >=3D shnum ||
-> +           src->st_shndx >=3D info->hdr->e_shnum ||
->             !src->st_name)
->                 return false;
+> 1: MEM_ALLOC_PROFILING depends on !DEBUG_FORCE_WEAK_PER_CPU (why?  I
+>    can't figure that out)
+
+DEBUG_FORCE_WEAK_PER_CPU forces weak percpu definitions everywhere,
+even in the core kernel. This introduces the restriction of [1]:
+
+2. Static percpu variables cannot be defined inside a function.
+
+Memory allocation profiling relies on percpu variables inside a
+function in DEFINE_ALLOC_TAG(). For
+CONFIG_ARCH_MODULE_NEEDS_WEAK_PER_CPU we comporomise by accounting all
+module allocations to a statically defined _shared_alloc_tag (see [2])
+but we can't do that for all kernel allocations because profiling
+becomes quite meaningless at that point (all allocations being
+accounted in the same counter is not useful).
+
+[1] https://elixir.bootlin.com/linux/v7.2-rc6/source/include/linux/percpu-d=
+efs.h#L64
+[2]  https://elixir.bootlin.com/linux/v7.2-rc6/source/include/linux/alloc_t=
+ag.h#L91
+
 >
-> +       if (is_mapping_symbol(&info->strtab[src->st_name]))
-> +               return false;
-> +
->  #ifdef CONFIG_KALLSYMS_ALL
-> -       if (src->st_shndx =3D=3D pcpundx)
-> +       if (src->st_shndx =3D=3D info->index.pcpu)
->                 return true;
->  #endif
+> 2: x86_64 allmodconfig enables DEBUG_FORCE_WEAK_PER_CPU, despite it
+>    being for s390 and alpha.  In fact it might be alpha-only.
 >
-> -       sec =3D sechdrs + src->st_shndx;
-> +       sec =3D info->sechdrs + src->st_shndx;
->         type =3D sec->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
->         if (!(sec->sh_flags & SHF_ALLOC)
->  #ifndef CONFIG_KALLSYMS_ALL
-> @@ -130,12 +136,11 @@ void layout_symtab(struct module *mod, struct load_=
-info *info)
+> Adding
 >
->         /* Compute total space required for the core symbols' strtab. */
->         for (ndst =3D i =3D 0; i < nsrc; i++) {
-> -               if (i =3D=3D 0 || is_livepatch_module(mod) ||
-> -                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
-hnum,
-> -                                  info->index.pcpu)) {
-> -                       strtab_size +=3D strlen(&info->strtab[src[i].st_n=
-ame]) + 1;
-> -                       ndst++;
-> -               }
-> +               if (!is_kept_symbol(mod, info, i, src + i))
-> +                       continue;
-> +
-> +               strtab_size +=3D strlen(&info->strtab[src[i].st_name]) + =
-1;
-> +               ndst++;
->         }
+>         depends on ALPHA || S390
 >
->         /* Append room for core symbols at end of core part. */
-> @@ -197,23 +202,22 @@ void add_kallsyms(struct module *mod, const struct =
-load_info *info)
->         strtab_size =3D info->core_typeoffs - info->stroffs;
->         src =3D kallsyms->symtab;
->         for (ndst =3D i =3D 0; i < kallsyms->num_symtab; i++) {
-> +               ssize_t ret;
-> +
->                 kallsyms->typetab[i] =3D elf_type(src + i, info);
-> -               if (i =3D=3D 0 || is_livepatch_module(mod) ||
-> -                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
-hnum,
-> -                                  info->index.pcpu)) {
-> -                       ssize_t ret;
-> -
-> -                       mod->core_kallsyms.typetab[ndst] =3D
-> -                               kallsyms->typetab[i];
-> -                       dst[ndst] =3D src[i];
-> -                       dst[ndst++].st_name =3D s - mod->core_kallsyms.st=
-rtab;
-> -                       ret =3D strscpy(s, &kallsyms->strtab[src[i].st_na=
-me],
-> -                                     strtab_size);
-> -                       if (ret < 0)
-> -                               break;
-> -                       s +=3D ret + 1;
-> -                       strtab_size -=3D ret + 1;
-> -               }
-> +
-> +               if (!is_kept_symbol(mod, info, i, src + i))
-> +                       continue;
-> +
-> +               mod->core_kallsyms.typetab[ndst] =3D kallsyms->typetab[i]=
-;
-> +               dst[ndst] =3D src[i];
-> +               dst[ndst++].st_name =3D s - mod->core_kallsyms.strtab;
-> +               ret =3D strscpy(s, &kallsyms->strtab[src[i].st_name],
-> +                             strtab_size);
-> +               if (ret < 0)
-> +                       break;
-> +               s +=3D ret + 1;
-> +               strtab_size -=3D ret + 1;
->         }
->
->         /* Set up to point into init section. */
->
-> --
-> Thanks,
-> Petr
->
+> in there fixes this.
