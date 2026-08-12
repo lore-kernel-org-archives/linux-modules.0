@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B512F6931
-	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 03:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788762F6931
+	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 03:44:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786506152; cv=none; b=bpUt67uc4mOdosJvJY0TaKQsnO5naB7AjiKwOZpigkNa4DDRJnznVuavIYDze77Mqw948xcwdgOHS9lwacTiXFHllbRNp3YfaY6qSLetv8BmKmfgutOjZG0Ww3G1bcm8l2u8GNVXrx978qYTkmXbzSvTUfDi8Y7bYRejxVhc7Qk=
+	t=1786506258; cv=none; b=FHNSRNDEcIRrYoXpfERAU4Kd5MP+HX9IUa+OipxFAW/yOr/E6lSJX6u3TvzMseAm1vemNe9U5/qdK/UuiDhPBGWxhCHh+u785eLneMaNUpMwrUTjzyhchx4hrXv+9fwuv1U3LVFgMTGk55f6c3Wk225f7Vqmyo/mlAwYa2wleNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786506152; c=relaxed/simple;
-	bh=Eghftz41OzykVBzhoQsH5C2o7klWSoibrkeqR7iHcwE=;
+	s=arc-20240116; t=1786506258; c=relaxed/simple;
+	bh=hOazogFyL5H5WEfFDSpuLPjkjGdASjBu2PzK2rau2uA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IyfGwB9dDHze4GzraMEjnSC9e+qlODoJfXRt1N61tE641qHNDLnqTvES8lK+fEYwdgAUs5V4MrW8hW8BjaOpL4a0UtPN1gYiGSgvN8MBLFueTGiKT8PmYxAc1cHbM6vwZNb1PuvzWsHtULxA9vdB1Hpmg0dup0ec4xLW7IaYrik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IP2r6GvT; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=i4FnqeERey3jA6w+tljx7NuMzQ8AfkkZruBqtAvA1RwitQwofRVCsUD6d0tz9Of6eUaQuKfrAJS7F/j+TFmlKLyhG0wXo+aM8D+FaazYiaA83mUygOMtDTAkfmCKKR4HEosn2Mzip2140/f4F88dUi7SElvsfyT2oeJ3sQo1w4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YfRIGEz4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IP2r6GvT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463EE1F000E9;
-	Wed, 12 Aug 2026 03:42:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YfRIGEz4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB981F000E9;
+	Wed, 12 Aug 2026 03:44:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786506150;
-	bh=oNcR1dqi5nt3vZehf2iIGNYogDyMnZqOB5jht2vzqHE=;
+	s=k20260515; t=1786506257;
+	bh=TcpeVVuDJjyOkQUaz2maQvOYxCW+B8Wa8/A8QWO+Ceg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IP2r6GvTzJ3pSyBymoMRUmp9+GMOV2lcVynyLqKOAeBbhCPmT7/YWljMxSN6QOIBA
-	 lZ5dgOiEM+pZCeCJ7l7swFOLV88MfuhkrFDsCcbbaK+2yyOijvEUmAzgG2LM5sICSu
-	 nnZgi6lhRppeyWO5zdI74WTG4WXeh6IvizVX5XMtb5i1t0Egelt53XJ7mFgD3QCPX4
-	 BetRb3u/FNho7QphMic0q4UMlyPBR9xFEBBqzhcXLitmxb+ipe77k5dDAIzGnPA/YR
-	 6yiWVZdrR72Me1Hiwe0iq1P/I2gY1tcz9MPrGxtcY/11vozO2qmKyqanCBfcdgF4bA
-	 5Tn7jkcKwb1og==
+	b=YfRIGEz4RVCEX5rDlkCL40EH+XYa5WTXLIL2VaiUw5DnizhXhvsTvOLSPwALDudgQ
+	 ybCw9sKXW1tkAPOyxETPNL9QZztqrqxKWM+gN00/nS8nrYKHNj/0N4hR9WRzwZQUhb
+	 o5owiBxfobVvNXQgO1Mq2v8GKhV9Xu7NZo0SvuAiJpUb9gHMoMLn/3RrpF2zPA9C0b
+	 aMKTg3fpBQ1OT2C3motnps6xzZL4LgdXYjprmZ92xMLmX9mVPv8ojg88DdjMt4Bn4m
+	 t1Wp8DjQzehqWVmSzWqKbJ/7peiuJ8m57+Lt+FOB2Q7gXq4X7vtvWW4XpMy3SlZfEc
+	 ZUj3STq1TfO1Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/3] module/kallsyms: Refactor current symbol
- filtering into is_kept_symbol()
+Subject: Re: [PATCH v3 3/3] module/kallsyms: Filter out local and mapping
+ symbols during module load
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260812032807.15034-3-yangtiezhu@loongson.cn>
+In-Reply-To: <20260812032807.15034-4-yangtiezhu@loongson.cn>
 References: <20260812032807.15034-1-yangtiezhu@loongson.cn>
- <20260812032807.15034-3-yangtiezhu@loongson.cn>
+ <20260812032807.15034-4-yangtiezhu@loongson.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 12 Aug 2026 03:42:29 +0000
-Message-Id: <20260812034230.463EE1F000E9@smtp.kernel.org>
+Date: Wed, 12 Aug 2026 03:44:16 +0000
+Message-Id: <20260812034416.DAB981F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -49,81 +49,51 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] An attacker can use ELF relocations targeting the `.symtab` sectio=
-n to bypass early validation checks. This leads to heap buffer overflows, o=
-ut-of-bounds reads, and information leaks during module loading.
+- [High] Relocations can modify `.symtab` and `.strtab` between `layout_sym=
+tab()` and `add_kallsyms()`, leading to a heap buffer overflow, out-of-boun=
+ds read, and security control bypass.
 --
 
---- Patch [2]: [PATCH v3 2/3] module/kallsyms: Refactor current symbol filt=
-ering into is_kept_symbol() ---
-commit a466dcd66d6b608624bbdcca606a5281e2967615
+--- Patch [3]: [PATCH v3 3/3] module/kallsyms: Filter out local and mapping=
+ symbols during module load ---
+commit b99e0a63da9d8d5ffb4bf7cbd78e368abde75865
 Author: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-module/kallsyms: Refactor current symbol filtering into is_kept_symbol()
+module/kallsyms: Filter out local and mapping symbols during module load
 
-Currently, the loops in layout_symtab() and add_kallsyms() duplicate the
-exact same checks to determine whether a symbol should be preserved in
-the module's core symbol table. This commit renames is_core_symbol() to
-is_kept_symbol() and consolidates the checking logic.
+The compiler toolchains generate local and mapping symbols on certain
+architectures like LoongArch for optimizations and relocations. This
+commit filters them out during module load time using the newly
+introduced is_kept_symbol() helper to keep /proc/kallsyms clean.
 
 > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index 8955cd42f20bc..efc73f66defd5 100644
+> index efc73f66defd5..77e05b5ca1f2c 100644
 > --- a/kernel/module/kallsyms.c
 > +++ b/kernel/module/kallsyms.c
-
-[ ... ]
-
-> @@ -197,23 +199,21 @@ void add_kallsyms(struct module *mod, const struct =
-load_info *info)
->  	strtab_size =3D info->core_typeoffs - info->stroffs;
->  	src =3D kallsyms->symtab;
->  	for (ndst =3D i =3D 0; i < kallsyms->num_symtab; i++) {
-> +		ssize_t ret;
+> @@ -89,6 +89,9 @@ static bool is_kept_symbol(struct module *mod, const st=
+ruct load_info *info,
+>  	    !src->st_name)
+>  		return false;
+> =20
+> +	if (is_local_mapping_symbol(&info->strtab[src->st_name]))
+> +		return false;
 > +
->  		kallsyms->typetab[i] =3D elf_type(src + i, info);
-> -		if (i =3D=3D 0 || is_livepatch_module(mod) ||
-> -		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
-> -				   info->index.pcpu)) {
-> -			ssize_t ret;
-> -
-> -			mod->core_kallsyms.typetab[ndst] =3D
-> -				kallsyms->typetab[i];
-> -			dst[ndst] =3D src[i];
-> -			dst[ndst++].st_name =3D s - mod->core_kallsyms.strtab;
-> -			ret =3D strscpy(s, &kallsyms->strtab[src[i].st_name],
-> -				      strtab_size);
-> -			if (ret < 0)
-> -				break;
-> -			s +=3D ret + 1;
-> -			strtab_size -=3D ret + 1;
-> -		}
-> +
-> +		if (!is_kept_symbol(mod, info, i, src + i))
-> +			continue;
-> +
-> +		mod->core_kallsyms.typetab[ndst] =3D kallsyms->typetab[i];
-> +		dst[ndst] =3D src[i];
-> +		dst[ndst++].st_name =3D s - mod->core_kallsyms.strtab;
-> +		ret =3D strscpy(s, &kallsyms->strtab[src[i].st_name], strtab_size);
 
 [Severity: High]
-This isn't a bug introduced by this patch, but could an attacker use ELF
-relocations targeting the .symtab section to bypass early validation checks
-and trigger a heap buffer overflow or out-of-bounds read here?
+This is a pre-existing issue, but does this new check introduce an
+out-of-bounds read if a malformed module modifies st_name?
 
-During module loading, layout_symtab() adds the SHF_ALLOC flag to the
-.symtab section and computes memory requirements based on the unmodified
-symbols:
+In layout_symtab(), .symtab and .strtab are marked with SHF_ALLOC:
 
 kernel/module/kallsyms.c:layout_symtab() {
     ...
     symsect->sh_flags |=3D SHF_ALLOC;
+    strsect->sh_flags |=3D SHF_ALLOC;
     ...
 }
 
-Later, apply_relocations() processes relocation sections. Because .symtab
-now has the SHF_ALLOC flag, relocations targeting .symtab are applied,
-modifying the symbol table in memory after bounds checks have completed:
+Later, apply_relocations() applies relocations to sections with
+SHF_ALLOC, which can mutate the symbol and string tables in module memory:
 
 kernel/module/main.c:apply_relocations() {
     ...
@@ -133,21 +103,20 @@ kernel/module/main.c:apply_relocations() {
     ...
 }
 
-Finally, add_kallsyms() reads this modified symbol table without
-re-validating it. If an attacker modifies st_name via relocations, it
-bypasses the earlier elf_validity_cache_strtab() bounds check, causing
-strscpy() to read out-of-bounds memory. Modifying st_shndx bypasses the
-ndst calculation, causing out-of-bounds writes on mod->core_kallsyms.symtab
-and typetab arrays.
+When add_kallsyms() re-evaluates the mutated symbol table, it calls
+is_kept_symbol(), which uses the mutated src->st_name without bounds
+checking against the unmodified info->strtab.
 
-> +		if (ret < 0)
-> +			break;
-> +		s +=3D ret + 1;
-> +		strtab_size -=3D ret + 1;
->  	}
-> =20
->  	/* Set up to point into init section. */
+Could this read out of bounds if st_name is maliciously inflated?
+
+Also, since a previously rejected symbol might now be kept after mutation,
+could this overflow the mod->core_kallsyms.symtab array since the number
+of kept symbols might now exceed the pre-calculated allocation?
+
+>  #ifdef CONFIG_KALLSYMS_ALL
+>  	if (src->st_shndx =3D=3D info->index.pcpu)
+>  		return true;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260812032807.1503=
-4-1-yangtiezhu@loongson.cn?part=3D2
+4-1-yangtiezhu@loongson.cn?part=3D3
