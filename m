@@ -1,238 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571CF40801E;
-	Wed, 12 Aug 2026 21:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBECE41687D
+	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 22:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786571625; cv=none; b=bkgYARdG5dNs/rEP+UfoUCmf2GTo1JU7YFM2aGQYT2lXygAVASncc5nVhFpv8tGzIL6NfX/MMmGJStnwF1379pKfW8AWulmzuGEjozwf7mPpZMDAHrmOYPzWYr1gXlPC83TRFw+1rmlyhJcvmIPuvAp77+YR+PRfUeAirO07m10=
+	t=1786573899; cv=none; b=rdjEwKXcumYGqXNLGi8FAGKl7jzCQhhC7NZlli56WJEfh8U0tlIZc6WjPAtFtqONsCddXt1iu0R0cm7WHNoJT8iHy8ztkrkBrYz2GkXZDGq6qQi0GUGzPiXptZsUY1Fmo+ceIsnZxbUALeYVKYvKodChQ/oUhwoduh9vtDodePc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786571625; c=relaxed/simple;
-	bh=zoOEOQ43+sDxWy+UnOrNn2U9dUnrZIIC52tkbdcIiuY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=mMcG0vAz0Itg0Ld07aoICQSsSbD2KTLExaFc92QeWnvu3WBUnf004y+y+TqPjwRHwSfVpMZFHWaecXBCqib/2r8f2wRgfLOxQQraQ4PeHduTgT17vJD3Q3VwGMTzgpIcANI5IF1AJG09W/AR2PQAbQSwm0lGzlZlqsqwM+uD2IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXsVTdQ5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786573899; c=relaxed/simple;
+	bh=NCgbA1Nl6htv7Ct5XsBTLJDqXai4MIz8g3kzJINWoo4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=LMMSbyCNc8oRNCWN7GIQIIfirhk3V/tlWz5MZU/cbUuGCxQUIfAjcLg9i3QNxNk90oS+QC/T/ociaqrPtMnXWcKdsdAHNOn10eEUWIQVMRXyxk2+C1eccsNNEAZEMr5Jory0WY4sdepQ9yothoauCUIbi+f9KPKc+yta8iiEAWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZMuj+zvd; arc=none smtp.client-ip=209.85.215.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXsVTdQ5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 987811F000E9;
-	Wed, 12 Aug 2026 21:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786571623;
-	bh=6nEU+aeRluycxdNo/6s4mZZKrJ1RxjlgPtIHRp6CvKk=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To;
-	b=IXsVTdQ5zQUuKR4Iw6ZK3MQhGzcBbD5D+BmAgP90RIhowNF15Qvl/daAVQJt8uLyy
-	 rIkJAZ6sNBkDjUGtU3cI/VGEiGebXer+9cErer6IqhdmgixYvy4Hz1W7Q7pabBrv8x
-	 YQXaZcdMYk+oUEFaZT6hbmwff+KV39BTSqdgf6+R+2uOUvAmAbz9PrPAOS6WKy0Fa1
-	 O6EgPhBJzHIifIXXh8zwYLZJluIm96rhQ3IQSP1gu3YzsVqWyoQ5I/w3Dm6bN1SHUD
-	 PeamQtayFym7qz9Jcw3jlL3cOB+eq9PY/6eF6heTF+y3ojTLfgHj8GMUmuJum26dfp
-	 gSeZSwkGxdiXg==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZMuj+zvd"
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cbee6bb8408so190137a12.3
+        for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 15:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786573895; x=1787178695; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rf33RbOQxtUsb9Ne02ZQYE/IyKd30WKKnCFvHNaI21k=;
+        b=ZMuj+zvdWHFuqEUv8UnaT88fLTuVIE4fLPr4/t0XHr9yz8QGHsLFggGBrpXsK6tHzv
+         eWsDf+zX2DpqZGYsWr8irmPu4D2Ogygt/Ydl7CkEof7YOim4OwdUdbKlq3dzNuom0Y5p
+         5Pi/faopmDVsL4/oixGdnBYs5vvlJ8QJAGNFqtXj5tzQrrt0vBRyzuFWfu0ywOe20zUn
+         cR3zZmfz8vlvCejXd7yyP3E/QNr/N8i7H6EXUDS51osO0ynfwNpy8TESVlmkrm1ll0OQ
+         j17UtM1q9La+kFVLf9NQsr0ORlNuPRSIhdaSwNYltlt9ak1+gf+ecA/XdlDPC/pYihTe
+         lo6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786573895; x=1787178695;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rf33RbOQxtUsb9Ne02ZQYE/IyKd30WKKnCFvHNaI21k=;
+        b=P0xmOOEAnoWzi8w1bNPKwDfOtc0WkbqGx0pwoKHPEiBL+Z47++ue3U/ja/KUgG/eJ9
+         FYkALEXbjz0t6HSukyqXtyDd7myk09uyNHdknZBMrnFwNoOjwgX6CHiPfu3EL4GGOMF/
+         PziiByp0gMlEgth1QixX5TzF4gMuevT8+uBefSEBkS9E6N6Khlv0Kp9yorvwTJlMOUVj
+         G4q3f48hcubw8zMTSIV7aeVbahYD90mts5C7PueeQkSghvVtqKjjd6QNKKTNYhqvmBr4
+         D58+sNH+Qqd766N65AgPDRDGBc+qTsvrhTo6gr5479O47IdGoEbudn/KSwbp2L4duKRt
+         xCpw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqf7iS+YnsFOkvxGqhlpHxXdmeUJ8DJkqX0/h4HqZ66gBR1rNEhXVdxIVk/rszvU1TDn5ptXJxvgTmcnm6q@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKSC4XGQ0lWUVqa16NrLZkvm3FQTgUPllmeuvdaN+LpPMCijjd
+	CIXw6A5tTFGlz4DT/jq9aX0P/5cs9bKpRZ/rq+qtBd6FqhP4H/QL27MkwKiJ+J/UrCoovL+bGZz
+	Du4qYFw==
+X-Received: from pgbfp7.prod.google.com ([2002:a05:6a02:2ce7:b0:c86:5f41:8c94])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:989f:b0:3c1:b9c:4890
+ with SMTP id adf61e73a8af0-3cc55244655mr1599108637.22.1786573894658; Wed, 12
+ Aug 2026 15:31:34 -0700 (PDT)
+Date: Wed, 12 Aug 2026 15:31:33 -0700
+In-Reply-To: <anzW_H5OlQ-MqWjf@jpoimboe>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 12 Aug 2026 23:53:34 +0200
-Message-Id: <DKNAS52KYWLD.M15VEC6U0F6R@kernel.org>
-Subject: Re: [PATCH v10 00/10] Fix missing fops.owner in Rust DRM/misc
- abstractions
-Cc: "Alvin Sun" <alvin.sun@linux.dev>, "Miguel Ojeda" <ojeda@kernel.org>,
- "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Luis
- Chamberlain" <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>,
- "Daniel Gomez" <da.gomez@kernel.org>, "Sami Tolvanen"
- <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Daniel Almeida" <daniel.almeida@collabora.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
- "David Gow" <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Breno
- Leitao" <leitao@debian.org>, "Jens Axboe" <axboe@kernel.dk>, "Dave Ertman"
- <david.m.ertman@intel.com>, "Leon Romanovsky" <leon@kernel.org>, "Igor
- Korotin" <igor.korotin@linux.dev>, "FUJITA Tomonori"
- <fujita.tomonori@gmail.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, "Todd Kjos"
- <tkjos@android.com>, "Christian Brauner" <brauner@kernel.org>, "Carlos
- Llamas" <cmllamas@google.com>, <rust-for-linux@vger.kernel.org>,
- <linux-modules@vger.kernel.org>, <driver-core@lists.linux.dev>,
- <dri-devel@lists.freedesktop.org>, <nova-gpu@lists.linux.dev>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>
-To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>, "Mark Brown"
- <broonie@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
- <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
-In-Reply-To: <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
+References: <cover.1785727106.git.jpoimboe@kernel.org> <9548393f4d89ec3b498f4f69aa6ef6b9bb7150fe.1785727106.git.jpoimboe@kernel.org>
+ <anyufyGq2d-7AC_H@google.com> <anzW_H5OlQ-MqWjf@jpoimboe>
+Message-ID: <anz0Rbiytt0qEH0n@google.com>
+Subject: Re: [PATCH 03/14] objtool/klp: Fix false module dependencies caused
+ by dead relocs
+From: Sean Christopherson <seanjc@google.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Song Liu <song@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-modules@vger.kernel.org, Ben Procknow <bprockno@redhat.com>, 
+	Dylan Hatch <dylanbhatch@google.com>
+Content-Type: text/plain; charset="us-ascii"
 
-(Cc: Mark)
+On Wed, Aug 12, 2026, Josh Poimboeuf wrote:
+> On Wed, Aug 12, 2026 at 10:33:51AM -0700, Sean Christopherson wrote:
+> > +Dylan
+> > 
+> > On Sun, Aug 02, 2026, Josh Poimboeuf wrote:
+> > > When creating a klp reloc, klp-diff keeps the original relocation but
+> > > converts the referenced symbol to an UNDEF/WEAK placeholder tombstone
+> > > symbol, which gets fully disabled later by klp post-link.  The tombstone
+> > > symbol is only needed to avoid confusing objtool when it does the final
+> > > run on the patch module.
+> > > 
+> > > However, for references to exported symbols, modpost sees the reference
+> > > to the tombstone symbol as a real reference to an exported symbol,
+> > > resulting in a false module dependency getting created.
+> > > 
+> > > Further, for a reference to a tombstone symbol which is exported into a
+> > > module namespace, e.g. via EXPORT_SYMBOL_FOR_KVM_INTERNAL(), modpost
+> > > can't satisfy the dependency, resulting in a warning like the following:
+> > > 
+> > >   module ... uses symbol kvm_flush_remote_tlbs from namespace
+> > >   module:kvm-amd,kvm-intel, but does not import it.
+> > > 
+> > > Rename the placeholder tombstone symbols to ".klp.tombstone.<name>" so
+> > > modpost no longer recognizes them.
+> > > 
+> > > Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+> > > Reported-by: Ben Procknow <bprockno@redhat.com>
+> > > Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
+> > > Link: https://lore.kernel.org/20260720145658.1103243-5-joe.lawrence@redhat.com
+> > > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> > > ---
+> > >  tools/objtool/elf.c                 | 13 +++++++++++++
+> > >  tools/objtool/include/objtool/klp.h |  2 ++
+> > >  tools/objtool/klp-diff.c            | 16 ++++++++++++----
+> > >  3 files changed, 27 insertions(+), 4 deletions(-)
+> > 
+> > Naive question(s) incoming...
+> > 
+> > How does livepatching deal with the kernel's restrictions around module-specific
+> > namespaces/exports?  AIUI, klp builds a livepatch module, and then loading the
+> > resulting livepatch.ko (or whatever its called) performs the actual patching of
+> > the kernel.  If a patched function in livepatch.ko references an module-specific
+> > exported symbol, how does it actually resolve that symbol?
+> > 
+> > AFAICT, livepatch.ko would need to explicitly import the module namespace, but
+> > then it would run afoul of setup_modinfo()'s checks that a module isn't explicitly
+> > importing a module namespace.
+> > 
+> > E.g. if (not-so-hypothetically) one were to try to livepatch
+> > nested_vmx_enter_non_root_mode(), how would livepatch.ko get at things like
+> > kvm_service_local_tlb_flush_requests() and kvm_spurious_fault() without also
+> > creating copies of those functions?  Wouldn't the kernel need something like the
+> > below to exempt livepatch modules from the restriction?
+> 
+> Indeed, though we approached it from the tooling side, see this (not yet
+> merged) patched:
+> 
+>   https://lore.kernel.org/fe5a00818e06ec613344d41d5944de054fcd8832.1786138493.git.jpoimboe@kernel.org
 
-On Wed Aug 12, 2026 at 6:33 PM CEST, Miguel Ojeda wrote:
-> On Tue, Aug 11, 2026 at 8:41=E2=80=AFAM Alvin Sun <alvin.sun@linux.dev> w=
-rote:
->>
->> The series moves `THIS_MODULE` into the `ModuleMetadata` as a const, thr=
-eads it
->> through `#[vtable]` to set `fops.owner` in DRM/miscdevice, and updates c=
-onfigfs
->> and rnull to use `this_module::<LocalModule>()`.
->
-> Applied to `rust-next` -- thanks everyone!
-
-This series has a semantic conflict with both the driver-core and the drm-r=
-ust
-tree:
-
-@Mark: When you merge driver-core-next after rust-next (which I think is th=
-e
-case) then you need to include the diff in [1] into the merge.
-
-In drm-rust-next the build fails with:
-
-	error[E0425]: cannot find type `LocalModule` in the crate root
-	   --> rust/kernel/drm/gem/shmem.rs:628:5
-	    |
-	628 |     #[vtable]
-	    |     ^^^^^^^^^ not found in the crate root
-	    |
-	    =3D note: this error originates in the attribute macro `vtable` (in Ni=
-ghtly builds, run with -Z macro-backtrace for more info)
-
-which is because the kunit test in rust/kernel/drm/gem/shmem.rs uses the
-#[vtable] macro.
-
-This should be fixed up with a patch on top of this series in rust-next.
-
-I came up with to potential solutions [2] and [3]. I think with the new bui=
-ld
-system we want [3], but I'm not entirely sure this works correctly with the
-current build system in all cases (at least it did survive my tests).
-
-Alternatively, we could just open-code a dummy module as in [2] for now.
-
-[1] driver-core-next merge fixup
-
-diff --git a/rust/kernel/serdev.rs b/rust/kernel/serdev.rs
-index a4927452016e..17ca504b7f8d 100644
---- a/rust/kernel/serdev.rs
-+++ b/rust/kernel/serdev.rs
-@@ -87,7 +87,7 @@ unsafe fn register(
-         }
-
-         // SAFETY: `sdrv` is guaranteed to be a valid `DriverType`.
--        to_result(unsafe { bindings::__serdev_device_driver_register(sdrv.=
-get(), module.0) })
-+        to_result(unsafe { bindings::__serdev_device_driver_register(sdrv.=
-get(), module.as_ptr()) })
-     }
-
-     unsafe fn unregister(sdrv: &Opaque<Self::DriverType>) {
-
-[2] Open-coded dummy module
-
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index c04e6c5aa7e0..274924cfcc05 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -157,6 +157,15 @@
- /// Prefix to appear before log messages printed from within the `kernel` =
-crate.
- const __LOG_PREFIX: &[u8] =3D b"rust_kernel\0";
-
-+/// Dummy module type for `#[vtable]` impl blocks within the kernel crate =
-(e.g. kunit tests).
-+struct LocalModule;
-+
-+impl ModuleMetadata for LocalModule {
-+    const NAME: &'static str::CStr =3D c"rust_kernel";
-+    // SAFETY: `try_module_get`/`module_put` handle null module pointers g=
-racefully.
-+    const THIS_MODULE: ThisModule =3D unsafe { ThisModule::from_ptr(core::=
-ptr::null_mut()) };
-+}
-+
- #[cfg(not(testlib))]
- #[panic_handler]
- fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
-
-[3] Allow module!() for kernel crate
-
-diff --git a/rust/Makefile b/rust/Makefile
-index 48adcd9b7851..4f6bf1b4d194 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -279,6 +279,7 @@ rustdoc-pin_init: $(src)/pin-init/src/lib.rs rustdoc-pi=
-n_init_internal \
-        +$(call if_changed,rustdoc)
-
- rustdoc-kernel: private is-kernel-object :=3D y
-+rustdoc-kernel: private rustc_target_envs =3D RUST_MODFILE=3Dkernel/lib.rs
- rustdoc-kernel: private rustc_target_flags =3D --extern ffi --extern pin_i=
-nit \
-     --extern build_error --extern macros \
-     --extern bindings --extern uapi \
-@@ -351,6 +352,7 @@ rusttestlib-pin_init: $(src)/pin-init/src/lib.rs rustte=
-stlib-macros \
-     rusttestlib-pin_init_internal $(obj)/$(libpin_init_internal_name) FORC=
-E
-        +$(call if_changed,rustc_test_library)
-
-+rusttestlib-kernel: private rustc_target_envs =3D RUST_MODFILE=3Dkernel/li=
-b.rs
- rusttestlib-kernel: private rustc_target_flags =3D --extern ffi \
-     --extern build_error --extern macros --extern pin_init \
-     --extern bindings --extern uapi \
-@@ -386,6 +388,7 @@ quiet_cmd_rustdoc_test_kernel =3D RUSTDOC TK $<
-        rm -rf $(objtree)/$(obj)/test/doctests/kernel; \
-        mkdir -p $(objtree)/$(obj)/test/doctests/kernel; \
-        $(rustc_target_envs) \
-+       RUST_MODFILE=3Dkernel/lib.rs \
-        OBJTREE=3D$(abspath $(objtree)) \
-        $(RUSTDOC) --test $(filter-out --remap-path-scope=3D%,$(rust_flags)=
-) \
-                -L$(objtree)/$(obj) --extern ffi --extern pin_init \
-@@ -788,6 +791,7 @@ $(obj)/uapi.o: $(src)/uapi/lib.rs \
-     $(obj)/uapi/uapi_generated.rs FORCE
-        +$(call if_changed_rule,rustc_library)
-
-+$(obj)/kernel.o: private rustc_target_envs =3D RUST_MODFILE=3Dkernel/lib.r=
-s
- $(obj)/kernel.o: private rustc_target_flags =3D --extern ffi --extern pin_=
-init \
-     --extern build_error --extern macros --extern bindings --extern uapi \
-     --extern zerocopy --extern zerocopy_derive
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index c04e6c5aa7e0..7df9159788ad 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -154,8 +154,21 @@
- };
- pub use uapi;
-
--/// Prefix to appear before log messages printed from within the `kernel` =
-crate.
--const __LOG_PREFIX: &[u8] =3D b"rust_kernel\0";
-+struct KernelCrateModule;
-+
-+impl Module for KernelCrateModule {
-+    fn init(_module: &'static ThisModule) -> error::Result<Self> {
-+        Ok(Self)
-+    }
-+}
-+
-+macros::module! {
-+    type: KernelCrateModule,
-+    name: "rust_kernel",
-+    authors: ["Rust for Linux Contributors"],
-+    description: "The kernel crate",
-+    license: "GPL",
-+}
-
- #[cfg(not(testlib))]
- #[panic_handler]
+Thanks much!  After educating myself (a very little bit) on KLP relocs, I think
+I even understood all of that!
