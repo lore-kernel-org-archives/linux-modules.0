@@ -1,96 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1AC4248C5
-	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 15:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786547868; cv=none; b=hpPnO9PHwOakyrWNk/DJvooAQijCISxSoBDUIZZZOSy+AFpziddoRY183RMuFpIgpNA193hNyP9HAL+a7oSRBWGuFL0n6qQLT44Sr3ocl90rFUs0ykG60PppINewWVEKVoSgyR3aNxBWLngfXNRkOj6wQ0yr+Wbc0fZuOsyTgBk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786547868; c=relaxed/simple;
-	bh=jwDMgUPHkbOCJu9ptvK1dhBFbozu9J2QR4s5hOwE6uQ=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C600B2C15A5
+	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 16:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786552425; cv=pass; b=Qk2kKhzmpGNAhFiyWxBTiCyf4nCRPY4aeWkV4E9cBlhHYBMg6Zi59NtLXGAi6gCA/+Rs+yIAzPpoUbY0EtX34nLjA93hPZ/UegaiaDHef2r/O/rsO3M9d1IbSeGf1EciKfujnlVjG1MH5GgjExSVsIu/ULa/3s9l+LcfVmj2SP0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786552425; c=relaxed/simple;
+	bh=gOIsyGGYeGZsd7+1t35VENt6hUZ6tCz5k0UwrPgrJB8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z17IgDizMh5QlsK9NLv61E6qWS4EfHVLRsF7PqFG8kv6QYglCFnPO1G//f6cW87HV0Hy/32wUhWGTbxDFleJNB5n3BWJ1SieAkU88B3ypfw76LtTPKQyOvGXn6OSYNFCK6AB7MnlyJz6L6xBO+hnh6xIEamnh5CUG47lVR6CWFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IVrXFDs3; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=NVvvWg/retkM3IxYkuAO9E2shsz8keQn9rD8V2x1H6Dm8ztmWcqqcSxT30JfLJ07K3h86abyTBmWogCdPFqkFU5qupqPH/Bo1fW6+qSVU6NTjytC9ah+6ukIMwQ4zXCxHGQK0XUjp0Rsu6INwZADMtbMUwJcRbpFKx2eMzKRamU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Al5TqyfU; arc=pass smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IVrXFDs3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D92F1F00A3F
-	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 15:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786547866;
-	bh=ik2fuz9TuLVHsuaLwF0Z/EF0E1lbisTBGZFFl5LwWfg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=IVrXFDs32DQqUoXDf1/vSKCOHOzs17duCXdbSVlqkNj7ZlTKnh+Tt35+diZGfHMoY
-	 o17p/OBO501lnBfXq4HVXh0pQre68o/+22fq4Ew19g4eoiSBvFNnB5mXKwng4fsaqq
-	 aqlzFL8ONbVGTTciy/81hzET3/wLZBsjQT8CR+HTd2lrwPW1k12EQcWPrjJ/aPNrqS
-	 yqBUlQOKVroKaJO/Ex+YvD8Pm2XgZzioS/f20+p6/nvflWbumYCA7/tCAXPoA2NcpE
-	 pxj9Re7Bag694sFGZDLpnH0J+8lEhlbZ4hkglOJolitMBKucDrQI/xEN5EmuCAOY4O
-	 vgZKv/+0oMRBA==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6a157f90752so1777944a12.3
-        for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 08:17:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RpClt0TKU57LEI5S4aCzrhnPAmIssRF1PkOV+Ymj8TUe+b2t49z8q+a1IFVMYrQEVWpPfdBn0SFVgF6P6i9@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqW/WAzUoy4djg2JTQg4qtFdXWNUDTYJ6qgVKxbamBne/LxeF/
-	kUtFDYKCDwfBq5E459EsX3FpLgjBDJYdqrBuxz4+9IqrUD4g3wFodZfs9/Zfu5dCtwfUdShleWk
-	AQmmaJmlZ1/Ve9dGJkUcFtqsrIJ3yBEo=
-X-Received: by 2002:a05:6402:ea0:b0:6a1:4458:7f2d with SMTP id
- 4fb4d7f45d1cf-6a375eadd01mr2786148a12.5.1786547865002; Wed, 12 Aug 2026
- 08:17:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Al5TqyfU"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2d03fcd26a6so1806555ad.2
+        for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 09:33:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786552423; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ctz34D7ntC/IB6Tc+p3PkBt9arUtozoBf7eiTAU9FayQE5GQpPaAAmOOpvEujrWxJ9
+         Qj7w9htRZ7FvbmnD4awGhH7zxAXH3Atu/I6dyB2RL5dbmT3GlKy0Rt36QwDLfboRLfiK
+         iJPqjEgntKeh79UQWucqlb3ZEDZj3OjbDNA5VL32GObF8OObXmKXRwpKUHwa//YV8A9f
+         chwmTHgu/Ohcp92srE8kKpe5Hgnyy5x090yGWNNaTVQA7Jj4bAJetJKCo9Ft6jN4QfuD
+         DDMItEcBEW0PSWfjFfDb4CtPeDCC7rGueuxtIlQcgSQiTwljpaIOkLsV+RFMNPdgo+Bb
+         wAtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=D4SZ6u0V1SghQBdqtC98mKtc1SLMxMH5ah0RWt1B7vw=;
+        fh=WmwOPqFaj0DW6niWjNip1Slx4d19u3iQao3QuH3m0Gs=;
+        b=AR+4rY020e1ClYFtxuZzHhxn3Ve1TQZHI55UIGNsBAZohuG3IlD60KoDMXdY2pMn/q
+         sseJ9MqrcqwRoAFo1cbhWc80OJNDWBlmRJMZDqTpJQMpCGRRpKL7qg/OM53c72AU7QV5
+         23dw7g6YT7Q9kMdP2VBpgnd2o3LKkNB+NmqGRS71CsIfCE1kcCqIVHiyXXltB64eULnB
+         P4XHwM+ceUx5BoiMdLVv1SK/pO0fGMWjuMVttBVeiHqfmL0hpWD0v3ckNBVnikNVjTi0
+         yk17cj7dn3xQc8Ud9ybz14i+AWG1hPEL/CntIYaUeK3LCvO226drfuqoPoWtZOUca57N
+         qb4g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786552423; x=1787157223; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=D4SZ6u0V1SghQBdqtC98mKtc1SLMxMH5ah0RWt1B7vw=;
+        b=Al5TqyfUu+23OQeZiYehEwCKw9h7n1GWuwvFfs5W/FN6ixV7O12veg3o/+6+ecIG5q
+         gi77Jv50TJJVfBr5tK78wp8gBVgj+5Y7A46NSJQiMg9vf/b+171Ld/CV/ytLNCLuYUX5
+         JGnwl6csWpus6UXO9bC2cOxNn79Q6o54bdsEtVRm7+6yYsLP6x21sneKJH7rILfD6V6Q
+         tMWciyTleAT2pJLtlHf4Ke1yqhLx3FZDQ5GOYVRZdJPiPy5U/KlYo5NBcXMa/AeygtYc
+         /sE48ZwkvJJt8DLXaboqm3a/tld2DEUcqAqzzQ8WWBf/PsfhZ7ZNON80nFOWRsL+Ksc3
+         WL8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786552423; x=1787157223;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=D4SZ6u0V1SghQBdqtC98mKtc1SLMxMH5ah0RWt1B7vw=;
+        b=Jce8qC7iCILLCK9tczOO3Jcf9+lv9ZfoQVEOsW40GGQmyOlfSeuDid+9LHrIuvNg5f
+         m0eCFK4FFV8J65gI0qofvzJUSTtg7IBrLOUDpLqE4OFFIY0u8H5g6OAg6z9e7mBMbfZp
+         YVU5sIAx+4cocpT0qUp5qBuk56WMntGnATQpv0Jn5JUsMfalwOMWpaP08jS9A/VHqWCX
+         0h+qqUvN2Hi+9TuTb1OSLsjAGDiFp40lxEfZUa08Uhb7L1CFcVNgulaJpFlgdVbbJH6n
+         WWF+lWvcnAH+gdNl5T/VpTKH/59M3aIFQ3SKnys4gV5MdeZtXCKEp7AXtkLdyriQJPfn
+         9ILA==
+X-Forwarded-Encrypted: i=1; AHgh+RrLpFKb8uKJ/ddW09ggWXoBllUf3bzdwEZ7i0VxbX5cLgzt8cAqVOvP04ckAXWdoTMDb9eAsPyZLPTRy98l@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxhr2p7AadwMTLhjkU4qKnrzcEbdXE0Nx/QGk2Cdrc3PHVvfPG/
+	mQgS7LbaXjDh6r6ehPnvybRy29uDEomTOH53XWu4fi4lAtwy2RG8aVJPRRuG0VZBncNeKB3ahr7
+	jlWe3KkniOTZueYLcMtGc2O+yD1DqHIo=
+X-Gm-Gg: AR+sD10nvxPpwaPO984Wjr3/3r4A+suyi7u4JOgUd2FP4yujby34G/KIQINLD1dm9w/
+	JjI2tc973MTNIY9sdO+d2kUSN8nkBuDJ+bQ2GscvmDqUsckcOb3pAYv3sbhRKe0ivojc20i3ynE
+	9Sx88aZcWAMN4wv4FZ/RRs4TT6TiHTV8Q3lCZeFx4qXOhPLYlXY9BbelRi5ZQWWbR2jSOtoARwd
+	yeKOVtwy9zxR5AW9OySdiyEPDFqRSekrhrY5wuamI/O6GknEE4IrX2Oa2YLFHnOiFRlRDyN1tQG
+	rruGFJsgPkVfXsGngzMYuWxjJzqWSIYO3s2g59PkMxPBrX4y8yuawPpOD+AZk+rSMelBQDPHu/Z
+	t9PLVOUtsmQD349t9sSBXQ6PbTkvRu8mc6NVlpGhDLlLUoc27y5U/e6DF1pzE
+X-Received: by 2002:a17:902:d552:b0:2cf:9e90:8be with SMTP id
+ d9443c01a7336-2d3456e7622mr58880125ad.4.1786552423044; Wed, 12 Aug 2026
+ 09:33:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260812032807.15034-1-yangtiezhu@loongson.cn>
-In-Reply-To: <20260812032807.15034-1-yangtiezhu@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 12 Aug 2026 23:17:35 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5w8VVW_L6cRes-syjEvhbWmevSKWrZWPFapRkuemmjaw@mail.gmail.com>
-X-Gm-Features: AUfX_my7amXpUbUaFyOB9T3ZWwS1EoRkTROxoDguMKCdpASA4Taw_zoETGoew_I
-Message-ID: <CAAhV-H5w8VVW_L6cRes-syjEvhbWmevSKWrZWPFapRkuemmjaw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] Filter out local and mapping symbols during module load
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
+In-Reply-To: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 12 Aug 2026 18:33:27 +0200
+X-Gm-Features: AUfX_mzHM3XF1m8TGRbbbrVs79_o_CCgi7jI9gpogE6umN7ICq8ixcdhm-skrqA
+Message-ID: <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
+Subject: Re: [PATCH v10 00/10] Fix missing fops.owner in Rust DRM/misc abstractions
+To: Alvin Sun <alvin.sun@linux.dev>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
 	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+	Aaron Tomlin <atomlin@atomlin.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+	Rae Moar <raemoar63@gmail.com>, Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
+	Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
+	Igor Korotin <igor.korotin@linux.dev>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	=?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
+	Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
+	Carlos Llamas <cmllamas@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-modules@vger.kernel.org, driver-core@lists.linux.dev, 
+	dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+On Tue, Aug 11, 2026 at 8:41=E2=80=AFAM Alvin Sun <alvin.sun@linux.dev> wro=
+te:
+>
+> The series moves `THIS_MODULE` into the `ModuleMetadata` as a const, thre=
+ads it
+> through `#[vtable]` to set `fops.owner` in DRM/miscdevice, and updates co=
+nfigfs
+> and rnull to use `this_module::<LocalModule>()`.
 
-But I still don't think renaming is_core_symbol() to is_kept_symbol()
-is necessary.
+Applied to `rust-next` -- thanks everyone!
 
-Huacai
+    [ Fixed `clippy::undocumented_unsafe_blocks` lint by wrapping with
+      a block. Added interim `#[allow(dead_code)]`. - Miguel ]
 
-On Wed, Aug 12, 2026 at 11:28=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.c=
-n> wrote:
->
-> This series prevents compiler generated local and mapping symbols
-> from leaking into /proc/kallsyms for loaded modules. This ensures
-> tracing tools like bpftrace can resolve accurate kernel stacks on
-> architectures like LoongArch.
->
-> Based on the v2 discussion, the changes are now refactored into a
-> clean three-patch series to eliminate code duplication and clarify
-> naming.
->
-> Tiezhu Yang (3):
->   module/kallsyms: Rename is_mapping_symbol() to
->     is_local_mapping_symbol()
->   module/kallsyms: Refactor current symbol filtering into
->     is_kept_symbol()
->   module/kallsyms: Filter out local and mapping symbols during module
->     load
->
->  include/linux/module_symbol.h |  4 +--
->  kernel/module/kallsyms.c      | 59 ++++++++++++++++++-----------------
->  scripts/faddr2line            |  2 +-
->  scripts/mod/modpost.h         |  2 +-
->  4 files changed, 35 insertions(+), 32 deletions(-)
->
-> --
-> 2.42.0
->
->
+    [ Fixed `rusttest` by adding a dummy `LocalModule`. Removed interim
+      `#[allow(dead_code)]`. - Miguel ]
+
+    [ Rebased to avoid the imports cleanup patch. - Miguel ]
+
+    [ Removed Acked-by and Cc. - Miguel ]
+
+By the way, I removed the Acked-by in that last patch since I think it
+came from an older version as a series-tag that didn't have the patch.
+Please let me know if I should re-add it.
+
+And since I was editing that commit for that reason, I took the chance
+to remove the Cc because Petr already gave the Acked-by which you
+collected, so normally you don't need to keep both in that case.
+
+I hope that clarifies! :)
+
+Cheers,
+Miguel
