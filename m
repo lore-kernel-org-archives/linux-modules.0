@@ -1,118 +1,85 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 776C430DEA6;
-	Wed, 12 Aug 2026 01:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3110377AA0;
+	Wed, 12 Aug 2026 03:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786498474; cv=none; b=ZZe+bz8/vcD1rHdn+2Vm+FtV01+5szG2MkNSXCxdb+7WtyQCbBtX4AmlbRfve9xHxjT+FuPzL1gythNY7jslrPeLYVnMd9mlcfYr+AYodU0PgLPqMdN8l6NuMpeqQhiDt4BF1gHpEYP9Ck2Ib/EidL1MJqiUGC90eRB6sPYs9Jo=
+	t=1786505295; cv=none; b=Rgg2qlnNUB40W6/s++SYoHz1ThZCWTXk20qOQws89wyfoZR9mrh5sgeMqm92gQnllAb0r3M1xSV4R3vZA8Q3LC0lMwPid3fBWNvMXqSzZAa/U/hwU09wSmktWEqrH1WSmRm6iReh+eeNMCSSDoqd3JpEerATzTnQLumG2Aw92GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786498474; c=relaxed/simple;
-	bh=YE9zt04z5CZ6P7lf+VW7Fs/6VQ4jiP0JB8lVbLPQXnc=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=IO2gBn6NF6HMWFyVyeHoLNTYFxTo1wGtsS0ySTz/SXZLjVlXzKbYSEnA5rVa01ElQAHP+44K1q5EjsLXQSzKeoSMmlPAX0Jm/4p6OkOqmpRaisfru/vGCgF5P/ZujPSnd0SDTXQ3pZq5TQQ5rSR7EDiyqx87hPPeaha62YHioko=
+	s=arc-20240116; t=1786505295; c=relaxed/simple;
+	bh=LMeVbo/jILdHh3k2XeAvSmtPFPvCwjvSnzqY0Oi9unE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bL4h3bqLDSakuW/XsgNYxl6TRXlosgBzZ8yrFERVXajl3fpe1sjzYWfz32PRe3ShMic6BcCFn3vvdXFGyyiuUwQwU3Aq2Q6BoBszopg4FPFcc+5AHpqTbV63QqkiH1Wq7pQHJtwhsQ4vScWs/PbG/L2N+T3vCgsvPlL2dlShisc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8CxutGhzXtqW2YAAA--.1219S3;
-	Wed, 12 Aug 2026 09:34:25 +0800 (CST)
-Received: from [10.130.40.83] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAx3c6gzXtq5GwBAA--.9706S2;
-	Wed, 12 Aug 2026 09:34:24 +0800 (CST)
-Subject: Re: [PATCH v2] module/kallsyms: Filter out local mapping symbols
- during module load
-To: Huacai Chen <chenhuacai@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-modules@vger.kernel.org, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20260811071507.24043-1-yangtiezhu@loongson.cn>
- <39a48465-22b6-4b18-9f7e-ce258513181b@suse.com>
- <CAAhV-H5qN2=LEbVS+hd5Uohq6OKHgkxEWLg4GNukYFBmjEABHg@mail.gmail.com>
+	by gateway (Coremail) with SMTP id _____8Bx69FK6HtqQWwAAA--.1322S3;
+	Wed, 12 Aug 2026 11:28:10 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCxPs9J6HtqfoUBAA--.10453S2;
+	Wed, 12 Aug 2026 11:28:10 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <f933e156-1ef2-3abc-ef8f-b2688e78b957@loongson.cn>
-Date: Wed, 12 Aug 2026 09:34:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>
+Cc: linux-modules@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Filter out local and mapping symbols during module load
+Date: Wed, 12 Aug 2026 11:28:04 +0800
+Message-ID: <20260812032807.15034-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5qN2=LEbVS+hd5Uohq6OKHgkxEWLg4GNukYFBmjEABHg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx3c6gzXtq5GwBAA--.9706S2
+X-CM-TRANSID:qMiowJCxPs9J6HtqfoUBAA--.10453S2
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7WrW7CFyrtF1xJr18trW3CFX_yoW8tr4kpF
-	4qka1rXF4kZF13Can2vw1FgFy5WrWkWFW5J3Z8G3s7AFnxWFy0vrZrKw1Y934UAr1rJF1I
-	qa12yasxZas8AagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-	42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
+X-Coremail-Antispam: 1Uk129KBj9xXoWruFWUuw48GF1fZF18JF1DJwc_yoWfWrc_WF
+	yxGFW5Cr47Ga97uFW8trn5XryS9a15G3yDAa4vqF47A3s5Ar43tFs2yrWIgr17XF18Zr4S
+	yFnFva4kZwnFgosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_JFv_Jw1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+	JVW8Jr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5
+	McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+	1lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+	Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+	cVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI
+	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v2
+	6r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFwIDUUUUU
 
-On 2026/8/11 下午10:22, Huacai Chen wrote:
-> Hi, Petr,
-> 
-> On Tue, Aug 11, 2026 at 8:20 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
->>
->> On 8/11/26 9:15 AM, Tiezhu Yang wrote:
->>> The compiler toolchains generate internal local labels on certain
->>> architectures (such as LoongArch) for optimizations and relocations.
->>>
->>> While these local labels are filtered out during runtime lookups in
->>> find_kallsyms_symbol(), they still leak into the permanent symbol
->>> tables of loaded modules, because layout_symtab() and add_kallsyms()
->>> do not check for the mapping symbols during layout generation.
->>>
->>> Consequently, tracing tools like bpftrace resolve identical addresses
->>> into confusing local labels instead of actual clear C function names.
->>>
->>> Fix this by adding is_mapping_symbol() checks directly into the symbol
->>> tracking loops of layout_symtab() and add_kallsyms(). This prevents the
->>> mapping symbols from entering the module's memory symbol arrays at load
->>> time.
->>
->> This optimization looks sensible to me. Kallsyms in vmlinux also
->> normally doesn't include information about local labels (.L<xyz>) and
->> mapping symbols ($a, $d, ...), so it should be ok not to track them in
->> modules either.
->>
->> Note that the patch description mixes up these two symbol categories,
->> presumably because the existing is_mapping_symbol() function conflates
->> them as well.
+This series prevents compiler generated local and mapping symbols
+from leaking into /proc/kallsyms for loaded modules. This ensures
+tracing tools like bpftrace can resolve accurate kernel stacks on
+architectures like LoongArch.
 
-...
+Based on the v2 discussion, the changes are now refactored into a
+clean three-patch series to eliminate code duplication and clarify
+naming.
 
->> It is better to avoid duplicating the same logic in layout_symtab() and
->> add_kallsyms(). The function is_core_symbol() can be renamed to
->> something like is_kept_symbol() and can be solely responsible for
->> deciding what to keep.
-> I'm sorry but I think Tiezhu's patch is simpler and cleaner. :)
+Tiezhu Yang (3):
+  module/kallsyms: Rename is_mapping_symbol() to
+    is_local_mapping_symbol()
+  module/kallsyms: Refactor current symbol filtering into
+    is_kept_symbol()
+  module/kallsyms: Filter out local and mapping symbols during module
+    load
 
-Hi Petr and Huacai,
+ include/linux/module_symbol.h |  4 +--
+ kernel/module/kallsyms.c      | 59 ++++++++++++++++++-----------------
+ scripts/faddr2line            |  2 +-
+ scripts/mod/modpost.h         |  2 +-
+ 4 files changed, 35 insertions(+), 32 deletions(-)
 
-Thanks for your feedback! To make the code cleaner, I plan to split the
-changes into the following three patches for v3:
-
-1. module/kallsyms: Rename is_mapping_symbol() to is_local_mapping_symbol()
-2. module/kallsyms: Refactor current symbol filtering into is_kept_symbol()
-3. module/kallsyms: Filter out local and mapping symbols during module load
-
-I will send out the v3 patch series soon.
-
-Thanks,
-Tiezhu
+-- 
+2.42.0
 
