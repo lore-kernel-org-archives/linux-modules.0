@@ -1,238 +1,307 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010050.outbound.protection.outlook.com [40.93.198.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B4C2E03F1
-	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 06:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786516375; cv=none; b=bUHWdLMfYINM+AZbYfADb1i4ICL0+Nqz1aghXIzbriGewZRAQTjvL/8SzOHfMxI1K0g/inWOspiIIU174nZU8EN7TaJ4ifz86GtzTgC7lYrsM9CIiHbeSFGwtyObfwPKMI6gJclxApjp+aMnAQfUuuEy7a1H5EiaOArBiB9cFMQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786516375; c=relaxed/simple;
-	bh=h5JXSvc1ufL6bkPE/woM5yaUaXQLAZ8qaqklf9eMHAc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O2TSnPczz0e6D9rkjXMNP20vobff9ntkb2cSyqKQiocTn/afWr47xVjG5jZqOHjzHDwN+gZIOHbRGLkcmSqNPzfJ43WvJnv11ztUe9h02QeFFZmL+EmzfDB9aXdJLxnuRMsSQnXTT6vJ2fs/9nNtgBj2gh92tLR8S7cFFYOtNLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PLdyU+qs; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F65431E858;
+	Wed, 12 Aug 2026 06:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786516430; cv=fail; b=Q7gAg+6aHzvSWk/4j8Fmnh2d0sB/xxVdUrMHZg1bFV6i4Iz1STdPVMnXncEttDdwRKkO59u2AG/pVUvmDSFPSTbJkXdrDUBhfwgZXuUPC69mnmubPpkM8v8qkg9Qc5dlUCXCOy02FIwumx3pbpeaPH8S74n0Q26MyPFwQnbRWFM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786516430; c=relaxed/simple;
+	bh=wzEHJUx+YbEuq/RI8rF9INu1RHt0gQwLSDW7o16e4Pw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E8YrT0g8vAXT3QBaDalRWxBMp+Ry+cM3JQi7Eqy563dKrnxkLYVvKnTG0v6TrmZaIH0Hsp2zi4U96R8PpJYcUn8ChCLXZpSP8tp8F/putQ+h5Cw/hsUv5k81fu3YPRLiM5BsFvmQ+GykBoTE5cvO5vwV9oZVMCXiKwsfS/QRAcE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Yr4yewez; arc=fail smtp.client-ip=40.93.198.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PLdyU+qs"
-Message-ID: <f244c880-c907-456b-81ae-07c28456185e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786516361;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ExJys5qSDXQWFXg8uSDgxGRkENE87NKcgW0l7vfMryo=;
-	b=PLdyU+qsm8C9P29r4fmpfnSmLBODoUGdBqzDh9D1uirmugiUqWiF1KJNxYfAaOVCcJzh2Z
-	KRfHKXbsCYtnXvQFGVljlD+C+wgQcCnfBoPVvyRT+/quU+lQ429XSl+lMcooNE8j+CDw63
-	1xOwbNgx2ftc9XiwadFKgdEGZt4cJjQ=
-Date: Wed, 12 Aug 2026 14:32:40 +0800
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Yr4yewez"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=K4v8DHzl1k3CwVhK+FV4zDBZnBhZsLFOqL1d5GYXY6Up4oosyUVGSFLgTFMgvO03/ttKZUzxu7DKC4suKowbENh8+wyKcAvx+ZHHxrAxjjf3dWpjp8fmb4iIC7T/9Cw5nwE/ccedMeQDmzFqkbKWfXDzFYE3rW9Xq1xTD19B53Z+MBvd3xfmTpjh8AWetQ08p7lwI4nqElgYBWwVa7L5+K+zYyVVGWGiSqIGJlIuDlbJCJ5WDMb+fvtFANNQzsxuSbewltttuIxvzTUUHSNBZ/MetaSZSo/xzyjEL8hHk+TehmkFdU5STKP4l1ce4+J4Vzvbejlyf2ZIJ9Z5kW6omg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sSL4avIfqWEiLYqVbIS+A9O39Fd/inVCJxK8XPe12ZM=;
+ b=eBYqQNEGngKR7XEOt64K87oVHCflpPCcnntEmRQAN7HJ4Srlkmquid8Pqvr9XPg58sE/VNRc1Q3LhRi5mBHMGJRojHddPuuNGlse7duaw8qWk3cYEDWyOoYO/rrBtimtPUFX5L9zX9CqcJlS+XP16DKsXw/UanqS512yADBsvYw9o6EvPHSfHqI6klKADUh0HcDUwxKu4qfu8+zFAEtEEJz8xVvkAVZhhQtcee1W+GUgFOdfRuyJNk3ZjmPYZvs2E27xJh23fL461T9ZsCcUNwvKJtXdIsFPBZwFslKjZOoZiSygL9+7wV7rH1ac6KCGw2lMHZSeHzGwqzWcUeL7ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sSL4avIfqWEiLYqVbIS+A9O39Fd/inVCJxK8XPe12ZM=;
+ b=Yr4yewez4yLeDCTtf9fFrBRp2GS1f2FUiiZdhHqty82ot13jKFlV3iLnW/EDoCBIO2s2YTHRFa9gBqXzSVA0fKmZohHWPsXSH/wrx1C9mFYOYHmbJvAQrCgpRe2buQaslWeh61y8RT6VHpn0lFg+8Hxz66XlTPUueG6qTTiBncg=
+Received: from CH2PR14CA0021.namprd14.prod.outlook.com (2603:10b6:610:60::31)
+ by DM6PR12MB4153.namprd12.prod.outlook.com (2603:10b6:5:212::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.12; Wed, 12 Aug
+ 2026 06:33:42 +0000
+Received: from CH2PEPF0000013E.namprd02.prod.outlook.com
+ (2603:10b6:610:60:cafe::9f) by CH2PR14CA0021.outlook.office365.com
+ (2603:10b6:610:60::31) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.13 via Frontend Transport; Wed,
+ 12 Aug 2026 06:33:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ CH2PEPF0000013E.mail.protection.outlook.com (10.167.244.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.315.6 via Frontend Transport; Wed, 12 Aug 2026 06:33:41 +0000
+Received: from gomati.amd.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 12 Aug
+ 2026 01:33:30 -0500
+From: Nikunj A Dadhania <nikunj@amd.com>
+To: <rppt@kernel.org>
+CC: <akpm@linux-foundation.org>, <anton.ivanov@cambridgegreys.com>,
+	<bp@alien8.de>, <brendan.higgins@linux.dev>, <da.gomez@samsung.com>,
+	<danielt@kernel.org>, <dave.hansen@linux.intel.com>, <davidgow@google.com>,
+	<dianders@chromium.org>, <hpa@zytor.com>, <jason.wessel@windriver.com>,
+	<jikos@kernel.org>, <joe.lawrence@redhat.com>, <johannes@sipsolutions.net>,
+	<jpoimboe@kernel.org>, <kgdb-bugreport@lists.sourceforge.net>,
+	<kirill.shutemov@linux.intel.com>, <kunit-dev@googlegroups.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-um@lists.infradead.org>,
+	<live-patching@vger.kernel.org>, <lorenzo.stoakes@oracle.com>,
+	<luto@kernel.org>, <mark.rutland@arm.com>, <mbenes@suse.cz>,
+	<mcgrof@kernel.org>, <mhiramat@kernel.org>, <mingo@redhat.com>,
+	<peterz@infradead.org>, <petr.pavlu@suse.com>, <pmladek@suse.com>,
+	<richard@nod.at>, <rmoar@google.com>, <rostedt@goodmis.org>,
+	<samitolvanen@google.com>, <shuah@kernel.org>, <song@kernel.org>,
+	<tglx@linutronix.de>, <x86@kernel.org>, <nikunj@amd.com>, <bharata@amd.com>,
+	<ananth.narayan@amd.com>
+Subject: Re: [PATCH v3 9/9] x86: re-enable EXECMEM_ROX support
+Date: Wed, 12 Aug 2026 06:33:15 +0000
+Message-ID: <20260812063316.21371-1-nikunj@amd.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250126074733.1384926-10-rppt@kernel.org>
+References: <20250126074733.1384926-10-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 2/2] alloc_tag: fix undetected compressed tag overflow
- when profiling is disabled
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-modules@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Suren Baghdasaryan <surenb@google.com>
-References: <20260812054105.102637-1-hao.ge@linux.dev>
- <20260812054105.102637-3-hao.ge@linux.dev>
- <20260812060411.968631F000E9@smtp.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Hao Ge <hao.ge@linux.dev>
-In-Reply-To: <20260812060411.968631F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000013E:EE_|DM6PR12MB4153:EE_
+X-MS-Office365-Filtering-Correlation-Id: 842669da-6194-4e7d-18d7-08def83ba6ce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|7416014|36860700016|1800799024|82310400026|6133799003|13003099007|10067099003|11063799006|56012099006|22082099003|18002099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	edAdbBq3sYu2i6EcRZAxvWon9AX1MKUnUGDUj7lF9rd985mGTzQVlbziAjGTUS2lgJlqxV0/AW8soW9ZQQX4xN7KnFdjbVTwoqP968YxzuHSq8ZtZCBqdZTs/W5NNIOWWiG4X8QFnThF60+EU2X4iGtqjZumqaIGE+z14o06Ab3LU/4NfHe+omATazyVzsjwv7fO6cnI1mkIDqU9Qu/Gph5TjmX/gHoNvl7szLT5hqWkR7xJ7hpyAFAAJg0Fkz9s1r6ONuP+7Jnwr/nXyXSc/s8Ov5XbhrpOZlDNNuuo4REwoa+87YDWqqI4s0nShvgFvCtdOrnXoRFmMt/WJ6fjc/M3dlHfYiDNSHlUt1mvOPelziSDSU3sOF+SUyB1eNdneDCYONB/afxx7RNaoSmNabn6ENUCVIgGWqievUdjLsndatFUIxpBnwdk8F8VTsZggmfaPJmLytnWgJWNutDFAkoDYypbVLXv1fefSlOFPF7oMah5NinKAFG46g6cLunR/igmwwq7SMbPKDWTZtKiz0cySxvgAmDWKSukPB0ytPOQDtPc+93IHwRFsKP/gU8TiMgkavvSNjKOCRPoVwg+SENLhUlNnGQeYCYMHND+ZIwZgnRYiRXltKb2S+HoHUsu5utwr6uWRqoDVOoEn0twMdyMoR0OOfpQ9uNGOYYjzFSxUOuO5MDcyeCYyHQcRgfpcb0exZh/Yj4dd011v+9T0A==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(36860700016)(1800799024)(82310400026)(6133799003)(13003099007)(10067099003)(11063799006)(56012099006)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Zn4SHCgRSEbaCHZYcQplgOm2z8XYtvyI9sMkXh42XxJH9iM3TX2xJFQBkx5ZX1vmHhFt3P8TopFK9t2NsiEejXDRWS0P/IaAk5cf5IIse/5yBAzJtNhxuHy2dbxPl3Xbn6emjxySA/TiRtBk/wYHXsyuJju8cfmKmHvSGsLBcwDeDMFko51PK/D6A5pIYIe/qku5ujgsKtzW6kdH21/fL35e1K5MClj77DKim3Dk/omwhFgLQdwhp/c1Z+QGFq3MsdRQWAUarpaJRE1Wut/kWdp/uEd61/JVogrxNvRAE5pHy8buVug/M0CwMxp45EHXqMSVagZ/aTfdoL2GS003nYbaZcyQg8FHO+Nynac0LICXBvkF6PBRpwmsuGnxw3WBTWV5/MPjN3mrXwsxZQcJp+nD/ZURvJNgf9YQv8iL9qYsBrVHgAPpB4ltgwc0frtL
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2026 06:33:41.7925
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 842669da-6194-4e7d-18d7-08def83ba6ce
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF0000013E.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4153
 
-CC Andrew and Suren
+Hi,
 
+A kernel BUG in __text_poke() is observed inside a Ubuntu 26.04 guest 
+(v7.0.0.28 and also with upstream v7.2-4c5). Host is running on v7.2-rc5.
 
-On 2026/8/12 14:04, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 4 potential issue(s) to consider:
-> 
-> New issues:
-> - [High] Unconditional allocation of per-CPU counters for modules causes a memory leak when memory profiling is disabled and the module load is retried.
-> 
-> Pre-existing issues:
-> - [Critical] Concurrent module loading can cause an out-of-bounds memory write and module corruption because the global profiling flag is toggled without cross-phase synchronization.
-> - [High] A race condition on the global module tags size variable can lead to unmapped virtual memory access and a kernel panic.
-> - [High] If page population fails, a dangling module pointer is left in the maple tree, leading to a Use-After-Free.
-> --
-> 
-> --- Patch [2]: [PATCH v5 2/2] alloc_tag: fix undetected compressed tag overflow when profiling is disabled ---
-> commit ffb2b208763f32cdfb3d6cb740d4d4efa5c99ae0
-> Author: Hao Ge <hao.ge@linux.dev>
-> 
-> alloc_tag: fix undetected compressed tag overflow when profiling is disabled
-> 
-> This patch modifies module layout and allocation to retry loading without
-> memory profiling if the compressed tag limit is exceeded. It removes the
-> profiling enabled guard when checking for tag overflow and handles the
-> fallback by resetting section flags and repeating the layout process.
-> 
->> diff --git a/kernel/module/main.c b/kernel/module/main.c
->> --- a/kernel/module/main.c
->> +++ b/kernel/module/main.c
-> 
-> [ ... ]
-> 
->> @@ -2966,18 +2967,38 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
->>   	 */
->>   	module_mark_ro_after_init(info->hdr, info->sechdrs, info->secstrings);
->>   
->> +	/*
->> +	 * Save the sizes reserved by module_frob_arch_sections() so they can
->> +	 * be restored if we retry below.
->> +	 */
->> +	for_each_mod_mem_type(type)
->> +		frob_size[type] = info->mod->mem[type].size;
->> +
->>   	/*
->>   	 * Determine total sizes, and put offsets in sh_entsize.  For now
->>   	 * this is done generically; there doesn't appear to be any
->>   	 * special cases for the architectures.
->>   	 */
->> +retry:
->>   	layout_sections(info->mod, info);
->>   	layout_symtab(info->mod, info);
->>   
->>   	/* Allocate and move to the final place */
->>   	err = move_module(info->mod, info);
-> 
-> [Severity: Critical]
-> This isn't a bug introduced by this patch, but can concurrent module loading
-> cause memory corruption if profiling is disabled mid-flight?
-> 
-> In move_module(), if one thread disables profiling globally via
-> shutdown_mem_profiling() while another thread is halfway through module
-> loading (between layout calculation and memory movement), the second thread's
-> section offset queries could evaluate to false.
-> 
-> This would cause the module loader to use an un-incremented 0 offset and
-> incorrectly write the codetag section into the base memory, overwriting the
-> start of the module's core memory block.
-> 
->> -	if (err)
->> -		return ERR_PTR(err);
->> +	if (err) {
->> +		if (err != -EAGAIN)
->> +			return ERR_PTR(err);
->> +		/*
->> +		 * -EAGAIN means profiling was disabled but the module
->> +		 * can still load without it. Reset state and retry.
->> +		 */
->> +		rewrite_section_headers(info, flags);
->> +		for_each_mod_mem_type(type)
->> +			info->mod->mem[type].size = frob_size[type];
->> +		info->sechdrs[info->index.sym].sh_flags &= ~(unsigned long)SHF_ALLOC;
->> +		info->sechdrs[info->index.str].sh_flags &= ~(unsigned long)SHF_ALLOC;
->> +		goto retry;
-> 
-> [Severity: High]
-> Does this retry mechanism cause a memory leak for per-CPU counters?
-> 
-> When the module load is retried via this new loop, the codetag section is
-> treated as standard memory and bypasses maple tree registration. However, the
-> subsequent codetag module initialization unconditionally allocates per-CPU
-> memory for these tags regardless of the profiling state.
-> 
-> During module unload in release_module_tags(), the cleanup path exits early
-> because the module cannot be found in the maple tree, permanently leaking
-> the per-CPU memory on every unload.
+SETUP
+-----
 
-The per-CPU counter leak is pre-existing, not introduced by the retry 
- 
- 
-                                                      mechanism.
+512 QEMU Q35 guests (2 vCPUs, 1G RAM each) boot concurrently across 200
+iterations. The crash is seen during module loading in early boot.
+2-7 guests out of ~100,000 boot attempts crash with the kernel BUG.
 
-The root cause is that shutdown_mem_profiling() permanently sets 
- 
- 
- 
-mem_profiling_support to false, after which needs_section_mem() 
- 
- 
-                                                        returns false 
-for every subsequent module. Their codetag sections are 
- 
- 
-                                         placed as regular data, so they 
-are never inserted into the alloc_tag 
- 
- 
-                       maple tree. Yet codetag_load_module() still 
-unconditionally invokes 
- 
- 
-          the load_module() callback, which allocates percpu counters 
-that 
- 
- 
-release_module_tags() cannot find on unload.
+Reproduced on:
+  - AMD EPYC, QEMU Q35 guests
+  - Intel Icelake, QEMU Q35 guests
 
-I'll send out a separate patch to fix this leak later.
+Apparently it was seen once in the non-guest Ubuntu 26.04 environment as well
+https://discourse.ubuntu.com/t/failed-boot-one-time-on-ubuntu-unity-26-04-educational-mission/85300
 
+SYMPTOMS
+--------
 
+Either of the below two crash signatures is observed:
 
-> 
->> +	}
->>   
->>   	/* Module has been copied to its final place now: return it. */
->>   	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
-> 
->> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
->> --- a/mm/alloc_tag.c
->> +++ b/mm/alloc_tag.c
-> 
-> [ ... ]
-> 
->> @@ -950,10 +950,12 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
->>   		int grow_res;
->>   
->>   		module_tags.size = offset + size;
-> 
-> [Severity: High]
-> This is a pre-existing issue, but does the update to module_tags.size race
-> with concurrent module loads?
-> 
-> The high-water mark for the module tags size is updated here without a lock
-> after the maple tree lock is released. If two concurrent module loads race on
-> this update, a higher offset might be overwritten by a smaller one.
-> 
-> Subsequently, vm_module_tags_populate() relies on this corrupted size and
-> would fail to map the physical pages for the higher virtual addresses, leading
-> to a page fault when the module accesses its allocated tags.
-> 
->> -		if (mem_alloc_profiling_enabled() && !tags_addressable()) {
->> +		if (!tags_addressable()) {
->>   			shutdown_mem_profiling(true);
->> -			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
->> -				mod->name, NR_UNUSED_PAGEFLAG_BITS);
->> +			pr_warn_once("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
->> +				     mod->name, NR_UNUSED_PAGEFLAG_BITS);
->> +			release_module_tags(mod, false);
->> +			return ERR_PTR(-EAGAIN);
->>   		}
->>   
->>   		grow_res = vm_module_tags_populate();
-> 
-> [Severity: High]
-> This is a pre-existing issue, but could this lead to a dangling pointer in
-> the maple tree if page population fails?
-> 
-> If vm_module_tags_populate() fails and returns an error, the allocation
-> routine returns an error here but doesn't remove the newly inserted module
-> pointer from the maple tree.
-> 
-> Since this error bypasses the standard codetag cleanup routines in the module
-> loader (where codetag_section_found might remain false in move_module()),
-> the maple tree retains a pointer to the aborted module. Once the module
-> structure is freed, future maple tree iterations could dereference this freed
-> pointer.
-> 
+Signature 1 — BUG_ON(!pages[0]) in __text_poke():
+
+  kernel BUG at arch/x86/kernel/alternative.c:2564!
+  Oops: invalid opcode: 0000 [#1] SMP NOPTI
+  CPU: 0 UID: 0 PID: 741 Comm: (udev-worker) Not tainted 7.0.0-28-generic #28-Ubuntu PREEMPT(lazy)
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009)
+  RIP: 0010:__text_poke+0x2a4/0x400
+  Call Trace:
+   <TASK>
+   smp_text_poke_batch_finish+0x25f/0x5b0
+   smp_text_poke_single+0x13/0x30
+   __static_call_transform+0x10e/0x210
+   arch_static_call_transform+0x5c/0xc0
+   __static_call_init+0x154/0x300
+   static_call_module_notify+0x144/0x170
+   notifier_call_chain+0x62/0xf0
+   blocking_notifier_call_chain_robust+0x62/0xc0
+   load_module+0x5ef/0x960
+  Modules linked in: ppdev(+) kvm(+) irqbypass ...
+
+Signature 2 — BUG_ON(memcmp()) in __text_poke():
+
+  kernel BUG at arch/x86/kernel/alternative.c:2632!
+  Oops: invalid opcode: 0000 [#1] SMP NOPTI
+  CPU: 0 UID: 0 PID: 742 Comm: (udev-worker) Not tainted 7.0.0-28-generic #28-Ubuntu PREEMPT(lazy)
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009)
+  RIP: 0010:__text_poke+0x380/0x400
+  Call Trace:
+   <TASK>
+   smp_text_poke_batch_finish+0x323/0x5b0
+   smp_text_poke_single+0x13/0x30
+   __static_call_transform+0x10e/0x210
+   arch_static_call_transform+0x5c/0xc0
+   __static_call_init+0x154/0x300
+   static_call_module_notify+0x144/0x170
+   notifier_call_chain+0x62/0xf0
+   blocking_notifier_call_chain_robust+0x62/0xc0
+   load_module+0x5ef/0x960
+  Modules linked in: kvm(+) irqbypass ...
+
+INSTRUMENTATION
+---------------
+
+The following instrumentation was applied to capture the page table state at
+the moment of failure:
+
+  In mm/vmalloc.c::vmalloc_to_page()
+
+    ptep = pte_offset_kernel(pmd, addr);
+    pte = ptep_get(ptep);
+    if (pte_present(pte))
+        page = pte_page(pte);
+    else
+        pr_err("vmalloc_to_page: pte_not_present for addr=%lx "
+               "PGD=%lx P4D=%lx PUD=%lx PMD=%lx PTE=%lx\n",
+               addr, pgd_val(*pgd), p4d_val(*p4d), pud_val(*pud),
+               pmd_val(*pmd), pte_val(pte));
+
+  In arch/x86/kernel/alternative.c::__text_poke()
+
+    /* BUG 1: pages[0] NULL */
+    if (!pages[0] || ...) {
+        pr_err("%s: vmalloc_to_page failed for addr=%pK pages[0]=%pK pages[1]=%pK cross=%d\n", ...);
+        BUG();
+    }
+
+    ...
+
+    /* BUG 2: memcmp mismatch */
+    if (memcmp(addr, src, len)) {
+        struct page *page_now = vmalloc_to_page(addr);
+        pr_err("%s: memcmp failed at addr=%pK len=%zu\n", __func__, addr, len);
+        pr_err("%s: expected (src): %*ph\n", __func__, (int)len, src);
+        pr_err("%s: found    (dst): %*ph\n", __func__, (int)len, (u8 *)addr);
+        pr_err("%s: pfn at poke time (vmalloc_to_page): %lx\n", __func__, page_to_pfn(pages[0]));
+        pr_err("%s: pfn at readback time (vmalloc_to_page): %lx\n", __func__, page_to_pfn(page_now));
+        text_poke_dump_pagetable((unsigned long)addr); /* reads CR3 */
+        BUG();
+    }
+
+Signature 1 — vmalloc_to_page() returned NULL:
+
+  vmalloc_to_page: pte_not_present for addr=ffffffffc0697979 PGD=28242067 P4D=28243067 PUD=28245067 PMD=3be001a1 PTE=0
+  SMP alternatives: __text_poke: vmalloc_to_page failed for addr=ffffffffc0697979 pages[0]=0000000000000000 pages[1]=0000000000000000 cross=0
+
+  PMD was not a leaf, and the code reached a point to check pte_present() and
+  finds the PTE to be not present. But in the dump in else case, pmd_val(*pmd)
+  shows that it is a PMD leaf (PSE bit set).
+
+Signature 2 — vmalloc_to_page() returned a wrong page:
+
+  SMP alternatives: __text_poke: memcmp failed at addr=ffffffffc06fc4bd len=1
+  SMP alternatives: __text_poke: expected (src): cc
+  SMP alternatives: __text_poke: found    (dst): e8
+  SMP alternatives: __text_poke: pfn at poke time (vmalloc_to_page): 3884a
+  SMP alternatives: __text_poke: pfn at readback time (vmalloc_to_page): 52fc
+  SMP alternatives: __text_poke: page table dump for addr:
+    PGD 1ba42067  P4D 1ba43067  PUD 1ba45067  PMD 52001a1
+
+  vmalloc_to_page() returned pfn=0x3884a when pages[0] was queried. The write
+  of 0xcc landed there. When vmalloc_to_page() was called again during the
+  memcmp readback in the instrumentation code, the vmap mapping resolved through
+  PMD=52001a1 to a different pfn=0x52fc, which contains 0xe8 (existing
+  instruction bytes). This is silent memory corruption — 0xcc was written to
+  the wrong physical page (pfn=0x3884a).
+
+BISECTION
+---------
+
+The following experiments all ran 200 iterations of 512 concurrent guest boots
+with zero crashes.
+
+  1. Remove "select ARCH_HAS_EXECMEM_ROX" from arch/x86/Kconfig
+
+  2. Boot with "nohugevmalloc"
+
+  3. Remove VM_ALLOW_HUGE_VMAP from vm_flags in execmem_cache_populate()
+
+       - unsigned long vm_flags = VM_ALLOW_HUGE_VMAP;
+       + unsigned long vm_flags = 0;
+
+  4. Remove CPA_COLLAPSE from set_memory_rox()
+
+       return change_page_attr_set_clr(&addr, numpages, __pgprot(0), clr, 0,
+  -                                    CPA_COLLAPSE, NULL);
+  +                                    0, NULL);
+
+     Without CPA_COLLAPSE, set_memory_rox() changes 4K PTE permissions
+     in-place and the PMD stays permanently as a PTE-page pointer after
+     the first split — no re-collapse, no future race window. This
+     confirms that CPA_COLLAPSE is a necessary part of the race sequence.
+
+  5. Hold pgd_lock around vmalloc_to_page() in __text_poke()
+
+         if (!core_kernel_text((unsigned long)addr)) {
+     +           spin_lock(&pgd_lock);
+                 pages[0] = vmalloc_to_page(addr);
+                 if (cross_page_boundary)
+                         pages[1] = vmalloc_to_page(addr + PAGE_SIZE);
+     +           spin_unlock(&pgd_lock);
+         } else {
+
+     __split_large_page() holds pgd_lock while installing the new PMD
+     and populating all 512 4K PTEs. Holding pgd_lock around
+     vmalloc_to_page() prevents CPA from modifying the PMD concurrently
+     with the page table walk. This confirms the race is precisely
+     between vmalloc_to_page() reading the PMD/PTE and
+     __split_large_page() modifying it under pgd_lock.
+
+     Note: this is a diagnostic experiment, not a production fix.
+
+The experiments point to a race between vmalloc_to_page() in
+__text_poke() and __split_large_page() modifying the shared PMD under
+pgd_lock. __split_large_page() holds pgd_lock while modifying the
+PMD; vmalloc_to_page() holds no lock and can observe the PMD in an
+intermediate state.
+
+What would be the correct fix for this issue?
+
+Happy to test any proposed fix or run further experiments.
+
+Regards,
+Nikunj
