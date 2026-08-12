@@ -1,78 +1,123 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739003002DD
-	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 04:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out-181.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650E22253A1
+	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 05:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786508356; cv=none; b=k5bj/V/Te6qY8e6i1Rgq8wcZJxcUdWj1TydbYNGDiaFAFdl01VPqYsovzqBSLvuL6hYMS3QAdGTGURgwF4bX+Nvu9uZcI747JpkT1fbzzL55XeRNlt96Qud+nVpRewJh1lBBX9gL1thdPAnpWhxZ9JYXUEfgR4fGRYqceSogr7k=
+	t=1786513260; cv=none; b=a2c5eSHFSJRlL5WnSSD1+U/hZ6qWpaJxrxRFfHlV9VudRkwUOIpe1x+BkOs7biRrCCTozkikdIQ5RJGHh1bC4BAW79VPp8Vbhfepyeg42CxxSsdFgXiUVAShsIyXK3aLajQOvRupXUvaNVNavFu0YkvEXkB5wUPy4DIYOiRvpUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786508356; c=relaxed/simple;
-	bh=kyWuVwDHDZwQqMzpX/78Rp68PO8hrk0L1annhXEhrh8=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=K9PEX2ArBZWzAAYtaxwe67DJqyinVpJYTxJkPerkLHIYpb05ISh2ShJVH02CllggKXX5ueNRRbQn3jvJb0S/vuw5ZRz+HPIBWK6CaNXRodVvm8+Vh7L9QBveXv0Um3qgI04Rre3+VOGALl/UjlDS3zvJD5Umc8AmSzpD+bbzeRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8AxYdFB9HtqRW4AAA--.1419S3;
-	Wed, 12 Aug 2026 12:19:13 +0800 (CST)
-Received: from [10.130.40.83] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAx3c479HtqJZEBAA--.10850S2;
-	Wed, 12 Aug 2026 12:19:08 +0800 (CST)
-Subject: Re: [PATCH v3 3/3] module/kallsyms: Filter out local and mapping
- symbols during module load
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-modules@vger.kernel.org
-References: <20260812032807.15034-1-yangtiezhu@loongson.cn>
- <20260812032807.15034-4-yangtiezhu@loongson.cn>
- <20260812034416.DAB981F000E9@smtp.kernel.org>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <0cd4c5c8-3c50-958f-a8c8-9f118a14a57c@loongson.cn>
-Date: Wed, 12 Aug 2026 12:19:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1786513260; c=relaxed/simple;
+	bh=fSfD7lk/8EGGpmraRb4osxC6XMQsZA99FFJiZWRt+jg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qm4b/CsdDszQ4w5eTqGJXFlFk//l3RandvcKIBnLR30V6x0hzjMISGQm4aUcwCb8t40h+54ItjX1D4gRA+Gvr9s/axrVx8inik3P3xT8uGBuFBgpnH8isFZEo80yXNB9nO3ZTr+YuBrFdNWd1OZNxaJMulBCaI4drwsm4/Ni070=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I5pWdTs6; arc=none smtp.client-ip=37.59.57.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I5pWdTs6"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786513256;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tgUVbxAMqq9eyDnj3cSJELw1GrjSzVkJC09UC840utI=;
+	b=I5pWdTs6iR44KCPchZFhbtaRPzzGzUHmQ//szAGW4Se8CL4a2SKesOe+A7bcEfGxIPpkB1
+	0r1Clyvu8DuLDvuA0qO63HmxVfA5FtapuDd8Uod6UMd0p8Hmw+Lp8thxh4EpZpEllPNgZp
+	h+4EntL4Ely3UAj0m0O0CEb0RIcYBCY=
+From: Hao Ge <hao.ge@linux.dev>
+To: Suren Baghdasaryan <surenb@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>
+Cc: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	Hao Ge <hao.ge@linux.dev>
+Subject: [PATCH v5 0/2] alloc_tag: fix undetected compressed tag overflow when profiling is disabled
+Date: Wed, 12 Aug 2026 13:41:03 +0800
+Message-Id: <20260812054105.102637-1-hao.ge@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260812034416.DAB981F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx3c479HtqJZEBAA--.10850S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-	BjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
-	AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280
-	aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-	xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r
-	17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxV
-	W8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU
-	zpBTUUUUU
+X-Migadu-Flow: FLOW_OUT
 
-On 2026/8/12 上午11:44, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-...
+v3 was a single patch. After discussion with Suren and Andrew we went
+for a more graceful approach: rather than failing the module load on
+overflow, let it load without profiling. Once profiling is disabled,
+codetag_needs_module_section() returns false, so on retry the codetag
+section is placed as regular module data.
 
-> [Severity: High]
-> This is a pre-existing issue
+A new patch (1/2) is added to move release_module_tags() above
+reserve_module_tags(), since the overflow path now has to call it and
+the helper sits below it.
 
-Thanks for the reports of patch 2 and patch 3.
+release_module_tags() is what module unload calls to drop a module's
+reservation from the maple tree. By the time reserve_module_tags()
+detects the overflow it has already stored that reservation, and the
+-EAGAIN return skips vm_module_tags_populate(), so the backing pages
+never get mapped. If reserve_module_tags() returns without calling
+release_module_tags(), the stale entry keeps pointing at that unmapped
+range; when the module is later unloaded, release_module_tags() walks
+it and panics.
 
-As noted in the descriptions, these are pre-existing issues,
-they are completely independent of this series.
+Tested on an x86_64 virtual machine:
 
-IMO, a dedicated security patch series should handle this
-historical vulnerability in the future.
+# insmod overflow_tag.ko
+# dmesg
+  With module overflow_tag there are too many tags to fit in 13 page
+  flag bits. Memory allocation profiling is disabled!
+# rmmod overflow_tag
+The module loads without profiling.
 
-Thanks,
-Tiezhu
+Changes in v5:
+- add Fixes: and Cc: stable to patch 1/2 as well, since 2/2 does not
+  compile without it (Andrew Morton)
+- restore frob-adjusted mem[type].size on retry instead of zeroing,
+  as s390 and parisc add GOT/PLT space there in
+  module_frob_arch_sections() (Reported by Sashiko)
+- drop the load_module() mem_profiling_support check; the percpu
+  counter leak is pre-existing and orthogonal to this fix
 
+Changes in v4:
+- add a new patch (1/2) to move release_module_tags() above
+  reserve_module_tags(); the overflow fix is 2/2
+- release the reservation on the -EAGAIN path
+- return -EAGAIN instead of -ENOMEM so the module can still load
+  without profiling (Suren)
+- reset sh_addr, mem[type].size and sym/str SHF_ALLOC before retry
+- skip percpu counters in load_module() when profiling is off
+
+Changes in v3:
+- use pr_warn_once() instead of pr_warn()
+- return -ENOMEM instead of -ENOSPC (Suren)
+- expand the commit message to describe the /proc/allocinfo impact
+  (Andrew)
+
+Changes in v2:
+- return an error after shutdown_mem_profiling() to skip
+  vm_module_tags_populate()
+
+v1: https://lore.kernel.org/all/20260804064408.105033-1-hao.ge@linux.dev/
+v2: https://lore.kernel.org/all/20260804122038.190270-1-hao.ge@linux.dev/
+v3: https://lore.kernel.org/all/20260805090633.141001-1-hao.ge@linux.dev/
+v4: https://lore.kernel.org/all/20260810093955.153015-1-hao.ge@linux.dev/
+
+Hao Ge (2):
+  alloc_tag: move release_module_tags() above reserve_module_tags()
+  alloc_tag: fix undetected compressed tag overflow when profiling is
+    disabled
+
+ kernel/module/main.c |  25 ++++++++++-
+ mm/alloc_tag.c       | 100 ++++++++++++++++++++++---------------------
+ 2 files changed, 74 insertions(+), 51 deletions(-)
+
+--
+2.25.1
