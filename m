@@ -1,151 +1,190 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C600B2C15A5
-	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 16:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786552425; cv=pass; b=Qk2kKhzmpGNAhFiyWxBTiCyf4nCRPY4aeWkV4E9cBlhHYBMg6Zi59NtLXGAi6gCA/+Rs+yIAzPpoUbY0EtX34nLjA93hPZ/UegaiaDHef2r/O/rsO3M9d1IbSeGf1EciKfujnlVjG1MH5GgjExSVsIu/ULa/3s9l+LcfVmj2SP0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786552425; c=relaxed/simple;
-	bh=gOIsyGGYeGZsd7+1t35VENt6hUZ6tCz5k0UwrPgrJB8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NVvvWg/retkM3IxYkuAO9E2shsz8keQn9rD8V2x1H6Dm8ztmWcqqcSxT30JfLJ07K3h86abyTBmWogCdPFqkFU5qupqPH/Bo1fW6+qSVU6NTjytC9ah+6ukIMwQ4zXCxHGQK0XUjp0Rsu6INwZADMtbMUwJcRbpFKx2eMzKRamU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Al5TqyfU; arc=pass smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B8A47012F
+	for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 17:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786556034; cv=none; b=Ic8a9xy9fihabekVL/7ErkviJADXbTv4g8KvX36Ak0u6PcqmP+J3+DhDg8BnHzu5k3ZJp0rxCVjYIhWxMJEJbVYFbZzcUt3bylp0tzgAXiCWyKnhSbb8GVWZSfqOd23wsiPFnlu1NXJyT2NzqFdEkQU5A8A34Bm/f+vCRRVG1Rw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786556034; c=relaxed/simple;
+	bh=/hnDmjwxmrJpbe9QYFrqG+D0DSrYDexbzx8XrdL1Utc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=imiVgd4pT+xgoEIM9Uf5TJfdjWcm5jrthOZArodqi9UzeCqvZrcr4N/X3C1Jg+gyUveIzPYGY38fWuyiFKwtk0+W3bWBSBItlpdcqaC3UUENbZO4EnCC60EA2YKOsB7pOQwEtVkD8MB9wGNnlh4G/FOue2a0moLZiyADLT6PBqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cl2Z58J3; arc=none smtp.client-ip=209.85.214.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Al5TqyfU"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2d03fcd26a6so1806555ad.2
-        for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 09:33:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786552423; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ctz34D7ntC/IB6Tc+p3PkBt9arUtozoBf7eiTAU9FayQE5GQpPaAAmOOpvEujrWxJ9
-         Qj7w9htRZ7FvbmnD4awGhH7zxAXH3Atu/I6dyB2RL5dbmT3GlKy0Rt36QwDLfboRLfiK
-         iJPqjEgntKeh79UQWucqlb3ZEDZj3OjbDNA5VL32GObF8OObXmKXRwpKUHwa//YV8A9f
-         chwmTHgu/Ohcp92srE8kKpe5Hgnyy5x090yGWNNaTVQA7Jj4bAJetJKCo9Ft6jN4QfuD
-         DDMItEcBEW0PSWfjFfDb4CtPeDCC7rGueuxtIlQcgSQiTwljpaIOkLsV+RFMNPdgo+Bb
-         wAtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=D4SZ6u0V1SghQBdqtC98mKtc1SLMxMH5ah0RWt1B7vw=;
-        fh=WmwOPqFaj0DW6niWjNip1Slx4d19u3iQao3QuH3m0Gs=;
-        b=AR+4rY020e1ClYFtxuZzHhxn3Ve1TQZHI55UIGNsBAZohuG3IlD60KoDMXdY2pMn/q
-         sseJ9MqrcqwRoAFo1cbhWc80OJNDWBlmRJMZDqTpJQMpCGRRpKL7qg/OM53c72AU7QV5
-         23dw7g6YT7Q9kMdP2VBpgnd2o3LKkNB+NmqGRS71CsIfCE1kcCqIVHiyXXltB64eULnB
-         P4XHwM+ceUx5BoiMdLVv1SK/pO0fGMWjuMVttBVeiHqfmL0hpWD0v3ckNBVnikNVjTi0
-         yk17cj7dn3xQc8Ud9ybz14i+AWG1hPEL/CntIYaUeK3LCvO226drfuqoPoWtZOUca57N
-         qb4g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cl2Z58J3"
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2cec4226c70so17265575ad.1
+        for <linux-modules@vger.kernel.org>; Wed, 12 Aug 2026 10:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786552423; x=1787157223; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=D4SZ6u0V1SghQBdqtC98mKtc1SLMxMH5ah0RWt1B7vw=;
-        b=Al5TqyfUu+23OQeZiYehEwCKw9h7n1GWuwvFfs5W/FN6ixV7O12veg3o/+6+ecIG5q
-         gi77Jv50TJJVfBr5tK78wp8gBVgj+5Y7A46NSJQiMg9vf/b+171Ld/CV/ytLNCLuYUX5
-         JGnwl6csWpus6UXO9bC2cOxNn79Q6o54bdsEtVRm7+6yYsLP6x21sneKJH7rILfD6V6Q
-         tMWciyTleAT2pJLtlHf4Ke1yqhLx3FZDQ5GOYVRZdJPiPy5U/KlYo5NBcXMa/AeygtYc
-         /sE48ZwkvJJt8DLXaboqm3a/tld2DEUcqAqzzQ8WWBf/PsfhZ7ZNON80nFOWRsL+Ksc3
-         WL8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786552423; x=1787157223;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1786556032; x=1787160832; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=D4SZ6u0V1SghQBdqtC98mKtc1SLMxMH5ah0RWt1B7vw=;
-        b=Jce8qC7iCILLCK9tczOO3Jcf9+lv9ZfoQVEOsW40GGQmyOlfSeuDid+9LHrIuvNg5f
-         m0eCFK4FFV8J65gI0qofvzJUSTtg7IBrLOUDpLqE4OFFIY0u8H5g6OAg6z9e7mBMbfZp
-         YVU5sIAx+4cocpT0qUp5qBuk56WMntGnATQpv0Jn5JUsMfalwOMWpaP08jS9A/VHqWCX
-         0h+qqUvN2Hi+9TuTb1OSLsjAGDiFp40lxEfZUa08Uhb7L1CFcVNgulaJpFlgdVbbJH6n
-         WWF+lWvcnAH+gdNl5T/VpTKH/59M3aIFQ3SKnys4gV5MdeZtXCKEp7AXtkLdyriQJPfn
-         9ILA==
-X-Forwarded-Encrypted: i=1; AHgh+RrLpFKb8uKJ/ddW09ggWXoBllUf3bzdwEZ7i0VxbX5cLgzt8cAqVOvP04ckAXWdoTMDb9eAsPyZLPTRy98l@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxhr2p7AadwMTLhjkU4qKnrzcEbdXE0Nx/QGk2Cdrc3PHVvfPG/
-	mQgS7LbaXjDh6r6ehPnvybRy29uDEomTOH53XWu4fi4lAtwy2RG8aVJPRRuG0VZBncNeKB3ahr7
-	jlWe3KkniOTZueYLcMtGc2O+yD1DqHIo=
-X-Gm-Gg: AR+sD10nvxPpwaPO984Wjr3/3r4A+suyi7u4JOgUd2FP4yujby34G/KIQINLD1dm9w/
-	JjI2tc973MTNIY9sdO+d2kUSN8nkBuDJ+bQ2GscvmDqUsckcOb3pAYv3sbhRKe0ivojc20i3ynE
-	9Sx88aZcWAMN4wv4FZ/RRs4TT6TiHTV8Q3lCZeFx4qXOhPLYlXY9BbelRi5ZQWWbR2jSOtoARwd
-	yeKOVtwy9zxR5AW9OySdiyEPDFqRSekrhrY5wuamI/O6GknEE4IrX2Oa2YLFHnOiFRlRDyN1tQG
-	rruGFJsgPkVfXsGngzMYuWxjJzqWSIYO3s2g59PkMxPBrX4y8yuawPpOD+AZk+rSMelBQDPHu/Z
-	t9PLVOUtsmQD349t9sSBXQ6PbTkvRu8mc6NVlpGhDLlLUoc27y5U/e6DF1pzE
-X-Received: by 2002:a17:902:d552:b0:2cf:9e90:8be with SMTP id
- d9443c01a7336-2d3456e7622mr58880125ad.4.1786552423044; Wed, 12 Aug 2026
- 09:33:43 -0700 (PDT)
+        bh=QI9k6LB5sz62CbOLY/wR28xgl05dZyGnVmDcR2qTGh8=;
+        b=cl2Z58J3UfwPzNXKPzNTKvcnhS0dEYmwyhVHURD2mGCVu+vWHKkSbHDaggRIodxzYW
+         +0BSBJQz/aq//VjTU2mVQGNw33TTft5uneVH2E+H86RgK8aqkGSUVUG+DVi+ajEPMLlx
+         xd+KKxNgjYEOLqimeTHOyYM2Kancrc7arGtNJ00iJ31pDR//4lsG6zEPIZ3XZtNOvlP1
+         GhsX/P71ZDbSmsdlqXzhwJZvtvpfIOo9FK+ip4oWzY1mbaNTpyy0FWeYWtHCDkuW2pAD
+         86hyCPLsSQB9EGdoD4KaL+87X2tZZvZgVyNGALj56cDUjKM+j/2h7ZuOkfq0gKDefn3y
+         j3+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786556032; x=1787160832;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=QI9k6LB5sz62CbOLY/wR28xgl05dZyGnVmDcR2qTGh8=;
+        b=gxQyaJiekf05DvMFclRJNgMZ002UVpiw9Nw/YRXtjLTkBm8G9FDefoNbl3jJh9vuJX
+         b3VrLrHZhhKfQReswNviNHhK1ekCE3IVo+4Lhn6Kvkc0+pUHgpxsi4S+9IQbOvNzCRoI
+         gWVbFpA8rUCzysX61wl/oW2KF7XsDJ6RIfqLwP6yjewPWieWXeOVv3b0Y3FyQlPysGn9
+         0CKx/ULUlt2hymL/wV8DELVxXILZL9XdGzzjP+nQ4hDBZsZ3HH16cdMS+v2grA9nm1u0
+         p7YtSJhSDEIlfhSvhi+6qzk/P7XVOK0fb1DD5/KBjBb5WbpKvdpmxeHNoFoOHfsWN5Iu
+         iwIA==
+X-Forwarded-Encrypted: i=1; AHgh+RpFGszB+mqMCnfbe6zuXe2Fb7MqHoVg9NbUvdWrppT7ZOKNtaOmfxMB0CDLZKsI4n6Do1WLRJOiAY9RfjWo@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYygCcWVN+WgAdLbu8c2yYIei/SQ4Rp2VSAbonhS7zgxJmjg09
+	XtaOHfkByADRLeogsr1fQfQ5IlhcNVlN9EqBzJGIRVtbFf+Ve2H/BwOvTQGes6uZrKDoU301JGY
+	wBfLk7A==
+X-Received: from plaq21.prod.google.com ([2002:a17:903:2055:b0:2c7:a802:500b])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2306:b0:2cf:8131:75e8
+ with SMTP id d9443c01a7336-2d34565d781mr78916615ad.13.1786556032258; Wed, 12
+ Aug 2026 10:33:52 -0700 (PDT)
+Date: Wed, 12 Aug 2026 10:33:51 -0700
+In-Reply-To: <9548393f4d89ec3b498f4f69aa6ef6b9bb7150fe.1785727106.git.jpoimboe@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
-In-Reply-To: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 12 Aug 2026 18:33:27 +0200
-X-Gm-Features: AUfX_mzHM3XF1m8TGRbbbrVs79_o_CCgi7jI9gpogE6umN7ICq8ixcdhm-skrqA
-Message-ID: <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
-Subject: Re: [PATCH v10 00/10] Fix missing fops.owner in Rust DRM/misc abstractions
-To: Alvin Sun <alvin.sun@linux.dev>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+Mime-Version: 1.0
+References: <cover.1785727106.git.jpoimboe@kernel.org> <9548393f4d89ec3b498f4f69aa6ef6b9bb7150fe.1785727106.git.jpoimboe@kernel.org>
+Message-ID: <anyufyGq2d-7AC_H@google.com>
+Subject: Re: [PATCH 03/14] objtool/klp: Fix false module dependencies caused
+ by dead relocs
+From: Sean Christopherson <seanjc@google.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Song Liu <song@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
 	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Rae Moar <raemoar63@gmail.com>, Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
-	Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
-	Igor Korotin <igor.korotin@linux.dev>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	=?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
-	Carlos Llamas <cmllamas@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-modules@vger.kernel.org, driver-core@lists.linux.dev, 
-	dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	linux-modules@vger.kernel.org, Ben Procknow <bprockno@redhat.com>, 
+	Dylan Hatch <dylanbhatch@google.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Aug 11, 2026 at 8:41=E2=80=AFAM Alvin Sun <alvin.sun@linux.dev> wro=
-te:
->
-> The series moves `THIS_MODULE` into the `ModuleMetadata` as a const, thre=
-ads it
-> through `#[vtable]` to set `fops.owner` in DRM/miscdevice, and updates co=
-nfigfs
-> and rnull to use `this_module::<LocalModule>()`.
++Dylan
 
-Applied to `rust-next` -- thanks everyone!
+On Sun, Aug 02, 2026, Josh Poimboeuf wrote:
+> When creating a klp reloc, klp-diff keeps the original relocation but
+> converts the referenced symbol to an UNDEF/WEAK placeholder tombstone
+> symbol, which gets fully disabled later by klp post-link.  The tombstone
+> symbol is only needed to avoid confusing objtool when it does the final
+> run on the patch module.
+> 
+> However, for references to exported symbols, modpost sees the reference
+> to the tombstone symbol as a real reference to an exported symbol,
+> resulting in a false module dependency getting created.
+> 
+> Further, for a reference to a tombstone symbol which is exported into a
+> module namespace, e.g. via EXPORT_SYMBOL_FOR_KVM_INTERNAL(), modpost
+> can't satisfy the dependency, resulting in a warning like the following:
+> 
+>   module ... uses symbol kvm_flush_remote_tlbs from namespace
+>   module:kvm-amd,kvm-intel, but does not import it.
+> 
+> Rename the placeholder tombstone symbols to ".klp.tombstone.<name>" so
+> modpost no longer recognizes them.
+> 
+> Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+> Reported-by: Ben Procknow <bprockno@redhat.com>
+> Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
+> Link: https://lore.kernel.org/20260720145658.1103243-5-joe.lawrence@redhat.com
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  tools/objtool/elf.c                 | 13 +++++++++++++
+>  tools/objtool/include/objtool/klp.h |  2 ++
+>  tools/objtool/klp-diff.c            | 16 ++++++++++++----
+>  3 files changed, 27 insertions(+), 4 deletions(-)
 
-    [ Fixed `clippy::undocumented_unsafe_blocks` lint by wrapping with
-      a block. Added interim `#[allow(dead_code)]`. - Miguel ]
+Naive question(s) incoming...
 
-    [ Fixed `rusttest` by adding a dummy `LocalModule`. Removed interim
-      `#[allow(dead_code)]`. - Miguel ]
+How does livepatching deal with the kernel's restrictions around module-specific
+namespaces/exports?  AIUI, klp builds a livepatch module, and then loading the
+resulting livepatch.ko (or whatever its called) performs the actual patching of
+the kernel.  If a patched function in livepatch.ko references an module-specific
+exported symbol, how does it actually resolve that symbol?
 
-    [ Rebased to avoid the imports cleanup patch. - Miguel ]
+AFAICT, livepatch.ko would need to explicitly import the module namespace, but
+then it would run afoul of setup_modinfo()'s checks that a module isn't explicitly
+importing a module namespace.
 
-    [ Removed Acked-by and Cc. - Miguel ]
+E.g. if (not-so-hypothetically) one were to try to livepatch
+nested_vmx_enter_non_root_mode(), how would livepatch.ko get at things like
+kvm_service_local_tlb_flush_requests() and kvm_spurious_fault() without also
+creating copies of those functions?  Wouldn't the kernel need something like the
+below to exempt livepatch modules from the restriction?
 
-By the way, I removed the Acked-by in that last patch since I think it
-came from an older version as a series-tag that didn't have the patch.
-Please let me know if I should re-add it.
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Mon, 10 Aug 2026 14:27:50 -0700
+Subject: [PATCH] module: Allow livepatch modules to import module-specific
+ namespaces
 
-And since I was editing that commit for that reason, I took the chance
-to remove the Cc because Petr already gave the Acked-by which you
-collected, so normally you don't need to keep both in that case.
+Allow livepatch modules to explicitly import module-specific namespaces,
+i.e. to use symbols that were exported for select module(s), as disallowing
+use of module-specific exports cripples the ability to livepatch the target
+modules.
 
-I hope that clarifies! :)
+KVM x86 heavily uses module-specific exports to restrict KVM-internal
+exports to KVM's own sub-modules, e.g. kvm-{amd,intel}.ko on x86, and to
+restrict a variety of "dangerous" kernel exports that exists purely to
+support KVM.  See commits 20c489205836 ("KVM: Export KVM-internal symbols
+for sub-modules only") and 6276c67f2bc4 ("x86: Restrict KVM-induced symbol
+exports to KVM modules where obvious/possible").
 
-Cheers,
-Miguel
+Preventing livepatch modules from using those exports makes it infeasible
+to livepatch huge swaths of KVM, even if the to-be-livepatched function
+itself is generally compatible with livepatching, to the point where KVM is
+effectively un-livepatchable as the most interesting/critical flows in KVM
+vendor code rely on functionality provided by the kernel and/or kvm.ko.
+
+Exempting livepatch modules isn't exactly ideal, as it allows circumventing
+the "no explicit module-specific imports" rule by using MODULE_INFO() to
+tag an arbitrary module as a livepatch module.  However, that's only viable
+on kernels built with CONFIG_LIVEPATCH=y, and loading such a module also
+taints the kernel.
+
+Fixes: 520b1a147d91 ("module: Add module specific symbol namespace support")
+Cc: stable@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ kernel/module/main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 46dd8d25a605..67181c768af0 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1823,9 +1823,10 @@ static int setup_modinfo(struct module *mod, struct load_info *info)
+ 	for_each_modinfo_entry(imported_namespace, info, "import_ns") {
+ 		/*
+ 		 * 'module:' prefixed namespaces are implicit, disallow
+-		 * explicit imports.
++		 * explicit imports, except for livepatching.
+ 		 */
+-		if (strstarts(imported_namespace, "module:")) {
++		if (!is_livepatch_module(mod) &&
++		    strstarts(imported_namespace, "module:")) {
+ 			pr_err("%s: module tries to import module namespace: %s\n",
+ 			       mod->name, imported_namespace);
+ 			return -EPERM;
+
+base-commit: d58772d8520c7ef247c4b95c9bd76d3a25da9ff5
+-- 
