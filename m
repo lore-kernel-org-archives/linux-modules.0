@@ -1,133 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BA93921DD
-	for <linux-modules@vger.kernel.org>; Thu, 13 Aug 2026 09:49:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D375D3A7F57
+	for <linux-modules@vger.kernel.org>; Thu, 13 Aug 2026 09:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786614594; cv=none; b=q0gyw4F/HCCba4SvSaKvJa6dbJpuUOMeJ4oqUlIbUZpN41a8h9s4r79bXuklvy+f7k86h8LT9YyceQMQQPbQpnYbV3WRUKb7oiHMIjYVDcXCKR5L8hYrdzOSReXeEfyhCuTHaFqgk+0pQYAjnJyvetFJjQWaaSX3LY3FsG1XA5U=
+	t=1786614898; cv=none; b=bGJNf8Z88ainYSVN4J+ZW+EIxGQ3Ie6vo6FLjsioBSIOuTbd6jTYmW/FHhmzuM0JerFwag6tUHMdjlFIrOQPsEkpexsQNHfnTaGZD64UNAd3Rjnhv6k3YuOfypi6sJL5s67DEzq75duHg/k7mz7157tb1tXQIppTr/jvcAPRA88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786614594; c=relaxed/simple;
-	bh=t9CWCCFY9zZvBPDDpqOt2JECTvnyDth5JPDF7tOxMuk=;
+	s=arc-20240116; t=1786614898; c=relaxed/simple;
+	bh=6aFYd2kSlYZjfvezvQxBX96rPjTrd67QNg9Mj+OJSrE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dITu90Dm14q1QypKlbxYk/cl9ICpiPSHq81aGJFKhv8a+2OPF0l2/iqqmuoO82q8AZILMuvUNJo9ehq+4P5z+5ECew3dl/VV2Nu7rq44HPq2W9CFGaS97AYarUhdGC6lMQxu1oCcn7sq1dG+puicAA3/CFPWKvGfncHGbm8Dl/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fBI0Uz3t; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=pArOQPNYGZ0RZInRjHJu1leeLrURzybP57g9HJLmxVDATCJp+ClW7Z9gedbMylduMu64iIAuX9h9Wo6mu55hqwx/Oc28LmtaNW42wpKZe4tqRz4fVEdexGO6t1ubbft6QPwTCdqk2H5FG4U3Rf5I9nUcJAMnHvGz+BFxx0tOFGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PESBlgwE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fBI0Uz3t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FFB1F000E9;
-	Thu, 13 Aug 2026 09:49:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PESBlgwE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563E01F000E9;
+	Thu, 13 Aug 2026 09:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786614593;
-	bh=uUS3xEEkGqF4Nr60z0VIHmnGP15d4ht97gFMX/xUaxI=;
+	s=k20260515; t=1786614896;
+	bh=KDSe1dU9CAYRK3rIhCHJugg8ruMj6jquBhcdnpJG/MM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fBI0Uz3tjP5m0HAM8dHY2xcbGJNLPbwxoTBA925b+MoTpdgYE+ymEj1zrLKeO+Ovl
-	 BrhuxNkFch9LBcqubP+SKuGEQj2sUrcUqR9aZX9GbmGl6PneyCZTy791Vx3+EXiTcX
-	 xFDssr/V4jjP+Xc35S0zBnY2XBopRX+wX/QPHsP463NjVDREyyBnUaNSnCClC22ISR
-	 Lk2DeBaZzW7JxHLMVJFAZfHlGEXeks3tJ+W0TBiblG16vTXeaKzdPzpeVLP0xKsbAu
-	 dpze/2xCK87uduJaM0EmII5WyL2biqvpMaQ7R1BK4W/9Vyt4gB+b1+0HZqjfinizp6
-	 fQzhAhTTKSYGQ==
+	b=PESBlgwEoo2/KvI8MZvomlF63LRgSYQnjf6w7xKzuPJ5CQ2zGv3mTxrB2V1+VwJrd
+	 INzzEOFXf3J6WlqzANKzc2PjR9/3C3pWslTyrkkIECs2fTxJMaPifhCNeqahguUoh8
+	 7l+qysGrdxyZ751a0dNimkkltQVHnMOGSEHy5J539sguilEKtSWW0OdBSS1g6vJCl8
+	 6z9AK9k5YS2fXiwnWJcSpmA7QHsWrKL8wR+WCf8+3o9tfqU7t+n5HbU1GMY69map9o
+	 vWYS5ta40LKd6hfxDvw5dW13jYxcKapeRdToMCXgB8LJpmYqrP42oS0ySH3NvfsAHz
+	 o3g0C3R0uqxvw==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 1/3] alloc_tag: skip percpu counter allocation when
- profiling is disabled
+Subject: Re: [RFC PATCH 2/3] module: move codetag section placement decision
+ to layout_sections()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Hao Ge" <hao.ge@linux.dev>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260813093421.135230-2-hao.ge@linux.dev>
+In-Reply-To: <20260813093421.135230-3-hao.ge@linux.dev>
 References: <20260813093421.135230-1-hao.ge@linux.dev>
- <20260813093421.135230-2-hao.ge@linux.dev>
+ <20260813093421.135230-3-hao.ge@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 09:49:52 +0000
-Message-Id: <20260813094952.D2FFB1F000E9@smtp.kernel.org>
+Date: Thu, 13 Aug 2026 09:54:55 +0000
+Message-Id: <20260813095456.563E01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Missing error code assignment when codetag_load_module() fails in =
-load_module().
-- [High] Use-After-Free and memory leak due to missing codetag_unload_modul=
-e() on the module load error path.
+- [High] An integer overflow in ALIGN() using unvalidated sh_addralign allo=
+ws an attacker to spoof the memory type stored in sh_entsize, leading to an=
+ out-of-bounds read and kernel panic.
 --
 
---- Patch [1]: [RFC PATCH 1/3] alloc_tag: skip percpu counter allocation wh=
-en profiling is disabled ---
-commit 355b88475bea314f9aab64a9aa73da39a0d2bcf0
+--- Patch [2]: [RFC PATCH 2/3] module: move codetag section placement decis=
+ion to layout_sections() ---
+commit f621cb3d3b6809c9dd569a1f5e20bfb1e929c4d4
 Author: Hao Ge <hao.ge@linux.dev>
 
-alloc_tag: skip percpu counter allocation when profiling is disabled
+module: move codetag section placement decision to layout_sections()
 
-After shutdown_mem_profiling() clears mem_profiling_support,
-needs_section_mem() returns false, so later modules have their codetag
-section placed as regular data and never enter the alloc_tag maple tree.
-This patch returns CODETAG_MODULE_EXCLUDED when profiling is off to skip
-percpu counter allocation.
+This commit moves the decision for codetag section placement to
+layout_sections(), storing the result in sh_entsize using the new
+MOD_MEM_CODETAG type. The move_module() function now relies on this stored
+type instead of calling codetag_needs_module_section() again. This prevents
+a race condition when profiling support is toggled during module load.
 
-> diff --git a/lib/codetag.c b/lib/codetag.c
-> index a9cda4c962a30..8506ecab9ea70 100644
-> --- a/lib/codetag.c
-> +++ b/lib/codetag.c
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 46dd8d25a6058..25056e87d0038 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
 [ ... ]
-> @@ -238,9 +238,10 @@ static int codetag_module_init(struct codetag_type *=
-cttype, struct module *mod)
->  	}
->  	up_write(&cttype->mod_lock);
+> @@ -2815,11 +2812,10 @@ static int move_module(struct module *mod, struct=
+ load_info *info)
+>  			continue;
 > =20
-> -	if (err < 0) {
-> +	if (err) {
-> +		/* Error or excluded: cmod is dropped, free it. */
->  		kfree(cmod);
-> -		return err;
-> +		return err < 0 ? err : 0;
->  	}
-> =20
->  	return 0;
+>  		sname =3D info->secstrings + shdr->sh_name;
+> -		/*
+> -		 * Load codetag sections separately as they might still be used
+> -		 * after module unload.
+> -		 */
+> -		if (codetag_needs_module_section(mod, sname, shdr->sh_size)) {
+> +
+> +		enum mod_mem_type type =3D shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
+> +
+> +		if (type =3D=3D MOD_MEM_CODETAG) {
 
 [Severity: High]
-This is a pre-existing issue, but if codetag_module_init() fails midway thr=
-ough
-the codetag types, does it leave the module registered in the previously
-initialized types?
+Can a maliciously crafted ELF module spoof the type by causing an integer
+overflow in module_get_offset_and_type()?
 
-lib/codetag.c:codetag_load_module() {
-...
-	list_for_each_entry(cttype, &codetag_types, link) {
-		ret =3D codetag_module_init(cttype, mod);
-		if (ret)
-			break;
-	}
-...
+If a module with two SHT_NOBITS sections is loaded, it might bypass ELF file
+size validations. The first section could inflate mod->mem[MOD_DATA].size to
+0x60000001. If the second section has sh_addralign =3D 0x10000000, it would
+cause an integer overflow in module_get_offset_and_type():
+
+kernel/module/main.c:module_get_offset_and_type() {
+    ...
+    offset =3D ALIGN(mod->mem[type].size, sechdr->sh_addralign ?: 1);
+    ...
+    return offset | mask;
 }
 
-If the loop breaks on an error, the successfully initialized types are not
-unwound. When load_module() in kernel/module/main.c handles this error, it
-jumps to sysfs_cleanup and eventually frees the module, but misses a call to
-codetag_unload_module(mod).=20
+The overflowed offset (0x70000000) places 7 (MOD_MEM_CODETAG) into the top 4
+bits of sh_entsize. By setting the second section's sh_size to 0x90000000,
+the attacker can wrap mod->mem[MOD_DATA].size back to 0, avoiding -ENOMEM
+during module_memory_alloc().
 
-Could this lead to a use-after-free or a memory leak when traversing the IDR
-later, since the freed module is still registered?
+If this spoofed type is trusted by move_module(), execution routes to
+codetag_alloc_module_section():
 
-
-[Severity: High]
-This is another pre-existing issue. Is the error code lost in load_module()
-when codetag_load_module() fails?
-
-kernel/module/main.c:load_module() {
-...
-	if (codetag_load_module(mod))
-		goto sysfs_cleanup;
-...
+lib/codetag.c:codetag_alloc_module_section() {
+    ...
+    const char *type_name =3D name + strlen(CODETAG_SECTION_PREFIX);
+    ...
 }
 
-Since err is not assigned before jumping to sysfs_cleanup, would the syscall
-incorrectly return 0 (success) even though the module failed to load and was
-destroyed on the error path?
+If a short-named section is routed here by the spoofed type, could blindly
+advancing the name pointer cause an out-of-bounds read past the secstrings
+vmalloc allocation and trigger a kernel panic?
+
+>  			dest =3D codetag_alloc_module_section(mod, sname, shdr->sh_size,
+>  					arch_mod_section_prepend(mod, i), shdr->sh_addralign);
+>  			if (WARN_ON(!dest)) {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813093421.1352=
-30-1-hao.ge@linux.dev?part=3D1
+30-1-hao.ge@linux.dev?part=3D2
