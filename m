@@ -1,199 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-41.mta0.migadu.com [91.218.175.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178DD19A288;
-	Thu, 13 Aug 2026 00:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A5143F4A3
+	for <linux-modules@vger.kernel.org>; Thu, 13 Aug 2026 08:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786580347; cv=none; b=huKWB2XCDjnTHi6ZL7FFapICyakzbvk0i4EjS6mjZ1o3qhxDbNcd9EVrl0lghAONj/DrT9LLoDEQtyRNtAInwNm4Jm1pQ0BvnCPkRErzSp0X0wgT263gubrCB9TflDgdPtDzgek3Eyl8Zvzm1X2yxs9B1vyL9BSF8pBGP/RIa1U=
+	t=1786608914; cv=none; b=uekWyJ15lNh7RpGBmABZOjepeJk/7FN7a9kiaNr73f9LsMEHjioe/sV9rkGOnO+bLbWxV6gCtdGj3B3biEJZUP4l3iNU/PlLLkZzhEbQOxvgclGyBzxvM7usbHx0MnQJANa2sXCOjBowAsTcjeJgG8Dj90vGi+ZKuV4MTepeAXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786580347; c=relaxed/simple;
-	bh=p9RdFBhv1eoyUw5/knwomMhrJLw+gkl8caK5fR6eOwg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=ikaYzo4wukUNe/2t6Qz4cGAe2qxg7QsTMyCLqeHYPbpt4ty1n4Wu5vpJMpa5kQpizvxJB89fii9WOCcyeQ2jJMpWhRcAuVuMm0gRCiwEngTbdWqU7Um+TUkyzWskBQ0WccdiBXiQDLburT2p+Ku39cIrmXlelEmY5W75q8HaiHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N1brDirC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786608914; c=relaxed/simple;
+	bh=HJkkjybnc95eKMUgffBgUHHJLr8cPHCSSaxuPE45BEc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g2v+3I0GTWsH5tYNPor7lxZ8IhsShIRPPya852UXi/DcSfIDdeGMoN/kNhzbXV6JejCYcN6pxMZ21jtAab04cJQhwdk8+Iq7y9ATAo9C18J7ORBFMJDNEzqOXlZuHyQzoA7BhDghiriQewtKyhZ8XLCA4/GnP7fsCe1WaEcWh9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UHai7FBN; arc=none smtp.client-ip=91.218.175.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N1brDirC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C350A1F000E9;
-	Thu, 13 Aug 2026 00:18:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786580345;
-	bh=+SlSGOuNX1TZ7M6MiLLHH9rezuBa5FVnB0SFZWu5/6o=;
-	h=Date:Cc:To:From:Subject:References:In-Reply-To;
-	b=N1brDirC0ImWaLb3a2YVySmvKaz7pWOflIfKKF8P0n72nR1p0zLOePB0ZKFYKqZr4
-	 bunv6c/FSpcRYVq8g+YQeBLlRTeqKFQjA6HxDI8SdTL8H6d9awmOw/8MQzpr38SqjY
-	 Lawp0Om/x9H4M9FT7gX7SC+6LSEehgj6QAuWW6yo4T9KMvPEEi6fKYDbZNgBta3/k6
-	 GIUXRNnxXiQrJIORha31qqvLNtvvDGSHKcl+Q4C5EPelt9GeDy4C4cRExXnd9thRih
-	 7i9Djv0c32P5iPz7s5DIZLPgomlJWibBbR4zWDJXxv756SliUUeCAdSYDFhxWmrNfB
-	 +/8eT3reSQ3mg==
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UHai7FBN"
+X-Envelope-To: linux-modules@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=HJkkjybnc95eKMUgffBgUHHJLr8cPHCSSaxuPE45BEc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786608910; v=1; x=1787213710;
+ b=UHai7FBNVrl0ZSe+2mNdxKwYssAUVvc8lLsNDvxwVJM9F25wBLYV5Nekeg3/FEgeXSbEloJt
+ ZUh6B0rVaU2nqJACkfxm66O77x++fBtgRcll4Gv0xFHv1ZqOU6grQX9i/Mwzt/PjWYN5IIfrGkF
+ LJ4WiabhJaVR4BgMgGXFog+A=
+X-Envelope-To: linux-modules@vger.kernel.org
+Received: from [10.0.11.3] (2a11:3:200::10a9)
+	by smtp.migadu.com with ESMTPS id 549bb4bc2be94b73;
+	Thu, 13 Aug 2026 08:15:10 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <0102f153-154b-430d-a3da-2c8423fb3f1f@linux.dev>
+Date: Thu, 13 Aug 2026 16:14:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 13 Aug 2026 02:18:55 +0200
-Message-Id: <DKNDVFGPA2T4.1VRWDIHTBOROT@kernel.org>
-Cc: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>, "Mark Brown"
- <broonie@kernel.org>, "Alvin Sun" <alvin.sun@linux.dev>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Luis
- Chamberlain" <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>,
- "Daniel Gomez" <da.gomez@kernel.org>, "Sami Tolvanen"
- <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Daniel Almeida" <daniel.almeida@collabora.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
- "David Gow" <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Breno
- Leitao" <leitao@debian.org>, "Jens Axboe" <axboe@kernel.dk>, "Dave Ertman"
- <david.m.ertman@intel.com>, "Leon Romanovsky" <leon@kernel.org>, "Igor
- Korotin" <igor.korotin@linux.dev>, "FUJITA Tomonori"
- <fujita.tomonori@gmail.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, "Todd Kjos"
- <tkjos@android.com>, "Christian Brauner" <brauner@kernel.org>, "Carlos
- Llamas" <cmllamas@google.com>, <rust-for-linux@vger.kernel.org>,
- <linux-modules@vger.kernel.org>, <driver-core@lists.linux.dev>,
- <dri-devel@lists.freedesktop.org>, <nova-gpu@lists.linux.dev>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>
-To: "Gary Guo" <gary@garyguo.net>
-From: "Danilo Krummrich" <dakr@kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v10 00/10] Fix missing fops.owner in Rust DRM/misc
  abstractions
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann
+ <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>,
+ Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>,
+ Igor Korotin <igor.korotin@linux.dev>,
+ FUJITA Tomonori <fujita.tomonori@gmail.com>,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
+ Carlos Llamas <cmllamas@google.com>, rust-for-linux@vger.kernel.org,
+ linux-modules@vger.kernel.org, driver-core@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-pci@vger.kernel.org
 References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
  <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
- <DKNAS52KYWLD.M15VEC6U0F6R@kernel.org>
- <DKNDF3WD27GM.5VP6RBRXZBUS@garyguo.net>
-In-Reply-To: <DKNDF3WD27GM.5VP6RBRXZBUS@garyguo.net>
+From: Alvin Sun <alvin.sun@linux.dev>
+In-Reply-To: <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu Aug 13, 2026 at 1:57 AM CEST, Gary Guo wrote:
-> On Wed Aug 12, 2026 at 10:53 PM BST, Danilo Krummrich wrote:
->> (Cc: Mark)
->>
->> On Wed Aug 12, 2026 at 6:33 PM CEST, Miguel Ojeda wrote:
->>> On Tue, Aug 11, 2026 at 8:41=E2=80=AFAM Alvin Sun <alvin.sun@linux.dev>=
- wrote:
->>>>
->>>> The series moves `THIS_MODULE` into the `ModuleMetadata` as a const, t=
-hreads it
->>>> through `#[vtable]` to set `fops.owner` in DRM/miscdevice, and updates=
- configfs
->>>> and rnull to use `this_module::<LocalModule>()`.
->>>
->>> Applied to `rust-next` -- thanks everyone!
->>
->> This series has a semantic conflict with both the driver-core and the dr=
-m-rust
->> tree:
->>
->> @Mark: When you merge driver-core-next after rust-next (which I think is=
- the
->> case) then you need to include the diff in [1] into the merge.
->>
->> In drm-rust-next the build fails with:
->>
->> 	error[E0425]: cannot find type `LocalModule` in the crate root
->> 	   --> rust/kernel/drm/gem/shmem.rs:628:5
->> 	    |
->> 	628 |     #[vtable]
->> 	    |     ^^^^^^^^^ not found in the crate root
->> 	    |
->> 	    =3D note: this error originates in the attribute macro `vtable` (in=
- Nightly builds, run with -Z macro-backtrace for more info)
->>
->> which is because the kunit test in rust/kernel/drm/gem/shmem.rs uses the
->> #[vtable] macro.
->>
->> This should be fixed up with a patch on top of this series in rust-next.
->>
->> I came up with to potential solutions [2] and [3]. I think with the new =
-build
->> system we want [3], but I'm not entirely sure this works correctly with =
-the
->> current build system in all cases (at least it did survive my tests).
->>
->> Alternatively, we could just open-code a dummy module as in [2] for now.
->>
->> [1] driver-core-next merge fixup
->>
->> diff --git a/rust/kernel/serdev.rs b/rust/kernel/serdev.rs
->> index a4927452016e..17ca504b7f8d 100644
->> --- a/rust/kernel/serdev.rs
->> +++ b/rust/kernel/serdev.rs
->> @@ -87,7 +87,7 @@ unsafe fn register(
->>          }
->>
->>          // SAFETY: `sdrv` is guaranteed to be a valid `DriverType`.
->> -        to_result(unsafe { bindings::__serdev_device_driver_register(sd=
-rv.get(), module.0) })
->> +        to_result(unsafe { bindings::__serdev_device_driver_register(sd=
-rv.get(), module.as_ptr()) })
->
-> `module.0` shouldn't be used in the first place, it just happens to be vi=
-sible
-> due to the unfortunate placement at crate root.
->
-> Perhaps you can update driver-core tree to use `as_ptr()`? It was already=
- there
-> and not newly introduced in the series.
 
-Heh, I just remembered that patch 1 of this series did fix this in a couple=
- of
-places and assumed that it was introduced in the same patch without looking
-further.
+On 8/13/26 00:33, Miguel Ojeda wrote:
+> By the way, I removed the Acked-by in that last patch since I think it
+> came from an older version as a series-tag that didn't have the patch.
+> Please let me know if I should re-add it.
 
-In that case I can throw in a patch in the driver-core tree; will send it
-tomorrow.
+Hi Miguel,
 
->>      }
->>
->>      unsafe fn unregister(sdrv: &Opaque<Self::DriverType>) {
->>
->> [2] Open-coded dummy module
->>
->> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
->> index c04e6c5aa7e0..274924cfcc05 100644
->> --- a/rust/kernel/lib.rs
->> +++ b/rust/kernel/lib.rs
->> @@ -157,6 +157,15 @@
->>  /// Prefix to appear before log messages printed from within the `kerne=
-l` crate.
->>  const __LOG_PREFIX: &[u8] =3D b"rust_kernel\0";
->>
->> +/// Dummy module type for `#[vtable]` impl blocks within the kernel cra=
-te (e.g. kunit tests).
->> +struct LocalModule;
->> +
->> +impl ModuleMetadata for LocalModule {
->> +    const NAME: &'static str::CStr =3D c"rust_kernel";
->> +    // SAFETY: `try_module_get`/`module_put` handle null module pointer=
-s gracefully.
->> +    const THIS_MODULE: ThisModule =3D unsafe { ThisModule::from_ptr(cor=
-e::ptr::null_mut()) };
->> +}
->> +
->>  #[cfg(not(testlib))]
->>  #[panic_handler]
->>  fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
->
-> IMO this is the correct way, also consistent with
->
-> https://lore.kernel.org/rust-for-linux/20260811-fix-fops-owner-v10-3-7e71=
-776f9dbe@linux.dev/
->
-> It might make sense to add this to rust-next.
+Thanks for applying the series and catching the stray Acked-by.
+It was a v5 series-tag, from before the MAINTAINERS patch existed,
+so no need to re-add it. I'll be more careful with tags in future
+submissions.
 
-I feel like [3] is the superior solution (just unsure about the build syste=
-m
-implications); once we have the new build system some subsystem crates will=
- be
-actual modules, some will be always built-in. So, in general I think we wan=
-t to
-use the module!() macro.
+Best regards,
+Alvin
