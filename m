@@ -1,36 +1,69 @@
-Received: from mta1.migadu.com (out-223.mta1.migadu.com [95.215.58.223])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E59376468
-	for <linux-modules@vger.kernel.org>; Thu, 13 Aug 2026 11:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD34D483806
+	for <linux-modules@vger.kernel.org>; Thu, 13 Aug 2026 14:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786621965; cv=none; b=Xd4LtGiHo1CWWpb3fuH3di1uR22+izLxI4J0IQWwcg/FLPYaw6f8DO2PcV9MFdgAA9KkCbtiuUvZ0U9j8rImQjzS/BBniR/CeFKgZBl9WM2OImZOM6mDEBcF2HlWZS0aeZQU+2X1qSWXhfzsIZzVA1xmgVeYO3xy0RnNpGMZ3wA=
+	t=1786630512; cv=none; b=q/tGYJqxED6ZC2sXsqH2DoYzoybIvnUWdKLC08US+7Xv4GvJm6ncuSueDK+SyQeToI2SOls/Tg4MFj9NRNPu6ZBdY2R23hSWWbEg52lZuX2WLCAK6tOZ24A7fBAxbwRa/ccBf4tQL758csl8fyC8LxfRVcmEf2zETvezxyo1++I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786621965; c=relaxed/simple;
-	bh=R2f0PJtuTSVROgAmYKIuGCx86gpNuYMzhmVycIrzC/0=;
+	s=arc-20240116; t=1786630512; c=relaxed/simple;
+	bh=BJmgQ0xsWwLek3a34c+eZxt3ELWgWeEXeHtsjDuughU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xu/eHs766/Ya6DTSc4fa5hF/oQCq3rJ4jlycY4e5/0hXZlbBM2gm9/UkemnzJvL23zyTMIf7do+kO3HAUgSaF+Z1IMlNjMQ4n359jAQ7dR0Hzcmh/iaS3wLnqBG4PX98TLJ63GU9d5fYrumP9bnKGfJ4yKYZ4knnWQH2lycHae0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ubtiHOCi; arc=none smtp.client-ip=95.215.58.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=r4coiGPPD9HavQUCuQ2/ViBWWYi0aFDCo4U7R/TfmHwZkUhj4omgvhSuIIY+NtZXua9aA+sYxUws20b8XA+549NjDGoLTsIxkc0869LUCVXaxS1b7wce7U2myhB4/OemDvA9OQh9zr3ugVHm4rn2BvuhiF8cATfkRt9HQz5q8FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TNKwobiN; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ubtiHOCi"
-X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=R2f0PJtuTSVROgAmYKIuGCx86gpNuYMzhmVycIrzC/0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786621958; v=1; x=1787226758;
- b=ubtiHOCiVF+6G2c57ZPAvI6l+awYjHl+AIb5taDvumN7OMQCvAXROI+r8LU1Uh4u47ZDTwcP
- +c1G/hi9ZzkB30pl20V961orVKZoU3tfKI/qpVs+Jk6DnEGQfKo/qnEmgrN069VuLkPSLEc+jBz
- c14PQhuIwKPL9sizx6dY8eoM=
-X-Envelope-To: linux-modules@vger.kernel.org
-Received: from [192.168.200.2] (2a11:3:200::10a9)
-	by smtp.migadu.com with ESMTPS id dd9de6576435b65a;
-	Thu, 13 Aug 2026 11:52:38 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <cfb5912c-514d-4a3c-b056-a1e8d2d4469f@linux.dev>
-Date: Thu, 13 Aug 2026 19:51:04 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TNKwobiN"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4954d29264cso10975835e9.2
+        for <linux-modules@vger.kernel.org>; Thu, 13 Aug 2026 07:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1786630509; x=1787235309; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=in6woJYFkc39bFtfodNqD0fkpoWFu5/eR61xqqy33mA=;
+        b=TNKwobiNDry3Jg29pIVwqvbGOSLRwhjctHlglRVHgFA+h1A4RzTLVpgDAXfIKopaHP
+         tubDpQuDDPFpTBWHmhwje9fX+uDhhch+AUD1KSzQ25xIwxTrXD8sr30mpaTGvnNVRIYm
+         dBvHdInLOtGbZY2t3UUaDftXbV5VjABV9/79tSmw1kWbcT3ngOR10XMtQmi0MowPGITA
+         TuEb+IeLRTv2nhdAuEUV9Uap9h7GJqQUu1/YxYWzo6IcuojhYKzYExWow6lPi/ccNK4v
+         4d+oI3VqBdKxJF9/6AyRp6jyUeMgOKpQKrQwsvJbt/YJgEevsxWKyRrJcYCds6sUBT8c
+         TZuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786630509; x=1787235309;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=in6woJYFkc39bFtfodNqD0fkpoWFu5/eR61xqqy33mA=;
+        b=rbAp28839NJoW8sH+ZKcvgfDjDJYqfUak0RbKi6ZsmLxLE09fnz201Jy1Wo/IOt9zu
+         UTIK5Zzg3naeIjHS99uBOVETb6hXLqf0ZWC+RWnwiBkZ5VjwZB257gfg+THEQOsKxiiN
+         XlmBRTZWn6FlsvGFCKk/qbyXTArnlLrvZQ4P4L4tR52tD/FHrE/Pio7u5H5nOcyYO8aM
+         bqRKhbssVz4FxtjKc+BcE5hRcQ6B1aTQquvwzt08mvDvQCyJAjnjBBmNkfqccN5TCRbS
+         5zfK+dS955ZRrcHDzBEbUWwmIH3tTUwL4m/Ig5QrlD/P27k+BAiUdl3l/us8X2iZT2wB
+         qLsA==
+X-Forwarded-Encrypted: i=1; AHgh+RrLWZrHlWPEBCTvY49tbxEUd+7A6cN7ID2WGwgLqtSndwkY7D8CQPeE4a2q6TfwYZTyxfarPHVBrSZikC+f@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxj1WI/W0v9c18B2UI2YeQB2vCp9bh4Q9sKu2bOy2e0kjbw2vXw
+	6vZZIgma1vojKjFIcT9w2Jb41MPMyaf3rWPLQopKnwj+lm5JamdxXw72+BM9mE1KHv59b/AxXhl
+	UcTsZsFA=
+X-Gm-Gg: AR+sD12dQJpM4274TEdWUXnNXlegG1HXIfUCzslQsnQSRgEP6qWNOVMhTwVJW1LhlwJ
+	N6Xt1OpQo2s4ZCKIbtbIBp68irT5gpbPN/I7UL1ImwZ296w+TUsqOQj5/+JY51pFt6QykAVqfV1
+	uOCVi9O5bILbYcg+9NVFttdlExE9aaPxFhDEL8/kq7TkxdfIjMV+hqxeNR8dxSf8vo3V4UPY680
+	k39UHIj7RBmHZMzQBVQhY2SKt/ZhwcMK4EQNbKkkdS85b72d4Z/7FnxVJiGSANzKP1WU2lv3YBK
+	QWGzxk0+FYAL5Pjbf4EvMwWmkaZPyCGFwF8ydlgC40L5JQGzZED0RVBd+wQ1nYtlBZclgrsuXYX
+	fHnJtVV4wU6aurcKJXWhgrNlHH2yeBow42YNMQPVobxOSyjS7MJwcl4jO20CE27z5j4M/zhnZ80
+	MYOJrJUcdwZTF/uU2wa8ppQVw4DaASlxR2CeNBQ+AuYcF/IEwgyIr4R2yVC3MZ1sudD5unylvfg
+	UITX70jqkwxJ2pu72wdouvwlg==
+X-Received: by 2002:a05:600c:6995:b0:494:596e:e8c4 with SMTP id 5b1f17b1804b1-499821bdcadmr82447915e9.17.1786630508708;
+        Thu, 13 Aug 2026 07:15:08 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4998212a011sm62452805e9.5.2026.08.13.07.15.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Aug 2026 07:15:08 -0700 (PDT)
+Message-ID: <af6aaa0a-03de-4175-84a5-7c253198d184@suse.com>
+Date: Thu, 13 Aug 2026 16:15:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -38,82 +71,90 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 00/10] Fix missing fops.owner in Rust DRM/misc
- abstractions
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>,
- Mark Brown <broonie@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann
- <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
- Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>,
- Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>,
- Igor Korotin <igor.korotin@linux.dev>,
- FUJITA Tomonori <fujita.tomonori@gmail.com>,
- Bjorn Helgaas <bhelgaas@google.com>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
- Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
- Carlos Llamas <cmllamas@google.com>, rust-for-linux@vger.kernel.org,
- linux-modules@vger.kernel.org, driver-core@lists.linux.dev,
- dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
- <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
- <DKNAS52KYWLD.M15VEC6U0F6R@kernel.org>
- <DKNDF3WD27GM.5VP6RBRXZBUS@garyguo.net>
- <CANiq72=SP_nT7Z6NSH-GT51-8hJ8qLUa07Cs+SarSFTO9Z7vUw@mail.gmail.com>
-From: Alvin Sun <alvin.sun@linux.dev>
-In-Reply-To: <CANiq72=SP_nT7Z6NSH-GT51-8hJ8qLUa07Cs+SarSFTO9Z7vUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v9 1/2] module: Extend module_blacklist parameter to
+ built-in modules
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: arnd@arndb.de, mcgrof@kernel.org, da.gomez@kernel.org,
+ samitolvanen@google.com, peterz@infradead.org, ojeda@kernel.org,
+ akpm@linux-foundation.org, mhiramat@kernel.org, boqun@kernel.org,
+ neelx@suse.com, da.anzani@gmail.com, sean@ashe.io, chjohnst@mail.com,
+ steve@abita.co, mproche@mail.com, nick.lane@mail.com,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260807012601.360452-1-atomlin@atomlin.com>
+ <20260807012601.360452-2-atomlin@atomlin.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260807012601.360452-2-atomlin@atomlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 8/7/26 3:26 AM, Aaron Tomlin wrote:
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index 5659f4b5a125..799d912dcbc0 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -734,7 +734,9 @@
+>  	EARLYCON_TABLE()						\
+>  	LSM_TABLE()							\
+>  	EARLY_LSM_TABLE()						\
+> -	KUNIT_INIT_TABLE()
+> +	KUNIT_INIT_TABLE()						\
+> +	STRUCT_ALIGN();							\
+> +	BOUNDED_SECTION_BY(.initcall.modnames, _initcall_modnames)
+>  
+>  #define INIT_TEXT							\
+>  	*(.init.text .init.text.*)					\
 
-On 8/13/26 17:32, Miguel Ojeda wrote:
-> On Thu, Aug 13, 2026 at 1:57 AM Gary Guo <gary@garyguo.net> wrote:
->> IMO this is the correct way, also consistent with
->>
->> https://lore.kernel.org/rust-for-linux/20260811-fix-fops-owner-v10-3-7e71776f9dbe@linux.dev/
->>
->> It might make sense to add this to rust-next.
-> Yeah, it is also consistent (in the sense of adding a fallback) with
-> the other fix I added when applying the series for the `macros`
-> doctest; and the `kernel` crate is not an actual module yet.
->
-> I guess yet another solution would be to have an even more local
-> fallback, but that would be too local in my opinion, i.e. we will want
-> to use it elsewhere sooner or later.
->
-> So I could fold [2] into commit 98f256e27262, but a commit on top is
-> fine, I will reference that commit from the new one instead.
->
-> Ok, done -- Danilo, I took your diff and converted it into a proper
-> commit, please double-check you are OK with the Signed-off-by:
->
->    ec6fcf8a175a ("rust: kernel: add `LocalModule` fallback for
-> `#[vtable]` `impl`s")
+I realized that instead of using STRUCT_ALIGN(), a cleaner and less
+wasteful approach is to prevent any potential over-alignment of
+individual .initcall.modnames sections by having
+____define_initcall_modname() define each `struct initcall_modname` with
+`__aligned(__alignof__(struct initcall_modname))`.
 
-I was just looking at the difference between the doctest and in-crate
-`#[kunit_tests]` test paths — thanks for taking care of this.
+> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> index 06c18e207508..13353b43b38d 100644
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@ -479,6 +479,7 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+>      let ident_init = format_ident!("__{ident}_init");
+>      let ident_exit = format_ident!("__{ident}_exit");
+>      let ident_initcall = format_ident!("__{ident}_initcall");
+> +    let ident_modname = format_ident!("__{ident}_modname");
+>      let initcall_section = ".initcall6.init";
+>  
+>      let global_asm = format!(
+> @@ -590,6 +591,21 @@ pub extern "C" fn cleanup_module() {
+>                  #[cfg(CONFIG_HAVE_ARCH_PREL32_RELOCATIONS)]
+>                  ::core::arch::global_asm!(#global_asm);
+>  
+> +                #[cfg(not(MODULE))]
+> +                #[repr(C)]
+> +                struct InitcallModname {
+> +                    initcall_fn: extern "C" fn() -> ::kernel::ffi::c_int,
+> +                    modname: *const ::kernel::ffi::c_char,
+> +                }
+> +
+> +                #[cfg(not(MODULE))]
+> +                #[used(compiler)]
+> +                #[link_section = ".initcall.modnames"]
+> +                static #ident_modname: InitcallModname = InitcallModname {
 
-I'll look into [3] once the new build system lands.
+Can Rust directly use the C definition of initcall_modname via
+::kernel::bindings::initcall_modname?
 
-Best regards,
-Alvin
+> +                    initcall_fn: #ident_init,
+> +                    modname: #name_cstr.as_ptr().cast(),
 
->
-> Thanks!
->
-> Cheers,
-> Miguel
+Can the modname string be placed in .init.rodata to match the behavior
+on the C side?
+
+> +                };
+> +
+>                  #[cfg(not(MODULE))]
+>                  #[no_mangle]
+>                  pub extern "C" fn #ident_init() -> ::kernel::ffi::c_int {
+
+-- 
+Thanks,
+Petr
