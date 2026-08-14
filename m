@@ -1,134 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F683546E7;
-	Fri, 14 Aug 2026 18:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786731885; cv=none; b=EWL+ReMFhtUiG/BOPG36XjN98uWYqVWYqqksN6hK0dMkLgx8cclN7iC109R7ISlbI6S5mCHQOJVj4KZlJwM7qt4bg+ao7hhjknGgsoWej8u4MQIQF0HMB8Q4Zm0qx2P701ApFEcaJgR0cpAVsfhxM/X3zxa3W/6gZUx+CuY2F/g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786731885; c=relaxed/simple;
-	bh=vu+zfzNe1WEav0e72HiaOs0RrGg13nrgBqLNFQl29LE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=de5Nx0jlwxf/3G3js62Cb9OBVDW5ae+cFdJdnGSOJT+LqhsLJVV/3dFG8ls/Mm/+UFLtD6/Iff93+Cp5sJvGEPrG+p/i6Od8my88pVOz2I0lFBK750qReOSy0u0QIMEL/gGpvdzqfsXhpSAU7pYEg4/UCmzVhf2ILbkgJ5en8hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B3xC16AE; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01923DCD95
+	for <linux-modules@vger.kernel.org>; Fri, 14 Aug 2026 20:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786740262; cv=pass; b=M4QLxxDDfIpTyAOpsXyqR0K7afIISPMN22WOo5vUtETMA/kfaIV9XIOQCDCoaVwZu/DPZjf5tZNSDjxQX2KjtWjbU6/UdcxMNGDeAaMqpIhgM4wbluLO6k8mRf/f4G0KHqE7auV61xw99SylUShrijCi3D+zvqr47Gg+vowEuk8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786740262; c=relaxed/simple;
+	bh=Yef0+XlIt5CkGyFDHekUoQrBKiNSnjOiMr6bDpxcEAM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZkLjsz/MWEIEhJ5R6pcQTfzDtledAjAgVfBk2faGxuAQF/i9/ylytTbDSmfxNB+mHILm+Si+OnR25+V/kOoPkOjVAbKp5kCR03Wvwi8+yap3W+pKkMKzqRPz26fbGqLtqiym7KxaQaL9N2YpW/kKOxKC4yitL3oFdPTr1uf9u+0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eNr582kv; arc=pass smtp.client-ip=209.85.217.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B3xC16AE"
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id ADD521F000E9;
-	Fri, 14 Aug 2026 18:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786731883;
-	bh=m1gghI+TDeiW059JYb2+KGqrR0PA5N3lWmxT++HB6Z8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=B3xC16AEGuQu4TAKX96OJOZO3H7opkNjCXH2/zMfsHBZRXvjmxPeJ23y8S7pWKDnr
-	 8rN/hTxh4TD8ozwWybnM6tIC+KTLs7aMfLH4NUTHHNwGF6B2650JGQ5TapzqWc89oQ
-	 BGYyE+lyQ7/OXs6rSAQlvt+p3PFC1fJ0/5mDnqfdaCvyA5mxMNIN2JTaNA2sHvbo4S
-	 s0Tpky85PMJR6Amf71MV3f8qDJEcFonEb0HHdtm8P6zCR7P9OmRlL2+bfKzGgB6Ky3
-	 y7FWy8TPs7PbVmtY+Usf5tRz7ra2CbuWiQ/txJgua/UfGkCHiCK638lJnqEboEmIpJ
-	 BNDB0nIqI0mcA==
-Date: Fri, 14 Aug 2026 20:23:02 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: Jaihind Yadav <jaihindy@qti.qualcomm.com>
-Cc: Kees Cook <kees@kernel.org>, nathan@kernel.org,
-	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] kstack_erase: suppress -grecord-gcc-switches for
- external module builds
-Message-ID: <an9dBpYEIb4GWhAC@levanger>
-Mail-Followup-To: Jaihind Yadav <jaihindy@qti.qualcomm.com>,
-	Kees Cook <kees@kernel.org>, nathan@kernel.org,
-	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260803181217.GB1067866@ax162>
- <20260813082949.1622045-1-jaihindy@qti.qualcomm.com>
- <202608130942.4FFA5AAB9D@keescook>
- <CY5PR02MB8991D4B48F9391D1849B2CFCE2DA2@CY5PR02MB8991.namprd02.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eNr582kv"
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-754ac74c495so442073137.0
+        for <linux-modules@vger.kernel.org>; Fri, 14 Aug 2026 13:44:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786740260; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Ul2W4M41QjjlQ/PG4DU0bjFJixK49WMNTSvoWokCUcYMJD+p4pNrTnVmBJN3zp4+J6
+         XBE7VmEgLL+ojVdJ+mXa7o6/+/553rexEFTMiNV/C2KAiK/L/lLFXd56V8pKqO5um4Mr
+         euPzxlb+rMQnjSVKdgMrNdJ9d5a54IB/DjUhuRD9uAVSr/9mNsTIt2bLDXsT9uuCIXvq
+         oY7XkTLzdkLnvlMnjPUbm4q2HUqdU2npoGREH0Ne6ceVf7EbX6dD0wO31qrLoSg/r6d+
+         vqWnQwp0CJgxD3wSTmxf1Kjjl5YOjrANVnNhZ3aCVUX12/NOC39B7iS4gXOwDuf3Jzd+
+         0KWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GYGwalcvjkjv/vzHq/Wh7lCLdSqyXSnP87QCybk111Q=;
+        fh=3hM6gyRql63JQnupwiqPejuICghiafiXncW77fVGb1g=;
+        b=ll336VYLtaGXbjPb1YNwPeDUFEzp7wsi4BavkfCtJltFfwaWEVdMtjGqmuI/vHnM6Z
+         lAS+CItILTqShY+Xmmgamt7Gy4UOcgFY4o78KKcRJxt6td1IkIlHtVGpf6PAWq7EFTph
+         131rmcEyTVQtNGAhYDegSBGktqjxA66mno7B+Yxn1sUYATL5ngWPWpIKtchvaf5FfO+h
+         xttLPosYCaV+cG1jxoUtlE9rF7r3qGhA0EcFbld2EyxmOZSemoqsER0+199Lo03ncWBR
+         fDR9SOXP8w32SYeazWRvQjEpqd/z/O/Kva8Q0KvrTX+0aI50TlQZoFU+icNXveN7sw6e
+         9RRQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786740260; x=1787345060; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GYGwalcvjkjv/vzHq/Wh7lCLdSqyXSnP87QCybk111Q=;
+        b=eNr582kvWnLdBPVqBuLK4CuituDSaYuO7aR+Fg4aUogm04XgO7g+CktP3Q0m4yklCR
+         TCIlf7yhwKgUuLGdDcFdeedymXyRVIEFzLP18B8jvwz6wUQv8nKi1HyIWi0zRQw12eW3
+         BpjjjyoECEuQX5IByb/44ERJNUG5wPkJC0tc8YxO/FXdmsoT+BpmzXSiqJwVhKV/mB14
+         7jhuvQ3LhPCaSGVxaLGo8NMF69CSMTHnXq9L9g/WhZ2oBXUCw8BM3iHqHBxIdl3Ii8fC
+         i8jh/S6KmyveE9gqZmSMz5BefUeAPcFxz2NEm1HCTfvS0EUbGzOFRt0UCA+fZ/S4qV6X
+         zoYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786740260; x=1787345060;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GYGwalcvjkjv/vzHq/Wh7lCLdSqyXSnP87QCybk111Q=;
+        b=n7JInrGyA9ps9/VrcteUXYnd5ANP+5I5yXa+5F8BxVcq2u9a6QgTTjI3/HKUwljnzi
+         PFmlrL9LFRUXmkPfkYwzFVCsuLg1tEn/DnEdEAcCXKL+WUtu8iBEsNKvXZ7yyjIxxm+m
+         4HO+fAS+VN6CAmBhwM3abUNaJdX1K5zaG3w704elKroIZtg4hHkABX3AFVdWjIg2NLhb
+         HMMvRmFOb3YlHOIZTTsAUSM8M3J7/Blu5lby4dl9lv30b4b0UY56WoqAKVFtmFL0ttSG
+         GlnxbPXnB5D23wQwqTqGmyEPy717fy9J558ID4m2CLNT+WZT5BTYxoKRh/o44uiG6VSr
+         B4Cg==
+X-Forwarded-Encrypted: i=1; AHgh+RoIaqnGjrLgUDk9SoYQeCiJISPNvqLYQ45sPSX4uzUneW2ibfvguxSEWx+rENzPsLDfSM8iTds2su6OMSjr@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywve0KdON2bZa62UGfULH55IWYSc4BzlFh8Oa+L2lV7jenellSi
+	AV8kcZl01/HYbNZ3H5r67W9sBBX4rbeJ/Wyq+PclrVr6qRsmUIKgpU8lD1o2j6SJGXk7xUycEVq
+	9fFN9kaCG523cqXkGZTv0izT0SMmlKc6IM1F1vyFt
+X-Gm-Gg: AR+sD11ayh1QYCq6Syd3YKoVMcI1Iykn3nqF01GdOUD91DuNlRYoFQ6Hr9BVvgxGLYh
+	XJ03d9UdjrA8pWOAewJSQqPhARmGG9IHtYI8OaDC03Hz4YCzw5/njb6k9oNODYVY69yN4b4+9QY
+	nM89bvVCAu/rVez9V8Gy+6S8WAHFirX6pqHBz3uCJxFl49oP7ZSV3xlwD9bzM9TbqJ+dEmUZVAN
+	C3Y1z0Wm05gbekrrQFibXCPgg+rV3usw7JIVpeAjbYLDkV806oPGgetSgQXoUV+OXST2HCffO2c
+	VtV/ZCsILUxBPvdivxNvtMAF+RqABZ9kY9pF+qJBcHyD
+X-Received: by 2002:a05:6102:548b:b0:75f:e517:ec96 with SMTP id
+ ada2fe7eead31-76f27377fe3mr1344823137.0.1786740259079; Fri, 14 Aug 2026
+ 13:44:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CY5PR02MB8991D4B48F9391D1849B2CFCE2DA2@CY5PR02MB8991.namprd02.prod.outlook.com>
+References: <cover.1785727106.git.jpoimboe@kernel.org> <9548393f4d89ec3b498f4f69aa6ef6b9bb7150fe.1785727106.git.jpoimboe@kernel.org>
+ <anyufyGq2d-7AC_H@google.com> <anzW_H5OlQ-MqWjf@jpoimboe>
+In-Reply-To: <anzW_H5OlQ-MqWjf@jpoimboe>
+From: Dylan Hatch <dylanbhatch@google.com>
+Date: Fri, 14 Aug 2026 13:44:07 -0700
+X-Gm-Features: AcwNN1Ws2u7TqlGkWkPnRDhb4Ze0atWVAAtFKe83ByDo08JtuB09SoN8yeYeXKU
+Message-ID: <CADBMgpyY6R_YmEqhZSw=88-Bfkv9=s-N-x1siE1uPAgH_fTURw@mail.gmail.com>
+Subject: Re: [PATCH 03/14] objtool/klp: Fix false module dependencies caused
+ by dead relocs
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Sean Christopherson <seanjc@google.com>, x86@kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Song Liu <song@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-modules@vger.kernel.org, Ben Procknow <bprockno@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[ Please reply interleaved,
-  cp.  Documentation/process/submitting-patches.rst ]
+Hi Josh,
 
-On Fri, Aug 14, 2026 at 08:27:58AM +0000, Jaihind Yadav wrote:
-> Hi Kees,
-> 
->   That's a fair point.
-> 
->   In my testing, the issue was observed specifically with the STACKLEAK
->   plugin path being recorded in DWARF producer strings for KBUILD_EXTMOD
->   builds via:
-> 
->     -fplugin=$(objtree)/scripts/gcc-plugins/stackleak_plugin.so
-> 
->   The motivation for this patch was to address that specific issue with
->   the smallest possible change.
-> 
->   I agree the same behavior may apply to other GCC plugins when their
->   -fplugin arguments contain build-specific absolute paths. A more general
->   solution may make sense, but I wasn't sure whether disabling recorded
->   GCC switches more broadly would be desirable from a debugging
->   information perspective.
+On Wed, Aug 12, 2026 at 1:27=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
+> wrote:
+>
+> On Wed, Aug 12, 2026 at 10:33:51AM -0700, Sean Christopherson wrote:
+> > E.g. if (not-so-hypothetically) one were to try to livepatch
+> > nested_vmx_enter_non_root_mode(), how would livepatch.ko get at things =
+like
+> > kvm_service_local_tlb_flush_requests() and kvm_spurious_fault() without=
+ also
+> > creating copies of those functions?  Wouldn't the kernel need something=
+ like the
+> > below to exempt livepatch modules from the restriction?
+>
+> Indeed, though we approached it from the tooling side, see this (not yet
+> merged) patched:
+>
+>   https://lore.kernel.org/fe5a00818e06ec613344d41d5944de054fcd8832.178613=
+8493.git.jpoimboe@kernel.org
 
-[...]
-> On Thu, Aug 13, 2026 at 01:59:49PM +0530, Jaihind Yadav wrote:
-> > With CONFIG_GCC_PLUGIN_STACKLEAK=y, kstack erase adds:
-> >
-> >   -fplugin=$(objtree)/scripts/gcc-plugins/stackleak_plugin.so
-> >
-> > For KBUILD_EXTMOD builds, recording gcc switches can embed this 
-> > host/build specific plugin path into module DWARF producer strings, 
-> > which trips QA checks looking for absolute path leakage.
-> 
-> Isn't this a problem for all Linux gcc plugins, though?
-> 
-> -Kees
-> 
-> >
-> > Disable gcc switch recording only for external modules by adding 
-> > -gno-record-gcc-switches to kstack-erase-cflags when KBUILD_EXTMOD is set.
-> >
-> > This keeps stackleak plugin instrumentation enabled while avoiding 
-> > leakage of host-specific paths in external module debug metadata.
-> >
-> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> > Link: https://lore.kernel.org/all/20260803181217.GB1067866@ax162/
-> > Signed-off-by: Jaihind Yadav <jaihindy@qti.qualcomm.com>
-> > ---
-> >  scripts/Makefile.kstack_erase | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/scripts/Makefile.kstack_erase b/scripts/Makefile.kstack_erase
-> > index ee7e4ef7b892..6f31a3915d24 100644
-> > --- a/scripts/Makefile.kstack_erase
-> > +++ b/scripts/Makefile.kstack_erase
-> > @@ -5,6 +5,7 @@ kstack-erase-cflags-y += -fplugin=$(objtree)/scripts/gcc-plugins/stackleak_plugi
-> >  kstack-erase-cflags-y += -fplugin-arg-stackleak_plugin-track-min-size=$(CONFIG_KSTACK_ERASE_TRACK_MIN_SIZE)
-> >  kstack-erase-cflags-y += -fplugin-arg-stackleak_plugin-arch=$(SRCARCH)
-> >  kstack-erase-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK_VERBOSE) += -fplugin-arg-stackleak_plugin-verbose
-> > +kstack-erase-cflags-$(if $(KBUILD_EXTMOD),y) += -gno-record-gcc-switches
+In the case where KVM is built as a module, a livepatch to
+nested_vmx_enter_non_root_mode() doesn't seem to work because
+livepatch doesn't allow KLP relocs for vmlinux symbols when they're in
+a patch function originating in a module. I was able to recreate this
+failure with a simple module/livepatch combo:
 
-As -gno-record-gcc-switches is not specific to kstack-erase, I am not
-convinced that CONFIG_GCC_PLUGIN_STACKLEAK is a good switch for it.
-Might it be that someone has CONFIG_GCC_PLUGIN_STACKLEAK enabled but
-wants (some other) gcc switches to be recorded?
+https://github.com/dylanbhatch/linux/tree/mod-ns-lp
 
+Is there a way to work around this issue in the .patch source itself,
+or some other way to allow these relocs?
 
-If there is a need for external kmods to to have 
+I'll also send a reply to your V3 patch with some more details on my findin=
+gs.
 
-  make modules KCFLAGS=-gno-record-gcc-switches
-
-automated in kbuild, I'd rather like to see a new Kconfig symbol for
-that flag (some CONFIG_EXT_MOD_NO_RECORD_GCC_SWITCHES) but a Kconfig
-symbol only for external kmods feels odd to me, too.
-
-HTH.
-
-Kind regards,
-Nicolas
+Thanks,
+Dylan
