@@ -1,153 +1,134 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C966745FFA6
-	for <linux-modules@vger.kernel.org>; Fri, 14 Aug 2026 11:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F683546E7;
+	Fri, 14 Aug 2026 18:24:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786706170; cv=none; b=GKzT56F+z1FwoPWNR6Hg+S/rAdLQs6kkKPudiIDbqPURoe99vLyGScId5SBQA7OIYktlSclo53SRdDKe9FWSti1ZujtpCRaTNWLQbYs/W+uh0dGrrXhIX17o3RcBe0+HNo2uCGMCb8v4LSd8KL6sjoL4+QE7z8Ya4NJJMj2guNU=
+	t=1786731885; cv=none; b=EWL+ReMFhtUiG/BOPG36XjN98uWYqVWYqqksN6hK0dMkLgx8cclN7iC109R7ISlbI6S5mCHQOJVj4KZlJwM7qt4bg+ao7hhjknGgsoWej8u4MQIQF0HMB8Q4Zm0qx2P701ApFEcaJgR0cpAVsfhxM/X3zxa3W/6gZUx+CuY2F/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786706170; c=relaxed/simple;
-	bh=WC68mzM9vVdX5O4PVh43sBf4C00Yw06tw0d+DOenXm8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H+JFPd2TV/hvs030/vToc9E3KAVjSJjX4Rp44cwKTxBc2VzDFGkM19c3gGlDQ7gTCOc5vjL4fpoU7ozMeWCi2Ck9zMjnp33Y9SqmxznmdMJpmDMj1gG7oddFzKyglIwi7Tx7y4DquRrk/GMRDVfjia1IooyliE//0X+pha7ZBcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=N1OOPHyS; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1786731885; c=relaxed/simple;
+	bh=vu+zfzNe1WEav0e72HiaOs0RrGg13nrgBqLNFQl29LE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=de5Nx0jlwxf/3G3js62Cb9OBVDW5ae+cFdJdnGSOJT+LqhsLJVV/3dFG8ls/Mm/+UFLtD6/Iff93+Cp5sJvGEPrG+p/i6Od8my88pVOz2I0lFBK750qReOSy0u0QIMEL/gGpvdzqfsXhpSAU7pYEg4/UCmzVhf2ILbkgJ5en8hI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B3xC16AE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="N1OOPHyS"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-47f7854678cso727883f8f.1
-        for <linux-modules@vger.kernel.org>; Fri, 14 Aug 2026 04:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1786706163; x=1787310963; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ufDJ56SqV15sMOIVLhDYx7ZQ9UDhnRuzgS+xzCE8e40=;
-        b=N1OOPHyS45MXH3sccBAv2rnBqRxeeTdLcQ1simpHJDu8KuFsM/QMtbqrycyltEcYqb
-         9OwivpkDmJ0RtQF79WxIyobrV/6hJmlRd9HMf0+a0LrXXBhEMabsy4YcUBs/ZHZSJVZv
-         eaGy3tVg0ISGERycch4cng6STN052ctq+JUSkUpQtddL+0zDtIkbSeXwwcWI+3w3tkWv
-         GI3W6PBycL0xJRfXyRRrBj2T6tLjocDF0tMflPyOXoNffLZb4YovGP4FI3YMBB8Hb4En
-         m+oHCeS9MamwwlKftGAJFH7eghAj6T0ZhpkY+3JYXETrQJ/RGVoOfC7d9auSTD9WPpKt
-         ihUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786706163; x=1787310963;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ufDJ56SqV15sMOIVLhDYx7ZQ9UDhnRuzgS+xzCE8e40=;
-        b=iXLJr8xOIQC4EiYP3nslgVBDzh6tWWOQ3ockoim6wuq9biZMjWrEdpyqQLxvSGd94q
-         Ex5cOJ3EHNxThZ+Nv9YqBQJAK4gd986h1Ohy6NEgS7O1qBz9+bE1Fjs82Jkv0+pV54LV
-         YXytZ9wIlJWxMmgLBYKpbcCyKKG2vwhRBImuXOIkeJs5QFPuiNNBf6yWL3xHgoWRgDia
-         0p9ObptOvPdbiFpHNYKpwwAeYVegeO7LZ1K6Z5jgeGJfHAgG2TkyGVjo1SzZ7dliYqjK
-         cbAlhWJHAa2MNqorvH98TEY7rLyXn6Bj/t1R4/6Wx/l4qqokq/YpE87+O2VGqj38INh9
-         sibw==
-X-Forwarded-Encrypted: i=1; AHgh+Rpqrvco4IybrgaKmuZSS5KCgHkdO+IsGDSnCUCKb1RS8ctign0B0JReHrA4oxsUj7RD8S0pWNbbdrrsYFIl@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywjoo9Sy2Fu1TLUwzFNRrG/lJRwhg6hD7jymdIc6o33zuwbi/da
-	ZIekgPjyAnKrVmxcLnZVpJN2eq+mbNzBzN/Vx8oWOn5PmZXdEtGsZ9ijoH+iS83xSPY=
-X-Gm-Gg: AR+sD13qLikvhN8Eqa7sIfjv7DWWHsFzApvZd67xD1oqNH7aIZ+qy8IO7p+a7pX6Dhg
-	rTyrpIFh9vu2RMncC79ixqr8QEc6YKon+5W2QIKPksCIBiGglh1wpJJrd0DvMpi3cZ7YAMbffQI
-	B+nDRzjJRy7FBnrnc+9f8Nxk6ZvTWXTw/jhkUFtFaQ+ESBVv11/GWd/AoL7ydeWIbokydYpExUM
-	Cj6ROZBzGsMy9Z65xN1c7JprbW49CcQczbp9fbt4YaYekAJF6Fo4d8A0LUvwA6a65xtu9QIlRnI
-	y37PVwewMdJIT7pzAbJzajV6G/q6MAGCa7YY98gwy1643wqb06wLs2AZMpbuUb1RXOG0Jk1JblN
-	J9SbSI//SPiD97C73Wp6Zr8luJa4U27B2q94H3yJBv5Y1wagoX/QxCzh4bJ+GnPr6I+ZSGrzFwH
-	7a4oaZhNV7zq4Yy9/wTxcjJP3XUCppu/uinSZgWc8n+iMHD87MscawvKFveGoLbgPTPRCU7WtdW
-	xzHGE9WEVMXneXaj38+KT5HJw==
-X-Received: by 2002:adf:ee84:0:b0:47f:eb37:fb7f with SMTP id ffacd0b85a97d-48160758e05mr5816291f8f.16.1786706163380;
-        Fri, 14 Aug 2026 04:16:03 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f20059asm6805179f8f.5.2026.08.14.04.16.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Aug 2026 04:16:02 -0700 (PDT)
-Message-ID: <9044355d-bff2-44fa-a8e2-ee3500aa1af0@suse.com>
-Date: Fri, 14 Aug 2026 13:16:01 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B3xC16AE"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id ADD521F000E9;
+	Fri, 14 Aug 2026 18:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786731883;
+	bh=m1gghI+TDeiW059JYb2+KGqrR0PA5N3lWmxT++HB6Z8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=B3xC16AEGuQu4TAKX96OJOZO3H7opkNjCXH2/zMfsHBZRXvjmxPeJ23y8S7pWKDnr
+	 8rN/hTxh4TD8ozwWybnM6tIC+KTLs7aMfLH4NUTHHNwGF6B2650JGQ5TapzqWc89oQ
+	 BGYyE+lyQ7/OXs6rSAQlvt+p3PFC1fJ0/5mDnqfdaCvyA5mxMNIN2JTaNA2sHvbo4S
+	 s0Tpky85PMJR6Amf71MV3f8qDJEcFonEb0HHdtm8P6zCR7P9OmRlL2+bfKzGgB6Ky3
+	 y7FWy8TPs7PbVmtY+Usf5tRz7ra2CbuWiQ/txJgua/UfGkCHiCK638lJnqEboEmIpJ
+	 BNDB0nIqI0mcA==
+Date: Fri, 14 Aug 2026 20:23:02 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Jaihind Yadav <jaihindy@qti.qualcomm.com>
+Cc: Kees Cook <kees@kernel.org>, nathan@kernel.org,
+	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] kstack_erase: suppress -grecord-gcc-switches for
+ external module builds
+Message-ID: <an9dBpYEIb4GWhAC@levanger>
+Mail-Followup-To: Jaihind Yadav <jaihindy@qti.qualcomm.com>,
+	Kees Cook <kees@kernel.org>, nathan@kernel.org,
+	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260803181217.GB1067866@ax162>
+ <20260813082949.1622045-1-jaihindy@qti.qualcomm.com>
+ <202608130942.4FFA5AAB9D@keescook>
+ <CY5PR02MB8991D4B48F9391D1849B2CFCE2DA2@CY5PR02MB8991.namprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 0/2] module: Extend module_blacklist parameter to
- built-in modules
-To: Gary Guo <gary@garyguo.net>, Aaron Tomlin <atomlin@atomlin.com>
-Cc: arnd@arndb.de, mcgrof@kernel.org, da.gomez@kernel.org,
- samitolvanen@google.com, peterz@infradead.org, ojeda@kernel.org,
- akpm@linux-foundation.org, mhiramat@kernel.org, boqun@kernel.org,
- neelx@suse.com, da.anzani@gmail.com, sean@ashe.io, chjohnst@mail.com,
- steve@abita.co, mproche@mail.com, nick.lane@mail.com,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260807012601.360452-1-atomlin@atomlin.com>
- <DKNWEO3BOUOL.9COZBXZIGS6A@garyguo.net>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <DKNWEO3BOUOL.9COZBXZIGS6A@garyguo.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CY5PR02MB8991D4B48F9391D1849B2CFCE2DA2@CY5PR02MB8991.namprd02.prod.outlook.com>
 
-On 8/13/26 4:50 PM, Gary Guo wrote:
-> On Fri Aug 7, 2026 at 2:25 AM BST, Aaron Tomlin wrote:
->> Currently, the "module_blacklist=" command-line parameter only applies to
->> loadable modules. If a module is built-in, the parameter is silently
->> ignored. This patch series extends the blacklisting functionality to
->> built-in modules by intercepting their initialisation routines during early
->> boot.
->>
->> Following review feedback, the implementation has been split into two
->> separate changes to decouple the introduction of the new feature from the
->> terminology renaming:
->>
->>     1.  The first patch extends the "module_blacklist=" parameter to
->>         built-in modules using the original blacklist terminology. It
->>         introduces the ".initcall.modnames" section to map initcall
->>         function pointers to their associated KBUILD_MODNAME strings
->>         (restricted only to module_init() invocations to save memory and
->>         avoid matching core kernel subsystems). It also restricts the check
->>         to a boot-time __init wrapper to eliminate Use-After-Free (UAF) and
->>         Spectre v1 vulnerability risks when loading dynamic modules at
->>         runtime, and adds a fast-path check to eliminate lookup overhead
->>         when the parameter is not in use
->>
->>     2.  The second patch renames the variables and helper functions to
->>         adopt the preferred "module_denylist=" and module_is_denylisted()
->>         terminology in the codebase. To preserve the existing user-space
->>         ABI, "module_blacklist=" is kept as a legacy alias pointing to the
->>         same module_denylist variable
->>
->> Aaron Tomlin (2):
->>   module: Extend module_blacklist parameter to built-in modules
->>   module: Rename module_blacklist to module_denylist
+[ Please reply interleaved,
+  cp.  Documentation/process/submitting-patches.rst ]
+
+On Fri, Aug 14, 2026 at 08:27:58AM +0000, Jaihind Yadav wrote:
+> Hi Kees,
 > 
-> I feel with
-> https://lore.kernel.org/driver-core/20260421-acpi_mod_name-v2-0-e73f9310dad3@sony.com/
-> and this we're really making loadable module and builtin modules less different.
+>   That's a fair point.
 > 
-> I wonder if we should just somewhat unify these completly, so built-in modules
-> just behave identically to loadable modules, just without runtime relocations
-> and ability to unload.
-
-I can imagine this being possible and potentially useful. For instance,
-a minimal `struct module` could be used for each built-in and loadable
-module. For the latter, it could be then extended to something like
-`struct loadable_module` containing all the fields currently needed for
-loadable modules.
-
-It could also help improve some C APIs. Functions currently cannot
-determine whether a NULL value passed as a module parameter indicates an
-invalid pointer or a built-in module [1].
-
+>   In my testing, the issue was observed specifically with the STACKLEAK
+>   plugin path being recorded in DWARF producer strings for KBUILD_EXTMOD
+>   builds via:
 > 
-> Of course, that's quite a big change... And mostly likely people won't care
-> because almost everything is built as loadable modules in distros anyway.
+>     -fplugin=$(objtree)/scripts/gcc-plugins/stackleak_plugin.so
+> 
+>   The motivation for this patch was to address that specific issue with
+>   the smallest possible change.
+> 
+>   I agree the same behavior may apply to other GCC plugins when their
+>   -fplugin arguments contain build-specific absolute paths. A more general
+>   solution may make sense, but I wasn't sure whether disabling recorded
+>   GCC switches more broadly would be desirable from a debugging
+>   information perspective.
 
-I agree this looks non-trivial. It would require proper investigation to
-see how it might actually turn out.
+[...]
+> On Thu, Aug 13, 2026 at 01:59:49PM +0530, Jaihind Yadav wrote:
+> > With CONFIG_GCC_PLUGIN_STACKLEAK=y, kstack erase adds:
+> >
+> >   -fplugin=$(objtree)/scripts/gcc-plugins/stackleak_plugin.so
+> >
+> > For KBUILD_EXTMOD builds, recording gcc switches can embed this 
+> > host/build specific plugin path into module DWARF producer strings, 
+> > which trips QA checks looking for absolute path leakage.
+> 
+> Isn't this a problem for all Linux gcc plugins, though?
+> 
+> -Kees
+> 
+> >
+> > Disable gcc switch recording only for external modules by adding 
+> > -gno-record-gcc-switches to kstack-erase-cflags when KBUILD_EXTMOD is set.
+> >
+> > This keeps stackleak plugin instrumentation enabled while avoiding 
+> > leakage of host-specific paths in external module debug metadata.
+> >
+> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> > Link: https://lore.kernel.org/all/20260803181217.GB1067866@ax162/
+> > Signed-off-by: Jaihind Yadav <jaihindy@qti.qualcomm.com>
+> > ---
+> >  scripts/Makefile.kstack_erase | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/scripts/Makefile.kstack_erase b/scripts/Makefile.kstack_erase
+> > index ee7e4ef7b892..6f31a3915d24 100644
+> > --- a/scripts/Makefile.kstack_erase
+> > +++ b/scripts/Makefile.kstack_erase
+> > @@ -5,6 +5,7 @@ kstack-erase-cflags-y += -fplugin=$(objtree)/scripts/gcc-plugins/stackleak_plugi
+> >  kstack-erase-cflags-y += -fplugin-arg-stackleak_plugin-track-min-size=$(CONFIG_KSTACK_ERASE_TRACK_MIN_SIZE)
+> >  kstack-erase-cflags-y += -fplugin-arg-stackleak_plugin-arch=$(SRCARCH)
+> >  kstack-erase-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK_VERBOSE) += -fplugin-arg-stackleak_plugin-verbose
+> > +kstack-erase-cflags-$(if $(KBUILD_EXTMOD),y) += -gno-record-gcc-switches
 
-[1] https://lore.kernel.org/linux-modules/610fc63b-f3dc-4824-99fd-907fc96f3194@oracle.com/
+As -gno-record-gcc-switches is not specific to kstack-erase, I am not
+convinced that CONFIG_GCC_PLUGIN_STACKLEAK is a good switch for it.
+Might it be that someone has CONFIG_GCC_PLUGIN_STACKLEAK enabled but
+wants (some other) gcc switches to be recorded?
 
--- 
-Cheers,
-Petr
+
+If there is a need for external kmods to to have 
+
+  make modules KCFLAGS=-gno-record-gcc-switches
+
+automated in kbuild, I'd rather like to see a new Kconfig symbol for
+that flag (some CONFIG_EXT_MOD_NO_RECORD_GCC_SWITCHES) but a Kconfig
+symbol only for external kmods feels odd to me, too.
+
+HTH.
+
+Kind regards,
+Nicolas
