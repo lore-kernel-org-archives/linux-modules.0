@@ -1,95 +1,94 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6938B370AD7
-	for <linux-modules@vger.kernel.org>; Sat, 15 Aug 2026 06:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F063D5C38
+	for <linux-modules@vger.kernel.org>; Sat, 15 Aug 2026 06:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786774934; cv=pass; b=oDugYKBUe35s9e3mRqFY7CA2VxmX5DdWS9iCY691EW9TP7QqWschAM+TWRECqDjEy4qSs4QvuigJ8vQXM3BVrYPxw1CbjhG0dsyMYrCFESNCvhd9wNAMIzqPqylgV/dqtbbVjjy3aB+qctHYoiipUdex/C4kBJ06IZOmqdNrTes=
+	t=1786776695; cv=pass; b=g03+grxLgSIMybCm5JkkMTgRjALHrAOF3N1IDwHXcXna1Xd4AQG7x9LeNF1SAhAkyju5NsHlk4mC5u2l4o36l79k6PkQBkqJbbT6sc9jyNAM8b9+1JNURWGicvr+cvfzODkRumxm1bqTbF687NmqncogQL77SpF3dqhRQQ+iFxU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786774934; c=relaxed/simple;
-	bh=zJxk6Wum0TfUdifa+ET6oavSctHiWrkHFEmb2mrQB48=;
+	s=arc-20240116; t=1786776695; c=relaxed/simple;
+	bh=LOJjF2L/Hw97+zA54YTMzFQ2dp+58kZzIwVj0qcqR5Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RMo9mm90s0C+PCw1/fvJfA0Ry8DVc7Ty2udvhG2WFl6DQKuQaHes6SWqHKEzPucAfKIMQeuUQ2Lb8fAvyPdK+8fgQLSdfZC9oYDlywFT44sSa7UK8T2Fb9BIzpaUFywTjOwi2XNTWqdmS8nAc181bxJ/s5ep6vqdnuc4A1E/zh8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E2Ww2hcB; arc=pass smtp.client-ip=209.85.160.176
+	 To:Cc:Content-Type; b=PvAmbXPmYY41ZaBa+ZN+/JL1VLNoy6pKzZ7Gt+9VxM3cYQp35Wo7Dfcsm2S6fCuSl4Ce5pv/zpW2cU0e6MaTSLI8flzFebbq4WVaVN9CSIR+oUy5IUQJABqavipuEN7ZuSaTZJlHhNaV3OIX0KO/iZRJxg5blgv26HCFQyrzTMs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=anSpR0bM; arc=pass smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E2Ww2hcB"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-51c15a5b265so418391cf.0
-        for <linux-modules@vger.kernel.org>; Fri, 14 Aug 2026 23:22:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786774931; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="anSpR0bM"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-51c01c79467so481691cf.0
+        for <linux-modules@vger.kernel.org>; Fri, 14 Aug 2026 23:51:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786776683; cv=none;
         d=google.com; s=arc-20260327;
-        b=o79EaVKldaGNPcp/pKYz5ds9ORgZirTXBwpaZsC5dcrc79j/QmxwbPKakkFc6IPCWt
-         wz7JBq9GO9jPbhQVH3mxI/gfz0d63feANDiuJD0muR2q/a6PD7iNo+Ri7E1V0kyYhpic
-         z0ucsN0DsfyW/YxaMIvo425N3ktD+xlLdGzkK0GhAFVDMQBTqavRFLNdPq7tQ3XjxrgG
-         1YFNyQF9OZwvo/oAVQu1nL5eOI6Q18TXU8ewGeujJHXCekbs4a3cG65jLrpBn4MSoeKa
-         YYREMMdlUw+L796tlEWBvKOc9v3ED1ywq5Lsv1luBP/gqLsbtfnNvPmaFBq0j1koJZbM
-         im9Q==
+        b=BJVqf/uXzYYrGkwWyqEpFeb5uxa+aZf0mNLGCXxLZfpOQN/wBBZKOtTBV0JBHmfIL+
+         kcWM7hVoVEMd5sC5pU5sP+8dUrYWZY2d2eu4J32/1WqBi1/WN9ulF6dbA4VeGkQBqcjH
+         nKdSpd7Rpcy/Rn6+6SYcIjOE1d9RFeOJB6pF3FaEKs+3nKFuN1xmWNso0VHFnodK1FjE
+         aGiW0bPiDcss/pWyw9b7kF3mx/R6KIw/cTO+wQsZF655ETn1pYdIUdpqUAllKuwf5zjo
+         53EdE3t/vUxqQBxdwM0G4SeZKsZ7axmflvkvPQXEoYDdwPpIjp6ztPep0P9ovd0RI9EA
+         BrRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=OBKzlS6zgLX7HjDf60a09oLwp2mBkH0MhIIWPg5JjtQ=;
-        fh=2UpjNBakis2lP2TZWCGuRwo/TQHEuVWcZy6JHbwalIE=;
-        b=fO2jDpBtc2iiJheU3iK9pawFTpfM5CkTMtvy9qCWfoy8JCvbw0ou7kxbPUdySi/83V
-         GcCeNPogsX5mIqi4zZiKd5+S5MyW68gqCFSx/euoMJk2Hg1+LzD46StCLgkP9Wt8ZWTr
-         v7SrwUJgc9OOcYWt0u4Mc9pHBeynCVGh2Ck+oAYzKzFZjqhToJCNBhM3x5SfQk2G/V9i
-         xCc3GGh6iT/C0ty4UxziVD4/OMk2eXrBXfriJrkEHK4+cPXvAQdepPMhtg+px2tPa+WJ
-         +NIP7ETfjOQQpW+3Mby0dhNaSXvv+NLKCqvwZBtvuU2TX0d8Fhwjp0Y/FNDESSNs56D9
-         XtLg==;
+        bh=Zq2c0RpFytAPpB30mO0XEj2mdkMZ8ArlW2dXXmz706Y=;
+        fh=Vk+HF2o4D9SchNAyzGaZXZJqtMpPYotXt6PGrArMx5Y=;
+        b=M6h3NvXY5Cufvcy+cPvb98EUWONfx1CIW/psdnzvJX2ukNaUF/dNQxlZ9cTsPTr+J/
+         d8BOzsy/zl3DqbEeNwHxx1yUNZBbifUzMypcW8IeNWWMmzC1bQm+GjauFjZAYJGTx5n2
+         AHzTtrgyz41lU7PeF/e5gxjVj4PJYrwcnFMYeu+6kqXmZ3+JvKvcpb39zRRe9NCn9wg8
+         WQYwUaYcmbAG64pyzLJa0fqRs9RduE6gYaDdLnf5TFo8pCTs0Pd0oQTLvNtHRp/CirVD
+         ud6rbVL45FhI+wkmmOOM8GjIPJ1y6Rl4XzhJ2rGDpWq6UPHnDdylsdXpf7CH25ZxAxoy
+         4L6g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786774931; x=1787379731; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786776683; x=1787381483; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=OBKzlS6zgLX7HjDf60a09oLwp2mBkH0MhIIWPg5JjtQ=;
-        b=E2Ww2hcBnPGWnzJIPH14nuE4n50iU12RVxpvKYXksphzPAnGTJtwW/LMrRutZciYmS
-         Ur2fAp8rnCsW7v64HYqZmWq4wu4GRDyZYxLA/Ze6RNQorP6UyDRQ0eeT1QlIDW/HaZed
-         bI62Mz9ZNkU0dhWx8KQKI8+ICghDwd2XPHqjWhvskifYDwpEXT9fGybs8OB1OS5o3H0A
-         7hErQRRtPCc8QDAX6Yr4hzQLDXkcq+r1CC54wbbXvWaSS4R4FNSOJd0dotaUxuHmH+1q
-         GJi7Y+M1+2zpEsu5n4jUhB7oUYJu5EZJ29yfoK9/lHpJM3/t/sffzoHQzPZJoMRnKvZL
-         UXvw==
+        bh=Zq2c0RpFytAPpB30mO0XEj2mdkMZ8ArlW2dXXmz706Y=;
+        b=anSpR0bMxhC9y4pF8S5DoJYOToHO4GXiskrXyGOxJ23MH70zRisZ7lD4MftqiFfo7F
+         Htqp0xBgZZEhysK8MjAF8klEOGoCT8+GbhO2mhMsVSWAG5aXQ/eBzJTbZndyXNtemEkQ
+         O4YJ9qnt6iBODrH0F1xRM2RIj7mPjXzxAhPiWnxRmxdSw5yC9jxUWpM2cw22H4IUknCx
+         JjLTrVuJJjq7eSyvpQBNpKFNaZqa+h9MvMEwZ8v6rzMgTZSQ3+zgG6Z/umynG80boeSQ
+         WSlfyM/91GP0YKd+odXs9rMMYi9MUekMh4shpbgZWEyg9jp06cqTe9R25f0x5V6vnODb
+         AXRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786774931; x=1787379731;
+        d=1e100.net; s=20251104; t=1786776683; x=1787381483;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OBKzlS6zgLX7HjDf60a09oLwp2mBkH0MhIIWPg5JjtQ=;
-        b=tNaMTrxa7KW6oRp1nDwegaR4jIrFPvAENA/ab5k9MN1DnWhlhqcG2vCXME453wDeJb
-         HMsTreMYJY+Ejh/9nMtIHxEQZ2Uz5ezi0NmuuPiznKG3p6y5EiRfznABp1/cwqGVmztr
-         mLVzM5AvICo2uKfmrfCsI+9z+xndeaOfPj4EQAQJ6MtRm4KUvSKlunYpGnaYZ9DKTiEr
-         oUcsIwXBotuDt2ENSvvLTCI2EnDUlFJQOsIgGNA26iLG8gJfpMv1Q/DXIprLNMr+KPQI
-         +yESKdTO7lA1+lQoGNuHsUTmKuKxiJxFMxTxRT+2N4jLDN58WpDkM/Xo4RDZFJ0jDPRm
-         Y9EA==
-X-Forwarded-Encrypted: i=1; AHgh+RpvJrZgWEfeUZ3a7KWBwczTxItpnOQCWNzn1gM2inVg8pZKcC0Mze9z8lf/e7rrLejA5+5HykpNKpk2yR8o@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7wRr6hoIw89/a3YC9FRwjl78k+M48/SKFYTZwMfAtUjG5dEGY
-	BZ+2sCbttV16tloDLfSlyIoMLpIsjyJ6VnROmjyZmTILWuWLyc6lDyz2n7fzOlLd/Ih0H+YyN7A
-	A/qAPfP9if+6sZtqm4TeQCSZtrp1Cx2PAXc78+Cp2
-X-Gm-Gg: AR+sD110FciwG/Ap3lZk/33ACCitEQmMGIRkeJmalLPIBBkb0Bm8M4VFiGzPBrPZ+gL
-	nC8D573MTIId2CFuRTKA0KeF3/dADHYXhbMELiT9tOoBi40ZywEToHvMh2408+WsdlIa+QIppg9
-	gt71kUtVn+zYfTkKPO42hrpl7hxaoyIaSCr0unG+wcBTa8Xc1DXZ987F73ziFKyK1gBpF6dU9nV
-	tPagSHBeTbpqrjTTTkgqkF4GcDzBVUHnY5Yf4m+jPMoktgoWuuG18u9wix3hhUTUrCoXgz+Dira
-	SDyBVomFEuTh1ouoa/Prwlq9jHpbHGI2d/TXXIiGXE0=
-X-Received: by 2002:a05:622a:591:b0:52b:4ec6:52ba with SMTP id
- d75a77b69052e-52d845c0170mr30884361cf.6.1786774930473; Fri, 14 Aug 2026
- 23:22:10 -0700 (PDT)
+        bh=Zq2c0RpFytAPpB30mO0XEj2mdkMZ8ArlW2dXXmz706Y=;
+        b=SorYqSzmpEQlr7VBrvnCpm64bWiHunwfeM4Ej3/7TjdSbgRj9NOnRb0bdASftAvr8v
+         rF1lCNphCC+2NwxCkijCwTe1aHKAmgxZrLbGucwqHwVakc0VXjgPY6Jvxc6VTP09FOz0
+         +ZmrJDwy+FvFIzPAMuTPE5Bih4bTOfJ5cah1jD0mllEbov7D46y4JBt0IGWEdmSWL97E
+         ESUBzWCSsqY+O75f6AsFl4a5jUUUJU+E8OwVRXCTiLubqs1EnnNTYB+vIa99dpQHxd+P
+         QG5lXHkRdbo1CBi1osIL7C1l1YyQdWxBZvaVN6YK2mlSxmmj2LLjm50x0fDIGC2+fDpT
+         He5A==
+X-Forwarded-Encrypted: i=1; AHgh+RoXGpimhP4SVbKtL8d6bd50LfsADiZnFrJgl09qWebdTQKIqMArlJ3l4beMPafHXvG7g3G6DXQYPe/GHi6v@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/7xrRMDD8fpNjOnf78Z8ntsbxOdCuwwHPWLsepTkg2ojTeZuR
+	ctqPHtl4ZEgVZ5//ImY4OrgC03o3jSzxaLEInFgwww459GYhtS8YBXBFyEkAaA0OOK09xZo8Rsq
+	HomunleU/i1i0jooOKS46R9wCE5tNwD1TRN8F7RH+
+X-Gm-Gg: AR+sD129obrgPS+2zB0cnNqzQj+Rb6kigDJ3r+a2C+NqsUNzi6zxoL/ofgcyMJT/MMT
+	tVnBQ03UovSTQurzKsN8LzP1Ac3F8sui0axwx0DbmMXgwpco1oZTLEx/7ZKZkRI+iV/UlF4mVm3
+	E7idb2oLBgdY7rwLXKqV83d9SEsr9Sb+03+nCwgpAEWS+RWsmAJ7l4Bu+gLgMYOgwLR4yLNkKVG
+	NMUVwPQ0I1HxhaAdQD4P0FiQeqr8nbjPyc6G/qmNW4BHo+grqh4pClKwOMKVRClyt/tsoVSMcaI
+	RfCDuivyCzuhnOCs8LfGM6MHp5A4ZQgP9JXG0ADRcr0=
+X-Received: by 2002:ac8:5f8b:0:b0:50d:edb1:6bd1 with SMTP id
+ d75a77b69052e-52d8631482dmr11055441cf.13.1786776682352; Fri, 14 Aug 2026
+ 23:51:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260813093421.135230-1-hao.ge@linux.dev> <20260813093421.135230-3-hao.ge@linux.dev>
-In-Reply-To: <20260813093421.135230-3-hao.ge@linux.dev>
+References: <20260813093421.135230-1-hao.ge@linux.dev> <20260813093421.135230-4-hao.ge@linux.dev>
+In-Reply-To: <20260813093421.135230-4-hao.ge@linux.dev>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Fri, 14 Aug 2026 23:21:58 -0700
-X-Gm-Features: AcwNN1XREKpTOkn7MwudQ1sU-GPxwXHRR1fNjOfp72xmvYqYjGc-85rvjZBIN9o
-Message-ID: <CAJuCfpHBWFZh5yHHK01CT1i-z=OP74kzGobfYskkqKgBBLx_EQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/3] module: move codetag section placement decision
- to layout_sections()
+Date: Fri, 14 Aug 2026 23:51:10 -0700
+X-Gm-Features: AcwNN1VO4OZ-i99wJIbsAO44f2g8Nco5BTsyXPWH4YOr-l5zjYCr5D9HdcxgZ24
+Message-ID: <CAJuCfpGfQrYJ=Rgrar-8btsiUCg=OQotWPou0J-mpMFNzrJC6A@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] alloc_tag: remove /proc/allocinfo outside of mod_lock
 To: Hao Ge <hao.ge@linux.dev>
 Cc: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
@@ -101,154 +100,69 @@ Content-Transfer-Encoding: quoted-printable
 
 On Thu, Aug 13, 2026 at 2:34=E2=80=AFAM Hao Ge <hao.ge@linux.dev> wrote:
 >
-> codetag_needs_module_section() is called twice per codetag section, once
-> in layout_sections() and once in move_module(), and both depend on
-> mem_profiling_support, which changes without a lock. If profiling is
-> disabled between the two calls, layout excludes the section (offset 0)
-> while move copies it as normal memory to offset 0:
+> shutdown_mem_profiling() calls remove_proc_entry() from
+> reserve_module_tags(), which runs under mod_lock held for write.
+> remove_proc_entry() waits for readers, and a reader takes mod_lock for
+> read in allocinfo_start():
 >
->   CPU0 (insmod A)                    CPU1 (insmod B)
->   ----------------                   ----------------
->   layout_sections()
->     needs_section_mem() =3D=3D true
->     sh_entsize: type, offset =3D 0
->                                      reserve_module_tags() overflows
->                                        shutdown_mem_profiling()
->                                        mem_profiling_support =3D false
->   move_module()
->     needs_section_mem() =3D=3D false
->     offset =3D sh_entsize & MASK =3D 0
->     memcpy(mod->mem[type].base + 0, ...)
->        -> overwrites the first section there
+>   CPU0 (insmod)                      CPU1 (read /proc/allocinfo)
+>   ----------------                   ----------------------------
+>   reserve_module_tags()
+>     down_write(&mod_lock)  [held]
+>                                      use_pde()            [in_use++]
+>                                      allocinfo_start()
+>                                        down_read(&mod_lock)  <- blocks
+>     shutdown_mem_profiling()
+>       remove_proc_entry()
+>         wait for in_use =3D=3D 0         <- blocks
+
+Yes, this is indeed a possible race.
+
 >
-> Record the decision in layout_sections() in sh_entsize using a
-> MOD_MEM_CODETAG type, and have move_module() use that instead of asking
-> again.
->
-> reserve_module_tags() returns -EAGAIN if profiling was disabled after
-> layout, so the loader retries and places the section as normal memory.
+> Move remove_proc_entry() to a workqueue.
 >
 > Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compress=
 ion")
+
+I think all these issues were reported by Sashiko, so you should add a
+Reported-by tag.
+
 > Signed-off-by: Hao Ge <hao.ge@linux.dev>
+
+LGTM
+
 > ---
->  include/linux/module.h | 11 +++++++++++
->  kernel/module/main.c   | 17 ++++++-----------
->  mm/alloc_tag.c         |  8 ++++++++
->  3 files changed, 25 insertions(+), 11 deletions(-)
+>  mm/alloc_tag.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 >
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 7566815fabbe..a02016528e1d 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -328,6 +328,17 @@ enum mod_mem_type {
->         MOD_INVALID =3D -1,
->  };
->
-> +/*
-> + * If CONFIG_CODE_TAGGING is on, modules get a .codetag section.
-> + * codetag_needs_module_section() says where it goes: the usual
-> + * mod->mem[], or off to the codetag region.
-> + *
-> + * Mark the codetag-region ones with MOD_MEM_NUM_TYPES.
-> + * It's just past the real types, so it doesn't index into mod->mem[]
-> + * and for_each_mod_mem_type() skips it.
-> + */
-> +#define MOD_MEM_CODETAG        MOD_MEM_NUM_TYPES
-
-Ok, it feels a bit hacky but it's probably the simplest way to mark
-codetag regions.
-
-> +
->  #define mod_mem_type_is_init(type)     \
->         ((type) =3D=3D MOD_INIT_TEXT ||     \
->          (type) =3D=3D MOD_INIT_DATA ||     \
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index ed26f167be84..2337bf604f58 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1728,11 +1728,8 @@ static void __layout_sections(struct module *mod, =
-struct load_info *info, bool i
->                          * preallocated contiguous memory.
->                          */
->                         if (codetag_needs_module_section(mod, sname, s->s=
-h_size)) {
-> -                               /*
-> -                                * s->sh_entsize won't be used but popula=
-te the
-> -                                * type field to avoid confusion.
-> -                                */
-> -                               s->sh_entsize =3D ((unsigned long)(type) =
-& SH_ENTSIZE_TYPE_MASK)
-> +                               s->sh_entsize =3D ((unsigned long)MOD_MEM=
-_CODETAG
-> +                                                & SH_ENTSIZE_TYPE_MASK)
->                                                 << SH_ENTSIZE_TYPE_SHIFT;
->                                 continue;
->                         }
-> @@ -2815,11 +2812,10 @@ static int move_module(struct module *mod, struct=
- load_info *info)
->                         continue;
->
->                 sname =3D info->secstrings + shdr->sh_name;
-> -               /*
-> -                * Load codetag sections separately as they might still b=
-e used
-> -                * after module unload.
-> -                */
-> -               if (codetag_needs_module_section(mod, sname, shdr->sh_siz=
-e)) {
-> +
-> +               enum mod_mem_type type =3D shdr->sh_entsize >> SH_ENTSIZE=
-_TYPE_SHIFT;
-> +
-> +               if (type =3D=3D MOD_MEM_CODETAG) {
->                         dest =3D codetag_alloc_module_section(mod, sname,=
- shdr->sh_size,
->                                         arch_mod_section_prepend(mod, i),=
- shdr->sh_addralign);
->                         if (WARN_ON(!dest)) {
-> @@ -2832,7 +2828,6 @@ static int move_module(struct module *mod, struct l=
-oad_info *info)
->                         }
->                         codetag_section_found =3D true;
->                 } else {
-> -                       enum mod_mem_type type =3D shdr->sh_entsize >> SH=
-_ENTSIZE_TYPE_SHIFT;
->                         unsigned long offset =3D shdr->sh_entsize & SH_EN=
-TSIZE_OFFSET_MASK;
->
->                         dest =3D mod->mem[type].base + offset;
 > diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-> index 461fa87fbb0b..7481180dadd2 100644
+> index 7481180dadd2..b80f5a151f28 100644
 > --- a/mm/alloc_tag.c
 > +++ b/mm/alloc_tag.c
-> @@ -893,6 +893,14 @@ static void *reserve_module_tags(struct module *mod,=
- unsigned long size,
->         if (size < sizeof(struct alloc_tag))
->                 return ERR_PTR(-EINVAL);
+> @@ -591,6 +591,13 @@ void pgalloc_tag_swap(struct folio *new, struct foli=
+o *old)
+>         put_page_tag_ref(handle_new);
+>  }
 >
-> +       /*
-> +        * Profiling may have been disabled by a concurrent module load.
-> +        * Return -EAGAIN so the loader retries with profiling off, layin=
-g
-> +        * the section out as ordinary module memory.
-> +        */
-> +       if (!mem_profiling_support)
-> +               return ERR_PTR(-EAGAIN);
-
-I think this requires your patch [1] from another patchset to work
-correctly, correct? If so, I would suggest sending this patch as part
-of that patchset since there is a dependency.
-
-[1] https://lore.kernel.org/all/20260812054105.102637-3-hao.ge@linux.dev/
-
-
+> +static void remove_allocinfo_file(struct work_struct *work)
+> +{
+> +       remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
+> +}
 > +
->         /*
->          * align is always power of 2, so we can use IS_ALIGNED and ALIGN=
-.
->          * align 0 or 1 means no alignment, to simplify set to 1.
+> +static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
+> +
+>  static void shutdown_mem_profiling(bool remove_file)
+>  {
+>         if (mem_alloc_profiling_enabled())
+> @@ -600,7 +607,7 @@ static void shutdown_mem_profiling(bool remove_file)
+>                 return;
+>
+>         if (remove_file)
+> -               remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
+> +               schedule_work(&remove_allocinfo_work);
+>         mem_profiling_support =3D false;
+>  }
+>
 > --
 > 2.25.1
 >
