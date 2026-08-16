@@ -1,218 +1,239 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA122931F1
-	for <linux-modules@vger.kernel.org>; Sat, 15 Aug 2026 10:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786790758; cv=none; b=sMtHYdVGB1GNo49FiZeXDA+uzDleDx+BXYBrOzJdz2WZNKCMPuzwrBXidHBYbFGQl/RRo77/5dirpVHCYlm94ppZf4Jv4vRGrIxqwAzCoaHaZuBg2rSikGBAuvPGqyOX1ZBvslQBykVUe0uzq1stnPpMtlY9RyOh8a7RK9VasxQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786790758; c=relaxed/simple;
-	bh=QpUm6CVCQQwGrppEIrtM90WDN1gNlvT8gtcLxZ+Uq/M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XcCy0N/dmpk4Jph8YLIoNm0ZcE3gq8wU35fzyZ1GUxcTcjRpuC+Bdx7UsNKpc17WMp5q4PLXUhaGlnsHO3BH28j0eywlrLzFwVEbNx+kim/ed1+8KcJL4ZQmfMkxqbY+I0cQNvPPBw/cSHBRpCZ8QevD7jpna2jlnoaSOaSHzHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gN22j3LJ; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EBD189B84;
+	Sun, 16 Aug 2026 08:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.180.131
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786867870; cv=fail; b=PuODSINmbS2QdjKbLisb6BCJCxbIdtXQ3HXzdlKzpJFpE32V9A/EiOt0QSzzOg996PPNedQ2w9Kzd59xpiytiyJW2bN0VfMUCPh5yFz7AFK/qN9GrKvkOkas27i6xEGarW28pJgigmWYtBfz5grhZWP1MciactUht6DIWd4qshU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786867870; c=relaxed/simple;
+	bh=2P03EjtSbn09yculyIYTp3SK09nrFqoitpkfx9hq9A4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=hynRqOfwzQzfI/Ut4hFapLb5Khz1fixBKZaYKaEVM4L3CupsHOA6lVmf6hp5p7luQcWEDD4o8nF8TEfVaq3368uyccZBFhN06OZ4vK47Znta41fPUYuQnqICqaI9spEtjBjx2MJ2gNrM8feecu8HOPlstcBACWg+8sStTD4kcR4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qti.qualcomm.com; spf=pass smtp.mailfrom=qti.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bWTqG+MV; arc=fail smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qti.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qti.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gN22j3LJ"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-47f7027ca11so1145769f8f.3
-        for <linux-modules@vger.kernel.org>; Sat, 15 Aug 2026 03:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1786790754; x=1787395554; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+i8sSuNGd6mmLHE2UfzLIflavVjmbyhwZK+DDdZURwg=;
-        b=gN22j3LJBUgUW4n0mofX+AT+LJQELbhXEDS1l0/wXGMNsbKdVciVghTfKGnJkf3naD
-         K7pvf1x2iX1Vjutw/kIRYQBvyOt56GsgvdY1DVrkEVQKzLydmNyo7+yWBEBQGisgxzmo
-         NDgU38st9945n/IQlFvDKO5o6eRYD/+f2RxmOURQtlOmilXba18NEcgvEu1YIB1UZJW6
-         Nq/wuUfswDbacpzegELdA3WOCJJvFjb++3SWXLgdnEFB4w2H9ddrM0tJ8vC9K8IAT9xx
-         wFtc8G4WRM3CTvhi3hm70jnbByQsNOmksuH9oLmbXbHLPvATOtnsAi7P+c9C1J3u74K2
-         qhVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786790754; x=1787395554;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+i8sSuNGd6mmLHE2UfzLIflavVjmbyhwZK+DDdZURwg=;
-        b=CjRe4+v0F3hA9pDZy1e/tOGi/4OPEU0HzHLpzxTgtcksOYIndSLP2rOrK6HrD9lw1X
-         FwkdEmmjM3hKBdY+uBmTDGWWtqZr8UVIzZ4p5flK5iKqLF1l1wHa3ST5/KOCsJR5Yr/e
-         rro885zy1aqgXCC8uapFoN6cW6mfaCc1BrdtW8bUGfhEnCL4ztpmAlcCzAOEkdj+DPWS
-         lVHK0MzdGk2Vv9CEuMY73HMjazB0EYARYTVrCFYuiJ6nkq7CX6cCzAvOBA0XRQkXyew3
-         YJqK8bylaUphqSvMokCVpePuomIeFrAgeoZQ3ZQj39Od9y/q/nitRKsIxq7zRU/p7L9x
-         RCNQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrYwja/E04+hsL/7j+SORWex04XqkViIebakHNhyG25Pmo0damRgUQmvD/zJIiV46pQd+M92oqH1cEY2lZk@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZds3wFA2iFu639rx1hptKx731XQ6YxDleCRKCWHj/Ta41Qzrf
-	OpG4zhItt8Nm7esFVxTfUmU2aQRc/EOBdh9J1zxqg1UODiR7voJ42G041U0QUec68wc=
-X-Gm-Gg: AR+sD134O6Rvkwez2DKvhdjCvbbuUOy4TxLRxhLwMaZSrpF1PpCPGWI9l9DoZ5KonP/
-	oWA9ozb9cXTur7hfx0lltBq29Jjan+hFzstPfCTEAntYeHQ6HZL5Yqu0veyoylxIO+J/yfD2aNt
-	6giIVzMXcRv9YshaWWeaOLbKS5DiJZo8t/ssjCrZuZTsqZGPEFViUegOIURbXPwQ5fg6Fnn+gAP
-	x6mgz96cr1Zx9FTDMTDiD3LY2YBIliKpqdW+Hlj/mw8xWNDKczWxgLst//P3TdIruMGv9jLt316
-	ApD9dt6rzgCCiohS9kDMH5TzGem1+/EvSXvSV0zelDGF5uYmzfaFN5ySnkmekeP0T7YD2tZW1Kj
-	EKSkNKCBqd/rLW1bKBd6kF0qkxgVmH/VOUB/HmB6fuRisEfdpBui8jXo0dQ1vPZJWmVNspHFsfd
-	6ese2kzyIdkfBwLaWvEzCN94/O/P5QqyvubG8tfBxT8zH1a4k/t1hBi0nmIEBeK3Wr+YU14sJhi
-	mF3MdCAvQ5JINPAv6slU0wI
-X-Received: by 2002:a05:6000:29c2:b0:481:44e5:160c with SMTP id ffacd0b85a97d-48160723ca6mr13951544f8f.2.1786790754104;
-        Sat, 15 Aug 2026 03:45:54 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2ccc00sm15346737f8f.35.2026.08.15.03.45.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Aug 2026 03:45:53 -0700 (PDT)
-Message-ID: <143a37b5-93a2-4038-8be9-29e13263e743@suse.com>
-Date: Sat, 15 Aug 2026 12:45:53 +0200
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bWTqG+MV"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67G72Dcs2810821;
+	Sun, 16 Aug 2026 08:11:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Iz7+1tFKHy/NoRcd7G64NWzdIrZdXAj9ft1xfk3K69I=; b=bWTqG+MVXm50JD2Y
+	zi8uxykdxI6Xh9BKTngvaGkmPbBM3pImTXQ/4knG2o/Yi08Yh24Dc9orC0gxlq0M
+	hRbCV+jvKoiHh1TSttZ2NSPDKkmdqWA9ox8VjT63z2DETIeEgdJfnkusfX/GEOml
+	/ld8JrRweqw306uy8ameSHsdAaMm2EfPjDX0fCLNd0ZZp/KLM2qLWk8oHx1ox2AP
+	uHivRgHkGshByavJppYKqGi7lHr5QZHqQhlawvWOemnHgfSVCL/8tBI1vw/wp8QK
+	MzG68W6WJ9fTHZrGwaBk+pSRWYeRqU5Nf/m7j4tiuIe8s3txOYaghxlagm1hzPBe
+	unVqcQ==
+Received: from ds2pr08cu001.outbound.protection.outlook.com (mail-ds2pr08cu00102.outbound.protection.outlook.com [40.93.13.50])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g2ghek40g-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Sun, 16 Aug 2026 08:11:05 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BrcSXbIkb+/vKM8HbmFom6WO1XSYDF7ekTAz7X6G/9df68DJcTDtMrfuqBlvLKUv25x4SijTIGgUPwxHKFGmtmcKTdLiasUBnc2JbfhiT0lGY8b+R9k+rCsP6434EDTZVw40D37fMBvjDoizhuVq9Z9ND6Rps3tKpOSrbRUcys6ggWHVP2GxsNEXVSS+XRGhUxFJi02/MIBEAGCP52cJiiP5q3sG3C39Ob/iy3k3kPvXc3d0oIJs32ddRGn9iUtAyZo2RzQ6t+hUfHxR2q6aE/G3Ut/uM7EcqdixDSsGiMdxqBp1t9Evby6JAz49FchAVUQGwF0PRfWCHF61e/GTnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Iz7+1tFKHy/NoRcd7G64NWzdIrZdXAj9ft1xfk3K69I=;
+ b=UkMDUyKB97GZgwzQpLJ8U52O/3o5yZBW/DBFkgGIfSg8oEPjsk1NrHoqCvujIkIDe/7HRqbSQ7oXTgKqWJOnj8+DugxdbCz8akwuP8lf6vmabH07iboy9ua8gs8kSkDu2sA4aCAUnGxXflohdFhBry3A2R47uEDN3YOKLrGDFNqbQ2jUOmUCU8gj1U0FZ6RnGdUvGe3d+jjOHrYPO368FCvkCZFRwnwXjquq6KPveXJchup+04XZpHx2LbtY6DjLtWFXHSsAIEwKzhUSN9nduRJqa0yqRPrN86u9BTIKJY4OCy1ezMkDIuFMFr5BRD0mBSIqR4gyae4jtz+oIirCWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=qti.qualcomm.com; dmarc=pass action=none
+ header.from=qti.qualcomm.com; dkim=pass header.d=qti.qualcomm.com; arc=none
+Received: from CY5PR02MB8991.namprd02.prod.outlook.com (2603:10b6:930:38::17)
+ by CYYPR02MB9886.namprd02.prod.outlook.com (2603:10b6:930:c9::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Sun, 16 Aug
+ 2026 08:11:02 +0000
+Received: from CY5PR02MB8991.namprd02.prod.outlook.com
+ ([fe80::6c24:88a6:606f:d52]) by CY5PR02MB8991.namprd02.prod.outlook.com
+ ([fe80::6c24:88a6:606f:d52%4]) with mapi id 15.21.0315.016; Sun, 16 Aug 2026
+ 08:11:01 +0000
+From: Jaihind Yadav <jaihindy@qti.qualcomm.com>
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+CC: Kees Cook <kees@kernel.org>,
+        "linux-kbuild@vger.kernel.org"
+	<linux-kbuild@vger.kernel.org>,
+        "linux-modules@vger.kernel.org"
+	<linux-modules@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] kstack_erase: suppress -grecord-gcc-switches for
+ external module builds
+Thread-Topic: [PATCH v2] kstack_erase: suppress -grecord-gcc-switches for
+ external module builds
+Thread-Index: AQHdKv35rL7DoRisNUSDvIbYNgWT5LacL4gAgAEHwHCAAKaeAIAASWwAgAIwE1A=
+Date: Sun, 16 Aug 2026 08:11:01 +0000
+Message-ID:
+ <CY5PR02MB8991C91E71C153EEF452972FE2D82@CY5PR02MB8991.namprd02.prod.outlook.com>
+References: <20260803181217.GB1067866@ax162>
+ <20260813082949.1622045-1-jaihindy@qti.qualcomm.com>
+ <202608130942.4FFA5AAB9D@keescook>
+ <CY5PR02MB8991D4B48F9391D1849B2CFCE2DA2@CY5PR02MB8991.namprd02.prod.outlook.com>
+ <an9dBpYEIb4GWhAC@levanger> <20260814224550.GA3553101@ax162>
+In-Reply-To: <20260814224550.GA3553101@ax162>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR02MB8991:EE_|CYYPR02MB9886:EE_
+x-ms-office365-filtering-correlation-id: e80193b5-6c7a-4857-c1fe-08defb6de8ea
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|1800799024|366016|23010399003|38070700021|6133799003|10067099003|56012099006|4143699003|11063799006|18002099003|22082099003;
+x-microsoft-antispam-message-info:
+ QClgWqW6ojpZIdzfzIs0FElqwKBs06MvQM7rQNtWn8HIHzxhfPSBLpdNRm3unXPpa2jcwkTQgz1m1UUO8soW6P66agoSuymA5fr1fDkNeuk6Jjb41snFRrzxZgOEY5l27Ch5v80rU5ubMP1ECwHIbHFOKNNIdqFmY+BK7w2h9yv+gXXUVDZf1rx2x02yDN4hmbimkGM3O4D71/+Kxv7p+thAGiMlzDo8ZqxtorD/dTfo2azKwACV0BHqrv8LWu36nDdRXlwK4Bod7Vs1MRDDW7BEPdPcoVJgYGzavHHZ9GCLSIdDPky5PmFjlVqO9vwUekzFieFV8GFH+M7b1wwX4h5m2uJ4FOLiuyr8flA5MM6uJQmOa2kkvj3hXuKkr2NPDrwtgGYPteCsSCQocZBatUK91/Jbon6EAsHWAxXOWDGMQM0ZQgNOhdyTLVjHkjWeUSie0A8VRZzHPFobcYHIXHhjH1hRTU5AGIqzPPZTQQwcs7xdEmk2JhoIsRVt4AMY5oJvCkelnJ6H10kE2txXPFD4HPI8FckM0rlMVAC38ojeCjPWknlKpWqebPlOEFbVn/1zioCGF1wFNlqC7Jn2yaNfnEtAwLjPwUgDiEPHlzmwITf9vAy3FLJnxLkK1VR9H+VXHLokVLG70dq6LqOBy5pZtM02Nrv5TObUIZ0nNAqLx07udUb0/ZU4eBVFTLDwmwcBCiFubHdD0N2dEW9aj4aULSja3aYItQZAB8LQ2ng=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR02MB8991.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(23010399003)(38070700021)(6133799003)(10067099003)(56012099006)(4143699003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?m1L+HwaqFUAUa5AAkp1Tq2KXna1VMEkdFU5EWD8N9eMru1eVcatU2R29jrJK?=
+ =?us-ascii?Q?ecYjPNjWnZd3UjPE1gJ7+LoYp6ClvqWYiZNobsHJqnBk0psfKUakY08Xwdbe?=
+ =?us-ascii?Q?eYkQzCTMWd891CxEtXpW3TubOWi+W10or+iAXj2mrq2SUyGexWP/enZBDBbb?=
+ =?us-ascii?Q?Dov/kMaz0uqK/MDExwwWDRhq6ucCjrbMzjJZlV68KgXrWuuR8uyNXFYZCFei?=
+ =?us-ascii?Q?YBrIYZh6zZav7DjulCUeXwILTIq77JtRv/n7pS6ngFlyEjqkiGJ/lMlxuwpP?=
+ =?us-ascii?Q?tIKPi36mLqynl9oKUDqwCmMXGTFC3B0YY9igmM/Li1Ae5vgyRv25HP+lOfKE?=
+ =?us-ascii?Q?ekINuiu/WloxXDPUyVGANHqfR50zGkZ26y9FXieaZKFOGVHcrDGj7PSnIbFr?=
+ =?us-ascii?Q?ZFzmYEbihvx7fPYLG6cY+XFyOAZyBTPsvKldEACKH6PpriyBYiaCY8QvdZ8e?=
+ =?us-ascii?Q?9sTtFGLl0OpP/xJP8GPQ6Of9BnUojBWsV42eyToA+4slT2lVH/XkXi1yCT9m?=
+ =?us-ascii?Q?EKXlQG535+JCwFGWuaOljTKG42g79JsJmLv6y9MWZ8M6KLPnuqovJxE12sZN?=
+ =?us-ascii?Q?D/AYHeAYO/jS5HNwJdtLDbVKyrjHeD23e1DV/biWy3mLYmc6EcYKsI5kbRf2?=
+ =?us-ascii?Q?JMiSomc6C/53+610Ws1z6ZZlam+kN92dtOn6ZK4waoHur1Yju7PRE1oeLZ27?=
+ =?us-ascii?Q?ciXMGfTNyOpK0dVnQ1xEYzmmZXFDAwcD0OVfrQf5ebQwpHiytgQFOj2na+5x?=
+ =?us-ascii?Q?d5KvBb3nJ2T4fwS9HHPlAwoQKGsM6kOoDZ6ase6c+gZ71NCPRxzjhaOYVZad?=
+ =?us-ascii?Q?bklWAY/ATDP+jcwhc++LYHju40d6okVjjCpISRm4pC+qQaz+9k3Fp3mjYVll?=
+ =?us-ascii?Q?8UFq49dqbSsq/ZeYLYWHkSZUSr0kIqr4UVjgU95SnAB/HoVzjKp7C5bXo11f?=
+ =?us-ascii?Q?dyPsXFjRbC9xeidrxr17OC36AGBawDDyseeIY5nR/GiStqhiT9Cc6/f3cH26?=
+ =?us-ascii?Q?futJVaKqwkA4LcwqFIiF2ix1+EmtuQ/pvCFgVRbKLPvVaJ4PbIRD/VI5Mbq3?=
+ =?us-ascii?Q?PDN5/cUVnmBkgSAJfCicBypMo4Fsu7moNYdRtsFk8dCqdgQoZI56NX7wkk9h?=
+ =?us-ascii?Q?UdWHVFe7sMou36TknxjS5d8kJXMp/J6RlpY9/U2g88Smg6pbdsgdGdeVFgMN?=
+ =?us-ascii?Q?uKr1PvpCdPOW7yLhL0i6DxtFJoDrXUTTikun40iKEyrAJbkhHfGChLVZV3SL?=
+ =?us-ascii?Q?Z36RYqp0sZNg7niEkDsOaTJZEkJeQpxNdW13+DLu5385A1htaPqxWybL2SWv?=
+ =?us-ascii?Q?MUGTekC0vmUeK5XR3nV/1H7UqlJwc3gx5x/+KyDac4/uTQ2ijpg4z+LY/xVm?=
+ =?us-ascii?Q?Gf+n3RWpoPc6Cc7STDwZtrFiGe/SHx4KqZ8+s+QHW7FaH1Oc55bTVBe38/YT?=
+ =?us-ascii?Q?cgyE8Heq/8ultqS2IOfK68oV4B5yNxqqmT4oJJplwQ8shDt9VpSAprTc7UxK?=
+ =?us-ascii?Q?I+9hvpRJ1QgtBO9FoDGUAbghMxixVlp4nd3nuC9Nl4kS96lkQ4ZzCyQJX93G?=
+ =?us-ascii?Q?YQAdgZ5Lhv3qHLzRq64TCU6vzryqnbIIUfUxOz5GgWUDgRdjZjUuMZrOp6bz?=
+ =?us-ascii?Q?90EfGKTBEhFURkp2dZnLrcJ8DD3yXPTB1IRdn/EYLCOB8NYfkzBBT2j1dD41?=
+ =?us-ascii?Q?SeXrHQb2D6ijq3ySjDBtq/Qr4GMw3PCfaTUSQuljlvlOYIYTKhGa/MDD7r/J?=
+ =?us-ascii?Q?ig0V+yMDXg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] alloc_tag: fix undetected compressed tag overflow
- when profiling is disabled
-To: Suren Baghdasaryan <surenb@google.com>, Hao Ge <hao.ge@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, stable@vger.kernel.org
-References: <20260812054105.102637-1-hao.ge@linux.dev>
- <20260812054105.102637-3-hao.ge@linux.dev>
- <CAJuCfpFvdNFdsKdK2CdF2fNp8gbNgFpoeAiaqp70mpbNGCvk3g@mail.gmail.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <CAJuCfpFvdNFdsKdK2CdF2fNp8gbNgFpoeAiaqp70mpbNGCvk3g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Exchange-RoutingPolicyChecked:
+	qPnEp0UhUBjS2pOklh4ILJrNSWt9ZYC/9Q9hx+8ePVnFw8A+MoPzSGI+kS7tHbBtLRzVWmjY5bhUqrTExWxZHW0AT9rfOTyUSHz1tnX1Du3Ey7HW1rLXewLMo3rZCA+iokfcZSaiVEiJaOhFGweAT8vXalifhy4IZpWDrZaBMoeKIfgMnvp+gmnMfWqxUiSD0JdgPipIdLNKMvjmdTNdO33qZbIgI4eTpfDzDKtqMCbGDhAIKw0rGUvfl4QeyXhfV1i2QQ/L4VeFQd7VRJ3ud65ucfj7GpufDn4g3a1Ux9Wrk7XFH0VD8WdDdvxcf2h2s5b16ul3RS8tWecClxiGVg==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Hcu7RCpuwjdXvCcNN2KlU/zzcoWOiptHYadaaq48h1csca4/zexpyAI+Oz/IG6juj33VUbmSxT+KQbvFuqjxkkHdsP9xk8wiWjVIULP8TrhdlnFfN7UOwx0RR5DS67U5Pb4gn55sTcTK0ZUEveQzt9PoJdw3obwaURrIPcE5mGfisCbYMzDSoNEyozRxQSTKSYajuR0mcEciwSDnf7/dOSo9ZSdWZbNdMDFmHM7Tmg2W0QZXhS6zOxCEawKFTnseRx9BNBEvcAzVNso01/T2z4B0kOWsHRKfyr1rEvuKQnX0gRegzo6bzibqVdOUei8xLy/fjSFtUYLvs5ud102ScIRov6cZT7L95gCGosmotwAJpKXjkYIK9BIud0jL9Wd44QmTSVGSZXI9v6YhTaL9dL/2XJCYHhqPwmvgUTT89/QQVttFKafpVHSSx5QICq8G2ZHD6Pw6pqqvdycj1l40Q+445rU7kLsA5yL8Qnr1peaJ5g4r3zZeJdyYK5zFensO9lHvd7ES/qdEUCTQB8Hw48HnRyGOSVwz5p8iZzZSnWkqAlXAKeldh/f6LQAeRpLTpbGZ5Bmb0XWpzNphmiDSq6xqAqQVmm4jlQC1fKd8MH31vbzY9sUDIg/+KKeVbYmV
+X-OriginatorOrg: qti.qualcomm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR02MB8991.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e80193b5-6c7a-4857-c1fe-08defb6de8ea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2026 08:11:01.0544
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: J/jZ/lnEf/GxuPhYcx48A9olxcTz7NNFOkYBzjKUrDfb8QMW1PPx6Q8YEYMG1TxWjU5tTuDEPPsKNhKCfv8SaKHoh1+x4gInN4N/7eklhOo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR02MB9886
+X-Authority-Analysis: v=2.4 cv=EKc2FVZC c=1 sm=1 tr=0 ts=6a817099 cx=c_pps
+ a=ITiX5wGoaVWtfJBAqtKqhw==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=gowsoOTTUOVcmtlkKump:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=Z8vxkzJkRz7waHGfg2oA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE2MDA1OCBTYWx0ZWRfX8Hs82jqRTPZa
+ TGuCjdy6Aj8CxY9RtOhrXAzv6MOKmUQQ3sMnzuQ5LSdGuHM/CZforOkjaAFUTOkMQfDHGY03KGW
+ nJMyEVQo9T1pqDJ0cx8sFj0n4oTp/tY=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE2MDA1OCBTYWx0ZWRfXy1MMPEn/6Tk/
+ 6afRmiK9Bad54TfVrAUmhoSeuP+Y7pVUDl9XDCc3xGUWEJ3f9VGmp+GCtd2Px4DdHcmaeW9BILW
+ ZcW4dWPIf4qHgMO1Gf8mSvbigDlZBtbZdzMk3cALWiNJ1PzJ2ZwY/5iR+J88XI5JKRuPqw76Qto
+ vJIY1jJrCxY6jRp2owWHtNy1qlKow5ztxdYF9uDjPBZR1NFG2lVoV683Rxq04s3lgnv1Xc7S9u1
+ OHryKOQuQiRVflD97bapzkAaBjExRSPRwfgw75vlpFlfSRWfPW883rGrQT6/Uu5k+fmy+ckoS7d
+ eO3ev+aiiCiK8HtJXR+TUwULuSnVSvO+X+97cfYRKAkksMx0NbEKD8h5lXFE81IrYiXqy5nqVGO
+ Qp08+7lSYwaHDa1sgznyZPEU7sy7W7L7noZdk3nNhxYTum2jbeJzfhiOVm051PVlGdf/5qAwbOn
+ GwZI1LS2nI8ZaFkKp2A==
+X-Proofpoint-GUID: sTOEvF7SXFz80fUQl7DApfsGGfInKdeI
+X-Proofpoint-ORIG-GUID: sTOEvF7SXFz80fUQl7DApfsGGfInKdeI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-16_02,2026-08-12_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 spamscore=0 clxscore=1011 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608160058
 
-On 8/12/26 7:41 AM, Hao Ge wrote:
-> In reserve_module_tags(), the tag overflow check is gated on
-> mem_alloc_profiling_enabled():
-> 
->     if (mem_alloc_profiling_enabled() && !tags_addressable())
-> 
-> If profiling is toggled off at runtime and a module is loaded whose
-> tags exceed the compressed-mode limit, shutdown_mem_profiling() is
-> skipped. vm_module_tags_populate() still maps memory for the tags and
-> the module loads successfully, but the total tag count now exceeds what
-> NR_UNUSED_PAGEFLAG_BITS can address.
-> 
-> Once profiling is re-enabled, ref_to_idx() computes each tag's index
-> as its position in the alloc_tag array. update_page_tag_ref() masks
-> it to alloc_tag_ref_mask before storing in page->flags. Indices
-> beyond the mask are truncated and idx_to_ref() resolves them to wrong
-> tags.
-> 
-> This silently corrupts /proc/allocinfo: allocated pages get attributed
-> to the wrong call sites, so the statistics it reports are wrong.
-> 
-> mem_alloc_profiling_enabled() and mem_profiling_compressed are
-> independent. Once compressed mode is established at boot, it stays
-> active regardless of runtime toggles of mem_profiling.
-> 
-> Remove the mem_alloc_profiling_enabled() guard. On overflow, shut down
-> profiling, release the reservation, and return -EAGAIN so that
-> layout_and_allocate() retries with profiling disabled: codetag sections
-> are then placed as regular module data and the module loads without
-> profiling rather than being rejected entirely.
+  Hi Nicolas, Nathan, Kees,
 
-When the described overflow occurs, why should codetag sections be
-placed as regular module data? Will the codetag support use them in any
-way, or do they simply waste space? Is the issue that alloc_hooks()
-creates relocations pointing into .codetag.alloc_tags?
+  Thanks for the feedback.
 
-> 
-> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
-> Cc: stable@vger.kernel.org
-> Suggested-by: Suren Baghdasaryan <surenb@google.com>
-> Signed-off-by: Hao Ge <hao.ge@linux.dev>
-> ---
->  kernel/module/main.c | 25 +++++++++++++++++++++++--
->  mm/alloc_tag.c       |  8 +++++---
->  2 files changed, 28 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 46dd8d25a605..ed26f167be84 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2944,6 +2944,7 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
->  {
->  	struct module *mod;
->  	int err;
-> +	unsigned long frob_size[MOD_MEM_NUM_TYPES];
+  Would it be acceptable to handle this generically for external modules in
+  top-level kbuild (`Makefile`) instead of tying it to kstack_erase? I was
+  thinking about adding:
 
-frob_size is used to store values of module_memory::size, which has type
-`unsigned int`. The types should match.
+    diff --git a/Makefile b/Makefile
+    @@ -1057,6 +1057,10 @@ include $(addprefix $(srctree)/, $(include-y))
+     # Do not add $(call cc-option,...) below this line. When you build the=
+ kernel
+     # from the clean source tree, the GCC plugins do not exist at this poi=
+nt.
 
->  
->  	/* Allow arches to frob section contents and sizes.  */
->  	err = module_frob_arch_sections(info->hdr, info->sechdrs,
-> @@ -2966,18 +2967,38 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
->  	 */
->  	module_mark_ro_after_init(info->hdr, info->sechdrs, info->secstrings);
->  
-> +	/*
-> +	 * Save the sizes reserved by module_frob_arch_sections() so they can
-> +	 * be restored if we retry below.
-> +	 */
-> +	for_each_mod_mem_type(type)
-> +		frob_size[type] = info->mod->mem[type].size;
-> +
->  	/*
->  	 * Determine total sizes, and put offsets in sh_entsize.  For now
->  	 * this is done generically; there doesn't appear to be any
->  	 * special cases for the architectures.
->  	 */
-> +retry:
->  	layout_sections(info->mod, info);
->  	layout_symtab(info->mod, info);
->  
->  	/* Allocate and move to the final place */
->  	err = move_module(info->mod, info);
-> -	if (err)
-> -		return ERR_PTR(err);
-> +	if (err) {
-> +		if (err != -EAGAIN)
-> +			return ERR_PTR(err);
+    +ifneq ($(KBUILD_EXTMOD),)
+    +KBUILD_CFLAGS +=3D -gno-record-gcc-switches
+    +endif
+    +
+     # Add user supplied CPPFLAGS, AFLAGS, CFLAGS and RUSTFLAGS as the last=
+ assignments
 
-The move_module() logic is non-trivial. -EAGAIN could be returned by
-other code, now or in the future.
+  This would avoid per-module changes and also avoid coupling a generic
+  compiler switch-recording behavior to `CONFIG_GCC_PLUGIN_STACKLEAK`.
 
-> +		/*
-> +		 * -EAGAIN means profiling was disabled but the module
-> +		 * can still load without it. Reset state and retry.
-> +		 */
-> +		rewrite_section_headers(info, flags);
-> +		for_each_mod_mem_type(type)
-> +			info->mod->mem[type].size = frob_size[type];
-> +		info->sechdrs[info->index.sym].sh_flags &= ~(unsigned long)SHF_ALLOC;
-> +		info->sechdrs[info->index.str].sh_flags &= ~(unsigned long)SHF_ALLOC;
+  If this direction looks reasonable, I can send it as an RFC patch for rev=
+iew.
 
-Why is it necessary to reset SHF_ALLOC for .symtab and .strtab here?
+  Thanks,
+  Jaihind
 
-> +		goto retry;
-> +	}
->  
->  	/* Module has been copied to its final place now: return it. */
->  	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
+-----Original Message-----
+From: Nathan Chancellor <nathan@kernel.org>=20
+Sent: Saturday, August 15, 2026 4:16 AM
+To: Nicolas Schier <nsc@kernel.org>
+Cc: Jaihind Yadav <jaihindy@qti.qualcomm.com>; Kees Cook <kees@kernel.org>;=
+ linux-kbuild@vger.kernel.org; linux-modules@vger.kernel.org; linux-hardeni=
+ng@vger.kernel.org; linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] kstack_erase: suppress -grecord-gcc-switches for ex=
+ternal module builds
 
-I'm not sure this is the best approach. It's complex logic for what
-appears to be an edge case related to a debugging facility. It will have
-the usual problem of error paths not getting enough testing and breaking
-subtly over time.
+WARNING: This email originated from outside of Qualcomm. Please be wary of =
+any links or attachments, and do not enable macros.
 
-An alternative could be to reset SHF_ALLOC on the codetag section to
-remove it from further processing and have relocations that point to
-this section resolve to something else. It seems that alloc_hooks_tag()
-could tolerate this, since it only needs to reference the associated
-alloc_tag when mem_alloc_profiling_enabled() is true and that gets
-disabled by reserve_module_tags() on the overflow.
+On Fri, Aug 14, 2026 at 08:23:02PM +0200, Nicolas Schier wrote:
+> If there is a need for external kmods to to have
+>
+>   make modules KCFLAGS=3D-gno-record-gcc-switches
 
-It is also not an ideal approach, but I feel it could be less intrusive
-to the module loader. I can put together a prototype if needed.
+Ah yeah, I forgot about KCFLAGS for the external module build. An external =
+module could also include
 
--- 
-Thanks,
-Petr
+  ccflags-y :=3D -gno-record-gcc-switches
+
+in its build file as well if this is a requirement of their build setup.
+Perhaps we could revisit this within Kbuild if there is enough interest fro=
+m various parties.
+
+--
+Cheers,
+Nathan
