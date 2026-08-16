@@ -1,128 +1,264 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145CA3DD861
-	for <linux-modules@vger.kernel.org>; Sun, 16 Aug 2026 09:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786872608; cv=none; b=bYERIwsTq59dyb1mgsQTqMFAf+FDElspiNtTOmzprnUIUD93mhCtMLJTufa1fbxz/RL6zIqEZzmgNgxtVrEIit03KGZFM/n/VeVlY6o820WvLsa8h+TEMfljdb/fCqvUN1w7KWiPE3V/ulTcOXhmI+fR9I24rCa8xY8qR59Sigs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786872608; c=relaxed/simple;
-	bh=rf6Zv7aaumfL97sFKfE4by4/1kdp0Np8vyoyNbuZMdo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pWkARWzbDeuJfuyhLJgsIHmJ2AFbsiXUPSCjZsSM1q1DjiDRq+p0d2rpn9QVEjcXkOZoDA9+xfK8BiT6kR1mgO7wb7wAdK3Lsyw+2cVs4wygvWEjBKXKQmtkpJgIvxdteOBMYTT344qsFwK/CIim0ppxzmMcZpv39hcJklfXcdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KAcK3ivp; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF3114EC73
+	for <linux-modules@vger.kernel.org>; Sun, 16 Aug 2026 15:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786893409; cv=pass; b=Jnu65/hOEW1/gwEoxtjUSKeXTnNHePDhxWwF1nlicosto9jBfhVYSSZ8nSxgDXoLAWrzrDLEpVhnBSSUKWy61qpolWQ/m8kafotPS6jcsMBal3OnuFQAqQ6HXUHF613QpwufXOP++9+KXA5wtvPyt3D7H5uYKNwEcmgSV7lMlts=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786893409; c=relaxed/simple;
+	bh=nTQYatXTuo/oI/IsZwKNVXTQE999UX8l9kqBpb11hlk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e1yNFWs+WvQhMU8K+5gcoiCBNr+4erX++JNqF/8oYlh+5I/D5aKp4VydEVu5PXbB4AlkQg771GAKSmUfInH2t+d3YrEm4VISjpF+W0tzaDh/c2D8O5vfr5lzqABdo5Y+QSnvrvw8EdDFkrSjnNcWGSnFMFUABggrQ0F1QqDBF/0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iiIyU1XV; arc=pass smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KAcK3ivp"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47f904e80eeso2442213f8f.1
-        for <linux-modules@vger.kernel.org>; Sun, 16 Aug 2026 02:30:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iiIyU1XV"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-51c10e86e52so479821cf.1
+        for <linux-modules@vger.kernel.org>; Sun, 16 Aug 2026 08:16:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786893406; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UttQIdSAfEjZ29ewlQ196fEd1WXnJOuyXT6cpKbyfxW7zwODudMzm0yltXsigBN5WI
+         BBZ7U2bg1WzB02G+09qGxrt+NqK2XmU+hpDklU2LeBJ4YIlwQTPc2VwOEOOy1LfiQfu1
+         QOJsU7TMgspHpIIcywniiDQkAqh4iHa9PhC7bhZw1PMG0G3QEQWniIYkaVUJEcL6ExaR
+         1UcKPN8ZMcWzdiRaxL5S0yxzPtJPv2JyygeQc2JyxjF7+qa97Nh9mlUZnlOZeeM6pXEg
+         kuwJljq8VnoGdTH1LXA+oDQVeEMTVFHROqfsWEVWeerGkF6YelLPez/o4h/jpATmov/i
+         FriA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=paElrpHQlE8g3P6OtIHexotZleQW+QuOt1CzJnnLFjc=;
+        fh=X2z137MJ3nl9vJWptPgeahGZWbMFfQ5oVIkK/+804j0=;
+        b=S+DAAxzWX0I3cmT1WsOeVmbBbAmxePUYNE9O9YqfN1fbBuYafIDw4r5ung8qRnCQy+
+         xn0Zd/qpEqy32x7Ze2YvLSBOWTbfWHNfzxs+tRikCvoS3rsXocrZg3dEhDjqA75DqJAj
+         0hjZA59ntDUpoKs154wY/kkpNbpMG1pNE8hT9p8ouVRuGAoWBHpAtuoracRT8xZ47N2p
+         jfpqAmziiHReCHRgyZbwHEzqSdYDlFqzdWy9ucavtYUUIYAX9004fyt4HJkCZdsbzTx5
+         931SmP/qDsSW24IWj0e6381D4BbQQLnDXWZKcpK5mHzsYwKiwBWfQNp3tR0rP81+8DFh
+         dveA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1786872603; x=1787477403; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HYO0v0mYby1fN7mZljAuJT92KJjaxa1LNtL8cC5NBWA=;
-        b=KAcK3ivpRVWYn790jZUwJYlxGgjkDtGPnVtIWfIpuAmeeILXnJHsbOJDpDHzJbrxe+
-         IH1W3U04a4Y4CkdSudZCCIaV7vRSz/mQSLC0Kw8iS2AxZdl9udff50Fj0th6k9ApsVUy
-         8R5C+3fOFuijlUtVxi5XLQLRrFDmfDpQsOyO/lGIT6qYME4P0xSaaYKCz+JEPoBe7XLX
-         vu85TDFwgs/k9yK5704SuleNPjIHfU1iEjTbNCFrHsYGD7YLN+Iv3oz+e/H0Wg/CGv19
-         qD/vH8ULN5xXdP35xpxQjtT5vDJjmjEFw7GCOyx8Cz927j9UMRYbUDqU+qaEKP9ld6Kb
-         hm8Q==
+        d=google.com; s=20251104; t=1786893406; x=1787498206; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=paElrpHQlE8g3P6OtIHexotZleQW+QuOt1CzJnnLFjc=;
+        b=iiIyU1XVANX+/lvpdh/C92MD/gI1aZa2VLbw4vkBA5UogzJyi433p9RQxlCpP+8A5M
+         smkk0iswmpmYeVXIdzVL5FK3DXhFw4NVPobm5ve+HOTswU/WYrF8GVXuAkCwB8+Vm5Qi
+         02XIWvzr/pCuLUAh1uR5E4E64boWSYAeoKHZQrgQIlAvCRZIYH+jLZC/KnrmrhLpEZ8w
+         mSLu82zViXgIj7LurCFKcLkQGAKFbGF9bOE2t1KnR8pnbffPVxE62Ncb9+vlBlkBn2cd
+         6hoCAzA9ZZ/w4HZkPVWsPV7vCWGe0qpYQpXhONdMDfScysYNsXiar1ZVFipNdPNwRIUt
+         D4UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786872603; x=1787477403;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=HYO0v0mYby1fN7mZljAuJT92KJjaxa1LNtL8cC5NBWA=;
-        b=N/1m9SiDunsMU1prJXDgbGbc9csGQvMoibAkzz4P+F5FS5JmrE5iYTMhOzG1KBj1F5
-         ypMOoa1z784vqLs8Jxds1JbhJ6qxw4b5r2btLhJr2tOZVoB+7mVqt6vdIMNBVTiXYLBI
-         WwsAVkCfb51GBYBkOwqxT6RmqKJ945exOmXr4a4uPr++5nr3PrdW+j8UEUWwvuy+7QC7
-         JkemRuF58S+Zw2YvBXrJHHH0FNftus4hLjIH5pIqEqPs1IAPJ9JtvvPsO2idI0E2B5T/
-         2RZXormuphd8cfJjfRMo1PoGTCHz7sVxPHbV84hBSUvhHzYnPtNhu1X+ICTSyisxVFaZ
-         UyFg==
-X-Gm-Message-State: AOJu0YwxWZEVtC06Go7CJvTdjE4e1oavBp4irFQHA0jtoA9uga7VzcbN
-	vzbIZhUMhKsxO/ALNbad/Y0WTKtADdFCpHsaKH72e/z7ink7cVsVnkN6N4bJBDQi5bk=
-X-Gm-Gg: AR+sD13H5j7vYbrGAv/03QwmXtAmq09IRLfsG8jGSRjY0ak+c7Git6dW1vTOixTEIdU
-	JIz4p/NcZYzeNH9dyy57eH//pdUm2z8xs7dqvTkRX3YLbUpAKHhe4IMpbroF8Q/vNe/FYb4IIrb
-	diMOPovoSEjl17UDnsQkQZLjVL6AV/GVlb3vii2oDUiXULRSOA/CHn4eCJBQOFzkkKnD8LG/lKs
-	+q43DUQ2dqNC/8H2kqoawoWotAJy+YJS65IlF3o6WhcKI7aDrTYN8QhzwWiG3voopALIecsTHRc
-	/nGXjYaVJJtKjO0kIBmET2Wj+qFSecP4FP8t4A5b+KDx6hfys5EqRo/U9uTbQpuZHztH+E2IPs1
-	Zp42ncQW6xDHxild9Ywg29RHPq7ijwDyVH1frRDeAzpMVdfZSYYWWp9SNeJxM+smNOjguHSBLY7
-	YO0mUNdx0HN8yqA+pj6mOqOFWe0S43Exf7ob47mqYhB9zrBLG4n680zGuo7xpFWtMSyjBw1+NRq
-	ZRbudHMWOr5FV7aS8bmgdiUYTYqKpUWURA=
-X-Received: by 2002:a05:6000:41e8:b0:481:5edd:1b6c with SMTP id ffacd0b85a97d-4816070c47emr28246971f8f.7.1786872603310;
-        Sun, 16 Aug 2026 02:30:03 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2cc811sm23769861f8f.33.2026.08.16.02.30.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Aug 2026 02:30:03 -0700 (PDT)
-Message-ID: <0d11ebbb-2e9c-49f3-a550-760b5a94dfe0@suse.com>
-Date: Sun, 16 Aug 2026 11:30:02 +0200
+        d=1e100.net; s=20251104; t=1786893406; x=1787498206;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=paElrpHQlE8g3P6OtIHexotZleQW+QuOt1CzJnnLFjc=;
+        b=dSPox47z4jwNX4+Iq4jzYTSDiaXAQ29C4Kb7m+6oC/LshBQMvxbS0aXzfCOF2xOvYE
+         JzZML2AFFGRvBmXsvKswMXvXSFbPf78/rCtSmjM3lOAVy5J6ELtTHa4Vv3NaYtkAgW2T
+         0YbJLLjR+JevBYrgBJo+guGEb+giojDfWAzqeZK5mBv34HUf4V+M3L73jEvR7TLW4Okd
+         h0HYJFuFCQw18VKdfGWHfCJ4jWEQLJTZ0EjGlaq6TWF3EaWQHZ3e2NaEuN6OBwwBonDN
+         flQB2ryAM7EVbPg/88vnX5QmfbnAJDIU+2ILSExOmvjq/OsjeT1CQSVzICk39eq/btDQ
+         iuUA==
+X-Forwarded-Encrypted: i=1; AHgh+RqhgBjyg0G137au6At55Qw4GxzaDE+KiJi8Oj01dtk/VZrVxlhazCukAUvBcz81tYtr/oGl47u5oke0vjAO@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhHyxC11loXikeZvX8INfbPYpwfUKqpXNag/7U2CfJyCQJopmI
+	y0SlYCiPb+DG09G/t+7Kxnx4sEZLYa+kCS/l4bEpkz2oDAIa1xQLOKjEirFSZWQTFIhFwo2o5zG
+	N7xMYjK0hnynGOCSCi44+6dNdKKgKx39XAPtWmE6f
+X-Gm-Gg: AR+sD11pga702C1zviINoID+ZU1keUa65DLHSpVqKiMNYLlFsa2e7TwmrwtoOVcwSmZ
+	Pn83g6FFODfmNVXk+MxX+BbVknYqeOPzJfW+entSRnI1rrf+d92ODKA8t904Sm/ksRAaiYQyTo2
+	OxfO3bIlUmLMLK4X1CdcLVt8GSN0rAec2mRHLUgmqFW4jEKxzVSPxODmjROz3TMnoK10VhsW3i5
+	v3TFOgF4wYlJajBD/enMuGeBLN9WXGcrZCSa9eiZTG0E8P1ntEnP8gxwsisfH3Tq4RDoiXJHGAW
+	rmVSyv6RN8I6ChlbN0RMnr4Ghn08+w6vJbRKa1j3eGE=
+X-Received: by 2002:a05:622a:291:b0:517:6010:7c71 with SMTP id
+ d75a77b69052e-52db07b97ffmr678631cf.4.1786893405340; Sun, 16 Aug 2026
+ 08:16:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] slab-use-after-free in idempotent() during concurrent
- finit_module [syzkaller] [ath10k_pci]
-To: Yang Zi <2959243019@qq.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <tencent_95B4D4B2EC1DAF3C31FDD07D6FA8B3FA9907@qq.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <tencent_95B4D4B2EC1DAF3C31FDD07D6FA8B3FA9907@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260812054105.102637-1-hao.ge@linux.dev> <20260812054105.102637-3-hao.ge@linux.dev>
+ <CAJuCfpFvdNFdsKdK2CdF2fNp8gbNgFpoeAiaqp70mpbNGCvk3g@mail.gmail.com> <143a37b5-93a2-4038-8be9-29e13263e743@suse.com>
+In-Reply-To: <143a37b5-93a2-4038-8be9-29e13263e743@suse.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Sun, 16 Aug 2026 08:16:33 -0700
+X-Gm-Features: AcwNN1X1kkHyn9OSKgwwnu-af8eWVC7nq_5zQzZp6a8dGSxkkhZX0C7kT05sApM
+Message-ID: <CAJuCfpF1pWqhc+P9zPg8FT_CcdQxRuEpJ2DtYja1BeMXhW7-8Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] alloc_tag: fix undetected compressed tag overflow
+ when profiling is disabled
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Hao Ge <hao.ge@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/8/26 7:00 PM, Yang Zi wrote:
-> Hi,
-> 
-> While fuzzing the kernel with syzkaller (KASAN), we hit a slab
-> use-after-free in the module loader's idempotent path. The crash is a
-> Read of size 8 in `idempotent()` in kernel/module/main.c while
-> concurrently loading modules via `finit_module`, when the load fd is
-> `close()`d from another thread.
-> 
-> Reproducer summary:
-> 
->     BUG: KASAN: slab-use-after-free in idempotent kernel/module/main.c:3682 [inline]
->     BUG: KASAN: slab-use-after-free in idempotent_init_module kernel/module/main.c:3788 [inline]
->     BUG: KASAN: slab-use-after-free in __do_sys_finit_module kernel/module/main.c:3815 [inline]
->     Read of size 8 at addr ffff88800d36fe48 by task modprobe/715
-> 
->     The buggy address belongs to the object at ffff88800d36f700
->     which belongs to the cache UNIX-STREAM of size 2048
->     The buggy address is located 1864 bytes inside of a freed 2048-byte region
-> 
-> Allocated by task 634: __sys_socket → unix_create1 → sk_alloc → kmem_cache_alloc (2048 B)
-> Freed by task 634:  __x64_sys_close → __fput → sock_close → unix_release_sock → __sk_destruct → sk_prot_free → kmem_cache_free
-> 
-> `idempotent()` uses `file_inode(f)` as the cookie to compare entries on the
-> global `idem_hash` list. `fdget` only holds a reference on the `struct file`,
-> not on the inode/socket object. When a concurrent thread `close()`s the
-> module-load fd while another `finit_module` is inside `idempotent()`, the
-> `UNIX-STREAM` socket object is freed and the inode-cookie is dereferenced on
-> the hash list → slab-use-after-free (Read 8 B).
-> 
-> Root-cause hypothesis: the `file_inode(f)` cookie has no lifetime protection
-> across the `hlist_for_each_entry` in `idempotent()`; the concurrent `close`
-> can release the object underneath the traversal.
+On Sat, Aug 15, 2026 at 3:45=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
+ote:
+>
+> On 8/12/26 7:41 AM, Hao Ge wrote:
+> > In reserve_module_tags(), the tag overflow check is gated on
+> > mem_alloc_profiling_enabled():
+> >
+> >     if (mem_alloc_profiling_enabled() && !tags_addressable())
+> >
+> > If profiling is toggled off at runtime and a module is loaded whose
+> > tags exceed the compressed-mode limit, shutdown_mem_profiling() is
+> > skipped. vm_module_tags_populate() still maps memory for the tags and
+> > the module loads successfully, but the total tag count now exceeds what
+> > NR_UNUSED_PAGEFLAG_BITS can address.
+> >
+> > Once profiling is re-enabled, ref_to_idx() computes each tag's index
+> > as its position in the alloc_tag array. update_page_tag_ref() masks
+> > it to alloc_tag_ref_mask before storing in page->flags. Indices
+> > beyond the mask are truncated and idx_to_ref() resolves them to wrong
+> > tags.
+> >
+> > This silently corrupts /proc/allocinfo: allocated pages get attributed
+> > to the wrong call sites, so the statistics it reports are wrong.
+> >
+> > mem_alloc_profiling_enabled() and mem_profiling_compressed are
+> > independent. Once compressed mode is established at boot, it stays
+> > active regardless of runtime toggles of mem_profiling.
+> >
+> > Remove the mem_alloc_profiling_enabled() guard. On overflow, shut down
+> > profiling, release the reservation, and return -EAGAIN so that
+> > layout_and_allocate() retries with profiling disabled: codetag sections
+> > are then placed as regular module data and the module loads without
+> > profiling rather than being rejected entirely.
+>
+> When the described overflow occurs, why should codetag sections be
+> placed as regular module data? Will the codetag support use them in any
+> way, or do they simply waste space? Is the issue that alloc_hooks()
+> creates relocations pointing into .codetag.alloc_tags?
 
-This doesn't quite hold up. 1) idempotent() never dereferences the
-file_inode(f) cookie, so it cannot cause a use-after-free.
-2) finit_module() calls fdget() on the input file and the file itself
-pins its inode.
+Correct, alloc_hooks() will have references into .codetag.alloc_tags.
+With mem_profiling_support=3Dfalse they should technically never be used
+but I don't think it's a good idea to skip .codetag.alloc_tags section
+allocation and to leave dangling pointers. Also the case described
+here is an outlier, so optimizing it would not yield much benefit.
 
-I'm afraid this looks very much like AI-generated spam. If it is
-a genuine report, please provide more information, such as a syzkaller
-reproducer and the full boot log.
+>
+> >
+> > Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compre=
+ssion")
+> > Cc: stable@vger.kernel.org
+> > Suggested-by: Suren Baghdasaryan <surenb@google.com>
+> > Signed-off-by: Hao Ge <hao.ge@linux.dev>
+> > ---
+> >  kernel/module/main.c | 25 +++++++++++++++++++++++--
+> >  mm/alloc_tag.c       |  8 +++++---
+> >  2 files changed, 28 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 46dd8d25a605..ed26f167be84 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -2944,6 +2944,7 @@ static struct module *layout_and_allocate(struct =
+load_info *info, int flags)
+> >  {
+> >       struct module *mod;
+> >       int err;
+> > +     unsigned long frob_size[MOD_MEM_NUM_TYPES];
+>
+> frob_size is used to store values of module_memory::size, which has type
+> `unsigned int`. The types should match.
+>
+> >
+> >       /* Allow arches to frob section contents and sizes.  */
+> >       err =3D module_frob_arch_sections(info->hdr, info->sechdrs,
+> > @@ -2966,18 +2967,38 @@ static struct module *layout_and_allocate(struc=
+t load_info *info, int flags)
+> >        */
+> >       module_mark_ro_after_init(info->hdr, info->sechdrs, info->secstri=
+ngs);
+> >
+> > +     /*
+> > +      * Save the sizes reserved by module_frob_arch_sections() so they=
+ can
+> > +      * be restored if we retry below.
+> > +      */
+> > +     for_each_mod_mem_type(type)
+> > +             frob_size[type] =3D info->mod->mem[type].size;
+> > +
+> >       /*
+> >        * Determine total sizes, and put offsets in sh_entsize.  For now
+> >        * this is done generically; there doesn't appear to be any
+> >        * special cases for the architectures.
+> >        */
+> > +retry:
+> >       layout_sections(info->mod, info);
+> >       layout_symtab(info->mod, info);
+> >
+> >       /* Allocate and move to the final place */
+> >       err =3D move_module(info->mod, info);
+> > -     if (err)
+> > -             return ERR_PTR(err);
+> > +     if (err) {
+> > +             if (err !=3D -EAGAIN)
+> > +                     return ERR_PTR(err);
+>
+> The move_module() logic is non-trivial. -EAGAIN could be returned by
+> other code, now or in the future.
 
--- 
-Thanks,
-Petr
+That's a good point.
+
+>
+> > +             /*
+> > +              * -EAGAIN means profiling was disabled but the module
+> > +              * can still load without it. Reset state and retry.
+> > +              */
+> > +             rewrite_section_headers(info, flags);
+> > +             for_each_mod_mem_type(type)
+> > +                     info->mod->mem[type].size =3D frob_size[type];
+> > +             info->sechdrs[info->index.sym].sh_flags &=3D ~(unsigned l=
+ong)SHF_ALLOC;
+> > +             info->sechdrs[info->index.str].sh_flags &=3D ~(unsigned l=
+ong)SHF_ALLOC;
+>
+> Why is it necessary to reset SHF_ALLOC for .symtab and .strtab here?
+
+I believe layout_symtab() sets that bit and to retry we need to reset
+it. But I might be wrong here.
+
+>
+> > +             goto retry;
+> > +     }
+> >
+> >       /* Module has been copied to its final place now: return it. */
+> >       mod =3D (void *)info->sechdrs[info->index.mod].sh_addr;
+>
+> I'm not sure this is the best approach. It's complex logic for what
+> appears to be an edge case related to a debugging facility. It will have
+> the usual problem of error paths not getting enough testing and breaking
+> subtly over time.
+>
+> An alternative could be to reset SHF_ALLOC on the codetag section to
+> remove it from further processing and have relocations that point to
+> this section resolve to something else. It seems that alloc_hooks_tag()
+> could tolerate this, since it only needs to reference the associated
+> alloc_tag when mem_alloc_profiling_enabled() is true and that gets
+> disabled by reserve_module_tags() on the overflow.
+
+Hmm, yeah if we redirect the references into .codetag.alloc_tags, that
+would be much better.
+
+>
+> It is also not an ideal approach, but I feel it could be less intrusive
+> to the module loader. I can put together a prototype if needed.
+
+If your approach does not cause module loading to fail when we disable
+profiling, then that sounds like a good idea. If it's not too much
+trouble, could you please send an RFC?
+
+>
+> --
+> Thanks,
+> Petr
