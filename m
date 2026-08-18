@@ -1,116 +1,115 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7AC233C1AD
-	for <linux-modules@vger.kernel.org>; Tue, 18 Aug 2026 11:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149194734E2;
+	Tue, 18 Aug 2026 13:04:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787054400; cv=none; b=K1GYiyuOckMET8Kya6a0S37aUfwF5OZiSXVjUETJK0lD4qHhf/pB/dWBuUaGS9NFR7R+H1Y7CWAOxs6wBz93+Umz2Rgk16x5BHInETMI6Xorl/F6E8DCXzmTrp034GebU1vIcUAA0y5m1qpujWu8UIDbk7voWLZPYy3GCHjJKQk=
+	t=1787058262; cv=none; b=A+xPqLodOdGmdw7sYW3Su4D1d0u6ocQ/7CvcnuitMRQVfKMkYLNApwf4e7cLM1JDIBZjF7MThfgULwTX5L12srpXYsxgSLw6qP8FXfnDGWZeoBwUBjd7MMNqiewJq8nmdzK1zwMFkdqDNzdZBebSktgxN8Q1wcXhm23LiR+SwMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787054400; c=relaxed/simple;
-	bh=4XrU5DOs80iqMiB8KU7Viwwf3z4yaHMHf4dvuHwXlRs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tT8ni9Hx5buyx2NxzSynAhtmfL6U+jVldvTOWUcWBJVJde2KnhlR/qnKztnrQuhkuMEusXewRvkt6B4TKr8qRurpYUd4dILUnBip+6NVNUjn1tXOxjzYk+enBIIgjYu5TGJHtuDZpKQ0Jgzh96qjlLQHuTrLWd/nWWvY+O6zvsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HiLZefeN; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HiLZefeN"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47fe89fb333so2749374f8f.3
-        for <linux-modules@vger.kernel.org>; Tue, 18 Aug 2026 04:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787054396; x=1787659196; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uS9zOAi5LfeCdiC/XsclJmrpHRK7bC0G5EuVG3u99Qk=;
-        b=HiLZefeNtIcSHGiyMMME9aqi0/V0e04QxE/ja4EXcVouytWkKgTypLTNe//85JlwGV
-         Txid3tA+dzCflJRWB2cQD6w9sL4x6hxURuZM55/cRH4g28RfAwxSa2WeXmrbfPdOItr8
-         8dUpotV/y34+GLch1keE3sZpfrmUNEHth/V0LI8B3t/8wOkcYsK6LTcGsRMNDJ9qPC4e
-         MJzx/UyPzYhVSt9050jbYG+epYkXbXIyh+XoSp9O8l+/PqLaz/QKM9hjPCy50NBSGMUW
-         nfEy8/+Zx/D58g0oxdjvPs5Ar/rY2JqbTX8cdaNuR/9bWkU+5+nt4LPGiZRhYVGbs0pf
-         Ibnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787054396; x=1787659196;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uS9zOAi5LfeCdiC/XsclJmrpHRK7bC0G5EuVG3u99Qk=;
-        b=FFmUe8RQHcbPKLEmr0+gA91R1GzS307CR5VkMYCuVPBMifyI4+/nUqKwQTk2/3t5xi
-         f9JxDJ4YElKBBxv0V6TvR44DgYx9BLB7AtTzeL8ezNe8Qnd6/oURaxhhqu7b6vdt+AED
-         lgUmQAFJvMejvZWL5AYI/ge88wNNg/PyOAVb9JlpyhH7ewD6Ihnk2ja+Q968/n6QAB+A
-         TcXNz0MrM5BmdGD13sAD1tKlUaGdB0wm4PiqpPbR9pJdZBlfJqWMrx7qF0rcN6T2UoXE
-         91G/nbtvtirQoACbbT9FiYrMZ6qd11RD9hYSvJsf0eASsLzQq7A90oDGShKGBr5+E9vX
-         6w8A==
-X-Forwarded-Encrypted: i=1; AHgh+RoOJPxvK8T0eUMfl8prSLLsFJovp6/7LTf/aoQa/+G9gQ/5zd6y35MHDTXT2ugmVzLC3U5ZW8vNV7xFzpDQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTVZHF2HRpk4XL/kidFe7OJ7gvEQsAiHmSNMxFfGUo34yoeZcL
-	RqtOnFyCgg/tyvj5mGgU3EZgoBD9xAxVoscOG7RmS6QMpdnce1MsCIYetTVlGlGtyugnvF+tx6v
-	q1sqlFjk=
-X-Gm-Gg: AR+sD13Ud8vqB1SB8KGu52blkAdO9V1n9lePtTdfb02iIMICg4QbsuRLhTz2Axn7nL3
-	5C05B3Ba3z3R8Gk4OL8BgdNodH9sGMHs7IJYNQrUKeIZA0YfNZZjgi/J0depeTzbpVyQWLYCSLA
-	Dn1wo86YfJpMDc0W6VNwHLzqOuQF5vA7Dykjo+ZGzBH24XmTphAbgGExlXF9FPF/IGYoTycPdUG
-	xnM+nemBPX4At20xKriOcGmq2yhl8B0GlD7jNmu/UKwisnxjFQYd7QnMP4aS+IMQ3Cb+N6WKDs4
-	42uT8LIus793ly59WBWF034dlBL4tvHR+S9hhaubIeRxnZQ8bhU2qWchWchy4Ql9kkuDvpgKGvD
-	m8w7T0VZMOeb9mOkt/m2aZTk4BHzzaZeNSNd5Xpe/9dJZqMPBekTguHuWUd5VVtbY4VWGIPbgV0
-	zhZf81wAo8G+n8T+8TBYYs0T0zds61ieS9Ei2m+6KwiXYmamHF0xrVUUWvG03jFLWsl0cjTQMFS
-	nVvqvkuyzRfEyzLGitoS/+1
-X-Received: by 2002:a05:6000:46d4:b0:481:f33d:6445 with SMTP id ffacd0b85a97d-482a907b955mr9315513f8f.7.1787054395935;
-        Tue, 18 Aug 2026 04:59:55 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482a5a7c603sm12401112f8f.21.2026.08.18.04.59.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Aug 2026 04:59:55 -0700 (PDT)
-Message-ID: <4e351b13-1670-4813-ac98-e44c00703601@suse.com>
-Date: Tue, 18 Aug 2026 13:59:55 +0200
+	s=arc-20240116; t=1787058262; c=relaxed/simple;
+	bh=BFn4JpyCthd+jKbVEx5O7iwhEAo72F48en/l+4dlYnw=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=aC+4cjj9UI8yKxe7wU/hLYv9GkobsLxNwyE9fNne0hZIqCtqIOQYIPM+BMjUFnkH41swHD6z91eUOBATWjkjpjI+b29LUVGCXcN5tjT+rkTh5oQkiMWQ0v8hntq1Z4C97EdhbDMMnpBpzR6hhdj3YlHB6zxzJzao+nLY3JmEEQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Bxn9FRWIRq900CAA--.6904S3;
+	Tue, 18 Aug 2026 21:04:17 +0800 (CST)
+Received: from [10.130.40.83] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAx3c5NWIRqHVoJAA--.59505S2;
+	Tue, 18 Aug 2026 21:04:14 +0800 (CST)
+Subject: Re: [PATCH v3 1/3] module/kallsyms: Rename is_mapping_symbol() to
+ is_local_mapping_symbol()
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ linux-modules@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20260812032807.15034-1-yangtiezhu@loongson.cn>
+ <20260812032807.15034-2-yangtiezhu@loongson.cn>
+ <96b0e23b-165d-4026-bdfe-f8cd8ceb36ba@suse.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <d22a5f25-b4b3-faa4-46d5-132f3fa725f3@loongson.cn>
+Date: Tue, 18 Aug 2026 21:04:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] module/kallsyms: Filter out local and mapping
- symbols during module load
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-modules@vger.kernel.org, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20260812032807.15034-1-yangtiezhu@loongson.cn>
- <20260812032807.15034-4-yangtiezhu@loongson.cn>
+In-Reply-To: <96b0e23b-165d-4026-bdfe-f8cd8ceb36ba@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260812032807.15034-4-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAx3c5NWIRqHVoJAA--.59505S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7CFWDurW8JFyUuFWkXF1fGrX_yoW8ArW3pF
+	WDCr4UXFn5Wr48Wws7Jr4rWF9F9w4kXw4rCa43trWkuF9IqF1vqFWS9rs0g3ZrXr10gw4I
+	vF47ZF90v34kAFcCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
 
-On 8/12/26 5:28 AM, Tiezhu Yang wrote:
-> The compiler toolchains generate local and mapping symbols on certain
-> architectures like LoongArch for optimizations and relocations.
+On 2026/8/18 下午7:56, Petr Pavlu wrote:
+> On 8/12/26 5:28 AM, Tiezhu Yang wrote:
+>> The helper function is_mapping_symbol() historically checks for both
+>> local labels prefixed with ".L" or "L0" and mapping symbols prefixed
+>> with "$".
 
-Nit: "local" -> "local label".
+...
 
+> I think the updated comment and the function name are confusing. They
+> read as if they are about local symbols in general (STB_LOCAL), but they
+> should refer only to local label symbols (.L<xyz>, ...). The function
+> would need to be called is_local_label_or_mapping_symbol() but that is
+> too long.
 > 
-> While the symbols are already filtered out during runtime lookups via
-> find_kallsyms_symbol(), they still leak into /proc/kallsyms for loaded
-> modules because layout_symtab() and add_kallsyms() do not filter them
-> during load time.
+> If you do want to rename this function, one option is to be consistent
+> with perf, which implements the same filter and calls it
+> is_ignored_kernel_symbol().
 > 
-> Consequently, tracing tools like bpftrace (which do not perform internal
-> filtering, unlike perf) resolve identical addresses into confusing local
-> labels instead of actual clear C function names.
+> The comment could also be clearer, for example:
 > 
-> Fix this by integrating the is_local_mapping_symbol() check directly into
-> the newly introduced is_kept_symbol() helper. This ensures these unneeded
-> symbols are stripped during module load time, keeping /proc/kallsyms clean
-> and resulting in accurate call stacks.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> /*
+>   * Ignore local labels (.L*, L0*) and mapping symbols ($*). These symbols are
+>   * not useful for the kernel, for example, they should not appear in kallsyms.
+>   */
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+OK, it looks better, will do it in v4.
 
--- 
+>>   {
+>>   	if (str[0] == '.' && str[1] == 'L')
+>>   		return true;
+
+...
+
+> Another comment-only reference to is_mapping_symbol() that should be
+> updated is in tools/perf/util/symbol.h.
+
+There may be conflicts between modules-next and perf-tools-next:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/log/tools/perf/util/symbol.h?h=modules-next
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/log/tools/perf/util/symbol.h?h=perf-tools-next
+
+So one way is to not modify tools/perf/util/symbol.h if based
+on modules-next at this time, the other way is to rebase the
+code and then send the series after the merge window.
+
+Please let me know what is the proper way.
+
 Thanks,
-Petr
+Tiezhu
+
