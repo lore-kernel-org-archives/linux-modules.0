@@ -1,209 +1,184 @@
-Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021112.outbound.protection.outlook.com [52.101.100.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B8F367F31;
-	Mon, 17 Aug 2026 20:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786999927; cv=fail; b=b/K0td4F7fQNkWhQJBpiH/NBat8MpRo4YGSATf4vZN0/HIb7ZoH1AoGRJ7Z+KY6WPfOmlNviJWLBRf6bvmhVWgyZbAqfYOs++kTQyVTHPExLlI3bnDL/lV5xMGi4I07coYFYEbCEUVS7D3MPSXTnlUE29PUJSLLlxV7iwipvXwM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786999927; c=relaxed/simple;
-	bh=JlBbCXL00k49g/uvgJvXga2Kikz8AlhJLEVnHksahh8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ozVfaEDVZ8b3ZesgvIvQja/KfEC2eZoz0ZLyrLzN+SjVzieBZq/gvcIcaJ6pukt9TeC75PKSKbHd0SI9TG2eqkylDiBqPZhPRdDHIkUW62A+pX29fCZJODgLvAg4rr1qqIt35/JC7VCCIFKdccazNA4LxT+LTd8DmqclS1uAHiw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.100.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=np3/qak9AvYVNuk1ql00128pesyE/fwy4gUptAhSt3RJg9vbBvtIq3AaTcFoG5rGCNnVdph6MeIzOvURPpM3+bO8xBP+g2+yXk8L6djQUAcOCJFwEvqs/nPXQlzCEjSOJT+tnW0MX89PvFlndb32zOTR7D5YUchvCW7W110RP23lNnJLUMkluN65JOdbW85iW7kHxkmB6EhRgJFxXrKKnxFU7XYpYgVGdngDvoOZbv1J2WZmyPKMp4Xvs4zNJaE+A+YcQo1HGCvoPhi7iZ7HB5KzFDf5CaXmbm/Qae7gurAwcwksjWLshZ/EtwqvnB5XnjyAN9FPp9K3RSEsD0n/4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=OSR8E5YK9M8GRmWrJiRWzJnVhUWXNdrNtURqdrXiyS4=;
- b=khV+FoHc5nj1GA5YiNfn3o4dSoBkoAfWOEoUqQxmh3vhXaBr025fQo1k2XIKZds34bjRZnWBLkePYtXMopwTCnKTWkWKYcI6nCuZx4NmKU9CcDo2LlCSixwfiGhpfNFcakoylBlp+YoxZjYp/tRbPC9GhQvmgKFe2ZU45toa+P9XJU2VWKYk6z2AotngSAb8JDtQTXSKuKasCfr67z5jfU+/qwo3dxTkQq9a00LM/OhM/Sm6Utb/r4lU15KFOiKvOPFUP6rJlxS/CddMY0OArahtQchlHKuHRoNYhz/1G+wRoJRxfIcCsaxQn9XB8dVAhowAZazwBh7Tm25T/UD3Qw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LO3P123MB3226.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:b3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Mon, 17 Aug
- 2026 20:52:02 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0315.016; Mon, 17 Aug 2026
- 20:52:02 +0000
-Date: Mon, 17 Aug 2026 16:51:58 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: Petr Pavlu <petr.pavlu@suse.com>, gary@garyguo.net
-Cc: arnd@arndb.de, mcgrof@kernel.org, da.gomez@kernel.org, 
-	samitolvanen@google.com, peterz@infradead.org, ojeda@kernel.org, 
-	akpm@linux-foundation.org, mhiramat@kernel.org, boqun@kernel.org, neelx@suse.com, 
-	da.anzani@gmail.com, sean@ashe.io, chjohnst@mail.com, steve@abita.co, 
-	mproche@mail.com, nick.lane@mail.com, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 1/2] module: Extend module_blacklist parameter to
- built-in modules
-Message-ID: <qxmsga66by2pvm3vh2vd72ypo56p36cyjlbzah4yk7xolgun4w@vjjkn2hnbdu7>
-References: <20260807012601.360452-1-atomlin@atomlin.com>
- <20260807012601.360452-2-atomlin@atomlin.com>
- <af6aaa0a-03de-4175-84a5-7c253198d184@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <af6aaa0a-03de-4175-84a5-7c253198d184@suse.com>
-X-ClientProxiedBy: BN0PR03CA0042.namprd03.prod.outlook.com
- (2603:10b6:408:e7::17) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:183::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2968746AF2C
+	for <linux-modules@vger.kernel.org>; Tue, 18 Aug 2026 11:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787054202; cv=none; b=U7Kx4V7A3d1quSHt9YsI9VPafSBmFP7dj5xr7xRf/FC8Ks5fr+HgyZ4jmrO+V0jOMQeGbbL9cCgfkpqBcuoE90ifpXhm45zXyIy2wy5hIc34Mi0M9WKzavWF8Yf9ZwkwRDCrB8zOv2QPm8i0oSyN6haQEqP6b2ohKz1zDpIymis=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787054202; c=relaxed/simple;
+	bh=ga/vqg8/LzdG6CRzQHxdL0ZC9le8D2d/7kcqYNPWNzk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GNH1QhCIQ6sCOEs2+DAK/l/scZmpH7HhP812GL7wkNtQ8SBlI+A8DRy8rIlgpb3uqRahVXnTkm9prPsDVp63chrJudGwHU9Hj4Cphghp3S7y9snYc+QUiRBMzsA2BjoV2d8sk3g28B9NZnr+BTgfBNb6OSVVo2tk07qW0ypEexs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SAkCWT9J; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SAkCWT9J"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4998b5a63e2so39097775e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 18 Aug 2026 04:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1787054197; x=1787658997; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yrk9FyukvMF5FeyPP9zZXiY0rd/GtA3//9z9DG/ssnQ=;
+        b=SAkCWT9JbLpYpMsp3k6hbSYC5W2fNcxIn8IJtuvc/utev3IfglDfYnq6p3l+PRxuDs
+         YfjvK1S1ERZ/TUTYFrcR6CM7X9sxt7Oi5kfGKw1Vv8OL/cU+ruoneAsRC0D9S1F9Q3+B
+         Br4NOlKic7GlPcEY9BZF3CvOPpIjVBtp/ntV2NxDEEk6d0+0HA9cogRp04rvr2gh0arT
+         yAYwlriuItpQjZAGESMwJRW3FX6f/G+ik8sEj5UBZDI9DQyraPWS/IakgLsZW3vttqFr
+         hDTsYRl6ZFZmIh7psZOzEQQVfzfR9piFafVXsuxt9gQLCofVs1cPv4EGFfm3UTl2EcvS
+         ZGcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787054197; x=1787658997;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=yrk9FyukvMF5FeyPP9zZXiY0rd/GtA3//9z9DG/ssnQ=;
+        b=GQwFjMqwL8La9cxky91DnY55l7aTDb3eFfQx+Dm7ga0nfkUyLneUYc+PHEu+KxsCfl
+         ujeh/2Iw1aygAiM59t63jMSFYqQBo+9N4uGHEHZKmwYdDWH3pCiNx4D9+XHKJIUzYiYD
+         zIdnrQM9okmX9V/LOI3qKDRLP9pIA7RoDG0vS9cCbvT2ILadFCYdS7Toc33vQcuENNEg
+         qDzhch+qy0zR9G/23oaS47hnydycmUYOzEuSCx7esvcSlEKcmRemM72n/3ED71m9Jeqw
+         kpGb64Js1jBDiHYf4TX4ftjuvH62XbbLmBN6R19DoG7OS6rs7c++bKYPsRh6BjjMxNSt
+         iyUQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrHJh6iK5GHmfddTs145D7+KQ71N8JQcqNbFzTffWFmqDeYwUwftxW1zWlP/e+4pGFjl3ZeZ/5i89tIKhSN@vger.kernel.org
+X-Gm-Message-State: AOJu0YxONFLthQAKUmhhaN+cOPlsEAV90Ze0L/MoOC3+3jBJRWeZIEh5
+	/AD0XQX7rjajq56ztrFb28B1dLotBAB4UGecFqvhXWOkD398svnNrkyOdBKaltMngXA=
+X-Gm-Gg: AR+sD10lxaDffXeJF1Cqln+U/GR0+T7Ug0C7sbnslVSBhiy0IBEEQWNwDZ+YyaHz86n
+	OodRodLcpVFC4nUFS0xiSrfkOpLhTg/flUPmjTIYikDRlla4VxPpTuljQSZr9eNZn5XaUkhWrF4
+	UdrhCS22VmxUtAAkdNvs8P0mxZMXaxBYSu9quPUdeKJQSRTqVRC1pZ0f1VGyA2gFNAKLKqieYWR
+	bk5XJC3Xwg+pkrML+2fu6JnlVEbT77IsYrGECJT7m9emHR3PRbFAVVSZW1X9aFsabjmaKtqBIR5
+	5ePL84iUS8Q053mp1RIibCRlbvVdL3xODJEH7x+SYMA8Cktmz+yJUyt+OsLvJaerO6Sygj2ogFC
+	9V/XFEkIcRkOQfYMPeXfLAtNfY/C97334ij1+P2BlJiDYnZZOzFewQO3PxuoAwoKy9gB9j0I/dI
+	45prj22gGCvXQLgi91UbeC3TKBxyeB6U79tDQXipMbKIcvLbLgnXfnYRRF2YmYhD1BZS3KkKY6u
+	H/rPGFy2Uscu+rWdlwehH/9ROwsjd0tWfA4
+X-Received: by 2002:a05:600c:5392:b0:495:48d7:f178 with SMTP id 5b1f17b1804b1-4998795d6bemr522363345e9.11.1787054197410;
+        Tue, 18 Aug 2026 04:56:37 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482aa084a64sm6241298f8f.17.2026.08.18.04.56.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Aug 2026 04:56:37 -0700 (PDT)
+Message-ID: <96b0e23b-165d-4026-bdfe-f8cd8ceb36ba@suse.com>
+Date: Tue, 18 Aug 2026 13:56:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO3P123MB3226:EE_
-X-MS-Office365-Filtering-Correlation-Id: e9e5c340-cdb5-4a7a-cee7-08defca16359
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|23010399003|10067099003|4143699003|56012099006|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	nY2BmLb/NqA8KFKZzrZNDG+JezdeaJPXTvQdYyqrlSjP15uMgPNMX/LmfqqwAa3G26ubjQGQB2dtpBQOBgR+fFu/hc0mRsXryVOfHsfnuu7O/SX8SieuuEUFCNpbF+URTuVJF9mb8Vn/bt/2Hq6Vk8K8BPWbpiua75cRto9M5YHapCe84VmUZsFBLDg8zmPKTspG6rdrYuJFTz5tswDIy81SzQTKv8iZRLn4S2xyY2AR40KFvyjI2EgRxZ+kDXN0zkmUON2an4kqbLi8464i/SQ7RofrRwW8JTniWrjsplqI83S5RGxzkemq5Fql33kU4ZcKcNOYLqWvrMYGZf6RBara0+g9zdO/urzfgbu7fi2Ta5rok3GqVfQDIqLmIIcv7qrqySg8P3Mk6mTgwbqfsqKzWw0cXNCWgaw2i5JKj0z90SuGNKMZbIX9b6b1nX4l7cMcU8lHMKgMuhNCdm1EVpqzWX7LpiBqnOtjmFSXf/6E0RZ4wtNsKfuT4fFnhKpZJKSH07Pxf4PyMFWQUAV0TOdmaNR++kRFzro+DJNoqDfC0onTj2slvxv2p8lcF4M4rCMhUuoOaylpWjK/RO0W2XGeLNPdWPubeH9MkqDXaxQnK2X9lzST+D47dInjOW8VcmnDuidvFWcNoZsiUO/RbC4lyHdt1HkI/lqRhl1Izb4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(23010399003)(10067099003)(4143699003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?T29WVldaS1FhN08zNUNpQlRadUFRMjNSVE1pT1g4Z1NnaG9xUUpRN3dhcXJl?=
- =?utf-8?B?c3gydHhHRjNkK01KM3hSa2NxVDRsdnBWK2d2WGJGOE1oQnZ3WlpmOHFrekpV?=
- =?utf-8?B?Y2l0b2luVjFFQUl4VFArckc3NEpWaWlZSVFnVGVDRmFMRG1CdW9zZkdBRzM4?=
- =?utf-8?B?bFQ3cThuMXk3MWtiaG1kZnBCajMyS2dOZ0FFOE9SeDkyQkpDTXhRQWFxbGsw?=
- =?utf-8?B?ekhrVXZyUW5QNEJVN2JhSkZsS3VJcy9ZVkFjMlR0M2tjbWJKMHlncGJmM20w?=
- =?utf-8?B?YXF4Z1l3K3l5Q0NydXNpSHFrcUx4K2VENW9PTDNDTmZ5MVR0MzRxOGd3Uy9W?=
- =?utf-8?B?ZEhxK1FQZUVHZUo2SExtTGM1ckVsMXpKNkt6VDlaT0RCYmRQcEhCWmhjeFRz?=
- =?utf-8?B?U01yRmhONjRtMW44eWZFQzQ4cVJ4ODJIVVZCMTJ1Z1BMOTB4ZGNDMmwxbWo2?=
- =?utf-8?B?UkNFMHpQNTU2cEkvdlpKTjhISzNmL3FxeE9CK2ZINHVVcThtTVp0U2JFVTVi?=
- =?utf-8?B?bDFtNzkzd3VITGdFOUxIc3MrOTFjMGZncnovWEVFOVp5T2RaSytYUHVBTW5M?=
- =?utf-8?B?WWYyZWs2SkFyaUU1TXR3SDYzTGE3ZWRhT0hmenJUT01rMWQrY3k3RTRGVm1U?=
- =?utf-8?B?dTRPZnJVa0d4M2p5eFRjSWlUZm5jSUhXVWwxSDdncFpKNWVMMS8rL1lVS0Rt?=
- =?utf-8?B?cGJtK012V0VsUE1aVGp4Ukx2KzVtYXBBMW5MejU0akttUXEzd0VqVHdkOVlw?=
- =?utf-8?B?UmlGTVhleEUvSlNoVGIwckxtcFZlaSt4Y1R0ZGdrWW5PRDFYUVhMTTI0aHlJ?=
- =?utf-8?B?emJMbFhhcTlueHNpaVdxZXRscnRRbCtrcElCdGZqc0kraksxWEtJbU40OWE3?=
- =?utf-8?B?ZVdqQlFDNmZSQ2tienFYTlJ0eXdGeHVWRkdEQ1JidjB2Q1VmZnBUMmNHRit2?=
- =?utf-8?B?TENuSUIrOHNYdVArbVBJbVVkMWZtbzZJOWtudWZWdEVKM2dFckNDbW95TjU3?=
- =?utf-8?B?eXRTNm92bGQzYnhjUnh0N01ZZGsvMENZQ2dHdnVVVHQzVmFXZE1HOUpFS1RD?=
- =?utf-8?B?ZllCSjdGNktkRFRaaUxEZU5ZQnBpc3NjZG43MXdVankwTDNTTi80Ulo3eXJS?=
- =?utf-8?B?THUrZ2txaW9JQ3N2UkpHME9DRXFoaURyUHRpYzIyRmZKWjU3Ukl3VzdrcVZB?=
- =?utf-8?B?RWlKdy80bGJWa1crYU5ncDQxUHZXZ3gxTHFnbExKUjdzcjRBYVJLNXBDRy84?=
- =?utf-8?B?aU5scm90YldROVZzd1pEY0Q1VjFyMjRrVDF3VStWM1RQd1VmTWovdkhnTUs1?=
- =?utf-8?B?TXNhSVFtNkM3NDR3OXllVkMvMmpXQUIzdWo5bXZCYWlZT3hqNStNUFRuSjJN?=
- =?utf-8?B?R3l6VFNreTNmTWxUdmpQK0x6S1dmVmhqZjlLK3FWZjVva2FOMGhMb29TMGdx?=
- =?utf-8?B?T3pFcFBKQVBWUGR5em15d0cxK25wZFFBVnVmb0ZDWGxZMXZWejZkLzJEOTNv?=
- =?utf-8?B?UG03cjl5dE1tN1B1cllhT0EzSzN5NytlY1RadG1rV0Q0R3poSVNObFVSSE5k?=
- =?utf-8?B?Tzk1eWRaMUZTTWtMSmxaaS9TUERzWXpoZ2UxcVdtWnhtRC9TcjF2SmtXZEcx?=
- =?utf-8?B?L3VOWFRva2ovOHJSenZ6Vkt0eVc1VVhWREFBZVZ2c01xRURTYlQrSllpbm4v?=
- =?utf-8?B?c0FPSUNuYi9JbVltNjdsb0t2SGpQTHVQbFJmYzVrbHZWUkQwVmZLQjZrTmV1?=
- =?utf-8?B?TFNPdkZIMWtNWGU5d1BCMzJkalEzcFArWERhQm5qYndSOTRwRGJXQTBVdDIx?=
- =?utf-8?B?cDMwYnV2NnZFQmV1NFFpckZMeklpUlBIZHZwSHdrNlhwUU5qb0V1WlNnOHJ6?=
- =?utf-8?B?bXY1dEhZN3pjSjh2dlZwaTYvWG5EU1pjM3ErRmFIbkhyTDY3d0VEVjdKU3Bp?=
- =?utf-8?B?WEN5bzZvNUtQRmJkS2JibFAvMjZaUEZOUTFDOTF4SmNGTEt2ejNGSjRQUlZw?=
- =?utf-8?B?QTBiTk1NTldkcmRyOEhkOWhtcWpjbFhEdDFSdE0xRS9OSnBZMEVZamtqdVBS?=
- =?utf-8?B?ZDJaSVo5U3ZHMGhFeW8zMHdEWjMvZW1naGhrdVBWYm0rQmZiWkl0NjZYOEc4?=
- =?utf-8?B?eEJhQ3ZvRnhwazVhclpJREVlU1dsN2Y0RU15Rk91dys3RTlJUGg3TjRWUzJv?=
- =?utf-8?B?TzBJRzZ6cUEwZmhxRnJHNms1UzNOM0txNEVWNHRxc29NaU9iVWdHb05GWUM4?=
- =?utf-8?B?RkxHdzViZzZtQy9lWjEwdC9jelVibSt1TE53cHcvTHU0YXlIbklEZUJXbXFu?=
- =?utf-8?B?MUR2OEcxeUVPTEovRnN2RnlzeDRyaHNzY1NPaitlaXpEUWdVbEkzdz09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9e5c340-cdb5-4a7a-cee7-08defca16359
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2026 20:52:02.1681
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WqMnOc7q6fsSoZyA2QY8yxrFWIx9UJLEG1GYK3COX3DG+aPcQBrAK4zCnd9UMfb3AD8NwlQsRH9S/l0XeJg8bA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P123MB3226
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] module/kallsyms: Rename is_mapping_symbol() to
+ is_local_mapping_symbol()
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ linux-modules@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20260812032807.15034-1-yangtiezhu@loongson.cn>
+ <20260812032807.15034-2-yangtiezhu@loongson.cn>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260812032807.15034-2-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Aug 13, 2026 at 04:15:05PM +0200, Petr Pavlu wrote:
-> On 8/7/26 3:26 AM, Aaron Tomlin wrote:
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> > index 5659f4b5a125..799d912dcbc0 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -734,7 +734,9 @@
-> >  	EARLYCON_TABLE()						\
-> >  	LSM_TABLE()							\
-> >  	EARLY_LSM_TABLE()						\
-> > -	KUNIT_INIT_TABLE()
-> > +	KUNIT_INIT_TABLE()						\
-> > +	STRUCT_ALIGN();							\
-> > +	BOUNDED_SECTION_BY(.initcall.modnames, _initcall_modnames)
-> >  
-> >  #define INIT_TEXT							\
-> >  	*(.init.text .init.text.*)					\
+On 8/12/26 5:28 AM, Tiezhu Yang wrote:
+> The helper function is_mapping_symbol() historically checks for both
+> local labels prefixed with ".L" or "L0" and mapping symbols prefixed
+> with "$".
 > 
-> I realized that instead of using STRUCT_ALIGN(), a cleaner and less
-> wasteful approach is to prevent any potential over-alignment of
-> individual .initcall.modnames sections by having
-> ____define_initcall_modname() define each `struct initcall_modname` with
-> `__aligned(__alignof__(struct initcall_modname))`.
-
-Hi Petr,
-
-Nice, I see. So, adding __aligned(__alignof__(struct initcall_modname))
-forces the compiler to use the structure's natural alignment (8 bytes on
-64-bit), ensuring entries are packed contiguously with zero inter-element
-padding.
-
-> > diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> > index 06c18e207508..13353b43b38d 100644
-> > --- a/rust/macros/module.rs
-> > +++ b/rust/macros/module.rs
-> > @@ -479,6 +479,7 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
-> >      let ident_init = format_ident!("__{ident}_init");
-> >      let ident_exit = format_ident!("__{ident}_exit");
-> >      let ident_initcall = format_ident!("__{ident}_initcall");
-> > +    let ident_modname = format_ident!("__{ident}_modname");
-> >      let initcall_section = ".initcall6.init";
-> >  
-> >      let global_asm = format!(
-> > @@ -590,6 +591,21 @@ pub extern "C" fn cleanup_module() {
-> >                  #[cfg(CONFIG_HAVE_ARCH_PREL32_RELOCATIONS)]
-> >                  ::core::arch::global_asm!(#global_asm);
-> >  
-> > +                #[cfg(not(MODULE))]
-> > +                #[repr(C)]
-> > +                struct InitcallModname {
-> > +                    initcall_fn: extern "C" fn() -> ::kernel::ffi::c_int,
-> > +                    modname: *const ::kernel::ffi::c_char,
-> > +                }
-> > +
-> > +                #[cfg(not(MODULE))]
-> > +                #[used(compiler)]
-> > +                #[link_section = ".initcall.modnames"]
-> > +                static #ident_modname: InitcallModname = InitcallModname {
+> Rename it to is_local_mapping_symbol() to better reflect this actual
+> behavior and scope, preventing conceptual confusion.
 > 
-> Can Rust directly use the C definition of initcall_modname via
-> ::kernel::bindings::initcall_modname?
-
-Well, defining the local '#[repr(C)] struct InitcallModname' follows the
-existing precedents and avoids expanding the bindgen surface with
-<linux/init.h>. I think this is preferred, no? Gary, any thoughts?
-
-In rust/macros/module.rs the existing built-in initcall pointers are
-defined directly within the macro rather than pulling in initcall_t from
-bindings, keeping module.rs self-contained.
-
-> > +                    initcall_fn: #ident_init,
-> > +                    modname: #name_cstr.as_ptr().cast(),
+> No functional change.
 > 
-> Can the modname string be placed in .init.rodata to match the behavior
-> on the C side?
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  include/linux/module_symbol.h | 4 ++--
+>  kernel/module/kallsyms.c      | 2 +-
+>  scripts/faddr2line            | 2 +-
+>  scripts/mod/modpost.h         | 2 +-
+>  4 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
+> index 574609aced99..ca76ed5cb489 100644
+> --- a/include/linux/module_symbol.h
+> +++ b/include/linux/module_symbol.h
+> @@ -7,8 +7,8 @@ enum ksym_flags {
+>  	KSYM_FLAG_GPL_ONLY	= 1 << 0,
+>  };
+>  
+> -/* This ignores the intensely annoying "mapping symbols" found in ELF files. */
+> -static inline bool is_mapping_symbol(const char *str)
+> +/* This ignores the intensely annoying "local or mapping symbols" found in ELF files. */
+> +static inline bool is_local_mapping_symbol(const char *str)
 
-This is a very good suggestion and definitely worth adopting! Thank you.
+I think the updated comment and the function name are confusing. They
+read as if they are about local symbols in general (STB_LOCAL), but they
+should refer only to local label symbols (.L<xyz>, ...). The function
+would need to be called is_local_label_or_mapping_symbol() but that is
+too long.
 
+If you do want to rename this function, one option is to be consistent
+with perf, which implements the same filter and calls it
+is_ignored_kernel_symbol().
 
-Kind regards,
+The comment could also be clearer, for example:
+
+/*
+ * Ignore local labels (.L*, L0*) and mapping symbols ($*). These symbols are
+ * not useful for the kernel, for example, they should not appear in kallsyms.
+ */
+
+>  {
+>  	if (str[0] == '.' && str[1] == 'L')
+>  		return true;
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index f23126d804b2..a595f8cd29b2 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -294,7 +294,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
+>  		 * and inserted at a whim.
+>  		 */
+>  		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
+> -		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
+> +		    is_local_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
+>  			continue;
+>  
+>  		if (thisval <= addr && thisval > bestval) {
+> diff --git a/scripts/faddr2line b/scripts/faddr2line
+> index 622875396bcf..bda4ea20e39e 100755
+> --- a/scripts/faddr2line
+> +++ b/scripts/faddr2line
+> @@ -243,7 +243,7 @@ __faddr2line() {
+>  			local cur_sym_elf_size=${fields[2]}
+>  			local cur_sym_name=${fields[7]:-}
+>  
+> -			# is_mapping_symbol(cur_sym_name)
+> +			# is_local_mapping_symbol(cur_sym_name)
+>  			if [[ ${cur_sym_name} =~ ^(\.L|L0|\$) ]]; then
+>  				continue
+>  			fi
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 2aecb8f25c87..4173fff2788a 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -198,7 +198,7 @@ static inline bool is_valid_name(struct elf_info *elf, Elf_Sym *sym)
+>  
+>  	if (!name || !strlen(name))
+>  		return false;
+> -	return !is_mapping_symbol(name);
+> +	return !is_local_mapping_symbol(name);
+>  }
+>  
+>  /* symsearch.c */
+
+Another comment-only reference to is_mapping_symbol() that should be
+updated is in tools/perf/util/symbol.h.
+
 -- 
-Aaron Tomlin
+Thanks,
+Petr
