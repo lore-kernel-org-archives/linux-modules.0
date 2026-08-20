@@ -1,120 +1,155 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F8A3B47F7
-	for <linux-modules@vger.kernel.org>; Thu, 20 Aug 2026 09:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8CC4457D7
+	for <linux-modules@vger.kernel.org>; Thu, 20 Aug 2026 12:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787219623; cv=none; b=aQ7kN/89J15h5PGXoUgGLGLgGD5b3Ty/EVDQGH/MP8IbJ3hKyp1Iytkmdrw+q1nFPu/Ga1F0/0GBNppk3iCkNnuuLcu1BVazM4CVPb0bUwe4FpSZlHPB7axUiDc/tDG75NZ3cvrNcJ21ZjiibBlT/EnYsZNybXXAB2L6p1N0X5s=
+	t=1787230223; cv=none; b=eS5k3K3tYM0nJ5HJ7aWzweFEOcfQ8AiUyYTpMDh9en/0LrvQD3PdmhuHcg5cg3mb1gaguOnrKm3FB2SJoxoKNf6BXQxTHoN66iztiT5XfylXNTw5msFq1uY1mMt5ofmMaBKmgouI5L8WnmkTOtRUix31bALVytFT7FuBOp7Rmgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787219623; c=relaxed/simple;
-	bh=ej6Va93k+afyPpSdoRsXCwDTyq75PwwJMrXamE+Nyss=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m6K+7XPhrNzMAULqjmtawY7gNIzjroAjisPHNP8cLzFoIHxRA6oDtEAP3hGt+T8P0DGGa1TNuRx5Tj3uIyV8yWFJxM6E/2Ar5/9f8W/c+AAP5wwFbn4TbJGgFp2iLA4ld6ejsK+WV5zQf8Vcor1OBt2lgx/dH4f15QzPkxHDNOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=P7/uGkaP; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="P7/uGkaP"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-49954b88fffso20564325e9.0
-        for <linux-modules@vger.kernel.org>; Thu, 20 Aug 2026 02:53:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787219619; x=1787824419; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wP66327MWS8VhJp48Lj+aYSlLX7zAuS97DNshIbvPkQ=;
-        b=P7/uGkaPjknwWrwLjK3CxqeXQ+TVHgTpJHbRiy8F1NbE0oki3O7i2TYGL5vVTkz5kA
-         PsP9HewT9qI4nLR1njQhK3A1yBE48bLX2Gv/UwL1YbOxMEQvibhDDnW91A0bTzuAXeWo
-         ilf8qH/0zcqk4bFnts9jReA+yMa2tYtYYJv1nXeyhXO89A1+FWeE34JWKaDL6q+KqOYw
-         a5espBAMOnBZ1Dt1D0wN0l4IbO2RL96R2/KplU/OsIwU4XwF8WnSKi9hvkB2uCtGj/Ej
-         CITUILogs15pmhGH5j/Ol2W2xfA/AJ0Us2I965Ci4o11AExqgRMA8UI8+rCfLVdX12Y6
-         XkoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787219619; x=1787824419;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wP66327MWS8VhJp48Lj+aYSlLX7zAuS97DNshIbvPkQ=;
-        b=bnpfHdpel2QJQfEJSWR3Qyz0BtBKdBGvUDovfpEDSPl7WP0vHJozMGbdYWk9gXUxtN
-         C/FnstYlnT7E7P7zHg7/MX9O/EGBbpFn0ebCbO7JXpUb9olzHzL0DFbl9iKWbIF8fmWO
-         kxCJqm/VeNl8TXkklqmy/ZARX/ZWRwm/w16n/+fSzF8CCWe0VW3/sejyLNIVsiZKBMd0
-         ceDAffz8w75K8zEH9lk5R7VRCp0DZlp2q8XboRwFuvsSvggziYg9OCPAbNRtpKrI6xlr
-         mGJV6CNjsCnampeZ14DBKJFZWYy9DAY000SG0FaU3e6nybXL5V1xXeGNOzK4ArlrFT8Q
-         EGCQ==
-X-Forwarded-Encrypted: i=1; AHgh+RopEVjae/VTKaOD0fed7KtbCaGVDEnsVy8VPPrTWQGMzECRLX6SiJiWVCKs3stV2eeYvaKtaDVfgWU+MQk+@vger.kernel.org
-X-Gm-Message-State: AOJu0YywitPjrr1N5dBpOckB74qKZ4OjJ8To+5TWF8mjwU1unDpyhYuT
-	lPRHUJO3+rmz3xZGV5qmOn+dvx5TVqzMnZ6vQpkvOhN31Qda576cBktRi1INlh37R9U=
-X-Gm-Gg: AR+sD10uJRRpKEImj9RH7y4+lvPz6QhExKCCusDpWk6DmsOjOTRCCBQXhKAfhQ9pH+R
-	/TpUG20j6DdziSQYmenvWzeUICsmpenhlbKMrRnIqh2/ypXPFQlVTFyYQE5v4bY0ffhNmrWqhL+
-	yR0OZw+bcqnSWPnW40IRQcomv3ioepOxPkfRVL8CfXwEGwBNdk5PncAUuJSi/ET9CWqp9mIoll7
-	7rJFe/WfWxb/ffdyE0VnBPa8OsoYu+Y+bqzkJvud7e09ob5t1TePE+veJFTVkseE5ovrB8dfdV8
-	l5y1NMaQKI8CPKwllnqE2XAOmw+SlBhL1hZw9J09eJzRFFTQRbvZ6M/rgZpLmNnY8mzJ8HLhzlk
-	4GukXu5hX1kKjnj8fgJeZ0nx0qmCjDWLROzvGR4PSclzRS9UXk10OIQkNp9hGOoF9FR7jzDZaML
-	6cljHYIpE/xzBD/w6Ht6PQsvsbN3lrEPQQIoHhlH/XmzrAXoBWUl4gIKgjbJk9IWTPAZU0z78Lt
-	ahfsAxgFkJKV+fp/YXOGkQA2h/ovHS+gNc=
-X-Received: by 2002:a05:600c:6211:b0:499:a760:722f with SMTP id 5b1f17b1804b1-499aa1ba0b7mr207185505e9.13.1787219619110;
-        Thu, 20 Aug 2026 02:53:39 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499b20bb2b4sm33083495e9.0.2026.08.20.02.53.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2026 02:53:38 -0700 (PDT)
-Message-ID: <226fd868-b51d-4ec4-b13f-520ccd0e8e36@suse.com>
-Date: Thu, 20 Aug 2026 11:53:37 +0200
+	s=arc-20240116; t=1787230223; c=relaxed/simple;
+	bh=IOabAEWjqaeY6j9kg3frtzHOhg7NAQAwhlq+4NmQc9Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=krHOY2qpjg5AoMymjVJeJC8vc5WHpFUE4yO1hVJZh08xnsnxs8TmNoHunEwmGOJhzWmjd6fnV9S01srlLoptMbf1PHAgHUJultNgt7aXS9eMhidGQozR967n7rO+FM+GAI0J32DokUoK3RgDGuRVZnBC1d9RJWECr0f3kBu3J/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8BxLtME+IZqWx0DAA--.9219S3;
+	Thu, 20 Aug 2026 20:50:12 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAx2c0A+IZqX_QLAA--.6716S3;
+	Thu, 20 Aug 2026 20:50:11 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: linux-modules@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH v4 1/3] module/kallsyms: Rename is_mapping_symbol() to is_ignored_kernel_symbol()
+Date: Thu, 20 Aug 2026 20:50:05 +0800
+Message-ID: <20260820125007.22943-2-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20260820125007.22943-1-yangtiezhu@loongson.cn>
+References: <20260820125007.22943-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] module/kallsyms: Rename is_mapping_symbol() to
- is_local_mapping_symbol()
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-modules@vger.kernel.org, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20260812032807.15034-1-yangtiezhu@loongson.cn>
- <20260812032807.15034-2-yangtiezhu@loongson.cn>
- <96b0e23b-165d-4026-bdfe-f8cd8ceb36ba@suse.com>
- <d22a5f25-b4b3-faa4-46d5-132f3fa725f3@loongson.cn>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <d22a5f25-b4b3-faa4-46d5-132f3fa725f3@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAx2c0A+IZqX_QLAA--.6716S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXFWxuw43Jw45XF45CF4UGFX_yoW5Krykpw
+	s8Ca18XFWUAryjgas7Gw4v9ry5Ww4vqr4FkryayrykCFnIq3WvqrZ2kF15uw4UXr4UKF4I
+	vrsrZrWSka4fArcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUc038UUUUU
 
-On 8/18/26 3:04 PM, Tiezhu Yang wrote:
-> On 2026/8/18 下午7:56, Petr Pavlu wrote:
->> Another comment-only reference to is_mapping_symbol() that should be
->> updated is in tools/perf/util/symbol.h.
-> 
-> There may be conflicts between modules-next and perf-tools-next:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/log/tools/perf/util/symbol.h?h=modules-next
-> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/log/tools/perf/util/symbol.h?h=perf-tools-next
-> 
-> So one way is to not modify tools/perf/util/symbol.h if based
-> on modules-next at this time, the other way is to rebase the
-> code and then send the series after the merge window.
-> 
-> Please let me know what is the proper way.
+The helper function is_mapping_symbol() historically checks for both
+local labels prefixed with ".L" or "L0" and mapping symbols prefixed
+with "$".
 
-I don't immediately see that updating the comment in
-tools/perf/util/symbol.h would cause a conflict with either modules-next
-or perf-tools-next.
+Rename it to is_ignored_kernel_symbol() to better reflect this actual
+behavior and scope, preventing conceptual confusion.
 
-I think you can even base the series on mainline. It applies cleanly
-to v7.2. If there happens to be a conflict, it should be minor and I can
-deal with it.
+While at it, update the related non-module files, no functional changes.
 
-Importantly, please Cc the maintainers of the updated non-module files
-(scripts/faddr2line, scripts/mod/modpost.h, tools/perf/util/symbol.h) in
-the next version of this patch so they are aware of the change.
+Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ include/linux/module_symbol.h | 7 +++++--
+ kernel/module/kallsyms.c      | 2 +-
+ scripts/faddr2line            | 2 +-
+ scripts/mod/modpost.h         | 2 +-
+ tools/perf/util/symbol.h      | 4 +---
+ 5 files changed, 9 insertions(+), 8 deletions(-)
 
+diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
+index 574609aced99..698d3db2b37e 100644
+--- a/include/linux/module_symbol.h
++++ b/include/linux/module_symbol.h
+@@ -7,8 +7,11 @@ enum ksym_flags {
+ 	KSYM_FLAG_GPL_ONLY	= 1 << 0,
+ };
+ 
+-/* This ignores the intensely annoying "mapping symbols" found in ELF files. */
+-static inline bool is_mapping_symbol(const char *str)
++/*
++ * Ignore local labels (.L*, L0*) and mapping symbols ($*). These symbols are
++ * not useful for the kernel, for example, they should not appear in kallsyms.
++ */
++static inline bool is_ignored_kernel_symbol(const char *str)
+ {
+ 	if (str[0] == '.' && str[1] == 'L')
+ 		return true;
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index f23126d804b2..a52942fd0e07 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -294,7 +294,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 		 * and inserted at a whim.
+ 		 */
+ 		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
+-		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
++		    is_ignored_kernel_symbol(kallsyms_symbol_name(kallsyms, i)))
+ 			continue;
+ 
+ 		if (thisval <= addr && thisval > bestval) {
+diff --git a/scripts/faddr2line b/scripts/faddr2line
+index 622875396bcf..3aca197d513f 100755
+--- a/scripts/faddr2line
++++ b/scripts/faddr2line
+@@ -243,7 +243,7 @@ __faddr2line() {
+ 			local cur_sym_elf_size=${fields[2]}
+ 			local cur_sym_name=${fields[7]:-}
+ 
+-			# is_mapping_symbol(cur_sym_name)
++			# is_ignored_kernel_symbol(cur_sym_name)
+ 			if [[ ${cur_sym_name} =~ ^(\.L|L0|\$) ]]; then
+ 				continue
+ 			fi
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 2aecb8f25c87..d9c21d479dd8 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -198,7 +198,7 @@ static inline bool is_valid_name(struct elf_info *elf, Elf_Sym *sym)
+ 
+ 	if (!name || !strlen(name))
+ 		return false;
+-	return !is_mapping_symbol(name);
++	return !is_ignored_kernel_symbol(name);
+ }
+ 
+ /* symsearch.c */
+diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
+index a71525335703..8b0780046938 100644
+--- a/tools/perf/util/symbol.h
++++ b/tools/perf/util/symbol.h
+@@ -31,9 +31,7 @@ struct build_id;
+ struct perf_env;
+ 
+ /*
+- * Ignore kernel mapping symbols, matching kernel is_mapping_symbol() logic.
+- * This checks for '$' prefix (used by ARM, AArch64, RISC-V) and
+- * x86 local symbol prefixes (.L* and L0*).
++ * Ignore local labels and mapping symbols, matching kernel is_ignored_kernel_symbol() logic.
+  * Only use this for kernel symbols (kallsyms, ksymbol events, kernel ELF DSOs).
+  */
+ static inline bool is_ignored_kernel_symbol(const char *str)
 -- 
-Thanks,
-Petr
+2.42.0
+
