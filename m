@@ -1,56 +1,56 @@
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61443CB560
-	for <linux-modules@vger.kernel.org>; Sat, 22 Aug 2026 13:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF563C3F7F
+	for <linux-modules@vger.kernel.org>; Sat, 22 Aug 2026 13:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787406856; cv=none; b=IWVqT9AP1+vOuveaQpkX8WaOm6V4EsOElImGjf9CN1rmQnvJYB/f5EuqYwnZqy0NqccxZtuqTwQR8Yz3TMxUkTil5KF0D4PnU9g7WojBZf5W5QsQVsQYH1MUnhlHeC7vdoDC8jZ6OL3fZdDa8D0Cihdn3gKdFfams1VJN2XbiuM=
+	t=1787406864; cv=none; b=Sk3ygdEsQXa1krMLYpdCBd1Q18BiapC2UBba1qi+ngZkZ/FxTVaQOXC5angtOtueWY05oJoBIlwdZhO0cz2mP9ptt/agvfccP7j7pzLaCSyvGc3hljMhgx2ydoXb77rPd3KtUhfyL44YeLecE1L9AGISbSvYhzpmufRrlxazaec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787406856; c=relaxed/simple;
-	bh=uFMxGHqEPW0hVIsajDV+q6/mim0jiwVFeEB2HYV1iUU=;
+	s=arc-20240116; t=1787406864; c=relaxed/simple;
+	bh=KzkGg2FO9EGkV0PFVKpsKMx4fbZaAn79KH1T1TlQHZs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=h/or5U+9RRUt4jDcDwnPAnT/0p4ovtYnXGmJEheLSrB9jox5k4jayGEfxyuBmcA0NWMkGRN1shdyzoDcLXkbLz3uK0afmsGvJh4kiC1+ggr8+dXONVk4vXArQ42R41rXSkgTkha2ACcNugQRPZc25iGaPgrZQRl2BdQUvQCo7BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FruUrbuA; arc=none smtp.client-ip=209.85.221.71
+	 To:Cc:Content-Type; b=XAQz/du90En2kqay1pvJcVUFl6HCXH6Qud2Kgqh2Vv/pxB6LcXHlJyFqgdmITdxIyq8Ro+WhlDaPTsPg6tYSli+QPNHgQ3iOQasl7E22OW8PoA399pe3aXcq9iCbcdEzuLNDmDr9ZxygRv5T/NMlzWhwURYVJr9SwfXwH94wFws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gH9BZJvT; arc=none smtp.client-ip=209.85.128.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FruUrbuA"
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-47f7039fa59so1433823f8f.1
-        for <linux-modules@vger.kernel.org>; Sat, 22 Aug 2026 06:54:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gH9BZJvT"
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-499900c9d99so14428325e9.0
+        for <linux-modules@vger.kernel.org>; Sat, 22 Aug 2026 06:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787406852; x=1788011652; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1787406854; x=1788011654; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=uCGSy80EkADOYqRdnClxXtF6MDWdUJROODWOao0NQ9A=;
-        b=FruUrbuAwb46nyY5h8NAf0SLadstvYO6lvl2ceuuRN7b6YFwdw6rTSOppjojW1JkYp
-         Q/KGA2u55Lfv13HXkANm8y7G48Owx6oEgnzCn72+cTbfmIZ/j0WIb4KiiAZMtlz9kP6X
-         yHG6wBh2pbxitXW6X4+e76LKm2P+lw+NIggts7aQaQCOrhc9e65X9PnUKe+IpzWTLaS5
-         7HMyPLFgcxweZA/DKcuw9awko9wD0DmqJ52PGeNSRgusTmdueI4k2gsF+eVmTjIF4BeN
-         U8svjdE46rdYyVL2wDyj6N+XaobcWmvu2vcAeOrWvTz+w8Cm7KsY8117XEkputMoQ7KC
-         5ByQ==
+        bh=Fli+nS6RhVan3nt659uJs8jpsHJEZUSGw+6iw8TgCBk=;
+        b=gH9BZJvT8mpN0tqhrjCbcss3fLgqWSU0Ci0dWRCyp7PP4DaIu3giSwmHA0yoyPJInI
+         eBk3vgbHCgZjn102R+5EiK2d70aunBm1p4U8uGjmJ5d3Y83lcKWmYEREnRofLfr7Ja8v
+         pSOI9DLgZIoc4OcrYLepYd3GwPOU51RuuFBRQPwDH8rK02jfTuiSMCO6vdz6cJBhHVUt
+         UPsfg7eudzGiAF4CZAZb23CjazxMZMKK/Ek90/hxLURvPdV9nr/hdT7evfdLaH/M2ZHa
+         gFBNTcfbQGehIvVFaO26fxPGWXTubqSPGLRVhPQ+m4oHYVR9CYlpkO9Yzrx22bqlTatT
+         wIPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787406852; x=1788011652;
+        d=1e100.net; s=20251104; t=1787406854; x=1788011654;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uCGSy80EkADOYqRdnClxXtF6MDWdUJROODWOao0NQ9A=;
-        b=oUmVoUuvFahbtVC44lnNOe9NMMU9KBDosxAeuCOMYQM7fjvSk+fSEUcdMyA5wj7lvh
-         V+02jIdAbnpiJ5FuW+8seflPjIaDwIStlsCS4FzDSL8h2x1aJbNJW7iaSR/HSozhqsfD
-         JBW11znCb8QJWoYP3Mk9K5jjS9TF5UWFqq7cBsDEmqJYxqZf0NNA3PF07fGmovYU6tnA
-         8KScMMOwsOdN7RKOu7gFaB/hNogA0WA86AO/+0c758tGSl3HVZhbgtI9wjfm42WIlsiU
-         DXT2PvWes42sM8mXrqm5HqMyunj6t0JTLOrbKIIxSao9cZkO6gMPzpHB5JNc3qFvRexq
-         whXw==
-X-Forwarded-Encrypted: i=1; AHgh+RppBLbmIxmvAXQSCDTiqjn++ijpaab5hnJjt7XFVzfQF1iWfiVytYbAML1hgZKLwV0boRKta79EyGo0PU++@vger.kernel.org
-X-Gm-Message-State: AFuF++nmzjYmpwR/9col7tOF6xmE0UrRkvFpq3wo7AjslQuQhU8FaoPf
-	90MRmah4FhxvTSevLpupGVlH5pPfuuPWojxcVdPMyIDaUFvnokp4DXdDFWI6fCqLZz6UCDA2XQ=
+        bh=Fli+nS6RhVan3nt659uJs8jpsHJEZUSGw+6iw8TgCBk=;
+        b=GnoMGj8+BRlErOOtybX1SdU/t483vFanwOjClC2/ZSZcc4fp8/vHmYkYM77wSmuI7i
+         YJkl63MdblB+6Onqb9auwIpHAsSusFyaZHg6phrc1BJyezFK1aEi4tpYnQgD8d+xrP4R
+         2ssPvstb4+oYruLaaORkB70yYrqC7CL3TInH2x34lp6PyV0LrEf4ThsC68fgNhMT/Grg
+         SP46VhhyNEz2xh50nVUnM1KD8v4c2cZ6zc0xZ4HCx2n4LFIb9KaPO0ahums/LScOsc7W
+         +4M7CbwHKKIhFErzdwA/5HWRd0Sa4Wop27jB4i0K7HpfpdA6pYAx2DZ0m5nispdRug93
+         74Mw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq8+8Fyb4GSzBwyDAEAHyQEces3uC5VTG5wD4+csco3xA1IJXyEEBJQuxOLtPoRS1XlcPdqkWr2JFry7qZ/@vger.kernel.org
+X-Gm-Message-State: AFuF++mu1FSU4PBZ5GQhnFwO/IZKE4FLtcqkyx8hLh1hFpxSp2fo/cLv
+	Q9uUhoAz2enUxfB5CxvDJvocS36EdTa0gNnpGQkyjKnw2lAw9DNGMBweaNh9yGz0mvz2xOhyvQ=
 	=
-X-Received: from wrtv12.prod.google.com ([2002:a5d:610c:0:b0:47f:76fc:f05a])
- (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:2589:b0:482:bf17:e685
- with SMTP id ffacd0b85a97d-482c0b88f19mr19709898f8f.11.1787406851530; Sat, 22
- Aug 2026 06:54:11 -0700 (PDT)
-Date: Sat, 22 Aug 2026 15:53:29 +0200
+X-Received: from wmfu6.prod.google.com ([2002:a05:600c:1386:b0:495:4396:e1fc])
+ (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4f87:b0:499:5a50:b022
+ with SMTP id 5b1f17b1804b1-499b830d220mr157719645e9.3.1787406853968; Sat, 22
+ Aug 2026 06:54:13 -0700 (PDT)
+Date: Sat, 22 Aug 2026 15:53:31 +0200
 In-Reply-To: <20260822135323.795946-11-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -60,15 +60,14 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260822135323.795946-11-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4579; i=ardb@kernel.org;
- h=from:subject; bh=BEHgSt5XbzXt4tBoZXsq5UPFvM43IOdkHorxrjqha9w=;
- b=owGbwMvMwCVmkMcZplerG8N4Wi2JIatz5b2w6FXrAkIL3p777u+w3ijm62ajN4vezjfYEpZQl
- u7w99y6jlIWBjEuBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjCRA0mMDO0W8Xtjiy5zcH03
- q/x9b5GHzca9Bgf6WzaZLIo6+FaheSUjw3TVOf/Ejuza9aHbfV1D3U6jyXpCKevnz9LVlc13Lr4 txwYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3229; i=ardb@kernel.org;
+ h=from:subject; bh=E47PSMirXFpI2/XCsflkCaR86s287Dpi3LlkrwYeMZU=;
+ b=owGbwMvMwCVmkMcZplerG8N4Wi2JIatz5YP+Sf2p1kr7Q6vXvzG479h57WWiGrOK0SxDm5Zur
+ rn/05U6SlkYxLgYZMUUWQRm/3238/REqVrnWbIwc1iZQIYwcHEKwETM0hj+xzDKsHPO3dNxlH9C
+ 0+uIc6a1D/ek6rI+m2n6kfsH+/Iz2xj+xz1lvlS6rabo2mvOz1OevZxXu7UtMFJsxfK5+yQPz9Z 5ygoA
 X-Mailer: git-send-email 2.55.0.860.g4b6b3295ed-goog
-Message-ID: <20260822135323.795946-18-ardb+git@google.com>
-Subject: [RFC PATCH 7/9] arm64: ftrace: Revert "fix unreachable PLT for
- ftrace_caller ..."
+Message-ID: <20260822135323.795946-20-ardb+git@google.com>
+Subject: [RFC PATCH 9/9] arm64: ftrace: Simplify PLT handling
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
@@ -85,135 +84,96 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-This reverts commit a7ed7b9d0ebb038db9963d574da0311cab0b666a, which is
-no longer needed now that the corner case where .init.text is placed out
-of direct branching range from .text of the same module can no longer
-occur.
+Instead of emitting the ftrace trampoline PLT into a separate ELF
+section, allocate them at the start of the ordinary PLT array, so
+that no special sections are needed.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/arm64/include/asm/module.h     |  1 -
  arch/arm64/include/asm/module.lds.h |  1 -
- arch/arm64/kernel/ftrace.c          | 13 +++----------
- arch/arm64/kernel/module-plts.c     | 12 +-----------
- arch/arm64/kernel/module.c          | 11 -----------
- 5 files changed, 4 insertions(+), 34 deletions(-)
+ arch/arm64/kernel/module-plts.c     | 18 +++++-------------
+ arch/arm64/kernel/module.c          |  9 +--------
+ 3 files changed, 6 insertions(+), 22 deletions(-)
 
-diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/module.h
-index fb9b88eebeb1..79550b22ba19 100644
---- a/arch/arm64/include/asm/module.h
-+++ b/arch/arm64/include/asm/module.h
-@@ -19,7 +19,6 @@ struct mod_arch_specific {
- 
- 	/* for CONFIG_DYNAMIC_FTRACE */
- 	struct plt_entry	*ftrace_trampolines;
--	struct plt_entry	*init_ftrace_trampolines;
- };
- 
- u64 module_emit_plt_entry(struct module *mod, Elf64_Shdr *sechdrs,
 diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
-index 0b3aacd22c59..0c3aea98e116 100644
+index 24fc9401c514..95540e956b41 100644
 --- a/arch/arm64/include/asm/module.lds.h
 +++ b/arch/arm64/include/asm/module.lds.h
-@@ -2,7 +2,6 @@ SECTIONS {
+@@ -1,6 +1,5 @@
+ SECTIONS {
  	.plt 0 : { BYTE(0) }
- 	.init.plt 0 : { BYTE(0) }
- 	.text.ftrace_trampoline 0 : { BYTE(0) }
--	.init.text.ftrace_trampoline 0 : { BYTE(0) }
+-	.text.ftrace_trampoline 0 : { BYTE(0) }
  
  #ifdef CONFIG_KASAN_SW_TAGS
  	/*
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index 5a1554a44162..b56da24c1be4 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -258,17 +258,10 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
- 	return ftrace_modify_code(pc, 0, new, false);
- }
- 
--static struct plt_entry *get_ftrace_plt(struct module *mod, unsigned long addr)
-+static struct plt_entry *get_ftrace_plt(struct module *mod)
- {
- #ifdef CONFIG_MODULES
--	struct plt_entry *plt = NULL;
--
--	if (within_module_mem_type(addr, mod, MOD_INIT_TEXT))
--		plt = mod->arch.init_ftrace_trampolines;
--	else if (within_module_mem_type(addr, mod, MOD_TEXT))
--		plt = mod->arch.ftrace_trampolines;
--	else
--		return NULL;
-+	struct plt_entry *plt = mod->arch.ftrace_trampolines;
- 
- 	return &plt[FTRACE_PLT_IDX];
- #else
-@@ -339,7 +332,7 @@ static bool ftrace_find_callable_addr(struct dyn_ftrace *rec,
- 	if (WARN_ON(!mod))
- 		return false;
- 
--	plt = get_ftrace_plt(mod, pc);
-+	plt = get_ftrace_plt(mod);
- 	if (!plt) {
- 		pr_err("ftrace: no module PLT for %ps\n", (void *)*addr);
- 		return false;
 diff --git a/arch/arm64/kernel/module-plts.c b/arch/arm64/kernel/module-plts.c
-index 7afd370da9f4..bde32979c06a 100644
+index e30876b90e30..6900d2242f1b 100644
 --- a/arch/arm64/kernel/module-plts.c
 +++ b/arch/arm64/kernel/module-plts.c
-@@ -283,7 +283,7 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 	unsigned long core_plts = 0;
- 	unsigned long init_plts = 0;
+@@ -275,12 +275,14 @@ static int partition_branch_plt_relas(Elf64_Sym *syms, Elf64_Rela *rela,
+ 	return i;
+ }
+ 
++static const int ftrace_plts = IS_ENABLED(CONFIG_DYNAMIC_FTRACE) ? NR_FTRACE_PLTS : 0;
++
+ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 			      char *secstrings, struct module *mod)
+ {
+-	unsigned long core_plts = 0;
++	unsigned long core_plts = ftrace_plts;
  	Elf64_Sym *syms = NULL;
--	Elf_Shdr *pltsec, *tramp = NULL, *init_tramp = NULL;
-+	Elf_Shdr *pltsec, *tramp = NULL;
+-	Elf_Shdr *pltsec, *tramp = NULL;
++	Elf_Shdr *pltsec;
  	int i;
  
  	/*
-@@ -298,9 +298,6 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 		else if (!strcmp(secstrings + sechdrs[i].sh_name,
- 				 ".text.ftrace_trampoline"))
- 			tramp = sechdrs + i;
+@@ -290,9 +292,6 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 	for (i = 0; i < ehdr->e_shnum; i++) {
+ 		if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt"))
+ 			mod->arch.core.plt_shndx = i;
 -		else if (!strcmp(secstrings + sechdrs[i].sh_name,
--				 ".init.text.ftrace_trampoline"))
--			init_tramp = sechdrs + i;
+-				 ".text.ftrace_trampoline"))
+-			tramp = sechdrs + i;
  		else if (sechdrs[i].sh_type == SHT_SYMTAB)
  			syms = (Elf64_Sym *)sechdrs[i].sh_addr;
  	}
-@@ -366,12 +363,5 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
- 		tramp->sh_size = NR_FTRACE_PLTS * sizeof(struct plt_entry);
- 	}
+@@ -336,15 +335,8 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 	pltsec->sh_flags = SHF_EXECINSTR | SHF_ALLOC;
+ 	pltsec->sh_addralign = L1_CACHE_BYTES;
+ 	pltsec->sh_size = (core_plts  + 1) * sizeof(struct plt_entry);
+-	mod->arch.core.plt_num_entries = 0;
++	mod->arch.core.plt_num_entries = ftrace_plts;
+ 	mod->arch.core.plt_max_entries = core_plts;
  
--	if (init_tramp) {
--		init_tramp->sh_type = SHT_NOBITS;
--		init_tramp->sh_flags = SHF_EXECINSTR | SHF_ALLOC;
--		init_tramp->sh_addralign = __alignof__(struct plt_entry);
--		init_tramp->sh_size = NR_FTRACE_PLTS * sizeof(struct plt_entry);
+-	if (tramp) {
+-		tramp->sh_type = SHT_NOBITS;
+-		tramp->sh_flags = SHF_EXECINSTR | SHF_ALLOC;
+-		tramp->sh_addralign = __alignof__(struct plt_entry);
+-		tramp->sh_size = NR_FTRACE_PLTS * sizeof(struct plt_entry);
 -	}
 -
  	return 0;
  }
 diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-index 24adb581af0e..6e5b488a219e 100644
+index 6e5b488a219e..620c2b70115e 100644
 --- a/arch/arm64/kernel/module.c
 +++ b/arch/arm64/kernel/module.c
-@@ -466,17 +466,6 @@ static int module_init_ftrace_plt(const Elf_Ehdr *hdr,
- 	__init_plt(&plts[FTRACE_PLT_IDX], FTRACE_ADDR);
- 
- 	mod->arch.ftrace_trampolines = plts;
+@@ -454,14 +454,7 @@ static int module_init_ftrace_plt(const Elf_Ehdr *hdr,
+ 				  struct module *mod)
+ {
+ #if defined(CONFIG_DYNAMIC_FTRACE)
+-	const Elf_Shdr *s;
+-	struct plt_entry *plts;
 -
--	s = find_section(hdr, sechdrs, ".init.text.ftrace_trampoline");
+-	s = find_section(hdr, sechdrs, ".text.ftrace_trampoline");
 -	if (!s)
 -		return -ENOEXEC;
 -
 -	plts = (void *)s->sh_addr;
--
--	__init_plt(&plts[FTRACE_PLT_IDX], FTRACE_ADDR);
--
--	mod->arch.init_ftrace_trampolines = plts;
--
- #endif
- 	return 0;
- }
++	struct plt_entry *plts = (void *)sechdrs[mod->arch.core.plt_shndx].sh_addr;
+ 
+ 	__init_plt(&plts[FTRACE_PLT_IDX], FTRACE_ADDR);
+ 
 -- 
 2.55.0.860.g4b6b3295ed-goog
 
