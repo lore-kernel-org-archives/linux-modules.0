@@ -1,251 +1,157 @@
-Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021081.outbound.protection.outlook.com [52.101.95.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5004E19005E;
-	Tue, 25 Aug 2026 03:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787629348; cv=none; b=qJ9TL1YTd1dE16VHn/a49FZwrz2fuSMmMOVYWliYpCLQcl8k3BKM2YIKEG3UanSaIx6CKpyZ5sHndPRrQCmWrDaLVGEObpND1dNqDqgp/hFfEfA8WJEjiJT2jkCQqNeZAL3g9DQRGLfTJieyY593hB08h1Dqv33LV0aoEF40NEk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787629348; c=relaxed/simple;
-	bh=sCIpBh96MTizUcYPbuMXVtACTZha6JEn2gtXnjiwUjA=;
-	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
-	 References:Date:Message-id; b=NfeHhuIVqlAm7oUWFggEiHgM1iva6zwmCDE+T/BcBOKRmDuaX+7lkEqnXfjs9TOhPIA40bJkEBdX06yOhEEXiUe1h5ntSwpdw2k4oad0VjUZ1mZXS0aHwmYpBrdM51C6nmxy7XzcV1irIvjqf+LzRTXWmWtYUfrdt3BBs1qi5y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net; spf=pass smtp.mailfrom=ownmail.net; dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b=nZITRrvU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=i2fKlB+S; arc=none smtp.client-ip=103.168.172.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b="nZITRrvU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="i2fKlB+S"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailflow.phl.internal (Postfix) with ESMTP id 0BB24138007E;
-	Mon, 24 Aug 2026 23:42:25 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Mon, 24 Aug 2026 23:42:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to; s=fm3; t=
-	1787629345; x=1787636545; bh=rJ0oTTauqUSSV8YPrFKbEbgb4sKqhN11H0K
-	EY9B/4wg=; b=nZITRrvUtxjGhQWPCc+YBA/V8pmBB+w5+Us3WUo2duB1QjCkwy6
-	Od3rl1vmEN6CjWQXdI+LVF6d1iAm+4DrL9OTp9h1RlBs3D6V+/IauxLIjsjp+SfG
-	atFjm0T7Pm4ShnLCs6fxOMS9oT8wFJ/xRL96sxFwCz7HRTrEmcjGs3p26a65johl
-	/XjMblWc9YjjbkpPUP3nRCRfpsre50xt285l2uggtLvhBYFtsM3JycuIyW4a+KNk
-	GW3fm3db4Gdc/7dpMJtmicl+ZxfEGpOTW50nG8n6uFKJFC0MOCFXObQkxDgMjqgh
-	5+6GHD2x3e1S6f7vC+kPuUtWSJUDT4L0WbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1787629345; x=
-	1787636545; bh=rJ0oTTauqUSSV8YPrFKbEbgb4sKqhN11H0KEY9B/4wg=; b=i
-	2fKlB+SBpWvud1Q4DZ5q/7SYH1e1RfTHq46U5CSVJYzUopKQLjojsJqfVY500Qr9
-	Bkz4zrt+mFGB9IJAAurQ9cv+CcTXHtw/tRipD1i6+7Zo9+jYP1lZ+WYeLqJnZRxS
-	UwKCNLkwSQ5ct7Nf0slQ8f3PVsWPGmL7Jez2+lyUWmqaQMvnZ67lODUp+yEyyQER
-	IaGeJ6wXNzl10D45HXT+JwoDb+b+MZwQ4f+KXMpUa6U1Oj8yQYK7G7g8NfH+XIvM
-	wJANlRDjImCSDrMW8WHjyrKKgmLQwyGe4c3gtYb9zCwiM979ImVN+aLGbVd02+3H
-	clSESga4DCfuaEBZ2aerA==
-X-ME-Sender: <xms:Gg-Navde2Nm-usag5Q-qSkMeNgfOUv8lr4P5rbWgPG0MEaMExL9bRw>
-    <xme:Gg-NammFuGgk4hLw2b1WiBeXS09vpveIvJBgL5qFWeijFu5spu9zi_CFHlZsiflLu
-    dgP5g-nt50AcWKBstOc4-fxK6bi5ZizMg-pj6ZpBC9YSTzXZEU>
-X-ME-Received: <xmr:Gg-Nat_JQ_w_F6jWM44XpleuBL6IzAMQDJbZk9W4zO02LXgRLJL0N_e8_mkbRzJlNVViXi8ka_hZZDPDWBDK5XMpU0u97rY>
-X-ME-Proxy-Cause: dmFkZTGAYKKC/opulm/8vN1Pgo3asbuTyz6PzixwG0v2vNyg3v4NaUYL6GcL+dZq4gFy/i
-    iUI6IZttRvbp59MYWeAeR9ywajwoEVC/szTNNz4g5RWilAriWV9/6iACKnkefi0Xhka8ao
-    UI3wIZg37/v3uedC0JIC4liLFj+4wza2xL9MLC2hJqF8TRlk/vKNVDTEZBAmzjnpJ9Ml8I
-    5iKfDAIjNBIsPRXlRJmQO/GxM52tDp4MH6k1h4YLsvZ4+eLPTX6HVMRWl7kV15NubEgjn5
-    AOX/iV0DZoSSut8p3lT4vfzjnQ8vEu6SUzCQWqmWO17gc0q3YHwvKukMn2Jlw6OSBo39M4
-    kp2c0I58cDLCIs8+pOuxlOaG9oDQXUq/dDRSL3VnDMojcLwC7R+1UVGwM9qZvYa7Xs90Z6
-    AYna48qAPi/du6tHtGe9BEaTqDNVGp1aqwebSjpsC2ModsDqa9WM4VSQ0/0+pvNyIS6FrV
-    ytGapxE/eBv413TmuD1tDDZr63FPme2bRmO1uIcvcJaZy0zsGgJ75xaLJb1TaWS4e4tCP2
-    kUhBDjDH+bcV7bINMKq96WD1HDhh6mSovIqT6cEeBtnDlfZGx+RAiPA1VVV7JWAYktB9iN
-    Y/pMAMGvdPZ7fJVM1EBoCPRZddDsklrerz9cFnPjihjjr9174sV2sILEoZrw
-X-ME-Proxy: <xmx:Gg-NalubECiEGqnpBIMXfrvPavhWvY7Lg6urBXuqIe0ygNNYu2DD1Q>
-    <xmx:Gg-NaoAH6XiRaTgo6XZ-CO_OY5Y8erO18iTKrmzHISotHVvYHg6Luw>
-    <xmx:Gg-NanChCkA9x2FDaiSO6iQAh1f3_IpDurOSNfWVtYCEhfk_1rg9vQ>
-    <xmx:Gg-NajPWmintf1CRv95G0G7XeeVwpE53q8WgvepVBCeWJ4MZT8sQvg>
-    <xmx:IQ-NaqkzmXf-SjwABxUsJdluph06cGOFumGsbCOVtUKNRMcwiO1f9Lg2>
-Feedback-ID: i9d664b8f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Aug 2026 23:41:38 -0400 (EDT)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1AC1A680C;
+	Tue, 25 Aug 2026 08:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787648086; cv=fail; b=BYhJmuCW9Kx4YizOnCD61gdVeY/01I/uaIhTiyrfZfORlAv+s6wsKqJYYIzGlX5A+CY7Mz/36DjzVHCelel+c8r6HHrfb/h8KOmqcSsSs+j87hrrUuZm7yFwsJD/LhPqGTjSVIxfVK3foY4nFmMU1j0cTKDMJ2KJsBoxjq0SCnY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787648086; c=relaxed/simple;
+	bh=OuZnMcGiOPjMOSHhCKHy73f09aj3o0/ZGvWQXX0T8os=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=kJ3ahWbV+ED0VJjRAQs4a4OxOp4WVcSMDCe6U9c1iBq73rFHJobByPqkV5sfqKr7YD8U+lH2XEjVAAylJPJXjuZXnYXPIgf6sPchPH1Kff2Li2FOIdestDEEbIzclcgdpN+R/m9Iid5SbwktMyQgRUwjWYVUv9WcebIV96GWxEM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YkqnSXyWUlzeJAaAKPdY2uLH8+iy6Ptiu5DENPtq570zDgeu2Du5mSj9p9X6aG44m+wrM5EQfCIp0l3HJI0xUhzKHcIvvPuPWyAXeX+gvJUP7MVHV2TRn1sdBPBwjzsVExkOj+XTIKM254rmKGcj0dW/2AzugZ5xdDXJg9riLXCVcHR1Vtv5EMTYU/uz6S5dAJRhzwp7Q1tJ1g65u+2BGU3NBoqZICtbubUc1G9BgseZvKmHpFHrM0k9wRfec/Mp7iqqBKp69QzK99538c6Sr0Mwoa9CrO2cHMkdrUeaAD4fBP8gVtxYIYBGpRqARA1Sa+CA9f7YCzniUI3PpQ6cWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
+ bh=SX2xXbZyt5Gd6pAlSCQuVwEBY74Gm20PC1gDo2clyOE=;
+ b=fcjgNiD+NusG7WNmNJZJsE+dB3V55GMUhqjE5e/ywv0covanMcnImieQnHKUcEm/1qHyGHSBzV8uUviXWxhpf97H1GK6rhC0RP3Q8nyMCxDMw/v/s14YAF98Nhb2QgCnoYHWGigwXzWycIZNTGPyzW7Tw60j8emIRZcDG7fy4e+6XenrvRyneNINl9N/AnaQmFGXBXUwj6frKu75RSUZEcbfE6H5GilA6oYAMOTExKj7PTQWsfBCuyaEzOndNNRAaOqFpNETe4MhxaJqDZUsHID2y20cT5TSvEqj5y7959lmK2FhzhTyk/Q/P3a0H30BbSl7pK8DayBr/ic5ubCHtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
+ by LO0P123MB4250.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:159::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.13; Tue, 25 Aug
+ 2026 08:54:41 +0000
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0339.012; Tue, 25 Aug 2026
+ 08:54:40 +0000
+Date: Tue, 25 Aug 2026 04:54:38 -0400
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: Hao Ge <hao.ge@linux.dev>
+Cc: Suren Baghdasaryan <surenb@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] module: fix lost error code from codetag_load_module()
+Message-ID: <22w2z5iw5mkakrz5bypeygjl3ytlaakagcc77emsmbrzol5tvs@ucrorrfpcg5o>
+References: <20260824014736.35026-1-hao.ge@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260824014736.35026-1-hao.ge@linux.dev>
+X-ClientProxiedBy: LO0P265CA0012.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:355::13) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:183::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: NeilBrown <neilb@ownmail.net>
-To: "Matthew Wilcox" <willy@infradead.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
- "Byungchul Park" <byungchul@sk.com>, linux-kernel@vger.kernel.org,
- max.byungchul.park@gmail.com, kernel_team@skhynix.com,
- torvalds@linux-foundation.org, linux-ide@vger.kernel.org,
- adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, mingo@redhat.com,
- peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
- rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
- daniel.vetter@ffwll.ch, duyuyang@gmail.com, johannes.berg@intel.com,
- tj@kernel.org, tytso@mit.edu, david@fromorbit.com, amir73il@gmail.com,
- gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
- akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
- hannes@cmpxchg.org, vdavydov.dev@gmail.com, sj@kernel.org,
- jglisse@redhat.com, dennis@kernel.org, cl@linux.com, penberg@kernel.org,
- rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
- linux-block@vger.kernel.org, josef@toxicpanda.com,
- linux-fsdevel@vger.kernel.org, jack@suse.cz, jlayton@kernel.org,
- hch@infradead.org, djwong@kernel.org, dri-devel@lists.freedesktop.org,
- rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
- hamohammed.sa@gmail.com, harry.yoo@oracle.com, chris.p.wilson@intel.com,
- gwan-gyeong.mun@intel.com, boqun.feng@gmail.com, longman@redhat.com,
- yunseong.kim@ericsson.com, ysk@kzalloc.com, yeoreum.yun@arm.com,
- netdev@vger.kernel.org, matthew.brost@intel.com, her0gyugyu@gmail.com,
- corbet@lwn.net, catalin.marinas@arm.com, bp@alien8.de, x86@kernel.org,
- hpa@zytor.com, luto@kernel.org, sumit.semwal@linaro.org,
- gustavo@padovan.org, christian.koenig@amd.com, andi.shyti@kernel.org,
- arnd@arndb.de, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
- rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
- petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
- paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
- joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
- mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
- qiang.zhang@linux.dev, juri.lelli@redhat.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
- vschneid@redhat.com, chuck.lever@oracle.com, okorniev@redhat.com,
- Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org, anna@kernel.org,
- kees@kernel.org, bigeasy@linutronix.de, clrkwllms@kernel.org,
- mark.rutland@arm.com, ada.coupriediaz@arm.com,
- kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
- broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
- shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
- yuzhao@google.com, baolin.wang@linux.alibaba.com, usamaarif642@gmail.com,
- joel.granados@kernel.org, richard.weiyang@gmail.com,
- geert+renesas@glider.be, tim.c.chen@linux.intel.com, linux@treblig.org,
- alexander.shishkin@linux.intel.com, lillian@star-ark.net,
- chenhuacai@kernel.org, francesco@valla.it, guoweikang.kernel@gmail.com,
- link@vivo.com, jpoimboe@kernel.org, masahiroy@kernel.org,
- brauner@kernel.org, thomas.weissschuh@linutronix.de, oleg@redhat.com,
- mjguzik@gmail.com, andrii@kernel.org, wangfushuai@baidu.com,
- linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
- linux-i2c@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-modules@vger.kernel.org, rcu@vger.kernel.org,
- linux-nfs@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- 2407018371@qq.com, dakr@kernel.org, miguel.ojeda.sandonis@gmail.com,
- bagasdotme@gmail.com, wsa+renesas@sang-engineering.com,
- dave.hansen@intel.com, geert@linux-m68k.org, ojeda@kernel.org,
- alex.gaynor@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
- lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
- tmgross@umich.edu, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v19 00/40] DEPT(DEPendency Tracker)
-In-reply-to: <ao0AieB7zg5FKD39@casper.infradead.org>
-References: <20260706061928.66713-1-byungchul@sk.com>
-  <359ea967-9b97-4584-88e6-bddb4044de2e@kernel.org>
-  <20260821042143.GA40890@system.software.com>
-  <825134a8-ceae-430c-b2fc-d1d0c7240f39@kernel.org>
-  <178730572084.2852630.7732425311008244683@noble.neil.brown.name>
-  <3d58eb3c-7a9d-4183-907b-46172664631c@kernel.org>
-  <178761465493.3510150.12380729360578969391@noble.neil.brown.name>
-  <ao0AieB7zg5FKD39@casper.infradead.org>
-Date: Tue, 25 Aug 2026 13:41:35 +1000
-Message-id: <178762929532.3510150.18274428053274599221@noble.neil.brown.name>
-Reply-To: NeilBrown <neil@brown.name>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO0P123MB4250:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4059d035-03bd-4d61-bcfd-08df02867fdb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|23010399003|376014|10067099003|56012099006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	7huFCH/iSfjsLwA2BMUGpvplb4pSczEeVJaqInQri2cONMOxlkMmLGQPbcMrYdxLyXKvJ+Kjrb1ixAOCFiU0Udq7gRbUAWDIhkyT2958VJ67eSY9T6Yi9JjYmkWkIKou+Q0WZQ+0LphXKw6unSdff6OEqGKVTSMIpj41GLBvrHPusPKkBFEUbAaydtn54bqy4vhnLNL9VsEhvlKLRjUnzAfvM1vG82wZDt1abSCNaFpUs8/HwcZLHkkT02gmBHE3r0R4qmpdB4txYOuIQOH8E0++K3z6SiSeV8eaXjjk5a33GFGKqYOKoFe6xxA9Jv4SzZisibAtW/Ca5MIenJixAe4xqGzJO7Etm9thyUgLQj9OKwdmQm8eStk1xpiyn44utl6y4SFhx2eyVHvUmL+y2VE2sQO20I5yjoitXfYfdUF5NFYanMXNoBw+XEuPpnsys5jq363ICGMDMrczUCcsD6wm/m0v41ATiR+8s7AFHItPs/OyytZqR+ljpFcmwFoqDoSn6vmmBuvYIShAPgWuqhLZ1H7zWO4lSKOvPwBOQh8TT+2Te5uqUZjLPFAwFxuAiiaJLqNjOE1xhZdLnhIYMxe7flqAsneGsUcXTuFoXU8ZAoBI6/gbpUBa0SSaTvPkBWGfwaCwMGc9KES2cuRMWPit+U7esFf8nsrEA4MNqEc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(23010399003)(376014)(10067099003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VitZV0NCWFlHV0doRm05aGxmK29HaDhLUW5aVW4yYVNrR0doZkk5RGtoVlds?=
+ =?utf-8?B?a0Z5d1IyRXJZM2tlSWV0RWVEcUlXSFJmNWw4bWg1Rk80WFV3b2crMDdKTCtl?=
+ =?utf-8?B?ZmFXcTBVeGhac0xReWt2cE9hb0tQVi80NTcwRUc0amFyQ2RaQ3MwSXpUYWts?=
+ =?utf-8?B?Zlo5cWFQcTM5cTBGdGJrNUNtOFlTTlZnM3ZtTDdMdEtTT295Ri9pOUhmZEJI?=
+ =?utf-8?B?WGdWM1hybHZ5T1ora2pqM0NYNXdxY2RBYjZRTHNqODdxYVNhYmdodE85SDVS?=
+ =?utf-8?B?djNSOXNHS3gxbmlFeEhvd09xRVcrRy9sWDRSNUgwOEROanBRM0RiZ2I4MGdn?=
+ =?utf-8?B?TVNHUDgwN0FtYk00bjVMN0JIWktJcCs0RVNlK0cybVE2VGpEZzNMZjJXMlZM?=
+ =?utf-8?B?ay90ZFhYRDVEVnRWczE2YXhZTkdFWUFFaFZjcWtEVFVoRmdmVExrNFdxYzVJ?=
+ =?utf-8?B?bXlNVzlscUo1SDM4TUdRVDQ1YUNNMTNxM3o4MU5QU2FrRjlFQURydHZiV1BC?=
+ =?utf-8?B?ZW12bVF4ZktLSjlJbDZsdGlVOVpta3gyb2NTcXhkM0gwRlR2Q2U3VmNIV0s5?=
+ =?utf-8?B?cUt6L1B1em1CelY1M3NNcjJQTng0WjloQThBTjNmU0hQU1VWZ0VnYzRiSnRs?=
+ =?utf-8?B?anQ1Rk15aFNNQnE5M3plKy81QUJKNjZyNG5oU1IvWDNpNVEzcHVKendxaGN2?=
+ =?utf-8?B?dmZPUyt4SlJVZi96TzhvWGx4R2VDaGlaNVp5d3NaTmJzVWgrdGx5RTRXaXdQ?=
+ =?utf-8?B?LzV5MVdjRVVFV3ZkZFhpNVFyQ3lwaE1qTkpKNTNqK3Evd1JBKzIxSWFkT2Zr?=
+ =?utf-8?B?bmhabUVvWjRaclo0aGQxTDFKcmpFNnBWbm1abGNFMHdlNWVFWmtXQjJRekZm?=
+ =?utf-8?B?N2JENDZUaGhwemJqb01xeDV2Qk54VFo0aEhPMXVJWkhRWHJhc0lSM0oyT1R3?=
+ =?utf-8?B?MUJxMlB1a3ZUOHhPQ1dwUTBvckt3OGFVYjkzYmN2UzhnNVlma3dOMTZUN0k2?=
+ =?utf-8?B?REt4anB3c1BCWUtWdDQ2MTkxM01YTzVQVkxubjlCamtLQWZyWTdzVEhpY2pB?=
+ =?utf-8?B?aE9tdnBwbnk2TkNuUGxaRXdvY0RzajFvaCs4NVNEMm9aa0dYR0tpaDllMGdj?=
+ =?utf-8?B?ano4RnFNMnNrcngzNkpKeGxBZ1Y4RkRmbTZrRVIvTnJPRjhKUkw1akVBMkJC?=
+ =?utf-8?B?UUhxL3NodUVIM1BNeTNYSWg1Z1BkRzg5QlBzVjg4RjlVZEVSemFHYzk4UnpM?=
+ =?utf-8?B?WDh5QjkydkQzVUJoeEFjYnczbFNreVJvdFY1NUJrMitPa0gxbjN5emc5ajRD?=
+ =?utf-8?B?TTFPbGNodjZlQUJqTnNhby9uV09pMWsyMFVKSWpibE8xNXUrT3pzWTV3TjhU?=
+ =?utf-8?B?NEdMY2VGanhaVTJsek50SkhIUlFxVTZPRFJTNkRYZnZJZjVGMDVLMzBFOHdV?=
+ =?utf-8?B?NUV4czNianRJUXRrWHBZM3dydUQxL2dEK0pVQXgvNnZleGpqZ2RCWWczbGV4?=
+ =?utf-8?B?cUc4eDM5Z0toYk5vWG52cHZhdTY0OUJSUlM1Z2N6UWxnb1YwUlpSeldwbzRE?=
+ =?utf-8?B?V0V5RHEydlJIeVp0MDF2NDJwSTRNeUdYaVRjbFR3NmJ2Ry96emdPb00vMUJZ?=
+ =?utf-8?B?a25zcmxvR1JhUnh3Ni8rMHV1dUlWZ3hRTm5WYWJDZEtBRHEvMkJKWk83dzg5?=
+ =?utf-8?B?aVVzZUNWcVNHRUFXOWRGcjF0TWxNamxpM1BXdGZjelB0V0p3NzI5dWsyTDlu?=
+ =?utf-8?B?NnphUGxIcDluVVVkcGlobVZ2YW9uVHk5SytCQkNlMElFWGtVOWpadWVGcjFk?=
+ =?utf-8?B?MmV3RmNhdWtROWdxTlFubHF6NUl5L3lKUmZTdE5EUDZyVXRqMUsvY1BCSmxp?=
+ =?utf-8?B?UlduTjUvUkNMSzlHY0N3RjlSTnh5aitMSWRYMGxDNUtVblNqWmdRaTVpM3E2?=
+ =?utf-8?B?cUV6L0p0ZmNpYksvdjVPSC9SNmMyeFJ6ei9OV0ozLytPMGdJYW8zNzlJOVdk?=
+ =?utf-8?B?ZHh4SEJ2Rlo3VFIwMFFKMkUrRFFyL1VkelM1bTErVmxKekJlR21FQ3NobmRv?=
+ =?utf-8?B?QU15MGtaajlDa1NkNVB2a3preHJoQnZFazlrM0JsbzRjY2pHeFBwaFR0Vk9P?=
+ =?utf-8?B?QVJsMytRY3lxVmc3NmpGRm13S2U3ODZYdTBhRlJxbXVlMU1QMTR1dWhRNmxR?=
+ =?utf-8?B?ME1VaVB2dXNMSGtvRFRyWis4N0xQeExpMjRKdC9SVVUreUNJN0Y1UE9hNzI3?=
+ =?utf-8?B?dG1nRWcyOG9OTmNpdyt6OTg1aERwNWxkNC9DTm9iRysvR0lvL0R0R3QyaVFQ?=
+ =?utf-8?Q?6C07HocYpnCQnOUCMW?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4059d035-03bd-4d61-bcfd-08df02867fdb
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 08:54:40.6247
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ELR+yTCjT07m13uswxZyIVCT+PF+dnmQJec9VP7rkVW6hsVUOprw4vcBirsDUEUm2vzFbGpTWIbYxHD4uQShiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB4250
 
-On Tue, 25 Aug 2026, Matthew Wilcox wrote:
-> On Tue, Aug 25, 2026 at 09:37:34AM +1000, NeilBrown wrote:
-> > > For readahead, I think that queues / lru are not involved. We submit th=
-e I/O,
-> > > and once the I/O is done, we unlock the folio from interrupt context.
-> >=20
-> > "submit the I/O" means "attach the page to a "struct bio" (or similar)
-> > and attach the struct bio to a transmit queue for the device (or
-> > similar).  So there really is a queue.
-> >=20
-> > >=20
-> > > end_buffer_async_read() / iomap_finish_folio_read() end up calling
-> > > folio_end_read(), where we do the magic
-> > >=20
-> > > 	folio_wake_bit(folio, PG_locked);
-> >=20
-> > Exactly where the lock ownership should be reclaimed is not immediately
-> > clear to me.  bio_endio() might be early enough but there are probably
-> > better points.
-> >=20
-> > A small difficulty here is that a bio has multiple folios and they are
-> > all locked.  I cannot see that lockdep has a concept of holding an
-> > arbitrarily large set of related locks.
-> > We could just tell lockdep=20
-> >   "I have some folios locked"=20
-> > or maybe enhance lockdep to allow
-> >   "I have N folios locked"
-> > or even
-> >   "I have N folios in address-space A with the highest offset being O".
-> >=20
-> > This would allow lockdep to check the validity of locking another folio
-> > - only allowed if the address space is the same and the offset is larger
-> > than the previous largest.
->=20
-> It's more complex than that; see my other emails on the subject.
+On Mon, Aug 24, 2026 at 09:47:36AM +0800, Hao Ge wrote:
+> If codetag_load_module() fails, err is never set and load_module()
+> returns 0 after the module has been torn down.
+> 
+> Fixes: 044d2aee6c57 ("alloc_tag: handle module codetag load errors as module load failures")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hao Ge <hao.ge@linux.dev>
+> ---
+>  kernel/module/main.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 46dd8d25a605..afb810f0154c 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3568,7 +3568,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>  			goto sysfs_cleanup;
+>  	}
+>  
+> -	if (codetag_load_module(mod))
+> +	err = codetag_load_module(mod);
+> +	if (err)
+>  		goto sysfs_cleanup;
+>  
+>  	/* Get rid of temporary copy. */
+> -- 
+> 2.25.1
+> 
 
-It always is more complex that you think, isn't it...
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
 
-though I found
- https://lore.kernel.org/all/akvueAxPl8aoLvMR@casper.infradead.org/
-
-and think that you are saying the same thing as me, though I'm probably
-not saying it as clearly.
-To say what I think you were saying, but with possibly different words:
-
-  We don't want to tell lockdep that we are locking a "folio".  The
-  particular folio is irrelevant.  Rather we want to tell lockdep that
-  we are locking something at a particular offset of some array of
-  folios.
-
-The vfs_lock_two_folios example is much like lock_two_nondirectories().
-We use the subclass mechanism to tell lockdep "trust me, this is OK".
-
->=20
-> I think we need the ability for lockdep to call a function which says "I
-> hold this lock, is that lock OK to acquire".  But the devil is in the
-> details.
-
-I doubt we need arbitrary callbacks.  lockdep doesn't try to prove the
-locking is correct, it just tries to prove that the information we have
-given it is consistent.  So if you say:
-
-  spin_lock(some_lock);
-  spin_lock_nested(other_lock, 1);
-
-and later say
-
-  spin_lock(other_lock);
-  spin_lock_nested(some_lock, 1);
-
-lockdep will say "fine, that look good", while you or I would say "hang
-on, that looks weird".
-
-Similarly for folios we just need to decide what information we want to
-give lockdep, and how it should manipulate that information.
-
-I think that locks on ranges of an address-space is the sort of
-abstraction that would be most useful.  But if you thought a different
-abstraction would be more useful I would certainly be open to that.
-
-As an aside, d_walk() needs to lock a dentry, then lock a child while
-holding the parent lock, then drop the original lock and move down the
-tree. i.e. it wants an arbitrarily lock sequence of overlapping locks.
-lockdep doesn't have any direct way to express this.  It has subclasses
-so that it is OK to lock the child while holding a lock on the parent,
-but there is a smallish limit to the number of subclasses.
-So d_walk() tells lockdep it is dropping the subclass lock on a dentry,
-then taking (try_lock) a primary lock on the same dentry.  This is a
-"white lie" that leaves lockdep with almost full knowledge but without
-confusing it.
-This example highlights the idea that lockdep doesn't need to know
-exactly what is going on, it just needs to know about the stuff we
-want it to check.
-
-
-Thanks,
-NeilBrown
-
+-- 
+Aaron Tomlin
