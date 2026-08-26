@@ -1,152 +1,133 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A268C3BE647
-	for <linux-modules@vger.kernel.org>; Wed, 26 Aug 2026 09:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2ED388394;
+	Wed, 26 Aug 2026 10:21:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787736248; cv=none; b=FPeSKvxx638qSLQFeoToczEL+P0vUntr33xlwKVWZ4hySAAw94sYvmSRnYZqrhjC8utr5OysHcEuXQ61PnzgmCANzRAkdkGtbPhjDYugprL9ZwqxRUmD93aYQPjLjOAcusRfgdNW6wRSlZmydD7zvrkvV5iMbQDU6w+deaFtyS8=
+	t=1787739686; cv=none; b=fBPz1G31PZ+tY72BsIDuPeE2POGZfLmlW5NqSO+Nuzp1bjnsc5Zl0RqGafNIv6+cfQ/UKSsUS+PKeZxqRJv68N23We+c0i5XhcvhUR30F/Mr6jEdTJGUCpwWm5XcWD3X3RuM1mpJqz4XvMvJZYpEoeGzFyoDbEWsACswtlJaH6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787736248; c=relaxed/simple;
-	bh=HqnDvKEanItWN4sZGrC35XsJJ1cF3PJL+CnWLNUiuN8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EeIGDinTjvPMh6D7VqWehOTYHehU0Q5fH1GcJU8ZY865nHTuKALQ2J4NXv5RpkFc90kN9zcWCn4y2ams/SD45QMzYPHNci+OQM4RtZm2eJUXabOZLa+Uu59qXKThFChWiLkuMGXX5xDrWB2renwLs/smU4SVTEdrJZ8ix07JKSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KyluUFwF; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1787739686; c=relaxed/simple;
+	bh=7SCdvxoK0Z6e0C/Fm77VqCSXp0EzbmaMQ5H91NjQjmE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iXS9xZ1uFHRU560r927OaY8aoTrlUoXjmPvx94izG0bg39H1pCQb+AGG/9FqJKPZgmLZVKP8KwgB3apqL9qInNqt9aQ2PW+Rb/ZQ3oiDO+JeuophHzDkHsXAvw78Y8mkWkRw/goIlCNCMsmLcTXYrsFPzR8ZwOEhhpv+7Cs4QLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UYvNVJ9Q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KyluUFwF"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c250c6a6a9aso88345366b.1
-        for <linux-modules@vger.kernel.org>; Wed, 26 Aug 2026 02:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787736245; x=1788341045; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jCn0c8on5VhTMPvJMk79IvJUhN4ps8pLKsOfBaE2aTk=;
-        b=KyluUFwFXoyN/tfgV/Tz4QF3bTjfmxkyRl/Sq65/7GnZ3UGKkb8obPY8gIl3nDJONZ
-         XojL2AXT7C5nwlXXQNlUdbJPjkpz39mH6oX3gmcjSr0KsHQ7MmL1zeUC6YlufOS7IYNn
-         CMzQ5/d06NOMJXrOpVeDxQ8M3u+2wGKmg9TFFdKp+F1sHH2lQS3vgXZ5OYz8k6njjY5w
-         Yx3KAMNcp5/eVnqIYOKtSVzkm8YkAqnQLNdOpMDnmZRtCQsvyFjcvoyZ1A7Q9kTC+O4B
-         rDF5dQF4dHOtEZtT5kiL8eLIYxMe0KTg31wcPJmi4O1cRbJYVXAyWStJ9bEXbsry6Emw
-         Z6bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787736245; x=1788341045;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jCn0c8on5VhTMPvJMk79IvJUhN4ps8pLKsOfBaE2aTk=;
-        b=XsuNCvqGVPROUEnDXDB4cZ+3XS/xrX/6MdmITfcSvCiNA450rRNbnphqEpnbuRONZ1
-         d/nxuto4lcxn4/boX+dXvR0SypwgTshP6FJyYOzZrbaNuU+B5qzf7SpRpOwVul+FLc51
-         Tu7KvVC/bjZCCqNAGdtoXAL9zWdRvdH/pEgD8GbsQuYPhowZ8GEw13TckJ3bUUboRGva
-         hoRaPiOWRDjLAS7vCFHrE7fDgTrnVublCv7IjUSL/4Dm00b91VcadDkAb6w6CGHM+Vj3
-         kbFMqgFOSDVFjwGjQqIODdbQZQ0dslL2m9QBoeToP5prmvsl10Pu1Zj1wazgQACz40bC
-         JXcQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro8x4UinthMyWuwEZJV1Q8zIcJXvp3H4qi0TrlHlZdCEegssvUORmwjJbSysFlix2WcE66XPJwnDLv/qZYr@vger.kernel.org
-X-Gm-Message-State: AFuF++ldeudqR9xskh9GmdoLNvw9hb4YGwQDCmQoyKUZ1/5e/7uAOZZL
-	Pxg33sNQAz5PvOS74QLojUQwphSNwLgR/k7ORKfNvGc9W9xaoDC/+3+Abjw2WGKK6y8=
-X-Gm-Gg: AR+sD11KtIetWeRWDDllFB9MGwIcEyWmllDOIxejMdhvVSzGOnF4Zi3PVY0cuuUyCJ8
-	2tHl3ldC9wc676ZAWxP3wcpRywqw/Uek+yRJ6k6bAty9Q13cM9VlptGR2neZsGAp6a6QnuyJCtr
-	bqxvwOiXngljOySK5w+lNOGEYUTSUvWHb70w6WyoZHGQd+9xXrcuxwIAD4ynXRYE4sjHVzjNKXT
-	8SOaIksuOXcrCeXnUVAklwcTky8jwpFDaNTZEnHnr94DnhlNP6oUUQhrO2ABlloe7PA7HUQGYg5
-	X9lrZRSE3msSlY3ejgMD89/JqWlHJe1qB3zhnq9kKztu8pzYf729+gzynZCcagw4uxBpm7KxURL
-	X8e0tKZETFqmGsqJiDmdJi7uazs2+xZJB585M38yjTvHfgNus7mLWMZ/M+qFsk6fvAcBZzYzALg
-	MtNfUGoD29qAYp3hYQJfQ7ZC4p4zhQ/Yn+DOiu8X73xGVANW6G3fe/Gt7lDTKLMYCuT3cz8nwsG
-	exTxKdw3Ap9AWczpQf0W8SV
-X-Received: by 2002:a17:907:8749:b0:c25:2fb5:e572 with SMTP id a640c23a62f3a-c252fb5efa7mr36929566b.23.1787736244662;
-        Wed, 26 Aug 2026 02:24:04 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a5dea83a25sm3726306a12.18.2026.08.26.02.24.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Aug 2026 02:24:04 -0700 (PDT)
-Message-ID: <cd6b372d-cc68-445d-bcae-6cfc83d9e4db@suse.com>
-Date: Wed, 26 Aug 2026 11:24:03 +0200
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UYvNVJ9Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C1E1F000E9;
+	Wed, 26 Aug 2026 10:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1787739684;
+	bh=YEUXFgAdOYZhq6WlTXAgBZCPoZlzq0VxDUe0Jo44nCo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=UYvNVJ9QJGIODputgmB7wnNgRVGVdFtQitMj0XSvMZK+a0f3/cxKMr2FWAPowRrbF
+	 VinU6yOTa6OXhDxvotzTxMOEu/9hD9fW9+IgDTmuonYLhhX6pDCq4V3gvaZe550PPy
+	 Jj+3mSvEHHT+GZr+WFE8xG4ri2TsPqij/IuekGUM=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date: Wed, 26 Aug 2026 11:19:32 +0200
+Subject: [PATCH 1/2] module: pull out add_taint_module() to be public
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module: fix lost error code from codetag_load_module()
-To: Hao Ge <hao.ge@linux.dev>
-Cc: Suren Baghdasaryan <surenb@google.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
-References: <20260824014736.35026-1-hao.ge@linux.dev>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260824014736.35026-1-hao.ge@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260826-bind_taint-v1-1-52b05f4a965c@linuxfoundation.org>
+References: <20260826-bind_taint-v1-0-52b05f4a965c@linuxfoundation.org>
+In-Reply-To: <20260826-bind_taint-v1-0-52b05f4a965c@linuxfoundation.org>
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+ driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-Mailer: b4 0.17-dev-362b8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2435;
+ i=gregkh@linuxfoundation.org; h=from:subject:message-id;
+ bh=7SCdvxoK0Z6e0C/Fm77VqCSXp0EzbmaMQ5H91NjQjmE=;
+ b=owGbwMvMwCRo6H6F97bub03G02pJDFl96zffXn45ez73/eMrvSft42cJU1Iz5TZesKygTqDT3
+ eyO/izjjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZhIaCHDPO0Pt/7Mbi7P+rlP
+ w2rNCw3XtkPP5BnmJ3wTvORXnhywreb6v/OGN/7KxmS9BwA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp;
+ fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 
-On 8/24/26 3:47 AM, Hao Ge wrote:
-> If codetag_load_module() fails, err is never set and load_module()
-> returns 0 after the module has been torn down.
-> 
-> Fixes: 044d2aee6c57 ("alloc_tag: handle module codetag load errors as module load failures")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hao Ge <hao.ge@linux.dev>
-> ---
->  kernel/module/main.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 46dd8d25a605..afb810f0154c 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3568,7 +3568,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  			goto sysfs_cleanup;
->  	}
->  
-> -	if (codetag_load_module(mod))
-> +	err = codetag_load_module(mod);
-> +	if (err)
->  		goto sysfs_cleanup;
->  
->  	/* Get rid of temporary copy. */
+Other kernel code might want to call add_taint_module() so pull it out
+and make it global.  If modules are not enabled, this defaults to a call
+to add_taint(), so all is fine.
 
-This looks ok to me but there appears another bug related to this code
-that would be good to fix at the same time. If the module is
-a livepatch, the preceding call to copy_module_elf() allocates
-mod->klp_info. However, if codetag_load_module() fails, the code doesn't
-free it.
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/linux/module.h |  8 ++++++++
+ kernel/module/main.c   | 13 +++++++++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
 
-I think we want something like this (not tested):
-
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 96cc98568eea..25221539e645 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -29,6 +29,7 @@
+ #include <linux/srcu.h>
+ #include <linux/static_call_types.h>
+ #include <linux/dynamic_debug.h>
++#include <linux/panic.h>
+ 
+ #include <linux/percpu.h>
+ #include <asm/module.h>
+@@ -770,6 +771,8 @@ static inline bool is_livepatch_module(struct module *mod)
+ 
+ void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data);
+ 
++void add_taint_module(struct module *mod, unsigned flag, enum lockdep_ok);
++
+ #else /* !CONFIG_MODULES... */
+ 
+ static inline struct module *__module_address(unsigned long addr)
+@@ -877,6 +880,11 @@ static inline bool module_is_coming(struct module *mod)
+ static inline void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
+ {
+ }
++
++static inline void add_taint_module(struct module *mod, unsigned flag, enum lockdep_ok)
++{
++	add_taint(flag, lockdep_ok);
++}
+ #endif /* CONFIG_MODULES */
+ 
+ #ifdef CONFIG_SYSFS
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d0e1e0bd2ad0..c1b34dc1e89a 100644
+index d0e1e0bd2ad0..99cedb961898 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -3581,8 +3581,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 			goto sysfs_cleanup;
- 	}
+@@ -191,8 +191,17 @@ static inline int strong_try_module_get(struct module *mod)
+ 		return -ENOENT;
+ }
  
--	if (codetag_load_module(mod))
--		goto sysfs_cleanup;
-+	err = codetag_load_module(mod);
-+	if (err)
-+		goto livepatch_cleanup;
- 
- 	/* Get rid of temporary copy. */
- 	free_copy(info, flags);
-@@ -3592,6 +3593,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 
- 	return do_init_module(mod);
- 
-+ livepatch_cleanup:
-+	if (is_livepatch_module(mod))
-+		free_module_elf(mod);
-  sysfs_cleanup:
- 	mod_sysfs_teardown(mod);
-  coming_cleanup:
+-static inline void add_taint_module(struct module *mod, unsigned flag,
+-				    enum lockdep_ok lockdep_ok)
++/**
++ * add_taint_module: add a taint flag if not already set for a specific module
++ * @mod: pointer to the module that caused the problem
++ * @flag: one of the TAINT_* constants.
++ * @lockdep_ok: whether lock debugging is still OK.
++ *
++ * If something bad has gone wrong, you'll want @lockdebug_ok = false, but for
++ * some noteworthy-but-not-corrupting cases, it can be set to true.
++ */
++void add_taint_module(struct module *mod, unsigned flag,
++		      enum lockdep_ok lockdep_ok)
+ {
+ 	add_taint(flag, lockdep_ok);
+ 	set_bit(flag, &mod->taints);
 
 -- 
-Thanks,
-Petr
+2.55.0
+
