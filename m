@@ -1,106 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9A23BCD3C;
-	Wed, 26 Aug 2026 09:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A268C3BE647
+	for <linux-modules@vger.kernel.org>; Wed, 26 Aug 2026 09:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787735991; cv=none; b=sKGdwU3DX21R+kd2FP2HSTlP7E2jgACVetWHbhOMeU/XaBFZjPZccVvbG+dTUPcnmYJZQTJfVUM931bO8oyyGevLq9sL0oOfY4kOucsXP2DWVF7ljyYWq2pl0fcfCs1Vkb+pzK95ubvG+fgDufYTAvyZbMiJRCylS8D8744fAEc=
+	t=1787736248; cv=none; b=FPeSKvxx638qSLQFeoToczEL+P0vUntr33xlwKVWZ4hySAAw94sYvmSRnYZqrhjC8utr5OysHcEuXQ61PnzgmCANzRAkdkGtbPhjDYugprL9ZwqxRUmD93aYQPjLjOAcusRfgdNW6wRSlZmydD7zvrkvV5iMbQDU6w+deaFtyS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787735991; c=relaxed/simple;
-	bh=+FX0Z5ui5AmSfOdLaZSq+x6dyOQhTCL5lVxKevxrmoQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mBnue71rKqvTSDesYJT0aMBQFDXsPfODT6kfi02iOTtSrWLHEkeJ5TW4WFVNTJVc5GSCaAucktVy7ptfobt8PnTS0BvbfRYrVBDENZNKG3xyItHndi2deEA3K7FH+ZKTGqGopeMHSaurGM98fE/FvUOmX1Zq4Cqv4AqJWHOswYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vRoIqWi+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787736248; c=relaxed/simple;
+	bh=HqnDvKEanItWN4sZGrC35XsJJ1cF3PJL+CnWLNUiuN8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EeIGDinTjvPMh6D7VqWehOTYHehU0Q5fH1GcJU8ZY865nHTuKALQ2J4NXv5RpkFc90kN9zcWCn4y2ams/SD45QMzYPHNci+OQM4RtZm2eJUXabOZLa+Uu59qXKThFChWiLkuMGXX5xDrWB2renwLs/smU4SVTEdrJZ8ix07JKSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KyluUFwF; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vRoIqWi+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 605A51F00A3D;
-	Wed, 26 Aug 2026 09:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1787735990;
-	bh=n7CjhrR4nepFt9FgKpeK8cy1EypYGcZbaVX36fKlPYI=;
-	h=From:Subject:Date:To:Cc;
-	b=vRoIqWi+sCHEFU5tVyaE/XP0GYeKtXink/Aq0NtjR6ji2EoxeH9KzNVE5B0T2KpQJ
-	 LkxU06eV1JHE4Ex8CbZZqsSWxTmsXRAdeGqZWvvQ7JUROsX+c6nnT25rKL/JHI3yrW
-	 GY9dOhvnPjfcAR5DmVBJgRXZTRTdWPr365NVwh6w=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 0/2] driver core: add TAINT_FORCED_BIND for when userspace
- manually messes with devices and drivers
-Date: Wed, 26 Aug 2026 11:19:31 +0200
-Message-Id: <20260826-bind_taint-v1-0-52b05f4a965c@linuxfoundation.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KyluUFwF"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c250c6a6a9aso88345366b.1
+        for <linux-modules@vger.kernel.org>; Wed, 26 Aug 2026 02:24:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1787736245; x=1788341045; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jCn0c8on5VhTMPvJMk79IvJUhN4ps8pLKsOfBaE2aTk=;
+        b=KyluUFwFXoyN/tfgV/Tz4QF3bTjfmxkyRl/Sq65/7GnZ3UGKkb8obPY8gIl3nDJONZ
+         XojL2AXT7C5nwlXXQNlUdbJPjkpz39mH6oX3gmcjSr0KsHQ7MmL1zeUC6YlufOS7IYNn
+         CMzQ5/d06NOMJXrOpVeDxQ8M3u+2wGKmg9TFFdKp+F1sHH2lQS3vgXZ5OYz8k6njjY5w
+         Yx3KAMNcp5/eVnqIYOKtSVzkm8YkAqnQLNdOpMDnmZRtCQsvyFjcvoyZ1A7Q9kTC+O4B
+         rDF5dQF4dHOtEZtT5kiL8eLIYxMe0KTg31wcPJmi4O1cRbJYVXAyWStJ9bEXbsry6Emw
+         Z6bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787736245; x=1788341045;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jCn0c8on5VhTMPvJMk79IvJUhN4ps8pLKsOfBaE2aTk=;
+        b=XsuNCvqGVPROUEnDXDB4cZ+3XS/xrX/6MdmITfcSvCiNA450rRNbnphqEpnbuRONZ1
+         d/nxuto4lcxn4/boX+dXvR0SypwgTshP6FJyYOzZrbaNuU+B5qzf7SpRpOwVul+FLc51
+         Tu7KvVC/bjZCCqNAGdtoXAL9zWdRvdH/pEgD8GbsQuYPhowZ8GEw13TckJ3bUUboRGva
+         hoRaPiOWRDjLAS7vCFHrE7fDgTrnVublCv7IjUSL/4Dm00b91VcadDkAb6w6CGHM+Vj3
+         kbFMqgFOSDVFjwGjQqIODdbQZQ0dslL2m9QBoeToP5prmvsl10Pu1Zj1wazgQACz40bC
+         JXcQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ro8x4UinthMyWuwEZJV1Q8zIcJXvp3H4qi0TrlHlZdCEegssvUORmwjJbSysFlix2WcE66XPJwnDLv/qZYr@vger.kernel.org
+X-Gm-Message-State: AFuF++ldeudqR9xskh9GmdoLNvw9hb4YGwQDCmQoyKUZ1/5e/7uAOZZL
+	Pxg33sNQAz5PvOS74QLojUQwphSNwLgR/k7ORKfNvGc9W9xaoDC/+3+Abjw2WGKK6y8=
+X-Gm-Gg: AR+sD11KtIetWeRWDDllFB9MGwIcEyWmllDOIxejMdhvVSzGOnF4Zi3PVY0cuuUyCJ8
+	2tHl3ldC9wc676ZAWxP3wcpRywqw/Uek+yRJ6k6bAty9Q13cM9VlptGR2neZsGAp6a6QnuyJCtr
+	bqxvwOiXngljOySK5w+lNOGEYUTSUvWHb70w6WyoZHGQd+9xXrcuxwIAD4ynXRYE4sjHVzjNKXT
+	8SOaIksuOXcrCeXnUVAklwcTky8jwpFDaNTZEnHnr94DnhlNP6oUUQhrO2ABlloe7PA7HUQGYg5
+	X9lrZRSE3msSlY3ejgMD89/JqWlHJe1qB3zhnq9kKztu8pzYf729+gzynZCcagw4uxBpm7KxURL
+	X8e0tKZETFqmGsqJiDmdJi7uazs2+xZJB585M38yjTvHfgNus7mLWMZ/M+qFsk6fvAcBZzYzALg
+	MtNfUGoD29qAYp3hYQJfQ7ZC4p4zhQ/Yn+DOiu8X73xGVANW6G3fe/Gt7lDTKLMYCuT3cz8nwsG
+	exTxKdw3Ap9AWczpQf0W8SV
+X-Received: by 2002:a17:907:8749:b0:c25:2fb5:e572 with SMTP id a640c23a62f3a-c252fb5efa7mr36929566b.23.1787736244662;
+        Wed, 26 Aug 2026 02:24:04 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a5dea83a25sm3726306a12.18.2026.08.26.02.24.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Aug 2026 02:24:04 -0700 (PDT)
+Message-ID: <cd6b372d-cc68-445d-bcae-6cfc83d9e4db@suse.com>
+Date: Wed, 26 Aug 2026 11:24:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module: fix lost error code from codetag_load_module()
+To: Hao Ge <hao.ge@linux.dev>
+Cc: Suren Baghdasaryan <surenb@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
+References: <20260824014736.35026-1-hao.ge@linux.dev>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260824014736.35026-1-hao.ge@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqAIBBA0avErBNMLKOrRETqVNPCQi2C6O5ZL
- d/i/wsCesIATXaBx4MCrS6hyDMw8+AmZGSTQXBR8VqUTJOzfRzIRWYlV0rXimsjIQWbx5HOb9Z
- 2v8OuFzTxPcB9P7yrvfhuAAAA
-X-Change-ID: 20260825-bind_taint-d4077b870bc4
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
- driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: b4 0.17-dev-362b8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1968;
- i=gregkh@linuxfoundation.org; h=from:subject:message-id;
- bh=+FX0Z5ui5AmSfOdLaZSq+x6dyOQhTCL5lVxKevxrmoQ=;
- b=kA0DAAIRMUfUDdst+ykByyZiAGqOr7Oi82jsQ8IzJfz/GbnZsoI/U7QJ6agMV/F/F6UrONzuI
- 4hdBAARAgAdFiEE9LYMxb94wiFKMT3LMUfUDdst+ykFAmqOr7MACgkQMUfUDdst+ynKegCfRLp8
- N3d5bRX0/GhNLhI7BHEBrfUAmwTNYUjSX9+qxujr24eft/pdvacn
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp;
- fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 
-The ability to add and remove devices from a driver through the sysfs
-"bind" and "unbind" files was created all those decades ago as a way
-that kernel developers can iterate faster, and provide a debugging way
-for users to attempt to add a new device to a driver without having to
-rebuild their kernel.
+On 8/24/26 3:47 AM, Hao Ge wrote:
+> If codetag_load_module() fails, err is never set and load_module()
+> returns 0 after the module has been torn down.
+> 
+> Fixes: 044d2aee6c57 ("alloc_tag: handle module codetag load errors as module load failures")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hao Ge <hao.ge@linux.dev>
+> ---
+>  kernel/module/main.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 46dd8d25a605..afb810f0154c 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3568,7 +3568,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>  			goto sysfs_cleanup;
+>  	}
+>  
+> -	if (codetag_load_module(mod))
+> +	err = codetag_load_module(mod);
+> +	if (err)
+>  		goto sysfs_cleanup;
+>  
+>  	/* Get rid of temporary copy. */
 
-This api over the years has been abused and recently come under a major
-fuzzing "attack" through tools like syzbot which decided that it would
-attempt to just randomly bind any driver to any type of device, causing
-loads of unneeded errors and pointless kernel patches to be generated by
-unsuspecting new developers.
+This looks ok to me but there appears another bug related to this code
+that would be good to fix at the same time. If the module is
+a livepatch, the preceding call to copy_module_elf() allocates
+mod->klp_info. However, if codetag_load_module() fails, the code doesn't
+free it.
 
-Handle all of this by adding a new taint flag, TAINT_FORCED_BIND, which
-will be set on the driver if the bind/unbind sysfs files are ever
-successfully written to.  This lets kernel developers "know" that a user
-is attempting to do something that is not normal, and as such, if the
-kernel breaks they get to keep the shiny pieces laying around on the
-floor.
+I think we want something like this (not tested):
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-Greg Kroah-Hartman (2):
-      module: pull out add_taint_module() to be public
-      driver core: add TAINT_FORCED_BIND for when userspace manually messes with devices and drivers
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d0e1e0bd2ad0..c1b34dc1e89a 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3581,8 +3581,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 			goto sysfs_cleanup;
+ 	}
+ 
+-	if (codetag_load_module(mod))
+-		goto sysfs_cleanup;
++	err = codetag_load_module(mod);
++	if (err)
++		goto livepatch_cleanup;
+ 
+ 	/* Get rid of temporary copy. */
+ 	free_copy(info, flags);
+@@ -3592,6 +3593,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 
+ 	return do_init_module(mod);
+ 
++ livepatch_cleanup:
++	if (is_livepatch_module(mod))
++		free_module_elf(mod);
+  sysfs_cleanup:
+ 	mod_sysfs_teardown(mod);
+  coming_cleanup:
 
- Documentation/admin-guide/tainted-kernels.rst | 52 ++++++++++++++-------------
- drivers/base/bus.c                            |  3 ++
- include/linux/module.h                        |  8 +++++
- include/linux/panic.h                         |  3 +-
- include/trace/events/module.h                 |  3 +-
- kernel/module/main.c                          | 13 +++++--
- kernel/panic.c                                |  5 +--
- tools/debugging/kernel-chktaint               |  8 +++++
- 8 files changed, 65 insertions(+), 30 deletions(-)
----
-base-commit: 45c13f3f9e3bb15fd89ff2864c6f627a3b4b4229
-change-id: 20260825-bind_taint-d4077b870bc4
-
-Best regards,
---  
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+-- 
+Thanks,
+Petr
