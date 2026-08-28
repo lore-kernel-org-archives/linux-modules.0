@@ -1,131 +1,72 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA6644AB7A;
-	Fri, 28 Aug 2026 14:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7942C2EC090;
+	Fri, 28 Aug 2026 15:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787926290; cv=none; b=XL+/Hc1iCqpK9KIbm9CHyht8upoRNMKAuNjb1T72CImUiKpitwS8PxiQdITVVPuSMw7idHl7ucR+36VzFzHmOJ4ZeVbD4nG7lzfwfkhqJ/kyVk2hULQ6INNc1spb1uxIaFSIQ+4xFK2xG63qG5BdFRoCP/BRqKE70oo3y/IGFgQ=
+	t=1787930216; cv=none; b=c1/fiM6bqW5S0bwgzPwb2Y/YCBoxArQPjC00fmawa2HtFeqQH8fh79odjAR00ZaYtzEkYjvWCwn63FUETflg9x48eXQyIZ6GZ77xet2wbkF3AuLMWF8m71ItQWikcMoo6jUQuW2uYs2lbpPTCFhTCdUPgG4EXduSctbP8e5v1ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787926290; c=relaxed/simple;
-	bh=zrWYftSCGtfnzZIw9FBRwaFuP0lkn+KXDXTp3VXyk30=;
-	h=Date:From:To:CC:Subject:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type; b=NB4XJtaDUDEGD+zDYTQGxHqoAImse5rgkQaiiZNL1dl9JLeHeXEgDy0epN0ubG5RxoIVUMPwDPcUuVWJ6fEN70okiB+7AVOjirWYAPX7dl7FeGBe+OQhjxnGICWAOkDQmZ+8vCjccAVA9YeWZIodmQxwnHoT9i5kbBM24YGWrUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Ycnv+HBq; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=pAwUirXl; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	s=arc-20240116; t=1787930216; c=relaxed/simple;
+	bh=Q59T3pNM7f250DsuM+zm4cYq+MejOdXE3S0WDywQ3EQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a/Ia6RzGBuqBoLWzUIQAWOhW/3KVbr48bLOaAWVZw36ZMRwmlEOj2KKSSp8fX19y+FQfSmNldRONbPTnrXWHqU+5S4suK3fJNT/H1c7WcVtNi0hocDLAriEclMUyK7zS7VVWLfuaqCt5Q8M6mD1zljjgVbLQQJNB+YA2AqExJ9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hOPNhXbw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Ycnv+HBq";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="pAwUirXl"
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1787926269; bh=iZASGKq02X3MlmO8ig05lys
-	xUTvXqLjttI83Y8LZB04=; b=Ycnv+HBqjWQS5U5unDzB96IugCG4zABbml+qs+cqmqoPXqgymN
-	G+vRqqgTKjoq8x60DPVW7sOXe0Hsqb5XVKob6OFULWPoJT11vMeGF3D6JUgoiFXpy8emipbSAo6
-	IwZ457tXuzzZ7gSK37RTznHw3k8u1/25x4QLcudfso8yHnZrbd3bb+ih/OBHLubdyDLScT66loD
-	ikQi4ZPR4efqWGzX5p2Yrzeq4egeTH6Z+oT6Jf1CHeGEwpw0pPrnrAFypM0ywwauY1QphgUu0c7
-	SIURc0XASezSaZ5NV9SeEzXFGejC8yS+NYgdAuQWayIoBCn0E1BA9kJwQOGqmRnLmsw==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1787926269; bh=iZASGKq02X3MlmO8ig05lys
-	xUTvXqLjttI83Y8LZB04=; b=pAwUirXl2vj2hacynI1LWN6FYowJY8LNRSofKFRBFio/OCLbR+
-	G44FlI0f44HKl1e99r6flMyTrSMraop1b0DA==;
-Date: Fri, 28 Aug 2026 15:11:08 +0100
-From: Bradley Morgan <brads@mainlining.org>
-To: ardb+git@google.com
-CC: abarnas@google.com, akpm@linux-foundation.org, ardb@kernel.org,
- atomlin@atomlin.com, catalin.marinas@arm.com, da.gomez@kernel.org,
- kevin.brodsky@arm.com, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- mark.rutland@arm.com, mcgrof@kernel.org, mhiramat@kernel.org,
- petr.pavlu@suse.com, rostedt@goodmis.org, rppt@kernel.org,
- ryan.roberts@arm.com, samitolvanen@google.com, will@kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_4/9=5D_module=3A_Allocate_MOD=5F?=
- =?US-ASCII?Q?INIT=5FTEXT_from_the_MOD=5FTEXT_ROX_allocation?=
-In-Reply-To: <20260822135323.795946-15-ardb+git@google.com>
-Message-ID: <5D55C497-95FF-4603-98E4-8C47CDAB504C@mainlining.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hOPNhXbw"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 888B01F000E9;
+	Fri, 28 Aug 2026 15:16:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787930215;
+	bh=tEb0OHpSN5AAL9HgLZnc75ThezeOxsQzDLYZJatUxac=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hOPNhXbwcREoOG/U3kqD/OvJjwZd0fVmpDWLfbWnoIsT619T7C8Vh+uvcOjPYnmuE
+	 2wqtRDZz9oVGHY1740sZY5MYJm9MC+nwVBiZVgXYE+MZjhmUZrZuGRPIE4b01JEyrT
+	 EGfWPUdVOEapWnZml/hfiIBUpwPV9x35K6GzhmHk7gIYDY2EwLWrUhrRcQF5+Hmms2
+	 8UT+T1L6gclwvl3kRiokXu0DJs1U5DiPQXBtohVetvK1pmv4WZjbwNICP5ooKIOQnJ
+	 9+hqLZZyRqTs+u2SN+bareBfHvkBAm2aXJ+stLCLL4UL0kM5h95sUtGUZyd0/Ono+0
+	 uXkcqw1yqSArg==
+Date: Fri, 28 Aug 2026 17:13:43 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Jaihind Yadav <jaihindy@qti.qualcomm.com>
+Cc: kees@kernel.org, nathan@kernel.org, linux-hardening@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH v3] scripts/gcc-plugins: suppress recorded GCC switches
+ for extmod builds
+Message-ID: <apGlpwSPSI9YHjlR@levanger>
+Mail-Followup-To: Jaihind Yadav <jaihindy@qti.qualcomm.com>,
+	kees@kernel.org, nathan@kernel.org, linux-hardening@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org
+References: <20260817185146.GC1249844@ax162>
+ <20260820060116.786173-1-jaihindy@qti.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260820060116.786173-1-jaihindy@qti.qualcomm.com>
 
-On 22 August 2026 14:53:26 BST, Ard Biesheuvel <ardb+git@google.com> wrote:
->From: Ard Biesheuvel <ardb@kernel.org>
->
->When execmem ROX caches are used for module text and inittext, place
->them adjacently in memory, by allocating space for both initially, and
->splitting off the space for MOD_INIT_TEXT as needed.
->
->This avoids the corner case on arm64, where .init.text being placed far
->from .text results in a lot of complexity wrt indirect branches and PLTs
->that we'd prefer to avoid.
->
+On Thu, Aug 20, 2026 at 11:31:16AM +0530, Jaihind Yadav wrote:
+> With GCC plugins enabled, external module builds can record
+> -fplugin=... paths in DWARF producer metadata via
+> -grecord-gcc-switches, leaking host/build specific paths and
+> triggering QA checks.
+> 
+> Handle this in scripts/Makefile.gcc-plugins for KBUILD_EXTMOD
+> builds by adding -gno-record-gcc-switches to plugin cflags.
+> 
+> This keeps plugin behavior unchanged while avoiding absolute
+> plugin path leakage in external module debug metadata.
 
-I can't see anything wrong, thanks for the patch
-
-Reviewed-by: Bradley Morgan <brads@mainlining.org> # kernel/
-
->Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
->---
-> kernel/module/main.c | 22 ++++++++++++++++----
-> 1 file changed, 18 insertions(+), 4 deletions(-)
->
->diff --git a/kernel/module/main.c b/kernel/module/main.c
->index 46dd8d25a605..2d6213496359 100644
->--- a/kernel/module/main.c
->+++ b/kernel/module/main.c
->@@ -1342,7 +1342,7 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
-> {
-> 	unsigned int size = PAGE_ALIGN(mod->mem[type].size);
-> 	enum execmem_type execmem_type;
->-	void *ptr;
->+	void *ptr = NULL;
-> 
-> 	mod->mem[type].size = size;
-> 
->@@ -1351,11 +1351,25 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
-> 	else
-> 		execmem_type = EXECMEM_MODULE_TEXT;
-> 
->-	ptr = execmem_alloc_rw(execmem_type, size);
->+	bool is_rox = execmem_is_rox(execmem_type);
->+	if (is_rox) {
->+		/*
->+		 * Special case for MOD_TEXT / MOD_INIT_TEXT: allocate the
->+		 * latter by splitting off required space from the former
->+		 * so that they are always placed close together.
->+		 */
->+		if (type == MOD_TEXT)
->+			size += PAGE_ALIGN(mod->mem[MOD_INIT_TEXT].size);
->+		else if (type == MOD_INIT_TEXT)
->+			ptr = execmem_split(mod->mem[MOD_TEXT].base, size);
->+	}
->+
->+	if (!ptr)
->+		ptr = execmem_alloc_rw(execmem_type, size);
-> 	if (!ptr)
-> 		return -ENOMEM;
-> 
->-	mod->mem[type].is_rox = execmem_is_rox(execmem_type);
->+	mod->mem[type].is_rox = is_rox;
-> 
-> 	/*
-> 	 * The pointer to these blocks of memory are stored on the module
->@@ -1368,7 +1382,7 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
-> 	 * *do* eventually get freed, but let's just keep things simple
-> 	 * and avoid *any* false positives.
-> 	 */
->-	if (!mod->mem[type].is_rox)
->+	if (!is_rox)
-> 		kmemleak_not_leak(ptr);
-> 
-> 	memset(ptr, 0, size);
->
+Maybe it makes sense to add a note on how to restore the original
+behaviour for those who may want to have the gcc switches recorded in
+debug data for external kmods ('make KCFLAGS=-grecord-gcc-switches').
 
 
---- Thanks!
-https://lore.kernel.org/all/EE579805-42F2-4C58-B752-F28779EEB717@grrlz.net/
+-- 
+Nicolas
