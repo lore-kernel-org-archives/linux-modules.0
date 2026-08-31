@@ -1,364 +1,167 @@
-Received: from mta0.migadu.com (out-84.mta0.migadu.com [91.218.175.84])
+Received: from mta1.migadu.com (out-147.mta1.migadu.com [95.215.58.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEBD3C455F
-	for <linux-modules@vger.kernel.org>; Mon, 31 Aug 2026 07:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761C03CAA5F
+	for <linux-modules@vger.kernel.org>; Mon, 31 Aug 2026 07:37:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788160843; cv=none; b=JI4Wd8HJfo9+Kp/nWZxtV3tvrxpaukhndHmhxXVHBkJOPAGLCvCvAWNV4QhCtu3Nu4wAQLjr7ddbEGi40r88Mns3KV5Skce3E4//6NDTdeRvA/RHp65jK6kMi4LWIytmpSPsfpOKB6R2xKBOjYY7In1/0r1842v8uE0wMCzL1OY=
+	t=1788161853; cv=none; b=MDNgb8iVIqRdsT5PR2CdO6bmMA1WfRJSAJVaaOANNz4l+8M/PAncnXEmWX/yCa2ysxfrRMheKXNZMNtrhW7Jckp6wt1579jPoVC0XCbSIgo1U3jkKXZAhZWXSwx5ooAOnmVP1SryCYN6Up48kaHnHxH9t1hrG28xRaHkqZYs1mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788160843; c=relaxed/simple;
-	bh=w3KSkMf6l9toWeai+kZJfAXDdwBcuEHBoU2cjDlYTSs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=u8ba3QL7oTQE6Icsg/aEHH304ujr/KvsmROxqpzqiP1d9bzmgKt+r81qcjnbacwQo7LUCOz4ZCwWtPoBO5uo2N5OOt/IGFh158wZ06swCyTPcbZz9U/41uJuuOW9e7lczNMuoaTKVwf3Mnp4fX0kSxzgiENKdQHcVJ34xRxHn/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TQmF6qH5; arc=none smtp.client-ip=91.218.175.84
+	s=arc-20240116; t=1788161853; c=relaxed/simple;
+	bh=uxdKX20I9JQ/4ZC9HWtiJ9xgZdL6bJ5oz1EYtGytCcE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NhljrgCpzkNvY5j4ZIV2QbwV0E2IsMs7jiJ2DC7Hnzq8u3PirQ9YSCt6eI8AgGaecbOcpsCdOnOc/z+meN6q9lqfSvM+s7vUUwoZsQMCZaAPkQeaMIC3NX6lenmBw0ZJOdahkalkBlIeFOGqYkOHShs93k4KD13wlt9errbZl6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NWoX0q+8; arc=none smtp.client-ip=95.215.58.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TQmF6qH5"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NWoX0q+8"
 X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=w3KSkMf6l9toWeai+kZJfAXDdwBcuEHBoU2cjDlYTSs=;
+DKIM-Signature: a=rsa-sha256; bh=uxdKX20I9JQ/4ZC9HWtiJ9xgZdL6bJ5oz1EYtGytCcE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788160839; v=1; x=1788765639;
- b=TQmF6qH58MHdicFpmCFNqXU6E4EnbNk2KN8MkQKAY7neB2FO8SYlMY5qEyegGiW5a8GOue8Y
- ESgJEfZ/ddDDwx7ojJy2VnG7Mtbt3MwoQ5uco8WeSz0Fpvvbfnx3Q8adMW71PHdgcTGJ/Ao9ard
- wo6UA7srwDW2mjBMOuCt12Ks=
+ t=1788161848; v=1; x=1788766648;
+ b=NWoX0q+8y6x9sv2pt0nThFKzZM5elNJ4wVzcasiOO1US4c1DLhMAlS2nHjbPDLU6rGoDhFP0
+ zIf242wtC2iV9CVJ0OHWzpN+btqOfbnO0SWX1r1O7CU9JkL7soQGXDWWZs5iwTW+tTIqpF7fFWU
+ 3UYpJcnR4U4/WNNridwn+vwU=
 X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d82006544af2806b;
-	Mon, 31 Aug 2026 07:20:39 +0000
-X-Mizu-Trace-ID: d82006544af2806b
+Received: by smtp.migadu.com with ESMTPS id df6850f57dc2e572;
+	Mon, 31 Aug 2026 07:37:28 +0000
+X-Mizu-Trace-ID: df6850f57dc2e572
 X-Migadu-Flow: FLOW_OUT
-From: Hao Ge <hao.ge@linux.dev>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hao Ge <hao.ge@linux.dev>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [RFC PATCH v6 2/2] module: allocate codetag sections before the regular module layout
-Date: Mon, 31 Aug 2026 15:21:04 +0800
-Message-Id: <20260831072104.120197-3-hao.ge@linux.dev>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260831072104.120197-1-hao.ge@linux.dev>
-References: <20260831072104.120197-1-hao.ge@linux.dev>
+Message-ID: <556a5f2e-7ce1-4045-b935-9ba877254cd2@linux.dev>
+Date: Mon, 31 Aug 2026 15:38:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/2] alloc_tag: fix undetected compressed tag overflow
+ when profiling is disabled
+To: Petr Pavlu <petr.pavlu@suse.com>, Suren Baghdasaryan <surenb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, stable@vger.kernel.org
+References: <20260812054105.102637-1-hao.ge@linux.dev>
+ <20260812054105.102637-3-hao.ge@linux.dev>
+ <CAJuCfpFvdNFdsKdK2CdF2fNp8gbNgFpoeAiaqp70mpbNGCvk3g@mail.gmail.com>
+ <143a37b5-93a2-4038-8be9-29e13263e743@suse.com>
+ <CAJuCfpF1pWqhc+P9zPg8FT_CcdQxRuEpJ2DtYja1BeMXhW7-8Q@mail.gmail.com>
+ <499bb60c-c6e3-43a3-bd92-95a0567ece5e@suse.com>
+Content-Language: en-US
+From: Hao Ge <hao.ge@linux.dev>
+In-Reply-To: <499bb60c-c6e3-43a3-bd92-95a0567ece5e@suse.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Whether a codetag section goes to the codetag region is decided by
-layout_sections() and asked again in move_module(). A concurrent
-load can shut profiling down in between, and move_module() then
-copies the section to offset 0 of its regular destination,
-overwriting whatever is there.
+Hi Petr
 
-Decide and allocate in one pass, before the layout. Allocation
-errors fail the load. On a tag area overflow profiling is already
-disabled, so -EAGAIN makes the section fall back to regular module
-data and the module still loads.
+On 2026/8/26 16:32, Petr Pavlu wrote:
+> On 8/16/26 5:16 PM, Suren Baghdasaryan wrote:
+>> On Sat, Aug 15, 2026 at 3:45 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>>> On 8/12/26 7:41 AM, Hao Ge wrote:
+>>>> In reserve_module_tags(), the tag overflow check is gated on
+>>>> mem_alloc_profiling_enabled():
+>>>>
+>>>>     if (mem_alloc_profiling_enabled() && !tags_addressable())
+>>>>
+>>>> If profiling is toggled off at runtime and a module is loaded whose
+>>>> tags exceed the compressed-mode limit, shutdown_mem_profiling() is
+>>>> skipped. vm_module_tags_populate() still maps memory for the tags and
+>>>> the module loads successfully, but the total tag count now exceeds what
+>>>> NR_UNUSED_PAGEFLAG_BITS can address.
+>>>>
+>>>> Once profiling is re-enabled, ref_to_idx() computes each tag's index
+>>>> as its position in the alloc_tag array. update_page_tag_ref() masks
+>>>> it to alloc_tag_ref_mask before storing in page->flags. Indices
+>>>> beyond the mask are truncated and idx_to_ref() resolves them to wrong
+>>>> tags.
+>>>>
+>>>> This silently corrupts /proc/allocinfo: allocated pages get attributed
+>>>> to the wrong call sites, so the statistics it reports are wrong.
+>>>>
+>>>> mem_alloc_profiling_enabled() and mem_profiling_compressed are
+>>>> independent. Once compressed mode is established at boot, it stays
+>>>> active regardless of runtime toggles of mem_profiling.
+>>>>
+>>>> Remove the mem_alloc_profiling_enabled() guard. On overflow, shut down
+>>>> profiling, release the reservation, and return -EAGAIN so that
+>>>> layout_and_allocate() retries with profiling disabled: codetag sections
+>>>> are then placed as regular module data and the module loads without
+>>>> profiling rather than being rejected entirely.
+>>>
+>>> When the described overflow occurs, why should codetag sections be
+>>> placed as regular module data? Will the codetag support use them in any
+>>> way, or do they simply waste space? Is the issue that alloc_hooks()
+>>> creates relocations pointing into .codetag.alloc_tags?
+>>
+>> Correct, alloc_hooks() will have references into .codetag.alloc_tags.
+>> With mem_profiling_support=false they should technically never be used
+>> but I don't think it's a good idea to skip .codetag.alloc_tags section
+>> allocation and to leave dangling pointers. Also the case described
+>> here is an outlier, so optimizing it would not yield much benefit.
+>>
+> [...]
+>>> I'm not sure this is the best approach. It's complex logic for what
+>>> appears to be an edge case related to a debugging facility. It will have
+>>> the usual problem of error paths not getting enough testing and breaking
+>>> subtly over time.
+>>>
+>>> An alternative could be to reset SHF_ALLOC on the codetag section to
+>>> remove it from further processing and have relocations that point to
+>>> this section resolve to something else. It seems that alloc_hooks_tag()
+>>> could tolerate this, since it only needs to reference the associated
+>>> alloc_tag when mem_alloc_profiling_enabled() is true and that gets
+>>> disabled by reserve_module_tags() on the overflow.
+>>
+>> Hmm, yeah if we redirect the references into .codetag.alloc_tags, that
+>> would be much better.
+>>
+>>>
+>>> It is also not an ideal approach, but I feel it could be less intrusive
+>>> to the module loader. I can put together a prototype if needed.
+>>
+>> If your approach does not cause module loading to fail when we disable
+>> profiling, then that sounds like a good idea. If it's not too much
+>> trouble, could you please send an RFC?
+> 
+> The alternative approach I mentioned unfortunately doesn't work well,
+> since redirecting all relocations against .codetag.alloc_tag to
+> a different destination is nontrivial. It would require introducing
+> something like frob_relocation() that is called from each
+> architecture-specific apply_relocate()/apply_relocate_add() after the
+> addend has been decoded.
+> 
+> Another option I realized is to change the order in which module
+> sections are allocated. Rather than interleaving the allocation of
+> codetag and regular sections, the module loader could first try to
+> allocate codetag sections and then allocate regular sections. If
+> allocation of a codetag section fails, it can naturally fall back to
+> being treated as a regular section. This avoids retrying the allocation
+> process, which I would prefer to avoid.
+> 
+> A prototype is below.
+> 
 
-The overflow and populate failure paths of reserve_module_tags() now
-release their reservation instead of leaking the maple tree entry.
-When profiling was toggled off, the overflow check did not run, a
-module could load with more tags than the page flags can address,
-and re-enabling profiling then silently corrupted /proc/allocinfo.
-The check no longer depends on mem_alloc_profiling_enabled().
+Thanks a lot for your prototype. I have reworked it with some changes,
+and here is the link to the patch:
+https://lore.kernel.org/all/20260831072104.120197-3-hao.ge@linux.dev/
+The differences against your version are listed in the patch.
 
-Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Based-on-a-patch-by: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Signed-off-by: Hao Ge <hao.ge@linux.dev>
----
-Changes against Petr's prototype:
-- allocate_codetag_sections() returns an error instead of void, and
-  only -EAGAIN falls back to a regular section. Any other error now
-  fails the load. The prototype fell back on everything, which can
-  leave live tags in module memory.
-- reserve_module_tags() releases its reservation when populate fails
-  too, that path used to leak the maple tree entry.
-- codetag_free_module_sections() on the move_module() error path uses
-  info->mod, the local mod is assigned only after a successful move.
-- The percpu section is marked only when index.pcpu != 0, otherwise
-  sechdrs[0] gets marked.
-- Dropped the SHF_ALLOC check, .codetag.* sections always have it.
----
- include/linux/module.h   |   2 +
- kernel/module/internal.h |   4 ++
- kernel/module/main.c     | 120 ++++++++++++++++++++-------------------
- mm/alloc_tag.c           |   9 ++-
- 4 files changed, 75 insertions(+), 60 deletions(-)
+I originally planned to put you as the patch author, yet I was
+concerned my modifications on top of your prototype might not be
+clean due to missed corner cases. I therefore added the
+Based-on-a-patch-by: trailer. I realise this might not be perfect
+given that most of the credit is yours, and this is my first‑time
+dealing with this scenario. This is also one motivation for sending
+it as RFC. Feel free to tell me if this attribution is incorrect,
+I will fix it in the final release.
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 7566815fabbe..33548daa31a3 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -325,6 +325,8 @@ enum mod_mem_type {
- 	MOD_INIT_RODATA,
- 
- 	MOD_MEM_NUM_TYPES,
-+
-+	MOD_STANDALONE = -2,
- 	MOD_INVALID = -1,
- };
- 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 061161cc79d9..217bb540e361 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -29,6 +29,10 @@
- #define SH_ENTSIZE_TYPE_MASK	((1UL << SH_ENTSIZE_TYPE_BITS) - 1)
- #define SH_ENTSIZE_OFFSET_MASK	((1UL << (BITS_PER_LONG - SH_ENTSIZE_TYPE_BITS)) - 1)
- 
-+#define SH_ENTSIZE_STANDALONE					\
-+	(((unsigned long)MOD_STANDALONE & SH_ENTSIZE_TYPE_MASK)	\
-+	 << SH_ENTSIZE_TYPE_SHIFT)
-+
- /* Maximum number of characters written by module_flags() */
- #define MODULE_FLAGS_BUF_SIZE (TAINT_FLAGS_COUNT + 4)
- 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c32f1d370b73..587df9103f0b 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1625,7 +1625,7 @@ static int apply_relocations(struct module *mod, const struct load_info *info)
- 		 * ELF template and subsequently copy it to the per-CPU destinations.
- 		 */
- 		if (!(info->sechdrs[infosec].sh_flags & SHF_ALLOC) &&
--		    (!infosec || infosec != info->index.pcpu))
-+		    info->sechdrs[infosec].sh_entsize != SH_ENTSIZE_STANDALONE)
- 			continue;
- 
- 		if (info->sechdrs[i].sh_flags & SHF_RELA_LIVEPATCH)
-@@ -1723,20 +1723,6 @@ static void __layout_sections(struct module *mod, struct load_info *info, bool i
- 			if (WARN_ON_ONCE(type == MOD_INVALID))
- 				continue;
- 
--			/*
--			 * Do not allocate codetag memory as we load it into
--			 * preallocated contiguous memory.
--			 */
--			if (codetag_needs_module_section(mod, sname, s->sh_size)) {
--				/*
--				 * s->sh_entsize won't be used but populate the
--				 * type field to avoid confusion.
--				 */
--				s->sh_entsize = ((unsigned long)(type) & SH_ENTSIZE_TYPE_MASK)
--						<< SH_ENTSIZE_TYPE_SHIFT;
--				continue;
--			}
--
- 			s->sh_entsize = module_get_offset_and_type(mod, type, s, i);
- 			pr_debug("\t%s\n", sname);
- 		}
-@@ -1746,16 +1732,10 @@ static void __layout_sections(struct module *mod, struct load_info *info, bool i
- /*
-  * Lay out the SHF_ALLOC sections in a way not dissimilar to how ld
-  * might -- code, read-only data, read-write data, small data.  Tally
-- * sizes, and place the offsets into sh_entsize fields: high bit means it
-- * belongs in init.
-+ * sizes, and place the offsets into sh_entsize fields.
-  */
- static void layout_sections(struct module *mod, struct load_info *info)
- {
--	unsigned int i;
--
--	for (i = 0; i < info->hdr->e_shnum; i++)
--		info->sechdrs[i].sh_entsize = ~0UL;
--
- 	pr_debug("Core section allocation order for %s:\n", mod->name);
- 	__layout_sections(mod, info, false);
- 
-@@ -2789,7 +2769,6 @@ static int move_module(struct module *mod, struct load_info *info)
- {
- 	int i, ret;
- 	enum mod_mem_type t = MOD_MEM_NUM_TYPES;
--	bool codetag_section_found = false;
- 
- 	for_each_mod_mem_type(type) {
- 		if (!mod->mem[type].size) {
-@@ -2807,36 +2786,14 @@ static int move_module(struct module *mod, struct load_info *info)
- 	/* Transfer each section which specifies SHF_ALLOC */
- 	pr_debug("Final section addresses for %s:\n", mod->name);
- 	for (i = 0; i < info->hdr->e_shnum; i++) {
--		void *dest;
- 		Elf_Shdr *shdr = &info->sechdrs[i];
--		const char *sname;
-+		void *dest;
- 
- 		if (!(shdr->sh_flags & SHF_ALLOC))
- 			continue;
- 
--		sname = info->secstrings + shdr->sh_name;
--		/*
--		 * Load codetag sections separately as they might still be used
--		 * after module unload.
--		 */
--		if (codetag_needs_module_section(mod, sname, shdr->sh_size)) {
--			dest = codetag_alloc_module_section(mod, sname, shdr->sh_size,
--					arch_mod_section_prepend(mod, i), shdr->sh_addralign);
--			if (WARN_ON(!dest)) {
--				ret = -EINVAL;
--				goto out_err;
--			}
--			if (IS_ERR(dest)) {
--				ret = PTR_ERR(dest);
--				goto out_err;
--			}
--			codetag_section_found = true;
--		} else {
--			enum mod_mem_type type = shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
--			unsigned long offset = shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK;
--
--			dest = mod->mem[type].base + offset;
--		}
-+		dest = mod->mem[shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT].base +
-+		       (shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK);
- 
- 		if (shdr->sh_type != SHT_NOBITS) {
- 			/*
-@@ -2868,8 +2825,6 @@ static int move_module(struct module *mod, struct load_info *info)
- 	module_memory_restore_rox(mod);
- 	while (t--)
- 		module_memory_free(mod, t);
--	if (codetag_section_found)
--		codetag_free_module_sections(mod);
- 
- 	return ret;
- }
-@@ -2940,9 +2895,48 @@ static bool blacklisted(const char *module_name)
- }
- core_param(module_blacklist, module_blacklist, charp, 0400);
- 
-+/*
-+ * Allocate codetag sections separately. They are loaded into preallocated
-+ * contiguous memory because they may still be used after the module is
-+ * unloaded.
-+ *
-+ * If the separate allocation overflows, allocate the section normally
-+ * so that the module can still be loaded.
-+ */
-+static int allocate_codetag_sections(struct load_info *info)
-+{
-+	for (unsigned int i = 1; i < info->hdr->e_shnum; i++) {
-+		Elf_Shdr *shdr = &info->sechdrs[i];
-+		const char *sname = info->secstrings + shdr->sh_name;
-+		void *dest;
-+
-+		if (!codetag_needs_module_section(info->mod, sname, shdr->sh_size))
-+			continue;
-+
-+		dest = codetag_alloc_module_section(info->mod, sname, shdr->sh_size,
-+				arch_mod_section_prepend(info->mod, i), shdr->sh_addralign);
-+		if (WARN_ON(!dest))
-+			return -EINVAL;
-+		if (dest == ERR_PTR(-EAGAIN))
-+			/* Allocate the section as a regular section. */
-+			continue;
-+		if (IS_ERR(dest))
-+			return PTR_ERR(dest);
-+
-+		if (shdr->sh_type != SHT_NOBITS)
-+			memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
-+		shdr->sh_addr = (unsigned long)dest;
-+		shdr->sh_flags &= ~(unsigned long)SHF_ALLOC;
-+		shdr->sh_entsize = SH_ENTSIZE_STANDALONE;
-+	}
-+
-+	return 0;
-+}
-+
- static struct module *layout_and_allocate(struct load_info *info, int flags)
- {
- 	struct module *mod;
-+	unsigned int i;
- 	int err;
- 
- 	/* Allow arches to frob section contents and sizes.  */
-@@ -2956,8 +2950,15 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
- 	if (err < 0)
- 		return ERR_PTR(err);
- 
-+	/* Repurpose sh_entsize to track where each section is allocated. */
-+	for (i = 0; i < info->hdr->e_shnum; i++)
-+		info->sechdrs[i].sh_entsize = ~0UL;
-+
- 	/* We will do a special allocation for per-cpu sections later. */
--	info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
-+	if (info->index.pcpu) {
-+		info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
-+		info->sechdrs[info->index.pcpu].sh_entsize = SH_ENTSIZE_STANDALONE;
-+	}
- 
- 	/*
- 	 * Mark relevant sections as SHF_RO_AFTER_INIT so layout_sections() can
-@@ -2966,18 +2967,23 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
- 	 */
- 	module_mark_ro_after_init(info->hdr, info->sechdrs, info->secstrings);
- 
--	/*
--	 * Determine total sizes, and put offsets in sh_entsize.  For now
--	 * this is done generically; there doesn't appear to be any
--	 * special cases for the architectures.
--	 */
-+	/* Allow codetag sections to be allocated separately first. */
-+	err = allocate_codetag_sections(info);
-+	if (err) {
-+		codetag_free_module_sections(info->mod);
-+		return ERR_PTR(err);
-+	}
-+
-+	/* Determine total sizes and put offsets in sh_entsize. */
- 	layout_sections(info->mod, info);
- 	layout_symtab(info->mod, info);
- 
- 	/* Allocate and move to the final place */
- 	err = move_module(info->mod, info);
--	if (err)
-+	if (err) {
-+		codetag_free_module_sections(info->mod);
- 		return ERR_PTR(err);
-+	}
- 
- 	/* Module has been copied to its final place now: return it. */
- 	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
-diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-index e7a79116ad81..3c25475becbc 100644
---- a/mm/alloc_tag.c
-+++ b/mm/alloc_tag.c
-@@ -958,10 +958,12 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 		int grow_res;
- 
- 		module_tags.size = offset + size;
--		if (mem_alloc_profiling_enabled() && !tags_addressable()) {
-+		if (!tags_addressable()) {
- 			shutdown_mem_profiling(true);
--			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
--				mod->name, NR_UNUSED_PAGEFLAG_BITS);
-+			pr_warn_once("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
-+				     mod->name, NR_UNUSED_PAGEFLAG_BITS);
-+			release_module_tags(mod, false);
-+			return ERR_PTR(-EAGAIN);
- 		}
- 
- 		grow_res = vm_module_tags_populate();
-@@ -969,6 +971,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 			shutdown_mem_profiling(true);
- 			pr_err("Failed to allocate memory for allocation tags in the module %s. Memory allocation profiling is disabled!\n",
- 			       mod->name);
-+			release_module_tags(mod, false);
- 			return ERR_PTR(grow_res);
- 		}
- 	}
--- 
-2.25.1
+Thanks
+Best Regards
+Hao
 
