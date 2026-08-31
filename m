@@ -1,183 +1,157 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D34A3D810C;
-	Mon, 31 Aug 2026 11:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2249942FCD8
+	for <linux-modules@vger.kernel.org>; Mon, 31 Aug 2026 13:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788177499; cv=none; b=fLTxcPc8H9iCVbryIiNhoWiNsrpfNiOf49WEmG6MYYiCyoLi7HC8vuk+Hi/L+Bfs0GqWMCq/JdCsN4EPk/T+LjaGMEqNOM5Oyq2rbgKun1c4l2e/Pfkeyn4JenH8ZNo2QcEzWsCJS15Mp2yJYj0KPx94RFdy8tbBi+zUScT9Mps=
+	t=1788183041; cv=none; b=EyBpCSpE4zGyae6E/fvjINvYXv+KBUsh8LT15/6urTV5fvO7IKsAJs0BwuV+Vbvszs8WZlxVS5ht/GyGMwe8+uE2mNft3AEjmdBHlAuQCRTeD5vMEww0Ygy+Zj/ZcjFUCL0GaMSVqNN0rCHNZLin2rQd05EQ7m0oP8WVdlPNKKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788177499; c=relaxed/simple;
-	bh=BZM0zPycUPGlC/MQ4i0mFQQT4axjWRXiEB0nk7replg=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=KYYD29nYraQ2cbnCG+ew+YSEhfTyvpvWACplMfoVp8EKlQsJDC0QkZ2QpaPyusv9tcqY9vujG3sEoAR0mFGWWGGVmGgRb0o4jqTddV6IxHKIOKhvdrNhK6NGNbpFOJmPMkEjwKNwo8DktaThekqG2+KG5fbYCJP5DPyGGsB1AA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=TojKNeFL; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=ac1XFzCm; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	s=arc-20240116; t=1788183041; c=relaxed/simple;
+	bh=eAs5v0X4DQXO5Yp0nfjTElZLxyJMKOOQvrmCKjejTMw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Zp4uLDXIkqAWrmAF8viP8/vORCiYZYbbOcumeHpCaoVGNPxWaj6fYLdmdLr69oLHPub+Pk0qjmBuk8Y66fSeKAvjTsCUZ1luSFLFfkH3Cg0w7t/JjtV531fFYSCI9eYnP9/izhzm7yir71QoKVWx0o73EXEgISYdoQlR6Km2en0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QoJwjGk1; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="TojKNeFL";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="ac1XFzCm"
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1788177459; bh=gDgWYp6lSGpR6Fw4ej7gEz6
-	7vDzTKUrZGtKES2IVKQg=; b=TojKNeFLwNuQE6peaoJwLfn1QfCJKAChrpGKoICfFIdi7DNnq3
-	dVEXSHWA9NPUaT4vk+ihaG6QgeF99KKnAgzNAZCeu0pbM1HSTEuMTHsMQOFhODM/QfJa8T4toAI
-	OD7EQpPEmlJO2rc/6ou3ZfY34ZXMBOE4lLop0cdszHfcoA0nmsjEUPkemMjMMiBIKGXPaWFHY5S
-	HwVlGa8MmIbFyOAHnRzlnlLyw1u0j1IB+qyuVkZopn9TmeonddprA8qOF68VKxloLhFF6DNhXmP
-	uHbGZ6I85C8W9uHUwqC80EMrLpeB7U01+eoqMmPNImSshpWh9XVN/Lf2tUqr6CpnCNg==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1788177459; bh=gDgWYp6lSGpR6Fw4ej7gEz6
-	7vDzTKUrZGtKES2IVKQg=; b=ac1XFzCm3bZtmJFVyK3OJH9PpZ3CAQjQolLZ639XEusiSiHMQD
-	1GTg+BDw+gi07o+cXflyAPQgZn3WXv4uEDBg==;
-Date: Mon, 31 Aug 2026 12:57:40 +0100
-From: Bradley Morgan <brads@mainlining.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC: Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
- linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_0/2=5D_driver_co?=
- =?US-ASCII?Q?re=3A_add_TAINT=5FFORCED=5FBIND_fo?=
- =?US-ASCII?Q?r_when_userspace_manually_messes_with_devices_and_drivers?=
-In-Reply-To: <20260831-bind_taint-v2-0-1082d631213b@linuxfoundation.org>
-References: <20260831-bind_taint-v2-0-1082d631213b@linuxfoundation.org>
-Message-ID: <9AB1C455-143A-4583-AC25-F6989EADBD6D@mainlining.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QoJwjGk1"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c2055573c8cso445362866b.3
+        for <linux-modules@vger.kernel.org>; Mon, 31 Aug 2026 06:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1788183038; x=1788787838; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bclo5dNXV+6Jy1wwsMfxD1j5QCeC9PLq5D/ZXM1ZV+o=;
+        b=QoJwjGk1lJkZUVbaTJ12PYABKBy7QxMBcy39riN/BPMnm9TwZ3W7fhwvSIiUqMUTjQ
+         F3ul1vDx99QAH0E1c7niSi9sf4Axf4kLy1EyeRVq6ynJwD+XzbA4tFWCXXp42SrtxMPG
+         cnkF5+ftKmIKEsPdz0jaqkj28HTVMTPsYTQTPsKb/ZjoG8I684rCN9Z4YlLdIUX6MhbA
+         5c9xE6j0XgI0nph/mpRxPBGbrZLtnFyIVmKdqMrKi1xM5sCxvWXE7H3H1b1Z+Pa7FvCj
+         2Roh0gkWAWMlXcWyzC9BzGVYtefXxYbDDZPkplTe9Vmg2RPyaUe31hPtcTTRYd5rQQWe
+         Eh0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788183038; x=1788787838;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=bclo5dNXV+6Jy1wwsMfxD1j5QCeC9PLq5D/ZXM1ZV+o=;
+        b=Wm8fhdiOR1cjHq/S7riRIrx+Zx0jQ6cVjtLTVKn/uXAjFdz1TnbIthnOzJRv8GpGDB
+         805xLmSG5TVMsNI2KcKPxfOTTC3Sz0qAWu/c+sJFdjw75WEssMAaJmNhirrk7wxQTPGt
+         lnhcotlT3AKpyDGJ1fWKgvOp0lZlrFUrvEQoTt4DyYXX/fgZl8kwIrC5mEP7TGnDnbz4
+         ICLsRGZwjLS0v+RKTjXH6ejJV+JZSEDZIpkYinCC6sRUCy1LhxX+4OsvYDmk9xq4sn8d
+         vdb1TYXYHNpFPe4ttTQlFAdj1Vh8AdNnnRifRM2uUqIKNUPgPRXB5kbAxwCU3X9zJYHE
+         2D/Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpOHK/mq4jh0EaoIxv9RStbvW/CgshT9wGWvQdFPjFQ3erQ5Denu9mjxV7PhOncDVieTA5wdpDrZfiRfJtI@vger.kernel.org
+X-Gm-Message-State: AFuF++m/Q6ngTh3x7FMKoMz3hR1Ej6WDTwItjYDf7BVxtGREUc+0/Y7g
+	7NFMu5oeGbfp5zdwkTLIbziIZM3i7ptk4L5e9691ieEMZ6wy6JI29gd/dRYweNzvgMg=
+X-Gm-Gg: AR+sD10dfwurfrqvWKlyJPRHuSNbN66bSHjFVxvv2Lmiz7aTX+rXAZ6Qgmw6J7kStQj
+	Z3S03suFwK3Fohd+p8M+XDPvDrQwJObml9g5PnheT4UhCG+PjDdPm8Gvvf3bAuOSYEpLEjGauDo
+	WHKkAGGtZHNYQxgBfX5qq/RqgDqQlTMY2xUsNgMnRoABo7AQs2G63RWGD40fDbF8KjsbUsuKghU
+	vZDggLgQl1AVW6CHWEvfzyRZHeXbV2b7iLIWQuSrC7bVsw+36DPSGTEQBnlSQNnceFVn3Mp7CeY
+	SdKQvoSa4MR5EyU/DaE+gv+HqA0zIvMx/XkUMtogJ9PD9O4Irs/GvhEn5gSQT/GqgOYZKKqUqzk
+	0SHJvIm/1px7r1VVHs4uXBrjOdfxEsNUJrmzLkmv1gPWqJu16LU1qktUjQuVWiu2GDV9vw2bfAp
+	sJ04Wku2SaOhQNjZtKLh9947OW9hWhM0c35LMn6niSXM0dIIeydHUZM/KMqIeY/sxELZeiMQANd
+	PtnR7fCucb0FDIXraIjZfxJ
+X-Received: by 2002:a17:907:3cc2:b0:c1c:5aa1:de57 with SMTP id a640c23a62f3a-c2557030696mr1575327866b.13.1788183038289;
+        Mon, 31 Aug 2026 06:30:38 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:fc6c:f9a2:4a0a:6354? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255ee0b233sm435317266b.11.2026.08.31.06.30.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Aug 2026 06:30:37 -0700 (PDT)
+Message-ID: <5e6231aa-10b9-4c41-b7ab-dee5e8f64bec@suse.com>
+Date: Mon, 31 Aug 2026 15:30:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/9] arm64: Allocate .text and .init.text together
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ =?UTF-8?Q?Adrian_Barna=C5=9B?= <abarnas@google.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Kevin Brodsky <kevin.brodsky@arm.com>,
+ linux-arm-kernel@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ linuxppc-dev@lists.ozlabs.org
+References: <20260822135323.795946-11-ardb+git@google.com>
+ <524b5817-c097-47cb-b301-4a9c0f1d2947@suse.com>
+ <cee89666-9de0-4012-b665-69da3846c5ef@app.fastmail.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <cee89666-9de0-4012-b665-69da3846c5ef@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 31 August 2026 11:51:45 BST, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->The ability to add and remove devices from a driver through the sysfs
+On 8/28/26 3:45 PM, Ard Biesheuvel wrote:
+> On Fri, 28 Aug 2026, at 15:07, Petr Pavlu wrote:
+>> On 8/22/26 3:53 PM, Ard Biesheuvel wrote:
+>>> From: Ard Biesheuvel <ardb@kernel.org>
+>>>
+>>> The arm64 module loader has to deal with a couple of corner cases that
+>>> may occur when .init.text is placed out of direct branch range of .text:
+>>>
+>>> - ordinary direct branches from .init.text into .text may require the
+>>>   use of a PLT entry (i.e., a trampoline aka veneer), which means not
+>>>   only that additional PLT entries need to be allocated for
+>>>   cross-section calls, but also that .init.text needs its own PLT
+>>>   reservation, as the one in .text will be out of range as well;
+>>>
+>>> - dynamic patching of the ftrace handler into .init.text code needs its
+>>>   own dedicated trampoline as the one in .text may be too far away.
+>>>
+>>> - recent compilers may omit BTI veneers for static functions that never
+>>>   have their address taken, and so additional veneers will need to be
+>>>   added to .text in case cross-section direct branches from .init.text 
+>>>   require a PLT entry (and therefore a landing pad at the target end).
+>>>
+>>> This is unfortunate, because it is actually somewhat unusual for .text
+>>> and .init.text to be so far away from each other: only when allocating
+>>> either of them (but not both) exhausts the 'near' (PLT-less) module
+>>> region, the other will be allocated from the spillover region, which is
+>>> not in direct branching range, and therefore requires PLT entries for
+>>> cross-section calls.
+>>>
+>>> This series addresses this wart by allocating both of them as a single
+>>> chunk, and freeing the .init.text part along with the other init
+>>> sections at the appropriate time. This ensures that the two regions will
+>>> never require veneers for cross-section calls, allowing the arm64 module
+>>> loader to be simplified.
+>>
+>> It looks like this should also be useful for ppc64, which currently
+>> merges .init.text and .text because keeping them separate would require
+>> stubs between the two, and consequently .init.text is never released in
+>> modules on this architecture.
+>>
+> 
+> Thanks for the data point - are those stubs needed when there is some
+> distance between the placements of .text and .init.text?
 
-Hello hello hello!!
+Yes, my understanding is that these stubs are primarily needed because
+the BL instruction on ppc64 can only reach a range of +-32 MB.
 
-Right, this may not be a maintainer preference, but this patch is well
-needed, and well beneficial.
+Another aspect on ppc64 is the use of the Table of Contents (TOC). In
+theory, when splitting .text and .init.text, one would also want
+separate TOCs, along with stubs to support switching between them.
+However, I don't think this is particularly feasible. As far as I can
+see, the ABI and GCC don't allow separate TOCs within a single
+relocatable object file. In practice, it shouldn't be a large problem to
+keep a single TOC, even if some data related only to .init.text remains
+present after the module is loaded. Being able to free .init.text is the
+important part. On newer Power10 with PCREL, the TOC is not used, so
+this issue goes away.
 
-Please bare I'm on a well deserved vacation, so I didn't review this super
-vigourisly.
-
-Reviewed-by: Bradley Morgan <brads@mainlining.org>
-
-
->"bind" and "unbind" files was created all those decades ago as a way
->that kernel developers can iterate faster, and provide a debugging way
->for users to attempt to add a new device to a driver without having to
->rebuild their kernel.
->
->This api over the years has been abused and recently come under a major
->fuzzing "attack" through tools like syzbot which decided that it would
->attempt to just randomly bind any driver to any type of device, causing
->loads of unneeded errors and pointless kernel patches to be generated by
->unsuspecting new developers.
->
->Handle all of this by adding a new taint flag, TAINT_FORCED_BIND, which
->will be set on the driver if the bind/unbind sysfs files are ever
->written to.  This lets kernel developers "know" that a user is
->attempting to do something that is not normal, and as such, if the
->kernel breaks they get to keep the shiny pieces laying around on the
->floor.
->
->The flag is 'Y' which was unused, and can remembered as the user is
->"yeeting" the device being operated on here (thrown with force without
->regard for the thing being thrown).
->
->Note, the taint flag gets set _BEFORE_ the bind/unbind callback happens,
->as many times crashes/oops/warnings/failures happen within the callback,
->and the taint flag needs to be there to show what was being attempted.
->If it were to be set after the callback happens, the oops report would
->not properly reflect what foolishness was being attempted.
->
->Fuzzing tools like syzbot, that doesn't have hand-crafted rules to keep
->the tool from hitting bind/unbind, should be run with panic_on_taint
->enabled so that they fall over and don't continue on, thinking that they
->actually found a real issue.
->
->Userspace operations that rely on the bind/unbind files to work around
->the lack of will to upgrade a kernel image to a newer version with
->proper support for new devices, or the lack of will to submit valid
->device ids to driver authors, will still work properly, but now the
->kernel will be flagged in a way that will show that perhaps those users
->should reconsider their behavior and work to have the drivers properly
->support these devices in a "native" manner.
->
->Finally, the bind/unbind files can find real use-after-free issues with
->some drivers by forcing the process to happen virtually without having
->to rely on manual removal processes.  Those real bugs should still be
->worked on, but by adding this taint flag, developers can more easily
->determine bug reports that are actually worth looking at.
->
->Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->---
->Changes in v2:
->- rebase on 7.3-rc1
->- Add changelog text to describe panic_on_taint and how it should be set
->  for tools like syzbot.
->- Add changelog text to describe why 'Y' was picked.
->- Fixes based on sashiko review:
->  - Make add_taint_module() handle a NULL for module pointer, fixing a
->    problem with built-in drivers.
->  - Fix up prototype for when CONFIG_MODULES is disabled so it will
->    actually build properly.
->  - rst table header fixes.
->- Link to v1: https://patch.msgid.link/20260826-bind_taint-v1-0-52b05f4a965c@linuxfoundation.org
->
->To: Luis Chamberlain <mcgrof@kernel.org>
->To: Petr Pavlu <petr.pavlu@suse.com>
->To: Daniel Gomez <da.gomez@kernel.org>
->To: Sami Tolvanen <samitolvanen@google.com>
->To: Aaron Tomlin <atomlin@atomlin.com>
->To: Jonathan Corbet <corbet@lwn.net>
->To: Shuah Khan <skhan@linuxfoundation.org>
->To: Randy Dunlap <rdunlap@infradead.org>
->To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->To: "Rafael J. Wysocki" <rafael@kernel.org>
->To: Danilo Krummrich <dakr@kernel.org>
->To: Steven Rostedt <rostedt@goodmis.org>
->To: Masami Hiramatsu <mhiramat@kernel.org>
->To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->Cc: linux-modules@vger.kernel.org
->Cc: linux-kernel@vger.kernel.org
->Cc: linux-doc@vger.kernel.org
->Cc: driver-core@lists.linux.dev
->Cc: linux-trace-kernel@vger.kernel.org
->
->---
->Greg Kroah-Hartman (2):
->      module: pull out add_taint_module() to be public
->      driver core: add TAINT_FORCED_BIND for when userspace manually messes with devices and drivers
->
-> Documentation/admin-guide/tainted-kernels.rst | 52
-> ++++++++++++++-------------
-> drivers/base/bus.c                            |  3 ++
-> include/linux/module.h                        | 10 ++++++
-> include/linux/panic.h                         |  3 +-
-> include/trace/events/module.h                 |  3 +-
-> kernel/module/main.c                          | 16 +++++++--
-> kernel/panic.c                                |  5 +--
-> tools/debugging/kernel-chktaint               |  8 +++++
-> 8 files changed, 69 insertions(+), 31 deletions(-)
->---
->base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
->change-id: 20260825-bind_taint-d4077b870bc4
->
->Best regards,
->--  
->Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
-
---- Thanks!
-https://lore.kernel.org/all/EE579805-42F2-4C58-B752-F28779EEB717@grrlz.net/
+-- 
+Cheers,
+Petr
