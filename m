@@ -1,158 +1,220 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5941D5AC2;
-	Tue,  1 Sep 2026 18:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788286490; cv=none; b=DFnhzfxXCzOxp8Fpoomm/jydd5bYzlYNFFongn1BFn+jAQgITjyDChW7zzPVUo3Ttyp+ih6dxYxSRhdbai8qkcIqCsq7jjsKr7+amgipqt0rMFW6B7IYXk/MbdLTeUVSFDjnq4ZX2x1vpPC9d/0+BeWiIm3Jj7VdeI/TBklVEZI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788286490; c=relaxed/simple;
-	bh=Q74fB3VP015f3XiZ5T08A7hxIUGZpJNs0FI3LHR2+Qw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=s/Z4A5fvKJBXWYZ1rD6W+Zapn59opPit3O55dJ9FWgVy3dOS9j4Zg+6BayEpeZb4rWxiqczcAY3HX2fjJZxWA/uTBUt0oSpkZwJRsdopR1tWlS0LObcb3f3Vxj3Pgt3rVkH1pYQyTXZBzlfv8c6q3wDS6lOKg+UV7Tu/lZakmZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=br+7cjr0; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFF14921A1
+	for <linux-modules@vger.kernel.org>; Tue,  1 Sep 2026 18:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788287822; cv=pass; b=nhmzTYDUF9PXp9Dxz59nPP6GJY/UiGAm2N7Cf2ZoEB8n48kcKGTq1j31KftLU9OWSJtMZHKLZo0CoX1mmAWJZYG1MmO56aNkGbTS10pTv/kd7X78uxU/YJMTJLneogB/Zd6Gwn+nLJL9Fr/du6WU/2oi6x5Nz1ZolVfMBhvc2Qk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788287822; c=relaxed/simple;
+	bh=i7l3f/T9kKF5TN4Wa1LIlLBpN3SB+N4kLu22MC4+OoM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lOcuSgUS6gpUZx0LjT9V2tTpljPRtMtJ+l/u+0u2dFqayvT5z1wkNw3SAQh6lz2q+5DD9+pzxxUg7vfZo1zfie4feLiJHuH7ILXZlndvkhlhZWxMDUH7OOB66bwodrs5cUJRfDLVqIY+jzZbmBcQys3xXGYtkicK2RH0HUnFEOc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ahYFmD3x; arc=pass smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="br+7cjr0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D746D1F000E9;
-	Tue,  1 Sep 2026 18:14:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788286489;
-	bh=85diNgB1gjiA7HzQx1oMNsSRACXwQ1XQDvGbX5zvKLE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=br+7cjr0B2OFjdHaCWu7v3l/e5UWE2dOdkKjvDPs849Ve4H+W+HPKS9kYa2bRy8sN
-	 IR86RXalttvte6CJ64T/8XHSzkMKMb8Ac8gv5mB47agdbksyXA1W5zmE3DeE6l1N+q
-	 W81IKMDBySaeonePHyjYl9qikgUuPqTF+LAsOh8yNeyuZ0oXzVFQbXsQdtgeu0R6Mu
-	 GY7IL0gPqhqPYF0kcKHBMAgy1JhF8UFDg4S7rvVopvZptBoQWW93NMfe7HYBjvlj2E
-	 7aQpXSKXFgfwU/jaRSKLo69NF3Gs0akzEX8yOJxYllbaBhl8/f5ZOubHJOGe2Q1Nrq
-	 eI2zQYKLMQSCw==
-Content-Type: multipart/mixed; boundary="===============5834501064021467908=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ahYFmD3x"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-51c01c79467so57281cf.0
+        for <linux-modules@vger.kernel.org>; Tue, 01 Sep 2026 11:37:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788287819; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lQKtRjTczAFiix3oSBPLkXaarMUu3S0idrRxXsBB1mPhjYQJpPvsw2S8UKE4M2GC/9
+         aPiXa2Y1aZLJvEi66+ZIBGb8G9rZUluhpkKyEZuaqOd2WrDy6ICDYI7yZPK4zcosbJJA
+         oabLR/JqafqiolGeOgLLxlMHXjLvVKKQ2NL3vNldwvQBDrVMqlYL9OZUxueTOvHdrnnI
+         /IXTdRChMYWksXXooUJKXud54GDjDLH8LAzPU704OG4njur4qpOFG/aTTrbYLcPheHCd
+         +NuikzQ63SYFrvSC8HqNp8sNpLb/P1MOxW3Ji11z6/bAwm09I5L4CMwx9vV+42MtF1xH
+         K6Uw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=deSloNnROwXtYwAsI/oPSWN8BS0rUlZqZlnebW2ETcc=;
+        fh=/CyXpTreCMrs2md8DeRyjxUw/XzC5zG59bwYWHUdolo=;
+        b=eajFIFWc6/jRGz2OfXZ3KgYZKY2eTBVQ/Vf+UG82LwrZe8rymwLquWeXHlduRaXjvm
+         3yYuiBcfDjftS3Yl5s6R3luboTcUzU7lXTYbFjfrpC2H3ZWSfOGSPFWjfYs4ZmuXx/iC
+         Y0siCPv8Yjg5JWKFAy9DjRKB4vGbq5jh/oTnFgKJ2v4htav7oVmORJ81/3t1hyAr0wkJ
+         y7QZFe180bTZXu5J5HG+1ib79fKBKjV6wOo2eFAUUX+p13oQqfyq4rLgaK7u5+3kzazE
+         IIkL2JTV9b7kXxE7oQnrj5Jo1OSezOyDmfB7d3pB5AqtFXLojbrdOxRacOBuMPuB/RFo
+         +smA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788287819; x=1788892619; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=deSloNnROwXtYwAsI/oPSWN8BS0rUlZqZlnebW2ETcc=;
+        b=ahYFmD3xble2mWEyqbcVOtJ6gwbyKcI2zvpInilhUNTDPpw1qnc3UBtNyYK1OvZHOD
+         e+0kdKpq//C10O/3QW8dy07Wtmwi4HifP+rhZqq7SCR8F/ZbMd4u2xRGvDV5Pu1LfFP1
+         OLxrNX2HjMdGpqHdk0OUT1TBbEibPpGJLF6hZzabRyqdic6AAMyXzF9Bf9GmHsqyM9vO
+         ygCQWbvbpy1S9ZGGisUFCdtefft4eJIVk2lS4tLDDoy6XG3db7bufLHpSdFVh7AGuUKj
+         8YEYCQf37zY5UFmu4ET7M8s27OJZf7HHDI2dcjmfMNwcs8173uXUpPzVobWYGrbCqV7X
+         gJNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788287819; x=1788892619;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=deSloNnROwXtYwAsI/oPSWN8BS0rUlZqZlnebW2ETcc=;
+        b=dXfBgkVnQoaTcSrY/dz9My2ELqAfRbk/lhOvePhnArpl9UtDAJQqg73qJCKHOpCOiT
+         ODt/QktIkZro6B/HWIsqdjHnXoR6EyvF8lScUGMBSlqAXZeYhTUm2EHkyPsJ2yGghsFj
+         rZ5vhutoMnaj/uDv8sI6ss2/QsdCwfCywj24ebIj2UfP08X4MAIMy6Kw8gdXbIKsHCO6
+         hC+x2x3PYUlPx8MXJfCWF3e9v4ZuiPhjkzBVMoN15ZUZ2WmqSIhYFa4ErzKjIAEzQGQ2
+         AnDHXOUaRNunaOLgInoTIpEErteZSkQiRbeRkYxDJ3YYDOzl1q1dbZyZasZj8IwOSZZP
+         Sruw==
+X-Forwarded-Encrypted: i=1; AHgh+RoRYS8EoCZECVnJvh0qHgetPKsfHMqOYeIw/aOm6ru5m60GyS9TeSEluU+EtYGFy7QmRupTMvSsfbKWSMWC@vger.kernel.org
+X-Gm-Message-State: AFuF++n16LVJ7GWv1bFnbTx2F2ywyXlFnplwrT9LVa0qLm7rB+uru1/K
+	xwXs82uUwYRXY6cxmfA3ZOWkK3q2fD8cwgzzVFCbn7jwQ1epFW1GxeIOnHngirnpcaD93s+Kuc9
+	EiBbVO1CrB5RIRZiQw2fbuucB5f9qckk7Bgq9Tf/5
+X-Gm-Gg: AR+sD12/FRM3K6UUyidQMTHmKSJsrBYd75iw619daQmeGwgsloMyJWIKfIlWt/5xnVC
+	V+hExd7X9b7SzeXuj3gBlNnZjrZfi07QGaBxOlFiw1ScZ0E5Jl36u1/+KcTcx0aPrJYh71fixRC
+	J6jRCyezljnmcnZA/l8IMTsBcjqi4ZsfbTqYq7g7zso96HoWLIvHCd1OP//ekq8whsOZqhyXrRM
+	aY4Ib4RZ2bMFcSzuhni7ql5x8T92rov8Pgt2ZdPrfpATroXuIFIQXZZAVlP0S2HoI60nPIRPbVW
+	K5CQ4kH4xEHtQgZk/s7oSF7mtqAg1pHztLgtdrrvmjmu5IGYxxtYnsAZuW+h7IkT7fjYfS216MU
+	=
+X-Received: by 2002:a05:622a:4d08:b0:51c:ad5:93be with SMTP id
+ d75a77b69052e-53033af32b6mr1814531cf.8.1788287818532; Tue, 01 Sep 2026
+ 11:36:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <797b06b4ecde0e90165b2164c65560decf5869c6b9b6f0d4b6376cb49726459b@mail.kernel.org>
-In-Reply-To: <20260901165757.801449-4-alan.maguire@oracle.com>
-References: <20260901165757.801449-4-alan.maguire@oracle.com>
-Subject: Re: [PATCH v2 bpf-next 03/18] libbpf: Support moving permuted BTF types into split BTF
-From: bot+bpf-ci@kernel.org
-To: alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org
-Cc: daniel@iogearbox.net,eddyz87@gmail.com,jolsa@kernel.org,ihor.solodrai@linux.dev,yonghong.song@linux.dev,song@kernel.org,qmo@kernel.org,martin.lau@linux.dev,memxor@gmail.com,emil@etsalapatis.com,mcgrof@kernel.org,petr.pavlu@suse.com,tj@kernel.org,kees@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,arnd@arndb.de,puranjay@kernel.org,yatsenko@meta.com,atenart@kernel.org,ojeda@kernel.org,linux-modules@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue,  1 Sep 2026 18:14:47 +0000 (UTC)
+References: <20260831072104.120197-1-hao.ge@linux.dev> <20260831072104.120197-3-hao.ge@linux.dev>
+ <37eb07db-332c-4da1-a671-6ef1cb753cb3@suse.com>
+In-Reply-To: <37eb07db-332c-4da1-a671-6ef1cb753cb3@suse.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Tue, 1 Sep 2026 11:36:46 -0700
+X-Gm-Features: AcwNN1WbKynZXiNJyf1x2DIabxhn9qVzOBQ2684ipzpY8wSQGNsJHC44kdS54cE
+Message-ID: <CAJuCfpHdevUVms+WPHXET0M912hxRo_+QiV2zh2+O5ZCNTy+mA@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 2/2] module: allocate codetag sections before the
+ regular module layout
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Hao Ge <hao.ge@linux.dev>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Sashiko <sashiko-bot@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============5834501064021467908==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 9449f6f50f18..30f8c426d145 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -2147,16 +2147,9 @@ int btf__find_str(struct btf *btf, const char *s)
->   *   - > 0 offset into string section, on success;
->   *   - < 0, on error.
->   */
-> -int btf__add_str(struct btf *btf, const char *s)
-> +static int btf_add_local_str(struct btf *btf, const char *s)
->  {
-> -	int off;
-> -	int err;
-> -
-> -	if (btf->base_btf) {
-> -		off = btf__find_str(btf->base_btf, s);
-> -		if (off != -ENOENT)
-> -			return off;
-> -	}
-> +	int off, err;
+On Tue, Sep 1, 2026 at 8:04=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wro=
+te:
 >
->  	err = btf_ensure_modifiable(btf);
->  	if (err)
-> @@ -2167,10 +2160,24 @@ int btf__add_str(struct btf *btf, const char *s)
->  		return libbpf_err(off);
+> On 8/31/26 9:21 AM, Hao Ge wrote:
+> > Whether a codetag section goes to the codetag region is decided by
+> > layout_sections() and asked again in move_module(). A concurrent
+> > load can shut profiling down in between, and move_module() then
+> > copies the section to offset 0 of its regular destination,
+> > overwriting whatever is there.
+> >
+> > Decide and allocate in one pass, before the layout. Allocation
+> > errors fail the load. On a tag area overflow profiling is already
+> > disabled, so -EAGAIN makes the section fall back to regular module
+> > data and the module still loads.
+> >
+> > The overflow and populate failure paths of reserve_module_tags() now
+> > release their reservation instead of leaking the maple tree entry.
+> > When profiling was toggled off, the overflow check did not run, a
+> > module could load with more tags than the page flags can address,
+> > and re-enabling profiling then silently corrupted /proc/allocinfo.
+> > The check no longer depends on mem_alloc_profiling_enabled().
+> >
+> > Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compre=
+ssion")
+> > Reported-by: Sashiko <sashiko-bot@kernel.org>
+> > Based-on-a-patch-by: Petr Pavlu <petr.pavlu@suse.com>
+> > Cc: Suren Baghdasaryan <surenb@google.com>
+> > Signed-off-by: Hao Ge <hao.ge@linux.dev>
+> > ---
+> > Changes against Petr's prototype:
+> > - allocate_codetag_sections() returns an error instead of void, and
+> >   only -EAGAIN falls back to a regular section. Any other error now
+> >   fails the load. The prototype fell back on everything, which can
+> >   leave live tags in module memory.
+> > - reserve_module_tags() releases its reservation when populate fails
+> >   too, that path used to leak the maple tree entry.
+> > - codetag_free_module_sections() on the move_module() error path uses
+> >   info->mod, the local mod is assigned only after a successful move.
+> > - The percpu section is marked only when index.pcpu !=3D 0, otherwise
+> >   sechdrs[0] gets marked.
+> > - Dropped the SHF_ALLOC check, .codetag.* sections always have it.
+> > ---
+> >  include/linux/module.h   |   2 +
+> >  kernel/module/internal.h |   4 ++
+> >  kernel/module/main.c     | 120 ++++++++++++++++++++-------------------
+> >  mm/alloc_tag.c           |   9 ++-
+> >  4 files changed, 75 insertions(+), 60 deletions(-)
+> >
+> > diff --git a/include/linux/module.h b/include/linux/module.h
+> > index 7566815fabbe..33548daa31a3 100644
+> > --- a/include/linux/module.h
+> > +++ b/include/linux/module.h
+> > @@ -325,6 +325,8 @@ enum mod_mem_type {
+> >       MOD_INIT_RODATA,
+> >
+> >       MOD_MEM_NUM_TYPES,
+> > +
+> > +     MOD_STANDALONE =3D -2,
+> >       MOD_INVALID =3D -1,
+> >  };
+> >
 >
->  	btf->hdr.str_len = strset__data_size(btf->strs_set);
-> +	btf->strs_deduped = false;
+> It might be better to split this patch into two: the first to introduce
+> MOD_STANDALONE and use it only for the percpu section, and the second
+> with all the codetag-related changes.
+>
+> The introduction of SH_ENTSIZE_STANDALONE should also allow us to clean
+> up the current resetting of SHF_ALLOC for the percpu section, and now
+> also for codetag sections. The problem is that find_sec(".data..percpu")
+> can currently return different results depending on whether it is called
+> before layout_and_allocate() or later. In addition, apply_relocations()
+> needs a special case for SH_ENTSIZE_STANDALONE, where it could otherwise
+> just test SHF_ALLOC.
+>
+> Instead of resetting SHF_ALLOC for percpu/codetag sections, both
+> __layout_sections() and move_module() can check for
+> SH_ENTSIZE_STANDALONE to determine whether a section is handled
+> specially and should be skipped.
+>
+> I think it would be useful to include this change in the first patch
+> introducing MOD_STANDALONE, but I'm also ok with the current version.
+> I can send a separate patch later to make more use of
+> SH_ENTSIZE_STANDALONE in this way.
 
-The refactoring left the API doc comment attached to the new static
-helper btf_add_local_str(), so the public btf__add_str() (btf.c:2168) now
-has no documentation at all, and its declaration at tools/lib/bpf/btf.h:202
-is bare without doxygen. The comment is also no longer descriptive of what
-it now documents: the distinguishing property of btf_add_local_str() versus
-btf__add_str() is that it always adds to this BTF's own string section and
-never reuses a string already present in base_btf, which is exactly what
-makes the new transfer mode able to keep split-only strings out of the base.
+I ran some tests on my side and nothing blew up.
 
-Should the comment be moved back onto btf__add_str() and btf_add_local_str()
-given a one-liner about bypassing the base string table?
-
-The new btf->strs_deduped = false sits in btf_add_local_str(), which is on
-the path of every public btf__add_str() call (and therefore of btf__add_int,
-btf__add_var, btf__add_field, btf__add_enum_value, btf__add_func_param,
-btf__add_datasec, btf__add_locsec, btf_add_composite, btf_add_decl_tag,
-btf_add_ref_kind, btf_add_enum_common, and more), not just the new transfer
-path.
-
-Before this commit nothing in tools/lib/bpf ever cleared strs_deduped. The
-complete set of writers post-commit is: btf_ensure_modifiable() sets it true
-when hdr.str_len == 0 or when !base_btf && str_len == 1, end of
-btf_dedup_strings() sets it true, plus the two new clears here and in
-btf_compact_strings().
-
-For BTF built from scratch, btf__new_empty() (str_len == 1) and
-btf__new_empty_split() (str_len == 0) both make btf_ensure_modifiable() set
-strs_deduped = true, so pre-commit btf_dedup_strings() returned 0 at its
-early-return check and the string table was never rebuilt. Post-commit the
-first added string clears the flag, so btf__dedup() now always rebuilds the
-string table for such BTF: strings are reordered and unreferenced strings
-are dropped. Any offset a caller previously obtained from the public
-btf__add_str() and stashed outside a BTF type's name field is therefore
-silently invalidated across btf__dedup().
-
-This is not needed by the commit: both btf_compact_strings() call sites
-already force btf->strs_deduped = false themselves at btf.c:4536, so the
-transfer path does not depend on btf_add_local_str() clearing it.
-
-All in-tree consumers were checked and are safe: bpf_linker's
-finalize_btf() (tools/lib/bpf/linker.c:2860) runs finalize_btf_ext() first
-and then passes opts.btf_ext = linker->btf_ext to btf__dedup(), so the
-offsets produced at linker.c:1968, 2697, 2703, 2740 and 2952 all get
-remapped; bpftool merge_btf_files() (tools/bpf/bpftool/btf.c:880) and
-resolve_btfids finalize_btf() (tools/bpf/resolve_btfids/main.c:1578) hold no
-external string offsets. So there is no in-tree breakage, but this is an
-unadvertised behaviour change to a public API plus a full string-table
-rebuild on every static link, and the commit message does not mention
-btf__add_str() or strs_deduped at all.
-
-Is the clearing of strs_deduped here intentional for non-transfer use of
-btf__add_str(), or should it only be cleared in btf_compact_strings() where
-the transfer path already sets it?
+Petr's suggestion to split the patch sounds good to me and
+release_module_tags() change in alloc_tag.c could also be done in a
+separate patch. It's the cleanup after we do shutdown_mem_profiling(),
+so I think it would be correct on its own.
+Thanks,
+Suren.
 
 >
->  	return btf->start_str_off + off;
->  }
+> > @@ -2966,18 +2967,23 @@ static struct module *layout_and_allocate(struc=
+t load_info *info, int flags)
+> >        */
+> >       module_mark_ro_after_init(info->hdr, info->sechdrs, info->secstri=
+ngs);
+> >
+> > -     /*
+> > -      * Determine total sizes, and put offsets in sh_entsize.  For now
+> > -      * this is done generically; there doesn't appear to be any
+> > -      * special cases for the architectures.
+> > -      */
+> > +     /* Allow codetag sections to be allocated separately first. */
+> > +     err =3D allocate_codetag_sections(info);
+> > +     if (err) {
+> > +             codetag_free_module_sections(info->mod);
 >
-> +int btf__add_str(struct btf *btf, const char *s)
-> +{
-> +	int off;
-> +
-> +	if (btf->base_btf) {
-> +		off = btf__find_str(btf->base_btf, s);
-> +		if (off != -ENOENT)
-> +			return off;
-> +	}
-> +
-> +	return btf_add_local_str(btf, s);
-> +}
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33537080133
---===============5834501064021467908==--
+> The usual convention is that functions clean up after themselves on
+> error. That means this codetag_free_module_sections() call should be
+> done ideally by allocate_codetag_sections().
+>
+> --
+> Thanks,
+> Petr
