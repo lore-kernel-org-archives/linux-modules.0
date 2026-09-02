@@ -1,190 +1,188 @@
-Received: from mta1.migadu.com (out-68.mta1.migadu.com [95.215.58.68])
+Received: from mta0.migadu.com (out-199.mta0.migadu.com [91.218.175.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6789137F312
-	for <linux-modules@vger.kernel.org>; Wed,  2 Sep 2026 07:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546CA37AA98
+	for <linux-modules@vger.kernel.org>; Wed,  2 Sep 2026 08:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788334043; cv=none; b=Dsyz5UClfqKTGW0XOn8E5EJOf59d4e5SOooTA0+R3BFE5Rcn5FAdlg0hhe43tZsl0Kd6n2CvUVe4TSp1FDSZHsTu7rixKYYCzw11zBvo/goLiXvh2X7luRdBYA6vnLuT89nOjL8vJx3B1lqFxucZ8DT1z7hBuEKNHJZAEv/yQBg=
+	t=1788337053; cv=none; b=ZQhjRtY9t16hgPbw8KAhBz0rX21+962cBEQ2ppSQV4dc+ZjutMTjeGC6v+WUYDRZSkeIeTfzADX9K5jdHwKOMjafl4Ixsd3H8QHtJeOzj3zS+o+MMhWOegcn5dPkihwOVsDhYa46NaBzYjpcbwMy563JPn1i7jdmySJGGUrQDso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788334043; c=relaxed/simple;
-	bh=5d+nW84vcx6ba4Msp2rFptCPFpP2LtEZsGnTr+2A50s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kiTsI2ukpcIq7dBHpEhNu6kZ7x7lFAq6dTZdRS/2LbQASRyf+Yc/l7Ssze/VMgbEOXxeAlqRq6ytq/TnF9HeVkYoyeYMZFkxe6+Lq1NUO58gDPefxprfNOoXZw4FbiKz+YTPJrDIzjJa2YaX9MYXYCZCKq7A2slDNMIWw18d/5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KYQudEkm; arc=none smtp.client-ip=95.215.58.68
+	s=arc-20240116; t=1788337053; c=relaxed/simple;
+	bh=AHq5uwpwna5WtqCl9L8/HfyXXSRhiGwW726UtUgZVvo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Fu6nwFVS0iyGNRHr0CHumxW/SsvCxZiHNlaMq8geYHtyh17Kn2UXiGpFaAC6G7rTi82oSRgrV9joWJam+DtlHiLxR67mvUIOz7TPQicSKJ/C0hpqvVso6SyC8aFjpE+oAWbgfp1/DZRHmpLqhRLaMiNSIEUG/P5kJYuvEdzY/mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kAfoEyAV; arc=none smtp.client-ip=91.218.175.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KYQudEkm"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kAfoEyAV"
 X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5d+nW84vcx6ba4Msp2rFptCPFpP2LtEZsGnTr+2A50s=;
+DKIM-Signature: a=rsa-sha256; bh=AHq5uwpwna5WtqCl9L8/HfyXXSRhiGwW726UtUgZVvo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788334036; v=1; x=1788938836;
- b=KYQudEkmPveH6gIEMwMIQ3RDfttzANTkk2MEwlCJNuFPtGKT/nkQgrxmTMqPJbjWKRHXKCrj
- hd2CU/Vwpi/ID9HsDqS7rSSzWkZPMYAVEAnBCk1mOK47hDxzq0q3xT0cTZlx7se8mAo8iDPKsH1
- 7DQGn/tWu0P9yIdRKTPauP9Y=
+ t=1788337047; v=1; x=1788941847;
+ b=kAfoEyAVjzB4KN/GUdF3rKbxCIAgcoNS54Jk8fRfM+qiB7/uuwPRuJS7n81HQx3f3jo3D7Is
+ GG9CVnWir8o1HIIYpRNk2ZLuIPjRvvT10b8DbRUrLthASWf5ejfXBksXoZ09JGXqJ8Fekr3QDSc
+ He1YnRzcR/3lriLJFk5HGwK0=
 X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 572b371ec690fa84;
-	Wed, 02 Sep 2026 07:27:16 +0000
-X-Mizu-Trace-ID: 572b371ec690fa84
+Received: by smtp.migadu.com with ESMTPS id 3113f6cdaea4f218;
+	Wed, 02 Sep 2026 08:17:27 +0000
+X-Mizu-Trace-ID: 3113f6cdaea4f218
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <8d879e04-3dce-4725-a9e0-8a4b1edec30f@linux.dev>
-Date: Wed, 2 Sep 2026 15:28:03 +0800
+From: Hao Ge <hao.ge@linux.dev>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Hao Ge <hao.ge@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v7 0/4] alloc_tag and module codetag section fixes
+Date: Wed,  2 Sep 2026 16:17:58 +0800
+Message-Id: <20260902081802.146145-1-hao.ge@linux.dev>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v6 2/2] module: allocate codetag sections before the
- regular module layout
-To: Suren Baghdasaryan <surenb@google.com>, Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Andrew Morton <akpm@linux-foundation.org>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>
-References: <20260831072104.120197-1-hao.ge@linux.dev>
- <20260831072104.120197-3-hao.ge@linux.dev>
- <37eb07db-332c-4da1-a671-6ef1cb753cb3@suse.com>
- <CAJuCfpHdevUVms+WPHXET0M912hxRo_+QiV2zh2+O5ZCNTy+mA@mail.gmail.com>
-Content-Language: en-US
-From: Hao Ge <hao.ge@linux.dev>
-In-Reply-To: <CAJuCfpHdevUVms+WPHXET0M912hxRo_+QiV2zh2+O5ZCNTy+mA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Suren
+I ran into an overflow problem in the module tag area. With profiling
+toggled off, the overflow check in reserve_module_tags() did not
+run, a module could load with more tags than the page flags can
+address, and re-enabling profiling then silently corrupted
+/proc/allocinfo. On overflow the fix shuts profiling down, releases
+the reservation and returns -EAGAIN, and the codetag section lands
+as regular module data in the same load, so the module loads without
+profiling.
 
-Thanks for your review.
+Review of the earlier series by Sashiko turned up two more problems.
 
-On 2026/9/2 02:36, Suren Baghdasaryan wrote:
-> On Tue, Sep 1, 2026 at 8:04 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
->>
->> On 8/31/26 9:21 AM, Hao Ge wrote:
->>> Whether a codetag section goes to the codetag region is decided by
->>> layout_sections() and asked again in move_module(). A concurrent
->>> load can shut profiling down in between, and move_module() then
->>> copies the section to offset 0 of its regular destination,
->>> overwriting whatever is there.
->>>
->>> Decide and allocate in one pass, before the layout. Allocation
->>> errors fail the load. On a tag area overflow profiling is already
->>> disabled, so -EAGAIN makes the section fall back to regular module
->>> data and the module still loads.
->>>
->>> The overflow and populate failure paths of reserve_module_tags() now
->>> release their reservation instead of leaking the maple tree entry.
->>> When profiling was toggled off, the overflow check did not run, a
->>> module could load with more tags than the page flags can address,
->>> and re-enabling profiling then silently corrupted /proc/allocinfo.
->>> The check no longer depends on mem_alloc_profiling_enabled().
->>>
->>> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
->>> Reported-by: Sashiko <sashiko-bot@kernel.org>
->>> Based-on-a-patch-by: Petr Pavlu <petr.pavlu@suse.com>
->>> Cc: Suren Baghdasaryan <surenb@google.com>
->>> Signed-off-by: Hao Ge <hao.ge@linux.dev>
->>> ---
->>> Changes against Petr's prototype:
->>> - allocate_codetag_sections() returns an error instead of void, and
->>>   only -EAGAIN falls back to a regular section. Any other error now
->>>   fails the load. The prototype fell back on everything, which can
->>>   leave live tags in module memory.
->>> - reserve_module_tags() releases its reservation when populate fails
->>>   too, that path used to leak the maple tree entry.
->>> - codetag_free_module_sections() on the move_module() error path uses
->>>   info->mod, the local mod is assigned only after a successful move.
->>> - The percpu section is marked only when index.pcpu != 0, otherwise
->>>   sechdrs[0] gets marked.
->>> - Dropped the SHF_ALLOC check, .codetag.* sections always have it.
->>> ---
->>>  include/linux/module.h   |   2 +
->>>  kernel/module/internal.h |   4 ++
->>>  kernel/module/main.c     | 120 ++++++++++++++++++++-------------------
->>>  mm/alloc_tag.c           |   9 ++-
->>>  4 files changed, 75 insertions(+), 60 deletions(-)
->>>
->>> diff --git a/include/linux/module.h b/include/linux/module.h
->>> index 7566815fabbe..33548daa31a3 100644
->>> --- a/include/linux/module.h
->>> +++ b/include/linux/module.h
->>> @@ -325,6 +325,8 @@ enum mod_mem_type {
->>>       MOD_INIT_RODATA,
->>>
->>>       MOD_MEM_NUM_TYPES,
->>> +
->>> +     MOD_STANDALONE = -2,
->>>       MOD_INVALID = -1,
->>>  };
->>>
->>
->> It might be better to split this patch into two: the first to introduce
->> MOD_STANDALONE and use it only for the percpu section, and the second
->> with all the codetag-related changes.
->>
->> The introduction of SH_ENTSIZE_STANDALONE should also allow us to clean
->> up the current resetting of SHF_ALLOC for the percpu section, and now
->> also for codetag sections. The problem is that find_sec(".data..percpu")
->> can currently return different results depending on whether it is called
->> before layout_and_allocate() or later. In addition, apply_relocations()
->> needs a special case for SH_ENTSIZE_STANDALONE, where it could otherwise
->> just test SHF_ALLOC.
->>
->> Instead of resetting SHF_ALLOC for percpu/codetag sections, both
->> __layout_sections() and move_module() can check for
->> SH_ENTSIZE_STANDALONE to determine whether a section is handled
->> specially and should be skipped.
->>
->> I think it would be useful to include this change in the first patch
->> introducing MOD_STANDALONE, but I'm also ok with the current version.
->> I can send a separate patch later to make more use of
->> SH_ENTSIZE_STANDALONE in this way.
-> 
-> I ran some tests on my side and nothing blew up.
-> 
+One is a race. layout_sections() and move_module() both asked
+codetag_needs_module_section() where a codetag section goes, and
+mem_profiling_support can change between the two calls, for instance
+when another module load overflows the tag index and shuts profiling
+down. move_module() then copied the codetag section to offset 0 of
+its regular destination and clobbered the first section placed in
+that region.
 
-Thanks.
+v7 reworks where codetag sections are allocated, on a prototype by
+Petr Pavlu [1]. The allocation runs before layout_sections() and the
+placement is decided in one step, so nothing re-asks the question
+and the race is gone. The retry is gone too, on -EAGAIN the section
+is laid out as regular module data right in the same load.
 
-> Petr's suggestion to split the patch sounds good to me and
-> release_module_tags() change in alloc_tag.c could also be done in a
-> separate patch. It's the cleanup after we do shutdown_mem_profiling(),
-> so I think it would be correct on its own.
+Following review feedback from Petr and Suren the series is now
+split into four patches.
 
-OK, if I understand you correctly, you'd like the release_module_tags() call
-on vm_module_tags_populate() failure to go into its own separate patch.
-That's because our -EAGAIN fallback depends on the reserve_module_tags() change.
-Without it the overflow entry stays in the maple tree, codetag_module_replaced()
-retargets it at the live module, and rmmod then walks the never-populated tag area
-and faults.                                                                                                                  
+Patch 1 moves release_module_tags() above reserve_module_tags(),
+since the failure paths now have to call it.
 
-Thanks
-Best Regards
-Hao
+Patch 2 introduces SH_ENTSIZE_STANDALONE to mark sections with a
+separate allocation, per the ELF spec SHF_ALLOC means a section
+occupies memory during execution, and the percpu section does, only
+outside the regular module layout. It was previously excluded from
+the layout by clearing its SHF_ALLOC, overloading the flag with a
+loader-internal meaning. The mark lives in sh_entsize now,
+find_sec(".data..percpu") gives stable results again and
+apply_relocations() goes back to testing only SHF_ALLOC.
 
-> Thanks,
-> Suren.
-> 
->>
->>> @@ -2966,18 +2967,23 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
->>>        */
->>>       module_mark_ro_after_init(info->hdr, info->sechdrs, info->secstrings);
->>>
->>> -     /*
->>> -      * Determine total sizes, and put offsets in sh_entsize.  For now
->>> -      * this is done generically; there doesn't appear to be any
->>> -      * special cases for the architectures.
->>> -      */
->>> +     /* Allow codetag sections to be allocated separately first. */
->>> +     err = allocate_codetag_sections(info);
->>> +     if (err) {
->>> +             codetag_free_module_sections(info->mod);
->>
->> The usual convention is that functions clean up after themselves on
->> error. That means this codetag_free_module_sections() call should be
->> done ideally by allocate_codetag_sections().
->>
->> --
->> Thanks,
->> Petr
+Patch 3 moves the codetag allocation out of move_module() in front
+of layout_sections(). On overflow reserve_module_tags() shuts
+profiling down, releases the reservation and returns -EAGAIN, and
+the section is laid out as regular module data, so the module loads
+without profiling instead of failing. Any other error fails the
+load. The release and the fallback belong together, without the
+release rmmod hits the stale entry and panics.
+
+Patch 4, split out per Suren's suggestion, releases the reservation
+when vm_module_tags_populate() fails, so that path stops leaking on
+its own.
+
+Tested on an x86_64 virtual machine:
+
+Booted without sysctl.vm.mem_profiling=1,compressed:
+# cat /proc/allocinfo is fine
+
+Booted with sysctl.vm.mem_profiling=1,compressed:
+# cat /proc/allocinfo is fine
+# insmod overflow_tag.ko
+# dmesg
+  With module overflow_tag there are too many tags to fit in 13 page
+  flag bits. Memory allocation profiling is disabled!
+# rmmod overflow_tag
+The module loads without profiling and unloads cleanly.
+
+Changes in v7:
+- split the rework following review feedback (Petr Pavlu, Suren
+  Baghdasaryan)
+- new patch 2 marks separately allocated sections with
+  SH_ENTSIZE_STANDALONE instead of clearing SHF_ALLOC
+  (suggested by Petr Pavlu)
+- split the populate failure release into its own patch (suggested
+  by Suren Baghdasaryan)
+
+Changes in v6:
+- rework on Petr's prototype and allocate codetag sections before
+  layout_sections(), the retry and its state resets are gone
+- fix the layout_sections()/move_module() race (Found by Sashiko)
+- release the reservation on populate failure as well (Found by
+  Sashiko)
+- only -EAGAIN keeps the fallback, other errors fail the load
+
+Changes in v5:
+- add Fixes: and Cc: stable to patch 1/2 as well, since 2/2 does not
+  compile without it (Andrew Morton)
+- restore frob-adjusted mem[type].size on retry instead of zeroing,
+  as s390 and parisc add GOT/PLT space there in
+  module_frob_arch_sections() (Reported by Sashiko)
+- drop the load_module() mem_profiling_support check; the percpu
+  counter leak is pre-existing and orthogonal to this fix
+
+Changes in v4:
+- add a new patch (1/2) to move release_module_tags() above
+  reserve_module_tags(); the overflow fix is 2/2
+- release the reservation on the -EAGAIN path
+- return -EAGAIN instead of -ENOMEM so the module can still load
+  without profiling (Suren)
+- reset sh_addr, mem[type].size and sym/str SHF_ALLOC before retry
+- skip percpu counters in load_module() when profiling is off
+
+Changes in v3:
+- use pr_warn_once() instead of pr_warn()
+- return -ENOMEM instead of -ENOSPC (Suren)
+- expand the commit message to describe the /proc/allocinfo impact
+  (Andrew)
+
+Changes in v2:
+- return an error after shutdown_mem_profiling() to skip
+  vm_module_tags_populate()
+
+v1: https://lore.kernel.org/all/20260804064408.105033-1-hao.ge@linux.dev/
+v2: https://lore.kernel.org/all/20260804122038.190270-1-hao.ge@linux.dev/
+v3: https://lore.kernel.org/all/20260805090633.141001-1-hao.ge@linux.dev/
+v4: https://lore.kernel.org/all/20260810093955.153015-1-hao.ge@linux.dev/
+v5: https://lore.kernel.org/all/20260812054105.102637-1-hao.ge@linux.dev/
+v6: https://lore.kernel.org/all/20260831072104.120197-1-hao.ge@linux.dev/
+
+Hao Ge (4):
+  alloc_tag: move release_module_tags() above reserve_module_tags()
+  module: introduce SH_ENTSIZE_STANDALONE for separately allocated
+    sections
+  module: allocate codetag sections before the regular module layout
+  alloc_tag: release the reservation when populate fails
+
+ include/linux/module.h   |   2 +
+ kernel/module/internal.h |   8 +++
+ kernel/module/main.c     | 130 +++++++++++++++++++--------------------
+ mm/alloc_tag.c           | 101 +++++++++++++++---------------
+ 4 files changed, 127 insertions(+), 114 deletions(-)
+
+-- 
+2.25.1
+
