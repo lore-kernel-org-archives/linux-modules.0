@@ -1,86 +1,132 @@
-Received: from mta1.migadu.com (out-220.mta1.migadu.com [95.215.58.220])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D734385D7C
-	for <linux-modules@vger.kernel.org>; Wed,  2 Sep 2026 08:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE80D248880
+	for <linux-modules@vger.kernel.org>; Wed,  2 Sep 2026 08:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788337083; cv=none; b=d8dwW2edbZag8u6jDkAg/UAzWRIc6b5FfLC/jbpHFvxI2FT+0MZkIQOw1TNiQYTP2OtT6wgzS2H1KxmFRi6WFAZV0/2ek/9AAf0SUWCpbLJDSoVuFNN2HlscITGSJyWKMQ5JMEUvHGLGTN2ryjlKL6QXCoM84IojmGvlrRKt/Zg=
+	t=1788338020; cv=none; b=VUBwdKt8loXJzimvGyAGEeQ+wmJOCQQx2u+kodrsjcy/dWax4Mjo97fh0zrefwvlRP8Ntqq5TXs8MjWulxNRkVqmOcQxN5pZY2EbG1os/FoePKPXph+mwEAXCxmJmWODc79j1U0rNwnPeT8AIlSuWcksqKjzECKQ/4XAUNKk1Eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788337083; c=relaxed/simple;
-	bh=dWk9y7b0drDaUlfFd/9bCLMEQv7pdwsvhjNQU3mPn70=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oqp5YPUi/vIJx9/iI4E4Hho8C++v3tMLdzFE4/kb35Luy/FWl5Y6CQR0d/Na+xlYMmBK4eUOWxhxhmAod4ocWpB58K21dWwNQyJHouSOvbJlIuAoU6j0h1RsexiyW/URMUjbzrjXP8v1gXM6GUqBMHxFELjQWvknypqtLm+OPqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=or4Fd+fj; arc=none smtp.client-ip=95.215.58.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788338020; c=relaxed/simple;
+	bh=L4bqkFZr4M2KRAJosFKfekJOXqeu6sbrziL2c8cYexs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=NgnEv11n7VXtUHOJjOGMRRrgC3UMBr2X9fuc7hVuIA3e2JABVqL+wx2CxXbCFSvpmxvc2EHjBK+fApaeTHYBkKMCuq0l+oX61A5ZjUpqIil/wQo1w9ZkKFE4AotSgRMMpr2srOffKV/Z0P4BZP9QPGY6X4LVncKTE8Bf8JtbpUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W9zk9QzJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="or4Fd+fj"
-X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=dWk9y7b0drDaUlfFd/9bCLMEQv7pdwsvhjNQU3mPn70=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788337079; v=1; x=1788941879;
- b=or4Fd+fjoDT55iqG+B+WGSLMTkSlmM2k8Qs99PoVYTcNgrL8/zCL/7azvjiPygrMyNP+v1eN
- tjsUmoY+rFpBv0IjhNbAKdX2oLGpT8SU8WZ9/nEl/T38ACMIGrdGTfEog5CkVYMXkx1yoI0TRHo
- be6yuvAXOPdMXJti7fV2Ly4o=
-X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id eca1d97746dd0c27;
-	Wed, 02 Sep 2026 08:17:59 +0000
-X-Mizu-Trace-ID: eca1d97746dd0c27
-X-Migadu-Flow: FLOW_OUT
-From: Hao Ge <hao.ge@linux.dev>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Hao Ge <hao.ge@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Sashiko <sashiko-bot@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH v7 4/4] alloc_tag: release the reservation when populate fails
-Date: Wed,  2 Sep 2026 16:18:02 +0800
-Message-Id: <20260902081802.146145-5-hao.ge@linux.dev>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260902081802.146145-1-hao.ge@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W9zk9QzJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 706451F000E9;
+	Wed,  2 Sep 2026 08:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788338018;
+	bh=zG3kLhd/Dyd31JjDliEvBgqbrjNQOIs/IP3M/uVvbO8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=W9zk9QzJq44QRYB+GY3zexCIOxljXt459spo+5K57DGENdEXp2zKQGnIOcrfUKJ2j
+	 po/Wq9cRPTodGts8ihjRlUuw1THrdI33o4U519wnYmSF8wdid36fAACbfUD6L9fc9p
+	 1EyaBKG5Y3o5oNeuKsZq7j23Y3ldFnX6FlxF31jrOXkeA5jUtvGktLaV5eDPzmalec
+	 A5SCb6ADEulc/dWpwgBvCgmaNeK8r1IqNd9MYB4t1oOwk4+1TiQww4jhgcis9dOXdH
+	 ldpZMMFLFnSACOXDOWBZ/UNfW7BXcSxHag+NF/oEkLzH6fkmGs1jK7DLkKCKzk+9wi
+	 W0/4Euz4Q+88A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v7 2/4] module: introduce SH_ENTSIZE_STANDALONE for
+ separately allocated sections
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hao Ge" <hao.ge@linux.dev>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <20260902081802.146145-3-hao.ge@linux.dev>
 References: <20260902081802.146145-1-hao.ge@linux.dev>
+ <20260902081802.146145-3-hao.ge@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 02 Sep 2026 08:33:38 +0000
+Message-Id: <20260902083338.706451F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-vm_module_tags_populate() can fail after the reservation was stored
-in the maple tree, and the error return leaks the entry, since a
-failed load never unloads the module. Release it.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The `.data..percpu` section is incorrectly exported in sysfs wit=
+h a dangling pointer to a freed temporary buffer.
+--
 
-Fixes: 0f9b685626da ("alloc_tag: populate memory for module tags as needed")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Hao Ge <hao.ge@linux.dev>
----
- mm/alloc_tag.c | 1 +
- 1 file changed, 1 insertion(+)
+commit 5082dc654c1b8850af405eef473b249c0d936de9
+Author: Hao Ge <hao.ge@linux.dev>
 
-diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-index 248496470904..3c25475becbc 100644
---- a/mm/alloc_tag.c
-+++ b/mm/alloc_tag.c
-@@ -971,6 +971,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 			shutdown_mem_profiling(true);
- 			pr_err("Failed to allocate memory for allocation tags in the module %s. Memory allocation profiling is disabled!\n",
- 			       mod->name);
-+			release_module_tags(mod, false);
- 			return ERR_PTR(grow_res);
- 		}
- 	}
--- 
-2.25.1
+module: introduce SH_ENTSIZE_STANDALONE for separately allocated sections
 
+This commit introduces a new marker, SH_ENTSIZE_STANDALONE, to indicate
+sections with a separate allocation. Instead of clearing the SHF_ALLOC
+flag, it utilizes sh_entsize so that sections with separate allocations
+like the percpu section can be correctly skipped during layout.
+
+Link: https://lore.kernel.org/all/499bb60c-c6e3-43a3-bd92-95a0567ece5e@suse=
+.com/
+
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index d0e1e0bd2ad06..b114b815187a9 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+[ ... ]
+> @@ -2822,7 +2810,8 @@ static int move_module(struct module *mod, struct l=
+oad_info *info)
+>  		Elf_Shdr *shdr =3D &info->sechdrs[i];
+>  		const char *sname;
+> =20
+> -		if (!(shdr->sh_flags & SHF_ALLOC))
+> +		if (!(shdr->sh_flags & SHF_ALLOC)
+> +		    || shdr->sh_entsize =3D=3D SH_ENTSIZE_STANDALONE)
+>  			continue;
+> =20
+>  		sname =3D info->secstrings + shdr->sh_name;
+[ ... ]
+> @@ -2967,8 +2957,13 @@ static struct module *layout_and_allocate(struct l=
+oad_info *info, int flags)
+>  	if (err < 0)
+>  		return ERR_PTR(err);
+> =20
+> +	/* Repurpose sh_entsize to track where each section is allocated. */
+> +	for (i =3D 0; i < info->hdr->e_shnum; i++)
+> +		info->sechdrs[i].sh_entsize =3D ~0UL;
+> +
+>  	/* We will do a special allocation for per-cpu sections later. */
+> -	info->sechdrs[info->index.pcpu].sh_flags &=3D ~(unsigned long)SHF_ALLOC;
+> +	if (info->index.pcpu)
+> +		info->sechdrs[info->index.pcpu].sh_entsize =3D SH_ENTSIZE_STANDALONE;
+> =20
+>  	/*
+>  	 * Mark relevant sections as SHF_RO_AFTER_INIT so layout_sections() can
+
+[Severity: Medium]
+Because SHF_ALLOC is no longer cleared here, does this cause the
+.data..percpu section to be incorrectly exported via sysfs?
+
+With SHF_ALLOC remaining intact, sect_empty() in kernel/module/sysfs.c now
+returns false for the percpu section, causing it to be processed instead of
+skipped.
+
+Additionally, because move_module() explicitly skips sections marked with
+SH_ENTSIZE_STANDALONE, the sh_addr is never updated to the final allocated
+memory.
+
+This means when add_sect_attrs() exports the section:
+
+kernel/module/sysfs.c:add_sect_attrs() {
+    ...
+	if (sect_empty(sec))
+		continue;
+    ...
+	sattr->private =3D (void *)sec->sh_addr;
+    ...
+}
+
+Will sattr->private end up storing an unmodified sh_addr pointing to the
+freed temporary load_info buffer (info->hdr)?
+
+This appears to leak a stale vmalloc pointer address to userspace when
+reading the sysfs file for the section.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260902081802.1461=
+45-1-hao.ge@linux.dev?part=3D2
