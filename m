@@ -1,54 +1,58 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021117.outbound.protection.outlook.com [52.101.95.117])
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021119.outbound.protection.outlook.com [52.101.95.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D464C3859EF
-	for <linux-modules@vger.kernel.org>; Fri,  4 Sep 2026 14:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41714CB8BE;
+	Fri,  4 Sep 2026 14:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.119
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788532494; cv=fail; b=qnyVsY5Mwu1BJn1taHbmeCGPTzfZp9Kw83/rTDk198EgDP3ZOOW09AUIsCVLTC6qorhZvvaVOjGhIvTns9GNrNFuVlejfPjzVxfhBWQGRgsnH4fan5dCo2ajLYAw+jf+8OcVVb7ac2NIIFhekqONsqmb6q7i2ecwyAkqwjIh52U=
+	t=1788533992; cv=fail; b=Uxp4jacGNzpvc2cHmggd2xmAZ+YOPTJfRl9X4HKseG67rc4tHqjfhlZPXJqGPqlspGJUAkLkunHAImGzJLOPgTjXfQ7uhseoOxys6dqraFQ4h8MHbEUM9ZocH47mKwCjo4EZz0T2E90wMU5mTifaiUa+8y0Z9uC5/f0d2SAZIFA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788532494; c=relaxed/simple;
-	bh=AoJpFnB6k6SrxDbjvjhPL/txxX6eXVyHaOOzi5+KSaw=;
+	s=arc-20240116; t=1788533992; c=relaxed/simple;
+	bh=LQ32kJh/jtonzqAuDO4mpStgy0HG50EUgHLOnBUnwLk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=KjTezjl/XHSZW4OG1QAx9pexLIt/G7CTKBA2WGfv7VQebpcCST6XWvnWVzGHSIqVV2l562/VOXGFjG1u+fklaFKdQkeMJvd2aOy7996OgGDRiRjbY2nnzerLwhWke4mjx2zwoQphyJGxZQHCrhZ7tap2zJmIOuLar2qS2iWrfc4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.117
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Q23II/0tTJihEtPZyocEp23NU3TXbuaQ6vkTdXt0q+qwWQYrjuoOrU/3VoJfdHDaIkzJwyNR8sD+J/e1koak0xoK2hN97gzp36A2cXujHxzoMuNwoJ1B3PJ1bHCvUyC0Y5YDPw8+yq2Bxc0mMgyVjDHXXY0rAm+XwiSF6d4IYoI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.119
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UljjyN0k4E5yZyP5KM/W117kXNKbJt4AZ7Ua80OUqG0+7W2mP9I/YGclmH2CIaTTEEdFC7Z8epnubf4Qs4m1/jmnI2BFZrk0cq85LE9ENIev2kiTeOYimQbmqUOGHJsJ0WTD76flbG1ao45DD2gW3+fUIXJNxvJHlc8eJwQ7UvNh3PZ/hPvXAmh5dtuswq6tdCL6KmiBZRntLbTuFi9qZdd9XjzeEX7TkojkY99cmS17N9KY0O/zVQLEl3dEV2jUe0WVyY0cd/1Cjn9WzJ0Z/F/DC2V7k9SGdHJMNi4nqklGZlTwLeIXoVaYPb3PpAgjzWBjw2cA91yy0Sc9AWxMiA==
+ b=E4bxAUXrdFfef3f02laTF2UVH+fIyxFvmuw/yUeB9rW4P9KO+7/BVJBPoVSAb49lW8cHR0S8NjOKFUSiCf7+7MUTZiunTabXmdWM32ueBFTpt6OgoZvhgxxJqGJaCocDzSmnJM3AXiWn34GKk+CIBm3Mow7RrBckC0e1rzauxCY8xF7EyGCrjd60yjDxIVPPVQsNafq3zhv1eAyIUcb7gunWHAulOGPn9qFYwr9z9xa7WvWXBJINa+MeInn7nGRxDOQ4gznHlyn0y6C5Wa06LO+K6nVTfjV0nFA5m6iP1xT9Wj7mw2q5YviPvA/qLlKmU/tX7bsAwxEquYM1paj30A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=26YHRvEEs/dCMs+4uwNayGYevrF/h38c5/zI6YPQ1nk=;
- b=N5beSI25Ueq3nz2EtRgk6abrPa7BXQT5Op2mLFRs+khajfwpgoEG1uJMTCutKUx/PolKEyEPj8X1Ne4HNyXWI6769pMDEltylB42PRbezHSv2MG56SnlKjQEe05nYmk2W9zYk3g8PcNthL7zBso33oHyMXzDxSo3WG8Fsh7rSwG1UTJ2q+LT1SuylrcMev/f8ZGMgzEqhDkQ2cYX2amrOOvMzA04WOTUfHvgLJYUUD0C4k+TB2OsxqVua3Ib4+xrhsrvC7txSjChyQoMyBycTNTMCCMnnPEziD+kqheT0GphVntnbJAyFCgwPEnAhXxSLY/dpPKwqExRnqxAMYtfVA==
+ bh=miZfiHemO8Mc3gM4CMJw0JTJc6uXHYg1lLGpx67IMXw=;
+ b=oBefJiBkRBvUrwEe6Ye2hfxDwDtADSkuzSPAHUquYWHFZj/nsV64nBC+KqZc5/JFuQ1hy9dGjhLjfaLowiSD+mVnCMb3WTDKpvHE+T4JIh2/U/XtJm/s51uy4jHTMgLDLtghdX1YNMCm8lK2UtXrldfvU2B54Yvl9e7t9kdt2xu5VykSUJsQvwrOUPAwzsbEbR0Pp0Js6CoD4a/F2ossrJ2AO8ftlSlVvEH+3R7AuW704To7syYi8tkTGzOLf+c533WQSbbpJ1vjVArYIezAsK+wfC64Dy7QtwnNfQ+lr+dX9MJx2KNkapUibFlYFK0zC6fs3WR4zNnbh83bJGIumg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
  dkim=pass header.d=atomlin.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=atomlin.com;
 Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by CWLP123MB2802.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:53::7) with
+ by LO9P123MB7690.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:3eb::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Fri, 4 Sep
- 2026 14:34:48 +0000
+ 2026 14:59:46 +0000
 Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0360.008; Fri, 4 Sep 2026
- 14:34:48 +0000
-Date: Fri, 4 Sep 2026 10:34:44 -0400
+ 14:59:42 +0000
+Date: Fri, 4 Sep 2026 10:59:38 -0400
 From: Aaron Tomlin <atomlin@atomlin.com>
-To: sashiko-reviews@lists.linux.dev, petr.pavlu@suse.com, gary@garyguo.net
-Cc: ojeda@kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v10 1/2] module: Extend module_blacklist parameter to
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: arnd@arndb.de, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	da.gomez@kernel.org, samitolvanen@google.com, peterz@infradead.org, ojeda@kernel.org, 
+	mhiramat@kernel.org, boqun@kernel.org, neelx@suse.com, da.anzani@gmail.com, 
+	sean@ashe.io, chjohnst@mail.com, steve@abita.co, mproche@mail.com, 
+	nick.lane@mail.com, rishil1999@outlook.com, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 0/2] module: Extend module_blacklist parameter to
  built-in modules
-Message-ID: <xuj6okhlofl4cboopwjzqe3jyfmaxgvdpf5a3ek7bubew4vcbk@nkfqgoe53533>
+Message-ID: <ultg4rym4phqwqrbuz3hqtlse2lgafxebx3un7s3tdht7rz5xy@3ckauomiwqsy>
 References: <20260903185557.183224-1-atomlin@atomlin.com>
- <20260903185557.183224-2-atomlin@atomlin.com>
- <20260903191303.5A14B1F000E9@smtp.kernel.org>
+ <20260903132924.7a4d1b84791d30c706b394a1@linux-foundation.org>
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260903191303.5A14B1F000E9@smtp.kernel.org>
-X-ClientProxiedBy: BL0PR05CA0028.namprd05.prod.outlook.com
- (2603:10b6:208:91::38) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+In-Reply-To: <20260903132924.7a4d1b84791d30c706b394a1@linux-foundation.org>
+X-ClientProxiedBy: BN9PR03CA0505.namprd03.prod.outlook.com
+ (2603:10b6:408:130::30) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
  (2603:10a6:400:183::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -57,184 +61,196 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|CWLP123MB2802:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9316e5da-796c-4db9-fc9f-08df0a91ac18
+X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO9P123MB7690:EE_
+X-MS-Office365-Filtering-Correlation-Id: f3fcca10-b044-4d8b-fa30-08df0a95269c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|23010399003|376014|10067099003|4143699003|56012099006|22082099003|6133799003|18002099003;
+	BCL:0;ARA:13230040|7416014|376014|23010399003|1800799024|366016|5023799004|6133799003|10067099003|4143699003|18002099003|22082099003|56012099006;
 X-Microsoft-Antispam-Message-Info:
-	cj5QTEgC1fTNSiX6j54FQNW2p/d7xCr6D/45RXeuCoVvzsbXJZCQnXP1OrqmvFaE7/PAxPVSljcIuTkVSMMDil9mIfvPuWOC05WJ3L3kawxlW6+y2qB6Qg/gIPnRY5XcnXzetD1bSpTacndB7Vlxj5evaTcNMjr2JE+LliM/3RbfI7aFMQ/FHt9wgEEt2pnMzRc9P0ePI12C4XKmI8E0d/SR9HBiSYQx++WDpc9AfIE0APARyIVGRUYtVlvQoyzWWshh3VLpYP7mRNzTEawatyDW2v5aRES/zPQxMTB08+kD/Ap2T25/yly3foYVIVEAMugabHM0UQMNsVybkQuEWnRXhav4pYHSG3ODWHInhqDSFhZsUh2TfCu8g/lyp68JaJ6/Vco8PPuk7PCtnEp1Fxu34DNjWy+HwD+O+lDCsqQv9wnMd4sNlXi0Zfz5bkrorRDSmjH6FGE2H5Rlh2Z6/B6/UdNbjIH4U4D9fenFNu8WsTq04hgvTf5Fy217Iskw9FVCQ+uYX4Z8bdbxai5Adf4vMCjkuIA9Vee+FpMyCMqdNOdl1OML6UPLW2Wt5fRo0UUGg4br8StX4pEsdzOU34Wr727z0aagZLZann5Fhnv+0lLCsZZQljb2voq+nEei7fl9S+fe+5z6noeIkHB9TdUTLA6KCuMERnjnxO+f054=
+	nlF1odgiiHtxKkUMBsRUrk/7fRPotvdyFBIrcHT6pnz9ZNYVhkknnqSMi+z5QvJ8yzkcWTyTECSk2mpT5/3Sclx2ii8yOo1RvRauTen0IspnqS2DYg21HviuBFh/aZg7lCK4dWpJP8LGNcZxrpYx8n6wKp0qsOtW8C1A+xU1eu7HP139UaDoE938HyEYfoeCFPCNfMTdzPCK4SoVqppazms8A6zfRaTmRa2omhAvsxHW8lq9GgRzyk32fsh4qvkcL59pYGQwaZdySDWQeIj+ZfEMaLC4//cIOywpOkBo4dI3pmbXmFnO3KwE57Q3TTb/2kX8kp5xpuvjAqDjzqxrkhY7gFVT4W4eyeKIvdB24CxVNuKg079kN7rTpfgoYdtBI4CN4khq36RU6vFIULGXFGSKtEqkEo5HBPFrmdXbO/h3OEyabbuvV0z1nH+voGa5j18soC6fCKR3C1gfeH7L14yuIwjdJPxHXUOQj2NMO8AEPU1az2x4RzXUcFZjS8TUEPh17KCAWzbxB5oN//s/xfPjPS0SHYC8nxHo5uGhnN7A5xyZoor0TIgL7fc9zcRL9EHudVpPZ1Y0HnhSjFJbnl71BvzqBP49rhkN7ZdwS9nykZUs8QeuWC5/ZCrVYcNzYVKXC2PsW5nB4PEU0pVoBDiHW3UHpG+CbBP2eDAHfYk=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(376014)(10067099003)(4143699003)(56012099006)(22082099003)(6133799003)(18002099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(1800799024)(366016)(5023799004)(6133799003)(10067099003)(4143699003)(18002099003)(22082099003)(56012099006);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NXVMSmZZL1pNQTJCSUpVZDd6eGJHYmgvb3NjeGk0T0I2RWpTallZbkpIK1U3?=
- =?utf-8?B?OC9iMHo1eXRuY2thNHVxa2s0ZS9TNmY3SHIwTXNwR1NzempHSmpJbkd2b2lO?=
- =?utf-8?B?ZHdMTEtlTmNjMVVrVkhiVmxKd0k4c1FkU3gwOHdDQzFzMDVGZmlMQmJHZTZl?=
- =?utf-8?B?bzFlczBCYVluTE1weTZQSVJKd1Y4cWdQZnIvcVl6TkJVQnhRbExWUEVoYVFn?=
- =?utf-8?B?ZSsyRkdESUFIRkRQU2VkR1VLMHhudEJvOThCTGJFZ1ZLa0xDWThqNENOd3pJ?=
- =?utf-8?B?aWxLbmhOSkQrS0xkOXJSTndheGVPalVJbWF5RWhDcTZhTmlyU1VHVFhmQTc2?=
- =?utf-8?B?clJqR3hrTG9BQ3Bhck9lNm96TjZ5aDRoMjE5VVFBU05DWitUMVppcDhjZUFw?=
- =?utf-8?B?R0oxOVdnSEYzbVJUeklKQ0h5MVk5UWEraEFCVDloK2hmZURNOWJ5TWZjKy8y?=
- =?utf-8?B?TklHcHRUSnp0cmxtV3NYdjFQUzRBblg3WXpFNGFnUURWcUluVjVNWGJ0UlNt?=
- =?utf-8?B?QVFXclJIcnpvUjgvVHRQMHFwcGo5cnVnT0FIZXc5WWtZTHNiWGVZZDZkcEhk?=
- =?utf-8?B?d1QxeGZiVDJIZUZUNjJlZXlIdVB4VURVRnlRSHB3ZXNnMy9oMlJ0S1NET05Y?=
- =?utf-8?B?ZDhXa0M4STArSVZnMlp0cDR2OXNVZ1NmRVJ6QTdnUzNYR2FidWdLbGJDOGhE?=
- =?utf-8?B?RFZFZmh5TlFSb0xUYVphaUkweFliQXJ6NnQyRk1zVkpkVUlLRVVpZnkvaWxr?=
- =?utf-8?B?bmd0SldmMGNLRzFPWXJrek5hQWpPU1FMZjhkWmtmNjd4S09xRDE2aGtVdUtH?=
- =?utf-8?B?QTE1dk4xQmxPUkN5Nkx4eG9RYTVUV28vVUZzemhKak5ldVp5TXRzeFNsR214?=
- =?utf-8?B?TWowVFF4c1RKRjBMWXNyUTJ6SUphNEF1ZmxRcWprMmZkUDloaGc5Z2U2b0V6?=
- =?utf-8?B?U2JvenVJTnQvckVtNm9WUm5WbFBTMmRCNGZaYyt5dCtzVmkxekYwN0xoREdx?=
- =?utf-8?B?UVd5NXNxeHU3ME9sdUVwck1uMGpyQzNjL3dGd0FheUY4MEIwOWRLQW9zbmpt?=
- =?utf-8?B?QTRSRkNOK1dOSldESDgyU0g3cEMwQ0FlSWNQZGxXRjhYcWlaS2VsRFhxT25k?=
- =?utf-8?B?S244TGFRWHpONlZ2VFpJblVhblErV0VaN1NUQWNBSHdZaG5Nb1kweHZyeU5H?=
- =?utf-8?B?MnhoUVVaOU9raTZEUWw5aDA0Ti85YkpsbCtmbmFzRm40bWdvR2l6a3p2NS9Q?=
- =?utf-8?B?ZXBBY1VKc05qVVV3cnRDRDBURWVZVVQxTGV6dGNZZ3dJYTF3K2pSWHlHTWYx?=
- =?utf-8?B?djh5VlZFbGRCaTk4dFFNd2pXSWtPVktZZmlNbk15ZG52MGxJdXZXUzR0QzFI?=
- =?utf-8?B?MUZXRzZTSHRkMjNESmdQUnZzZDhGZ0NwcG9qR3NpSE9paUNOQnU0eGgrVkx2?=
- =?utf-8?B?TVl0MTdHb2k2TWdnb3V1R1V6SThYbXJqT1dTODBtVEZBTjdaMWdyRUU1NlY1?=
- =?utf-8?B?Y2hIOVR6SHIyS1BNMGxoQUhaS0liVWI2bFRsK3ZFSmZYME5lSTBpMmJBUS96?=
- =?utf-8?B?dWFmOVRuZUZRVUl4STlQNTgwZTIyZnZmTFZXRmZGaURzTi9jMzRLSTRwcVRw?=
- =?utf-8?B?Rkx2dDA5SmJleVM3d0hNcmtINEVQbG9aUmNKNjBhdXdHVGgrNWNQbHZxL3ky?=
- =?utf-8?B?c29Ib25MRkVmNFZNUHJjUmxMZWxaMUV3Zmtoa251UVljK241THBRbWJuR2JN?=
- =?utf-8?B?MVd4QUw0L05KSkM0Nnk5YWRsMmNXYmcxbGFHYndIVXYxTE5UbGtJTWM5clpp?=
- =?utf-8?B?UnVIQzBDWFBvbS9HcDA2d1RFOUVHMlBmbWEwZ1E1aGhXL0FTN0dtdE0yNGdM?=
- =?utf-8?B?eGRSOXNJK1g0SDB4MGRRL3d5WkdUODNJUUViUGV2ZHRUWlNmWUFNb2R1d05q?=
- =?utf-8?B?bS9rak5iL3hGbDJNaFhSd1ZRaWE5bEhDWDBiUXYzbVN0NVY1YzRXbFh1ZjNH?=
- =?utf-8?B?UzBOOFVXdDcvcE9GMktJdkIzTnRDR0U5QTN5bjIrMER2TVlZbmhIa0FiRlEr?=
- =?utf-8?B?Z2xaQ1krSi9FQW5sMW9udmhzeVJrQTJoalUySHBxNHdOMWFmRGVzM1JRVGEy?=
- =?utf-8?B?SitlL2tKWmRaZ21keDdqejgyUzRWdXRWZnNHV1N3K1JOaVgvalJKMzR1WWlK?=
- =?utf-8?B?SWR2MURZSDFIdUxOdGpFL21iTWF5ekx1Y09vOEhpM01aOWtSN2VYS21BMDVm?=
- =?utf-8?B?MjVOOXBHQWd6L3dHSStXa2k1U2VNMmIvcnE5dDZCNUpaRFZRTXN2V28yaC8x?=
- =?utf-8?B?bGJvZi9SdEwySlptZmIvNFIzMithZDFNVTA3WHVNZTllUkUzSE5MUT09?=
+	=?utf-8?B?TVJmM0pqcmZkZ0F2cjBtNDNGTTlmYWpXNVROaUZ4QUJacXdWanNsaSsyNEdh?=
+ =?utf-8?B?ZTk4N1dSdnpGeWRZazl6TGZ2ek5vQkZHVEhScXpaQUU4VStlQ3N6aFBQNlI0?=
+ =?utf-8?B?SEh5VEpwTjM0d05YNjFMdms2aWhwUWxmamZOQjJpcDcweE8rTEdCT3V5VUR6?=
+ =?utf-8?B?YkNvVDZDMWMzQmNwcmRkZnBja2gwTzJtS0tVTGtzRUxPZ0U3dHJNVVVLMk14?=
+ =?utf-8?B?bXFBNW5UOFB5MUQvR3haajhNcE01THRLTWM4cE1XWDl3RlRtUGdGUUt3N0ZW?=
+ =?utf-8?B?ZCtHMFdycU5iMHZ4NFNOTVhPRXIyTmtRcW4yLy9CeTU2OGQzZDgzTXpKcVNa?=
+ =?utf-8?B?SlBEYmgxcVZPUDhiUTJUNFZzRW43SnZGWmgra1BucmNZTDJoVnl5KzM4Mnls?=
+ =?utf-8?B?NDRlajJNRmc3TnVmckVreXp2Q2t6YU16MlVqUTQvQnpmd0hic1pxTjZDY1E3?=
+ =?utf-8?B?cmJWUlE3eXpRVHZXM0hqVEJQTlRVaVlKRXdWVkhmT2o5WnBidkxoZkV3Q3F6?=
+ =?utf-8?B?NVFxZ2c0YjQ4VFg0ZG1UajYvejVuNWE1MUo1TW9kaVgzWkFmZHVISmRZbXE0?=
+ =?utf-8?B?NUtsRGlycjZaOW1wc01VOWRibHdlOUVPTDdaS00wTDByejFzTTBlUHgwUmVX?=
+ =?utf-8?B?RzB3ZDJSeEpZQmZFeDZZL1ZPUjBzZ2pNSnZZVzJFSW5pZWpOeW95Z21VUGZL?=
+ =?utf-8?B?STBjVmhNOWZjN0VGaTdzUHdUY1FvcnFZaGFDa3N2TmcyNFpPaWYzWW96N2h0?=
+ =?utf-8?B?dVcvNHRVY2VMTWJkVnkzU0lJM2ZJWmdBTGlmcDZLanpNZEpuWlVPRWdxY28x?=
+ =?utf-8?B?MTNUeE1jMlhwTEhGRnFWRHJZcjlKRFREa09SQlR1UHdKTldod0NNVmhyemVX?=
+ =?utf-8?B?MHVZNUpVZ2xMSTlsSmkwclVJSVVTdC9uS3p0MnFsQVY1LzU4UmZRbTJIVXVH?=
+ =?utf-8?B?SjlWSU5TVDRsSmIwdmFEOXlSRGROT2Z5NW5GWjlQeHArVVQwaXZYdUgzZ0hD?=
+ =?utf-8?B?dlVRcFZXUGVIdWlVK0dhNGcxb0Q0aFpTR2ZkV1hyaUh2cmxSYS9ud1ZDcm9L?=
+ =?utf-8?B?Z1pObmVXL2c0SiswV3VhYURVRWU0K29OQWpoMktuZ29BYm1zNFVWR0FMNWho?=
+ =?utf-8?B?ZkpnNFBVWEl5UGhCNEJKS0kxd25FV3VsUkdvRjdMTTVDTG9Gb29xS2JBRlZL?=
+ =?utf-8?B?Z1pJMUhTUENseEpZOW03aHZwUFFhd2VrQXdaeitnNEVDaGJ2SUZzY0RYV2xW?=
+ =?utf-8?B?dnhodG5nU3Q0R05LdTJ1V2lqNW5xMWRFaTJhSjRwMzFQcUxvY3NrMHVqYVYx?=
+ =?utf-8?B?R3d5bjRyYkg4bSsvZVBQZDNIbHQ2bldYcHBnMlNoYXVQS0ZXV2oveW12OUEx?=
+ =?utf-8?B?QktNM2c4Tjk2b0JyS1dBQnEyNzhLWjJ5c2xELzVzaFVjbU9XenlEczFsb2Iv?=
+ =?utf-8?B?UFlWN2dtUmNPZDZyQUYyNGx3cGxYRW9wMURnbVRHLzZjeXgxWENjcWc3S2s1?=
+ =?utf-8?B?cGVqTzNkQnJPY3FVbDFmOGdwQ1h2NTg2VmhRbHVSL1NIeGhyNkpDQTBIR1BR?=
+ =?utf-8?B?NDE2TXRzYkRNRElsZEdWcHRIS3N1dmo2dWRnQk8wblZyY1pQczUxVTVOeXBF?=
+ =?utf-8?B?enhpcXpBWXJPbkFaNGgzS3pwNE1VMXBTS3lReGErWlEzQy91c0hDVFV5VDlw?=
+ =?utf-8?B?dExWSEQ5MDJvL2xnY05OZ1p2L0g4Y1VjRy9Cdi9RNjVJclJNQ0lzV1JVNFhk?=
+ =?utf-8?B?VVFzSEdCcHFPWEJtQUxWMXcvakNUeWI4c002dTBSZzlaMmxTeDc4czdOUS9y?=
+ =?utf-8?B?emw5S0U1ZXd2bHd3dFIrSVE4bTViZEVEQ05CRjlxWkRZZ0VrMTgzR2ovNjUx?=
+ =?utf-8?B?UGRJNVJHL1YxNDBIcXM5bFBRR2x2L3U3cmZBQlc0NXJUUGlkQzJ3M3daU3Qr?=
+ =?utf-8?B?Uit1Rll2SEoyNDZHWXRkeG45RFlSS0FhRTVFWW05RWxBcFB1ZmE2UUgxbGY5?=
+ =?utf-8?B?UGdsV00vL2thNHpWSmw4TVhvd3RoazAzQnFMam1hcjhHNXFLaTcwUDVWVU13?=
+ =?utf-8?B?QnVLb3NOeVB4QkY3dUdadWJGeC8ycXM0OW5nblk3M2tYOHZtN1B5U0pmNCto?=
+ =?utf-8?B?Y3psM3FQNlg3cThaZkY3c2ZJTHhPam1RNHNjMS9aRXRHN0NYMGhsZkxaam9y?=
+ =?utf-8?B?S29jbXc3NERZeExHTWRYMU10ajQwTUR2SnB0QlR0V01SQjFVeVpXTkNEQlFy?=
+ =?utf-8?B?WGRDVHJUYTRKZVRyTHVadW5qcjZJUnFrQS9pQnhZMHUyT2ZhazFhODhiQkgy?=
+ =?utf-8?B?dkZFVkxTb1l4aS9kNXd2UmZqWEw0dHpSOEVNS0R3VDBhTGVNSkZPdz09?=
 X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9316e5da-796c-4db9-fc9f-08df0a91ac18
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3fcca10-b044-4d8b-fa30-08df0a95269c
 X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2026 14:34:48.6260
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2026 14:59:42.6935
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UOoiAp1e4JmveKrLprC3TmWAAT+1KItZPpTinKMqdAB3km2tEbLrA2aDJHSQc9hxj3lGb+WsJVjIk3YCU9dU5Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP123MB2802
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rs3nYcNb9fhsDYVQkL6UHpI5OdTdeYmWw4XjhkDyhcT363/qD9WPZ/WqbUDaBYRyr3aBFS0LrunPR7XFqnna/w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO9P123MB7690
 
-On Thu, Sep 03, 2026 at 07:13:02PM +0000, sashiko-bot@kernel.org wrote:
-> commit 828a4fa4f29a0a3c5aba9065f4ba35eb845dddef
-> Author: Aaron Tomlin <atomlin@atomlin.com>
+On Thu, Sep 03, 2026 at 01:29:24PM -0700, Andrew Morton wrote:
+> On Thu,  3 Sep 2026 14:55:55 -0400 Aaron Tomlin <atomlin@atomlin.com> wrote:
 > 
-> module: Extend module_blacklist parameter to built-in modules
+> > Currently, the "module_blacklist=" command-line parameter only applies to
+> > loadable modules. If a module is built-in, the parameter is silently
+> > ignored. This patch series extends the blacklisting functionality to
+> > built-in modules by intercepting their initialisation routines during early
+> > boot.
 > 
-> This commit extends the module_blacklist command-line parameter to apply to
-> built-in modules. It achieves this by creating a new .initcall.modnames
-> section to map initcalls to module names, intercepting blacklisted builtin
-> initcalls during early boot.
+> Why?  What are the use-cases and what is the value of this change
+> to our users?
 > 
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> > index b2988aa12f664..7490278b7a2df 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -734,7 +734,8 @@
-> >  	EARLYCON_TABLE()						\
-> >  	LSM_TABLE()							\
-> >  	EARLY_LSM_TABLE()						\
-> > -	KUNIT_INIT_TABLE()
-> > +	KUNIT_INIT_TABLE()						\
-> > +	BOUNDED_SECTION_BY(.initcall.modnames, _initcall_modnames)
-> 
-> [Severity: High]
-> Does this section declaration need an alignment constraint? Without a preceding
-> . = ALIGN(8); or similar, the __start_initcall_modnames label might capture
-> the unaligned location counter before padding is inserted by the linker.
-> 
-> When iterating over this section during early boot in do_initcall_level(),
-> could the kernel read padding bytes as garbage pointers, breaking the
-> builtin module blacklist feature or causing an unaligned memory access panic?
+> Important, so please don't skimp on the details.
 
-Hi Petr,
+Hi Andrew,
 
-I forgot to restore ". = ALIGN(8)" in this iteration.
+Thanks for asking.
 
-The following ensures the location counter . within .init.data is aligned
-to an 8-byte boundary before __start_initcall_modnames = . is captured,
-preventing any linker padding from preceding the first element of the
-table.
+Here is the rationale, concrete use cases, and the value this hopefully
+brings to users and administrators.
 
-Are you okay with the following?
+1.  The Core Problem and User Experience Gap
+============================================
 
-    --- a/include/asm-generic/vmlinux.lds.h
-    +++ b/include/asm-generic/vmlinux.lds.h
-    @@ -735,6 +735,7 @@
-         LSM_TABLE()                            \
-         EARLY_LSM_TABLE()                        \
-         KUNIT_INIT_TABLE()                        \
-    +    . = ALIGN(8);                            \
-         BOUNDED_SECTION_BY(.initcall.modnames, _initcall_modnames)
+Today, module_blacklist= works strictly on loadable modules. When a user or
+system administrator encounters a driver bug, hang during device probe, or
+hardware fault during boot, the natural and widely documented remedy is to
+pass module_blacklist=[driver] via the bootloader (GRUB, systemd-boot,
+etc.).
 
-     #define INIT_TEXT                            \
+However, if that driver is built into the kernel, the parameter is silently
+ignored. The kernel proceeds to run the driver's initialisation routine
+anyway, leading to the same panic, hang, or hardware misbehaviour.
+
+From the user's standpoint, whether a driver was packaged by their
+distribution or built by their provider as =m or =y is an internal
+implementation detail. Having module_blacklist= silently fail solely based
+on compilation configuration violates the principle of least surprise and
+complicates system recovery.
+
+2.  Why initcall_blacklist= is not an adequate substitute
+=========================================================
+
+The kernel does provide initcall_blacklist=, but it is impractical for
+general users, sysadmins, and automated fleet management tools for several
+reasons:
+
+    Obscure symbol names
+
+        - initcall_blacklist= requires the exact function name of the
+          initcall (e.g., snb_pci_uarch_init and e1000_init_module). Users
+          typically know the module name, not the internal function name.
+
+    Internal instability
+
+        - Initcall function names are internal kernel implementation
+          details. They change across kernel releases, refactors, or macro
+          rewrites, making it impossible to write stable bootloader
+          configurations or recovery documentation across multiple kernel
+          versions.
+
+    Mangled names (Rust)
+
+        - For modern drivers written in Rust, the initcall symbol names are
+          compiler-mangled symbols (e.g. "_RNvX"), making
+          initcall_blacklist= practically impossible for a human user to
+          specify manually at a boot prompt.
+
+module_blacklist= (or module_denylist=) resolves this by allowing users to
+specify the canonical, user-facing module name (KBUILD_MODNAME) that they
+already know.
+
+3.  Concrete use cases
+======================
+
+    A.  Disaster recovery and triage on production systems
+
+        When a kernel update introduces a regression in a built-in driver
+        (e.g., a storage controller), administrators need a way to bypass
+        that driver at boot time to get the system into a usable emergency
+        shell or collect diagnostic logs, without having to rebuild the
+        kernel on another machine.
+
+    B.  Monolithic/Hardened environments (CONFIG_MODULES=n)
+
+        In security-sensitive environments, kernels are frequently compiled
+        without loadable module support (CONFIG_MODULES=n) to eliminate
+        module loading attack vectors. On these systems, all drivers are
+        built-in. If a hardware erratum or firmware bug triggers a hang in
+        a built-in driver, administrators previously had no
+        module-name-based mechanism to disable the offending driver.
+
+    C. Hardware Errata and Conflicting Devices
+       On systems with buggy firmware or conflicting device IDs where two drivers
+       attempt to bind to the same hardware, users can prevent the conflicting
+       built-in driver from initializing without patching and recompiling the
+       entire kernel image.
+
+4. Implementation and Overhead Considerations
+=============================================
+
+We took great care to ensure this change introduces virtually zero runtime
+overhead:
+
+    Scoped to module_init():
+   
+        - Only built-in drivers that explicitly use module_init() are
+          tracked. Core kernel subsystems using core_initcall(),
+          subsys_initcall(), etc. are unaffected.
+
+    Zero Resident Memory:
+   
+        - The metadata table (.initcall.modnames) and the module name
+          strings (.init.rodata) are placed entirely in init sections and
+          are completely freed from memory after boot via free_initmem().
+
+    Fast Path:
+   
+        - During boot, if neither module_blacklist= nor module_denylist=
+          was supplied on the kernel command line, the lookup is bypassed
+          entirely.
 
 
-> > diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> > index bc7027f8dbb2c..a96157598197f 100644
-> > --- a/rust/macros/module.rs
-> > +++ b/rust/macros/module.rs
-> [ ... ]
-> > @@ -591,6 +594,20 @@ pub extern "C" fn cleanup_module() {
-> >                  #[cfg(CONFIG_HAVE_ARCH_PREL32_RELOCATIONS)]
-> >                  ::core::arch::global_asm!(#global_asm);
-> >  
-> > +                #[cfg(not(MODULE))]
-> > +                #[used(compiler)]
-> > +                #[link_section = ".init.rodata"]
-> > +                static #ident_modname_str: [u8; #name_len] = *#name_cstr.to_bytes_with_nul();
-> 
-> [Severity: Low]
-> Will this cause a compilation failure for built-in Rust modules?
-> 
-> It attempts to initialize a fixed-size array by dereferencing a dynamically
-> sized slice returned by to_bytes_with_nul(). This could break the build when
-> CONFIG_MODULES=n or when a Rust module is configured as built-in.
+In summary, this patch brings parity between modular and built-in drivers,
+removes a pain point in boot-time disaster recovery, and provides users
+with a predictable, consistent interface.
 
-Hi Gary,
-
-Calling .to_bytes_with_nul() on &CStr returns a slice reference (&[u8]), so
-dereferencing it yields an unsized slice ([u8]).
-
-To resolve this, we can follow the pattern already used in
-rust/macros/module.rs for emitting '.modinfo' entries construct a byte
-string literal at macro-expansion time using Literal::byte_string(). In
-Rust, a byte string literal (b"...\0") has type &'static [u8; N], which can
-be cleanly dereferenced with '*' into a fixed-size array [u8; N].
-
-Would the following be appropriate?
-
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index a96157598197..67e3df8d4389 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -493,7 +493,9 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
-     );
-
-     let name_cstr = CString::new(name.value()).expect("name contains NUL-terminator");
--    let name_len = name_cstr.to_bytes_with_nul().len();
-+    let name_bytes = name_cstr.to_bytes_with_nul();
-+    let name_len = name_bytes.len();
-+    let name_byte_literal = Literal::byte_string(name_bytes);
-
-     Ok(quote! {
-         /// The module name.
-@@ -596,7 +598,7 @@ pub extern "C" fn cleanup_module() {
-                 #[cfg(not(MODULE))]
-                 #[used(compiler)]
-                 #[link_section = ".init.rodata"]
--                static #ident_modname_str: [u8; #name_len] = *#name_cstr.to_bytes_with_nul();
-+                static #ident_modname_str: [u8; #name_len] = *#name_byte_literal;
-
-                 #[cfg(not(MODULE))]
-                 #[used(compiler)]
-
-
-Kind regards,
--- 
+Thanks,
+--
 Aaron Tomlin
