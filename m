@@ -1,188 +1,204 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020122.outbound.protection.outlook.com [52.101.196.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7684EC671
-	for <linux-modules@vger.kernel.org>; Fri,  4 Sep 2026 15:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.122
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788534806; cv=fail; b=OtdS03hOJFsOIHeWiyY5bC5/xA6ud5qMcNjGPzZMg4YC5AMiYZNH1BVRUDN5M0afUzb09ClGQ5818DV2ioPICt+doVCbzoeWmwbRYmNkMCQOhFXruagkR49knWFeQqTm/Sj4UxFtctVhkN7bQu2P3o/+RZFvi5l3C5BPlXrFgEs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788534806; c=relaxed/simple;
-	bh=CqNjuiA8IIA7ta5Qx6hGC8IvoVcz3j63UWLQCflKfso=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Uf9MFT5w/oEufJpAxF+rZzCyds8dZGR7qmXkiGJmeeRJMBr7RTDRFgW0pu8b7ruC1ZqgUf7SOoNOOMsu0thuDjkAxKu8E8GEg0C+Xp0GQeQMAXWcQrFDXhmlu9R+nudwgxqqhwbJQKhEpBFWo3HJ1udqxgU65zec0HHwqwRv42I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.196.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JsDv6D5GKQBh/ZEFuFvEDpSvkxAudmlQyN0ydFa93e/RB6zTYgL3LTKHxcs30mfUNjqRP4diEj0TcNt4Q3T1CE9McxnHpF4+roSBKLstJeuhkwuYNxaFRxrvJLyLzm8UZ+M3lfkHniSXqFXOFpDu16yL3dPN5RyKfkmtlEIVNsw9iepnXbi4WFTxiAvLU5/GIKNEmjBGz1ngdgdJ8u+Pblu3c/POzGR0WcRW/jY20w6efUoqJvc0QKxDX/sd1uj99Tzsz4wghEofDjxkK1m27jMB0oPMOE1cyR1ebDpo/FJVjo1aPCTpRXw6bFCd3UeYyeqVcjkov6gt3/1mde8xgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=jfs9NUkTG51XrSDKPqUGfclA/SnvzxH67XuOGYm4LBw=;
- b=xHg4Jn/ebhCim8cJLlDrMVnlkT/hyUTG0Qn2R8IFHRywuh+lY+Zspw0CQaRwxQQPXkdVh7DZkS3sQu3PfDjODeUcA0m81G67ih3JUpNoIGecL3lAQDdAQd5sqjjH9N3bmvJmfzKuIhTKzHbKtTRG8NZ0Zad1jLvJbjSj9FY06SYzt61IaHsQHD7SGbFymtRk2yQpur9cZW1HMatUukqACFBjAX/0DkdobOcdgDq6H7gEpIFpG3igr/MDOFPBrSBnB0IwJ5LydT2QV/8b69kxsUGGz73SHf4ynA9nbeOiWgQjerh/5v7fR39oIsmpkyDHpJC18bfNFTBGSnHCXOiwog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LOVP123MB8526.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:48b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.382.10; Fri, 4 Sep
- 2026 15:13:21 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0360.008; Fri, 4 Sep 2026
- 15:13:20 +0000
-Date: Fri, 4 Sep 2026 11:13:17 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: sashiko-reviews@lists.linux.dev, petr.pavlu@suse.com
-Cc: ojeda@kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v10 2/2] module: Rename module_blacklist to
- module_denylist
-Message-ID: <b6vcua7y6t7gytrcmh7lspkkmhzqkmfhvgqf5mdrjxrlkxobgq@t47as2qufspe>
-References: <20260903185557.183224-1-atomlin@atomlin.com>
- <20260903185557.183224-3-atomlin@atomlin.com>
- <20260903190735.82B051F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260903190735.82B051F000E9@smtp.kernel.org>
-X-ClientProxiedBy: BN0PR07CA0021.namprd07.prod.outlook.com
- (2603:10b6:408:141::16) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:183::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B37A3CF673
+	for <linux-modules@vger.kernel.org>; Fri,  4 Sep 2026 15:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788535559; cv=none; b=NW1QfLUJEtSffSxIJZf02MpcnCKbCsS2DUuLIT/rtbZyVSavmj5dlmUXOSUGAhrLA8Jl64sgVKXbAb6SMbFzRORSqh2iag5/Do4rgaiH16RB4rRcEcEDCpT7BCdcCHRfJT4iFXkDPLicCluZWZmq8RXqU2fCYhjLJGJ/VhSejq8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788535559; c=relaxed/simple;
+	bh=0S/yDNSpy1oapOifaOSGHp+n9FA0u06NrTnF2HapZAc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TF7+4BV+E0I580vgndD+eusUGrDfmQgc5U1WpwzKE8aih3bGucJjX8vPQzuNCpP3aVSHAfwUiMIezLZdno9EMu6yTIRuM2o2SebEabfHaO/D9GeZmasZAa5vA20Dm7lLfneSJGqZxreX+uiFddr+bkkBkZjge9IcZWT7OeutyS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M7wrJr4X; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M7wrJr4X"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-495590dde14so15913345e9.0
+        for <linux-modules@vger.kernel.org>; Fri, 04 Sep 2026 08:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1788535555; x=1789140355; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RS03LLsyhG6wvyFekNOmy/GaO/oQnMp4qgvy/SOaFgQ=;
+        b=M7wrJr4XMts91y7gxaxzIGJVxlwxiawrhF9MPVpw1GCyHruyaj7tSMrMk1ISEg3V86
+         I7po47TOn/Oe35vuzBKbCi8PBze37ugqOT1SX3FdfrpIXiOdFG1W6L1bLec5efoJ8+vf
+         +4oX+q5aoxUtyiu85Ql+bkeCB2r3mOGurdjs6ptrFBR68oSLWQhpOGv0dxbYp+gDS7nS
+         nVuSo3By7iZGDboqD0PrPHk/TnoyKWpAYC62rWYW7btFPdMpuuoK/dfLCwGcegRKr61J
+         UIV1Gxe7w/onel5CdBkGs8hL2bsI/lsPpFS39nwfd/vK0NxCd0Rj+v0qRT1JIyVUNucU
+         UKyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788535555; x=1789140355;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RS03LLsyhG6wvyFekNOmy/GaO/oQnMp4qgvy/SOaFgQ=;
+        b=d0pJ2eXJSSA53xFNpWf1kN7CxsT9VZq4Wsanlewyr+V+MElhnRf4wKKqnd32Q8YZj4
+         rdtYY20xu84cfHroYM/aVqAKMpfd/RPlQrUzkSssPBeiWmWnsO1i8cmFk5i6uGrxxLNY
+         hLIE/RO4GQnfN+gXyAt3D/g6ESag+oJ8C9TRedOAkeIKCorL5lwReCzMljFNnQTvK0Ou
+         aIU+S0rUhib8QV5F6T4VBwn8bikFFyFIbbvM+bkQjCcOfY2GETaf0fog0TNicsgqDHJ8
+         EBRqYzTDqnzPOEL22FkchCAqQHSI56RVjNHO633PsvFulmIiE32v8xfdCcjorfoFyQKr
+         x5zQ==
+X-Gm-Message-State: AFuF++mJDwW2b6y7cZCk+ETCgcr2C4IsiJrhKCQWPz0X9epDULqSVCcI
+	igJXfsWyHqEXZG71bTyMo1x2EaotscGO6W71mppq6etldqulaKewv1qeDmB+G4b0mw0=
+X-Gm-Gg: AYBFou1QPokTjiT3eW0pdox1clgii7l9K/sT2uaFeMqHJIeXhy13nxYTPCgS1XB8utM
+	VNq2Lgpk+T8wedYY9ZPs4MvCPBe5VJK21vQmZdHaydnYkOg0rytpz1A0vNt1hQL85zIHdl+BnRZ
+	KKW/gBnU/UHsKxGcpMX2CVzOn9S46moh7m+s69jTG2fnVDjax0GOBrlET+5fSr+6GyZyGUWaA8H
+	OEWbD0pGFGQPRtD1+L4HpeZFVR3FplD9OX+ocguv/Us4HxaaxWp6nPKSte+fuMkilUtFb++Qvbf
+	ltobHOgUdHvXXTP1UHyROoTfeAbQ2IliBn987X4tdu5FSQ/V6PXH+/W1cJO7RMOueON/JO7blZf
+	Ac0xtSBDqg0fPnxG8x+UVNXuQ7pMZPI6q8ZCMXsxsFNCjHMMZ/S+E7M0ui12l7nRcfV41G68UVc
+	/YM7U/SKVJzOCJ+VmPBtD36BkUqT64M1VQkCoWHFiMnAHm3oHic2fR6o1rIgQaCqiEqkxZCHPuK
+	2JVysgtwdg5l9Nc10ecQFt0
+X-Received: by 2002:a05:600c:860b:b0:49c:ee20:e787 with SMTP id 5b1f17b1804b1-49cf7fe62e9mr129919575e9.1.1788535555177;
+        Fri, 04 Sep 2026 08:25:55 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf5135353sm87945265e9.2.2026.09.04.08.25.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Sep 2026 08:25:54 -0700 (PDT)
+Message-ID: <48658d4c-4920-40ba-afbf-65400dffc863@suse.com>
+Date: Fri, 4 Sep 2026 17:25:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LOVP123MB8526:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f0e4351-10f8-421e-e6f5-08df0a970e49
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|23010399003|10067099003|4143699003|56012099006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	EvxxAseLiXRPp/ozF/5RiIW1MGZVuOCicL4/2wEgj/YxJ96Vz+9No6HgMF8WGwzcLei85evQ9Yzv5I/o1EkvaHi9Rn72Rw7xC460363Upj2QqT86oLL6PTkKkyRhnXVWZDEKuKq/8dIO50NR7WivMHTasW82F7fwCAq93fVkGFn5g51xflN2Q3aLjTWlFNq19/OCoP1JcwkoyT15yqmnCbXy8GPQiQ02P6kA8lZmE7bXDarscl49P5o+2Qu8cq8ml2K7DyzcExd6cYqnk5EF5eEnI1FdV/28KUDAtw7fJZ43GNbdclRL9cyFybJq/NmmDmUf1xSmDb++5gb9F0oub/PpqRPKckKw2nQD47WREeEoTDEgIuO33c3iWWKXVdl99D9uPGNWSWt0fd1I+3utiLqWPeDEZ6WSvQKdaNH6hb807SkqjTPW77pih0Bu1VsbWFb3AwNGZ6Ysv1rJ4q7icP2rRGTPz6aQ6hZWGjQhG5imng3+6I2+gcWDtDQVtGWgL3X+UxMx9ZZHALsV7eZ4i7v2/1b4wdw4xGQ0O+XOUxm7FSwxSm/aXpgBpCjx8HmA1Q0JRT7W+Aoe1BB9HSmdary8oeV2/a8C+WZtK9qT6s6mLXpUsq9DsKCFrvhZNWO/AubVFK62MeTx8nQVf2x74roRoAh6EEFNUpASEIkAiIA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(23010399003)(10067099003)(4143699003)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cDdpa0VRc2NOUkpFVnhEOXN1My9TaHBBeFM3anMwdmlTdzFOcEtyRVBHc3oz?=
- =?utf-8?B?YnhDKy9uK2taMHNGaGxtT3JPOXR3VkR4WWZ1QU45bzk2RndsYkt0OGZxSkNK?=
- =?utf-8?B?Q0FHRW1FY2NNaUp4Ym5QbVNSK0pKaFVFWGNlMUIwU3VUalhpR2ZsUko5K2w2?=
- =?utf-8?B?N0l2ckZvQjMzQTFKeGxrWTltWHRBTU5IL3R1UkdrRFdCNHk3UkF3WnRhZU95?=
- =?utf-8?B?MUpUdk81aGpzdmdGbmJvTjdsNCtjejZUV2Z0eDYwV1JmNGhZZDhnYm9TcWYx?=
- =?utf-8?B?WkR4UUVUNDdycndlYjJJSlNHUDZ3MUZhZzNoVFMvTmx0SitHOTdCOWJDY09Y?=
- =?utf-8?B?bmliRUMzVjlHTVVkUG1uUm14T01SaEpQcDNBWXpLU0xuMkViWVFQdi9EVHBk?=
- =?utf-8?B?b3N4QVNhcWdvdnZkaHdsMmt6WGV0SGx6ZmRNSkJWSis1S3ljRGxBclMvZFdP?=
- =?utf-8?B?SktnWk1rK1VLVmhUd0pJb0gyeCtPNXFJVFpjcGRtM0JCK0ZraDF4dHFZSFR6?=
- =?utf-8?B?YnBRa0Ftb21BMzV6QlJxZWswZVNzbmVSelJucGNKU0ZhUEhXUXhuY3lrSEZw?=
- =?utf-8?B?LzdGSW5jcEtsMkdiUE1ETC9oRHZMMzFEYWc2NnFCcmNTMktPbW5sdndpVlJs?=
- =?utf-8?B?TDFBMkZzYjVYV2pTaW04cVgwd1YrajlsanRBU3RQUkIrcktxYVJXa05UT09r?=
- =?utf-8?B?QzRyK2xsdGMyeWxmVVhJUEo3Q1hJQ0lrVURaRmpFY0ZkZnRsMmswT1Jya1Js?=
- =?utf-8?B?YmlXR3R6RjlleFNCMHlSVldsUWlicEc4Tnp2TWZwakkzWldCY1NrdUN6MWlv?=
- =?utf-8?B?RFEySm9aYm1IMmJ4ZW5Ub2wxdWZjT2VWRDJyNzhJM1p4RnB6Vkt2TUFEYTM5?=
- =?utf-8?B?akVWMXNpQVJHak95Qjk2RHlmbFNqcEV3L0xyUmZIdUpmbnhVeHdQRlYzeXBE?=
- =?utf-8?B?aXdscU5jOGRyU0xMcStlVkNsaHo3UzA1UW9CZWtqMk1VdG9LZTNheFBkYndn?=
- =?utf-8?B?SzZFaE1PVFNCODFnM3JuRVcwRmt2bWNVMThTNjRFTStXeXEwaVd6YUc1TkRL?=
- =?utf-8?B?S0xYd2JRUFdIeGgvNzV2QjFka2h6UUUrVVdEVm4yL1Q4TDVYZjJOTUU1YWN5?=
- =?utf-8?B?dm9oVlVtcXFIbFJQVTVNWExGWGJhU0RFOXBIRC81V2tNNGhyRmQvUjhScmM0?=
- =?utf-8?B?cGhtOHpyTys5elZBNGVwTTVUM0RubGc0alpZakwvc25mc3RudzJwZHpqQlJI?=
- =?utf-8?B?NnoyTFBpSUc3ckhya1VOTGpCZ2tNMHdNckQ3MGJJS28wRFFPdVhINFlDNEZB?=
- =?utf-8?B?KzlVd2tPZENYSmRkVEtuK3daMVZxU3ZHUVl0NjViUlR0eHlXY2JIeXpyL1Fr?=
- =?utf-8?B?UFRXcDhSbmFDNUk3dHRtdUtvWUlSOWtUZThub245OC9ONk9sNTFhTVJkK1Vp?=
- =?utf-8?B?M0ZSOU1xMU9CdytwaXFpVG5RUGVuZVdyWmJRVEl3YzZaVGtqNXpjb2wyVFNN?=
- =?utf-8?B?MWRROWZZZmJMTGw4a0J4dmZRajFGSTZRZ2t0aHRUWHE2NVZ6cGpaQlZYSzJG?=
- =?utf-8?B?blNBS01Na0c4bEJoaDNtQUFmcUl1YkN4cFpLNGRwNjh1Z01UaUs3YmxwZXJ0?=
- =?utf-8?B?V0tyQnJxZUN1aDRGQUROaDZ0L3h2ZVd3b212a1B0RTltNHlzZ0xVTWd4Qm5S?=
- =?utf-8?B?Zlh5WlZJbzMxcFN6UmtVZXRRb096Skg1ZVlhSENsRGUvazRLN2hWVzNhOUVo?=
- =?utf-8?B?T2k2dk1SMHJwWjByNnI2eU9FMTJadGYvREV0M0tyV2o1MWpJLzYvbjRuUXJ4?=
- =?utf-8?B?ejBsVnVlQVNhem5MdkhMZ3VhZy9EWDV4WHVNbzMwazlGU254anI3L2FONkVR?=
- =?utf-8?B?VTYrVlN3cEt0U0dPd1lCWElCamxJQjN0VjZheFZTZ0NDMHE0cEVUR1owc1Bm?=
- =?utf-8?B?MTR1YTBOS1ptcEpad0lRaVQ1eXZJQjgraHBjdnFZVHlVdVJEQkltV3EvK3BW?=
- =?utf-8?B?S1Z4UzNKQTVCMmZvSWRvTldUcnYvTjBaeGsxa01VYkgzRHBSbDc0d3ljT2ty?=
- =?utf-8?B?eGdSWldlV2Q4TnBjTVQ5RzBzUlpBSVVLeFdjRE0vTkFmWjcyZ2trZDlTTWJL?=
- =?utf-8?B?cms2WUZ3ZUtLOFM1OGh4VVZpZ1ZFcWdWamN1NWxRV3NvcWRVelBiSktTd1BE?=
- =?utf-8?B?TXlFOWRGWXR6RlBKVmVOMGExRTM3QXVQbXJub1JRbnpoRXpEdDdOSFM2UkZU?=
- =?utf-8?B?aTdaRkU2OE1tNnhCR2xJaGFWejVVTlBGSU1YckhTY0FaWmJhZTJ2QzRzcDRM?=
- =?utf-8?B?Qi8zWnJnMUQ5U3orKzIwK0k4Y0tjY0srWkh3KzFuQW5kaGw2V3Nxdz09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f0e4351-10f8-421e-e6f5-08df0a970e49
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2026 15:13:20.7497
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VCKXisM6ATk1I1hPylbr99eNVOyuQWw9cJG6OcgyYDJKCf/yx7ppZx/ChOWFaPF1z+hGw253A2WkKAQLYubw8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LOVP123MB8526
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 2/4] module: introduce SH_ENTSIZE_STANDALONE for
+ separately allocated sections
+To: Hao Ge <hao.ge@linux.dev>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-modules@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Sashiko <sashiko-bot@kernel.org>
+References: <20260902081802.146145-1-hao.ge@linux.dev>
+ <20260902081802.146145-3-hao.ge@linux.dev>
+ <20260902083338.706451F000E9@smtp.kernel.org>
+ <cf829450-497f-4456-b229-3387fa24b177@linux.dev>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <cf829450-497f-4456-b229-3387fa24b177@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 03, 2026 at 07:07:35PM +0000, sashiko-bot@kernel.org wrote:
-> commit 2df01653b8cde06423a15fc161d3df5e8eddbdba
-> Author: Aaron Tomlin <atomlin@atomlin.com>
+On 9/3/26 8:00 AM, Hao Ge wrote:
+> Hi Petr and Suren
 > 
-> module: Rename module_blacklist to module_denylist
+> On 2026/9/2 16:33, sashiko-bot@kernel.org wrote:
+>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+>> - [Medium] The `.data..percpu` section is incorrectly exported in sysfs with a dangling pointer to a freed temporary buffer.
+>> --
+>>
+>> commit 5082dc654c1b8850af405eef473b249c0d936de9
+>> Author: Hao Ge <hao.ge@linux.dev>
+>>
+>> module: introduce SH_ENTSIZE_STANDALONE for separately allocated sections
+>>
+>> This commit introduces a new marker, SH_ENTSIZE_STANDALONE, to indicate
+>> sections with a separate allocation. Instead of clearing the SHF_ALLOC
+>> flag, it utilizes sh_entsize so that sections with separate allocations
+>> like the percpu section can be correctly skipped during layout.
+>>
+>> Link: https://lore.kernel.org/all/499bb60c-c6e3-43a3-bd92-95a0567ece5e@suse.com/
+>>
+>>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>>> index d0e1e0bd2ad06..b114b815187a9 100644
+>>> --- a/kernel/module/main.c
+>>> +++ b/kernel/module/main.c
+>> [ ... ]
+>>> @@ -2822,7 +2810,8 @@ static int move_module(struct module *mod, struct load_info *info)
+>>>  		Elf_Shdr *shdr = &info->sechdrs[i];
+>>>  		const char *sname;
+>>>  
+>>> -		if (!(shdr->sh_flags & SHF_ALLOC))
+>>> +		if (!(shdr->sh_flags & SHF_ALLOC)
+>>> +		    || shdr->sh_entsize == SH_ENTSIZE_STANDALONE)
+>>>  			continue;
+>>>  
+>>>  		sname = info->secstrings + shdr->sh_name;
+>> [ ... ]
+>>> @@ -2967,8 +2957,13 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+>>>  	if (err < 0)
+>>>  		return ERR_PTR(err);
+>>>  
+>>> +	/* Repurpose sh_entsize to track where each section is allocated. */
+>>> +	for (i = 0; i < info->hdr->e_shnum; i++)
+>>> +		info->sechdrs[i].sh_entsize = ~0UL;
+>>> +
+>>>  	/* We will do a special allocation for per-cpu sections later. */
+>>> -	info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
+>>> +	if (info->index.pcpu)
+>>> +		info->sechdrs[info->index.pcpu].sh_entsize = SH_ENTSIZE_STANDALONE;
+>>>  
+>>>  	/*
+>>>  	 * Mark relevant sections as SHF_RO_AFTER_INIT so layout_sections() can
+>>
+>> [Severity: Medium]
+>> Because SHF_ALLOC is no longer cleared here, does this cause the
+>> .data..percpu section to be incorrectly exported via sysfs?
+>>
+>> With SHF_ALLOC remaining intact, sect_empty() in kernel/module/sysfs.c now
+>> returns false for the percpu section, causing it to be processed instead of
+>> skipped.
+>>
+>> Additionally, because move_module() explicitly skips sections marked with
+>> SH_ENTSIZE_STANDALONE, the sh_addr is never updated to the final allocated
+>> memory.
+>>
+>> This means when add_sect_attrs() exports the section:
+>>
+>> kernel/module/sysfs.c:add_sect_attrs() {
+>>     ...
+>> 	if (sect_empty(sec))
+>> 		continue;
+>>     ...
+>> 	sattr->private = (void *)sec->sh_addr;
+>>     ...
+>> }
+>>
+>> Will sattr->private end up storing an unmodified sh_addr pointing to the
+>> freed temporary load_info buffer (info->hdr)?
+>>
+>> This appears to leak a stale vmalloc pointer address to userspace when
+>> reading the sysfs file for the section.
+>>
+> Yes, Sashiko is correct. The fix is just one line after percpu_modcopy():
 > 
-> This patch renames the module_blacklist boot parameter and internal
-> variables to module_denylist, keeping the old parameter as a deprecated
-> legacy alias. Internal symbols and log messages are also updated to
-> reflect the new nomenclature.
-> 
-> > diff --git a/init/main.c b/init/main.c
-> > --- a/init/main.c
-> > +++ b/init/main.c
-> > @@ -1347,17 +1347,17 @@ static inline void do_trace_initcall_level(const char *level)
-> [ ... ]
-> > -bool __init_or_module module_is_blacklisted(const char *module_name)
-> > +bool __init_or_module module_is_denylisted(const char *module_name)
-> >  {
-> >  	const char *p;
-> >  	size_t len;
-> >  
-> > -	if (!module_blacklist)
-> > +	if (!module_denylist)
-> >  		return false;
-> >  
-> > -	for (p = module_blacklist; *p; p += len) {
-> > +	for (p = module_denylist; *p; p += len) {
-> >  		len = strcspn(p, ",");
-> >  		if (strlen(module_name) == len && !memcmp(module_name, p, len))
-> >  			return true;
-> 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but it appears the renamed
-> module_is_denylisted() function retains a pre-existing logic issue.
-> 
-> Does the exact memory comparison here break denylisting for module names
-> containing hyphens?
-> 
-> Since the kernel build system converts module names to use underscores
-> internally (e.g. "my_module"), if an administrator passes a module name
-> with a hyphen on the command line (like "module_denylist=my-module"),
-> the strict memcmp() will fail to match the hyphen to the underscore.
-> 
-> This would allow an explicitly denylisted module to load, which could
-> defeat the administrative mitigation for buggy or malicious modules.
-> Is there a string comparison utility we should use here instead to treat
-> hyphens and underscores interchangeably?
+> info->sechdrs[info->index.pcpu].sh_addr = (unsigned long)mod_percpu(mod); 
 
-Since the build system converts module names to underscores internally,
-passing hyphenated names on the command line
-(e.g., "module_blacklist=my-module") currently fails to match due to the
-strict memcmp(), allowing the module to load.
+mod_percpu() (mod->percpu) isn't really the execution address of the
+.data..percpu section. That section in the ELF file is only a template
+to initialize the individual per-CPU variable areas.
 
-The kernel already provides parameqn() in <linux/moduleparam.h>, which
-treats '-' and '_' interchangeably. Using parameqn(module_name, p, len)
-resolves this directly.
+I think the two options are:
 
-Since this issue dates back to commit be7de5f91fdc ("modules: Add kernel
-parameter to blacklist modules") in Linux 4.8, I will split this out into a
-separate prerequisite patch with a Fixes: tag and CC stable, placing it as
-patch 1/3 in the series.
+1) Do not export the section under /sys/module/*/sections/.
+2) Treat the boot CPU area as the canonical location of
+   .data..percpu. In other words, do:
+   info->sechdrs[info->index.pcpu].sh_addr = (unsigned long)per_cpu_ptr(mod->percpu, get_boot_cpu_id());
 
-Kind regards,
+The /sys/module/*/sections/ interface is intended for debugging. From
+that perspective, exposing the .data..percpu address for the boot CPU
+may be useful and seems fairly reasonable to me. On the other hand, one
+could argue that this can cause confusion, since a loaded module has
+multiple .data..percpu instances.
+
+I don't see a strong argument for either option, but I would lean toward
+the second.
+
+> But .data..percpu will show up in /sys/module/*/sections/, it was never
+> exported before. Stable will get this too via backport, since later fixes
+> depend on it.
+
+I think exposing .data..percpu under /sys/module/*/sections/ is a minor
+change and is fine for stable. As mentioned, /sys/module/*/sections/ is
+a debugging interface. Additionally, most uses of per-CPU variables are
+in the core kernel, with only a handful modules defining per-CPU data.
+On my system, 30 modules out of 5383 contain a .data..percpu section.
+
 -- 
-Aaron Tomlin
+Thanks,
+Petr
