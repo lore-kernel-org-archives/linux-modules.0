@@ -1,67 +1,68 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B37A3CF673
-	for <linux-modules@vger.kernel.org>; Fri,  4 Sep 2026 15:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4204EC668
+	for <linux-modules@vger.kernel.org>; Fri,  4 Sep 2026 15:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788535559; cv=none; b=NW1QfLUJEtSffSxIJZf02MpcnCKbCsS2DUuLIT/rtbZyVSavmj5dlmUXOSUGAhrLA8Jl64sgVKXbAb6SMbFzRORSqh2iag5/Do4rgaiH16RB4rRcEcEDCpT7BCdcCHRfJT4iFXkDPLicCluZWZmq8RXqU2fCYhjLJGJ/VhSejq8=
+	t=1788536210; cv=none; b=AvW0TnOc08oTKtWpLGGUr+QXXEoMokvISSytGGI2xhqYXa0zebqXdpZILr6uo51QGMzEKVaEGgOpVwr8CHF+Vn1uBA3mEv1+muZhYiQF1q5a2AeezlVv5kiE9k+3EoElmONoflXg+1DcK75Yv5l4JEsWYg0NT8NXwwlvyZW2Hak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788535559; c=relaxed/simple;
-	bh=0S/yDNSpy1oapOifaOSGHp+n9FA0u06NrTnF2HapZAc=;
+	s=arc-20240116; t=1788536210; c=relaxed/simple;
+	bh=aaZIP2ylDVjQUtzurgdQ9wq0pNSQxBzXiVQVyeKHPJE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TF7+4BV+E0I580vgndD+eusUGrDfmQgc5U1WpwzKE8aih3bGucJjX8vPQzuNCpP3aVSHAfwUiMIezLZdno9EMu6yTIRuM2o2SebEabfHaO/D9GeZmasZAa5vA20Dm7lLfneSJGqZxreX+uiFddr+bkkBkZjge9IcZWT7OeutyS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M7wrJr4X; arc=none smtp.client-ip=209.85.128.52
+	 In-Reply-To:Content-Type; b=Xv3SLzogo9UozGOnVMYNDN7VDHIH1l15a8rVO+PX+U3AefvQd8ocgLn5vqp/UuUv9ztL1UUH5Ia8jV4GRksNpA2J+NmNTUEYWAfd0naN5eAKziOM48b7g0MvuaKFxNPXQnocR51lmyiwl0FbvZvRdd7vQVpwwH1PVaEJgrMmMCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CqyFV6Xe; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M7wrJr4X"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-495590dde14so15913345e9.0
-        for <linux-modules@vger.kernel.org>; Fri, 04 Sep 2026 08:25:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CqyFV6Xe"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48441fa5c37so783301f8f.3
+        for <linux-modules@vger.kernel.org>; Fri, 04 Sep 2026 08:36:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1788535555; x=1789140355; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1788536206; x=1789141006; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=RS03LLsyhG6wvyFekNOmy/GaO/oQnMp4qgvy/SOaFgQ=;
-        b=M7wrJr4XMts91y7gxaxzIGJVxlwxiawrhF9MPVpw1GCyHruyaj7tSMrMk1ISEg3V86
-         I7po47TOn/Oe35vuzBKbCi8PBze37ugqOT1SX3FdfrpIXiOdFG1W6L1bLec5efoJ8+vf
-         +4oX+q5aoxUtyiu85Ql+bkeCB2r3mOGurdjs6ptrFBR68oSLWQhpOGv0dxbYp+gDS7nS
-         nVuSo3By7iZGDboqD0PrPHk/TnoyKWpAYC62rWYW7btFPdMpuuoK/dfLCwGcegRKr61J
-         UIV1Gxe7w/onel5CdBkGs8hL2bsI/lsPpFS39nwfd/vK0NxCd0Rj+v0qRT1JIyVUNucU
-         UKyA==
+        bh=LsB/pfsHs0wy5wl2WAyEdIegLrat6VbBoQVukEgDfgo=;
+        b=CqyFV6XeE2iPSCzk6+O/m23NWilPd2Smy+mM2MKJ5ZJWNCGy54GcaJto9wt+h9Mg8n
+         zYoTDai2HA42UhptJ+knw9JM5TZXUkRdv8eyad9XFN9zBdYjEsMmrdO51edXk+UKSVUx
+         hMDtEu2ArAwarUPEH3Ve3+hXGXb6XB1vZsb6/cveP6PAMaybbCtMVLK3FZSkbhiEoTVw
+         dlnOhQ7asxq3bNB7o2Z6PmCdS7iHz38dHteLsP0sXlph/NvJq18khoP6ATmpl6NuvSNG
+         +M1GPP1///TqT5k1boTtZGpiXmg3t7iZaagIQ+EmYH8le0CiFCwetKAAfg+o7CKA65x1
+         keug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788535555; x=1789140355;
+        d=1e100.net; s=20251104; t=1788536206; x=1789141006;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=RS03LLsyhG6wvyFekNOmy/GaO/oQnMp4qgvy/SOaFgQ=;
-        b=d0pJ2eXJSSA53xFNpWf1kN7CxsT9VZq4Wsanlewyr+V+MElhnRf4wKKqnd32Q8YZj4
-         rdtYY20xu84cfHroYM/aVqAKMpfd/RPlQrUzkSssPBeiWmWnsO1i8cmFk5i6uGrxxLNY
-         hLIE/RO4GQnfN+gXyAt3D/g6ESag+oJ8C9TRedOAkeIKCorL5lwReCzMljFNnQTvK0Ou
-         aIU+S0rUhib8QV5F6T4VBwn8bikFFyFIbbvM+bkQjCcOfY2GETaf0fog0TNicsgqDHJ8
-         EBRqYzTDqnzPOEL22FkchCAqQHSI56RVjNHO633PsvFulmIiE32v8xfdCcjorfoFyQKr
-         x5zQ==
-X-Gm-Message-State: AFuF++mJDwW2b6y7cZCk+ETCgcr2C4IsiJrhKCQWPz0X9epDULqSVCcI
-	igJXfsWyHqEXZG71bTyMo1x2EaotscGO6W71mppq6etldqulaKewv1qeDmB+G4b0mw0=
-X-Gm-Gg: AYBFou1QPokTjiT3eW0pdox1clgii7l9K/sT2uaFeMqHJIeXhy13nxYTPCgS1XB8utM
-	VNq2Lgpk+T8wedYY9ZPs4MvCPBe5VJK21vQmZdHaydnYkOg0rytpz1A0vNt1hQL85zIHdl+BnRZ
-	KKW/gBnU/UHsKxGcpMX2CVzOn9S46moh7m+s69jTG2fnVDjax0GOBrlET+5fSr+6GyZyGUWaA8H
-	OEWbD0pGFGQPRtD1+L4HpeZFVR3FplD9OX+ocguv/Us4HxaaxWp6nPKSte+fuMkilUtFb++Qvbf
-	ltobHOgUdHvXXTP1UHyROoTfeAbQ2IliBn987X4tdu5FSQ/V6PXH+/W1cJO7RMOueON/JO7blZf
-	Ac0xtSBDqg0fPnxG8x+UVNXuQ7pMZPI6q8ZCMXsxsFNCjHMMZ/S+E7M0ui12l7nRcfV41G68UVc
-	/YM7U/SKVJzOCJ+VmPBtD36BkUqT64M1VQkCoWHFiMnAHm3oHic2fR6o1rIgQaCqiEqkxZCHPuK
-	2JVysgtwdg5l9Nc10ecQFt0
-X-Received: by 2002:a05:600c:860b:b0:49c:ee20:e787 with SMTP id 5b1f17b1804b1-49cf7fe62e9mr129919575e9.1.1788535555177;
-        Fri, 04 Sep 2026 08:25:55 -0700 (PDT)
+        bh=LsB/pfsHs0wy5wl2WAyEdIegLrat6VbBoQVukEgDfgo=;
+        b=WjDaOR5srHNUamolppkN4+sfg2eB+Q3qoFu7Yfxzc7RYVuV8CQI1C+pBqPLQ3YsxGq
+         mR/bN/rWcfeUB2KTZefKaSLy/hgYb4aYCOU5jFXL4M8lEjdIg5VJYZ/DsQd0R7lnI/HV
+         a/QurFR7oqFSx+gol3cbXEa3WO19if2jeOpaceFPDeRs/uYt2I/iB7XO/sIz86ThTCtQ
+         kuf1LoNbz1QY88kTKDzSSmePVQlgicCwgREDHRn+RSTH3j59fOVC7LV0LpeRKRCe/xtb
+         wJga4wz1NOwbPS79hftPxdpvqYJz2Ai+404jbuM3a8egiHNjLkRs14sOza/3by9S/RXX
+         N09A==
+X-Forwarded-Encrypted: i=1; AKwUvByruJB8gn/ttfHKORjXI9Erb4dZCZ9xrTX29dRFwqXvXkszfIstRru9camU9+Asiu1ycVv58I7i9tYet6sr@vger.kernel.org
+X-Gm-Message-State: AFuF++kLS4KElfpqioXK4mBuMdkcGDKcsKrM1WmQOUgmlttBOiOrt7N6
+	8hwo/LJzbtiCrlFK4C+dSj/eOPwrUaYL+Qu+UaooQc19ECl0RIQzfniJWbG+WvxEV0M=
+X-Gm-Gg: AYBFou35u5Bt2nDpzc0PNfIq50ruV9C6xmhFsXsoYts0NDofmqhMVsd5H7X0ti/mkSy
+	vTcR5bQ8pFzJlpqqAVJKfm6EzpCjh0qP9iCdj1TVHXjrL7qXcNj0QwkMs6dzCpkv4ntfqrrevng
+	H/JlLeJehXKtn0jeNDeLiAeCADbI33oZE5GTawUJoEJ18NMaGL3nDdbf6nH+gpTpWjmziypqJlm
+	9pmyDzimR1XkbhYLPxncfHONa98uP94HDbyGrsgjBBzwFJp2lwzIYTWbcZgW/paxMluKbhl6zRE
+	fG0RHKWQg2Lmri6ybgdvftUR7jBqcIZm6DOb3NGQ3PwSn/jfZrxLmhvKMfkwrfG8IAtI/7NDhaP
+	7d7V9eG1DFUExwl/1XGcmGEIVGjPagCYGscxwEdlCrEr0rhfD2zUA77d30y6DEwjKOnr1/fApld
+	u+70MvNb+OBjKOqTYwDZ1zWqirix6Zfn7bY4VuO1VChZE1zmVjZWxns1lAWcCewCKffOiwLXh13
+	4kh/HC7JP2hMwntKfCoxgJjjz9EGIUCz2rq4A==
+X-Received: by 2002:a05:6000:1863:b0:482:e6b5:61c with SMTP id ffacd0b85a97d-48587098310mr9747937f8f.8.1788536206395;
+        Fri, 04 Sep 2026 08:36:46 -0700 (PDT)
 Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf5135353sm87945265e9.2.2026.09.04.08.25.54
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883c6ba4sm7833177f8f.25.2026.09.04.08.36.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 08:25:54 -0700 (PDT)
-Message-ID: <48658d4c-4920-40ba-afbf-65400dffc863@suse.com>
-Date: Fri, 4 Sep 2026 17:25:54 +0200
+        Fri, 04 Sep 2026 08:36:46 -0700 (PDT)
+Message-ID: <33487133-b587-42f8-9716-b0bbe2f1511b@suse.com>
+Date: Fri, 4 Sep 2026 17:36:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,135 +70,68 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/4] module: introduce SH_ENTSIZE_STANDALONE for
- separately allocated sections
-To: Hao Ge <hao.ge@linux.dev>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-modules@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Sashiko <sashiko-bot@kernel.org>
-References: <20260902081802.146145-1-hao.ge@linux.dev>
- <20260902081802.146145-3-hao.ge@linux.dev>
- <20260902083338.706451F000E9@smtp.kernel.org>
- <cf829450-497f-4456-b229-3387fa24b177@linux.dev>
+Subject: Re: [PATCH v3 1/2] module: pull out add_taint_module() to be public
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh <nogikh@google.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+ driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
+ Johan Hovold <johan@kernel.org>
+References: <20260904-bind_taint-v3-0-30025465f38a@linuxfoundation.org>
+ <20260904-bind_taint-v3-1-30025465f38a@linuxfoundation.org>
+ <a79a6a06-cc48-4036-882d-95e9b4cc01cf@suse.com>
+ <2026090432-outlying-glitch-9295@gregkh>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <cf829450-497f-4456-b229-3387fa24b177@linux.dev>
+In-Reply-To: <2026090432-outlying-glitch-9295@gregkh>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/3/26 8:00 AM, Hao Ge wrote:
-> Hi Petr and Suren
-> 
-> On 2026/9/2 16:33, sashiko-bot@kernel.org wrote:
->> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->> - [Medium] The `.data..percpu` section is incorrectly exported in sysfs with a dangling pointer to a freed temporary buffer.
->> --
->>
->> commit 5082dc654c1b8850af405eef473b249c0d936de9
->> Author: Hao Ge <hao.ge@linux.dev>
->>
->> module: introduce SH_ENTSIZE_STANDALONE for separately allocated sections
->>
->> This commit introduces a new marker, SH_ENTSIZE_STANDALONE, to indicate
->> sections with a separate allocation. Instead of clearing the SHF_ALLOC
->> flag, it utilizes sh_entsize so that sections with separate allocations
->> like the percpu section can be correctly skipped during layout.
->>
->> Link: https://lore.kernel.org/all/499bb60c-c6e3-43a3-bd92-95a0567ece5e@suse.com/
->>
+On 9/4/26 2:19 PM, Greg Kroah-Hartman wrote:
+> On Fri, Sep 04, 2026 at 11:25:01AM +0200, Petr Pavlu wrote:
+>> On 9/4/26 7:10 AM, Greg Kroah-Hartman wrote:
 >>> diff --git a/kernel/module/main.c b/kernel/module/main.c
->>> index d0e1e0bd2ad06..b114b815187a9 100644
+>>> index d0e1e0bd2ad0..444d990c9983 100644
 >>> --- a/kernel/module/main.c
 >>> +++ b/kernel/module/main.c
->> [ ... ]
->>> @@ -2822,7 +2810,8 @@ static int move_module(struct module *mod, struct load_info *info)
->>>  		Elf_Shdr *shdr = &info->sechdrs[i];
->>>  		const char *sname;
+>>> @@ -191,11 +191,21 @@ static inline int strong_try_module_get(struct module *mod)
+>>>  		return -ENOENT;
+>>>  }
 >>>  
->>> -		if (!(shdr->sh_flags & SHF_ALLOC))
->>> +		if (!(shdr->sh_flags & SHF_ALLOC)
->>> +		    || shdr->sh_entsize == SH_ENTSIZE_STANDALONE)
->>>  			continue;
->>>  
->>>  		sname = info->secstrings + shdr->sh_name;
->> [ ... ]
->>> @@ -2967,8 +2957,13 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
->>>  	if (err < 0)
->>>  		return ERR_PTR(err);
->>>  
->>> +	/* Repurpose sh_entsize to track where each section is allocated. */
->>> +	for (i = 0; i < info->hdr->e_shnum; i++)
->>> +		info->sechdrs[i].sh_entsize = ~0UL;
->>> +
->>>  	/* We will do a special allocation for per-cpu sections later. */
->>> -	info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
->>> +	if (info->index.pcpu)
->>> +		info->sechdrs[info->index.pcpu].sh_entsize = SH_ENTSIZE_STANDALONE;
->>>  
->>>  	/*
->>>  	 * Mark relevant sections as SHF_RO_AFTER_INIT so layout_sections() can
+>>> -static inline void add_taint_module(struct module *mod, unsigned flag,
+>>> -				    enum lockdep_ok lockdep_ok)
+>>> +/**
+>>> + * add_taint_module: add a taint flag if not already set for a specific module
+>>> + * @mod: pointer to the module that caused the problem
+>>> + * @flag: one of the TAINT_* constants.
+>>> + * @lockdep_ok: whether lock debugging is still OK.
+>>> + *
+>>> + * If something bad has gone wrong, you'll want @lockdebug_ok = false, but for
+>>> + * some noteworthy-but-not-corrupting cases, it can be set to true.
 >>
->> [Severity: Medium]
->> Because SHF_ALLOC is no longer cleared here, does this cause the
->> .data..percpu section to be incorrectly exported via sysfs?
+>> Nit: The final paragraph is mostly copied from the description of
+>> add_taint() but I don't think it is quite right. The parameter name
+>> should be lockdep_ok, not lockdebug_ok and the values are
+>> LOCKDEP_STILL_OK / LOCKDEP_NOW_UNRELIABLE, not true / false.
 >>
->> With SHF_ALLOC remaining intact, sect_empty() in kernel/module/sysfs.c now
->> returns false for the percpu section, causing it to be processed instead of
->> skipped.
+>> I suggest updating this part for both add_taint() and add_taint_module()
+>> to something like:
 >>
->> Additionally, because move_module() explicitly skips sections marked with
->> SH_ENTSIZE_STANDALONE, the sh_addr is never updated to the final allocated
->> memory.
->>
->> This means when add_sect_attrs() exports the section:
->>
->> kernel/module/sysfs.c:add_sect_attrs() {
->>     ...
->> 	if (sect_empty(sec))
->> 		continue;
->>     ...
->> 	sattr->private = (void *)sec->sh_addr;
->>     ...
->> }
->>
->> Will sattr->private end up storing an unmodified sh_addr pointing to the
->> freed temporary load_info buffer (info->hdr)?
->>
->> This appears to leak a stale vmalloc pointer address to userspace when
->> reading the sysfs file for the section.
->>
-> Yes, Sashiko is correct. The fix is just one line after percpu_modcopy():
+>>  * Use @lockdep_ok = LOCKDEP_NOW_UNRELIABLE if something serious has gone wrong.
+>>  * For noteworthy but non-corrupting cases, use LOCKDEP_STILL_OK instead.
 > 
-> info->sechdrs[info->index.pcpu].sh_addr = (unsigned long)mod_percpu(mod); 
+> How about I add another patch to the series that fixes up the
+> documentation for both functions?  They both should be fixed up and I
+> might as well get them in sync properly.
 
-mod_percpu() (mod->percpu) isn't really the execution address of the
-.data..percpu section. That section in the ELF file is only a template
-to initialize the individual per-CPU variable areas.
-
-I think the two options are:
-
-1) Do not export the section under /sys/module/*/sections/.
-2) Treat the boot CPU area as the canonical location of
-   .data..percpu. In other words, do:
-   info->sechdrs[info->index.pcpu].sh_addr = (unsigned long)per_cpu_ptr(mod->percpu, get_boot_cpu_id());
-
-The /sys/module/*/sections/ interface is intended for debugging. From
-that perspective, exposing the .data..percpu address for the boot CPU
-may be useful and seems fairly reasonable to me. On the other hand, one
-could argue that this can cause confusion, since a loaded module has
-multiple .data..percpu instances.
-
-I don't see a strong argument for either option, but I would lean toward
-the second.
-
-> But .data..percpu will show up in /sys/module/*/sections/, it was never
-> exported before. Stable will get this too via backport, since later fixes
-> depend on it.
-
-I think exposing .data..percpu under /sys/module/*/sections/ is a minor
-change and is fine for stable. As mentioned, /sys/module/*/sections/ is
-a debugging interface. Additionally, most uses of per-CPU variables are
-in the core kernel, with only a handful modules defining per-CPU data.
-On my system, 30 modules out of 5383 contain a .data..percpu section.
+Makes sense to me.
 
 -- 
 Thanks,
