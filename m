@@ -1,161 +1,156 @@
-Received: from out28-77.mail.aliyun.com (out28-77.mail.aliyun.com [115.124.28.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7672434E21;
-	Sat,  5 Sep 2026 11:08:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0B43033CB
+	for <linux-modules@vger.kernel.org>; Sat,  5 Sep 2026 11:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788606508; cv=none; b=H7DvVR6hYf29xrRTIvbV9Fx26ICAP6XVLLioYTtMt/2NrqnmOz3o7qHcl6TVmtIkV9jUzs5AKT0YLw+puv+1jtfzme4FcWiQBxL05Su6x0HdI0/a5ch8Lop+/6/e4e4QxzyIonpNlVm349Quu47qdlAZ8lq2py0wL55yvxL5mJ4=
+	t=1788607163; cv=none; b=h7abnu4IhUVQdzfL+RfS+2zVdEHK+Vr9wSn4K04MD0pRD0wY/LRt+ZNJHZ3VbVTdt0Z4IbQjcvUbZmc6xksKGnaRnvkBN8gmwka0CpMa88+uFd6qprmwt9FuqInDqy7nRLfbJkv/TBbVPXATXDAfGxoXRDarvOSbHn7mDqiRWZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788606508; c=relaxed/simple;
-	bh=qVX/kHhQxbRS06bauUjWPo2+Y5pvhFS5SSCI9+p6kaY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TAuczZu2XyZYLEOWqHv72tc2/jzQ28ouR4P35UilX+FGH7oVs+8tmW8CVeOeJoitz3Lt2NOVzUSydk3No56g+U/v8vyW28K39BIlvGVCBnn3AEUCtf0FICvUkbLurvW1m1M1BAiwNEHrfw5utS+2WBMwUtVsgqal+GCdSEA/DQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xiaopeng.com; spf=pass smtp.mailfrom=xiaopeng.com; dkim=pass (1024-bit key) header.d=xiaopeng.com header.i=@xiaopeng.com header.b=r6etbjbJ; arc=none smtp.client-ip=115.124.28.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xiaopeng.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaopeng.com
+	s=arc-20240116; t=1788607163; c=relaxed/simple;
+	bh=0nFv6v4VDEUW8F6h8B8cMmcf6j+G03P/WmkCVXg7bsk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=cC+jISaQUg3tbfNC2aMF8IWsjySmf4sj18bZOBTSdV//Es6uff2ZjkdyMFxvlK1oP4Mtcbvs3VOHbIttKU5dxuJS0xLkV4YY1WJG3h8xQHX6EYIUVTIjbHHxUs/1D8mOXQE+shdMuq6sJ7HTczXDvKojzeRwgfyCHSPC2tsYNnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fPC3s8RY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xiaopeng.com header.i=@xiaopeng.com header.b="r6etbjbJ"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xiaopeng.com; s=default;
-	t=1788606494; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=YilmYO5G+M7tedW7DLjoBBbCENZkZk8Z5GGZz+7RmVE=;
-	b=r6etbjbJ1SAGJU5K3jwMDLcCA0xh0mpZgfaMFUVBNHz/0fHzA8HZaaWcwFgGvKkZhCN5Mhrbbti92f6T3kJm25/dMZXqxYle+pOCSfl0dzgXINeKdyk0qSDmmSX5gJgplimOG5mmr64XL1nTtbRKBym3IKFBmjQm1r8PgTVCZXI=
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07436459|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00844834-0.00229274-0.989259;FP=7057237632770475591|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037031241;MF=liuc63@xiaopeng.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.j6IKN8r_1788606493;
-Received: from localhost(mailfrom:liuc63@xiaopeng.com fp:SMTPD_---.j6IKN8r_1788606493 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Sat, 05 Sep 2026 19:08:14 +0800
-From: liuc63 <liuc63@xiaopeng.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Liu Chao <liuc63@xiaopeng.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] module: validate sh_name for SHT_NULL sections
-Date: Sat,  5 Sep 2026 19:08:13 +0800
-Message-ID: <20260905110813.150411-1-liuc63@xiaopeng.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fPC3s8RY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319941F00A3E;
+	Sat,  5 Sep 2026 11:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788607161;
+	bh=G7K3l0MI73hmHPnTiWpNsBKbDtex0kvzSZ+I8aRSEro=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fPC3s8RYNrewKmhnj7QUGLIaGyApaKx3nqlzQFNhz3OUN7p1jvE6HyZumz0sjm9+V
+	 rxf3MEOD21LsHWXeLTercys5W2hmPjrG4RuUQ2vedT4caE9+vJf2+9SODSqJ+GKOmm
+	 css1U4Elhe82ZZOCsMUWb/vninvP+zrNTqS907WmuApbubD/Z1T3dGXYt4aQ9AJysY
+	 yJa2fq4B/+HYgkjLKBQVpfD3PqneL5aogi5SZcXWUwDEoiebTEWnBmLr4e0ch2BHOf
+	 Z3FHL+KNmFGvYcR7XjaPVsMOZIlMcW2khJRQ9PzrgxWrdf56QveMQD3FqNkjMsSIp5
+	 9U/zTreKPitHQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] module: validate sh_name for SHT_NULL sections
+Reply-To: sashiko-reviews@lists.linux.dev
+To: liuc63 <liuc63@xiaopeng.com>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <20260905110813.150411-1-liuc63@xiaopeng.com>
+References: <20260905110813.150411-1-liuc63@xiaopeng.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 05 Sep 2026 11:19:20 +0000
+Message-Id: <20260905111921.319941F00A3E@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Liu Chao <liuc63@xiaopeng.com>
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-elf_validity_cache_secstrings() checks that every section name offset is
-inside the section name table, but skips headers of type SHT_NULL, since
-ELF leaves their field values undefined.
+New issues:
+- [Medium] The patch strictly enforces sh_name boundaries on SHT_NULL secti=
+ons, violating the ELF specification and risking module load failures for v=
+alid files.
 
-However, the section lookup helpers do not check sh_type. This is
-find_any_unique_sec(), which load_module() uses to locate ".modinfo":
+Pre-existing issues:
+- [Critical] The patch leaves unvalidated sh_offset and sh_size fields of S=
+HT_NULL and SHT_NOBITS sections vulnerable, allowing out-of-bounds reads an=
+d memory corruption.
+- [High] Consumers like find_any_sec, find_any_unique_sec, and module_enfor=
+ce_rwx_sections still process SHT_NULL sections, which can cause false posi=
+tives and crashes if undefined fields contain in-bounds garbage.
+--
 
-	for (i = 1; i < info->hdr->e_shnum; i++) {
-		if (strcmp(info->secstrings + info->sechdrs[i].sh_name,
-			   name) == 0) {
+commit 15965760da3d985f09b447439735945868c9d133
+Author: Liu Chao <liuc63@xiaopeng.com>
+Subject: module: validate sh_name for SHT_NULL sections
 
-find_any_sec() and module_enforce_rwx_sections() read sh_name the same
-way, the latter from index 0. find_sec() is only shielded by its
-SHF_ALLOC test, which a crafted module can satisfy.
+This commit removes the bypass for SHT_NULL sections when checking
+section name boundaries. It attempts to prevent out-of-bounds reads
+during section name lookups by enforcing that all sections have valid
+sh_name offsets.
 
-ELF also permits SHT_NULL entries above index 0. A module that carries
-one with a large sh_name passes validation and then reads out of bounds:
+Link: https://lore.kernel.org/linux-modules/20260708013301.C4D4A1F000E9@smt=
+p.kernel.org/
 
-  BUG: unable to handle page fault for address: ffffc9004052f988
-  Oops: 0000 [#1] SMP KASAN PTI
-  CPU: 0 UID: 0 PID: 261 Comm: insmod Not tainted 6.18.0-rc7 #2
-  RIP: 0010:strcmp+0xc/0x40
-  Call Trace:
-   ? find_any_unique_sec+0x89/0xf0
-   load_module+0x516/0x3d30
-   init_module_from_file+0xf5/0x180
-   __x64_sys_finit_module+0x91/0x100
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index d0e1e0bd2ad06..7d5943cd65432 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2060,9 +2060,6 @@ static int elf_validity_cache_secstrings(struct loa=
+d_info *info)
+> =20
+>  	for (i =3D 0; i < info->hdr->e_shnum; i++) {
+>  		shdr =3D &info->sechdrs[i];
+> -		/* SHT_NULL means sh_name has an undefined value */
+> -		if (shdr->sh_type =3D=3D SHT_NULL)
+> -			continue;
 
-The read happens in elf_validity_cache_copy(), before the blacklist check
-in early_mod_check().
+[Severity: Medium]
+Does enforcing this boundary on SHT_NULL sections violate the ELF
+specification?
 
-Bounds check sh_name for every section header. The name table is already
-known to be non-empty, so the sh_name of 0 that ELF requires at index 0
-still passes, and a name offset that points outside the name table is
-malformed regardless of section type. Neither an Ubuntu 20.04 x86_64
-build (GCC 9.4, 6025 modules) nor an aarch64 vendor build (GCC 13.2, 127
-modules) has a header with an out-of-bounds sh_name, or any SHT_NULL
-header above index 0.
+According to the ELF specification, members of SHT_NULL sections, other
+than the sh_type field itself, have undefined values. By removing this
+check, we now strictly enforce sh_name is less than strhdr->sh_size for all
+sections.
 
-Link: https://lore.kernel.org/linux-modules/20260708013301.C4D4A1F000E9@smtp.kernel.org/
-Cc: stable@vger.kernel.org
-Signed-off-by: Liu Chao <liuc63@xiaopeng.com>
----
-The same report lists two more SHT_NULL gaps, both from
-elf_validity_cache_sechdrs skipping offset and size validation:
-move_module will memcpy such a section, and elf_validity_cache_index_mod
-rejects SHT_NOBITS but not SHT_NULL. Sending this one on its own first,
-happy to respin all three as a series if you would rather have them
-together.
+Could this cause a valid ELF module to be incorrectly rejected with
+ENOEXEC if it happens to have an undefined but non-zero sh_name left over
+from a post-processing tool shrinking the string table?
 
-The Oops line says KASAN, but the access faults rather than producing a
-KASAN report, because lib/string.o is built with KASAN_SANITIZE disabled.
+[Severity: High]
+This is a pre-existing issue, but does removing this bypass leave
+other SHT_NULL regressions unpatched?
 
-No Fixes tag. 3c5700aeabd8 ("module: Factor out
-elf_validity_cache_secstrings") is where the exemption was added, but the
-problem predates it: before that commit sh_name was only checked for
-SHF_ALLOC sections and the ".modinfo" strcmp() ran ahead of the check, so
-find_any_sec() could already walk off the end. Same conclusion as
-9a5ff4568932 ("module: validate string table section types"), which went
-in with Cc: stable and no Fixes tag. checkpatch complains about that
-combination.
+For example, consumers like find_any_sec() and find_any_unique_sec()
+do not check if sh_type is SHT_NULL before doing string comparisons:
 
-The scan behind that last paragraph applies exactly the predicate this
-patch introduces, sh_name >= strhdr->sh_size, to every section header
-from index 0. On the x86_64 host it covered 17546 modules across three
-kernel trees (5.15.0-181, 5.15.0-190, 5.4.0-182), all built by GCC 9.4.0;
-those trees are the same toolchain recompiling much the same driver set,
-so the changelog quotes one tree rather than the total. The aarch64 side
-is a 5.10 vendor kernel built with Arm GNU Toolchain 13.2. Both are GNU
-toolchains - no clang-built module set was available to me.
+find_any_unique_sec()
+    ...
+    if (strcmp(info->secstrings + info->sechdrs[i].sh_name, name) =3D=3D 0)=
+ {
 
-Reproducer, needs root and an unsigned module on a kernel without
-CONFIG_MODULE_SIG_FORCE. Build any minimal module, then append a
-SHT_NULL section header with an out-of-bounds sh_name:
+If an attacker crafts an SHT_NULL section with an in-bounds sh_name
+that matches a targeted section name like .modinfo, will the loader
+erroneously use this empty section and its undefined sh_offset and
+sh_size fields?
 
-  python3 - <<'EOF'
-  import struct
-  SHDR = 0x40
-  data = bytearray(open('dummy.ko', 'rb').read())
-  shoff = struct.unpack_from('<Q', data, 0x28)[0]
-  shnum = struct.unpack_from('<H', data, 0x3c)[0]
-  old = bytes(data[shoff:shoff + shnum * SHDR])
-  evil = bytearray(SHDR)
-  struct.pack_into('<I', evil, 0, 0x40000000)
-  data += b'\0' * ((8 - len(data) % 8) % 8)
-  new_shoff = len(data)
-  data += old + bytes(evil)
-  struct.pack_into('<Q', data, 0x28, new_shoff)
-  struct.pack_into('<H', data, 0x3c, shnum + 1)
-  open('evil.ko', 'wb').write(data)
-  EOF
+[Severity: Critical]
+This is also a pre-existing issue, but there appears to be a separate path
+where unvalidated fields in SHT_NULL sections can lead to memory
+corruption.
 
-  insmod evil.ko
+In elf_validity_cache_sechdrs(), offset and size bounds checking is
+explicitly bypassed for SHT_NULL sections:
 
- kernel/module/main.c | 3 ---
- 1 file changed, 3 deletions(-)
+elf_validity_cache_sechdrs()
+    case SHT_NULL:
+    case SHT_NOBITS:
+        continue;
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d0e1e0bd2ad0..7d5943cd6543 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2060,9 +2060,6 @@ static int elf_validity_cache_secstrings(struct load_info *info)
- 
- 	for (i = 0; i < info->hdr->e_shnum; i++) {
- 		shdr = &info->sechdrs[i];
--		/* SHT_NULL means sh_name has an undefined value */
--		if (shdr->sh_type == SHT_NULL)
--			continue;
- 		if (shdr->sh_name >= strhdr->sh_size) {
- 			pr_err("Invalid ELF section name in module (section %u type %u)\n",
- 			       i, shdr->sh_type);
+However, move_module() does not exclude SHT_NULL sections, it only
+excludes SHT_NOBITS:
+
+move_module()
+    if (shdr->sh_type !=3D SHT_NOBITS) {
+        memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
+    }
+
+Can this sequence cause an out-of-bounds read from kernel memory if a
+crafted module contains an SHT_NULL section with SHF_ALLOC set and an
+arbitrary sh_offset?
+
+Similarly, elf_validity_cache_index_mod() accepts SHT_NULL sections for
+the .gnu.linkonce.this_module section.
+
+Does this allow info->mod to point to an arbitrary kernel address when
+initialized in elf_validity_cache_copy(), leading to out-of-bounds
+writes during module initialization?
+
+>  		if (shdr->sh_name >=3D strhdr->sh_size) {
+>  			pr_err("Invalid ELF section name in module (section %u type %u)\n",
+>  			       i, shdr->sh_type);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905110813.1504=
+11-1-liuc63@xiaopeng.com?part=3D1
