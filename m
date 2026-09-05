@@ -1,156 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0B43033CB
-	for <linux-modules@vger.kernel.org>; Sat,  5 Sep 2026 11:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B78453A44;
+	Sat,  5 Sep 2026 11:29:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788607163; cv=none; b=h7abnu4IhUVQdzfL+RfS+2zVdEHK+Vr9wSn4K04MD0pRD0wY/LRt+ZNJHZ3VbVTdt0Z4IbQjcvUbZmc6xksKGnaRnvkBN8gmwka0CpMa88+uFd6qprmwt9FuqInDqy7nRLfbJkv/TBbVPXATXDAfGxoXRDarvOSbHn7mDqiRWZs=
+	t=1788607778; cv=none; b=h/3dGEUC0KQ4DMFhr0AeO8d0z/5XfT9y/txVfCRtk1vK/t6xhnH7ois/1rbIYrbAm70D/3hgRJybOu2RZmGyO9vWy8cm75qp776nqqT3IWLyaezMKDGxVK1TAuaU+hgKXrfe1hIBAiNmYvA63DAiMZvgpXSiYvSY9Qx+mXxyiSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788607163; c=relaxed/simple;
-	bh=0nFv6v4VDEUW8F6h8B8cMmcf6j+G03P/WmkCVXg7bsk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cC+jISaQUg3tbfNC2aMF8IWsjySmf4sj18bZOBTSdV//Es6uff2ZjkdyMFxvlK1oP4Mtcbvs3VOHbIttKU5dxuJS0xLkV4YY1WJG3h8xQHX6EYIUVTIjbHHxUs/1D8mOXQE+shdMuq6sJ7HTczXDvKojzeRwgfyCHSPC2tsYNnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fPC3s8RY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788607778; c=relaxed/simple;
+	bh=6QlfVPFcF/JHSfLa9SAEC7zdo7QfY4euoKXQ/sK6GjQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I4DhT5+Oqv1zjwt6haNINqeSbolX7tp1C8AyQIUXxIE0XAb14t27OC4qvV+q7zmGR91M5eND7qJ8a/ONypobIbNYNmUvMOMGeAVQrqdtmUkJLKQh7+HxPASn6Gyf5gaQgEvZFGWRkPeAUEziqUeghMFaHjJNGO0pa3YAlumzfGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=syXLJRc8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fPC3s8RY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319941F00A3E;
-	Sat,  5 Sep 2026 11:19:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788607161;
-	bh=G7K3l0MI73hmHPnTiWpNsBKbDtex0kvzSZ+I8aRSEro=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fPC3s8RYNrewKmhnj7QUGLIaGyApaKx3nqlzQFNhz3OUN7p1jvE6HyZumz0sjm9+V
-	 rxf3MEOD21LsHWXeLTercys5W2hmPjrG4RuUQ2vedT4caE9+vJf2+9SODSqJ+GKOmm
-	 css1U4Elhe82ZZOCsMUWb/vninvP+zrNTqS907WmuApbubD/Z1T3dGXYt4aQ9AJysY
-	 yJa2fq4B/+HYgkjLKBQVpfD3PqneL5aogi5SZcXWUwDEoiebTEWnBmLr4e0ch2BHOf
-	 Z3FHL+KNmFGvYcR7XjaPVsMOZIlMcW2khJRQ9PzrgxWrdf56QveMQD3FqNkjMsSIp5
-	 9U/zTreKPitHQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] module: validate sh_name for SHT_NULL sections
-Reply-To: sashiko-reviews@lists.linux.dev
-To: liuc63 <liuc63@xiaopeng.com>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260905110813.150411-1-liuc63@xiaopeng.com>
-References: <20260905110813.150411-1-liuc63@xiaopeng.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 11:19:20 +0000
-Message-Id: <20260905111921.319941F00A3E@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="syXLJRc8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C691F00A3D;
+	Sat,  5 Sep 2026 11:29:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1788607776;
+	bh=NJjp7hyLSGDcY0T4wPUidEv8MR3gxhn3/lAEx5oetG8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=syXLJRc8Qt140rlFiEVX2z6Ayz3tdNxSLO+4qNaGVJEUzBMblPT1YU8iiP9themzZ
+	 MO5S/OwEjQ7ZUQKELKXoG2fshz9qTTwazYyULIJszn0cQ6w+ByEwYHmnVH+VYKL7K4
+	 LeT6ll8QifcRley2chTb1MuFumJnjGGiDhw/Nai8=
+Date: Sat, 5 Sep 2026 13:27:51 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Bradley Morgan <brads@mainlining.org>,
+	Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
+	linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v3 0/2] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
+Message-ID: <2026090546-skimming-bundle-0655@gregkh>
+References: <20260904-bind_taint-v3-0-30025465f38a@linuxfoundation.org>
+ <9ac44f3f-1c67-4c37-aa72-255cec1578d2@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ac44f3f-1c67-4c37-aa72-255cec1578d2@gmx.de>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+On Fri, Sep 04, 2026 at 09:46:59PM +0200, Armin Wolf wrote:
+> 
+> Am 04.09.26 um 07:10 schrieb Greg Kroah-Hartman:
+> > The ability to add and remove devices from a driver through the sysfs
+> > "bind" and "unbind" files was created all those decades ago as a way
+> > that kernel developers can iterate faster, and provide a debugging way
+> > for users to attempt to add a new device to a driver without having to
+> > rebuild their kernel.
+> > 
+> > This api over the years has been abused and recently come under a major
+> > fuzzing "attack" through tools like syzbot which decided that it would
+> > attempt to just randomly bind any driver to any type of device, causing
+> > loads of unneeded errors and pointless kernel patches to be generated by
+> > unsuspecting new developers.
+> > 
+> > Handle all of this by adding a new taint flag, TAINT_FORCED_BIND, which
+> > will be set on the driver if the bind/unbind sysfs files are ever
+> > written to.  This lets kernel developers "know" that a user is
+> > attempting to do something that is not normal, and as such, if the
+> > kernel breaks they get to keep the shiny pieces laying around on the
+> > floor.
+> > 
+> > The flag is 'Y' which was unused, and can remembered as the user is
+> > "yeeting" the device being operated on here (thrown with force without
+> > regard for the thing being thrown).
+> > 
+> > Note, the taint flag gets set _BEFORE_ the bind/unbind callback happens,
+> > as many times crashes/oops/warnings/failures happen within the callback,
+> > and the taint flag needs to be there to show what was being attempted.
+> > If it were to be set after the callback happens, the oops report would
+> > not properly reflect what foolishness was being attempted.
+> > 
+> > Fuzzing tools like syzbot, that doesn't have hand-crafted rules to keep
+> > the tool from hitting bind/unbind, should be run with panic_on_taint
+> > enabled so that they fall over and don't continue on, thinking that they
+> > actually found a real issue.
+> > 
+> > Userspace operations that rely on the bind/unbind files to work around
+> > the lack of will to upgrade a kernel image to a newer version with
+> > proper support for new devices, or the lack of will to submit valid
+> > device ids to driver authors, will still work properly, but now the
+> > kernel will be flagged in a way that will show that perhaps those users
+> > should reconsider their behavior and work to have the drivers properly
+> > support these devices in a "native" manner.
+> 
+> What about users that use driver_override together with vfio-pci? AFAIK
+> they still need to write to bind/unbind.
 
-New issues:
-- [Medium] The patch strictly enforces sh_name boundaries on SHT_NULL secti=
-ons, violating the ELF specification and risking module load failures for v=
-alid files.
+As I state above, that is an abuse of this api.
 
-Pre-existing issues:
-- [Critical] The patch leaves unvalidated sh_offset and sh_size fields of S=
-HT_NULL and SHT_NOBITS sections vulnerable, allowing out-of-bounds reads an=
-d memory corruption.
-- [High] Consumers like find_any_sec, find_any_unique_sec, and module_enfor=
-ce_rwx_sections still process SHT_NULL sections, which can cause false posi=
-tives and crashes if undefined fields contain in-bounds garbage.
---
+> Also i always liked the fact that the bind/unbind attributes make it very
+> easy in creating generic drivers. In fact, i am intending to use this feature
+> in order to add netlink support to the ACPI-WMI subsystem in the future.
+> I am planning to realize this thru a generic WMI driver that has to be manually
+> bound to a given WMI device to make it available over netlink, so having
+> users be able to write bind/unbind without potentially triggering a kernel panic
+> would be very nice.
 
-commit 15965760da3d985f09b447439735945868c9d133
-Author: Liu Chao <liuc63@xiaopeng.com>
-Subject: module: validate sh_name for SHT_NULL sections
+It's a taint flag being set, not a panic, showing developers that "hey,
+the user just did something odd here, ask them about it when handling
+this bug report."
 
-This commit removes the bypass for SHT_NULL sections when checking
-section name boundaries. It attempts to prevent out-of-bounds reads
-during section name lookups by enforcing that all sections have valid
-sh_name offsets.
+> Additionally, writing into the bind attribute still checks if the driver and the
+> device match:
+> 
+> /*
+>  * Manually attach a device to a driver.
+>  * Note: the driver must want to bind to the device,
+>  * it is not possible to override the driver's id table.
+>  */
+> static ssize_t bind_store(struct device_driver *drv, const char *buf, size_t count)
+> 
+> Because of this i would suggest that the taint (if at all) be added to the
+> driver_override attribute instead, because only with this attribute users can bind
+> random drivers to truly random devices.
 
-Link: https://lore.kernel.org/linux-modules/20260708013301.C4D4A1F000E9@smt=
-p.kernel.org/
+I had thought of that, but the force removal of drivers from devices
+wouldn't show up this way, which is one of the things that we do want to
+warn developers about.
 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index d0e1e0bd2ad06..7d5943cd65432 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2060,9 +2060,6 @@ static int elf_validity_cache_secstrings(struct loa=
-d_info *info)
-> =20
->  	for (i =3D 0; i < info->hdr->e_shnum; i++) {
->  		shdr =3D &info->sechdrs[i];
-> -		/* SHT_NULL means sh_name has an undefined value */
-> -		if (shdr->sh_type =3D=3D SHT_NULL)
-> -			continue;
+And, if we just did the driver_override taint, it would allow those
+drivers who claim to be "generic" like you are referring to, to keep
+"getting away with that" when it's obviously not true that they can
+handle any device for that bus, otherwise it would have automatically
+bound to it already (and no manual intervention would be needed.)
 
-[Severity: Medium]
-Does enforcing this boundary on SHT_NULL sections violate the ELF
-specification?
+By keeping the manual configuration of bind, you are forcing userspace
+to manually do work, while still a possible thing to do, now at least a
+developer who gets a bug report will _know_ it happened, which is why
+the taint flag is there.
 
-According to the ELF specification, members of SHT_NULL sections, other
-than the sh_type field itself, have undefined values. By removing this
-check, we now strictly enforce sh_name is less than strhdr->sh_size for all
-sections.
+Does that make a bit more sense?
 
-Could this cause a valid ELF module to be incorrectly rejected with
-ENOEXEC if it happens to have an undefined but non-zero sh_name left over
-from a post-processing tool shrinking the string table?
+thanks,
 
-[Severity: High]
-This is a pre-existing issue, but does removing this bypass leave
-other SHT_NULL regressions unpatched?
-
-For example, consumers like find_any_sec() and find_any_unique_sec()
-do not check if sh_type is SHT_NULL before doing string comparisons:
-
-find_any_unique_sec()
-    ...
-    if (strcmp(info->secstrings + info->sechdrs[i].sh_name, name) =3D=3D 0)=
- {
-
-If an attacker crafts an SHT_NULL section with an in-bounds sh_name
-that matches a targeted section name like .modinfo, will the loader
-erroneously use this empty section and its undefined sh_offset and
-sh_size fields?
-
-[Severity: Critical]
-This is also a pre-existing issue, but there appears to be a separate path
-where unvalidated fields in SHT_NULL sections can lead to memory
-corruption.
-
-In elf_validity_cache_sechdrs(), offset and size bounds checking is
-explicitly bypassed for SHT_NULL sections:
-
-elf_validity_cache_sechdrs()
-    case SHT_NULL:
-    case SHT_NOBITS:
-        continue;
-
-However, move_module() does not exclude SHT_NULL sections, it only
-excludes SHT_NOBITS:
-
-move_module()
-    if (shdr->sh_type !=3D SHT_NOBITS) {
-        memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
-    }
-
-Can this sequence cause an out-of-bounds read from kernel memory if a
-crafted module contains an SHT_NULL section with SHF_ALLOC set and an
-arbitrary sh_offset?
-
-Similarly, elf_validity_cache_index_mod() accepts SHT_NULL sections for
-the .gnu.linkonce.this_module section.
-
-Does this allow info->mod to point to an arbitrary kernel address when
-initialized in elf_validity_cache_copy(), leading to out-of-bounds
-writes during module initialization?
-
->  		if (shdr->sh_name >=3D strhdr->sh_size) {
->  			pr_err("Invalid ELF section name in module (section %u type %u)\n",
->  			       i, shdr->sh_type);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905110813.1504=
-11-1-liuc63@xiaopeng.com?part=3D1
+greg k-h
