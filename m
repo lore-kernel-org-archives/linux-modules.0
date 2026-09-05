@@ -1,192 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4705B4EBAEF
-	for <linux-modules@vger.kernel.org>; Sat,  5 Sep 2026 18:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDA638B12F
+	for <linux-modules@vger.kernel.org>; Sat,  5 Sep 2026 18:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788632967; cv=none; b=nHovVwZqao9P3vadvU/hKj5mfKF1ZVsQyDu8JBuaMYULLay9shbAGme5TgQyLI0wSNAdVXnBA3CvPtbW8+httsynsDKDW+CyeYfsJnOTchjzxMA/lGR3flVAA/zFG5IoaKkk1InNa53ZWo6I1w5xqxHlLQa8zf9ZK2SbMxhngIo=
+	t=1788632986; cv=none; b=id0kfwH3MMGlQAlvnUFKX7lo09mhr76fMRM2VfeJxYj5Xrm4xdKlTLXsnUZXyE7LC0foAyfHOza0fcqRgcSmFLf9jAyJM1mot2kWJyMGEYWc5Iwt48RFD59nk9Gl9cR2abcel8u1+/t44RMc2ILOb54LeZRebJs993ZEmquYwbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788632967; c=relaxed/simple;
-	bh=eBC/Vf3A8SNBDYvuCM4Ldn0BS6W9Z6/P6vYom+30xoM=;
+	s=arc-20240116; t=1788632986; c=relaxed/simple;
+	bh=iZZNdTu0sUN7lciFwhBsoZGP6Ibpq5N9hYmWKUm/W+Q=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dmhw/Ha839s3Uxp8haf4rkBoVHP+/10yd/13Ws16U4meEjKgtzYlW6xLHxrVRr3U8sNmalcZseAi1qwsePHNTzW+/eeb7KV5b5e2t2OFfPA7spsEaBgceUe/p7mKMPR23p1f3+R/QN9eNuGNK3BAa3FdLQO/Cl3OxKX1aZ/whUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K0gwsUH5; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Cbc2Jwefz7VckqU19nK9TUlmw8f2gP+RTwJMc42LP+MwJyiUuHBhRyiFNnz610FrhytgKVeOTDjGayCW18SyDWN3wo7qRCy7VrvhZv9LLnSOJ295otPoCRdbSOBGAh4hkjsOtz98gAbfAgWucj+Hp8sv/IA3AHZ/ENuVKsvnlUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XaZ1FQeE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K0gwsUH5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BB3B1F00A3A;
-	Sat,  5 Sep 2026 18:29:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XaZ1FQeE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DECE31F00A3A;
+	Sat,  5 Sep 2026 18:29:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788632964;
-	bh=Weg2Hvae1JiXpRLHECHA8qkTpryD5BtSbmDxhYM/Uxs=;
+	s=k20260515; t=1788632985;
+	bh=wi1sauKhWvV4kPtTDgP3yGzbL5FEOtwaThHwBoQnDyw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=K0gwsUH5kA6ikjKx1p+tQwLRuASARLmjUmbHeHN/Zb+vMGzkrvYXHiGezWC0UlY7c
-	 Ra8SgyPTG/pNrQ0i0GgWIzpE5AU5PwV0wD8VgEQZ4hp7YnztxeRijEJGwFb2NxiIlj
-	 rAHKofTU83fB8KLKVRLsjY+7M4cFw0ThNeg8BgvR5o82dK3y4UdFMyejMwhAeaP8o+
-	 sqrgeqj/U2AR7kwCiMqqc63Fr8de0/agKuSI4lmZ4zXVWxZsZnEnI1utbUCudGY61S
-	 z3O5tpd8kaMc1LUx9leLKYXzQVml/p0Iv/w4CKxxYzjjiHo+CD1D3NMVEL2lEtOKaP
-	 +19P262kn92cQ==
+	b=XaZ1FQeEp+SpPEcczJTzqJnfzCiW670x3Wbic9pmHZs1uip56gDiDHKYxZ5Q2CVOP
+	 /qITO2fiYvP36LzBVRanoy2CK8yoQJZILXrUj+Kl3yvwzXc/Cwz0RWafWtY46LP0qE
+	 6HBNNGcJTqYG/ECO5Sy38goYS5JPT8ATa6hzqEIzlmDsPw4sSIqR08IrOLIJqycCTd
+	 5xfqJe3u0mK23n7stMXOJQ2fBougn6EmZs/QUW7KjTPZjlpifZqNA3HvBSU8aq+CnC
+	 XBBl116JHQBmSHNr+ewMEwNeEHc6ZCfHs0+Wppf1xCZ5ustJvwXUh2CCDoQ/lyrSkc
+	 VwNUrhjuybi4A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v8 41/43] dyndbg: add +c flag to count advantage of
- classmaps for DRM
+Subject: Re: [PATCH v8 37/43] dyndbg: harden classmap and descriptor
+ validation
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jim Cromie" <jim.cromie@gmail.com>
 Cc: linux-modules@vger.kernel.org, dri-devel@lists.freedesktop.org
-In-Reply-To: <20260905-dd-cmap-part2-clean-v8-41-a4cc0674f6fd@gmail.com>
+In-Reply-To: <20260905-dd-cmap-part2-clean-v8-37-a4cc0674f6fd@gmail.com>
 References: <20260905-dd-cmap-part2-clean-v8-0-a4cc0674f6fd@gmail.com>
- <20260905-dd-cmap-part2-clean-v8-41-a4cc0674f6fd@gmail.com>
+ <20260905-dd-cmap-part2-clean-v8-37-a4cc0674f6fd@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 18:29:23 +0000
-Message-Id: <20260905182924.4BB3B1F00A3A@smtp.kernel.org>
+Date: Sat, 05 Sep 2026 18:29:44 +0000
+Message-Id: <20260905182944.DECE31F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Memory leak of the user-provided buffer `tmpbuf` in `ddebug_proc_w=
-rite()` when handling the `reset_stats` command.
-- [High] The `+c` (call counting) flag fails to operate when `CONFIG_JUMP_L=
-ABEL` is disabled, unless the `+p` flag is also set.
-- [Medium] Call counts from offlined CPUs are dropped from the total, resul=
-ting in inaccurate statistics.
-- [Low] Data race when resetting per-CPU call counts from another CPU lockl=
-essly.
+- [Medium] Off-by-one error in runtime classmap offset validation restricts=
+ the maximum valid class ID.
 --
 
-commit 5f4a75e3669c0fca15e2071c6b6911a58fe6a5ab
+commit 9fc4489f7afee86c427de8b09e6f38f827d4fc24
 Author: Jim Cromie <jim.cromie@gmail.com>
-Subject: dyndbg: add +c flag to count advantage of classmaps for DRM
 
-This commit introduces a +c flag to dynamic debug to count per-cpu hits
-for flagged pr_debug() callsites. The counts can be reset via a
-reset_stats command and read from the control file.
+dyndbg: harden classmap and descriptor validation
 
-> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-> --- a/include/linux/dynamic_debug.h
-> +++ b/include/linux/dynamic_debug.h
-[ ... ]
-> @@ -420,11 +430,15 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
->   * (|_cls):	adds in _DPRINT_CLASS_DFLT as needed
->   * (|_no_desc):	former gets callsite descriptor as 1st arg (for prdbgs)
->   */
-> +
->  #define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {	\
->  	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);	\
->  	if (DYNAMIC_DEBUG_BRANCH(id)) {				\
+This commit improves classmap and descriptor validation by mirroring
+compile-time limits of _DEFINE and adding run-time overlap checks for _USEd
+classmaps. It scans module descriptors at load time to warn about missing
+class_ids instead of waiting for a user query.
 
-[Severity: High]
-Will the +c (call counting) flag operate correctly when CONFIG_JUMP_LABEL
-is disabled?
-
-If CONFIG_JUMP_LABEL is not set, the fallback DYNAMIC_DEBUG_BRANCH(descript=
-or)
-macros check only for _DPRINTK_FLAGS_PRINT.
-
-When a user enables counting with +c but leaves printing disabled (-p),
-the branch evaluates to false, and DYNAMIC_DEBUG_COUNT() is bypassed
-completely.
-
-> -		func(&id, ##__VA_ARGS__);			\
-> -		__dynamic_dump_stack(id);			\
-> +		DYNAMIC_DEBUG_COUNT(id);			\
-> +		if (id.flags & _DPRINTK_FLAGS_ACTIVE) {		\
-> +			func(&id, ##__VA_ARGS__);		\
-> +			__dynamic_dump_stack(id);		\
-> +		}						\
->  	}							\
->  } while (0)
-
-[ ... ]
 > diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+> index a5d813ad323a1..b7ccf471b5efe 100644
 > --- a/lib/dynamic_debug.c
 > +++ b/lib/dynamic_debug.c
 [ ... ]
-> @@ -1083,6 +1093,14 @@ static __init int dyndbg_setup(char *str)
+> @@ -1524,10 +1543,47 @@ static int ddebug_add_module(struct _ddebug_info =
+*di)
+>  	dd_set_module_subrange(i, cm, &dt->info, maps);
+>  	dd_set_module_subrange(i, cli, &dt->info, users);
 > =20
->  __setup("dyndbg=3D", dyndbg_setup);
-> =20
-> +static void reset_ddebug_call_count(void)
-> +{
-> +	int cpu;
+> -	/* insure 2+ classmaps share the per-module 0..62 class_id space */
+> +	/* validate the per-module shared 0..62 class_id space */
+>  	for_subvec(i, cm, &dt->info, maps)
+>  		if (ddebug_class_range_overlap(cm, &reserved_ids))
+> -			goto cleanup;
+> +			err =3D -EINVAL;
 > +
-> +	for_each_possible_cpu(cpu)
-> +		per_cpu(ddebug_call_count, cpu) =3D 0;
-> +}
+> +	for_subvec(i, cli, &dt->info, users) {
+> +		cm =3D cli->map;
+> +		if (!cm) {
+> +			pr_err("module %s: classmap not found for user\n", di->mod_name);
+> +			err =3D -EINVAL;
+> +			continue;
+> +		}
 > +
-
-[Severity: Low]
-Can this lockless reset cause a data race?
-
-This logic locklessly writes 0 to the per-CPU variable of all possible
-CPUs. If another CPU is concurrently executing this_cpu_inc(), which is
-atomic only with respect to local interrupts, a data race occurs.
-
-This can result in a lost reset or a lost increment in the call count
-statistics.
-
->  /*
->   * File_ops->write method for <debugfs>/dynamic_debug/control.  Gathers =
-the
->   * command text from userspace, parses and executes it.
-> @@ -1105,6 +1123,10 @@ static ssize_t ddebug_proc_write(struct file *file=
-, const char __user *ubuf,
->  		return PTR_ERR(tmpbuf);
->  	v2pr_info("read %zu bytes from userspace\n", len);
-> =20
-> +	if (len >=3D 11 && !strncmp(tmpbuf, "reset_stats", 11)) {
-> +		reset_ddebug_call_count();
-> +		return len;
-> +	}
-
-[Severity: High]
-Does this code leak tmpbuf?
-
-When handling the reset_stats command, this early return path bypasses
-the standard cleanup and skips the kfree(tmpbuf) call required to free the
-dynamically allocated buffer.
-
-This allows a privileged user to leak memory (up to PAGE_SIZE per write)
-on every successful reset_stats command.
-
->  	ret =3D ddebug_exec_queries(tmpbuf, NULL);
->  	kfree(tmpbuf);
->  	if (ret < 0)
-[ ... ]
-> @@ -1238,6 +1260,16 @@ static const char *ddebug_class_name(struct _ddebu=
-g_info *di, struct _ddebug *dp
->  	return NULL;
->  }
-> =20
-> +static unsigned long get_ddebug_call_count(void)
-> +{
-> +	unsigned long total =3D 0;
-> +	int cpu;
-> +
-> +	for_each_online_cpu(cpu)
-> +		total +=3D per_cpu(ddebug_call_count, cpu);
-> +	return total;
-> +}
+> +		if (cm->base + cm->length + cli->offset >=3D _DPRINTK_CLASS_DFLT) {
 
 [Severity: Medium]
-Is it intentional to sum only the online CPUs here?
+Does this condition have an off-by-one error that restricts the maximum val=
+id
+class ID?
 
-The reset logic in reset_ddebug_call_count() expects all possible CPUs
-to be managed, but this read logic drops accumulated counts from CPUs
-that are currently offline.
+The _DPRINTK_CLASS_DFLT macro is defined as 63, which means valid class IDs
+range from 0 to 62. The maximum assigned class ID for a given map and offse=
+t is
+base + length + offset - 1. If base + length + offset =3D=3D 63, the maximum
+assigned class ID is exactly 62, which should be valid.
 
-If a CPU was online, accumulated hits, and is subsequently offlined, its
-counts are excluded from the total, making the metric fluctuate and
-become unreliable across CPU hotplug events.
+Because the code checks if the sum is >=3D _DPRINTK_CLASS_DFLT, a valid
+boundary case of 63 is erroneously flagged as an error. This shrinks the va=
+lid
+class ID space to 0..61 instead of the expected 0..62.
 
+> +			pr_err("module %s: base:%d + classes.len:%d + cli.offset:%d must be <=
+ %d\n",
+> +			       di->mod_name, cm->base, cm->length,
+> +			       cli->offset, _DPRINTK_CLASS_DFLT);
+> +			err =3D -EINVAL;
+> +			continue;
+> +		}
 > +
->  /*
->   * Seq_ops show method.  Called several times within a read()
->   * call from userspace, with ddebug_lock held.  Formats the
+> +		if (ddebug_class_user_overlap(cli, &reserved_ids))
+> +			err =3D -EINVAL;
+> +	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905-dd-cmap-pa=
-rt2-clean-v8-0-a4cc0674f6fd@gmail.com?part=3D41
+rt2-clean-v8-0-a4cc0674f6fd@gmail.com?part=3D37
