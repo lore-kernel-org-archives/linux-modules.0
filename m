@@ -1,140 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750CA17BED0
-	for <linux-modules@vger.kernel.org>; Mon,  7 Sep 2026 06:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE4023D7E3
+	for <linux-modules@vger.kernel.org>; Mon,  7 Sep 2026 06:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788763418; cv=none; b=noeX5emSvB6xW2IbQndgyQ47z24LaBjKWqpLncXZzwGTi8y2xaLsCiqCPXADO2VD1JEkAzMorvqh66Gs2ph7PGjBLg6mAjXe2guSavrCXLhZtC0KYLqC8x8M4exWxN4TRVBr4SXxfkZAzo2dgC4s4j6BS4WGIaM0QgZv6LkYwu0=
+	t=1788763625; cv=none; b=s9Jt7iurvZUNTfxITvgHyoG8ScfRpO+85s+5wjs4ZMOntyMEkozMqehEKEoVbvQ8U54zi0yoBCosuLeqNv8NIwDoiVhxdPm2rA/YBHF+T46/MbMf8+TQwBFmw2j8mLZqJIAku7IRZ0JvpDR/i/5DXl+5wl9iQUo37Evled8/x1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788763418; c=relaxed/simple;
-	bh=GY5KbA4OXdkw4gQqJfn10i59zYDYq+2M8PqOMTHXlDo=;
+	s=arc-20240116; t=1788763625; c=relaxed/simple;
+	bh=x21PkamW4u8jKF/Kib4WJcgc887WJT0/MpLx/YUfGok=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mY41lcssgJMfcOxQe6rRqxDz9FGz5+JIM9knI2zNkJnia22Jw3Ui1IwVv0/57cYyI47zZJ2lnlSCUkiejf0mOT3ObCfGbQyDmers5Xlqvt8JNDniirYGt+A3NcnGsJ7OUfgqGGXeSFozPClVJLY+UZNvy3l9Ysn8HuYEKW4S6DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUrp4i2G; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=V9OBw9KqWRhTC1yDkNPwV04PXQO5HuIeWP2jJpRRYesww2Gvt84Isc4RpVeNr+QrzHN8QFE2+Y+tJfsEOc3MRDn4danWh8Po/DcrcfoJTUsLQ71HhW4EQ16e0DbElx57jktIQ7PCqjwdL/xr8aW8gWANdrBvsa09RiJMdDlG0fQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMfBjy8w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUrp4i2G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33BE1F00A3A;
-	Mon,  7 Sep 2026 06:43:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMfBjy8w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C614F1F00A3D;
+	Mon,  7 Sep 2026 06:47:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788763417;
-	bh=crI51gCX9aNuQgXzRNwPfby91Hnb1p1BcqoIRzeMTNs=;
+	s=k20260515; t=1788763624;
+	bh=iqxyQnscVywPPMsYxKdUUWm+yWnHEuJNlBDzaO7loJ4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XUrp4i2GkaJSIMTT4IdFL8vcTU5h4dEkGlVPYUKKtZZ9MN8qP2m/6VR4yQMe43Bhv
-	 7O8VSJAHuBbjddcl2aGx+jm/BwqalPucSA/9P2P3tIbRxzOnodThSbB66rwNGe+s5R
-	 XjDKoypRfEn8Q+xqGHhnbiknKSyUcO4RVP7wpc6/LL7R9QjSiOkaPAzsvCn2Jee63j
-	 BZQfN2FnidxuvUkoE2mkmHWpMShBVNu5qCr9iMkcODjAHgJIz+HittN+fS+1Vn/l+t
-	 XOKAMQsjFftSA6G3mzpdLNKx8cWDH7bvS7LmawaJQN5pZi6c+QeFghUoegztG9QZ/u
-	 yLCDkn1zLdDfg==
+	b=XMfBjy8wZgTsOcqsOvV4HLWhiEolgi0qfMsgEvy8RhM7fDov621HZ030BOTv2fHOo
+	 08jbEMRS4FF5CufgGnRye8GHiadudzEPX0MFjog3xfxV5TMSfSB4cQ0Jr5PLDNTRDh
+	 T1AMfHQKd7D2PtPmEW8pFQJlGkfLMZ+MMKyWPiz530k7lkCsCrTPONZSOUln87cQra
+	 GCMzO6gx09GcvAJbDQkOol41AsM9cO85DOSEmt7T9gviS368b1BArpthd+TFWjNagO
+	 PfVKD9z+2OfHvK4ymsFKIZUbK82BWA90Q9OR5eaOI9ySeKbrQ+ptB/CjSgc2vVRUh8
+	 8B/VjpNn3gHOA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v8 4/4] alloc_tag: release the reservation when populate
- fails
+Subject: Re: [PATCH v8 3/4] module: allocate codetag sections before the
+ regular module layout
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Hao Ge" <hao.ge@linux.dev>
 Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260907062414.106873-5-hao.ge@linux.dev>
+In-Reply-To: <20260907062414.106873-4-hao.ge@linux.dev>
 References: <20260907062414.106873-1-hao.ge@linux.dev>
- <20260907062414.106873-5-hao.ge@linux.dev>
+ <20260907062414.106873-4-hao.ge@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 07 Sep 2026 06:43:36 +0000
-Message-Id: <20260907064336.E33BE1F00A3A@smtp.kernel.org>
+Date: Mon, 07 Sep 2026 06:47:03 +0000
+Message-Id: <20260907064703.C614F1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-New issues:
-- [Critical] The patch introduces a kernel crash by freeing the maple tree =
-entry without rolling back module_tags.size on failure.
-
-Pre-existing issues:
-- [High] vmap_pages_range() failure in vm_module_tags_populate() leaves phy=
-sical pages mapped while freeing them, leading to Use-After-Free.
-- [High] AB-BA Deadlock between procfs read and module loading via shutdown=
-_mem_profiling().
-- [Medium] Memory leak of percpu counters when module falls back to standar=
-d section allocation.
+- [Medium] Per-cpu counters for allocation tags are permanently leaked on m=
+odule unload if the tag area overflows during module load.
 --
 
-commit 09d0b9820f6ab861e4c9680b44a685c8658fb571
+commit 2a544bb32bf3bb065ea63ecd36207973b4aa45cd
 Author: Hao Ge <hao.ge@linux.dev>
 
-alloc_tag: release the reservation when populate fails
+module: allocate codetag sections before the regular module layout
 
-vm_module_tags_populate() can fail after a reservation is stored in the
-maple tree. The error return previously leaked the entry because a failed
-load never unloads the module. This patch calls release_module_tags()
-on failure to free the reservation.
+This commit modifies the module loader to decide and allocate codetag
+sections in one pass before the regular module layout. If the separate
+allocation overflows, it returns -EAGAIN so the section can fall back to
+being a regular module section, allowing the module to still load.
 
-> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-> index 112a014d4b890..c11813cd9e153 100644
-> --- a/mm/alloc_tag.c
-> +++ b/mm/alloc_tag.c
-> @@ -963,6 +963,7 @@ static void *reserve_module_tags(struct module *mod, =
-unsigned long size,
->  			shutdown_mem_profiling(true);
+Link: https://lore.kernel.org/all/499bb60c-c6e3-43a3-bd92-95a0567ece5e@suse=
+.com/ [1]
 
-[Severity: High]
-This isn't a bug introduced by this patch, but could calling
-shutdown_mem_profiling(true) here risk an AB-BA deadlock?
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 9b495571d8074..c3ea72e1e412f 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
 
-A read to /proc/allocinfo enters proc_reg_read_iter(), taking an 'in_use'
-reference on the proc entry, then calls allocinfo_start() which waits for
-down_read(&alloc_tag_cttype->mod_lock).
+[ ... ]
 
-Concurrently, module loading calls codetag_alloc_module_section(), holding
-down_write(&alloc_tag_cttype->mod_lock).
-
-If reserve_module_tags() encounters an error, it calls
-shutdown_mem_profiling(true), which invokes remove_proc_entry().
-
-Since remove_proc_entry() blocks waiting for the 'in_use' reference count
-to drop to zero, and the procfs reader blocks on the mod_lock held by the
-writer, doesn't this create a system hang during a module load failure?
-
->  			pr_err("Failed to allocate memory for allocation tags in the module %=
-s. Memory allocation profiling is disabled!\n",
->  			       mod->name);
-> +			release_module_tags(mod, false);
-
-[Severity: Critical]
-Will this new call to release_module_tags() cause a kernel crash on a
-subsequent module load?
-
-In reserve_module_tags(), module_tags.size is optimistically updated
-(module_tags.size =3D offset + size;) before attempting to allocate physical
-memory via vm_module_tags_populate().
-
-If population fails, this patch frees the maple tree entry, but
-module_tags.size is left artificially inflated.
-
-A subsequent module load will search the maple tree and reuse this freed ga=
-p.
-Because module_tags.size is already inflated, the allocation check bypasses
-vm_module_tags_populate(), returning an unmapped virtual address. Can copyi=
-ng
-section data into this address then trigger a fatal page fault?
+> @@ -2947,6 +2908,49 @@ static bool blacklisted(const char *module_name)
+> +static int allocate_codetag_sections(struct load_info *info)
+> +{
+> +	for (unsigned int i =3D 1; i < info->hdr->e_shnum; i++) {
+> +		Elf_Shdr *shdr =3D &info->sechdrs[i];
+> +		const char *sname =3D info->secstrings + shdr->sh_name;
+> +		void *dest;
+> +
+> +		if (!codetag_needs_module_section(info->mod, sname, shdr->sh_size))
+> +			continue;
+> +
+> +		dest =3D codetag_alloc_module_section(info->mod, sname, shdr->sh_size,
+> +				arch_mod_section_prepend(info->mod, i), shdr->sh_addralign);
+> +		if (WARN_ON(!dest)) {
+> +			codetag_free_module_sections(info->mod);
+> +			return -EINVAL;
+> +		}
+> +		if (dest =3D=3D ERR_PTR(-EAGAIN))
+> +			/* Allocate the section as a regular section. */
+> +			continue;
 
 [Severity: Medium]
-This is a pre-existing issue, but might the use of release_module_tags()
-when falling back to a standard section allocation leak percpu counters?
+Could this fallback mechanism cause a permanent leak of per-cpu counters
+when the module is unloaded?
 
-If tags are not addressable, reserve_module_tags() calls
-release_module_tags(mod, false) to remove the module from the maple tree
-and returns -EAGAIN.
+When the module tag area overflows, reserve_module_tags() returns -EAGAIN,
+and this code catches it to allow the section to load normally. Later in the
+load process, the tags are still processed, and per-cpu counters are
+unconditionally allocated for each tag:
 
-The module loader catches -EAGAIN and falls back to a normal section
-allocation. Later, load_module() successfully allocates percpu counters for
-the tags.
+mm/alloc_tag.c:load_module() {
+    ...
+    tag->counters =3D alloc_percpu(struct alloc_tag_counters);
+    ...
+}
 
-On unload, release_module_tags(mod, true) is called to free the counters.
-However, because the module is no longer in the maple tree, the search fails
-and exits early:
+However, on module unload, release_module_tags() searches the mod_area_mt
+maple tree to find the module. Since the codetag section fell back to
+standard memory and was never added to the maple tree, the search fails:
 
 mm/alloc_tag.c:release_module_tags() {
     ...
@@ -143,37 +118,27 @@ mm/alloc_tag.c:release_module_tags() {
     ...
 }
 
-Are the percpu counters allocated during load_module() permanently leaked
-in this scenario?
+This early exit completely bypasses clean_unused_counters(), leaving all
+those per-cpu counters allocated during load permanently leaked. Is there a
+way to ensure the counters are cleaned up even when the codetag section
+falls back to standard memory?
 
->  			return ERR_PTR(grow_res);
-
-[Severity: High]
-This is a pre-existing issue, but is there a risk that the failure path of
-vm_module_tags_populate() leaves dangling PTEs causing a Use-After-Free?
-
-In vm_module_tags_populate(), vmap_pages_range() maps allocated pages into
-the kernel virtual address space.
-
-If it fails, it returns an error but may leave successfully mapped PTEs
-active in the page tables. The error path calls release_pages() to free the
-physical pages back to the allocator, but fails to call vunmap_range():
-
-mm/alloc_tag.c:vm_module_tags_populate() {
-    ...
-    if (nr < more_pages || vmap_pages_range(...) < 0) {
-        release_pages(arg, nr);
-        return -ENOMEM;
-    }
-    ...
-}
-
-Could this leave dangling PTEs with PAGE_KERNEL permissions pointing to
-freed pages, risking data corruption when the pages are reallocated?
-
->  		}
->  	}
+> +		if (IS_ERR(dest)) {
+> +			codetag_free_module_sections(info->mod);
+> +			return PTR_ERR(dest);
+> +		}
+> +
+> +		if (shdr->sh_type !=3D SHT_NOBITS)
+> +			memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
+> +		else
+> +			memset(dest, 0, shdr->sh_size);
+> +		shdr->sh_addr =3D (unsigned long)dest;
+> +		shdr->sh_entsize =3D SH_ENTSIZE_STANDALONE;
+> +	}
+> +
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260907062414.1068=
-73-1-hao.ge@linux.dev?part=3D4
+73-1-hao.ge@linux.dev?part=3D3
