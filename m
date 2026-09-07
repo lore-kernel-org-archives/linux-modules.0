@@ -1,196 +1,144 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2085348BD54
-	for <linux-modules@vger.kernel.org>; Mon,  7 Sep 2026 12:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277B0345CDA
+	for <linux-modules@vger.kernel.org>; Mon,  7 Sep 2026 19:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788783429; cv=none; b=CiG7re9R7f3M0GacQ0KZC+ywiu7P6y/acPPou8ZCvMAvQt5XnZ/4SvrYmrjzVAkPBB9YWyiwfY86ig0C8xxBsR5Tkfy/jCpZSt4woSR7Go/R6WXrS605aX72bszMubCQ5NxbSz/Lwexbhh8qfJC7tY38/2kovWk0kqiPOK+iF6Y=
+	t=1788809416; cv=none; b=JHJhNHZM7MXDgymn6zSs0k8+wTCZ9QfufrYs22OyEOJuBOUZLefmGbTKMzMmt23vBVqR3F03BXniAc/11i4sGlkd2KyebsaPQS/kuoM5WVDE/6vE/CXaiucZs9IlbLcLYcuKS+QGpLMpQUH8J0XnDpUNGj1mPCOBx6MVSZ2bcEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788783429; c=relaxed/simple;
-	bh=P1JBUR6CrlGFBWEniY71OOu6dzdkNKM92VZKep2iisw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KBzP3PaB/oz+BZiVjCiSknVwAy4CGa3QMpaGT41JZ3lfUpmqZc9UF2gLN6XnBDnb0q53enuFf6J7uOhdY++MILO45WMET1mpdyt/ua5QejAT3GvzAxigCtO+ckCBqsjfssnMxivVAMnugxt0l4u0D3OiohO496PR3Tb4cQjcWFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Gj6eZkc7; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1788809416; c=relaxed/simple;
+	bh=j+BDnmDyh74w4pgL8Rn5XSmIJ3N/HoQ0HgjCKl4qQrI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=buraYCsr+jyI/FpzDysHCRJqfaRbuDgoCdz6qVCj1XSn0s1Q4nf+z5dz0aEMsg9kTleSj0eH2KLlTyN4Kkd0JCPLreHFqyn2Ian5YZwS9vV1aDIbNkY1ewfVZR+7AFfFORkmKFbesYwYrkYpeeV3UhqIgdPxwJ7lfqMKJ2YMcdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQEdwIQQ; arc=none smtp.client-ip=74.125.231.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Gj6eZkc7"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-495590dde14so50035285e9.0
-        for <linux-modules@vger.kernel.org>; Mon, 07 Sep 2026 05:17:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQEdwIQQ"
+Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466cc9b4b63so55812fac.1
+        for <linux-modules@vger.kernel.org>; Mon, 07 Sep 2026 12:30:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1788783425; x=1789388225; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jn0w3wd9DpGVfALSA66dfRIXO28kzDp/Jqd8OQTEmq8=;
-        b=Gj6eZkc7F1sKQn7n5+d5fwVOYBvO8I67EfMKarBAZvt3C2JyaWqLSvttT9T5YhjygA
-         GkCqtg2kG9F2ZQXQfq4tPgcaHa7adhPgLwt+j+8ZL4zkGnHjJ4gE7SDfbAhPF5lBLfgX
-         ncnVzItqK5RD7F9nCEzWpUrNPqbjMiD9j0Y3A6A5F2xsVoLzAHFypao8W7q1g2ZDZ1EW
-         5WU4+JV4dIfiSCIj5ZPgxi37PxyXSk8zrCdQSCArUrjkrf0HHCRgcJ7kX6pWvX9F9AJF
-         M3Ajo59K8/MZw2rs8UXWwNFfZ5YxZ5oezeiB0OuZv8dmWnScfG7SofO1AoyLF2VMV/aG
-         8p1Q==
+        d=gmail.com; s=20251104; t=1788809414; x=1789414214; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=dIu/mIBPX0VHys6MmT2l2fjN8J667C9u+lhywd7I4Hw=;
+        b=mQEdwIQQxvu7HtbSjhgKlHYS+LW6upkjK4w7BYQyqZuBtcJIYPwsiDBEsz2s29L0Lm
+         XfhAvRDcLQSBhxelMgZkOgPzBXrWJskuZwU98w5xmGmqnp6h1NnmaUtQXhBTmduvQys2
+         TNC0kZ9KO/QP/Gtj/3dcZ7hf2Iaqui+3yaDljYla64K92dJj92hEixhmzBtMAF+ic0tC
+         Piqgn+nFNPVz99EI0rI8+5oi0TYvCOIa5YDWfJTy4SseR8yiA2kQDi76oc6bUsFqvVyF
+         vHnxPZkFMrt5+bhzJ6nh5xYUPbof2ZqUpkt6bmLwnJXkWp8jTJ6E375LMmYGEuIGkVRt
+         D/SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788783425; x=1789388225;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jn0w3wd9DpGVfALSA66dfRIXO28kzDp/Jqd8OQTEmq8=;
-        b=kHh/ao0ufUkRnV9xPMEpfK4MnBeQY9iwbFtNN6o0UPQAz5GS3m+oyK2APsOUP379XH
-         ICY9NHUNwwAROL0PSbJ+XxeptnI+xlEGg31TFt2vfBybvh7km/pS8Xs5g5j8TOkrQw30
-         XOeUzxmZ/dsLSQrxHnJTB4g/1lbFf0zvDpTwJCRuK8UxKKNpAd/Vwxp3ZdNOrMdV6LnA
-         rBOdMtuJ1mU3Ug37i9cfkILbcfjIqFklSdw6bAZLgM1UhE7Nv8/C2NKaADaPtbfJzDhD
-         G6pLi2lE3Px++DCBumqV6N/oG7jxKNPa7OdG52UN+v+fEiUykCLsOWImPoCbMXRFWbxq
-         zp9Q==
-X-Gm-Message-State: AFuF++lChvfaNSgvIcSBUkVj9176ZnG5VM/T+KJmvN1wrRyiA3t7WXA7
-	a8FDx5jXUi68aol5C++FGVSm5a2R/tznHhuPlbB1XIdTJYuayJtBzB6KtLSRbzLdkVU=
-X-Gm-Gg: AYBFou25QLWwmeLqlVS4hq2FFkerOnuiowmh2GXZbCbJXwql5ShiJqzH6n+4GlwYaan
-	G5U6vzqHeJ9SpqwsnhSKuSogelA50JNwgwwTw7pym4FJBkgemZVw0ESj8UGx2WNLsl4WNet1hmF
-	WmMPZ05Ueol/HtJ16Yj5di7B1QBgZKDVG3RPZF6TTLWR49eVJ1L86juwYA+nsM1yS/w5+tu69B5
-	BGpZU9LLEE0g6Cm84NvC61Ppkrakn0cgly9VpUwSOVQHtXTzN79lbiNxgGON1XGok5Zr52Jfj0I
-	ZFFr+ERQX9dHaOS51LSIzm32/hXIntdNUOYsvRki7LyycFgKc/NdvFBa3IBMTnt1ul6FDxj9Zt2
-	JIm9jkMrvDtuqAdQMjLjWkFg5rtnKVt4LnXofMWAZtlJKj7NXFITmzVDqDMyxHr73BYmUCePC58
-	qwsJUWFlYQg8BL/1wEXLIcgKmh237EHgJK4cylMOvCATIwLxyBoKVA5nhI/D7YxVYyyEa42vB8X
-	bZGGdmstEXMt5TrX9rzmRvJ
-X-Received: by 2002:a05:600c:4ecc:b0:49d:870:7a69 with SMTP id 5b1f17b1804b1-49d08707aafmr181610255e9.12.1788783425050;
-        Mon, 07 Sep 2026 05:17:05 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf5135353sm271556005e9.2.2026.09.07.05.17.03
+        d=1e100.net; s=20251104; t=1788809414; x=1789414214;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dIu/mIBPX0VHys6MmT2l2fjN8J667C9u+lhywd7I4Hw=;
+        b=I2dExdAmozlGlTcDE73j+TvItoDzE10MXTzdzguVIIhdxrT23V9iviI3x4MYbmpA2S
+         Qq4HTs+BSxi+wfOcN1n3viTV7cVcYEARb62duvLIuEjvMytpYUnKeBi6hgHpKSiqExKz
+         EyKIXLJlrrIdE83Ar6uyYEszXYKEKl0IWYpQi9lZWJ3yru5OpAmwuIei97broaqz8jGw
+         9/bvsidigdYN567cr/jJ9qLBbRchGW9YMbb4gJcPBZxgSCrj6xQN6CsZk5yY9PKQRf4x
+         rbfBDv4unBu/I7itH37vSvUWs1Q4nAILqYYKF4DGhN8FzO07sqRNRego+pk8FeeLZ1pr
+         4zZA==
+X-Forwarded-Encrypted: i=1; AKwUvBwjc4cAi64peafEChWZV8NQwc7Cr3g8CbsY/gIWJG+Rau2NANXVQrQpx07mZIM56IyUW7xW4q5EbA6ESKJu@vger.kernel.org
+X-Gm-Message-State: AFuF++l4tvflH19kAgW3g0NXOE8NriO6Lxy8FKpFABZ/asag7lRzF4cD
+	Lt8v9e5TpxPgh81KJc8NAdel2u1ioUtZX0TyxCN63XIOoce7Q5PeuTVh
+X-Gm-Gg: AYBFou2i0pVfeZnHl4Q2ZXTcJ4NSexk0umgX8QnHelVkfrEoojrimkD1ZrgL48M6GCU
+	HrZ/H4CNzz3wgu41JmDCM9Gq78ZKEED5HwEzgzhT5qA0iw6v50xDIF3Q4+GN1QzdG57z+ferCAF
+	ACqAtYpzBDcL+e9pJFrJH8UfGTcus+fmUoJz/JtHZfTjBdC0UmPvxhLa8zXUu3z0CPBTP4b0hm8
+	LScYArd0ABv+kJIyHl0cX+bGUB9c5CjOF5O7+NVAmDzV1Yy5EPJxE4R9ogcVwe2FpA7ZA5Tm1UN
+	fs3AMcLGWKTgM1O39IMHYSGLEuqTzPjuDA2eapY67g6iSZMoXHGKPLZCEfUvcO2YoKpvCT1mJR9
+	EvSV3t7auvRJK43XVsdyZ6Uwxq6b4E3Fq2yOB6tCEWyg2TsJhUt6XauNsEyvU9ehnrrWwJeebto
+	ayIsGwAYm/BS6JAdL744ZdTB63/Te5bGeN6uUQbm10SCrVC2oqv31iA6gqCOXW5u+39yMRK2M9B
+	LhoJ8dQ+/ag8sFGUfOmOpCDuHQSkEuma09FzDf8ktmFweUnV+OHrZw=
+X-Received: by 2002:a05:6820:81d4:b0:6a3:7424:8db5 with SMTP id 006d021491bc7-6bc24aa0316mr768736eaf.3.1788809413944;
+        Mon, 07 Sep 2026 12:30:13 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:42::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b7691588f4sm12107567eaf.13.2026.09.07.12.30.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2026 05:17:04 -0700 (PDT)
-Message-ID: <534b9178-068f-4808-8ed3-e989dee2be0f@suse.com>
-Date: Mon, 7 Sep 2026 14:17:03 +0200
+        Mon, 07 Sep 2026 12:30:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/4] module: introduce SH_ENTSIZE_STANDALONE for
- separately allocated sections
-To: Hao Ge <hao.ge@linux.dev>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-modules@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Sashiko <sashiko-bot@kernel.org>
-References: <20260902081802.146145-1-hao.ge@linux.dev>
- <20260902081802.146145-3-hao.ge@linux.dev>
- <20260902083338.706451F000E9@smtp.kernel.org>
- <cf829450-497f-4456-b229-3387fa24b177@linux.dev>
- <48658d4c-4920-40ba-afbf-65400dffc863@suse.com>
- <100a9358-1c7b-4f08-a5d2-072362aea492@linux.dev>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <100a9358-1c7b-4f08-a5d2-072362aea492@linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Mon, 07 Sep 2026 12:30:11 -0700
+Message-Id: <DL9C0IVB1HCG.3B2WEUW6ARHH5@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Alan Maguire" <alan.maguire@oracle.com>, <ast@kernel.org>,
+ <andrii@kernel.org>
+Cc: <daniel@iogearbox.net>, <eddyz87@gmail.com>, <jolsa@kernel.org>,
+ <ihor.solodrai@linux.dev>, <yonghong.song@linux.dev>, <song@kernel.org>,
+ <qmo@kernel.org>, <martin.lau@linux.dev>, <memxor@gmail.com>,
+ <emil@etsalapatis.com>, <mcgrof@kernel.org>, <petr.pavlu@suse.com>,
+ <tj@kernel.org>, <kees@kernel.org>, <bpf@vger.kernel.org>,
+ <nathan@kernel.org>, <nsc@kernel.org>, <arnd@arndb.de>,
+ <puranjay@kernel.org>, <yatsenko@meta.com>, <atenart@kernel.org>,
+ <ojeda@kernel.org>, <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 11/18] bpftool: Add ability to dump
+ LOC_PARAM, LOC_PROTO and LOCSEC
+X-Mailer: aerc
+References: <20260901165757.801449-1-alan.maguire@oracle.com>
+ <20260901165757.801449-12-alan.maguire@oracle.com>
+In-Reply-To: <20260901165757.801449-12-alan.maguire@oracle.com>
 
-On 9/7/26 8:10 AM, Hao Ge wrote:
-> Hi Petr
-> 
-> On 2026/9/4 23:25, Petr Pavlu wrote:
->> On 9/3/26 8:00 AM, Hao Ge wrote:
->>> Hi Petr and Suren
->>>
->>> On 2026/9/2 16:33, sashiko-bot@kernel.org wrote:
->>>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->>>> - [Medium] The `.data..percpu` section is incorrectly exported in sysfs with a dangling pointer to a freed temporary buffer.
->>>> --
->>>>
->>>> commit 5082dc654c1b8850af405eef473b249c0d936de9
->>>> Author: Hao Ge <hao.ge@linux.dev>
->>>>
->>>> module: introduce SH_ENTSIZE_STANDALONE for separately allocated sections
->>>>
->>>> This commit introduces a new marker, SH_ENTSIZE_STANDALONE, to indicate
->>>> sections with a separate allocation. Instead of clearing the SHF_ALLOC
->>>> flag, it utilizes sh_entsize so that sections with separate allocations
->>>> like the percpu section can be correctly skipped during layout.
->>>>
->>>> Link: https://lore.kernel.org/all/499bb60c-c6e3-43a3-bd92-95a0567ece5e@suse.com/
->>>>
->>>>> diff --git a/kernel/module/main.c b/kernel/module/main.c
->>>>> index d0e1e0bd2ad06..b114b815187a9 100644
->>>>> --- a/kernel/module/main.c
->>>>> +++ b/kernel/module/main.c
->>>> [ ... ]
->>>>> @@ -2822,7 +2810,8 @@ static int move_module(struct module *mod, struct load_info *info)
->>>>>  		Elf_Shdr *shdr = &info->sechdrs[i];
->>>>>  		const char *sname;
->>>>>  
->>>>> -		if (!(shdr->sh_flags & SHF_ALLOC))
->>>>> +		if (!(shdr->sh_flags & SHF_ALLOC)
->>>>> +		    || shdr->sh_entsize == SH_ENTSIZE_STANDALONE)
->>>>>  			continue;
->>>>>  
->>>>>  		sname = info->secstrings + shdr->sh_name;
->>>> [ ... ]
->>>>> @@ -2967,8 +2957,13 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
->>>>>  	if (err < 0)
->>>>>  		return ERR_PTR(err);
->>>>>  
->>>>> +	/* Repurpose sh_entsize to track where each section is allocated. */
->>>>> +	for (i = 0; i < info->hdr->e_shnum; i++)
->>>>> +		info->sechdrs[i].sh_entsize = ~0UL;
->>>>> +
->>>>>  	/* We will do a special allocation for per-cpu sections later. */
->>>>> -	info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
->>>>> +	if (info->index.pcpu)
->>>>> +		info->sechdrs[info->index.pcpu].sh_entsize = SH_ENTSIZE_STANDALONE;
->>>>>  
->>>>>  	/*
->>>>>  	 * Mark relevant sections as SHF_RO_AFTER_INIT so layout_sections() can
->>>>
->>>> [Severity: Medium]
->>>> Because SHF_ALLOC is no longer cleared here, does this cause the
->>>> .data..percpu section to be incorrectly exported via sysfs?
->>>>
->>>> With SHF_ALLOC remaining intact, sect_empty() in kernel/module/sysfs.c now
->>>> returns false for the percpu section, causing it to be processed instead of
->>>> skipped.
->>>>
->>>> Additionally, because move_module() explicitly skips sections marked with
->>>> SH_ENTSIZE_STANDALONE, the sh_addr is never updated to the final allocated
->>>> memory.
->>>>
->>>> This means when add_sect_attrs() exports the section:
->>>>
->>>> kernel/module/sysfs.c:add_sect_attrs() {
->>>>     ...
->>>> 	if (sect_empty(sec))
->>>> 		continue;
->>>>     ...
->>>> 	sattr->private = (void *)sec->sh_addr;
->>>>     ...
->>>> }
->>>>
->>>> Will sattr->private end up storing an unmodified sh_addr pointing to the
->>>> freed temporary load_info buffer (info->hdr)?
->>>>
->>>> This appears to leak a stale vmalloc pointer address to userspace when
->>>> reading the sysfs file for the section.
->>>>
->>> Yes, Sashiko is correct. The fix is just one line after percpu_modcopy():
->>>
->>> info->sechdrs[info->index.pcpu].sh_addr = (unsigned long)mod_percpu(mod); 
->>
->> mod_percpu() (mod->percpu) isn't really the execution address of the
->> .data..percpu section. That section in the ELF file is only a template
->> to initialize the individual per-CPU variable areas.
->>
-> 
-> Yes, I used mod_percpu() to stay consistent with /proc/kallsyms.
+On Tue Sep 1, 2026 at 9:57 AM PDT, Alan Maguire wrote:
+> In raw mode ensure we can dump new BTF kinds in normal/json format.
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/bpf/bpftool/btf.c | 85 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+>
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> index bca0a3982f09..4d8991c99b48 100644
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
+> @@ -51,6 +51,9 @@ static const char * const btf_kind_str[NR_BTF_KINDS] =
+=3D {
+>  	[BTF_KIND_DECL_TAG]	=3D "DECL_TAG",
+>  	[BTF_KIND_TYPE_TAG]	=3D "TYPE_TAG",
+>  	[BTF_KIND_ENUM64]	=3D "ENUM64",
+> +	[BTF_KIND_LOC_PARAM]	=3D "LOC_PARAM",
+> +	[BTF_KIND_LOC_PROTO]	=3D "LOC_PROTO",
+> +	[BTF_KIND_LOCSEC]	=3D "LOCSEC",
+>  };
+> =20
+>  struct sort_datum {
+> @@ -415,6 +418,88 @@ static int dump_btf_type(const struct btf *btf, __u3=
+2 id,
+>  		}
+>  		break;
+>  	}
+> +	case BTF_KIND_LOC_PARAM: {
+> +		const struct btf_loc_param *p =3D btf_loc_param(t);
+> +		__u32 *v =3D (__u32 *)(p + 1);
+> +		__u32 i, vlen =3D btf_vlen(t);
+> +
+> +		if (json_output) {
+> +			jsonw_uint_field(w, "size", t->size);
+> +			jsonw_uint_field(w, "flags", p->flags);
+> +			jsonw_uint_field(w, "vlen", vlen);
+> +			jsonw_name(w, "values");
+> +			jsonw_start_array(w);
+> +		} else {
+> +			printf(" size=3D%u flags=3D0x%x vlen=3D%u", t->size, p->flags, vlen);
+> +		}
+> +		for (i =3D 0; i < vlen; i++, v++) {
+> +			if (json_output) {
+> +				jsonw_start_object(w);
+> +				jsonw_uint_field(w, "value", *v);
+> +				jsonw_end_object(w);
+> +			} else {
+> +				printf("\n\t value=3D%u", *v);
+> +			}
 
-That's a good point. /proc/kallsyms directly shows the st_value of each
-symbol. For per-CPU symbols in modules, that is mod->percpu+offset.
-I wonder whether it possible to make any use of such an address unless
-one also knows the per_cpu_offset() mapping.
-
-However, maybe it is really simpler not to export .data..percpu under
-/sys/module/*/sections/, rather than trying to determine what address it
-should provide.
-
--- 
-Thanks,
-Petr
+raw dump into json is fine, but please switch
+to pretty-print normal output that humans can read.
+Print function name, argument name and registers/stack where args are held.
