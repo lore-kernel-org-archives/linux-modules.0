@@ -1,248 +1,195 @@
-Received: from LO0P265CU003.outbound.protection.outlook.com (mail-uksouthazon11022131.outbound.protection.outlook.com [52.101.96.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873373B8BBF;
-	Tue,  8 Sep 2026 20:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.96.131
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788899573; cv=fail; b=tD7aBK19f7NE/sm20tFYuhlR77fItDSjw5p50bxx6fGY9izrS3USdP35D67DqR/+pU0GHlWG/XdMkHbB2HMQtpwhNEXDW2BFiTRd6UrkOfPvWIVq+lV24rJv4EaFX8hstBTktomj+zWb+DkookqTtrpT8H/fFi+JT4yqrn9XZog=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788899573; c=relaxed/simple;
-	bh=tyF2Bjc51NZIe6k7mnwP81pviDAy1BucIJllUtKQGDo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ULuS9bA5AQJC8/VQMorj0IR/80Qt0B/ZLbeF63XO1QTog2+X45u7cg6X/ax2hNW2oqsGpQnoP048u54NtJm3Mz1nwOG/uPNGMF3LUxB9I4oCIhmBl7ZgA0AvO1a2DUP1TKBnEbBO3Hqfa5cOT7977myLZTz6u+5IpP5M5wS8Baw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.96.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d8MJxS9QzLQbawI7o690I5LZR5nGM7KbZZZ7eOtmlDHxQl3J/O8sJiUApPT+SOcZ4NRyVxoJLwXjz3HY5dRU7MxeB1w+CmCm0gyzqdhMgyjFXXordXQ22Juc26ZEFsmN3X0f+YBkGOTQ56zow86WVGFWYjdGtYAR8Lp/XIXe/SmXihnsELfSxrYEABOftWXgPb/nzN7uj0esCKsWU2RNrP1AWwc3b3T91nIa8vazl+lhO4LhZtv5uAyoYjdnUk/gpjmuSEjOI15IKqERrN2ntNY/XHsQu8KKhgKkJgujfwJl+W9185FoRqOiKbd+gPfb0Nv00DV7s/1YHJzIGrsPmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=vDN3Mv/ICYouKSOhaOfwsMY0CjSbDzBvFKaCtP3kvHI=;
- b=isCqK2iSdLub1YuyI36uHjSMV+rYibw3u90KY6wuu3d5L0qSd4B9XKuldxG5i+C2YZiEAfe5WI1tdOpW9aPV8HtIfAIZJteXpw4ToSBqv04EMhSmT4HwGTwUZX2gHiVKn2ROUw3zuxYXCWEMXPtWN3FwE/Zac6/+Gnteuz8F5jcoS7H+wumxrle5rX5IhgqxHFn3yw3qPIizTv2CMiOJnvauYhU3puxenXZH3qRgX941nv8f/mdizDvqGJ+n41sixylphAaSakfHp32aK0VaHBfdpkK3S0MlpSciKkVI4V4WWYI41IF+dMO6eDqEIQmiFIhDqyEr7ZJDbP3nxLBcng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LO6P123MB7126.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:341::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.7; Tue, 8 Sep 2026
- 20:32:46 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0406.005; Tue, 8 Sep 2026
- 20:32:46 +0000
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: arnd@arndb.de,
-	mcgrof@kernel.org,
-	petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
-	peterz@infradead.org,
-	ojeda@kernel.org
-Cc: akpm@linux-foundation.org,
-	gregkh@linuxfoundation.org,
-	mhiramat@kernel.org,
-	boqun@kernel.org,
-	atomlin@atomlin.com,
-	neelx@suse.com,
-	da.anzani@gmail.com,
-	sean@ashe.io,
-	chjohnst@mail.com,
-	steve@abita.co,
-	mproche@mail.com,
-	nick.lane@mail.com,
-	linux-arch@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B2730C159
+	for <linux-modules@vger.kernel.org>; Tue,  8 Sep 2026 23:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788908986; cv=none; b=UlxDKqe3rpqV5Sbjn3CioYpcjFk5/ONBwdr5Zq1HQn0Ex+2ikF+HGegQSXT19F0tTs1Y2yyLlzfyBeVb7sbOn2ZQhGxsUnJLd/RgaOo5W5Hd8xdoChEOBmQXhCo2bmqMj2OH2fPVS4ti8PrZ7UveAhn/SnE3oLLZXJ5aGuZ3qMI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788908986; c=relaxed/simple;
+	bh=atrQOTjrNgABMsK63b7+x9nwBtP4l6gXo/MfCfGKi4s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FDksYgdNqn9ufFI9EMWbWSoZAHCyWtCQ7VxXybjwU2ouDzetEo1bF5HqNL+joizNT40kD9DxQJaJjwB58rogTRBp25p6sb0qpZZc2B61MG9N7wWIW7KG+j6fHKuRiwVOlYxZXnwYQp36s824QJWmE6XN16gWq1Mr/uxwedysMog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F6j3gGtD; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F6j3gGtD"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-49a97714f5dso51495955e9.0
+        for <linux-modules@vger.kernel.org>; Tue, 08 Sep 2026 16:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788908982; x=1789513782; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=S1sqlRiEDMtea/68TRHJP/y7Fg6bS0f93iC/rAE6DLs=;
+        b=F6j3gGtDWuk06NJt//uFMPNqNX0Rt7/fBXc6J9pg8UKN8hi/rmm4JZoIxXmTBPr228
+         6ZNhbPu4JFwkAoAtRBUImddloTtjMpiAyWTVgjgZya/zWTc6kQFFGc6oVskDZuGIMWUs
+         D2akvJT5Kzsvx5oDCj79e8Hnd0/31IiTZRBAByRKogExR23wotvhe6IDfWvmbdbKTWJq
+         l1wjIHbF/7byVkd67ggaGeJqieCDqcbtWJPhploQcENcamavkS6rvVfIYVtCGu/C5HzL
+         Z98KA6un4wPq3dT+iYGdqcQRjO196A+1zf2iETyhL0dcCLKsTZcvvNlzwpLq4ITUb2Cd
+         aXUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788908982; x=1789513782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=S1sqlRiEDMtea/68TRHJP/y7Fg6bS0f93iC/rAE6DLs=;
+        b=kS7sudNSFe5nRhL2hTHinjVE2Z7AZ6St7qBOnBOZG1oYQpSWnjv5MvorIjxXrCjjn5
+         2XddhIR2LdvAQtFCRbXUDoGTDITyJ+hVduO8yrcgS346QljBWagfvWpw3yZQc5UMUSk9
+         N5JnR8EdPmq71EH3V0yyGuRval1/oHhHGgB98vGXxNpth/g9TLzv79SA2A9R/VoUzqcg
+         BxleXa9mduC1iK9kalDAo1/YWdikANlcOs1vDEXGlddHYcoQ0t+Pem7WK6ZQDUyzfqpA
+         PHpt48R4yvgkgQKal60J6ha8ks39fiymAJ4pxG+yMWQho9WxIa9/cNDnaS/hvRfIyxIc
+         0Czw==
+X-Forwarded-Encrypted: i=1; AKwUvBwTgW7FcY4i+n4rcqnak7g5YvahE+NZ5nnXn7I2Bj9/9ie1GqmiUGyOXUYh9ffbEJT/Qd4KDHKRTPtmsrNC@vger.kernel.org
+X-Gm-Message-State: AFuF++leqG8AOE8pLq7Z2QroiUaWmxg6RmzE4prGWrpTbNDt7jf+vSM5
+	i8wDFl97IwqiCG9ZJl6KZE7wjO7/h5wq6X8R0r+ZVcuizxUfAapkQuV5
+X-Gm-Gg: AYBFou2TY7a6Zdk1ymHNA7t1eFolmxJNri6+UiIFp4a3y3CYqFA4iHC/DJbXQJZDhqC
+	jjd8XHUP4tk5zD3SFbDl0inzhvbBlUHjdTrR69RBDmmmhtQ44G/Xj1lkE3rv0iTOr89H5zo1mM+
+	XVXdhxIwXYeedzhfAOUlc31KwgaHBLTk5/KiZ+atyfDuBvYBsptJQxURO4HEezX9/gcuY9Bsmy+
+	ZzqufCoNNZ20VYqjo9xxLGPgwypK0LpGCqHMyKv6ibIjzhhJT/JjPEya8eWzd5zzFuWo8LZOSEQ
+	9F43dlXWyKK3wbZA/QdFqZjqs9D5FNdwOR6CLYBet/Q1V8MKk6xj2WZaKRa6LNE09lLQrXxYwS3
+	YgJR8izz8uFmiclioa6Dq72HxF/OtsfLRSoBO04RzOhrs4CkSj/eHAk7oVFT9OjBH+a+zGhCgXc
+	cuySeH40iZ1yV9cr9BpnkSZfiFW5dvreh60ATZ9ReQnMMbL9Wjv8ifczIgltDbqgMQOD9trZrse
+	zwToZQtV8AWzcBAAjEXbuVByeQi2qXFymEwpnl7DCdEe6/j6VvQiWkYi3NK32UCG9Xvbj3xv0qM
+	S5TFoNDSEmG7sbYRsBxtM9f/lg==
+X-Received: by 2002:a05:600c:348a:b0:49c:fa20:cc03 with SMTP id 5b1f17b1804b1-49cfa20ccedmr254595975e9.26.1788908982187;
+        Tue, 08 Sep 2026 16:09:42 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-095-117-170-066.95.117.pool.telefonica.de. [95.117.170.66])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cfd3f8192sm385530905e9.3.2026.09.08.16.09.40
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 08 Sep 2026 16:09:41 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nicolas Pitre <nico@fluxnic.net>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-modules@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-parisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v11 3/3] module: Rename module_blacklist to module_denylist
-Date: Tue,  8 Sep 2026 16:32:30 -0400
-Message-ID: <20260908203230.401020-4-atomlin@atomlin.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260908203230.401020-1-atomlin@atomlin.com>
-References: <20260908203230.401020-1-atomlin@atomlin.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BLAPR03CA0007.namprd03.prod.outlook.com
- (2603:10b6:208:32b::12) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:183::5)
+Subject: [PATCH] module: reject out-of-range relocation target indices
+Date: Wed,  9 Sep 2026 01:08:15 +0200
+Message-Id: <20260908230815.78409-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO6P123MB7126:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9e501e68-b6e0-43a5-dc78-08df0de857c0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|23010399003|3023799007|10067099003|56012099006|5023799004|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	jBrEXcM+PcJLTmNsUZKav9Ylyr1d6JGCyV2LSJ/a3pWjLNOOeYEkkQs/mrINFsNm5NvPcznp3tw1eibKiUnFgB/U6W/v6tzat1MzVgyivDMHl+IKscSpSoWQIUpjzUB9ekmwtzwbNAQSr/CRFc6/RIwFr+eWOQJgtlk7OupHpHmIAlVtrnNDPTwg2gvtRyX0S5VIOfEG+LHebP7Ytvnzb6T7BXHLgv2WiMDhYX5fFBefOSPdeCpXfazyk7+CMGHsThDP5Yb6ROkEtYbhq32dkyyuII2dAlNIhXOoks8uAo5Aid7RBK1NOVI+LBlXrpRMruf3HWJSZEXIb++WNREyDXqI9kR+6kPsF+8CUZa2Rdep316x1I5/sTOon19dvdHn4h+KlPhxycwa4CfXS/Nc9JxczSwRpq7RzJqr8DWq9aPua7WYBmdmyQV5BLRbjXiydSpIxFZ3Cj9sxlQ5qBBWIghRSYTUUB5PMPY5O+TQUoZ1tVGJwZJWpYTb+vaBPVkXiHQ4RbBCeWGi7Prlde4yvLok2OiLz4U0j4HxN3sV/AmFkUUILGbS3lzYXuY0RCK2qGJNsvlwX1XeefxlV1Zxy8flvwOviXGdk+vgNi3LilHegv2f9o2KLYBpTiDrtSvgoG1kns+uVXZduP4lcQp9KF36daeoQFiXA1Hx10i4WQw=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(23010399003)(3023799007)(10067099003)(56012099006)(5023799004)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IjD8/gWo30royto2cidsfeHyJ3N67kRce+0u0FnN6LWs28CO2DU/q0chTTyI?=
- =?us-ascii?Q?36Ym7lByH1WcBmgRkr/kjjTu8cPxMeEI03L9hG0RfL2vlsddc9JYQf+Z3iQS?=
- =?us-ascii?Q?DVto8E03sHCLpVybTaKG1C+30AASNk2kcmrKurGrm6uRrcWrc0i3wrYu5ICW?=
- =?us-ascii?Q?icJWBzBl7RVhHadgy9pHssoZd4Y/3AzK+ZNt3MzdCM2DLMxa1toFBZoMra8m?=
- =?us-ascii?Q?WqYv6VTz1QYeh/SET9rCfWmHu+zPKBFks6QV3IhlTndJlj+mFz33sgTG/NDU?=
- =?us-ascii?Q?mmmU7min+KCNpwZXInoU3ZDxa+L1OSbFPh+g6Dea5dgJBulDemdpDEvQQmAn?=
- =?us-ascii?Q?9hlQJqqxObUUE71D3CCB2AXTW7IEgWQfAPZBeTUPv0xrl92RPq5/nt4Huwqx?=
- =?us-ascii?Q?beYGRoBIFAumMEAUNL8Bb10DRODMkhkO06HC92Og6k4W9NzVgmUplLQvLvYj?=
- =?us-ascii?Q?yDjGnzhKelT+bWrZDkDW2lUTITejabrNS5S68y82VWNZPlnTwU/YhJvzT6ak?=
- =?us-ascii?Q?kO0RngahL3igVkxH3/Ti5QHYQwK4ug15f0dAx/R/h7jGdUHT4b+K+h5odXmn?=
- =?us-ascii?Q?SAcm6/VOPmqpwWdnECd+UM2vOQR9scVoMdl8Ixcr7NC8yJpvVqY4ejnQr9Ul?=
- =?us-ascii?Q?AyYJ1w96u1YgOdF/GhBGSKQoL/vO2LwVC17kZ6zgyKi0xpv1agul91190KDU?=
- =?us-ascii?Q?9oSKv0Hk4pYhxqXJosDUDksZHkh1/Dg8vasLUh2fVPmtLRE2c8DbJrJvHOAM?=
- =?us-ascii?Q?yX+k4ivc7uVJcp5XichTNclbamRV4jutRghKQ0dTujYnW6U5byllAwwxjQoX?=
- =?us-ascii?Q?xY7AIakm6wzMulMrT26yy3Afw7sRahkWxWtrpEBrNTiAmt4YLtDBDogykXxG?=
- =?us-ascii?Q?4o4OmmXXleK/KzwYt4D2QTIr1Pp0NAOODbrYRxm2EqVVqF1kDzjEtwnlctbW?=
- =?us-ascii?Q?KgxRJBrRzwqWcGaZ9SvAdRHcDlvrITNhr1a4L2jACsUB4/3nWkqi/cT25ciT?=
- =?us-ascii?Q?vf2gJ+33Fng79MBG4KxF4bNLgh0lV9OaKvLQryqpfrPbZP4ck6I4cbUfZxx6?=
- =?us-ascii?Q?kdupcnIt/N8mrUch20D+93No10CsLOnwflrYNJ88rP1J2CIstAmVdkomkEBo?=
- =?us-ascii?Q?mJZWSw4Skm1+kwblx7+OS2EefZzhzNdFxB0d5Ks9HgNvOgBxUHa+kURw7kmo?=
- =?us-ascii?Q?7+bNG1NYeyB9sRhMNUljZn36eaHVyFql3s9tFTsoa++c1OSMkD68YEEDqKUL?=
- =?us-ascii?Q?7hD9IurnYcCeqY8RB9cIx7ojtFd3/7s16mb/vkBpYYU01oFrX0j9aEVY1ZEj?=
- =?us-ascii?Q?pBk1hZStArWcMVIEThAox6z8eyKnBrSGx1Cts39Ttla3h2ExAH/u8r8df68O?=
- =?us-ascii?Q?aybN4ZwGb2zRRDKZINF2xK42hr2eNYw7V7GNQDORVZDPgoM/AIEkzn/AKVyU?=
- =?us-ascii?Q?6AUiyD2LGdCmFoKM7SEpf5bbuntQ6bRQFiEBcNAL1pnrF/NarFjAG9dBsQmt?=
- =?us-ascii?Q?EIayIpaN3AgjhoIelXLXgU/KBrR/Jd67GqKXhMQgJxv1/rk4IofRudmcINGW?=
- =?us-ascii?Q?nn2hgkW535v3s+LQR7JVUyxRqGRPWzSWDcNmPfuF+J1ox6eKxxB0X2DuVQYW?=
- =?us-ascii?Q?yGE8QGvnfZZfuzJG79ZN2+sBZo12tdKNI4PpcZmrmGzewrcuCEbWXS1ydIAJ?=
- =?us-ascii?Q?4rhgSK2uQUh/hvGR+vs82GwVDZyLna5UK4Pf5sZiY8gYN8UKPDn53GfI/cRx?=
- =?us-ascii?Q?QMCGkkbjhA=3D=3D?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e501e68-b6e0-43a5-dc78-08df0de857c0
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2026 20:32:46.7453
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: efJm8iufArJIqNmzEB0GohRDTdVk62xuroh2Uds/sthCic1m99eVEVbpHqDatyiNQObk1vV7UZ9kaUkTb6pZJQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P123MB7126
+Content-Transfer-Encoding: 8bit
 
-To preserve the existing user-space ABI, "module_blacklist=" is kept
-as a legacy alias pointing to the same module_denylist variable.
+apply_relocations() skips relocation sections whose sh_info target index
+is outside the section table. ARM, ARM64, LoongArch, PA-RISC and RISC-V
+use sh_info earlier in module_frob_arch_sections(), before this check.
 
-This patch addresses the documentation by marking "module_blacklist="
-as deprecated in admin-guide/kernel-parameters.txt, and documents
-the new "module_denylist=" parameter. All internal symbols, such as
-module_is_blacklisted(), have been renamed to use "denylist" and all
-log messages now use "denylisted".
+ARM, ARM64, LoongArch and RISC-V use the unchecked index to read
+sh_flags outside the section header table. PA-RISC uses it to index an
+e_shnum-sized heap array for a read and an update. QEMU reproduced
+page-fault Oopses on ARM, ARM64, LoongArch and RISC-V, and a Data TLB
+miss on the PA-RISC array read.
 
-Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
+Validate sh_info for SHT_REL and SHT_RELA sections in
+elf_validity_cache_sechdrs(). Reject the module with ENOEXEC before
+architecture code can use the index.
+
+Fixes: c298be74492b ("parisc: fix module loading failure of large kernel modules")
+Fixes: 7d485f647c1f ("ARM: 8220/1: allow modules outside of bl range")
+Fixes: fd045f6cd98e ("arm64: add support for module PLTs")
+Fixes: ab1ef68e5401 ("RISC-V: Add sections of PLT and GOT for kernel module")
+Fixes: fcdfe9d22bed ("LoongArch: Add ELF and module support")
+Cc: stable@vger.kernel.org
+Assisted-by: LLM
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- .../admin-guide/kernel-parameters.txt         |  6 +++++-
- include/linux/module.h                        |  2 +-
- init/main.c                                   | 19 ++++++++++---------
- kernel/module/main.c                          |  4 ++--
- 4 files changed, 18 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 68647ff4bdd2..aae1da11a592 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4232,7 +4232,11 @@ Kernel parameters
- 			Note that if CONFIG_MODULE_SIG_FORCE is set, that
- 			is always true, so this option does nothing.
- 
--	module_blacklist=  [KNL] Do not load a comma-separated list of
-+	module_blacklist=  [KNL] (deprecated)
-+			This parameter has been renamed to module_denylist=.
-+			Please use module_denylist= instead.
-+
-+	module_denylist=  [KNL] Do not load a comma-separated list of
- 			modules.  Useful for debugging problem modules.
- 
- 	mousedev.tap_time=
-diff --git a/include/linux/module.h b/include/linux/module.h
-index bcc54edbde7d..39386a18285b 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -879,7 +879,7 @@ static inline void module_for_each_mod(int(*func)(struct module *mod, void *data
- }
- #endif /* CONFIG_MODULES */
- 
--bool module_is_blacklisted(const char *module_name);
-+bool module_is_denylisted(const char *module_name);
- 
- #ifdef CONFIG_SYSFS
- extern struct kset *module_kset;
-diff --git a/init/main.c b/init/main.c
-index accaa8418aa5..8602dce328d7 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1347,17 +1347,17 @@ static inline void do_trace_initcall_level(const char *level)
- extern struct initcall_modname __start_initcall_modnames[];
- extern struct initcall_modname __stop_initcall_modnames[];
- 
--/* module_blacklist is a comma-separated list of module names */
--static char *module_blacklist;
--bool __init_or_module module_is_blacklisted(const char *module_name)
-+/* module_denylist is a comma-separated list of module names */
-+static char *module_denylist;
-+bool __init_or_module module_is_denylisted(const char *module_name)
- {
- 	const char *p;
- 	size_t len;
- 
--	if (!module_blacklist)
-+	if (!module_denylist)
- 		return false;
- 
--	for (p = module_blacklist; *p; p += len) {
-+	for (p = module_denylist; *p; p += len) {
- 		len = strcspn(p, ",");
- 		if (strlen(module_name) == len && parameqn(module_name, p, len))
- 			return true;
-@@ -1366,7 +1366,8 @@ bool __init_or_module module_is_blacklisted(const char *module_name)
- 	}
- 	return false;
- }
--core_param(module_blacklist, module_blacklist, charp, 0400);
-+core_param(module_denylist, module_denylist, charp, 0400);
-+core_param(module_blacklist, module_denylist, charp, 0400);
- 
- static const char *__init get_builtin_modname(initcall_t fn)
- {
-@@ -1383,10 +1384,10 @@ static void __init do_one_initcall_builtin(initcall_t fn)
- {
- 	const char *modname;
- 
--	if (module_blacklist) {
-+	if (module_denylist) {
- 		modname = get_builtin_modname(fn);
--		if (modname && module_is_blacklisted(modname)) {
--			pr_info("Skipping initcall for blacklisted built-in module %s\n",
-+		if (modname && module_is_denylisted(modname)) {
-+			pr_info("Skipping initcall for denylisted built-in module %s\n",
- 				modname);
- 			return;
- 		}
+A custom harness for upstream Frama-C 33.0 (Arsenic) Eva found the
+ARM32 instance in a source-identical ARM module_frob_arch_sections()
+slice. Eva reported the out-of-range section-table pointer and sh_flags
+access.
+
+The analysis and ARM32 A/B test ran at Linux b9b3e33b70b7 ("Merge tag
+'trace-v7.2-rc6' of
+git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace"). The
+PA-RISC, ARM64, RISC-V, LoongArch and x86_64 A/B tests ran at the
+declared base commit, 28924df2a08f. arch/arm/kernel/module-plts.c and
+the touched loop in kernel/module/main.c are identical between the two
+commits.
+
+Each A/B test changed only a relocation section's sh_info to
+0x10000000. The same configurations and modules were used before and
+after the change. All controls loaded before and after the change. The
+fixed kernels rejected the malformed modules with ENOEXEC.
+
+Original-kernel results with QEMU 10.2.1 TCG:
+
+- ARM32, virt/Cortex-A15, GCC 15.2.0, multi_v7_defconfig plus
+  VMSPLIT_2G: page fault at module_frob_arch_sections()+0x160.
+- ARM64, virt/Cortex-A57, GCC 15.2.0, defconfig: page fault at
+  module_frob_arch_sections()+0x110.
+- PA-RISC, B160L, hppa-linux-gcc 8.1.0, binutils 2.30,
+  generic-32bit_defconfig: Data TLB miss at
+  module_frob_arch_sections()+0x11c on the stub_entries read for a
+  counted R_PARISC_PCREL17F relocation.
+- RISC-V, virt, GCC 15.2.0, defconfig plus RELOCATABLE with
+  MODULE_SECTIONS enabled: page fault at
+  module_frob_arch_sections()+0xe4.
+- LoongArch, virt/LA464, LLVM 21.1.8, loongson64_defconfig: page fault
+  at module_frob_arch_sections()+0x1b8.
+
+On x86_64, which has no vulnerable early sh_info access, the original
+kernel loaded both modules. The fixed kernel loaded the control and
+rejected the malformed module with ENOEXEC. The test used pc/qemu64,
+x86_64_defconfig and GCC 15.2.0.
+---
+ kernel/module/main.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 0eb5700f9f73..9eb31dccef98 100644
+index d0e1e0bd2ad0..30c7a05488bc 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -3382,8 +3382,8 @@ static int early_mod_check(struct load_info *info, int flags)
- 	 * Now that we know we have the correct module name, check
- 	 * if it's blacklisted.
- 	 */
--	if (module_is_blacklisted(info->name)) {
--		pr_err("Module %s is blacklisted\n", info->name);
-+	if (module_is_denylisted(info->name)) {
-+		pr_err("Module %s is denylisted\n", info->name);
- 		return -EPERM;
- 	}
- 
--- 
-2.55.0
+@@ -1933,6 +1933,7 @@ static int elf_validity_ehdr(const struct load_info *info)
+  * * Section array fits in the user provided data
+  * * Section index 0 is NULL
+  * * Section contents are inbounds
++ * * Relocation section target indices are inbounds
+  *
+  * Then updates @info with a &load_info->sechdrs pointer if valid.
+  *
+@@ -1983,6 +1984,12 @@ static int elf_validity_cache_sechdrs(struct load_info *info)
+ 	/* Validate contents are inbounds */
+ 	for (i = 1; i < info->hdr->e_shnum; i++) {
+ 		shdr = &sechdrs[i];
++		if ((shdr->sh_type == SHT_REL || shdr->sh_type == SHT_RELA) &&
++		    shdr->sh_info >= info->hdr->e_shnum) {
++			pr_err("Invalid ELF relocation section target index %u\n",
++			       shdr->sh_info);
++			return -ENOEXEC;
++		}
+ 		switch (shdr->sh_type) {
+ 		case SHT_NULL:
+ 		case SHT_NOBITS:
 
+base-commit: 28924df2a08f440c73991b83028032c901de2ae4
+-- 
+2.53.0
