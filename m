@@ -1,32 +1,32 @@
-Received: from mta1.migadu.com (out-37.mta1.migadu.com [95.215.58.37])
+Received: from mta0.migadu.com (out-31.mta0.migadu.com [91.218.175.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1EA51356F
-	for <linux-modules@vger.kernel.org>; Tue,  8 Sep 2026 09:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA42511192
+	for <linux-modules@vger.kernel.org>; Tue,  8 Sep 2026 09:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788859259; cv=none; b=B0oM2i9U2bhHJlB2WfGwMuQjbzVffDEoUF4EqDrzvyN5PteehBV+P6E72utg1asf2Wn59l9V/FxEjj+MVX/tMN366O/OZoz61ciwnaiWKAHFtGltVzWKk2MsEnCslBavDc+O28DtSM1reRYwl+uC5PT+wk2kUdN6gRbG3VbClh8=
+	t=1788859501; cv=none; b=UQO35qH3hmh1vonVt5lvYMM+ltbxsM/C/JlLRsv2kqoGNADqykCOySyrJeIvmYgATFya4mBvusfwYDI5vQoHbVIV5eTW+uPLblXAAGU/6eKHkJJTEWKjQTIjeeIHWLuWlVfIfy3TeQWTE8vEPj2MEVmg6uTac4EzuvL1iTAVXsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788859259; c=relaxed/simple;
+	s=arc-20240116; t=1788859501; c=relaxed/simple;
 	bh=5qZoCBZiXzbympZO5SLiimtaqd6GAU+iP1rCRMtmMRs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XnqtVbxjo5CglpV9M8PXoTqRB7GHYWdYAqaotcrPckTgovSo/Auz/8anAda5MD1DApkRK+fdu1bwfRE/ZFXjjsMXCEZpLvn6DUdkFkLPh4ngwvrd94X84tOXrQWZOvHv6D2coF4TgTfzib6F34ln3jFYnI0YHf9rz4f+1SDcLh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dbGpm5W0; arc=none smtp.client-ip=95.215.58.37
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=s8+IKDT4smqPJ4kPdjqpt01qn44LyxdQcIchVzcpEiM6zioXjHNrKUXxZ2dn6uLol/JeJIf7kqiBAaVQ9KoeNg2cYtCnT8ji3TLlkPevlLQt68Qnrqp8d4H79m0jM0X7zWuzx+oWqkBUSecV7WuSdee1utZoROOmHbOxYh0IcGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=voIjrR+9; arc=none smtp.client-ip=91.218.175.31
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dbGpm5W0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="voIjrR+9"
 X-Envelope-To: linux-modules@vger.kernel.org
 DKIM-Signature: a=rsa-sha256; bh=5qZoCBZiXzbympZO5SLiimtaqd6GAU+iP1rCRMtmMRs=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788859255; v=1; x=1789464055;
- b=dbGpm5W0Xg9SB5Xt648j1l9N0LrtMzg/bgqMr1qYC68tF6VJLqsJyiSoMh+zRO7hhvX74KXd
- +Ri1BNn8uH2ynopB+iwJWnQ6Ck11cH3MATwPlMCg5eV/vcmHj6uHglybS3oD8OGdFQgyhdx1rYV
- zDZ7ChPg/mx/cipL8+xSVD4I=
+ t=1788859497; v=1; x=1789464297;
+ b=voIjrR+9XJaqu54GxR6300ZC05hac+AggwGJozFCbwEWFRrXXB0S4OLmyvKOeIiIvjOoKmot
+ T9M8evRZutvus/A6pAF+Tga1LVus7qr7I3fJyBaJEkKYrP9B31ToN0FPfn07b3uXLFyqtnQAn6t
+ S3vRGoT9iG2+lGrvaJesszs4=
 X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id bd3504b82ee67862;
-	Tue, 08 Sep 2026 09:20:55 +0000
-X-Mizu-Trace-ID: bd3504b82ee67862
+Received: by smtp.migadu.com with ESMTPS id c51440bf5b683b70;
+	Tue, 08 Sep 2026 09:24:57 +0000
+X-Mizu-Trace-ID: c51440bf5b683b70
 X-Migadu-Flow: FLOW_OUT
 From: Hao Ge <hao.ge@linux.dev>
 To: Luis Chamberlain <mcgrof@kernel.org>,
@@ -41,8 +41,8 @@ Cc: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org
 Subject: [PATCH v9 0/4] alloc_tag and module codetag section fixes
-Date: Tue,  8 Sep 2026 17:21:35 +0800
-Message-Id: <20260908092139.115329-1-hao.ge@linux.dev>
+Date: Tue,  8 Sep 2026 17:24:08 +0800
+Message-Id: <20260908092412.115953-1-hao.ge@linux.dev>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
