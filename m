@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C872BE639
-	for <linux-modules@vger.kernel.org>; Wed,  9 Sep 2026 01:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81743492E54
+	for <linux-modules@vger.kernel.org>; Wed,  9 Sep 2026 01:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788916411; cv=none; b=SPJVoU8gkjPS+mhq/vRP6lMIuN4ALmONQJWzYme26ud+cuO4i+smSpZrVEkymiFaEkgRFE0u6w7kfNTbCHYxVZwy+aApXLhunGANKV6+yOakOBSPBlEnZBB/IcLP8t6QLyI/LtYH9SJMIIZ9ajd32FkYfrBJGvxG6/SYCrqNEEE=
+	t=1788916497; cv=none; b=UUFBSEY6553QnoqU/vgcksbLd7nUnBaMareimu0xzVx0UMMXZcFdnoCWtjuN19TfAFmYXlP0AegDGbfRwh/WL7oTYxlUa4MvMsut1L5qrheG3rSIYOWHQ7IiU4D/esbHmeoLRpMIx5BGhQEea+Rug7Sasmo+/rcBl2+Af5m2mfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788916411; c=relaxed/simple;
-	bh=0bhhjy6ENRKrrBMYmr4j0zIb/ASnhmaHKxEeO9Vsf8I=;
+	s=arc-20240116; t=1788916497; c=relaxed/simple;
+	bh=v7rR3ddHlRuIyO9LH8rw+++GpfweObOJpaOMxRBfoOM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uWv/ELhETnvw3kJjVPo3yuUBClwVo1nShaLuJdFe7Mh+qRcmIxZ1tc30ygxNBTJep5Rlp4IFQdJaMg37WNVbOArfxiOZiBDZo7tQIIQsioacxy+B4y+eTez1+Lh/9WwjXRO/Mez+Jr5qQNffoT86tli7SJ9lXt8/ZUlCBrlYNvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hgc6qOo/; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=hZKxmd+AmWUHTTHRp2r40mGcibihZyANbaulSF6RqAiaVT/7T2iUXbkDpqvzsEHYiOIAMscp6oAb7n13FujaVKqThv8axd5llYBHB0XnjVZCSUBy8cOVWLzYZIv9bRvMI0mr6N6iw1usVsjW7H+LaPQBpAm92+1ZpqGm4vMhfnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjS17R7s; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hgc6qOo/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233FE1F00A3A;
-	Wed,  9 Sep 2026 01:13:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjS17R7s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE101F00A3A;
+	Wed,  9 Sep 2026 01:14:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788916410;
-	bh=9HlxQvjuct+JtCobiJ7NsGHeoLVT0QEcYijnXw6yfnQ=;
+	s=k20260515; t=1788916496;
+	bh=3G28ph8nlkLDHYZzD7M3IBfjRAu92jVUXnDoeGbhZT4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Hgc6qOo/6Es/j/C/I3S14MRrV5tzwpycEyhX0fdDKDOIV1cvS5ZqQbai/wpHb34KY
-	 ibfbfWWFwNishp+RhR4FZ8XJKfSNPn1sFPXOvMUBkASoAbIRkQKbOS0HnZMCd7oTVh
-	 aGmKUzyqN5H16j7nRqom0Kcll7yxLcPBYdQ14yF9OeNgGXR5kxlc7W2ZadMamwK8ME
-	 09Okzgiji1pNZCgBBcs4T+MmcYhFJUFj1zjmWzfccfMgTTk8J9txhqz9LLCgAl26Kw
-	 S7ZjW+oT08J3WVB/y73UYoOR17/8Z6QazvP74/6DwLuMDDC5wYjJ9CkkZlwx5frMD3
-	 MMfufHW6I3IPQ==
+	b=EjS17R7sGMwyA+7rTXrdoAA/61q4a0JFdjAQ/rkbokO8zzwUczceGTeav7i7P2cA2
+	 IGGEYraHC4hlL+D0mYFr3auBqUev0hVnJixoAdiIpCPh4tBSq+2+84BPPdefc5mcYd
+	 l82Oi8HEb7xeALLVfwmJ58ogdMq/HTqlCEARmktgE3yEji2x6Yu1DQdolE6DG/o25H
+	 tuimwH2bY7oVigDHgjYC5sQXVZC6wmdB8MKhiAtQsM9shYRQUi7qgrXna9KwwY4j1H
+	 JD51e2GKxbnKWwA0bFHBylbIbJAiv9CARiMAz4pc9yM9z5s2Jt0yEZwvoBO0lFpjyx
+	 jNzPMJPimxolg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v9 34/39] dyndbg: harden classmap and descriptor
- validation
+Subject: Re: [PATCH v9 36/39] dyndbg: Ignore additional arguments from
+ pr_fmt
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jim Cromie" <jim.cromie@gmail.com>
 Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260908-dd-cmap-part2-clean-v9-34-3a3f621f4a10@gmail.com>
+In-Reply-To: <20260908-dd-cmap-part2-clean-v9-36-3a3f621f4a10@gmail.com>
 References: <20260908-dd-cmap-part2-clean-v9-0-3a3f621f4a10@gmail.com>
- <20260908-dd-cmap-part2-clean-v9-34-3a3f621f4a10@gmail.com>
+ <20260908-dd-cmap-part2-clean-v9-36-3a3f621f4a10@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 09 Sep 2026 01:13:29 +0000
-Message-Id: <20260909011330.233FE1F00A3A@smtp.kernel.org>
+Date: Wed, 09 Sep 2026 01:14:55 +0000
+Message-Id: <20260909011455.DCE101F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -47,38 +47,56 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Missing implementation: The commit message claims to add a `stat=
-ic_assert` to `DYNAMIC_DEBUG_CLASSMAP_USE_`, but this change is entirely ab=
-sent from the patch diff.
+- [Medium] The patch papers over a compilation error in `pr_debug_ratelimit=
+ed` by modifying `DEFINE_DYNAMIC_DEBUG_METADATA_CLS` to silently discard va=
+riadic arguments, instead of fixing the root cause API inconsistency where =
+`pr_fmt(fmt)` is incorrectly passed to the descriptor.
 --
 
-commit 9e868ca8748038075020ceae45f58600f28f51b4
-Author: Jim Cromie <jim.cromie@gmail.com>
+commit 187c89f348922db282033311e2fc8e7a59f688c1
+Author: Philipp Hahn <phahn-oss@avm.de>
 
-dyndbg: harden classmap and descriptor validation
+dyndbg: Ignore additional arguments from pr_fmt
 
-This commit improves dynamic debug classmap and descriptor validation by
-adding run-time overlap checks for used classmaps and scanning module
-descriptors at load time to warn about missing class IDs. It also adjusts
-the reporting of unknown class IDs.
+This commit adds a variadic arguments slurping parameter to
+DEFINE_DYNAMIC_DEBUG_METADATA_CLS to avoid a compile error when
+pr_debug_ratelimited is used with a pr_fmt that includes additional argumen=
+ts.
+It also updates lib/test_dynamic_debug.c to test this behavior.
 
->     - Mirror the compile-time limits of _DEFINE by adding a static_assert
->       to validate the _offset value passed to DYNAMIC_DEBUG_CLASSMAP_USE_.
+> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+> index 32a34a80672b3..39de59c8bac2c 100644
+> --- a/include/linux/dynamic_debug.h
+> +++ b/include/linux/dynamic_debug.h
+> @@ -364,7 +364,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+>  		dump_stack();					\
+>  }
+> =20
+> -#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
+> +#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)	\
+>  	static struct _ddebug  __aligned(8)			\
+>  	__section("__dyndbg_descs") name =3D {			\
+>  		.modname =3D DDEBUG_MODNAME,			\
 
 [Severity: Medium]
-The commit message explicitly claims this patch mirrors compile-time limits=
- by
-adding a static_assert for the _offset passed to DYNAMIC_DEBUG_CLASSMAP_USE=
-_.
-However, this change to include/linux/dynamic_debug.h is entirely missing f=
-rom
-the patch diff.
+Does adding the variadic arguments here and silently discarding them corrupt
+the stored format string in the dynamic debug control file?
 
-It appears this change may have been introduced in an earlier patch in the
-series (commit ed72477b68f823). Should the commit message be updated to rem=
-ove
-this bullet point and avoid confusion?
+If a module defines pr_fmt(fmt) with additional arguments (such as __func__=
+),
+DEFINE_DYNAMIC_DEBUG_METADATA_CLS will capture a mangled format string like
+"test_dd_submod: %s " fmt while discarding the format arguments. This leaves
+unresolvable %s specifiers in the control file.
+
+This change also makes the stored format string inconsistent with pr_debug,
+dev_dbg_ratelimited, and net_dbg_ratelimited, which correctly use fmt witho=
+ut
+the pr_fmt prefix.
+
+Instead of discarding the arguments here, should the root cause in
+include/linux/printk.h be fixed so that pr_debug_ratelimited passes fmt to
+DEFINE_DYNAMIC_DEBUG_METADATA rather than pr_fmt(fmt)?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260908-dd-cmap-pa=
-rt2-clean-v9-0-3a3f621f4a10@gmail.com?part=3D34
+rt2-clean-v9-0-3a3f621f4a10@gmail.com?part=3D36
