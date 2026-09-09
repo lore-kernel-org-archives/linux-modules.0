@@ -1,68 +1,68 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A543C4BFE89
-	for <linux-modules@vger.kernel.org>; Wed,  9 Sep 2026 22:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6649048EC60
+	for <linux-modules@vger.kernel.org>; Wed,  9 Sep 2026 22:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788992812; cv=none; b=RkohSdScVGQQfcUfHeRQqvraTPoLt/zlg9gxdFweWVKyCaiPIebU7GZlZNfp0A0tYVjsgSSUtsjx2VvygPHFa0jDcsmrZiEBX1t84+Hymxus46kvvtzadmW4ZrPPS31TDkJZzrsSsprK6P3CoeEzFHRJszDMXBGLAPv5kxesZww=
+	t=1788992823; cv=none; b=uYoOiA1nFRMVk0nbQOaWrmMVsfNAdn9PMQo/MC8M4RuJ8j4sBMQreA2hgHTdmrrBTw1bbROerGHFfBv6TFD/nxTSnozYuFienPIWoSVMKT7upbe4myIRZimiWMN8AhAx2x7N+g2MKiedmxzR5iD05oujUJrgmgjp2VdsRgPW2Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788992812; c=relaxed/simple;
-	bh=CMc3Vsr7iweLoRN9H3y84ZJWlLhrHj7i+Kvx2VN2Uog=;
+	s=arc-20240116; t=1788992823; c=relaxed/simple;
+	bh=LB+qfaz6YdnbxjV+2oRihuPw0uTzVF9Yn8GNWXHeuNE=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bbSNtgbsmvHm33qnlOCmVl4ffshaMLnL0aOXyr53w8+6cvUKNDouFeGQqTzCO7V3AsDj6B9oZ7Dn11Mz3KxCgl3008kBZcWi51DjF9MvdZ80qVT9L3SzDRlENq/30Icu9D07QWm7N97XpiPsdYze9hoVda4vJeTtOe2FO90TTBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PHan+4uS; arc=none smtp.client-ip=209.85.216.53
+	 Content-Type:MIME-Version; b=apQzf6UIbkuv/AWOacd+ienJ02ehO10A1TeNXAIiH6IoAQMYnzfcFrQN9gNxfhryyZwpx1mj5lUB9yFYKFMCXuJQJaQzuVD2GXexjQcc5hZd/kOwSQQTRZbYK9unVeZsay4iWMT2pyXOnx7kXD1GldqmaGw6RfjdMiQUx8JOATs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K3iE208A; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PHan+4uS"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-398a5aad413so5387679a91.3
-        for <linux-modules@vger.kernel.org>; Wed, 09 Sep 2026 15:26:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K3iE208A"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2db1ca06b03so11075245ad.0
+        for <linux-modules@vger.kernel.org>; Wed, 09 Sep 2026 15:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788992809; x=1789597609; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788992822; x=1789597622; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=GJIj44arWcgfsXqCTf5jusWng1C5DNidnSVlW5EdX58=;
-        b=PHan+4uSrRW9YGfK+NT2JBQ3Ekb+7WQlQjyUzSJ7YladZ0+ws3P9bhcE2iBMlH7Tme
-         TUptviXTK9wXY9BfVd+tuvyWa+lZz3VMJbFYlbk58GZZXy1Ooq3OCuUGhItzAYzaqtQR
-         gyXJLP3KaZf1ZYA03eEM+yisRAO/3sLlJgNrEE6+nDRwGyZ2OYUrnMVzGxYNLlTfHqxm
-         c0QX/RA/I9g/pPj2nTea4Dp3l7ZJap6kw7mfGrpSVEuKku4W+0YPc8+J4hs1jwTWSk6N
-         bxfc0k3Z/y8FiZL8hhGGZ91L+RsxG8nVc6ngsPVMS2hiG1jAR9smA/brARUX7YD6JfhT
-         wS/g==
+        bh=FoqDybzgM2u1Ti7rz161YwHGpjrOZvM7SVulyrgRa/0=;
+        b=K3iE208ARtRxOlistRuy2sZu47/48gA3RxTnb81QTPJgbGoEeE6w8oHetSBppI+HrE
+         onOqTODbzWR2L9QKIUh7bCTHIgtwXesFL90tPILhMaJhbEY9L2Bi51Q4jTdCXk/cYcsg
+         mfT0Y56h7llcRfi0MpMwXG9dLuuWSWDo7Z8tp77jZjvA/xhug84Vlm04YgH5rYD1vC0e
+         SljidOWmb/LLO70W5gII/3FK91VJ/srH97cCLeEp4SPuKtHgM0fR+3EVUICqRDbSqUU7
+         1c9LhyCYFwwwz/i3woBsoda1WkYGehJt+oOs2PnNrgtpCQX15XuyYIk+hsBzIlzgOnLI
+         1WHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788992809; x=1789597609;
+        d=1e100.net; s=20251104; t=1788992822; x=1789597622;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GJIj44arWcgfsXqCTf5jusWng1C5DNidnSVlW5EdX58=;
-        b=lsRWiFb8Cfu0lzvkOhHKkmtI/KFG21keg5jmH1RPFmQ5wlClSHQ3AxdbQ9PzYbnVrQ
-         O7zpz5LgPnPB1pf5u2oLZFONhiQgsmQHSIMnZFMMEr0X4jHDkS5SYu8AkgbxeQyVe5do
-         rYPSARFAhg8JGBwDL3rONsOQaLLju4va81iQggwfPayNW2bAQYSnSojQUFLP8qrwDhLn
-         nH7LvTbYS2OC0gkFzo1nW1P3voMDnZdyayOF4P/YQg3gC3JGA8fimPNuKRrNy4V+65ZX
-         /dM2wRaG0qs0sZYtG9WdNfaLFGsKP0eRDmSiBzrnnRn+jgo8ghcqUWGhOSWPHVlKYQ40
-         3WBw==
-X-Forwarded-Encrypted: i=1; AKwUvBxgHUcol55nGzURql/S0EmIRde8InE9h4GiaQZP+ZB1fclxsMyoxrwd8Wb9+daPTLQTyAblzyqTkyfr1p2D@vger.kernel.org
-X-Gm-Message-State: AFuF++nYOIUzyhRUD7v55DwrwD6ENuraF8uroe3heybqtZ6oQoq5jE9K
-	TH8mc7NBL2m/ugFqOmMExvaGL3kzLsxXXi326WuISB/NaBn7UFcLlg7/
-X-Gm-Gg: AYBFou38rzzTNK/VUYrRSM4jtWg18a1WXjBB1jDJ201PPTuuhkbxmakTMBJT686ktMw
-	q1M9w0CFLKa6sLbD3lTKjho7IirtYRUvGzfpqF5CKD+0gVaOGrUVXnW6u8ppLjFRf6tCSnKd+a+
-	JiEXbVoMrLPd/pWVManw4PIZrUfDnUpZ/xmKlkonQmDDmG3/MJxabDx49Ei58qPTfc/g2bSP+MA
-	CjPvUHQ+85J6v7Ehvcst8qVyGH5yMenDVIK2SmL16iq4X+DHgDBQLru4cd2rFu3kDmUeI+onw85
-	26w9RIjWRHHeq+IpPD8zvNlZ2gI5CHGIha198XBNAY3n8jBAWD9kkKN801oKJzD328xY6XhBBT+
-	FUfixndlUlJu8JaXOZnEKcyI9sAWybZrgz/c4fu74BcvwIusePFHbnAUaMkXJQxiOSy6sDo+f/m
-	i6f8jvRGh1tEFaOg3TnDcYU+uF9/Kc5w9ReDcEW+qanfdYx2mDjW6CuZGbWbSaaanq3RJwdXQR9
-	B+qtxR1rxVhE4+podNk4EiNjoM=
-X-Received: by 2002:a17:90b:1643:b0:380:21b7:e727 with SMTP id 98e67ed59e1d1-39b26272f04mr54383045a91.14.1788992808747;
-        Wed, 09 Sep 2026 15:26:48 -0700 (PDT)
+        bh=FoqDybzgM2u1Ti7rz161YwHGpjrOZvM7SVulyrgRa/0=;
+        b=IROdWftOxQX62LKv+1cmSQs3WO/3fP/ZSSlkBPkTHAih2XJO+nyJ7RVMDYsGKrDPnP
+         sSJEA9GoW9Edr7ARP3j8fpOKypiLHKIPesmsUa1mF/QHtgbeioac4yXBPviXRBaoKNWj
+         xxDEXCd6WJzEmxXaNNswZcZlfaNjCN3Fmwhqc1CztBodTNcRHw6XKSYFkAXyMGe8DtUA
+         HrtcpNwBLlrTkPwToHfTJcVsr/YLUwGEUv9yM1B8WToqnCqh8S34Wv1WjJkrJWRfgxH0
+         vc9WKIBfY+a3RQQOc7ZBs/BFb4xEISvYo76isUjUYFhBcobsLxaxhj1IApTnMCs7t4al
+         v4Dg==
+X-Forwarded-Encrypted: i=1; AKwUvBwgkS0z3OievDgXv1f0zLQ2T/NapnQ+4FO3Nh9kRgR/n++iTGYZ1CsmK5RPg4JKVfSQNA2xpkpZycANOXL9@vger.kernel.org
+X-Gm-Message-State: AFuF++m+fqbluTI6L/PSL1wb4Tr5ITQ/C8nBeimbfwXfnZ/8m7kMHWd0
+	58rnupv56+wtrD+xnd9I1qidezyjJUHUFRS4vr+tNoG6f41K/yzxtH3r
+X-Gm-Gg: AYBFou1MuIFVdUD2pBQKDe6iHiKRR1koTVlkhlfnjelwbjmgOzlUl/YgkNyMivsT6ty
+	N4Z6ip8dOUuQXN6tlH9eQYNsFH70p0Mumi1IRkStJYjVth6icpttDKvrojfBbQxdmTTG/ydnEkK
+	Uh4/2TylhkgEquBLRwc0326Mp2iNU7BYDV6vcQ+3tJgRUXnv747HFPNWZ4TH2/XdPkCbp4p6mfV
+	1bkKevfXrX9cloRoX11g8cxtEwU4C8xDiphGgI3wI2Ki17FT7ZwPz4SFLuZaDB8n8icmgNbxapX
+	4KpcKILUfkDORvgsqr6Az2wc8hJU/GVqTYMrnhSs2qbh0QfjtsQrw7ZcS6W/3pHhsY4U19scn+U
+	rNebphcRMvY0aklFrQUuiZLnPwt22+8e6ZBwCgvqWRIa5Er0kW36VYMlxZ19KS6YfLrC6XMVG2E
+	jn287Ne4O4FtpEeujqdJa+i8c7LhdGfSPUjuZ6yOD2s/lyIowL1xrI2xUYFaRVmjPv682VMbYZm
+	sUl/HWfSYrYIDVhoQpRrAiJsWw=
+X-Received: by 2002:a17:902:e551:b0:2d8:d4cf:fe45 with SMTP id d9443c01a7336-2dd0ec7f206mr13292005ad.11.1788992821597;
+        Wed, 09 Sep 2026 15:27:01 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d77608fb4sm1613529a91.15.2026.09.09.15.26.47
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db195a1a59sm76352065ad.47.2026.09.09.15.27.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 15:26:48 -0700 (PDT)
-Message-ID: <791206dfa4759027377273185e3940156dc9b976.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 01/18] btf: Extend UAPI to support BTF
- location (inline site) info
+        Wed, 09 Sep 2026 15:27:01 -0700 (PDT)
+Message-ID: <e517c80062551871fa9008a223bc0044217354cb.camel@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 02/18] libbpf: Add support for BTF kinds
+ LOC[_PARAM|_PROTO|SEC]
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org, andrii@kernel.org
 Cc: daniel@iogearbox.net, jolsa@kernel.org, ihor.solodrai@linux.dev, 
@@ -72,10 +72,10 @@ Cc: daniel@iogearbox.net, jolsa@kernel.org, ihor.solodrai@linux.dev,
  bpf@vger.kernel.org, nathan@kernel.org, 	nsc@kernel.org, arnd@arndb.de,
  puranjay@kernel.org, yatsenko@meta.com, 	atenart@kernel.org,
  ojeda@kernel.org, linux-modules@vger.kernel.org
-Date: Wed, 09 Sep 2026 15:26:45 -0700
-In-Reply-To: <20260901165757.801449-2-alan.maguire@oracle.com>
+Date: Wed, 09 Sep 2026 15:26:58 -0700
+In-Reply-To: <20260901165757.801449-3-alan.maguire@oracle.com>
 References: <20260901165757.801449-1-alan.maguire@oracle.com>
-		 <20260901165757.801449-2-alan.maguire@oracle.com>
+		 <20260901165757.801449-3-alan.maguire@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10+b1 
@@ -87,167 +87,184 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Tue, 2026-09-01 at 17:57 +0100, Alan Maguire wrote:
-> Add BTF_KIND_LOC_PARAM, BTF_KIND_LOC_PROTO and BTF_KIND_LOCSEC
-> to help represent location information for functions.
+> Add support for new kinds to libbpf.=C2=A0 BTF_KIND_LOC_PARAM and
+> BTF_KIND_LOC_PROTO are dedup-able so add support for their
+> deduplication, whereas since BTF_KIND_LOCSEC contains a unique
+> offset it is not.=C2=A0 LOC_PARAM is considered a primary type
+> since it contains no external references; LOC_PROTO is a
+> reference type consisting of LOC_PARAM references so they
+> are handled in the primary and reference dedup phases
+> respectively.
 >=20
-> BTF_KIND_LOC_PARAM is used to represent how we retrieve data at a
-> location; either via register(s), or register+offset, a dereference
-> of a register+offset or a constant value.
+> For BTF field iteration, BTF_KIND_LOCSEC needs 2 m_offs[] values
+> for the associated KIND_FUNC and KIND_LOC_PROTO type ids in
+> each LOCSEC entry.
 >=20
-> BTF_KIND_LOC_PROTO represents location information about a location
-> with multiple BTF_KIND_LOC_PARAMs.
+> Add APIs to add location param, location prototypes and location
+> sections and btf_is_* tests, data accessors for each.
 >=20
-> And finally BTF_KIND_LOCSEC is a set of location sites, each
-> of which has
->=20
-> - a BTF_KIND_FUNC function associated with the inline site
-> - a location prototype specifying where to find the function
-> =C2=A0 parameters
-> - an address offset relative to the kernel base address
->=20
-> This can be used to support representing
->=20
-> - a fully-inlined function at potentially multiple inline sites
-> =C2=A0 with potentially different parameter availability
-> - a partially-inlined function where some _LOC_PROTOs represent
-> =C2=A0 inlined sites as above and others have normal _FUNC representation=
-s
->=20
-> Also BTF_KIND_LOCSEC struct btf_loc will have two type id
-> references; one for the associated func, the other for the loc_proto.
-> Accordingly increase the number of m_offs references in btf_field_desc
-> to 2.
+> For BTF distillation we add location info to split BTF.
 >=20
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-...
-
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index ddd0f4f32d24..a4412bc16688 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
+(Please see a few nits below)
 
 ...
 
-> +static inline struct btf_loc_param *btf_loc_param(const struct btf_type =
-*t)
-> +static inline __u32 *btf_loc_params(const struct btf_type *t)
-
-Maybe rename the latter to btf_loc_proto_params?
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
 
 ...
 
-> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-> index 618167cab4e6..6062c9958034 100644
-> --- a/include/uapi/linux/btf.h
-> +++ b/include/uapi/linux/btf.h
+> @@ -4395,6 +4653,45 @@ static bool btf_compat_enum(struct btf_type *t1, s=
+truct btf_type *t2)
 
 ...
 
-> @@ -212,4 +214,65 @@ struct btf_enum64 {
-> =C2=A0	__u32	val_hi32;
-> =C2=A0};
+> +static long btf_hash_loc_param(struct btf_type *t)
+> +{
+> +	long h =3D btf_hash_common(t);
+> +	__u32 *v =3D (__u32 *)btf_loc_param(t);
+> +	int i, vlen =3D btf_vlen(t);
+> +
+> +	for (i =3D 0; i <=3D vlen; i++, v++)
+> +		h =3D hash_combine(h, *v);
+> +	return h;
+> +}
+
+should v->flags be hashed as well?
+
+> +static bool btf_equal_loc_param(struct btf_type *t1, struct btf_type *t2=
+)
+> +{
+> +	struct btf_loc_param *p1 =3D btf_loc_param(t1);
+> +	struct btf_loc_param *p2 =3D btf_loc_param(t2);
+> +	__u32 *v1 =3D (__u32 *)(p1 + 1);
+> +	__u32 *v2 =3D (__u32 *)(p2 + 1);
+> +	int i, vlen =3D btf_vlen(t1);
+> +
+
+llm is right, the p{1,2}->flags comparison is missing.
+
+> +	if (!btf_equal_common(t1, t2))
+> +		return false;
+> +	for (i =3D 0; i < vlen; i++, v1++, v2++) {
+> +		if (*v1 !=3D *v2)
+> +			return false;
+> +	}
+> +	return true;
+> +}
+> +
+> =C2=A0/*
+> =C2=A0 * Calculate type signature hash of STRUCT/UNION, ignoring referenc=
+ed type IDs,
+> =C2=A0 * as referenced type IDs equivalence is established separately dur=
+ing type
+> @@ -4622,6 +4919,12 @@ static int btf_dedup_prep(struct btf_dedup *d)
+> =C2=A0		case BTF_KIND_FUNC_PROTO:
+> =C2=A0			h =3D btf_hash_fnproto(t);
+> =C2=A0			break;
+> +		case BTF_KIND_LOC_PARAM:
+> +			h =3D btf_hash_loc_param(t);
+> +			break;
+> +		case BTF_KIND_LOC_PROTO:
+> +			h =3D btf_hash_loc_proto(t);
+> +			break;
+
+Maybe add LOCSEC as an empty case, same as for VAR and DATASEC above?
+Otherwise if someone ever tries to dedup a non-module BTF with a LOCSEC
+the operation would return -EINVAL.
+
+> =C2=A0		default:
+> =C2=A0			pr_debug("unknown kind %d for type [%d]\n", btf_kind(t), type_id=
+);
+> =C2=A0			return -EINVAL;
+
+...
+
+> @@ -5489,6 +5813,41 @@ static int btf_dedup_ref_type(struct btf_dedup *d,=
+ __u32 type_id)
+> =C2=A0		break;
+> =C2=A0	}
 > =C2=A0
-> +/*
-> + * BTF_KIND_LOC_PARAM is followed by a single "struct btf_loc_param"
-> + * that contains flags specifying the contents of the vlen-specified
-> + * number of 4-byte values that follow.
-> + */
-> +struct btf_loc_param {
-> +	__u32 flags;
-
-Wdyt about adding a flexible array member here?
-
-	__u32 params[];
-
-Would make btf_loc_param_log() a little bit easier to follow.
-
-> +};
+> +	case BTF_KIND_LOC_PROTO: {
+> +		__u32 *p1, *p2;
+> +		__u32 i, vlen;
 > +
-> +/*
-> + * The combination of size, vlen and flags gives us the means to interpr=
-et
-> + * the following vlen-specified set of 4-byte values:
-> + *
-> + * - a BTF_LOC_PARAM_CONST is a constant value; combination
-> + *=C2=A0=C2=A0 of size, vlen and _SIGNED flag determines it. If the valu=
-e requires
-> + *=C2=A0=C2=A0 64 bits it is stored in {lo,hi} order.
-> + * - a BTF_LOC_PARAM_ADDR is an address that will be normalized with
-> + *=C2=A0=C2=A0 respect to kernel base address.
-
-Nit: pahole generates ADDR | CONST.
-
-> + * - a BTF_LOC_PARAM_REG with vlen 1 is a simple register number;
-> + *=C2=A0=C2=A0 with vlen 2 it is a multi-register parameter.
-
-Nit: REG | OFFSET is not discussed.
-
-> + * - a _REG | DEREF with vlen 1 dereferences the value in the register
-> + *=C2=A0=C2=A0 number specified.
-> + * - a REG | DEREF | OFFSET with vlen specifies the register value in
-> + *=C2=A0=C2=A0 the first 4-byte value and the offset in the remainder.
-
---- >8 ---
-
-> + * - binary logical operators operate on a combination of register
-> + *=C2=A0=C2=A0 number and constant value, aside from _NOT which operates=
- on
-> + *=C2=A0=C2=A0 a register
-
---- 8< ---
-
-This is probably a leftover.
-
-> + */
-> +enum btf_loc_param_flags {
-> +	BTF_LOC_PARAM_SIGNED		=3D	0x1,
-> +	BTF_LOC_PARAM_CONST		=3D	0x2,
-> +	BTF_LOC_PARAM_ADDR		=3D	0x4,
-> +	BTF_LOC_PARAM_REG		=3D	0x8,
-> +	BTF_LOC_PARAM_DEREF		=3D	0x10,
-> +	BTF_LOC_PARAM_OFFSET		=3D	0x20,
-> +};
+> +		p1 =3D btf_loc_proto_params(t);
+> +		vlen =3D btf_vlen(t);
 > +
-> +/*
-> + * BTF_KIND_LOC_PROTO specifies location prototypes; i.e. how locations =
-relate
-> + * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed by=
- a
-> + * a vlen-specified number of __u32 BTF type ids which specify the assoc=
-iated
-> + * BTF_KIND_LOC_PARAM for each function parameter associated with the
-> + * location.=C2=A0 The type should either be 0 (no location info) or poi=
-nt at
-> + * a BTF_KIND_LOC_PARAM.
-> + */
+> +		for (i =3D 0; i < vlen; i++, p1++) {
+> +			ref_type_id =3D btf_dedup_ref_type(d, *p1);
+> +			if (ref_type_id < 0)
+> +				return ref_type_id;
+> +			*p1 =3D ref_type_id;
+> +		}
 > +
-> +/*
-> + * BTF_KIND_LOCSEC consists of vlen-specified number of "struct btf_loc"
-> + * containing location site-specific information;
-> + *
-> + * - function (func)
-> + * - location prototype type id (loc_proto)
-> + * - address offset (offset) relative to kernel base address
+> +		h =3D btf_hash_loc_proto(t);
+> +		for_each_dedup_cand(d, hash_entry, h) {
+> +			cand_id =3D hash_entry->value;
+> +			cand =3D btf_type_by_id(d->btf, cand_id);
+> +			if (!btf_equal_common(t, cand))
+> +				continue;
+> +			vlen =3D btf_vlen(cand);
 
-pahole uses loc->section_offset to create LOCSEC entries,
-which corresponds to an offset within an ELF containing
-the function section. Would it make sense to rephrase the
-above comment a bit?
+Nit: btf_equal_common() checks vlen for equivalence,
+     so it appears that the above line is redundant.
 
-> + */
+> +			p1 =3D btf_loc_proto_params(t);
+> +			p2 =3D btf_loc_proto_params(cand);
+> +			if (vlen =3D=3D 0) {
+> +				new_id =3D cand_id;
+> +				break;
+> +			}
+
+Nit: It appears that special case for `vlen =3D=3D 0` is not necessary,
+     wouldn't memcmp(..., 0) be 0?
+
+> +			if (memcmp(p1, p2, vlen * sizeof(__u32)) =3D=3D 0) {
+> +				new_id =3D cand_id;
+> +				break;
+> +			}
+> +		}
+> +		break;
+> +	}
 > +
-> +struct btf_loc {
-> +	__u32 func;
-> +	__u32 loc_proto;
-> +	__u32 offset;
-> +};
-> +
-> =C2=A0#endif /* _UAPI__LINUX_BTF_H__ */
+> =C2=A0	default:
+> =C2=A0		return -EINVAL;
+> =C2=A0	}
 
 ...
 
+> --- a/tools/lib/bpf/btf_iter.c
+> +++ b/tools/lib/bpf/btf_iter.c
+
+...
+
+> @@ -94,6 +109,8 @@ int btf_field_iter_init(struct btf_field_iter *it, str=
+uct btf_type *t,
+> =C2=A0		case BTF_KIND_DECL_TAG:
+> =C2=A0		case BTF_KIND_TYPE_TAG:
+> =C2=A0		case BTF_KIND_DATASEC:
+> +		case BTF_KIND_LOC_PARAM:
+> +		case BTF_KIND_LOC_PROTO:
+> =C2=A0			it->desc =3D (struct btf_field_desc) {
+> =C2=A0				1, {offsetof(struct btf_type, name_off)}
+> =C2=A0			};
+> @@ -127,6 +144,11 @@ int btf_field_iter_init(struct btf_field_iter *it, s=
+truct btf_type *t,
+> =C2=A0				1, {offsetof(struct btf_param, name_off)}
+> =C2=A0			};
+> =C2=A0			break;
+> +		case BTF_KIND_LOCSEC:
+> +			it->desc =3D (struct btf_field_desc) {
+> +				1, {offsetof(struct btf_type, name_off)}
+> +			};
+> +			break;
+
+Nit: can this be grouped wit the _PARAM and _PROTO cases?
+
+...
 
