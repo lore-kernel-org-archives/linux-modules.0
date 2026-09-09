@@ -1,262 +1,93 @@
-Received: from mta0.migadu.com (out-224.mta0.migadu.com [91.218.175.224])
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04F549890A
-	for <linux-modules@vger.kernel.org>; Wed,  9 Sep 2026 13:08:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E505625ED
+	for <linux-modules@vger.kernel.org>; Wed,  9 Sep 2026 13:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788959307; cv=none; b=UnnqzjneBCQXlSlmwj568tlY8XlnLVxKlrrMWQIzP7fOe2NcTqZg9NA6PXnMThvSHctkZvFmHsF67oV+J1iGuj972N5GCWrdi71EMG/C/ntkEwZVJA88aufngBsoIOJYIOZxOJ9tP5N6Qdarra9eelnW10+N6cDxbYEkmUksnAk=
+	t=1788960174; cv=none; b=QzNkuXNav/8id+QuWYz1I7pv0YJTUn2ouOyyIzD+duY6VJHYVek+abv+2I1aOMIJ6oaHnln67GBYsuocKZ9Gbe/q7zj1SD9JRatHASlaZ17YBJng7izg0SmTe/to00TOYVKdjb+vIa8Sxd+61H7KuW3A7RHxPnWDwjmZ2slRJhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788959307; c=relaxed/simple;
-	bh=VhlFjNAgQI2Jtqxdp11XUFniGZMKsYGwyqeIsjbkGdA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=lq+9qJdkVTSfTbvEUu4cg2cMSiefn9DmMwvlKlGhB3+aOMoC9FaWbmDI6AEZEi+8Pu0mDjgh79X/ACXNMiq4q8Y2Lb7oSQ3PRSSgFBGo9MZp+THjj7GKnv4snSQB+IHXzCGW1glqlzVPlPJcrpqHjlEmc+Zsf6juJzV0/XtcvYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SqpWv98C; arc=none smtp.client-ip=91.218.175.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788960174; c=relaxed/simple;
+	bh=jcPULJdnuPzlzxuwUnOJeHwoHH9WcIC8g/lf4W65c9I=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=bceADCWCotZWVldbRay609yiJDv12PibQEsGgcpSh4K+pHyJiANpXAhU4DROZuBOqsR8EXgYt4T5eVVLw8B60tgSho1vrYV8fFO+yg2IRecclYqfq3LkwyetGcvNdBr/X1vaVqmftz0AsQSKq9BSYKSiHMOxah7XLfw+TutDW+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UOAQkl8K; arc=none smtp.client-ip=209.85.128.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SqpWv98C"
-X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=VhlFjNAgQI2Jtqxdp11XUFniGZMKsYGwyqeIsjbkGdA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788959301; v=1; x=1789564101;
- b=SqpWv98C61R76bJ0zUrMa/dUYoDYli14Cu7Sz2NGtXopPX3r0MU39mdYsfsxVAcN0nIXkHZB
- iDpYgU6xxC+1nMXUk9M4EJPCHIPpCUSVYrqxdZ4RPhIqRh0+meNClDCpRd33JuUrmJn0ZAzk0IJ
- KsweRhAgxCuHVDoM9FQKa/ME=
-X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 25b253702b94a6c9;
-	Wed, 09 Sep 2026 13:08:21 +0000
-X-Mizu-Trace-ID: 25b253702b94a6c9
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <7dbba23e-5530-43c4-9c44-20108cd0cef5@linux.dev>
-Date: Wed, 9 Sep 2026 21:08:09 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UOAQkl8K"
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-495689bfcc8so41585575e9.1
+        for <linux-modules@vger.kernel.org>; Wed, 09 Sep 2026 06:22:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788960171; x=1789564971; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=A4i81r+GTAXgH5FzYo2ohbuMajjqSfB8ggeOnVykaN4=;
+        b=UOAQkl8KiERqAyN2TqwC9Aoj34mFPekiBUxUqsUl3j3yzG+djU+H9dPP1mZE8w+hs/
+         rDfiq6xH11+1TPmEWJFbaOS1EFX05RLgsTkBui/cKlMOjsPW/bXtDszAnG/ZVAvqZu90
+         qz9XV8euQIg9jFhlelboa6Y1hxtOo77FiG7ouMmDnatEoNLrP5dLzyCktPflbyjNHbLu
+         5JvJRCcwzKYkuLcTNeLDdiSfrz0+G+7asuyispB+JL9R++0UMVlZkR0AmB+0niruTkKt
+         5yivaCp5i9qkb/0kaEenaV5XEcqdD1LYgg4k3Udn0Xjs40KaISHSq3OZ12lRTIak7BBw
+         Mizw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788960171; x=1789564971;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=A4i81r+GTAXgH5FzYo2ohbuMajjqSfB8ggeOnVykaN4=;
+        b=D9aAtZFkVAVVVJWwaq0x3PfKSqB2bAelbQD2AVAArA2cufT0C9WdAJAnEoFCCcsS+x
+         zUZgl+kskghpEQJYbvGKAnPRNqSGhA848Z+9xvO6v+XeXKhS3jZWlt+OYcH5a9U9GC3S
+         yYpTF0krDVk+58sAfjEFnxzty4g/N0CDgYBMUnntEucpwSQaN569GKSr1SHWsirkt6fh
+         roL80fA+SCwYDH1G3ftdjxLTI/9xh/wIUaLvX8eWpcK0kCDysQAnmblM69Q0VFCKVa0H
+         u1R7KAdtxxe1Pid5OseAXmZx1I9Daj2z9htQDLs4x9UI/dVihdQNCa2lW4TU4bUZ1EAq
+         vxng==
+X-Forwarded-Encrypted: i=1; AKwUvBx2IRYSDsadiK3ZQdmeP3u0W/Oltb0vCkQ0X+3udDp6MSZSkCavJJoI7jIeAeZr43f7ZOfj395zGq4HcrQh@vger.kernel.org
+X-Gm-Message-State: AFuF++m4H3+V3s7dLipr3XfeDkKH0jJ65ncqIQCSarnR7GAnbm3lRt/v
+	a5rUo1AZiJOvgBShyilyWNL6bqB2UtUoYjCEbq23wCi7KSSd+OpQPl0TuccFj9TuPnpFVGpL04r
+	k13hLPnsvUUugioevwg==
+X-Received: from wmph8.prod.google.com ([2002:a05:600c:4988:b0:490:b475:af08])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:55d2:b0:49c:fa21:e74b with SMTP id 5b1f17b1804b1-49d259252bemr7716245e9.33.1788960170557;
+ Wed, 09 Sep 2026 06:22:50 -0700 (PDT)
+Date: Wed, 9 Sep 2026 13:22:49 +0000
+In-Reply-To: <3gyxhudb5zwrrevc522qjpddnzxbsyxeeqair7tvii6jhfu6kl@f63vlxgftjpl>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 3/4] module: introduce SH_ENTSIZE_STANDALONE for
- separately allocated sections
-From: Hao Ge <hao.ge@linux.dev>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Suren Baghdasaryan <surenb@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
-References: <20260908092412.115953-1-hao.ge@linux.dev>
- <20260908092412.115953-4-hao.ge@linux.dev>
- <76b5edbb-8231-41d0-9e7b-f965af13c324@suse.com>
- <ec3f14f0-cebe-460f-9df7-537f49d70afd@linux.dev>
-Content-Language: en-US
-In-Reply-To: <ec3f14f0-cebe-460f-9df7-537f49d70afd@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260903185557.183224-1-atomlin@atomlin.com> <20260903132924.7a4d1b84791d30c706b394a1@linux-foundation.org>
+ <ultg4rym4phqwqrbuz3hqtlse2lgafxebx3un7s3tdht7rz5xy@3ckauomiwqsy>
+ <20260905172817.e367c940d750ca3e8484fef9@linux-foundation.org>
+ <3cee4548-0ae7-46a7-b437-bf84e5c155ad@app.fastmail.com> <3gyxhudb5zwrrevc522qjpddnzxbsyxeeqair7tvii6jhfu6kl@f63vlxgftjpl>
+Message-ID: <aqFdqQ5xCucwijsl@google.com>
+Subject: Re: [PATCH v10 0/2] module: Extend module_blacklist parameter to
+ built-in modules
+From: Alice Ryhl <aliceryhl@google.com>
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, da.gomez@kernel.org, 
+	Sami Tolvanen <samitolvanen@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	neelx@suse.com, da.anzani@gmail.com, sean@ashe.io, chjohnst@mail.com, 
+	steve@abita.co, mproche@mail.com, nick.lane@mail.com, rishil1999@outlook.com, 
+	Linux-Arch <linux-arch@vger.kernel.org>, linux-modules@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
+On Sun, Sep 06, 2026 at 10:08:57AM -0400, Aaron Tomlin wrote:
+>     2.  Mangled Names in Rust
+> 
+>         For drivers written in Rust, initcall symbols are compiler-mangled,
+>         which makes initcall_blacklist= virtually impossible for a user to
+>         specify at a boot prompt.
 
-On 9/9/26 20:47, Hao Ge wrote:
-> Hi Petr
->
->
-> On 9/9/26 19:30, Petr Pavlu wrote:
->> On 9/8/26 11:24 AM, Hao Ge wrote:
->>> SHF_ALLOC means, per the ELF spec, that a section occupies memory
->>> during process execution. Some module sections occupy memory
->>> outside the regular module layout, for example the percpu section
->>> with its per-CPU allocations. The loader currently excludes such
->>> a section from the layout by clearing its SHF_ALLOC, which
->>> overloads the flag with a loader-internal meaning.
->>> apply_relocations() needs a special case for the section, and
->>> find_sec(".data..percpu") returns different results before and
->>> after layout_and_allocate().
->>>
->>> Introduce SH_ENTSIZE_STANDALONE to mark sections with a separate
->>> allocation. The percpu section is its first user. layout_sections()
->>> and move_module() skip marked sections, and apply_relocations() goes
->>> back to testing only SHF_ALLOC. Based on a patch by Petr Pavlu [1].
->>>
->>> .data..percpu keeps SHF_ALLOC, so it would now show up under
->>> /sys/module/*/sections/. The section has one instance per CPU and no
->>> single address to report, and the entry never existed before, so
->>> skip it in add_sect_attrs(). add_notes_attrs() indexes its attrs[]
->>> array and skips it too. No functional change otherwise.
->>>
->>> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag 
->>> compression")
->>> Reported-by: Sashiko <sashiko-bot@kernel.org>
->>> Link: 
->>> https://lore.kernel.org/all/499bb60c-c6e3-43a3-bd92-95a0567ece5e@suse.com/ 
->>> [1]
->>> Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Hao Ge <hao.ge@linux.dev>
->>> ---
->>> [...]
->>> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
->>> index 0fc11e45df9b..49190deae61e 100644
->>> --- a/kernel/module/kallsyms.c
->>> +++ b/kernel/module/kallsyms.c
->>> @@ -76,7 +76,7 @@ static char elf_type(const Elf_Sym *sym, const 
->>> struct load_info *info)
->>>   }
->>>     static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr 
->>> *sechdrs,
->>> -               unsigned int shnum, unsigned int pcpundx)
->>> +               unsigned int shnum)
->>>   {
->>>       const Elf_Shdr *sec;
->>>       enum mod_mem_type type;
->>> @@ -86,11 +86,6 @@ static bool is_core_symbol(const Elf_Sym *src, 
->>> const Elf_Shdr *sechdrs,
->>>           !src->st_name)
->>>           return false;
->>>   -#ifdef CONFIG_KALLSYMS_ALL
->>> -    if (src->st_shndx == pcpundx)
->>> -        return true;
->>> -#endif
->>> -
->>>       sec = sechdrs + src->st_shndx;
->>>       type = sec->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
->>>       if (!(sec->sh_flags & SHF_ALLOC)
->>> @@ -131,8 +126,7 @@ void layout_symtab(struct module *mod, struct 
->>> load_info *info)
->>>       /* Compute total space required for the core symbols' strtab. */
->>>       for (ndst = i = 0; i < nsrc; i++) {
->>>           if (i == 0 || is_livepatch_module(mod) ||
->>> -            is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
->>> -                   info->index.pcpu)) {
->>> +            is_core_symbol(src + i, info->sechdrs, 
->>> info->hdr->e_shnum)) {
->>>               strtab_size += strlen(&info->strtab[src[i].st_name]) + 1;
->>>               ndst++;
->>>           }
->>> @@ -199,8 +193,7 @@ void add_kallsyms(struct module *mod, const 
->>> struct load_info *info)
->>>       for (ndst = i = 0; i < kallsyms->num_symtab; i++) {
->>>           kallsyms->typetab[i] = elf_type(src + i, info);
->>>           if (i == 0 || is_livepatch_module(mod) ||
->>> -            is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
->>> -                   info->index.pcpu)) {
->>> +            is_core_symbol(src + i, info->sechdrs, 
->>> info->hdr->e_shnum)) {
->>>               ssize_t ret;
->>>                 mod->core_kallsyms.typetab[ndst] =
->> FTR These changes in kernel/module/kallsyms.c have a conflict with the
->> series "Ignore local labels and mapping symbols during module load" [1],
->> which is currently queued on modules-next, but it should be
->> straightforward to resolve.
->>
->>> diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
->>> index 01c65d608873..f64170344e69 100644
->>> --- a/kernel/module/sysfs.c
->>> +++ b/kernel/module/sysfs.c
->>> @@ -62,6 +62,15 @@ static void free_sect_attrs(struct 
->>> module_sect_attrs *sect_attrs)
->>>       kfree(sect_attrs);
->>>   }
->>>   +/*
->>> + * .data..percpu has a separate allocation per CPU and no single
->>> + * address to report.
->>> + */
->>> +static bool sect_visible(const struct load_info *info, unsigned int i)
->>> +{
->>> +    return !sect_empty(&info->sechdrs[i]) && i != info->index.pcpu;
->>> +}
->>> +
->>>   static int add_sect_attrs(struct module *mod, const struct 
->>> load_info *info)
->>>   {
->>>       struct module_sect_attrs *sect_attrs;
->>> @@ -72,7 +81,7 @@ static int add_sect_attrs(struct module *mod, 
->>> const struct load_info *info)
->>>         /* Count loaded sections and allocate structures */
->>>       for (i = 0; i < info->hdr->e_shnum; i++)
->>> -        if (!sect_empty(&info->sechdrs[i]))
->>> +        if (sect_visible(info, i))
->>>               nloaded++;
->>>       sect_attrs = kzalloc_flex(*sect_attrs, attrs, nloaded);
->>>       if (!sect_attrs)
->>> @@ -92,7 +101,7 @@ static int add_sect_attrs(struct module *mod, 
->>> const struct load_info *info)
->>>       for (i = 0; i < info->hdr->e_shnum; i++) {
->>>           Elf_Shdr *sec = &info->sechdrs[i];
->>>   -        if (sect_empty(sec))
->>> +        if (!sect_visible(info, i))
->>>               continue;
->>>           sysfs_bin_attr_init(sattr);
->>>           sattr->attr.name =
->>> @@ -181,7 +190,7 @@ static int add_notes_attrs(struct module *mod, 
->>> const struct load_info *info)
->>>         nattr = &notes_attrs->attrs[0];
->>>       for (loaded = i = 0; i < info->hdr->e_shnum; ++i) {
->>> -        if (sect_empty(&info->sechdrs[i]))
->>> +        if (!sect_visible(info, i))
->>>               continue;
->>>           if (info->sechdrs[i].sh_type == SHT_NOTE) {
->>>               sysfs_bin_attr_init(nattr);
->> add_notes_attrs() has two sect_empty() calls. Both should be changed to
->> sect_visible().
->
->
-> I kept this part unmodified to preserve the loop's original intent.
->
-> This loop counts SHT_NOTE sections.
->
-> SHT_NOTE refers to ELF note sections, which hold non-executable
->
-> metadata such as build ID and ABI info.
->
-> I wonder if we could keep the current implementation.
->
-> As noted in the comment above, the top part counts SHT_NOTE sections
->
-> and allocates structures, while the lower logic handles control of 
-> node attributes.
->
->
-> WDYT?
->
->
+Are you sure?
 
-Sorry, I've reconsidered this. I think changing it to sect_visible would 
-be better.
+As far as I can tell, the Rust module! macro applies #[no_mangle] to the
+initcall, so no mangling should apply to it. Its name is the name of the
+module followed by an underscore.
 
-sect_visible stands for the count of externally visible note attributes, 
-so the code
-
-above and below can align with each other.
-
-
-Sorry for the noise.
-
-
-I'll rebase onto modules-next, apply this change and push a new revision.
-
-I'll also add your Reviewed-by tag.
-
-
-Thanks
-
-Best Regards
-
-Hao
-
-
-> Thanks
->
-> Best Regards
->
-> Hao
->
->>
->> With this fixed, the patch looks ok to me. Feel free to add:
->>
->> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
->>
->> [1] 
->> https://lore.kernel.org/linux-modules/20260820125007.22943-1-yangtiezhu@loongson.cn/
->>
+Alice
