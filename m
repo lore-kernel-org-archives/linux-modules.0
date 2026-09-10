@@ -1,270 +1,163 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021081.outbound.protection.outlook.com [52.101.95.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6649048EC60
-	for <linux-modules@vger.kernel.org>; Wed,  9 Sep 2026 22:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788992823; cv=none; b=uYoOiA1nFRMVk0nbQOaWrmMVsfNAdn9PMQo/MC8M4RuJ8j4sBMQreA2hgHTdmrrBTw1bbROerGHFfBv6TFD/nxTSnozYuFienPIWoSVMKT7upbe4myIRZimiWMN8AhAx2x7N+g2MKiedmxzR5iD05oujUJrgmgjp2VdsRgPW2Ew=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788992823; c=relaxed/simple;
-	bh=LB+qfaz6YdnbxjV+2oRihuPw0uTzVF9Yn8GNWXHeuNE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=apQzf6UIbkuv/AWOacd+ienJ02ehO10A1TeNXAIiH6IoAQMYnzfcFrQN9gNxfhryyZwpx1mj5lUB9yFYKFMCXuJQJaQzuVD2GXexjQcc5hZd/kOwSQQTRZbYK9unVeZsay4iWMT2pyXOnx7kXD1GldqmaGw6RfjdMiQUx8JOATs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K3iE208A; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K3iE208A"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2db1ca06b03so11075245ad.0
-        for <linux-modules@vger.kernel.org>; Wed, 09 Sep 2026 15:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788992822; x=1789597622; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=FoqDybzgM2u1Ti7rz161YwHGpjrOZvM7SVulyrgRa/0=;
-        b=K3iE208ARtRxOlistRuy2sZu47/48gA3RxTnb81QTPJgbGoEeE6w8oHetSBppI+HrE
-         onOqTODbzWR2L9QKIUh7bCTHIgtwXesFL90tPILhMaJhbEY9L2Bi51Q4jTdCXk/cYcsg
-         mfT0Y56h7llcRfi0MpMwXG9dLuuWSWDo7Z8tp77jZjvA/xhug84Vlm04YgH5rYD1vC0e
-         SljidOWmb/LLO70W5gII/3FK91VJ/srH97cCLeEp4SPuKtHgM0fR+3EVUICqRDbSqUU7
-         1c9LhyCYFwwwz/i3woBsoda1WkYGehJt+oOs2PnNrgtpCQX15XuyYIk+hsBzIlzgOnLI
-         1WHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788992822; x=1789597622;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FoqDybzgM2u1Ti7rz161YwHGpjrOZvM7SVulyrgRa/0=;
-        b=IROdWftOxQX62LKv+1cmSQs3WO/3fP/ZSSlkBPkTHAih2XJO+nyJ7RVMDYsGKrDPnP
-         sSJEA9GoW9Edr7ARP3j8fpOKypiLHKIPesmsUa1mF/QHtgbeioac4yXBPviXRBaoKNWj
-         xxDEXCd6WJzEmxXaNNswZcZlfaNjCN3Fmwhqc1CztBodTNcRHw6XKSYFkAXyMGe8DtUA
-         HrtcpNwBLlrTkPwToHfTJcVsr/YLUwGEUv9yM1B8WToqnCqh8S34Wv1WjJkrJWRfgxH0
-         vc9WKIBfY+a3RQQOc7ZBs/BFb4xEISvYo76isUjUYFhBcobsLxaxhj1IApTnMCs7t4al
-         v4Dg==
-X-Forwarded-Encrypted: i=1; AKwUvBwgkS0z3OievDgXv1f0zLQ2T/NapnQ+4FO3Nh9kRgR/n++iTGYZ1CsmK5RPg4JKVfSQNA2xpkpZycANOXL9@vger.kernel.org
-X-Gm-Message-State: AFuF++m+fqbluTI6L/PSL1wb4Tr5ITQ/C8nBeimbfwXfnZ/8m7kMHWd0
-	58rnupv56+wtrD+xnd9I1qidezyjJUHUFRS4vr+tNoG6f41K/yzxtH3r
-X-Gm-Gg: AYBFou1MuIFVdUD2pBQKDe6iHiKRR1koTVlkhlfnjelwbjmgOzlUl/YgkNyMivsT6ty
-	N4Z6ip8dOUuQXN6tlH9eQYNsFH70p0Mumi1IRkStJYjVth6icpttDKvrojfBbQxdmTTG/ydnEkK
-	Uh4/2TylhkgEquBLRwc0326Mp2iNU7BYDV6vcQ+3tJgRUXnv747HFPNWZ4TH2/XdPkCbp4p6mfV
-	1bkKevfXrX9cloRoX11g8cxtEwU4C8xDiphGgI3wI2Ki17FT7ZwPz4SFLuZaDB8n8icmgNbxapX
-	4KpcKILUfkDORvgsqr6Az2wc8hJU/GVqTYMrnhSs2qbh0QfjtsQrw7ZcS6W/3pHhsY4U19scn+U
-	rNebphcRMvY0aklFrQUuiZLnPwt22+8e6ZBwCgvqWRIa5Er0kW36VYMlxZ19KS6YfLrC6XMVG2E
-	jn287Ne4O4FtpEeujqdJa+i8c7LhdGfSPUjuZ6yOD2s/lyIowL1xrI2xUYFaRVmjPv682VMbYZm
-	sUl/HWfSYrYIDVhoQpRrAiJsWw=
-X-Received: by 2002:a17:902:e551:b0:2d8:d4cf:fe45 with SMTP id d9443c01a7336-2dd0ec7f206mr13292005ad.11.1788992821597;
-        Wed, 09 Sep 2026 15:27:01 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db195a1a59sm76352065ad.47.2026.09.09.15.27.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 15:27:01 -0700 (PDT)
-Message-ID: <e517c80062551871fa9008a223bc0044217354cb.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 02/18] libbpf: Add support for BTF kinds
- LOC[_PARAM|_PROTO|SEC]
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org, andrii@kernel.org
-Cc: daniel@iogearbox.net, jolsa@kernel.org, ihor.solodrai@linux.dev, 
-	yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
- martin.lau@linux.dev, 	memxor@gmail.com, emil@etsalapatis.com,
- mcgrof@kernel.org, petr.pavlu@suse.com, 	tj@kernel.org, kees@kernel.org,
- bpf@vger.kernel.org, nathan@kernel.org, 	nsc@kernel.org, arnd@arndb.de,
- puranjay@kernel.org, yatsenko@meta.com, 	atenart@kernel.org,
- ojeda@kernel.org, linux-modules@vger.kernel.org
-Date: Wed, 09 Sep 2026 15:26:58 -0700
-In-Reply-To: <20260901165757.801449-3-alan.maguire@oracle.com>
-References: <20260901165757.801449-1-alan.maguire@oracle.com>
-		 <20260901165757.801449-3-alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F0C2AD00;
+	Thu, 10 Sep 2026 01:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789003967; cv=fail; b=dypCo62zrhmzS4l3tjKxSDN+iTo0MAZLuA6ELp7yrAkLiZ5e4mTcoLJH9Ehkd7fn/MjyHjIN5gCtDQ/kNfHiyewITNn/O2BbHNXZSO6QEGvBkIG2HexnJEJF0fY7G3XMMJqJCjk2oH94miRCQWZFDJ1Lq3y+N3zo4kSn1raeyHE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789003967; c=relaxed/simple;
+	bh=jQItyttPpMJEVtc3dhlatMiXFnk7WJRbltIYVcRe2R8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ldobSoQcXq4wryjfKYAkaISCOWV/WpJ8eu03Y03VyHxHtIF4KCq3ht9tlhvAxmFK1yEOPVloBkyhWVO9OA8Oz96vAqHfeSwTgT3SRSWWeLPwBFkPcM/ig3ZFegymHQaiM21p00v6YhGIOd0SiqfPy09lauNSxeot7PdSDuHh3V0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=a9RJXrYVtjxk3ODiiUh5AytB1B1sBhdSTJoHZ3BVa37pyi9y148PTpwXo1QILAZhA2xNuCO7vudDyrYXl0lsNm4xWPu8E5ZB8Q4EcGrynr3e5hJ1AJ1tq7YxenCf7dOja4OJEagGzJOnBvhOJBe93hLUXFievIhQsX2r6dOiuXwqvnmRiLh9DMFeQPKjA5Sf8CuFg8iHUFEvtn/cJ6e+Mslji/rW17gPQBWElJYVakz/Qqmeh3fyQXJyEuhowwu/AopmDU+TMMF8W/y5kyxX6T8Y9Sr767P2Vda+9XUCQIQjAl0XBJGapRj7NzPjkjbfoj+kxGMh3T6kqeiEVBOe0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
+ bh=+8qYb6OY8KTeBSeSTdgOCRNDXfmGdHNVCnxAqR303m0=;
+ b=pcOLJgYILeK9Rvwl+hLd+9lfhRPZIU7n/2te9m6x206ZO9HooUAyxQuvW8gtcZD9twadNjmmgT6ZvOyUTCWD2Wz8xoVTD0paHGL9+33oPnGiYj87nS7i5axDPSaGNRJB5mAqIByXGID9ost4DjUup3ghW3fsaL1yEsloVB36TZJd2+nuLFL4DHouKxl0SVbwOtoxT4XbEh+gEkH5M0uonpXaOmsPUUUDDApVcP0jy2YoS6piVeLlCo9+teOExxqU4g06/CZO604T05VBtaLud6geJK7F/jKoqjS3g8Gf50CFGtn/pUrwUR/Pgn7wFfQCsMQ191dL+JLMYENt+39MGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
+ by LO0P123MB7767.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:428::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.9; Thu, 10 Sep
+ 2026 01:32:41 +0000
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0406.007; Thu, 10 Sep 2026
+ 01:32:41 +0000
+Date: Wed, 9 Sep 2026 21:32:37 -0400
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, da.gomez@kernel.org, Sami Tolvanen <samitolvanen@google.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Boqun Feng <boqun@kernel.org>, neelx@suse.com, 
+	da.anzani@gmail.com, sean@ashe.io, chjohnst@mail.com, steve@abita.co, 
+	mproche@mail.com, nick.lane@mail.com, rishil1999@outlook.com, 
+	Linux-Arch <linux-arch@vger.kernel.org>, linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 0/2] module: Extend module_blacklist parameter to
+ built-in modules
+Message-ID: <ffac4ftjetrrnuprjwt6smmfuovehykses5npyg4phzhlvxqcx@nluoqy7nrwfo>
+References: <20260903185557.183224-1-atomlin@atomlin.com>
+ <20260903132924.7a4d1b84791d30c706b394a1@linux-foundation.org>
+ <ultg4rym4phqwqrbuz3hqtlse2lgafxebx3un7s3tdht7rz5xy@3ckauomiwqsy>
+ <20260905172817.e367c940d750ca3e8484fef9@linux-foundation.org>
+ <3cee4548-0ae7-46a7-b437-bf84e5c155ad@app.fastmail.com>
+ <3gyxhudb5zwrrevc522qjpddnzxbsyxeeqair7tvii6jhfu6kl@f63vlxgftjpl>
+ <aqFdqQ5xCucwijsl@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aqFdqQ5xCucwijsl@google.com>
+X-ClientProxiedBy: BN9PR03CA0282.namprd03.prod.outlook.com
+ (2603:10b6:408:f5::17) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:183::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO0P123MB7767:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6b8928e1-7dc5-4ce3-b484-08df0edb67ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|23010399003|1800799024|366016|10067099003|4143699003|56012099006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	I+CFJfJe2nZiPB3Mxzoz9LgJvlm4zwIS0vMixjLYgLAT23vDBUMWuTSgCWCZN5Tmu09mlp8O5ERzeQakUoIcqUkjrH1fcIQXrLIKUrE/1HXdcnt6m9KNGwxZ3B5mh+lMhS6dVFwhH710aXQjskgipGkBYGn1AR8AG5t1Nywjijf9UGo8f8D0oArw9AqmRBbIs9zxpeMKElQswKTBByZppjGIDA1TEwfZx9JQ87mQJer2XxySbIJl5NidvNqpNczauracThko0ALvrRAFFR/QzXFoArvK8uCQ8hF0XXALBNQCoORQyCLhF59AhOakjHG/r1oYat1iJ2e5uqtVfUjxKt3ggMWnK+rs03897phIQ1LSM0SzetYxasrIP2K3yPgttlyZpuQaE8LNDj+g021YMc4XDrcWrnDBr50SUdRaucR9ayIG2vpqFzLIF11RTUSw3XGQ/iFwfSXHimF/SNqd/5VkGgpPnA5fT9FVi6IBjNUn/YdLt3ty7qOaqTCh68cfJNoYLBxpM3mn4jHuSpNRvCDvMAuQozH47lB5xtRO6MN+5WL3YYyCzCjQEXC9qUNNJOVOdfSTwW7+ESXj6XDc14ufGzMeS802igLBeGhmLUAVMlFeSPdugn/qKMfWysXZb8j/sKOcagVbynTnIQaPNw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(1800799024)(366016)(10067099003)(4143699003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UlhnVk5KV1VNRTkyT3VkWkFseDR2SWRCTmZKbmtkZzV1Mlp1ems0UURaWVpp?=
+ =?utf-8?B?d0pYUXMrdXZUbGJMVlBiVjdERVVybWY1NGxWTlpYQm9QYU5VK0ZXMjdrK0cw?=
+ =?utf-8?B?ejlnNC9lMTUxNUwrcWJ6NE1rK01tWThpSERQbjNINjFONDROR0VBSXQ0YTdY?=
+ =?utf-8?B?S2ZqNVVHcjNKTGlXU2trVklOV1pRaS9EZ29PSHZDQnpMekc0UU16ZW5JNyt6?=
+ =?utf-8?B?OGRKQWRTVm1iVGVTNEpNcHZ3VkJKZFQwZHBTbk03aFpKMFMvMS83dnN5Ynho?=
+ =?utf-8?B?ZjlVSU9jRVZ2SUVKd0xOWXZBZ24wbFNrZlZMTjlaNlpIZnpCUmJKR1g2UmhX?=
+ =?utf-8?B?U0NIWkdPTmt4YXFhWVRnMFRyQzN3K2U3aVZwcWZsVGkvaytQOUh2MWZ1NGNM?=
+ =?utf-8?B?aXlVTWNTMHAzbWQ2am92ZHVsY2NlazNabnhtbHFmK2NxOFM3N01na1ZBYU0x?=
+ =?utf-8?B?d01Gajg0UlhSNkYzb2F1c3FFTGVlNGs5VlhLN3d6azhjUWNKcnkwaDNuK0Nx?=
+ =?utf-8?B?eEdaRE5IYlhmSWFXZDZkc0JVTGR4RzYxYW44OVhwNXlJVFdxNjJMeWtaMHRq?=
+ =?utf-8?B?Y0g4eVFzSFB2REtrbTNoL1AyejdzcHpGdEk3VUpCNXBCWDFBM01NQU9SVTly?=
+ =?utf-8?B?VEpGelZ0a1RIcXB3VXJzT2tRSXlaY2FTOFVHM0ZTNCtmVG1NUzFKUUxURjFC?=
+ =?utf-8?B?ZXlkUGVnbm40dmtxazhVN3hjNlFjNVplYjlSUU5Malo3SzBLQzJpaldNaDlK?=
+ =?utf-8?B?TVVhcDJaM3QyU1FNZDdnY1RHdTBNaXJKQWZ2UVFmMllyRytjcCtnb3BrZWdB?=
+ =?utf-8?B?dGF6L1ZzcnhnMkhSZHQ4QUxmL3NjZEhyNENjWk5ma2pXUkRXL2pRWFhXdXZt?=
+ =?utf-8?B?VG1xQ2F3T2dWU1czU2pLSVJaMlJjR1dEYkdLRlZvbzZYL0swNHBidFYwUE5n?=
+ =?utf-8?B?TXNzYjhRKzBPTC9rdm9nSmxsZzlDQnN2ZFBxbHJURjBWeW1vTFZnRkVhaWtU?=
+ =?utf-8?B?QWh3V3IvTk1pUUtzdUs1ZjRBeXhJOHBDNFlBTlBxVGVQam1tK3BLaTQ3TVNI?=
+ =?utf-8?B?bDU2NndEODhwQTR0U3ZKT2xSSmhZZTZkcEVEMmZZeCt4Y1hIK0E4ZGM4Qm5j?=
+ =?utf-8?B?Y1E0NTRXQ2tzN0dXczh2VDcrRVlka05IdjQ5enVBd2FTeTBMN2hrajFpcksy?=
+ =?utf-8?B?SlhKM2c2cExWODQ5L1lhSEhFd21CMjFhazBXbnN2WGFHOTk4QTZES3NDNlRk?=
+ =?utf-8?B?enV4ZEhLZDBzVmJWNW0rS1VGN05ycVZxVmhOUE90aWJYelBTMUkvSm44NmF1?=
+ =?utf-8?B?dUZnUzExS3psMW1NdTd6KzYxOHphSVNNQnY1aUtYZTVPWUl2R0NmK2w4Vm8x?=
+ =?utf-8?B?TnRiWkd5SHJiZlhTVk5xWkxhVXBGS1FPSHBkUTN0WVFEZjVNSm95SG5XUTJy?=
+ =?utf-8?B?Z0pCenNDT2duNWtBalcrcC8xcS80TkZncE1xNmFkNCtlczRZczRjT2w5Q0pP?=
+ =?utf-8?B?WldjWDlGeVgyWjNkMFVZN1l2ZWtyQ2dnQU9FRTRRaEhSY0p2TDZnRE5KWXVM?=
+ =?utf-8?B?V1JnMmhZNmVmcUxmdWh1WU9tTWYwY09ZZG9JN2Z3REtQVitJSFZrYWY2MmtY?=
+ =?utf-8?B?QlZLalhsOTR4N3lyWjBOV3h2bVlOQXQ1VnVlZXMyTFNRTHd3aU45M3FYRk9N?=
+ =?utf-8?B?NERZVGFYWUV6RUhidnRZeU9UamhWa090d2lyVDNMMHB0SW81TndqNS8vKzU5?=
+ =?utf-8?B?ZlBrTSsrMjBHd3dmOWdCS3NKQU52akhxRW90b3l0Wjd5WHNlb1hBUnUxdWxt?=
+ =?utf-8?B?SzQ1TkV5a2puVzZ5aE42UGJwTUp5MlJGcWJqK0xZR1RmNUxRSksvNkx3L0pJ?=
+ =?utf-8?B?Sm9JSnR5K3ZVd3A3UTZvZXRLRzZKTUhTVk15MmVsbHAzMDRGTmg0eFAwR3Rq?=
+ =?utf-8?B?WmtCSC94dlppcjN2U3RCU055bU02N25zNmlrWk5zVVB1cnl0ajdoUW5tRkl5?=
+ =?utf-8?B?WkFhZXFLeWRZUUZpY3RtNG96Z1l4Vm81MGVIRWM2QlR0dzAzNytITmtSRVFW?=
+ =?utf-8?B?K1pxZlVSVmMvRjVaVkg4NjRscGRMcFZtcmlOOW1KQzV6alg5S2tYUFZ4cVJ5?=
+ =?utf-8?B?cmh3SHlCaGR3RFpZbm5WbUhLYkZjU2JtS0ZSM1JSYlJCZlQweHpHL1NVNWV5?=
+ =?utf-8?B?MmRhWlovbjNKR3dOcnpZNXg1NnBKYTdNZkZOM1daTlIzeEtvVlRYV0dQQkhj?=
+ =?utf-8?B?Z2JyVThSbE0rZm9scWtNODJtaER3OVhCSTJTWlBGaERiN1I1RDVCVjdOaHlN?=
+ =?utf-8?B?WE1PWS9JZWdJbDQ0djZTU2xHUGVYV0tIeUNnc0tpWm5WNnQwekl1UT09?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b8928e1-7dc5-4ce3-b484-08df0edb67ad
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2026 01:32:41.1629
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iAiUjlkxEdwJRQgkacSU6NFtPW65az9cQb/NsJtlduhT7J7SxTRz3k5GIlxX5/7mUOdN2yZLM8QThLWll2paGg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB7767
 
-On Tue, 2026-09-01 at 17:57 +0100, Alan Maguire wrote:
-> Add support for new kinds to libbpf.=C2=A0 BTF_KIND_LOC_PARAM and
-> BTF_KIND_LOC_PROTO are dedup-able so add support for their
-> deduplication, whereas since BTF_KIND_LOCSEC contains a unique
-> offset it is not.=C2=A0 LOC_PARAM is considered a primary type
-> since it contains no external references; LOC_PROTO is a
-> reference type consisting of LOC_PARAM references so they
-> are handled in the primary and reference dedup phases
-> respectively.
->=20
-> For BTF field iteration, BTF_KIND_LOCSEC needs 2 m_offs[] values
-> for the associated KIND_FUNC and KIND_LOC_PROTO type ids in
-> each LOCSEC entry.
->=20
-> Add APIs to add location param, location prototypes and location
-> sections and btf_is_* tests, data accessors for each.
->=20
-> For BTF distillation we add location info to split BTF.
->=20
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
+On Wed, Sep 09, 2026 at 01:22:49PM +0000, Alice Ryhl wrote:
+> On Sun, Sep 06, 2026 at 10:08:57AM -0400, Aaron Tomlin wrote:
+> >     2.  Mangled Names in Rust
+> > 
+> >         For drivers written in Rust, initcall symbols are compiler-mangled,
+> >         which makes initcall_blacklist= virtually impossible for a user to
+> >         specify at a boot prompt.
+> 
+> Are you sure?
+> 
+> As far as I can tell, the Rust module! macro applies #[no_mangle] to the
+> initcall, so no mangling should apply to it. Its name is the name of the
+> module followed by an underscore.
+> 
+> Alice
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Hi Alice,
 
-(Please see a few nits below)
+Sorry, I was wrong.
 
-...
+Looking at rust/kernel/module.rs, indeed #[no_mangle] ensures the symbols
+are named __{module_name}_init and __{module_name}_exit without compiler
+mangling.
 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+Thank you for the follow up!
 
-...
-
-> @@ -4395,6 +4653,45 @@ static bool btf_compat_enum(struct btf_type *t1, s=
-truct btf_type *t2)
-
-...
-
-> +static long btf_hash_loc_param(struct btf_type *t)
-> +{
-> +	long h =3D btf_hash_common(t);
-> +	__u32 *v =3D (__u32 *)btf_loc_param(t);
-> +	int i, vlen =3D btf_vlen(t);
-> +
-> +	for (i =3D 0; i <=3D vlen; i++, v++)
-> +		h =3D hash_combine(h, *v);
-> +	return h;
-> +}
-
-should v->flags be hashed as well?
-
-> +static bool btf_equal_loc_param(struct btf_type *t1, struct btf_type *t2=
-)
-> +{
-> +	struct btf_loc_param *p1 =3D btf_loc_param(t1);
-> +	struct btf_loc_param *p2 =3D btf_loc_param(t2);
-> +	__u32 *v1 =3D (__u32 *)(p1 + 1);
-> +	__u32 *v2 =3D (__u32 *)(p2 + 1);
-> +	int i, vlen =3D btf_vlen(t1);
-> +
-
-llm is right, the p{1,2}->flags comparison is missing.
-
-> +	if (!btf_equal_common(t1, t2))
-> +		return false;
-> +	for (i =3D 0; i < vlen; i++, v1++, v2++) {
-> +		if (*v1 !=3D *v2)
-> +			return false;
-> +	}
-> +	return true;
-> +}
-> +
-> =C2=A0/*
-> =C2=A0 * Calculate type signature hash of STRUCT/UNION, ignoring referenc=
-ed type IDs,
-> =C2=A0 * as referenced type IDs equivalence is established separately dur=
-ing type
-> @@ -4622,6 +4919,12 @@ static int btf_dedup_prep(struct btf_dedup *d)
-> =C2=A0		case BTF_KIND_FUNC_PROTO:
-> =C2=A0			h =3D btf_hash_fnproto(t);
-> =C2=A0			break;
-> +		case BTF_KIND_LOC_PARAM:
-> +			h =3D btf_hash_loc_param(t);
-> +			break;
-> +		case BTF_KIND_LOC_PROTO:
-> +			h =3D btf_hash_loc_proto(t);
-> +			break;
-
-Maybe add LOCSEC as an empty case, same as for VAR and DATASEC above?
-Otherwise if someone ever tries to dedup a non-module BTF with a LOCSEC
-the operation would return -EINVAL.
-
-> =C2=A0		default:
-> =C2=A0			pr_debug("unknown kind %d for type [%d]\n", btf_kind(t), type_id=
-);
-> =C2=A0			return -EINVAL;
-
-...
-
-> @@ -5489,6 +5813,41 @@ static int btf_dedup_ref_type(struct btf_dedup *d,=
- __u32 type_id)
-> =C2=A0		break;
-> =C2=A0	}
-> =C2=A0
-> +	case BTF_KIND_LOC_PROTO: {
-> +		__u32 *p1, *p2;
-> +		__u32 i, vlen;
-> +
-> +		p1 =3D btf_loc_proto_params(t);
-> +		vlen =3D btf_vlen(t);
-> +
-> +		for (i =3D 0; i < vlen; i++, p1++) {
-> +			ref_type_id =3D btf_dedup_ref_type(d, *p1);
-> +			if (ref_type_id < 0)
-> +				return ref_type_id;
-> +			*p1 =3D ref_type_id;
-> +		}
-> +
-> +		h =3D btf_hash_loc_proto(t);
-> +		for_each_dedup_cand(d, hash_entry, h) {
-> +			cand_id =3D hash_entry->value;
-> +			cand =3D btf_type_by_id(d->btf, cand_id);
-> +			if (!btf_equal_common(t, cand))
-> +				continue;
-> +			vlen =3D btf_vlen(cand);
-
-Nit: btf_equal_common() checks vlen for equivalence,
-     so it appears that the above line is redundant.
-
-> +			p1 =3D btf_loc_proto_params(t);
-> +			p2 =3D btf_loc_proto_params(cand);
-> +			if (vlen =3D=3D 0) {
-> +				new_id =3D cand_id;
-> +				break;
-> +			}
-
-Nit: It appears that special case for `vlen =3D=3D 0` is not necessary,
-     wouldn't memcmp(..., 0) be 0?
-
-> +			if (memcmp(p1, p2, vlen * sizeof(__u32)) =3D=3D 0) {
-> +				new_id =3D cand_id;
-> +				break;
-> +			}
-> +		}
-> +		break;
-> +	}
-> +
-> =C2=A0	default:
-> =C2=A0		return -EINVAL;
-> =C2=A0	}
-
-...
-
-> --- a/tools/lib/bpf/btf_iter.c
-> +++ b/tools/lib/bpf/btf_iter.c
-
-...
-
-> @@ -94,6 +109,8 @@ int btf_field_iter_init(struct btf_field_iter *it, str=
-uct btf_type *t,
-> =C2=A0		case BTF_KIND_DECL_TAG:
-> =C2=A0		case BTF_KIND_TYPE_TAG:
-> =C2=A0		case BTF_KIND_DATASEC:
-> +		case BTF_KIND_LOC_PARAM:
-> +		case BTF_KIND_LOC_PROTO:
-> =C2=A0			it->desc =3D (struct btf_field_desc) {
-> =C2=A0				1, {offsetof(struct btf_type, name_off)}
-> =C2=A0			};
-> @@ -127,6 +144,11 @@ int btf_field_iter_init(struct btf_field_iter *it, s=
-truct btf_type *t,
-> =C2=A0				1, {offsetof(struct btf_param, name_off)}
-> =C2=A0			};
-> =C2=A0			break;
-> +		case BTF_KIND_LOCSEC:
-> +			it->desc =3D (struct btf_field_desc) {
-> +				1, {offsetof(struct btf_type, name_off)}
-> +			};
-> +			break;
-
-Nit: can this be grouped wit the _PARAM and _PROTO cases?
-
-...
-
+Kind regards,
+-- 
+Aaron Tomlin
