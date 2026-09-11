@@ -1,61 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF08136A340
-	for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 14:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C802736B915
+	for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 14:52:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789138352; cv=none; b=kn6PjJf1rWnGaNJLVPb11YiiXIFIzwOY8iknShARxL6cF4MW7zkfhyODMmmbmuTTH0u396XwYi2DoHfwCWD9TuVEyPg+58mffYNcCje2fbMvycZhMVBqrnQ2rfwo4mVbMb19/n+1xq8BXRqBCGGKuliOcBCeDsfPOWyprzY4rZM=
+	t=1789138353; cv=none; b=Z3BW9qoogweHaAcJvQl0HVeto3pokSV3sRslSbGbJ0b0pN4low+DGn77my9tvE4MfOf6g3MzO1O6vcDLIVQH7Xh/POKG27ib0TlYbaRFkW4iTptN7PpfTxNFA9jvKax7Qk9t/aoi7aOiz56C8/sqPs8sgdxqjHWUjdQILU5awz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789138352; c=relaxed/simple;
-	bh=sVfwpVRyt/VC/mMjuLzN3CzfiY31hqAWvVtTiSgiWp4=;
+	s=arc-20240116; t=1789138353; c=relaxed/simple;
+	bh=ozHRLiliFMnW1SlnGtObXJsv2wh4qQXUNrJrJq2vbBY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RRMvefKX4U3+j34Mqw/LQJxNQD/yEhh0vHBfiXwefLjEMP2A7t8L5zCN271VXpxjxkcO7pNLqaP47+u2Pxpcj2rapYwSsPg17/cfmu+uVgjN4e9jAypXC/xSJtJSf31JWUmsFA69frYENHP+oUOw05g4wzHAvcuZPmwFY1e064U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dCBwWXTu; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Q5/QVJJGaJ8YVNGl84YxqZe6bW+ikVyUsLwJ5FgKagLRQkd/1fSPrQmuW2JbqYccDjaKTmc06my/NYO7J8DFNMW/bg6FQnytIwMmr/ziho9vwYW4IP0MfDIq2BUk2PRxjS8BdVMMRwPjE6arhKkImR4DNewMp/jU1QcIlM7haw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYyTGXyi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dCBwWXTu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00AAB1F000FF;
-	Fri, 11 Sep 2026 14:52:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYyTGXyi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1981F00898;
+	Fri, 11 Sep 2026 14:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789138350;
-	bh=sVfwpVRyt/VC/mMjuLzN3CzfiY31hqAWvVtTiSgiWp4=;
+	s=k20260515; t=1789138351;
+	bh=ozHRLiliFMnW1SlnGtObXJsv2wh4qQXUNrJrJq2vbBY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dCBwWXTu8eJXbblv1rr5FJS8lhcDAFXKt0sUgVA4dJx1CaUO3egUcL8XY3R5zTcoP
-	 F3ZpKHrybCbMBAo7x/cJuYTTZTGrt+ENZQQtaOiAYoBKWhOh1GyZE/gNNPWZGnYyrG
-	 gTEVJOfvC7GQT3oNelLAP8HRyWRyKkw79XlCDa1RBWPReUsReitE9Q25zBbXrWWI3Y
-	 vlAWrYqXj/sLRzmpyFLztcmx9TVEnRJLlRX/zeFdHsjWZj1HmaXOxUW1r1WiZ7EDcX
-	 fV6lHJFlo3yt50YSfHImFXMaWibOd6FJZCrL0ZTMeA96McWUEx5zmiswuHWXdnZE8v
-	 FeApGxMugkHbQ==
+	b=gYyTGXyiongFnx2ZCzh5d07wpg7CShCsdCRZkalAoax++3dgFnh3zWhDdjULqb/EL
+	 YCGgAJG4TFH7mPOz1Jm9Lcm4LxJ+WxU8u/X68cq0SnxKi2kzYOYnmdbGukbv4MOXge
+	 znV40VohLRIwK7f6qcq9MpgLhGl9qidTJ1/A1hqePyKrtgb+4P/9L3br4xSgHRZzdU
+	 GwdUFGU3R442JNmDxHhN0usRzgKMYxKA3McRrBNqkUe2dUY5pbgUJBlyLkkioQFsWj
+	 okjaDXeHx2/uSACNEF8vyi+B5IZOD39cSRXlJI0NwVBlCOVx0O0J+qOaI6ZnzPSEro
+	 cCt20HtI1DDTw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/3] time/jiffies: Include linux/sysctl.h for
- proc_int_u2k_conv_uop(), ...
+Subject: Re: [PATCH v3 3/3] module: Bring includes in linux/kmod.h up to
+ date
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Petr Pavlu" <petr.pavlu@suse.com>
-Cc: "Mark Fasheh" <mark@fasheh.com>, tj@kernel.org, "Anna Schumaker" <anna@kernel.org>, mkoutny@suse.com, dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org, "Jeff
- Layton" <jlayton@kernel.org>, hannes@cmpxchg.org, "Chuck Lever" <cel@kernel.org>, "Joseph
- Qi" <joseph.qi@linux.alibaba.com>, "Joel Becker" <jlbec@evilplan.org>
-In-Reply-To: <20260911-module-include-kmod-v3-2-6ebccc3e0731@suse.com>
+Cc: dri-devel@lists.freedesktop.org, tj@kernel.org, "Mark Fasheh" <mark@fasheh.com>, "Joel
+ Becker" <jlbec@evilplan.org>, "Anna Schumaker" <anna@kernel.org>, "Chuck
+ Lever" <cel@kernel.org>, hannes@cmpxchg.org, mkoutny@suse.com, "Joseph Qi" <joseph.qi@linux.alibaba.com>, "Jeff
+ Layton" <jlayton@kernel.org>, linux-modules@vger.kernel.org
+In-Reply-To: <20260911-module-include-kmod-v3-3-6ebccc3e0731@suse.com>
 References: <20260911-module-include-kmod-v3-0-6ebccc3e0731@suse.com>
- <20260911-module-include-kmod-v3-2-6ebccc3e0731@suse.com>
+ <20260911-module-include-kmod-v3-3-6ebccc3e0731@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 14:52:29 +0000
-Message-Id: <20260911145230.00AAB1F000FF@smtp.kernel.org>
+Date: Fri, 11 Sep 2026 14:52:30 +0000
+Message-Id: <20260911145231.1D1981F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-> jiffies.c uses proc_int_u2k_conv_uop(), proc_int_k2u_conv_kop(),
-> proc_int_conv(), proc_dointvec_conv() and proc_doulongvec_minmax_conv(),
-> which are declared in linux/sysctl.h. It currently gets that header
-> indirectly through linux/module.h -> linux/kmod.h, but the latter no long=
-er
-> needs to include linux/sysctl.h.
+> Including linux/kmod.h alone results in 1.5 MB of preprocessed output, ev=
+en
+> though it provides only a few functions and macros.
 >=20
-> Include linux/sysctl.h directly in jiffies.c ahead of removing the
-> unnecessary include from linux/kmod.h.
+> The header currently depends on:
+>=20
+> * __printf() -> linux/compiler_attributes.h,
+> * ENOSYS -> linux/errno.h,
+> * bool -> linux/types.h.
+>=20
+> Include only these files, reducing the preprocessed output to 10 kB.
 >=20
 > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
@@ -63,5 +66,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911-module-inc=
-lude-kmod-v3-0-6ebccc3e0731@suse.com?part=3D2
+lude-kmod-v3-0-6ebccc3e0731@suse.com?part=3D3
 
