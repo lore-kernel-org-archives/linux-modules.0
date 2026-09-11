@@ -1,65 +1,65 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D624366054
-	for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 14:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641673403E9
+	for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 14:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789137768; cv=none; b=V3fmMkCkAdaWPwzJo9w9jzOIjtqUjaH4RSLH43HICS9XJusj99brmViiQQrkmANTEmwyLbo1OQPrVvhju13Jusr8mLvz9DftpuopX0DJ3zc0gomyR5A3QJz77BNkSDzIfFgFPaqCI/ZYx9Z1gnYGkesE8veCB8/AIhzmAdkz+qI=
+	t=1789137769; cv=none; b=IfUijyGhnF5OD2ppc0ZWuqCof5HjuVppFc3ZAZjIs53D4gDoVdd0w9OO0vmIfog6/PdWeM0K5VqYMh7LjDKe28cQPfoDXdpcWM20Uw78u3ER6SwVg1pywmQtqye3Qi1Ztn+SWfZX9Zm5bIHqkpdG0GG/fIJh98a4MEP3ZuWiyrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789137768; c=relaxed/simple;
-	bh=Q6gYJk+pvivEut4Dg9S1KYlKEBevCBrSEwCT14tMvuE=;
+	s=arc-20240116; t=1789137769; c=relaxed/simple;
+	bh=gz51FBCWhizVrU+7SLeOKliZNk1p8rWeS98CiQ+wXUY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S1dJd00vkvML97+msgT49qp90Bql7E3hg2VMdwcLE5OYJvkG38exRujrciIp0ePoh8HX4sGWVLj5wyOD2JWxO4dK0M3jmF0p1qa6M5poKH51EWytRxExGvyrDEsCmRpsg6bbjaMrxUs1cBr8KkCRHu8a9TecX/JPMPvNUMZzaew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=b5syWAab; arc=none smtp.client-ip=74.125.225.140
+	 MIME-Version:Content-Type; b=kNWLGF0YlWwimAYB4Uor7+yNnb02ZWvMaVPvDWNkONjg/lhKZaI9WgBJcJ10WhhS+VPJRuNtMB34RBrA6IvOEaquk9/uabx7wE5dqwCw1veeyFl7AgcyWJyRiKIEKMBu41+mcmwXRtH4H8x31mg40/iG+O7l5l9Zh+4YZQEgsOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TMvGMq1K; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="b5syWAab"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd6185db7so6034395e9.1
-        for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 07:42:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TMvGMq1K"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49e668491f3so3414595e9.1
+        for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 07:42:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1789137764; x=1789742564; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1789137765; x=1789742565; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=o6xq0BxW8kPi2a+1MlzTOWetcM4nnwrAPZoyBYnvLVM=;
-        b=b5syWAabYfLW/JkamLeCwo12Ds0StLNJSUY639dt7/PEU/zeXEnHt1BG/56u3em7j/
-         QbBuSSvhKFQimwQL5tycIRYUKhpy079ocqnMl2oUiWmvHqaF3I/BZTYGalvm5opiRKRJ
-         fClUSQX4cnLSlHYJByehBH+NYN9Y4fNk4LFOyQaKajA3GlE69PnSOhDt3rKwiX1hp7zS
-         QbQ1PKkqX7CeVUzqRDKNuAbhztGsSN9maJ2hKkU6pPAnQdaGUUMf69EYIFNfPDQmk7LK
-         5duFJ96WYai4NazsmJ0Y2M1qoSbdFoZBMMxUuW20BI/PfHPKD5GE3XhGIOz60+FYUmaA
-         fJBA==
+        bh=hNkJ+Y4UNh/VmhAHfWRxswemkYstE9GZTmx6wz4UC8Q=;
+        b=TMvGMq1KXCQ8s+RpmILsIeGf8K0plpbDc3xU0HxW5q69wJ4IuhPeLCr5JbpsWff46R
+         R339YRUVqRi6/PFpgzO+b+Us8b3f0Fv3RavXH/rvTME6crQSeuZQX5fhsYwkFumrKmhE
+         MEMcuIHBwGYYUdn5MYSsoLeQRLHg/AjEpHokj7Aaii7ap4k7cJKFOQG/tiZUWjFTnYaP
+         lsPtlukinpLRNsdB7EuXrUMMC5LQpfj6AItmxEaYlmVgQ+Cj3hNca/7UM3Qz9RNHGCD0
+         a+6gAPL2hEEwWw9sRZRHyAcQZxk+Xn8ONLqvZvqEgWqJuBbWYpFcDFky37P6I126tOtP
+         Fcyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789137764; x=1789742564;
+        d=1e100.net; s=20251104; t=1789137765; x=1789742565;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=o6xq0BxW8kPi2a+1MlzTOWetcM4nnwrAPZoyBYnvLVM=;
-        b=MmHlw/aUIoGhH6I+TITw1wI9ZxMnoPe3iDFVrLeMeK/pFbHZo4gyu3dV9mmGnUX8Un
-         bYUfv3Zy56DCrRSE1bKElrOQbGBY28mc2fV19q9+lZLjUAa5HryfVBTinDNwCR041vpS
-         9sfdUjmO4g65CgRKAAlRpeEPX2ynw0uFjUo6VxaNA2sieXKTWhe8XbHXN2S5zfnYusRR
-         I26Br1EfaX0QVuvejtYMyOEqP2tialsi/W4WqKy/3WY3mrHmrP2GucmeJxfTkg97NEYR
-         uEj440uf2YizRdFW78Y1mzpby5nrgh+OLUmkxMP+uihm4rnEyYAuMEgPFbmWrHi2JMlO
-         W41w==
-X-Forwarded-Encrypted: i=1; AKwUvBzt/+wuQ2dEJPPgTBRVR2bhIyua+LnpkYT3Ss1dptwx+FpZwyVx2vi6kpKEA1LfyF1nruNE6UctZ5kWrWm0@vger.kernel.org
-X-Gm-Message-State: AFuF++nabqIPcK5EzkJgvd9YX6heIkXXj/opJKLnThJxm/swrEtZYGz5
-	ff3N9hwWPYX+4tmQ9WHygqSdFAdUn75ibfXnbC+Hl0KRqY88xONTLw0D1o597NLmvo0=
-X-Gm-Gg: AYBFou0Z8hbrgPEVI4cOrTyhAnrL9QGhG0cij52H12RrvUft5MXjtg4+zA4iaTkoGE7
-	Kp4SE6ddiH+gaIjjAjNGKSnSfxHcpo2IDQYVeKRIdYOVN3lfdiyh2mmebHO1FGEwKkXKu1B2RWI
-	Og1/zT72nZtf7mXWwbekRVpHg3A4uTCtxBs17CSWYHMOpiyt8Y4RBh+8EjmIqFpLLy2W2OkstKU
-	X8tXlvIsgXHZ2PixEWcSG/RzC81g9lkI0ZtK2bb4iEB6ScYyo4DmavOpDzpVRvHqfwKoFVbJxGH
-	/prPEy0H88Jk2QfN0L4fDx7p8e9zyHhvUqAb3EJyoYpbzS91SffD1Qq9G6Sj9LN0Ehl9Rwu2bvE
-	Eukjsoek9w0lACGqai6k7SY9hyaC8abXKmcZUQ1uA5bU0LXIdLPzMr1/tqxC5FXCZF95MP80HJ2
-	+IxlzkdjxunBGqVLAeXVamXhOQpGG6ZPpNQpXEaFPqLFYyIk464Y9FYeVy/7lykJGP35gaWsycV
-	vau8Q==
-X-Received: by 2002:a05:600c:4ece:b0:49c:f13e:e4c with SMTP id 5b1f17b1804b1-49e610829b5mr56105305e9.9.1789137763706;
-        Fri, 11 Sep 2026 07:42:43 -0700 (PDT)
+        bh=hNkJ+Y4UNh/VmhAHfWRxswemkYstE9GZTmx6wz4UC8Q=;
+        b=nBIV+zPbFlMizsq8jeZ9gyW+tkJwF+LJCSEu+xNxKlRgk3646U+1crKZ2nO6jJeno8
+         N8O8GufSJpjQQmU76q4GQ8nnRyCWRy+/alp7+0D2kmWvGF/PfF4GY28tT/cpVsA1CCj0
+         zsf/nkzFD0C7Sv0i7HX1eJLuelZvq8aoWJK90LMxjJ83LWcVj8vyLEs1zmoiJ5j81Hs4
+         bnr+d6Ewj12/TRfo1VLk6w1OP7zdJP7eeig4IX2KzJth9qCZZrhZO3+NwtZU2rTbZ7LF
+         YlxtFKtWzMsqF42gnirAMwwkXgl0n8gMNLH0lUyllxm3WD5R/gaFt70EgerVxR6y1w0f
+         4wXA==
+X-Forwarded-Encrypted: i=1; AKwUvBymBk8tPymqBCyNJsApYb8st06PDgA7aPnVIYcz/6i5hpR4qvLE10w9tezz5jxYQgQev3T+s5FTahyRdnlS@vger.kernel.org
+X-Gm-Message-State: AFuF++l6OSxPFF5iGwUvrXxyej8yrYstxy6e5FOeyFXPFiD+H8aOIDT7
+	ulQzTBXWbXsa86tEczDtCBweb/BxPHtW4PHw9kqv1XaDOGZSUYbdi4IY337ozSZeVLk=
+X-Gm-Gg: AYBFou30Jwglh2ZN04aexd1cXwDa5/TMZwKiDN8puwqHFiuIdCba80z1cYeH3XiHOuN
+	aY13PlYHnvYub0YkMrotujbl4pKPqMSHfwzbqbsGLT3K4B/JaSqjuQGQJmv5qvEnfIF0QyVac+I
+	9o2DO72ojFdpniNtJn46MmTZRFn9nu0L6hDLC6qEZek2Zk1bLuOgGq2x8wkZQP2FTI3WdIkFg+R
+	fOV9tE1eglwALTbbK/WdHlSY4DXrdTRxwcqU3upAZnHbq4ViU2OIrAonPvFYzHWJ3/ao7YCpshM
+	NxEtLA7j9IKXgEj53DTQUKtiD/n+iIlEcUFLaCQidc2620NThPLk6T/xt3PtiotPqCis7ecfbhu
+	pzGqewstouEAOEG5F4Efit3Q1WZEFi/ycWMcDu+Jy5UKAj04PhrcWrJEy8I4JlTcOaigxy6/qBY
+	PxCyJ3I1Yg4HEJL4z4185FWcwm0w4wXdXJshN2nzycnmYrtwkiho+P4wk4siyYqtZpXGRnD3kQ9
+	D2fh8zDRtle+ekr
+X-Received: by 2002:a05:600c:e557:20b0:49d:1d6a:4cfb with SMTP id 5b1f17b1804b1-49e619836d6mr35798025e9.1.1789137765611;
+        Fri, 11 Sep 2026 07:42:45 -0700 (PDT)
 Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e60ababd5sm107038405e9.4.2026.09.11.07.42.42
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e60ababd5sm107038405e9.4.2026.09.11.07.42.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 07:42:43 -0700 (PDT)
+        Fri, 11 Sep 2026 07:42:45 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Thomas Gleixner <tglx@kernel.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -90,9 +90,9 @@ Cc: Xin Li <xin@zytor.com>,
 	linux-integrity@vger.kernel.org,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/6] x86: Avoid indirect includes through linux/module.h -> linux/elf.h
-Date: Fri, 11 Sep 2026 16:40:31 +0200
-Message-ID: <20260911-module-include-elf-v2-1-954c732975fb@suse.com>
+Subject: [PATCH v2 2/6] s390: Avoid indirect includes through linux/module.h -> linux/elf.h
+Date: Fri, 11 Sep 2026 16:40:32 +0200
+Message-ID: <20260911-module-include-elf-v2-2-954c732975fb@suse.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260911-module-include-elf-v2-0-954c732975fb@suse.com>
 References: <20260911-module-include-elf-v2-0-954c732975fb@suse.com>
@@ -105,111 +105,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Several x86 files use ELF-related declarations and currently rely on them
-being provided indirectly through linux/module.h -> linux/elf.h:
+Several s390 files use declarations that are provided indirectly through
+linux/module.h -> linux/elf.h:
 
-* arch/x86/entry/entry_fred.c: ia32_enabled() -> asm/ia32.h,
-* arch/x86/entry/syscall_32.c: vdso32_image -> asm/vdso.h,
-* arch/x86/kernel/cpu/intel.c: ELF_HWCAP2 -> asm/elf.h,
-* arch/x86/kernel/fpu/xstate.c: elf_coredump_extra_notes_write(),
-  elf_coredump_extra_notes_size(), NT_X86_XSAVE_LAYOUT, elf_note ->
-  linux/elf.h,
-* arch/x86/kernel/process.c: mmap_is_ia32() -> asm/elf.h,
-* arch/x86/kernel/signal.c: get_sigframe_size() -> asm/elf.h.
+* arch/s390/kernel/nospec-branch.c: s390_kernel_write() -> linux/uaccess.h,
+* drivers/s390/char/uvdevice.c: copy_to_user(), copy_from_user(),
+  put_user(), get_user() -> linux/uaccess.h; file_operations -> linux/fs.h.
 
 Add the missing includes to these files in preparation for removing the
 linux/elf.h include from linux/module.h.
 
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- arch/x86/entry/entry_fred.c  | 1 +
- arch/x86/entry/syscall_32.c  | 1 +
- arch/x86/kernel/cpu/intel.c  | 1 +
- arch/x86/kernel/fpu/xstate.c | 2 +-
- arch/x86/kernel/process.c    | 1 +
- arch/x86/kernel/signal.c     | 1 +
- 6 files changed, 6 insertions(+), 1 deletion(-)
+ arch/s390/kernel/nospec-branch.c | 1 +
+ drivers/s390/char/uvdevice.c     | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/arch/x86/entry/entry_fred.c b/arch/x86/entry/entry_fred.c
-index fb3594ddf731..ea3bb4298065 100644
---- a/arch/x86/entry/entry_fred.c
-+++ b/arch/x86/entry/entry_fred.c
-@@ -9,6 +9,7 @@
- 
- #include <asm/desc.h>
- #include <asm/fred.h>
-+#include <asm/ia32.h>
- #include <asm/idtentry.h>
- #include <asm/syscall.h>
- #include <asm/trapnr.h>
-diff --git a/arch/x86/entry/syscall_32.c b/arch/x86/entry/syscall_32.c
-index 91123a90710c..4ace5b534f65 100644
---- a/arch/x86/entry/syscall_32.c
-+++ b/arch/x86/entry/syscall_32.c
-@@ -12,6 +12,7 @@
- #include <asm/traps.h>
- #include <asm/cpufeature.h>
- #include <asm/syscall.h>
-+#include <asm/vdso.h>
- 
- #ifdef CONFIG_IA32_EMULATION
- #define __SYSCALL_WITH_COMPAT(nr, native, compat)	__SYSCALL(nr, compat)
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 4297ceb2cb24..7dd5a039186e 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -17,6 +17,7 @@
- #include <asm/cpufeature.h>
- #include <asm/cpu.h>
- #include <asm/cpuid/api.h>
-+#include <asm/elf.h>
- #include <asm/hwcap2.h>
- #include <asm/intel-family.h>
- #include <asm/microcode.h>
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index a7b6524a9dea..8b90bf86a742 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -7,6 +7,7 @@
- #include <linux/bitops.h>
- #include <linux/compat.h>
+diff --git a/arch/s390/kernel/nospec-branch.c b/arch/s390/kernel/nospec-branch.c
+index e11ec15960a1..b62da9e81e79 100644
+--- a/arch/s390/kernel/nospec-branch.c
++++ b/arch/s390/kernel/nospec-branch.c
+@@ -2,6 +2,7 @@
+ #include <linux/module.h>
+ #include <linux/device.h>
  #include <linux/cpu.h>
-+#include <linux/elf.h>
- #include <linux/mman.h>
- #include <linux/kvm_types.h>
- #include <linux/nospec.h>
-@@ -26,7 +27,6 @@
- #include <asm/msr.h>
- #include <asm/tlbflush.h>
- #include <asm/prctl.h>
--#include <asm/elf.h>
++#include <linux/uaccess.h>
+ #include <asm/nospec-branch.h>
  
- #include <uapi/asm/elf.h>
+ int nobp = IS_ENABLED(CONFIG_KERNEL_NOBP);
+diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
+index 4d274a2ee84d..402b8a225d6b 100644
+--- a/drivers/s390/char/uvdevice.c
++++ b/drivers/s390/char/uvdevice.c
+@@ -28,6 +28,8 @@
+ #include <linux/vmalloc.h>
+ #include <linux/slab.h>
+ #include <linux/cpufeature.h>
++#include <linux/fs.h>
++#include <linux/uaccess.h>
  
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 346c438ac880..e7f736b53f41 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -54,6 +54,7 @@
- #include <asm/mmu_context.h>
- #include <asm/msr.h>
- #include <asm/shstk.h>
-+#include <asm/elf.h>
- 
- #include "process.h"
- 
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index 2404233336ab..0fe2d7a6b1af 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -29,6 +29,7 @@
- #include <linux/syscalls.h>
- #include <linux/rseq.h>
- 
-+#include <asm/elf.h>
- #include <asm/processor.h>
- #include <asm/ucontext.h>
- #include <asm/fpu/signal.h>
+ #include <asm/uvdevice.h>
+ #include <asm/uv.h>
 
 -- 
 2.55.0
