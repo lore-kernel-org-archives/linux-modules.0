@@ -1,156 +1,165 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A20A334692;
-	Thu, 10 Sep 2026 16:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B375364940
+	for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 14:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789057226; cv=none; b=YJ5QLp9inVpH+vcbGMgOIkh9WfIPHri6yZx5QQbOoZYrj+l6JaLDZYGIxvs0jgEVPf2i9GaMFJyj0dGSDBpeD+IMUdOl8fzlNiT5fOW0ycTJAcxiFBLY2yi51DMaLR3MZ22s/7GOQyvz+NsyvIPt7R4BQb42eAHn7zpbka2ogvg=
+	t=1789137768; cv=none; b=sM1U8qZPaeD8HV0VqFOmJgx5ckxLwAmhfLe1lNhHWDst1oXl/qeYVO9yYVrkf5AnyZFjNwa8dnn57RMe4JVXqMwyZc30XOXWLSkB/LBhJ2089sVm6xJQKL4/tKaSkcpn/Z8Dlswy0mT35NJpora9g6uqIwkr/nuCCuEho9kl0L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789057226; c=relaxed/simple;
-	bh=Eh2t79fGoNYzVTayHaBw7iqMWAqqtTzT2Efx0yoJY8c=;
-	h=Date:From:To:CC:Subject:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type; b=OxAYHt3WZuL/+AWuu0EVJVjdKUEVptU22q16q8+Cq9ryu+JNTI6FUR5YWIj2FHBSOHoZdCYkKIPobf9ZopV/GMO7B1m6zHjZRJaOX01iI4uJYNV7ucclfVPG3M6EjsnNHpltr344sJoPEqStZH0qUZkZQ1FdKvKNsBXjLRJvErY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.helo=mail.mainlining.org; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.helo=mail.mainlining.org
-Date: Thu, 10 Sep 2026 17:19:56 +0100
-From: Bradley Morgan <brads@mainlining.org>
-To: kmehltretter@gmail.com
-CC: James.Bottomley@HansenPartnership.com, alex@ghiti.fr, aou@eecs.berkeley.edu,
- ardb@kernel.org, atomlin@atomlin.com, catalin.marinas@arm.com,
- chenhuacai@kernel.org, da.gomez@kernel.org, deller@gmx.de,
- jiaxun.yang@flygoat.com, kernel@xen0n.name,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux@armlinux.org.uk,
- loongarch@lists.linux.dev, mark.rutland@arm.com, mcgrof@kernel.org,
- nico@fluxnic.net, palmer@dabbelt.com, petr.pavlu@suse.com, pjw@kernel.org,
- samitolvanen@google.com, will@kernel.org
-Subject: Re: [PATCH] module: reject out-of-range relocation target indices
-In-Reply-To: <20260908230815.78409-1-kmehltretter@gmail.com>
-Message-ID: <1C79D3C8-4B53-4B62-A14D-5DC1860F8099@mainlining.org>
+	s=arc-20240116; t=1789137768; c=relaxed/simple;
+	bh=q72VP5n2ZqcEGQgXeUc2xgK/v4cYAsj+QPvCunTuwVY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IdyJeV7uX2TqHEAycs7+rRIV8U9FFb5e+lSPQCAc/FXjzccITJV1hyiJz/KzF7hFHackM3/8iTiI4ZJN3ASl4/tK1LtDdJWZNjmb48WnphrvUlVMYDbLu7lyPo/9tdJZPoZb3xlVLyQAgkcOXr4cKMAHKN2S4nPd8tCHcRi/E0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Oa3P+L8h; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Oa3P+L8h"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-499ac87c92bso12235045e9.1
+        for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 07:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1789137762; x=1789742562; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jtpnUSLeT4ed4dWoaotfN7ey6FZzLAllCqnmIx1g6CU=;
+        b=Oa3P+L8hS5uNkz4niILTnDU6g1KqJOSl07IepB97cothgdPCtzuCqnHr/Ris3t2ZR8
+         sGkTWTi39H/kGliiNFSxa0pUXav5NACiZBUbIZqFUI13DgVISvAq88kOck1kbYFi11tk
+         s4sImAXrp0+0BrBPFV/bgoXbfYPSQ2U9tgUBOoKcPrjPzdYEpkQ8wEGQ4piPm1CBnpGW
+         R2CENzSyKArysWyQJOek25TAS9jAHzB1dD5oxZNEiOsAc6HGliIqUVV7lpvk0PnnfgQR
+         HmYYuiyKuLCBKsQJkovTAhy31kk/CGgXmHzLt5NI98yDOS9OC9W6h6M8cThDQ67eYvP3
+         dvbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789137762; x=1789742562;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jtpnUSLeT4ed4dWoaotfN7ey6FZzLAllCqnmIx1g6CU=;
+        b=fHCxvk+QdMNxPxE2UHaAEAGzT3NIq4OGlW3O0mp3scIt4nISt85wTxCmW5YrSdWqWc
+         QTb3iq9n+mltMFX4WSn1piZ5v07J88CoPo2v58dQtUPvaO8EiOJjCbVithGvTPFMAIlg
+         vFlsS6th8lYPWw0xWPvtDAbMRg7howHWsn2JuLgGisWVJCdjX6IMmWhkV9ZurLIduKD9
+         7CT2bYp2fmlkbFt4PcEyh/AVpmXDCd0Ei8jUbqhXiW9QakLbXoorbQ2A9bD3JeC6F0+m
+         El79j03eAz9MK7jy2PD/KomlExEELwR+QDjTRIHVNTNO/kmA49fbkHyTSZzg55oQKcMW
+         u0bQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwbxg019TfM4xCelKdKKKoCAm8E4Mc0F/QfC9sU+aMIV/y8g4KiHr5rEtoVWNBs1RHqCgdqyoOjj7S3bY6n@vger.kernel.org
+X-Gm-Message-State: AFuF++kY0amc6+RxqhWcQew+f44Le4Z7v+t24QF4KEQ0pNZRbUHr/9nr
+	a2T3DfuuDY7niWQvUbExeXL+FVcVo9b2MMG0dg5l3FmUkFDrYl/E4ajlDIh+ElYsyHA=
+X-Gm-Gg: AYBFou33XDkof4mwlo+N4dNZfIpvAdFMRYDd4xi4jiIUWlihaPLMw22b9j1kS+rn1dZ
+	30uuqEnUNupfOQufpbLxpcKAQKE7Cpntjdne8kCtv2j1ITMm8DeMG1y3onyz3Ty9l7johfy8PHP
+	qpqHgozW36/9LnKFB4omXjgwv1Dwc8leGRPBUzXlip+CPm0qZ4NTmCu+57PC0Fs/hH6dlwSstcO
+	8F4mEKtLl0T4hfep0yQOPIpwTaxWTr/3jRE9TX2epJXBMg7Ia1qyld6txJO3eBd+L893iC+Eds4
+	eqOuoCNKh2nXTssC7ThYhsJNJtCvkPMCv4lXQ57XwpHdcGNelELYAroqF/FVFMJH7kKt5qBE74+
+	X8x0V2kY9Qb/wgl0viUroUtVzvqHwupbndgMZNKq9s1AZZbegWoF+1HSXWghaYB1UNgV2EuOxVd
+	fQhceE3CsMLn6iAorVxKv4yJ81kZ/tlhlmaDTljGeqEnZZtntjLMzqfk3AFdVkxebE2QeqBR2d+
+	h8ssA==
+X-Received: by 2002:a05:600c:1f8d:b0:499:be2d:c290 with SMTP id 5b1f17b1804b1-49e6198933cmr55970145e9.9.1789137762240;
+        Fri, 11 Sep 2026 07:42:42 -0700 (PDT)
+Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e60ababd5sm107038405e9.4.2026.09.11.07.42.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2026 07:42:41 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Xin Li <xin@zytor.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	David Hildenbrand <david@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	linux-s390@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] module: Limit ELF includes in linux/module.h to uapi/linux/elf.h
+Date: Fri, 11 Sep 2026 16:40:30 +0200
+Message-ID: <20260911-module-include-elf-v2-0-954c732975fb@suse.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260816-module-include-elf-a9c10c041867
 Content-Transfer-Encoding: 8bit
 
-On 9 September 2026 00:08:15 BST, Karl Mehltretter <kmehltretter@gmail.com>
-wrote:
->apply_relocations() skips relocation sections whose sh_info target index
->is outside the section table. ARM, ARM64, LoongArch, PA-RISC and RISC-V
->use sh_info earlier in module_frob_arch_sections(), before this check.
->
->ARM, ARM64, LoongArch and RISC-V use the unchecked index to read
->sh_flags outside the section header table. PA-RISC uses it to index an
->e_shnum-sized heap array for a read and an update. QEMU reproduced
->page-fault Oopses on ARM, ARM64, LoongArch and RISC-V, and a Data TLB
->miss on the PA-RISC array read.
->
->Validate sh_info for SHT_REL and SHT_RELA sections in
->elf_validity_cache_sechdrs(). Reject the module with ENOEXEC before
->architecture code can use the index.
->
->Fixes: c298be74492b ("parisc: fix module loading failure of large kernel modules")
->Fixes: 7d485f647c1f ("ARM: 8220/1: allow modules outside of bl range")
->Fixes: fd045f6cd98e ("arm64: add support for module PLTs")
->Fixes: ab1ef68e5401 ("RISC-V: Add sections of PLT and GOT for kernel module")
->Fixes: fcdfe9d22bed ("LoongArch: Add ELF and module support")
->Cc: stable@vger.kernel.org
->Assisted-by: LLM
->Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+linux/module.h appears in roughly 15k #include directives across the
+kernel. This makes it a "hot" header, so it should avoid pulling in
+unnecessary definitions.
 
-I don't think so, sorry, see below.
+The header currently includes linux/elf.h but this is largely unnecessary
+because it requires only the base ELF structures, such as Elf_Ehdr and
+Elf_Sym, which are declared in uapi/linux/elf.h.
 
->---
->
->A custom harness for upstream Frama-C 33.0 (Arsenic) Eva found the
->ARM32 instance in a source-identical ARM module_frob_arch_sections()
->slice. Eva reported the out-of-range section-table pointer and sh_flags
->access.
->
->The analysis and ARM32 A/B test ran at Linux b9b3e33b70b7 ("Merge tag
->'trace-v7.2-rc6' of
->git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace"). The
->PA-RISC, ARM64, RISC-V, LoongArch and x86_64 A/B tests ran at the
->declared base commit, 28924df2a08f. arch/arm/kernel/module-plts.c and
->the touched loop in kernel/module/main.c are identical between the two
->commits.
->
->Each A/B test changed only a relocation section's sh_info to
->0x10000000. The same configurations and modules were used before and
->after the change. All controls loaded before and after the change. The
->fixed kernels rejected the malformed modules with ENOEXEC.
->
->Original-kernel results with QEMU 10.2.1 TCG:
->
->- ARM32, virt/Cortex-A15, GCC 15.2.0, multi_v7_defconfig plus
->  VMSPLIT_2G: page fault at module_frob_arch_sections()+0x160.
->- ARM64, virt/Cortex-A57, GCC 15.2.0, defconfig: page fault at
->  module_frob_arch_sections()+0x110.
->- PA-RISC, B160L, hppa-linux-gcc 8.1.0, binutils 2.30,
->  generic-32bit_defconfig: Data TLB miss at
->  module_frob_arch_sections()+0x11c on the stub_entries read for a
->  counted R_PARISC_PCREL17F relocation.
->- RISC-V, virt, GCC 15.2.0, defconfig plus RELOCATABLE with
->  MODULE_SECTIONS enabled: page fault at
->  module_frob_arch_sections()+0xe4.
->- LoongArch, virt/LA464, LLVM 21.1.8, loongson64_defconfig: page fault
->  at module_frob_arch_sections()+0x1b8.
->
->On x86_64, which has no vulnerable early sh_info access, the original
->kernel loaded both modules. The fixed kernel loaded the control and
->rejected the malformed module with ENOEXEC. The test used pc/qemu64,
->x86_64_defconfig and GCC 15.2.0.
->---
-> kernel/module/main.c | 7 +++++++
-> 1 file changed, 7 insertions(+)
->
->diff --git a/kernel/module/main.c b/kernel/module/main.c
->index d0e1e0bd2ad0..30c7a05488bc 100644
->--- a/kernel/module/main.c
->+++ b/kernel/module/main.c
->@@ -1933,6 +1933,7 @@ static int elf_validity_ehdr(const struct load_info *info)
->  * * Section array fits in the user provided data
->  * * Section index 0 is NULL
->  * * Section contents are inbounds
->+ * * Relocation section target indices are inbounds
->  *
->  * Then updates @info with a &load_info->sechdrs pointer if valid.
->  *
->@@ -1983,6 +1984,12 @@ static int elf_validity_cache_sechdrs(struct load_info *info)
-> 	/* Validate contents are inbounds */
-> 	for (i = 1; i < info->hdr->e_shnum; i++) {
-> 		shdr = &sechdrs[i];
->+		if ((shdr->sh_type == SHT_REL || shdr->sh_type == SHT_RELA) &&
->+		    shdr->sh_info >= info->hdr->e_shnum) {
->+			pr_err("Invalid ELF relocation section target index %u\n",
->+			       shdr->sh_info);
->+			return -ENOEXEC;
->+		}
-> 		switch (shdr->sh_type) {
-> 		case SHT_NULL:
-> 		case SHT_NOBITS:
+Replace the linux/elf.h include with uapi/linux/elf.h. On x86_64_defconfig,
+including linux/module.h alone results in 2.2 MB of preprocessed data. This
+change reduces that to 1.5 MB.
 
-If the module passes the signature check and the blacklist check, the
-kernel would assume that the module is fine and ^W^W^W^W won't blow the
-whole
-world up^W^W^W^W^W
+The first five patches are cleanups to avoid relying on declarations being
+indirectly provided through linux/module.h -> linux/elf.h. These patches
+are mostly independent and can go through their respective trees if
+preferred, except for the cpufeature patch, which depends on the preceding
+s390 cleanup. The final module patch depends on all of these changes.
 
-Since module_frob_arch_sections() loads AFTER said checks pass, adding
-checks is just useless bloat imho.
+It is hard to identify all files that indirectly reference something only
+through linux/module.h -> linux/elf.h. The changes were build-tested with
+allmodconfig on arm, arm64, m68k, mips, powerpc64, riscv, s390, x86_64.
 
-NAK, sorry
+---
+Changes in v2:
+- Rebase on top of v7.3-rc2.
+- Add the missing include of linux/slab.h in
+  drivers/virt/coco/arm-cca-guest/arm-cca-guest.c.
+- Remove the asm/mmu_context.h include from asm/elf.h on s390.
+- Add the missing include of linux/elf.h in linux/cpufeature.h, reported by
+  the kernel test robot.
+- Clean up commit descriptions.
+- Link to v1: https://patch.msgid.link/20260707153819.4172541-1-petr.pavlu@suse.com
 
+---
+Petr Pavlu (6):
+      x86: Avoid indirect includes through linux/module.h -> linux/elf.h
+      s390: Avoid indirect includes through linux/module.h -> linux/elf.h
+      drivers: Include linux/slab.h for kmalloc() functions
+      s390: Remove the asm/mmu_context.h include from asm/elf.h
+      cpufeature: Include asm/elf.h for ELF_PLATFORM
+      module: Limit ELF includes in linux/module.h to uapi/linux/elf.h
 
->
->base-commit: 28924df2a08f440c73991b83028032c901de2ae4
->
-
---- Thanks!
-https://lore.kernel.org/all/EE579805-42F2-4C58-B752-F28779EEB717@grrlz.net/
+ arch/s390/include/asm/elf.h                     | 1 -
+ arch/s390/kernel/nospec-branch.c                | 1 +
+ arch/s390/kernel/processor.c                    | 1 +
+ arch/s390/mm/mmap.c                             | 1 +
+ arch/x86/entry/entry_fred.c                     | 1 +
+ arch/x86/entry/syscall_32.c                     | 1 +
+ arch/x86/kernel/cpu/intel.c                     | 1 +
+ arch/x86/kernel/fpu/xstate.c                    | 2 +-
+ arch/x86/kernel/process.c                       | 1 +
+ arch/x86/kernel/signal.c                        | 1 +
+ drivers/char/tpm/tpm_crb_ffa.c                  | 1 +
+ drivers/s390/char/uvdevice.c                    | 2 ++
+ drivers/virt/coco/arm-cca-guest/arm-cca-guest.c | 1 +
+ include/linux/cpufeature.h                      | 1 +
+ include/linux/module.h                          | 4 ++--
+ 15 files changed, 16 insertions(+), 4 deletions(-)
+---
+base-commit: df2908090cda368b01ff43709f51890076c56157
+change-id: 20260816-module-include-elf-a9c10c041867
