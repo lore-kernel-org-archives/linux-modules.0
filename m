@@ -1,65 +1,65 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641673403E9
-	for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 14:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345BE36B926
+	for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 14:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789137769; cv=none; b=IfUijyGhnF5OD2ppc0ZWuqCof5HjuVppFc3ZAZjIs53D4gDoVdd0w9OO0vmIfog6/PdWeM0K5VqYMh7LjDKe28cQPfoDXdpcWM20Uw78u3ER6SwVg1pywmQtqye3Qi1Ztn+SWfZX9Zm5bIHqkpdG0GG/fIJh98a4MEP3ZuWiyrI=
+	t=1789137771; cv=none; b=NI+pGq1Q//SYW9222nV0a3bMOJ8Ms7M9sPvaA/OJ4VAvIVspTGEmvN6dZqWMSTCWzRPxIGvVu2Sj73Cza+ARkHZyOdvSsZnHcHJKaVRpZkdzwQUtmOc8nm5z4awyn5I6WiW8tk5u+VjiIk+EbCxVEznMz6n7CbzrztW4ytfqGkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789137769; c=relaxed/simple;
-	bh=gz51FBCWhizVrU+7SLeOKliZNk1p8rWeS98CiQ+wXUY=;
+	s=arc-20240116; t=1789137771; c=relaxed/simple;
+	bh=ETAktZ2QqHsWv3xS6bFropZQnc1xNBFVWMWX5r49MRU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kNWLGF0YlWwimAYB4Uor7+yNnb02ZWvMaVPvDWNkONjg/lhKZaI9WgBJcJ10WhhS+VPJRuNtMB34RBrA6IvOEaquk9/uabx7wE5dqwCw1veeyFl7AgcyWJyRiKIEKMBu41+mcmwXRtH4H8x31mg40/iG+O7l5l9Zh+4YZQEgsOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TMvGMq1K; arc=none smtp.client-ip=209.85.128.41
+	 MIME-Version:Content-Type; b=eW9tTxNbC8E7DRUTxou5Go00LP7NisQd6CAQtBEECjXeUAmfpFkN87YSWQlRzlCVIyMDB/cY0SnMd1lDCUqRn3jhoNEprtGQy7/rlaJUkOvik+IXBoeaPjTNBfwVEUy6mRKqZHqc9BAXjqzLZhCw20olIXHas+3R4e8OSaj0PCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KMuTAQ60; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TMvGMq1K"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49e668491f3so3414595e9.1
-        for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 07:42:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KMuTAQ60"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-49d0b98d6d0so12252355e9.0
+        for <linux-modules@vger.kernel.org>; Fri, 11 Sep 2026 07:42:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1789137765; x=1789742565; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1789137767; x=1789742567; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=hNkJ+Y4UNh/VmhAHfWRxswemkYstE9GZTmx6wz4UC8Q=;
-        b=TMvGMq1KXCQ8s+RpmILsIeGf8K0plpbDc3xU0HxW5q69wJ4IuhPeLCr5JbpsWff46R
-         R339YRUVqRi6/PFpgzO+b+Us8b3f0Fv3RavXH/rvTME6crQSeuZQX5fhsYwkFumrKmhE
-         MEMcuIHBwGYYUdn5MYSsoLeQRLHg/AjEpHokj7Aaii7ap4k7cJKFOQG/tiZUWjFTnYaP
-         lsPtlukinpLRNsdB7EuXrUMMC5LQpfj6AItmxEaYlmVgQ+Cj3hNca/7UM3Qz9RNHGCD0
-         a+6gAPL2hEEwWw9sRZRHyAcQZxk+Xn8ONLqvZvqEgWqJuBbWYpFcDFky37P6I126tOtP
-         Fcyg==
+        bh=zmqtfnwwI+zawdSfV+Bb8zoK3g+hxNVqzzOe1wmmaFk=;
+        b=KMuTAQ60E1CNCd4URXitK1S0G1TPbtFo/8O8pHis1hFlmUoTVHMXiXNQVvL5tTNkJk
+         7xlpb9OjCsSQguxNa/njBoRk0dh9fLjoT1Jd7nLCVirRR7lR6ptF/nwcTO/oZ2dn1Z6J
+         v/5m1+jI+XymI4y1S8B3tamh5a47cE053BCWZf76epFHDHjDpUXVJfXrVWVBkDD8aAxm
+         VRP90l7RbEnDe6d+8TPz19FyjXodJnFsbAK94SJA9xssWf+u9KJx+brm2OWPM6zHNCdr
+         F7I1coQzJHToof84FKaohuh4fKiA+446oeAEh5dIYeYntLaXFQ5zrY8jKVuo18z1Bw83
+         9hzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789137765; x=1789742565;
+        d=1e100.net; s=20251104; t=1789137767; x=1789742567;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hNkJ+Y4UNh/VmhAHfWRxswemkYstE9GZTmx6wz4UC8Q=;
-        b=nBIV+zPbFlMizsq8jeZ9gyW+tkJwF+LJCSEu+xNxKlRgk3646U+1crKZ2nO6jJeno8
-         N8O8GufSJpjQQmU76q4GQ8nnRyCWRy+/alp7+0D2kmWvGF/PfF4GY28tT/cpVsA1CCj0
-         zsf/nkzFD0C7Sv0i7HX1eJLuelZvq8aoWJK90LMxjJ83LWcVj8vyLEs1zmoiJ5j81Hs4
-         bnr+d6Ewj12/TRfo1VLk6w1OP7zdJP7eeig4IX2KzJth9qCZZrhZO3+NwtZU2rTbZ7LF
-         YlxtFKtWzMsqF42gnirAMwwkXgl0n8gMNLH0lUyllxm3WD5R/gaFt70EgerVxR6y1w0f
-         4wXA==
-X-Forwarded-Encrypted: i=1; AKwUvBymBk8tPymqBCyNJsApYb8st06PDgA7aPnVIYcz/6i5hpR4qvLE10w9tezz5jxYQgQev3T+s5FTahyRdnlS@vger.kernel.org
-X-Gm-Message-State: AFuF++l6OSxPFF5iGwUvrXxyej8yrYstxy6e5FOeyFXPFiD+H8aOIDT7
-	ulQzTBXWbXsa86tEczDtCBweb/BxPHtW4PHw9kqv1XaDOGZSUYbdi4IY337ozSZeVLk=
-X-Gm-Gg: AYBFou30Jwglh2ZN04aexd1cXwDa5/TMZwKiDN8puwqHFiuIdCba80z1cYeH3XiHOuN
-	aY13PlYHnvYub0YkMrotujbl4pKPqMSHfwzbqbsGLT3K4B/JaSqjuQGQJmv5qvEnfIF0QyVac+I
-	9o2DO72ojFdpniNtJn46MmTZRFn9nu0L6hDLC6qEZek2Zk1bLuOgGq2x8wkZQP2FTI3WdIkFg+R
-	fOV9tE1eglwALTbbK/WdHlSY4DXrdTRxwcqU3upAZnHbq4ViU2OIrAonPvFYzHWJ3/ao7YCpshM
-	NxEtLA7j9IKXgEj53DTQUKtiD/n+iIlEcUFLaCQidc2620NThPLk6T/xt3PtiotPqCis7ecfbhu
-	pzGqewstouEAOEG5F4Efit3Q1WZEFi/ycWMcDu+Jy5UKAj04PhrcWrJEy8I4JlTcOaigxy6/qBY
-	PxCyJ3I1Yg4HEJL4z4185FWcwm0w4wXdXJshN2nzycnmYrtwkiho+P4wk4siyYqtZpXGRnD3kQ9
-	D2fh8zDRtle+ekr
-X-Received: by 2002:a05:600c:e557:20b0:49d:1d6a:4cfb with SMTP id 5b1f17b1804b1-49e619836d6mr35798025e9.1.1789137765611;
-        Fri, 11 Sep 2026 07:42:45 -0700 (PDT)
+        bh=zmqtfnwwI+zawdSfV+Bb8zoK3g+hxNVqzzOe1wmmaFk=;
+        b=jGSLUE0ktUeFEX0Y1A5Y5usAMjuXGdphGqs0KUqKnyvNUB4GjEt6X4JrIKIkbY1d9H
+         JbEyG+SixIuSW54aqCie6iyMvUTu0rmgJn9khoXU+9l+9rT38qjBTIu3rTWKIKg2yZHF
+         Bq4e3VqM/HCz2jDBup/enXvgbsffArktcVJ/A8Ky/yLbVPy7XmqghF0zC4hzUiYxIgq8
+         xg4ZUYAs5H/dkilCnE/9xdtkUzA/Jxhi1Eyqq8LP6gzGjZVfAhG9z5eO9RkoBg6Yej8+
+         Qlrkr5dt5LheGs2dojeo0vBNOBOD94U0vdm2EbhBUQ7IPrKjStyb1wGJmKypW0fP5rWX
+         gq2A==
+X-Forwarded-Encrypted: i=1; AKwUvBz5jNh9jS0FMHEyWWO4zesSA91Od4E7V+27bnU2VhlBoxtlVr1nyjnx8kNmRGXCfwlKWRT+L6Ryr2D3k60/@vger.kernel.org
+X-Gm-Message-State: AFuF++knmMPFSs4IsVOrSWZBwJjh6EDzqhmDQvThGSuIqB7lpDne/Gpa
+	fauaOhnxVL+KNOsuQpoWX6GR7EbDo54yCvlxnREz4Zo7NbIYAkMcW4zX5oKhzom/saI=
+X-Gm-Gg: AYBFou3twgiPs0OGlcm2v2SVg32ekPYyx/yMurb7aHt+GPwhruKehkUZuHSWi252My2
+	H0R8UrjfG4prdLM2qEAKH8tW4fEbGKPGonorpyqF+ASJbKKC/dBGr8MD9Sybp99oZUNkuNdrNGu
+	7xEcLbvRTe4Ft97pVTkG3bQclsDCE0mUgG3+keTYr3FXw0oZuPqDkLz/ddEJWVvB0RrnCtcfi0d
+	lcUKB/iW5P9nG/SIn2bh/zcF9OqCXlUe6nh5/PO5rKFjeQYkyrh0y/ByGBMHVeD3L89jn1XCAxA
+	LjzoJEXwUkcs6oGKAfQCh7cth3NFTPRy7fC2I2F4MmrShVbTypH/DQ987RDj9RTybPVYCXOybu5
+	SK6+0KUQpWVQrgTVWJM9nTun40g2zl9FFa0Qfp96Ot7IdeNk7e6HvrEYQjHcfYGWTBx1fPDBS2N
+	/TyZY2Go51eaNuKVT45WaFs5ZbkiQoLIhdp8eVZlKwGnnpV1IqobbPagCrExpStisvCO2UDJQfc
+	YhdHmM=
+X-Received: by 2002:a05:600c:1d1c:b0:49d:2562:d670 with SMTP id 5b1f17b1804b1-49e6199243amr52252455e9.14.1789137766949;
+        Fri, 11 Sep 2026 07:42:46 -0700 (PDT)
 Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e60ababd5sm107038405e9.4.2026.09.11.07.42.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e60ababd5sm107038405e9.4.2026.09.11.07.42.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 07:42:45 -0700 (PDT)
+        Fri, 11 Sep 2026 07:42:46 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Thomas Gleixner <tglx@kernel.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -90,9 +90,9 @@ Cc: Xin Li <xin@zytor.com>,
 	linux-integrity@vger.kernel.org,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/6] s390: Avoid indirect includes through linux/module.h -> linux/elf.h
-Date: Fri, 11 Sep 2026 16:40:32 +0200
-Message-ID: <20260911-module-include-elf-v2-2-954c732975fb@suse.com>
+Subject: [PATCH v2 3/6] drivers: Include linux/slab.h for kmalloc() functions
+Date: Fri, 11 Sep 2026 16:40:33 +0200
+Message-ID: <20260911-module-include-elf-v2-3-954c732975fb@suse.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260911-module-include-elf-v2-0-954c732975fb@suse.com>
 References: <20260911-module-include-elf-v2-0-954c732975fb@suse.com>
@@ -105,47 +105,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Several s390 files use declarations that are provided indirectly through
-linux/module.h -> linux/elf.h:
+drivers/char/tpm/tpm_crb_ffa.c and
+drivers/virt/coco/arm-cca-guest/arm-cca-guest.c use kmalloc() functions,
+which are declared in linux/slab.h. They currently rely on this header
+being included indirectly through linux/module.h -> linux/elf.h.
 
-* arch/s390/kernel/nospec-branch.c: s390_kernel_write() -> linux/uaccess.h,
-* drivers/s390/char/uvdevice.c: copy_to_user(), copy_from_user(),
-  put_user(), get_user() -> linux/uaccess.h; file_operations -> linux/fs.h.
-
-Add the missing includes to these files in preparation for removing the
-linux/elf.h include from linux/module.h.
+Add the missing includes in preparation for removing the linux/elf.h
+include from linux/module.h.
 
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- arch/s390/kernel/nospec-branch.c | 1 +
- drivers/s390/char/uvdevice.c     | 2 ++
- 2 files changed, 3 insertions(+)
+ drivers/char/tpm/tpm_crb_ffa.c                  | 1 +
+ drivers/virt/coco/arm-cca-guest/arm-cca-guest.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/arch/s390/kernel/nospec-branch.c b/arch/s390/kernel/nospec-branch.c
-index e11ec15960a1..b62da9e81e79 100644
---- a/arch/s390/kernel/nospec-branch.c
-+++ b/arch/s390/kernel/nospec-branch.c
-@@ -2,6 +2,7 @@
+diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+index 025c4d4b17ca..af4466cdc297 100644
+--- a/drivers/char/tpm/tpm_crb_ffa.c
++++ b/drivers/char/tpm/tpm_crb_ffa.c
+@@ -12,6 +12,7 @@
+ #include <linux/arm_ffa.h>
+ #include <linux/delay.h>
+ #include <linux/moduleparam.h>
++#include <linux/slab.h>
+ #include "tpm_crb_ffa.h"
+ 
+ static unsigned int busy_timeout_ms = 2000;
+diff --git a/drivers/virt/coco/arm-cca-guest/arm-cca-guest.c b/drivers/virt/coco/arm-cca-guest/arm-cca-guest.c
+index 0eeddd1ff05b..54dcfc1681ab 100644
+--- a/drivers/virt/coco/arm-cca-guest/arm-cca-guest.c
++++ b/drivers/virt/coco/arm-cca-guest/arm-cca-guest.c
+@@ -8,6 +8,7 @@
+ #include <linux/kernel.h>
+ #include <linux/device-id/platform.h>
  #include <linux/module.h>
- #include <linux/device.h>
- #include <linux/cpu.h>
-+#include <linux/uaccess.h>
- #include <asm/nospec-branch.h>
- 
- int nobp = IS_ENABLED(CONFIG_KERNEL_NOBP);
-diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
-index 4d274a2ee84d..402b8a225d6b 100644
---- a/drivers/s390/char/uvdevice.c
-+++ b/drivers/s390/char/uvdevice.c
-@@ -28,6 +28,8 @@
- #include <linux/vmalloc.h>
- #include <linux/slab.h>
- #include <linux/cpufeature.h>
-+#include <linux/fs.h>
-+#include <linux/uaccess.h>
- 
- #include <asm/uvdevice.h>
- #include <asm/uv.h>
++#include <linux/slab.h>
+ #include <linux/smp.h>
+ #include <linux/tsm.h>
+ #include <linux/types.h>
 
 -- 
 2.55.0
