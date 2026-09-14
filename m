@@ -1,105 +1,184 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213B345D910;
-	Mon, 14 Sep 2026 12:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06BF73BB134;
+	Mon, 14 Sep 2026 14:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789387448; cv=none; b=gc5jypOzeb16ZS3hT/eBXAdZOv1RMu60mgG5Rqoc0nVYFJgaqW04HAd1VroUiwSoobmPBMiSWz+ALQ0s0aaej01NFZ39zaoNsy3cOhU0pZKBR8fjZh+5MGs5VsrQpqeZVKCH0HVkvh7kG8PbfbGPv+qJGwYxGj7FRovhgER1BaI=
+	t=1789396255; cv=none; b=dyx3/1t+CQ523ok6vFpG8nLKoezQ+rDXqywydJxTqx7tKrO1aRSsNjBTbnAq6qQApNag9qzogyeX59kkYXY90Cf2dBqjd9r/T3quNihE1oPv+u35bptPSpTJHWxIn9pOZcSQhrhgSzO6AeLhg0/gDZ8zsUepeJ7FXvze7Gv3sFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789387448; c=relaxed/simple;
-	bh=RwEZhfMJP7L6Q0UDZRqChxPxeZtWRLjjgHga4wyLG+U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=L/JqhcdGBV8tNiHBr64eI8IHNeIRQ+VuvPx4VTD77EFcrhE4ivLBVOb8qQa1j3HRaFs2GRifI2FF0kAkmzgQ+dn/3dJihdtGeLir4WzyKsSkh+ri5xw93kbUsgL5aw3QxoUwYAEeJQRKqWcufYKKO4OYYmArZLHSUY4Z1GDoU7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gCsAFcR0; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1789396255; c=relaxed/simple;
+	bh=H96wjuuBOZ9l+qPrAsLg02Mb1gl8IaRXEedwtI84byM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=urBBlW3K/HqGI27AHE6t/WjyscWl0YF4L3/CEI07gffloZZDcznkY53L9tmNTYPTM4Zn2UiU4FmVWrQR5u+689Y0ud4GwBvK4td2GhjgKNXPpsZwgeIM4ajhN1C1fkZJhr9gZlh4OHD8Yby7SxogTbhMYGU58vJa/oSoJ7rqErM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UdOka88T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gCsAFcR0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789387446; x=1820923446;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=RwEZhfMJP7L6Q0UDZRqChxPxeZtWRLjjgHga4wyLG+U=;
-  b=gCsAFcR0CPZkKCq2CZqPTWbYBOuU2HzZ2NpCCY2l6z80hS7W9jRJWLfm
-   D4GzmbyzTHb+rQsjq309oZKFcrtvRJGR9X9JUeBsjCwKM4RiJ0y/nc6Sb
-   S4mqHULrIuMh1pxQR6vo8Lld90wxMICNC0cEdbVkAdoIePDfGB8/TEPPp
-   H0CTqyqX98iiJE63i0Qq4BKHWdxUds9W6pxzM7e1C3CWiNAy8DiFYNQQo
-   CmTmadPqbI0ArJw6bXLFEn57vTe7Qjdx53No9gofHZ/kMk654Z+IfxBFe
-   +4ZDqa05Ot3ouU+JT6t/e0IJ0TCqTOqBNw25xKlWwpHCROPG0Yt0JtHNT
-   A==;
-X-CSE-ConnectionGUID: Ladvqn86Sbu6MGeuGui9rA==
-X-CSE-MsgGUID: W4Ngqh+2Q+GZ+wnIwN4BaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11904"; a="89763224"
-X-IronPort-AV: E=Sophos;i="6.27,102,1787036400"; 
-   d="scan'208";a="89763224"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 05:04:05 -0700
-X-CSE-ConnectionGUID: h0RGzZDZSImuU1pjcvMo4g==
-X-CSE-MsgGUID: FzTGZXnSSpmvM9i3IXefpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,102,1787036400"; 
-   d="scan'208";a="274541772"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.96])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 05:03:58 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Petr Pavlu <petr.pavlu@suse.com>, Jens Axboe <axboe@kernel.dk>, Jakub
- Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Joonas
- Lahtinen <joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, Matthew Brost <matthew.brost@intel.com>, Thomas
- =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>
-Cc: Simon Horman <horms@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Francois Dugast
- <francois.dugast@intel.com>, Luis Chamberlain <mcgrof@kernel.org>, Petr
- Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami
- Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-block@vger.kernel.org, netdev@vger.kernel.org,
- linux-api@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] drm/i915: Include error-injection.h for
- ALLOW_ERROR_INJECTION()
-In-Reply-To: <20260911-module-include-error_injection-v1-4-5da895d8c84d@suse.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park,
- 6 krs Bertel Jungin Aukio 5, 02600 Espoo, Finland
-References: <20260911-module-include-error_injection-v1-0-5da895d8c84d@suse.com>
- <20260911-module-include-error_injection-v1-4-5da895d8c84d@suse.com>
-Date: Mon, 14 Sep 2026 15:03:56 +0300
-Message-ID: <2860c528b7ce0d596a24b05f0ae2b4a9f21be301@intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UdOka88T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D841F000FF;
+	Mon, 14 Sep 2026 14:30:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1789396252;
+	bh=5DDu/i8F7CfME2M9V7A9fVs9AnBB0/zE0PZdH5IOtd4=;
+	h=From:Subject:Date:To:Cc;
+	b=UdOka88T09ASL0PXRvO30+gEhyo707Onj+bi2XeDQRmMPnUAzRI/r2DJwdr7GsDMK
+	 sCIWQsyGSkx+s4U+MckFMuUab2qymH0amDuDVf2x84+TOKuzWZxi5mIoiCK4jJ6R17
+	 5vz4vtcWGK4A23kUlxrmSa9ClD9vzny+lmLgZgw4=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
+Date: Mon, 14 Sep 2026 16:30:30 +0200
+Message-Id: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XOTQrCMBAF4KtI1kYmv62uvIeIJE2qI5JKkhZFe
+ ndTRVTQ5YM335sbST6iT2Q1u5HoB0zYhRLkfEaagwl7T9GVTDhwDTVX1GJwu2wwZOokVJWtK7C
+ NJOXgHH2Llwe22T5z6u3RN3kSpsYBU+7i9bE2sKn3gvUnPDAKVHELqpVmqVWzPmHoL23XB2dy+
+ XDRxT2ZJgb+gQj2hfCCsEI7LRhnwv5HxBtZgvxCREEEAFdSq1bU5jcyjuMdFyR6ZEoBAAA=
+X-Change-ID: 20260825-bind_taint-d4077b870bc4
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Bradley Morgan <brads@mainlining.org>, 
+ Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-usb@vger.kernel.org, driver-core@lists.linux.dev, 
+ linux-trace-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Johan Hovold <johan@kernel.org>
+X-Mailer: b4 0.17-dev-362b8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5415;
+ i=gregkh@linuxfoundation.org; h=from:subject:message-id;
+ bh=H96wjuuBOZ9l+qPrAsLg02Mb1gl8IaRXEedwtI84byM=;
+ b=owGbwMvMwCRo6H6F97bub03G02pJDFkrWAW4Gsorj7c2cE37q1/W1r9eqlTc+teel5MYyhT6t
+ gT+ld7dEcvCIMjEICumyPJlG8/R/RWHFL0MbU/DzGFlAhnCwMUpABOJ2Mswz7i9yjY2sn9GY9jq
+ HxGbVu6u4Dv1mGEOt8Kk2cHWFTttYp3FVq/8t2PBV98QAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp;
+ fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 
-On Fri, 11 Sep 2026, Petr Pavlu <petr.pavlu@suse.com> wrote:
-> Several drivers/gpu/drm/i915/*.c files use ALLOW_ERROR_INJECTION(), which
-> is defined in asm-generic/error-injection.h. They currently rely on this
-> header being included indirectly through linux/module.h ->
-> linux/error-injection.h.
->
-> Add the missing includes in preparation for removing the
-> linux/error-injection.h include from linux/module.h.
+The ability to add and remove devices from a driver through the sysfs
+"bind" and "unbind" files was created all those decades ago as a way
+that kernel developers can iterate faster, and provide a debugging way
+for users to attempt to add a new device to a driver without having to
+rebuild their kernel.
 
-I guess merging all of this through one tree would speed things up for
-you.
+This api over the years has been abused and recently come under a major
+fuzzing "attack" through tools like syzbot which decided that it would
+attempt to just randomly bind any driver to any type of device, causing
+loads of unneeded errors and pointless kernel patches to be generated by
+unsuspecting new developers.
 
-Acked-by: Jani Nikula <jani.nikula@intel.com>
+Handle all of this by adding a new taint flag, TAINT_FORCED_BIND, which
+will be set on the driver if the bind/unbind sysfs files are ever
+written to.  This lets kernel developers "know" that a user is
+attempting to do something that is not normal, and as such, if the
+kernel breaks they get to keep the shiny pieces laying around on the
+floor.
 
-for merging via whichever tree you prefer. However, please let me know
-if you do want this merged through drm-intel.
+The flag is 'Y' which was unused, and can remembered as the user is
+"yeeting" the device being operated on here (thrown with force without
+regard for the thing being thrown).
 
-Thanks for doing this.
+Note, the taint flag gets set _BEFORE_ the bind/unbind callback happens,
+as many times crashes/oops/warnings/failures happen within the callback,
+and the taint flag needs to be there to show what was being attempted.
+If it were to be set after the callback happens, the oops report would
+not properly reflect what foolishness was being attempted.
 
+Fuzzing tools like syzbot, that doesn't have hand-crafted rules to keep
+the tool from hitting bind/unbind, should be run with panic_on_taint
+enabled so that they fall over and don't continue on, thinking that they
+actually found a real issue.
 
-BR,
-Jani.
- 
+Userspace operations that rely on the bind/unbind files to work around
+the lack of will to upgrade a kernel image to a newer version with
+proper support for new devices, or the lack of will to submit valid
+device ids to driver authors, will still work properly, but now the
+kernel will be flagged in a way that will show that perhaps those users
+should reconsider their behavior and work to have the drivers properly
+support these devices in a "native" manner.
 
--- 
-Jani Nikula, Intel
+Finally, the bind/unbind files can find real use-after-free issues with
+some drivers by forcing the process to happen virtually without having
+to rely on manual removal processes.  Those real bugs should still be
+worked on, but by adding this taint flag, developers can more easily
+determine bug reports that are actually worth looking at.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+Changes in v4:
+- add documentation fixup for add_taint() and add_taint_module()
+- Link to v3: https://patch.msgid.link/20260904-bind_taint-v3-0-30025465f38a@linuxfoundation.org
+
+Changes in v3:
+- Fixes based on sashiko review:
+  - Fix up prototype for when CONFIG_MODULES is disabled so it will
+    build properly, AGAIN.
+- Link to v2: https://patch.msgid.link/20260831-bind_taint-v2-0-1082d631213b@linuxfoundation.org
+
+Changes in v2:
+- rebase on 7.3-rc1
+- Add changelog text to describe panic_on_taint and how it should be set
+  for tools like syzbot.
+- Add changelog text to describe why 'Y' was picked.
+- Fixes based on sashiko review:
+  - Make add_taint_module() handle a NULL for module pointer, fixing a
+    problem with built-in drivers.
+  - Fix up prototype for when CONFIG_MODULES is disabled so it will
+    actually build properly.
+  - rst table header fixes.
+- Link to v1: https://patch.msgid.link/20260826-bind_taint-v1-0-52b05f4a965c@linuxfoundation.org
+
+To: Luis Chamberlain <mcgrof@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+To: Daniel Gomez <da.gomez@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+To: Aaron Tomlin <atomlin@atomlin.com>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Danilo Krummrich <dakr@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: driver-core@lists.linux.dev
+Cc: linux-trace-kernel@vger.kernel.org
+
+---
+Greg Kroah-Hartman (3):
+      module: pull out add_taint_module() to be public
+      module: fix up documentation for add_taint() and add_taint_module()
+      driver core: add TAINT_FORCED_BIND for when userspace manually messes with devices and drivers
+
+ Documentation/admin-guide/tainted-kernels.rst | 52 ++++++++++++++-------------
+ drivers/base/bus.c                            |  3 ++
+ include/linux/module.h                        | 10 ++++++
+ include/linux/panic.h                         |  3 +-
+ include/trace/events/module.h                 |  3 +-
+ kernel/module/main.c                          | 17 +++++++--
+ kernel/panic.c                                | 10 +++---
+ tools/debugging/kernel-chktaint               |  8 +++++
+ 8 files changed, 73 insertions(+), 33 deletions(-)
+---
+base-commit: 704340f1cd0dcef829eb62f5b48ae95a2ce17bdf
+change-id: 20260825-bind_taint-d4077b870bc4
+
+Best regards,
+--  
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
