@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-100.mta0.migadu.com [91.218.175.100])
+Received: from mta0.migadu.com (out-108.mta0.migadu.com [91.218.175.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F93429CE6
-	for <linux-modules@vger.kernel.org>; Tue, 15 Sep 2026 06:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F6E4446EE
+	for <linux-modules@vger.kernel.org>; Tue, 15 Sep 2026 06:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789455558; cv=none; b=NsQvdabMcYG6I9c97slOWzt1Bz/uVR3jzERpOJ0v11L5XteMq2C7q14W94sz4MvQ6xh+isYLYk1VvVhOUFFFx1KqGwqXnJgMJvV9pRZSxdiniGrL+P9CTHDnQe1vDMbPiv7J2+G1jSdK+KZqOWq7Hu6eKbhVn/wb+bDdIKOfmp8=
+	t=1789455561; cv=none; b=F3pKONnhd7NO8GKuJuLSQGcRfYfVR9GCI5m0WEgk7mOYJhrxaaFozSKfRMEXlx+7c/8iW7Zc3x63zAg3TmDwpgHctJ8L+o1tThxkY0SRDNQotuTy5YTwxFXkB5fOReQrcVebn+sxg5O2rSSIePNVrZCqkogaJNbQq/TFbbOJJtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789455558; c=relaxed/simple;
-	bh=1hrOUU2WscT9i12+q2dsMTJyNqNUXrCyPWNHR9ygX74=;
+	s=arc-20240116; t=1789455561; c=relaxed/simple;
+	bh=5Vw+v6tRRrP3hQtpFy1LEiukFTySuc0mxZr/k7GpH8M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mLF7hQ+l3Y4oGRTsuLXXgo34FWS6P2Aisc0U+ZMTN/kWPKZvK4q9nB04xMSutlZKgFgNfay6sbPkrT9QuYs/DZTM1h3vKfQWUpVOoC+Pn2zcOyRGCQY6sGveF1mRaM9hXPiCGtO1BI8GvijTMOtH2hwmrWBRWUgf7ji5ud/6i2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Dz+c9LRn; arc=none smtp.client-ip=91.218.175.100
+	 MIME-Version; b=Fy1NuZMiTgHar9fEts8eD1nBb2fkQOoRgNNOgW1ky0IiMLBDr3zhcNNCQcdGCXGj8whEiAwmS0GGpNa9K1zvWVPEpCPOlS2Q+4VDc/J+H4jxRVx/qDIriyciwwzxU1cotiB18sf6Gd/xhC5Q20IEzv0+QlqGIcYbVRSIWHoy9iM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XvH0H/gQ; arc=none smtp.client-ip=91.218.175.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Dz+c9LRn"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XvH0H/gQ"
 X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1hrOUU2WscT9i12+q2dsMTJyNqNUXrCyPWNHR9ygX74=;
+DKIM-Signature: a=rsa-sha256; bh=5Vw+v6tRRrP3hQtpFy1LEiukFTySuc0mxZr/k7GpH8M=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789455553; v=1; x=1790060353;
- b=Dz+c9LRn+U4BKwUguORIFZqNQQxieg5o6zVodNBkoC2JEXt8UFf3IAGlY2Ygdn+0XcweaVfN
- RyzXkNvwdBOTnbJydG4u2KGY58++n+UcMBnQKR4CbLBnkhksvsIBdLOWisrIpXrFWhTKTay03rA
- jLB+iD4fMXYWigsmUd+sRAvg=
+ t=1789455557; v=1; x=1790060357;
+ b=XvH0H/gQ5qZmazbWuhKBFp2+oUOmHjfpydsM0L5V/NgCCPIFe6vhmxRZGBaXpsOBgGDKmDtd
+ zmbEMmdwUmy5/lFMm4b5JNGQF8A+ICmaNJs7q8QIbbToqFgD6TyKUsVV98xeMTThCSFOoi0PBhn
+ LXSlF8qY6ajAsV+EVsusMMQ4=
 X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6a28f1219eb0585b;
-	Tue, 15 Sep 2026 06:59:13 +0000
-X-Mizu-Trace-ID: 6a28f1219eb0585b
+Received: by smtp.migadu.com with ESMTPS id 332822dd31fa1db3;
+	Tue, 15 Sep 2026 06:59:17 +0000
+X-Mizu-Trace-ID: 332822dd31fa1db3
 X-Migadu-Flow: FLOW_OUT
 From: Hao Ge <hao.ge@linux.dev>
 To: Luis Chamberlain <mcgrof@kernel.org>,
@@ -44,9 +44,9 @@ Cc: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Sashiko <sashiko-bot@kernel.org>,
 	stable@vger.kernel.org
-Subject: [PATCH v10 1/6] alloc_tag: move release_module_tags() above reserve_module_tags()
-Date: Tue, 15 Sep 2026 14:59:56 +0800
-Message-Id: <20260915070001.113559-2-hao.ge@linux.dev>
+Subject: [PATCH v10 2/6] alloc_tag: clean up the populate failure path
+Date: Tue, 15 Sep 2026 14:59:57 +0800
+Message-Id: <20260915070001.113559-3-hao.ge@linux.dev>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260915070001.113559-1-hao.ge@linux.dev>
 References: <20260915070001.113559-1-hao.ge@linux.dev>
@@ -58,133 +58,61 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-release_module_tags() is a cleanup helper. reserve_module_tags() can
-also fail after storing the reservation in the maple tree, in which
-case it should call release_module_tags() to undo it. Move the helper
-above reserve_module_tags() so no forward declaration is needed.
+The reservation is already stored in the maple tree when
+vm_module_tags_populate() fails. A failed load never unloads the
+module, so nothing releases the entry. Release it and roll
+module_tags.size back. Without the rollback a concurrent load that
+already passed needs_section_mem() can reuse the freed gap, skip
+vm_module_tags_populate() and write to unmapped memory.
 
-No functional change.
+vmap_pages_range() may have installed some PTEs before failing. A
+retry to populate the same range would BUG on them, so undo them,
+but only if vmap actually ran.
 
 Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
 Fixes: 0f9b685626da ("alloc_tag: populate memory for module tags as needed")
 Reported-by: Sashiko <sashiko-bot@kernel.org>
 Cc: stable@vger.kernel.org
-Acked-by: Suren Baghdasaryan <surenb@google.com>
 Signed-off-by: Hao Ge <hao.ge@linux.dev>
 ---
- mm/alloc_tag.c | 92 +++++++++++++++++++++++++-------------------------
- 1 file changed, 46 insertions(+), 46 deletions(-)
+ mm/alloc_tag.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-index b33410310477..2070e682fe10 100644
+index 2070e682fe10..95ddf5b743d0 100644
 --- a/mm/alloc_tag.c
 +++ b/mm/alloc_tag.c
-@@ -835,6 +835,52 @@ static int vm_module_tags_populate(void)
- 	return 0;
- }
+@@ -804,6 +804,13 @@ static int vm_module_tags_populate(void)
+ 				     next_page, PAGE_SHIFT) < 0) {
+ 			release_pages_arg arg = { .pages = next_page };
  
-+static void release_module_tags(struct module *mod, bool used)
-+{
-+	MA_STATE(mas, &mod_area_mt, module_tags.size, module_tags.size);
-+	struct alloc_tag *start_tag;
-+	struct alloc_tag *end_tag;
-+	struct module *val;
-+
-+	mas_lock(&mas);
-+	mas_for_each_rev(&mas, val, 0)
-+		if (val == mod)
-+			break;
-+
-+	if (!val) /* module not found */
-+		goto out;
-+
-+	if (!used)
-+		goto release_area;
-+
-+	start_tag = (struct alloc_tag *)(module_tags.start_addr + mas.index);
-+	end_tag = (struct alloc_tag *)(module_tags.start_addr + mas.last);
-+	if (!clean_unused_counters(start_tag, end_tag)) {
-+		struct alloc_tag *tag;
-+
-+		for (tag = start_tag; tag <= end_tag; tag++) {
-+			struct alloc_tag_counters counter;
-+
-+			if (!tag->counters)
-+				continue;
-+
-+			counter = alloc_tag_read(tag);
-+			pr_info("%s:%u module %s func:%s has %llu allocated at module unload\n",
-+				tag->ct.filename, tag->ct.lineno, tag->ct.modname,
-+				tag->ct.function, counter.bytes);
-+		}
-+	} else {
-+		used = false;
-+	}
-+release_area:
-+	mas_store(&mas, used ? &unloaded_mod : NULL);
-+	val = mas_prev_range(&mas, 0);
-+	if (val == &prepend_mod)
-+		mas_store(&mas, NULL);
-+out:
-+	mas_unlock(&mas);
-+}
-+
- static void *reserve_module_tags(struct module *mod, unsigned long size,
- 				 unsigned int prepend, unsigned long align)
- {
-@@ -922,52 +968,6 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 	return (struct alloc_tag *)(module_tags.start_addr + offset);
- }
++			/*
++			 * vmap_pages_range() only runs once all pages were
++			 * allocated, and it may have installed some mappings
++			 * before failing. Undo them.
++			 */
++			if (nr == more_pages)
++				vunmap_range(phys_end, phys_end + (nr << PAGE_SHIFT));
+ 			/* Clean up and error out */
+ 			release_pages(arg, nr);
+ 			return -ENOMEM;
+@@ -947,6 +954,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+ 		return ret;
  
--static void release_module_tags(struct module *mod, bool used)
--{
--	MA_STATE(mas, &mod_area_mt, module_tags.size, module_tags.size);
--	struct alloc_tag *start_tag;
--	struct alloc_tag *end_tag;
--	struct module *val;
--
--	mas_lock(&mas);
--	mas_for_each_rev(&mas, val, 0)
--		if (val == mod)
--			break;
--
--	if (!val) /* module not found */
--		goto out;
--
--	if (!used)
--		goto release_area;
--
--	start_tag = (struct alloc_tag *)(module_tags.start_addr + mas.index);
--	end_tag = (struct alloc_tag *)(module_tags.start_addr + mas.last);
--	if (!clean_unused_counters(start_tag, end_tag)) {
--		struct alloc_tag *tag;
--
--		for (tag = start_tag; tag <= end_tag; tag++) {
--			struct alloc_tag_counters counter;
--
--			if (!tag->counters)
--				continue;
--
--			counter = alloc_tag_read(tag);
--			pr_info("%s:%u module %s func:%s has %llu allocated at module unload\n",
--				tag->ct.filename, tag->ct.lineno, tag->ct.modname,
--				tag->ct.function, counter.bytes);
--		}
--	} else {
--		used = false;
--	}
--release_area:
--	mas_store(&mas, used ? &unloaded_mod : NULL);
--	val = mas_prev_range(&mas, 0);
--	if (val == &prepend_mod)
--		mas_store(&mas, NULL);
--out:
--	mas_unlock(&mas);
--}
--
- static int load_module(struct module *mod, struct codetag *start, struct codetag *stop)
- {
- 	/* Allocate module alloc_tag percpu counters */
+ 	if (module_tags.size < offset + size) {
++		unsigned long prev_size = module_tags.size;
+ 		int grow_res;
+ 
+ 		module_tags.size = offset + size;
+@@ -961,6 +969,8 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+ 			shutdown_mem_profiling(true);
+ 			pr_err("Failed to allocate memory for allocation tags in the module %s. Memory allocation profiling is disabled!\n",
+ 			       mod->name);
++			release_module_tags(mod, false);
++			module_tags.size = prev_size;
+ 			return ERR_PTR(grow_res);
+ 		}
+ 	}
 -- 
 2.25.1
 
