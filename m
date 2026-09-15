@@ -1,165 +1,123 @@
-Received: from mta0.migadu.com (out-154.mta0.migadu.com [91.218.175.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9969A4457C6
-	for <linux-modules@vger.kernel.org>; Tue, 15 Sep 2026 06:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C7D379C5C
+	for <linux-modules@vger.kernel.org>; Tue, 15 Sep 2026 07:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789455586; cv=none; b=f907fGkiH7ZDSimUAklqb5afrlc/cTu9zGj3aQUVdCjrwO5v6+bqbIaMu1vE3J6nzqg2/hQ5hFwAyB4sa58wCo6d8yKI4InB8hZXTbKr1jRNoGhDjw4gDKcySeMx0Bk6ouEgSVe7I/en5JN13RHLXE8BTsdwcorELjY8LTPE5Uc=
+	t=1789456212; cv=none; b=IZojhOz5KeisYoCfbjdfHw2TZUH1cyMcP4VFrrK3O9F93QaUyelKuSZRISGR6AAXFWLphd7Krcc/GQl5dD9B68yr9xTol9dZF5Yq9FEJt+gRHAK/w4qjEuu+WnJqG5D1BTbhNC+Mewid52bhlSY7ZE5x7pycrOY4AdelCLsgx5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789455586; c=relaxed/simple;
-	bh=0gcszhOdin+bUpsUHNDDdcWh1NUbmDL4eeu4aqfKVU0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qodIAJC4D5FgpKZbR0RC/iqmHJgCTePq9JxiLV21hNsjah+gfAqLJGVtmn86kguye9mptWijgvBGBHhVd4x1aXYrWaZ/D8edHR/h208u+0nJvzcMcCoWu/Zix8W3MpeaiIH8gFGqbh/VNJFU787rb2SrWD0gYyhz8uagdI85/EY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ii7UKsEJ; arc=none smtp.client-ip=91.218.175.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789456212; c=relaxed/simple;
+	bh=LIwSniWOgFPhhyLTqGccqzKIq8MrM+Dl44OlE7NjnW4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=fWNFfpUDbf3EeCen01BbV+qV0pkedV8dghbLYvI94ciH3PTZR3JKy4BJJvzCBcVI5L3j8vhSc1EA2/K0Y8+lR7WAar1AE1Ok/g8b9ayO6bdwhoFvIOn+NBnpgngr3kz3ZirvZ6qUpVzVzc46q/UQExgdIzbJov7onQkQIwfLCJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XLpZ8j6Y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ii7UKsEJ"
-X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0gcszhOdin+bUpsUHNDDdcWh1NUbmDL4eeu4aqfKVU0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789455582; v=1; x=1790060382;
- b=ii7UKsEJcTBsF7caN5U1iFoEQgL0UqerqAbbcBOobpfHYqOXY5XOrkAR+NW+SfrUtm08NJgX
- wUnivqnee3uX/0YJZmuNIG0ypkh/Gd0p3OUsCYe9AN0OJ9uJwla9HSyQpjYPfieGPxJHVhKV39V
- kl65Ukv3OwOzPAtRWnLwwTng=
-X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id efae1140c7a24bc8;
-	Tue, 15 Sep 2026 06:59:42 +0000
-X-Mizu-Trace-ID: efae1140c7a24bc8
-X-Migadu-Flow: FLOW_OUT
-From: Hao Ge <hao.ge@linux.dev>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Hao Ge <hao.ge@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-modules@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	Sashiko <sashiko-bot@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH v10 6/6] alloc_tag: Defer /proc/allocinfo removal to a workqueue
-Date: Tue, 15 Sep 2026 15:00:01 +0800
-Message-Id: <20260915070001.113559-7-hao.ge@linux.dev>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260915070001.113559-1-hao.ge@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XLpZ8j6Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C93B1F000FF;
+	Tue, 15 Sep 2026 07:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789456210;
+	bh=rBgKMYvhiNBAsH1W7IYUZMxTqhcKrKPZ2y8OC2p/PIk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=XLpZ8j6YJ5oG/e0AXWm7HaH8AmnfEuto1W9LXNS8TbI5cxN4SAdhwpxwhcdcJGJNu
+	 ttgSEkj+/iWgkotItRhqxAe7hvwwf8zH5UsbqdQpx/cphjw0rZVrNK9YfV3Dm1aUzU
+	 kzKwcVtlgtVcQradnaMjkyMauW2qr9lPVcEVTKIi1ItBTaSLk6iDMuLKC0bd8xZ3ls
+	 ujCsEZpjirw80PA0lzdak+HUom6HNUOGWa0OdcR87ksefJrXT7W9pkhNC/LWiMmpne
+	 dJQMebEYcwmAkXdnCkL1XREMle3OZm23geB8+0vEy8wyO+tZfnEeur+mmuO9jUmjNC
+	 9Hb36BSM10HrA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v10 6/6] alloc_tag: Defer /proc/allocinfo removal to a
+ workqueue
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hao Ge" <hao.ge@linux.dev>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <20260915070001.113559-7-hao.ge@linux.dev>
 References: <20260915070001.113559-1-hao.ge@linux.dev>
+ <20260915070001.113559-7-hao.ge@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 15 Sep 2026 07:10:10 +0000
+Message-Id: <20260915071010.8C93B1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] mm: memory leak in alloc_tag_init() when proc_create() fails
+--
+
+commit 4e566e12e21d0ae73ee9a25235cceeeff9cef087
+Author: Hao Ge <hao.ge@linux.dev>
+
+alloc_tag: Defer /proc/allocinfo removal to a workqueue
 
 shutdown_mem_profiling() calls remove_proc_entry() from
 reserve_module_tags(), which runs under mod_lock held for write.
 remove_proc_entry() waits for readers, and a reader takes mod_lock for
-read in allocinfo_start():
+read in allocinfo_start(). This commit moves remove_proc_entry() to a
+workqueue and relocates file creation to avoid panics.
 
-  CPU0 (insmod)                      CPU1 (read /proc/allocinfo)
-  ----------------                   ----------------------------
-  reserve_module_tags()
-    down_write(&mod_lock)  [held]
-                                     use_pde()            [in_use++]
-                                     allocinfo_start()
-                                       down_read(&mod_lock)  <- blocks
-    shutdown_mem_profiling()
-      remove_proc_entry()
-        wait for in_use == 0         <- blocks
+> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+> index 1ca0409b492b8..cfa0fc84b68f9 100644
+> --- a/mm/alloc_tag.c
+> +++ b/mm/alloc_tag.c
 
-Move remove_proc_entry() to a workqueue.
+[ ... ]
 
-The file creation is moved to the end of alloc_tag_init() as well.
-If alloc_tag_init() fails with alloc_tag_cttype still NULL or an
-error pointer, a concurrent reader of the leftover file would
-dereference it in allocinfo_start() and panic.
-
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hao Ge <hao.ge@linux.dev>
----
- mm/alloc_tag.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
-
-diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-index 1ca0409b492b..cfa0fc84b68f 100644
---- a/mm/alloc_tag.c
-+++ b/mm/alloc_tag.c
-@@ -15,6 +15,7 @@
- #include <linux/seq_file.h>
- #include <linux/string_choices.h>
- #include <linux/vmalloc.h>
-+#include <linux/workqueue.h>
- #include <linux/kmemleak.h>
- #include <uapi/linux/alloc_tag.h>
- 
-@@ -591,6 +592,13 @@ void pgalloc_tag_swap(struct folio *new, struct folio *old)
- 	put_page_tag_ref(handle_new);
- }
- 
-+static void remove_allocinfo_file(struct work_struct *work)
-+{
-+	remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
-+}
-+
-+static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
-+
- static void shutdown_mem_profiling(bool remove_file)
+> @@ -1358,16 +1366,10 @@ static int __init alloc_tag_init(void)
+>  		return 0;
+>  	}
+> =20
+> -	if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops))=
  {
- 	if (mem_alloc_profiling_enabled())
-@@ -600,7 +608,7 @@ static void shutdown_mem_profiling(bool remove_file)
- 		return;
- 
- 	if (remove_file)
--		remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
-+		schedule_work(&remove_allocinfo_work);
- 	mem_profiling_support = false;
- }
- 
-@@ -1358,16 +1366,10 @@ static int __init alloc_tag_init(void)
- 		return 0;
- 	}
- 
--	if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops)) {
--		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
--		shutdown_mem_profiling(false);
--		return -ENOMEM;
--	}
--
- 	res = alloc_mod_tags_mem();
- 	if (res) {
- 		pr_err("Failed to reserve address space for module tags, errno = %d\n", res);
--		shutdown_mem_profiling(true);
-+		shutdown_mem_profiling(false);
- 		return res;
- 	}
- 
-@@ -1375,10 +1377,16 @@ static int __init alloc_tag_init(void)
- 	if (IS_ERR(alloc_tag_cttype)) {
- 		pr_err("Allocation tags registration failed, errno = %pe\n", alloc_tag_cttype);
- 		free_mod_tags_mem();
--		shutdown_mem_profiling(true);
-+		shutdown_mem_profiling(false);
- 		return PTR_ERR(alloc_tag_cttype);
- 	}
- 
-+	if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops)) {
-+		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
-+		shutdown_mem_profiling(false);
-+		return -ENOMEM;
-+	}
-+
- 	return 0;
- }
- module_init(alloc_tag_init);
--- 
-2.25.1
+> -		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
+> -		shutdown_mem_profiling(false);
+> -		return -ENOMEM;
+> -	}
+> -
+>  	res =3D alloc_mod_tags_mem();
+>  	if (res) {
+>  		pr_err("Failed to reserve address space for module tags, errno =3D %d\=
+n", res);
+> -		shutdown_mem_profiling(true);
+> +		shutdown_mem_profiling(false);
+>  		return res;
+>  	}
+> =20
+> @@ -1375,10 +1377,16 @@ static int __init alloc_tag_init(void)
+>  	if (IS_ERR(alloc_tag_cttype)) {
+>  		pr_err("Allocation tags registration failed, errno =3D %pe\n", alloc_t=
+ag_cttype);
+>  		free_mod_tags_mem();
+> -		shutdown_mem_profiling(true);
+> +		shutdown_mem_profiling(false);
+>  		return PTR_ERR(alloc_tag_cttype);
+>  	}
+> =20
+> +	if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops))=
+ {
+> +		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
+> +		shutdown_mem_profiling(false);
+> +		return -ENOMEM;
 
+[Severity: Medium]
+Does this code leak the memory allocated by alloc_mod_tags_mem()?
+
+Since the proc_create() call was relocated to execute after
+alloc_mod_tags_mem(), this error path seems to exit without unwinding the
+previous allocation by calling free_mod_tags_mem(), directly introducing a
+memory leak when procfs creation fails in mm/alloc_tag.c:alloc_tag_init().
+
+> +	}
+> +
+>  	return 0;
+>  }
+>  module_init(alloc_tag_init);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915070001.1135=
+59-1-hao.ge@linux.dev?part=3D6
