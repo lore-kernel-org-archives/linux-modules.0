@@ -1,123 +1,174 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C7D379C5C
-	for <linux-modules@vger.kernel.org>; Tue, 15 Sep 2026 07:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E70359A70
+	for <linux-modules@vger.kernel.org>; Tue, 15 Sep 2026 08:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789456212; cv=none; b=IZojhOz5KeisYoCfbjdfHw2TZUH1cyMcP4VFrrK3O9F93QaUyelKuSZRISGR6AAXFWLphd7Krcc/GQl5dD9B68yr9xTol9dZF5Yq9FEJt+gRHAK/w4qjEuu+WnJqG5D1BTbhNC+Mewid52bhlSY7ZE5x7pycrOY4AdelCLsgx5s=
+	t=1789460022; cv=none; b=Mniz9/Nw312P4zOv0ZAFyr+ThjhJrSXcpL7C4oSt4ZV0YA6EHLonfOIXAaTwdgIyxhEYq9J1wKpuIAB105P4bQcYMWDSuNd0ZndAsQrfciDt6+gnqmqkJYtxIYddjs4NFoXfTG7QslV1R3K/z76oktHqM0Ma1BcbnyPjfrLccV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789456212; c=relaxed/simple;
-	bh=LIwSniWOgFPhhyLTqGccqzKIq8MrM+Dl44OlE7NjnW4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fWNFfpUDbf3EeCen01BbV+qV0pkedV8dghbLYvI94ciH3PTZR3JKy4BJJvzCBcVI5L3j8vhSc1EA2/K0Y8+lR7WAar1AE1Ok/g8b9ayO6bdwhoFvIOn+NBnpgngr3kz3ZirvZ6qUpVzVzc46q/UQExgdIzbJov7onQkQIwfLCJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XLpZ8j6Y; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789460022; c=relaxed/simple;
+	bh=Qy1WQPyESiOhAWnLFCEN0YIk1kYz5dOKPx/yzCSBwsk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lj0cvlyF01Is7gLCg6fxyLra06nyyGJ1Y64xcYABQY4iJ63TyCsuh5Hl0xzYtq0+mcNoUqOlwgpo8fnV1gTHnpv1gcYb+WzGMW+vJs+mL/5tgKfEVlsmw3TY4dlV9zu4ZzlUo50qGWX4SiCcbQoyEZl3DrpOeD05y58JyP+doyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LE/3z16y; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XLpZ8j6Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C93B1F000FF;
-	Tue, 15 Sep 2026 07:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789456210;
-	bh=rBgKMYvhiNBAsH1W7IYUZMxTqhcKrKPZ2y8OC2p/PIk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XLpZ8j6YJ5oG/e0AXWm7HaH8AmnfEuto1W9LXNS8TbI5cxN4SAdhwpxwhcdcJGJNu
-	 ttgSEkj+/iWgkotItRhqxAe7hvwwf8zH5UsbqdQpx/cphjw0rZVrNK9YfV3Dm1aUzU
-	 kzKwcVtlgtVcQradnaMjkyMauW2qr9lPVcEVTKIi1ItBTaSLk6iDMuLKC0bd8xZ3ls
-	 ujCsEZpjirw80PA0lzdak+HUom6HNUOGWa0OdcR87ksefJrXT7W9pkhNC/LWiMmpne
-	 dJQMebEYcwmAkXdnCkL1XREMle3OZm23geB8+0vEy8wyO+tZfnEeur+mmuO9jUmjNC
-	 9Hb36BSM10HrA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v10 6/6] alloc_tag: Defer /proc/allocinfo removal to a
- workqueue
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hao Ge" <hao.ge@linux.dev>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20260915070001.113559-7-hao.ge@linux.dev>
-References: <20260915070001.113559-1-hao.ge@linux.dev>
- <20260915070001.113559-7-hao.ge@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 15 Sep 2026 07:10:10 +0000
-Message-Id: <20260915071010.8C93B1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LE/3z16y"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d3931so139025e9.3
+        for <linux-modules@vger.kernel.org>; Tue, 15 Sep 2026 01:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789460019; x=1790064819; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1aXv/QuntaY+V4oyEEzb+gi6VoNLvN7s/jnHI0pKvxg=;
+        b=LE/3z16ye4bb6qEaIvxhAzM0BujCI01M4DOZEKUEReuWLWAOAr+AsS+flIpSZBeqpJ
+         raKNYRptOv91hphQIoBpG3b5PkVAi3JuX12VR27YZJQf2IXkR/r1N83s9+nAnBaRibJ7
+         yfoQ5B4v1eGIvpyF1LIdrM5RPQ9mhFKvjPICxMZvHLa5aOuyfRG5/SHm+1eM99ePUR2l
+         yAObOo5dnUXF6F8n2Vw8FsCYKXSVunzanCHbk68sU3EoVa7/Ih35uTCDtxwrnKOqaWyz
+         pwDcd6jDNh5+rGMdIXUH4HZDTmEWpXmHpN9vS/x+1Y7XNxuWyJXBxph9h2NlaF22RMir
+         OVHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789460019; x=1790064819;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=1aXv/QuntaY+V4oyEEzb+gi6VoNLvN7s/jnHI0pKvxg=;
+        b=nd+wdMiZsN1b0TDhKlA5cZdqEukPTpar/iIv2Ezb73Z3kf7psdNWIwLUVan64WHO/G
+         XAsYEc6xafianD1mX4TeP1kAddI2hsIS4DeEw9jUgNzyJzC8pVNCr0LKRnoTAe2yox7I
+         S1oDdHuqIYmJNv8uGySbBL1uhiib+lZszo+iLGJR9gBYKr2VomP61wuE/DeoBW/vgk+7
+         FkHX81xyUTjZy7akRPO1A8DuUweRghk/Nuaz5cqWzSJMVAOK2jgrP7j1FR424xk9EKrI
+         UehwNN3VBKlZiRmtT+9UI3bge7EYe0YhDLwTaKvQ4MJxQ9jr4fA8HCrdKTvnplDyuN05
+         G7cw==
+X-Forwarded-Encrypted: i=1; AKwUvBz6TLEuoi/+n4Xy91fgMhmMKsrobzORU+x9CQjnjx01HKykKov8yBCttl8F4NKU6z6D7UDhswLX/YwJWTr7@vger.kernel.org
+X-Gm-Message-State: AFuF++lcRjShE/59GxT4G5EAIwahJ6kBcBuq8obChAQ5NRQgIO7Cdr71
+	MKTAPK1HDrcRQ2OHkrxxs9NwYNGCN0tsTVIuYfnb8R9GPfN8pICkFtdx
+X-Gm-Gg: AYBFou021QxLwPIlVndljdOetoCREolZDnKBwAreJTUSZnonK6OgRVDB1S22G0RVyXo
+	vNq3mRRECoFqu3UnPcPROSUgq5EhKKH1HLMyyjySKDUuTQ8UByFRIU9x3vPnqS+KS8RKgbPHgQj
+	lEOfFZk0Not6qxxw1mi2IlaR57kYJ8DsdU0UVrEAa0j3OS4ecS+slHUslFXFxynUOTohwJsdGSb
+	wDiufZMPWw+VDAzKVWaokFmV8cLY8zL2B/Sk9UnY6YrbobHR1PFX/QQngHywyqOW1tExn9KOe3a
+	d3kGC75bECJqtf3frBLSTWc+ZKoOvTpaZbcmBIgptFId/5cxbyThe953UzHGZal86pCy9oLjod2
+	BNg5DTU/xnvPjvMj21pmaT5xms+fSVE0wIFoh7Gsa914skoKuBMy0O6xcTvpJvkpkxjAjeiIlhd
+	nau3ypNp4gupdH4JW2JlquCZDh6oAO4pgLOiZaqZu8O6ML
+X-Received: by 2002:a05:600c:c173:b0:49e:799a:8951 with SMTP id 5b1f17b1804b1-49e82214b48mr1820155e9.11.1789460018923;
+        Tue, 15 Sep 2026 01:13:38 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::25dc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7d6a8d5asm47662215e9.9.2026.09.15.01.13.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 01:13:38 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 15 Sep 2026 10:13:36 +0200
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+	yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
+	martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
+	mcgrof@kernel.org, petr.pavlu@suse.com, tj@kernel.org,
+	kees@kernel.org, bpf@vger.kernel.org, nathan@kernel.org,
+	nsc@kernel.org, arnd@arndb.de, puranjay@kernel.org,
+	yatsenko@meta.com, atenart@kernel.org, ojeda@kernel.org,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next 01/18] btf: Extend UAPI to support BTF
+ location (inline site) info
+Message-ID: <aqj-MIrooVpronCx@krava>
+References: <20260901165757.801449-1-alan.maguire@oracle.com>
+ <20260901165757.801449-2-alan.maguire@oracle.com>
+ <aqRVysZxIpP5lSOT@krava>
+ <eb560e37-0eb1-4f11-a9c8-866562b178ed@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <eb560e37-0eb1-4f11-a9c8-866562b178ed@oracle.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] mm: memory leak in alloc_tag_init() when proc_create() fails
---
+On Mon, Sep 14, 2026 at 03:29:21PM +0100, Alan Maguire wrote:
+> On 11/09/2026 20:26, Jiri Olsa wrote:
+> > On Tue, Sep 01, 2026 at 05: 57: 40PM +0100, Alan Maguire wrote: SNIP > + > +/* > + * BTF_KIND_LOC_PROTO specifies location prototypes; i. e. how locations relate > + * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed
+> > 
+> > 
+> > On Tue, Sep 01, 2026 at 05:57:40PM +0100, Alan Maguire wrote:
+> > 
+> > SNIP
+> > 
+> >> +
+> >> +/*
+> >> + * BTF_KIND_LOC_PROTO specifies location prototypes; i.e. how locations relate
+> >> + * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed by a
+> >> + * a vlen-specified number of __u32 BTF type ids which specify the associated
+> >> + * BTF_KIND_LOC_PARAM for each function parameter associated with the
+> >> + * location.  The type should either be 0 (no location info) or point at
+> >> + * a BTF_KIND_LOC_PARAM.
+> >> + */
+> >> +
+> >> +/*
+> >> + * BTF_KIND_LOCSEC consists of vlen-specified number of "struct btf_loc"
+> >> + * containing location site-specific information;
+> >> + *
+> >> + * - function (func)
+> >> + * - location prototype type id (loc_proto)
+> >> + * - address offset (offset) relative to kernel base address
+> >> + */
+> >> +
+> >> +struct btf_loc {
+> >> +	__u32 func;
+> >> +	__u32 loc_proto;
+> >> +	__u32 offset;
+> >> +};
+> > 
+> > would it be possible to include btf id of the immediate parent function?
+> > we have use cases for tracing just inlined function called from particular
+> > parent
+> > 
+> > I thought we could use the location offset for that, but because inline
+> > functions could be nested, this seems like hard search.. also we do not
+> > know the size of the inlined code, so not sure how reliable it'd be
+> > 
+> > I checked the dwarves code and I wonder we could instead store parent
+> > function (struct inline_expansion) during dwarf decoding and use that
+> > later to get parent function FUNC_ID and have:
+> > 
+> > 	struct btf_loc {
+> > 	     __u32 func;
+> > 	     __u32 parent;
+> > 	     __u32 loc_proto;
+> > 	     __u32 offset;
+> > 	};
+> > 
+> > wdyt? thanks,
+> 
+> hi Jiri,
+> 
+> So in the case of encoding the immediate parent it is quite expensive -
+> my concern is that adding it as an extra field is another 4 bytes per BTF
+> location, and because there are a lot of inline sites that would mean
+> somewhere in the region of 4 * 500000 = 2Mb extra. This is the tricky part
+> with this stuff; even small per-site tweaks really add up.
 
-commit 4e566e12e21d0ae73ee9a25235cceeeff9cef087
-Author: Hao Ge <hao.ge@linux.dev>
+ugh right..
 
-alloc_tag: Defer /proc/allocinfo removal to a workqueue
+> 
+> Is the immediacy of the parent-child relationship a dealbreaker for your
+> use-case? As you say the offset can tell us the function B was inlined
 
-shutdown_mem_profiling() calls remove_proc_entry() from
-reserve_module_tags(), which runs under mod_lock held for write.
-remove_proc_entry() waits for readers, and a reader takes mod_lock for
-read in allocinfo_start(). This commit moves remove_proc_entry() to a
-workqueue and relocates file creation to avoid panics.
+it's one of the use cases, but it's still useful without this
 
-> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-> index 1ca0409b492b8..cfa0fc84b68f9 100644
-> --- a/mm/alloc_tag.c
-> +++ b/mm/alloc_tag.c
+> within the bounds of uninlined function A, but it won't tell us if it was
+> via function C. The other thing that complicates this is that an inlining
+> doesn't always have a size; it can be inlined in a non-contiguous manner.
+> So in some ways maybe the best we can do anyway is to be able to say a
+> function was inlined in a particular uninlined function?
 
-[ ... ]
+I guess we could get that info from dwarf, it'd just be simpler 
+having that in BTF
 
-> @@ -1358,16 +1366,10 @@ static int __init alloc_tag_init(void)
->  		return 0;
->  	}
-> =20
-> -	if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops))=
- {
-> -		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
-> -		shutdown_mem_profiling(false);
-> -		return -ENOMEM;
-> -	}
-> -
->  	res =3D alloc_mod_tags_mem();
->  	if (res) {
->  		pr_err("Failed to reserve address space for module tags, errno =3D %d\=
-n", res);
-> -		shutdown_mem_profiling(true);
-> +		shutdown_mem_profiling(false);
->  		return res;
->  	}
-> =20
-> @@ -1375,10 +1377,16 @@ static int __init alloc_tag_init(void)
->  	if (IS_ERR(alloc_tag_cttype)) {
->  		pr_err("Allocation tags registration failed, errno =3D %pe\n", alloc_t=
-ag_cttype);
->  		free_mod_tags_mem();
-> -		shutdown_mem_profiling(true);
-> +		shutdown_mem_profiling(false);
->  		return PTR_ERR(alloc_tag_cttype);
->  	}
-> =20
-> +	if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops))=
- {
-> +		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
-> +		shutdown_mem_profiling(false);
-> +		return -ENOMEM;
-
-[Severity: Medium]
-Does this code leak the memory allocated by alloc_mod_tags_mem()?
-
-Since the proc_create() call was relocated to execute after
-alloc_mod_tags_mem(), this error path seems to exit without unwinding the
-previous allocation by calling free_mod_tags_mem(), directly introducing a
-memory leak when procfs creation fails in mm/alloc_tag.c:alloc_tag_init().
-
-> +	}
-> +
->  	return 0;
->  }
->  module_init(alloc_tag_init);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915070001.1135=
-59-1-hao.ge@linux.dev?part=3D6
+thanks,
+jirka
