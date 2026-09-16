@@ -1,93 +1,94 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2E344C518;
-	Wed, 16 Sep 2026 07:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1284545FFAC;
+	Wed, 16 Sep 2026 07:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789544070; cv=fail; b=jJ2qt4nuQ5JKo3scp2FjDo63q5Fb7jB0HwNZOSjkhw0jFJSuMTn9Z0kEogp1V1745uToupixA0ZPzJiVl0r1p+EW+R8Av+LJLRMKsint/YEgphNdAJ9sF4WU/LMsNC+TA2vK6wf7GiO+aJ1pTOacUQ0oCZ9MCoIEZw77ZUdy9hg=
+	t=1789544618; cv=fail; b=D2e9W1XFQJMUXIdoU8bfPwUPCSlv89zNri8BGMRrQU04b0kA7X90lAk3TI521bU+78k1aXgL2HY1XZRSa384F7q1LCXC4rxbP2a21WvSWsB0VgrLWbG9DzG9x0xabYLe8iv4vNolvCCB8Vh1SDiPcS4cXUcJHUE3FqD1R1kqojQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789544070; c=relaxed/simple;
-	bh=g4t8tWezjTMABtFTvbAEnW2GJFp95z7L0Iv0NbrDFbU=;
+	s=arc-20240116; t=1789544618; c=relaxed/simple;
+	bh=q8Dv3sSw3/TeQ896ItxmIvfp1abMGBrPbvY1wpHqsc4=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=IVSCb4XNtIJ1SpdpbUixERAdF2quXRMJBqLmaCdGFbhuBQWpErHJQ6KY8BHY1BjfZQDnjC0oxvqahU0nkg2zFsPLP8XwL3bDetlCHSVFcaLvrjLaQu5sI7LdfN+s6VQT7M2GzX5snlvLhCq0rKWdEQOOsj2vALklLIWMbrsI+TM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=CU/K6fTH; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=UhdGUxej; arc=fail smtp.client-ip=205.220.177.32
+	 Content-Type:MIME-Version; b=kgok6HduLKksGLlGuC6/XUhGwiNHeg6/srine8QXupDXCm1+I3XeFC6tpy8vYGiTnfU6WIvktwnOZJRyOCr57/+VKuQcQuslb0u8G0E9zYK9c6Xchg3+mGO3FjAluS9zE6MNRHhnHbHtSi+9buUfaOS4zEflP8lKPdCTd4lklc4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=sJ1TjVU2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=yAaG8spJ; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="CU/K6fTH";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="UhdGUxej"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68FLWdvV622953;
-	Wed, 16 Sep 2026 07:33:53 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="sJ1TjVU2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="yAaG8spJ"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68FLY73u1308461;
+	Wed, 16 Sep 2026 07:42:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=3DoWV72EX1fGnefEYSWP4MRYPQ7jNOVdTtso1OWnh6o=; b=
-	CU/K6fTHTpu0KsU7AtXChKGhVVq/R9MdA195vqTKv6R1n0mSpd5ZdTKROBTGD5mT
-	FlZNXxExkLe3xs0TNs/ktm8tOMmJTEhmuZ0kqRA8WqdZUbzxc5VrVkI1cjro+aPp
-	ECnYSIcC0ieLklwrjFp2VocX8szUpt01d8Y+aBkj/849eB8ytdJp8xRo2wZZsrz7
-	pEDgs4swizgN5Df3vV1hXbJx29JFy9oecrS0f9eJFo8R82dKU1NaT+Du5NjVAavi
-	kvoEILqqhIgpQMKick9g8JqJlHD/WNyxCC6btjexij4P1bJ4LiZdeYL0soNXD4BV
-	1NdtlJ634wWQEyVbhh0vog==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gmwh1n4g3-1
+	corp-2025-04-25; bh=K3SJ+Y5ZjCHgjSGkPOUY41yNjpnzuq0ikR4ij+Wxw68=; b=
+	sJ1TjVU2eC5d2B/QQwBOzVHiID2xqPWow+VCx1iQvMZE1pAheqLLHfDiC2ouamjJ
+	wnaLanIHBW8Vl6BNGW4E/4rANvTRsOVqwLX+adODPnnOAitYB27yMYOKyxzHgV+T
+	hPC53M0lLYivjT9cV5GYdRJKnzSWJmkDW0UOTF62QBGS013SyxPUMQUVZFrOGgO1
+	ff6QnBwPrSmPTyUqFzBmquSIL5BS5fdvGuUAWnwaYFzEpC+z4T7F5+hPEbcnP1w4
+	k8O4iKToAOPlGZvme3ubwReELBgQQU1MtEcu9Q1AvccKaTYFPC2B8yeFVSQ9qOgz
+	cFYmjYBmHHN8ph1dI40hVQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gmwn9551w-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Sep 2026 07:33:53 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68G7VDcx037721;
-	Wed, 16 Sep 2026 07:33:52 GMT
-Received: from ch4pr04cu002.outbound.protection.outlook.com (mail-northcentralusazon11013035.outbound.protection.outlook.com [40.107.201.35])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gmw6q1ngc-1
+	Wed, 16 Sep 2026 07:42:58 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68G7e4tl014958;
+	Wed, 16 Sep 2026 07:42:58 GMT
+Received: from dm1pr04cu001.outbound.protection.outlook.com (mail-centralusazon11010015.outbound.protection.outlook.com [52.101.61.15])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4gmw6au5s4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 16 Sep 2026 07:33:52 +0000 (GMT)
+	Wed, 16 Sep 2026 07:42:58 +0000 (GMT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IeJ8DaMNlGRIk0ftSDPfB13sGH7P03lzsI68RxevHjuYkGLdE54xOtkyf8f6FAS9TX8RGOk3vo6hqinwlhz4LvjHH2YI5Zy1yySwEU4E6RvQBS5YBVoJXlFd7ffgeyjJLEFo4kcSm6Wf94y3jQTtNkxE4sOt0Yy42d+8B1NbWn0T7A89sbEUfqmhax/exbYuDQlqFo5NmOyf1RWzyNIfwNsmDc5PlqnDWo4X6nK0iSl7wLAVy8ZwfNLdppryCnETpx4z4vSX9viVl/d3H1cx8cBzGL5XRj0wCYrFhBn9DaRlHg/b1gKWTufJauhKaDzcynZl+nnmytVij2c98fxvNw==
+ b=Y72ifDaFhUWhyYA8xDAiz8paw9e/RUVgnjj603d8gLAZ/QnSLDoZXdhlQ1BwEydYlMtvhVB1j9gkCT8g26ehiNFORrYfJWoixEtpMOP3gbDWSinjeweFD07d4ELm7RcSum5OmGrKmufklQ3O9Ft7DCodACa3+rnlyMZ+PsL/lWrko8vD2myscRPjrvdJuin9/ppnJGMdAx+TtorDd4pcELxomvSME0w6oCKJVXu8HYmUM16nHFOOLmaFy9xbeMlR3CI3gzECGrplOuuoNcyfyw+Z8LRAUpMZ3WyRiQDQR8MihchqYJ8UM3ezyh5Y/5Km2iuzAUWqnQHglDx480IWDw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3DoWV72EX1fGnefEYSWP4MRYPQ7jNOVdTtso1OWnh6o=;
- b=x0HCYme5sN01CfRPY1fcr58rsrTtxX8bsohRZVETrKtesabx4Hg6T7pqpzFF3JYVTJypC+xI1BqS74dOnc42IdGEw4zNrdv7vCthM0bEi7YulCLukV5czF9BhyZoYftNeE4qm3aUIxHaJCNYkQEdyAYUo889yiQjGnqk+dN4g1P8C6xNdYEGJj3L/qWuVoboibw0NXq+T3kTmSgh937TCuQZIKnEMquAPcZAijJBj9qPAdu+6RT4eRihHWeD6o4m3hSdG4YQibs/jGRzX09utz7X0FseCKjcOf+Inq9F0v4nPPIFDugkHbPkpW65xOC4v4C8QfL4h4dGaen/XZIMhQ==
+ bh=K3SJ+Y5ZjCHgjSGkPOUY41yNjpnzuq0ikR4ij+Wxw68=;
+ b=HbZBVFCN6PPH16+GllsO+DVqjn5Tv5kKm06bssa/qJIp0sSQS4szRO+lmW+PkwBpf5oV2cGSu/iid9uJZG3dNlE0wJscpkTu+C5Fz6zN+nnem22AOx/yE2FACGO0YHQPtQg2tcQSMzM82dh2DVPhMgvZ/fho28pIscLLsDwToeWAGxS6gyMXZDEwUFxhoHdsLR+pWc8jdNjVFg2HHXBQ+8iPHbFTCs+EoENUTV8mVhW5yej5/kiWW6sydgBb7o/443HzD08y+4X90a2/v98phbnMBzMZvJfxlsUWXlUQogMS7V8uXctZVWOXYILNEOZjd/ZAVs4EwNodWqMbINeL+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3DoWV72EX1fGnefEYSWP4MRYPQ7jNOVdTtso1OWnh6o=;
- b=UhdGUxejvg+VgeJsgsM27FUxyLCBduHE4IWfpgB9McESKsEy2nD0gXKFB8fYR86CgRdS43DjtL3CCQd2y5Ijvc0y+zvhGRNsLNrrVfctzpx5+0w9xCKrNzhv54KozbLuQPVLBlpcJQHwtO4uryke4VVcytJniIyMCk+ObJypCNc=
+ bh=K3SJ+Y5ZjCHgjSGkPOUY41yNjpnzuq0ikR4ij+Wxw68=;
+ b=yAaG8spJN0Kv3nER5c2hdJpqmAcvvtIwojBJ1OKUn0vjuBBPu3zQr2J3psy3iP/juQBWO72AGRbObyb7cqpKGs/jVwmHB19YoonEs7SgygF46ZbJ7AQWCpBl2m4vAX3Wq5PSMsX0GO0WFEA5sudJTI5aTo6Z8eGic/h+reh/35Q=
 Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by CHAPR10MB997697.namprd10.prod.outlook.com (2603:10b6:610:2f5::16) with
+ by SJ0PR10MB998057.namprd10.prod.outlook.com (2603:10b6:a03:3e9::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.9; Wed, 16 Sep
- 2026 07:33:47 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.9; Wed, 16 Sep
+ 2026 07:42:53 +0000
 Received: from BN0PR10MB4901.namprd10.prod.outlook.com
  ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
  ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0428.008; Wed, 16 Sep 2026
- 07:33:47 +0000
-Message-ID: <bd56c5cb-fe35-4ce6-91b1-d83fad7c422f@oracle.com>
-Date: Wed, 16 Sep 2026 08:33:37 +0100
+ 07:42:51 +0000
+Message-ID: <bf1473a4-7a07-4a93-905f-fd1ff46b9533@oracle.com>
+Date: Wed, 16 Sep 2026 08:42:44 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 bpf-next 03/18] libbpf: Support moving permuted BTF
- types into split BTF
-To: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org, andrii@kernel.org
-Cc: daniel@iogearbox.net, jolsa@kernel.org, ihor.solodrai@linux.dev,
-        yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
-        martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
-        mcgrof@kernel.org, petr.pavlu@suse.com, tj@kernel.org, kees@kernel.org,
-        bpf@vger.kernel.org, nathan@kernel.org, nsc@kernel.org, arnd@arndb.de,
+Subject: Re: [PATCH v2 bpf-next 13/18] kbuild: Add support for BTF inline
+ information
+To: Nicolas Schier <n.schier@fritz.com>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+        jolsa@kernel.org, ihor.solodrai@linux.dev, yonghong.song@linux.dev,
+        song@kernel.org, qmo@kernel.org, martin.lau@linux.dev,
+        memxor@gmail.com, emil@etsalapatis.com, mcgrof@kernel.org,
+        petr.pavlu@suse.com, tj@kernel.org, kees@kernel.org,
+        bpf@vger.kernel.org, nathan@kernel.org, arnd@arndb.de,
         puranjay@kernel.org, yatsenko@meta.com, atenart@kernel.org,
         ojeda@kernel.org, linux-modules@vger.kernel.org
 References: <20260901165757.801449-1-alan.maguire@oracle.com>
- <20260901165757.801449-4-alan.maguire@oracle.com>
- <98c9c5838b50871b3a138d2104450774268644b3.camel@gmail.com>
+ <20260901165757.801449-14-alan.maguire@oracle.com>
+ <20260914-axiomatic-meaty-lynx-8a5dc7@l-nschier-aarch64>
 Content-Language: en-GB
 From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <98c9c5838b50871b3a138d2104450774268644b3.camel@gmail.com>
+In-Reply-To: <20260914-axiomatic-meaty-lynx-8a5dc7@l-nschier-aarch64>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0160.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b3::14) To BN0PR10MB4901.namprd10.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0085.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:cd::10) To BN0PR10MB4901.namprd10.prod.outlook.com
  (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -96,188 +97,179 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|CHAPR10MB997697:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4300e263-175d-4231-1c04-08df13c4d813
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|SJ0PR10MB998057:EE_
+X-MS-Office365-Filtering-Correlation-Id: 618f5df5-0149-4a51-2410-08df13c61cc8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|23010399003|376014|366016|1800799024|56012099006|4143699003|10067099003|22082099003|18002099003|6133799003;
+	BCL:0;ARA:13230040|366016|1800799024|7416014|23010399003|376014|4143699003|6133799003|56012099006|10067099003|18002099003|22082099003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	7GUJsPusIq3DXVyhccM5+RH/M0qch08aO0gpzhy/4XadQagHddTvjnuaPNhv7W2e4gT4wY5A+zAvJkEJMoRI6qItzAu1pCmpkn5vVIxusOs+kc6GAEsvIWTj6+dLQ83eaKxbkekiVcjSRHBd8uObD1APuzsGrtFQYZcVqdxlktdMNoPUdj/KPJL91OVJloLe9kolios+BsZI4OsbAIsL1Q3gu7Hhm3RTUcWqY6njAt86yvKHLD0yz441mBxzE760jI+x3FR4HKLas858fzZrkjBFwIrc1smRplPiC7Seumljbn1AH0V7AE0uwsBuL+jS/oZpsFoEftJLsPPWG3v+zK4ELoE/7FiD9uDRqH1fPYUSTg5arrZZFmIt2uu027kUMZ2lL3Lq0Qsia90EryxoueBOpvAX3b/cw64K4Jfy7V/3pGBZsdCH845OqFXZx6Xt1AvaDcNED6fvLUymXAgMzRE27aQnonUwBX0jgOaOkZPyHr98Su5VnvPeVSyqwNHnbJ3sKfZAwy7o83sDaYsS6za8mOy6PbBY2pmo0uQ/QXSXEX5oICSxXKe2sCqEyeQEh7nTdjbmQaMvWGBVAFGDxffCpzPB5vJHmCZWZC9sauMTAMquiK7YwOoLm4koGlvHRuBQQ/3jvSqkQwKwu5ekGHNdclsL+iqE/RDDFzS1K7I=
+	kvtiST/maIZodVvtjUBfwHU8NXji4Qr9lEGptXEeGCDLABzltanOSmo/hyu6Kgk6jAgIQ3DgBXVWONpG2ki2Zi//ag/HCtsf3/2K2M3/rlYhhae7KivxcM2ObnVK+v+VSeU7/PTrNlFs7TJ4xKimi6Bs1FPcVubnnpBCovh2E9eErY6R90bW4m3E9ivO5N80hFUSg6uRiGfZ2Gg4ZF3HJ6jMQvDAN/QfmEqp547ztbcqW++ULbsyQ3M3ef3xcatQl5MAvoCXG3AH3AIj7ibvj3zLeua1zRMZBk3b/F/AHF0UJd7KCqUasH3HeVu/9MSUZh14Ati04HsDE9beHproQNr3VukCDBjMq3PBWVO7poUuzopPlmyeOuVhgSo9MviJcyRClL7hUYcv+1qpXmbforhhUro+SfGrZesLT+Hnwb5UzGkjlv+R0OPzPVUA1ZoDZM17vR4N1QUljjgamfJrcMLcPasV0+NgoDVgGJFMk32EeKdfob4fTycE6Auoj/sAuxJ5aJOknER0Ngv+jJWspFWpIbNGaaCG00V6g4rVj6Dq83F2Rn/5m75nDmLH7Ns18V3YErZ8wpCKC9O3sRMczif7oh+VSkT6xfMks9aAJGutK52yIXK08fo9vUsBhHlCMawrseKbEwak1ZNBMspNS5ZUKd/u8GHG8AsbD/0iXRU=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(23010399003)(376014)(366016)(1800799024)(56012099006)(4143699003)(10067099003)(22082099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(23010399003)(376014)(4143699003)(6133799003)(56012099006)(10067099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Wjh2c2t3TTFHRk5xWmtQcmloeDBUd1JUeDN0dmlmb3JaZklXbnh2WXBoQ3FE?=
- =?utf-8?B?Mi94Slh5cURFTDNXUW1wRFJzS0N0cFh3dlNubk9CV24vdzBjQ2VvYlkxelg5?=
- =?utf-8?B?NnNENXA4STloWWlEVmQvbE1Bb1U5Yllubm9WZGJXK0ZxRVBGV29xTmJ0ZjhP?=
- =?utf-8?B?NUFFTkIxcm9OMmhOMEpndWZyejVWU1Y5OE8zRVFuQkpNdmxVckdYUHR3QjFN?=
- =?utf-8?B?aHQ3bHY5OEZ5aXFBSUI0eE1hbVJvLzZEd3JjalhDbXdEakJNd1g2c2FFaDFh?=
- =?utf-8?B?NkNJd1N0a0RMVzd2WFJaTnVqbFR1NG85TU0zdFlxeWdDUHpjaGxzV2J4NGxv?=
- =?utf-8?B?c0huQkJPNjM3eS9kL3JXcHBjWG1HN3pnenBQTEtrU3NGQ0dRQUJuN0ZEVVAz?=
- =?utf-8?B?NDhCS05JYTJtcEZ4MlRoc1hWRTZOVlBsNFpTYUNRdXNwYkdyakhIYkkxYkR1?=
- =?utf-8?B?OHdlUVNZblh6cXc2V2xmS2xmTEFuZVl5YTBJOUxKdmFzYUNsVStjejJidlA3?=
- =?utf-8?B?ZW9YNXZmVWVOU1FBdXhOTUJoaUdWUnBBTWM2V2I4T2pEY1hqb2xEVno0RXpy?=
- =?utf-8?B?eitSQzdDV1gyWnNPbFdVWWxESlk3djBNU05PbTZITGl4N2dZSXNvT3E0S0wv?=
- =?utf-8?B?Z01vY2I0ZmN2akpXT3hiK01QKzBxcHQ4UVF6VXlZSU40bDZQUXExZmJMaHRx?=
- =?utf-8?B?TGlRMlFMSE1VK0RmNVZINnpQbEhsREpNUjRCOXAxSHpGUDdrZnFraGdkVG9u?=
- =?utf-8?B?TlFHN0xVS25pZmFSYzJuYjFuTEl1ZVh6cmxUa0tsSUFEUVZESlhveVZJd1pj?=
- =?utf-8?B?TElsc1FWOGdDVENDeXAzNDBteHFXbVBKRzQ1RlNiMk82aUIyS2lQeitjM0Qr?=
- =?utf-8?B?MjdQSkZDT1QyZURiVEhUSGdSRTJBU3ppbjNMUzB4TXVTZzkzMHROekxyL0JS?=
- =?utf-8?B?cXI3OG4yL1ZJWGdWMWRNZmF0WTlObFhPQUZGMGtmWUpjZFdyd2dOaXZtRkg4?=
- =?utf-8?B?a1NSRGNaMTNLekZTR2ZReUVQQUVOQ1hYanZxVjd2MWRhYy9Pdk1sUlJ0Y2NC?=
- =?utf-8?B?VVpmNnFnN25uR3NDeVErZDFwNWpsa0FNb0Qvd0FpcGJ4WEhadlBsek1jZlo1?=
- =?utf-8?B?Z3gxMExKM244cHV2Z1RVTmxYQUY5cEFTbzUxVWFOMmtBQ2E3cG1iNjYxYmZv?=
- =?utf-8?B?bzFpZlFiT1JhRjQ4LzRXOTRFeERpUjdHWDBHUHJ2Nm5wa1ZwRmthTXBwaFll?=
- =?utf-8?B?eTd4WjQ3cG5Rc0JQK0wwUkhxRC9LcTh5VWFCcGF4QlNweVdRWm1oUXNkKy9V?=
- =?utf-8?B?eG15SE96aEdYbEdjVFBUZFVZUlhEcHFJRUxMcnF2Tnk3ZVY1eUtuMGxYNUM2?=
- =?utf-8?B?S2N2dTlsT1B6d3hRd1grRVA1SUZOVzNmOU4rUmtDdWZYWWV4K3ZRK3E5ZXEy?=
- =?utf-8?B?TEZrOENRYTZCckt4ZjVDOVNhcGhtM2pQZGtNSkVNdWVydDZ2RlM2aktKREdv?=
- =?utf-8?B?bzVDanFkZ1gzSnhBN0dmUndnaTFtV2JnNU5IQy9KR3VuSUZhdnlJdWNZbmY2?=
- =?utf-8?B?MndMRm5pdThQNHR6TlRqRTVHeE5yc3huWWdGREZGUmRML05idU5MOWpMbWhl?=
- =?utf-8?B?bHN2MWdRM1NyUWF2alVnZHZoQlB3TEp2Q3g1MDlENFFRYnZpaGhHN3FtWS9H?=
- =?utf-8?B?N0xyQW0yM1YyVXozTHFOZmJQUVFVMTV1UTNqMjQxUU5xb2dDUENqQ1ltM1J6?=
- =?utf-8?B?OWtJcGp4SXJjclZrVmVYTC9HeFFpL3RlelAvdjU0VnNFUnpXRmd3cmxhbk5L?=
- =?utf-8?B?RUVqNGJKNHNkRkR0VTlIelJIWjNwWWJ1V1oyZUQybTFVN0h6TERQSFNwRWV1?=
- =?utf-8?B?M2YzcmdxY0ZZVk4xY2FuNkNXV2h6ZG9YR2F3SjFqcjMxdGJhYkxSU2NRY3g0?=
- =?utf-8?B?TzhiWXRPVjdWbXpYZHpOdEtMVEp4L3pVTC92ZUJBNmZWV0g4dG5RUGU3dFl3?=
- =?utf-8?B?ZGNudHhqS0VYTVdINkhmTDg0UFBkZHpzVXptQUo2UVoyTUIydFhlUTVEVzJu?=
- =?utf-8?B?NEdkTWFOY05uaXpKTzRHQ1RUUGhvb2dkcXlyN3g5YnRUNEFQdFUzeGhGRU1U?=
- =?utf-8?B?U1RuUVA4VnBVcjZLT1JrRUY4Y1NZVHExelNKRzJTR0luQXZOMENxZnE5YjBS?=
- =?utf-8?B?WHNLQVNLdHREMEZqcmdkY2Y5WXl1ZFV3NFN0TW9lUmVLeWg2U0d5cmpKWnp6?=
- =?utf-8?B?ZkorbWpWejBmYTA3ZXlNRW91WCt4UVhBMy9RWHZqclllVEFvOUlkeVozK2k4?=
- =?utf-8?B?WDlNNlZIcFo5VU9kLzFlMXB5N0RSTzJMaTFjN041ZmlWZGVvNjBnZz09?=
+	=?utf-8?B?dm5hR1NVOERFUVhxTnlGMks5ZW1ZeGlUMFBIL3ZMcWl4OW90NzM3cHh1eXJN?=
+ =?utf-8?B?MncrQUErdlVIV0tUWkpFZlN2TElhdUNEdzZHTFBDRzNyUzVoN3I0VnlsOFRn?=
+ =?utf-8?B?d0tzaERDUEw2TUdLUUowT3JrdHJ6MnlUQktacDJ3OG53TnZKcTdTZ2RzeWhi?=
+ =?utf-8?B?ck9hMVVtNzBDUjdXU29hYitBeXdpc05ST05YT05UaExtZzlDY0IySFNHQ1JJ?=
+ =?utf-8?B?a29VTThRV0VvL1FWSW1BR1BVOW13TTNXcjdVNGJVRHBJN3lGc1M4UHdhSFV0?=
+ =?utf-8?B?d1Ywc01manJRMjBhMjMvU1R2eVBJd1g2Y0tYS01UYTUrUENQREV3QXVYOTNU?=
+ =?utf-8?B?VDhkNVA2S3dtWEhpSXQyTkhDbDllNXVWdHFHVytITE5PVng3MkthZGE4NUxV?=
+ =?utf-8?B?dXhDdWhHSmdRMzg5SzFJSys2M2RUZTZBK2JUV1NwOGc3am9qNDVud3N2SkZC?=
+ =?utf-8?B?N2xvOVhuL0tNQWwzRVNtbkVUTFhYc3VtRXFRSGMyVVJEUXlxYXRiVnBmVmpE?=
+ =?utf-8?B?MXNBVW1VUFBmKzVFYTNGSG5LNWt4KzV2c3JDb2ZadHZyaGJTRjNkb25KTFA0?=
+ =?utf-8?B?ampNODZVUjRsYUFMdVdOUC8xaDEyTmJmZ0lpWFNmdkpQd0E3d0dVaStlZkkz?=
+ =?utf-8?B?QUpkQ0hZQ3I4WFhzRjlFb24vdk54VnlsVC9OQXhUTnNkR2pSMW1WNDJLeEVK?=
+ =?utf-8?B?THRQdE5qb1JOVjF0bTJma05WTWg4S2h5T3Yxc2xicmVvWlZDL0tnb3ZNOUZy?=
+ =?utf-8?B?dWgzaDJPTHp1WHlzNWhzbzRVZnc2Y25MWEFqVjcxcEYyS3ZaQVVtbCtIUjZs?=
+ =?utf-8?B?U0FpeDhSNmo2dWZhWkdNbjkxZDM4dHFJeE91VjNYem5Mc2xIQXk0TXVWZTB1?=
+ =?utf-8?B?bUxscmxpMjQ4b3pTNVVCM2ZobnVCME9xQmJ6bWZXRmh4eGJTMlNETlNLSGNs?=
+ =?utf-8?B?ZDRkdHB4YUIydmZydkJVR3pqTzdtdTl0czM3UGxRQTdreHNvd1U4R292OHlu?=
+ =?utf-8?B?eStiVWkzWVQ3T3NJSG9uUGxMV3ZCSEFNSVY0bndJVldxakZhMUdocXNENGJo?=
+ =?utf-8?B?VXM4c3I3TGs5Yk83ZEx5bDJ5UEdBRkYzZWN5Tk1qSmxaT0tvT1llZHV4WVFY?=
+ =?utf-8?B?Z0tWakRGRERZU2toakpLUXpmTVp4V2xKcndxb2pLSXpsSXN3QkJZYTZZcFlC?=
+ =?utf-8?B?NjNaYjNpa3ZQZ2phY2pjTHVSVjZ1WEc1bW96bHdoaWxwdGxYTE5wUUpuWXhH?=
+ =?utf-8?B?UFNNeHM3ZTJrSzVIaFFrbUtONXhodzMvSHNXS3h0bHJFWkkwbEszY0VRd2Ux?=
+ =?utf-8?B?Y2NIT25YeGV5dUswNHdLR3g3WEx2czRKVmtpYlJURmJxc2JQTUc4SkhSclZw?=
+ =?utf-8?B?bUZtK2ZMWmZlZHY5L01QYUN2dUZrWkM1YTVFdFRLVVkrb0RzWE81Mi82VzJQ?=
+ =?utf-8?B?ZnN4OTJaWFJEdzFOa2F0eUpKak5UODZwcWd2Y2hPSkZ5dzFvMVpaS0hwNVRs?=
+ =?utf-8?B?ZHpnYVFqY1VHNTc3RzlKcVZ1WVFkMHkyN3htZjVSeml5M1BZNVJRdUg2eUZB?=
+ =?utf-8?B?aFNJN0Izci9wanp6U0dPSlVSUTdsNHhMaUN5RGs0WS9FOTZ4eGpaejBGeUVx?=
+ =?utf-8?B?dTdSTTUvR1F5QXJydWh1SnR4L0FlaWJnaUhUMTNEWjNqSFIzU2RLakpva3pm?=
+ =?utf-8?B?eGd3TG03YThKT2FYWmNpRFlUVnA2RWNwOW9JSkNYSXpLMEhZZllJVGtHRk4z?=
+ =?utf-8?B?NGxtNFhDdW5CcVd2NmFEUi9jbDhCS0hiNHRZR1FKWTc3MExTVGMrNGxhNmVM?=
+ =?utf-8?B?Zy9CcFVyM1lJVUVrcFJTd3hBU3AwMzRDREdCTnJaZE5hY1Vmb3VqN3ZHZ0lD?=
+ =?utf-8?B?aUxYVzdpL1dCQjJOZGM5QW5la25xdGVlTGhLUUhGNmlvV0owMFVTVmlLUmZ6?=
+ =?utf-8?B?ZFBCeG9aR0lpcVFJcXR0ZUJ1VlZHeEc0TXJTUFQ2VkZqSnJHL2R2NXAzS3RC?=
+ =?utf-8?B?cWxEYWx4ZFR1QUhpY2FGRDZDeklpUDZCR1pkK3hmR3VVZTk3LzdwN3A5MlRl?=
+ =?utf-8?B?RzdFYWg3ZXkyOVlPemVOeFk3bHRGOUU1UW8zcWRDZkN4WGo4QnIzY0hEVDVG?=
+ =?utf-8?B?bmNPZVFqelFCK3p0cW4xc29vTFZKbDltcy84Qm9za3lTa09LYlJ4LzA4Z09S?=
+ =?utf-8?B?REZUbjZHanJhSUxvbjFKaWttdlkreGxTUUNQeVlJcHNYY2x0YzQwVXkrd0Fm?=
+ =?utf-8?B?VjN0UEgzKzduSXZPN3dVZS9sWmRENGhIajR2SGdyY0dYSU5kWElRTjI2aUhu?=
+ =?utf-8?B?NXNVTmU4VVFBNUZrTXZhYkZHdFFMQmNVczlDb2FjcXYvZHgxaGRZQT09?=
 X-Exchange-RoutingPolicyChecked:
-	jPlnLDe4tRwKnwh+SJfxG+SMSdRCp9WvWJHsAA7egZqRqyYEJjOWrEILh3ACUOjcpIrwiwjC9krtaxVLOBDFGxWn33F2+m7ZptVL4gIszphDdjbq7ZPMGTSMiFhR4DY2H52QToMpZkPQdjW6+hb1ZTKeTacaKSXTZR0YUwBeKX19/RmVf0LQwp8XQ1JI4a7NhBsJRqTfBofQmbbXmQDfH4fME2OInMFzUkjEdFcv0iMwH8UFdhm7elUTSf29qxedys54JVoQEh81dkzJmgYGI6FwmYrkIReaQkCbu6gW/sJuYTDtFKOUZLJPruhaRP11zBOqKYqrG7TGncqq4HCeuw==
+	cm/NdcaIZOGTxO1Vb0iRCV0T+Xi7ZJtFInYVVJPvqOxmduV2njmpfaYPUEs2Ye86Y0oGnhv1lFf57Og7MISWDV851/Xzi9Jo2GWHdmLTXA+STCbQwZiMIcjMWlS27jF8WlvBkp/tH9fK5nL/TCxWmS53825XW5kFnbqtp5ofNoTlYPZKNhT5Ejncbfd4zovC4bwCT++Bjsp6+Pa0FaBh7LspZwSXS1t//L0vTvcTn0ww7MKu9YstRvkjKnrqCyH+6dzSPNUAEKflSFMDxptzNG6cJd3SJ56WjB6s19CAu7dB/TiSP+wNwy6q4VWlS/8krhk9qu3dhjPWrMpMt/sEMg==
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	zgGWjufjSC5TcmJaW2l9xTVnzcqypyB+KgepryOeUkFWFVosT2Uiho5Qr67EpZT1GsyFF5HmqnVpZJG3HfS8B7cWPLWB0gjwKGgrdYdzzOaynPNvftSIWtoU9AAZgX8+w2lDAHccZij8r6YwJG6/u98ITHDf2m+jZ8nUH/IwSZ5jwvM9MF0mgMtVN90ZSf+GQf2buoAcDDNUkFeqXnBqQCe+4LoRsy5M7WwzULNtj0JLMRBzcgWBbZMOEjkRPlxLVvVBmx9BrrVmOH2BqxJRhbox99peZuZsbBsRtXnj25pu67L4i8IoQcUsTMNDLG8aem9SRpD+ar+vKum4pXTCn0sd7K+Ts2BeXe3poecJS3uK4uj4iRcGEf58tFuh90gthPZGT1EjSqVMeXNAUHISpBmE0b8bIUvNx8TtAc/Vj7y8mD5Q8oDTZC/weWyFMgoGVusJKixb65lhueAY74pCP+ts7Nlz9xmZVUeSh2KUUYb6UOk2AJNAmwbTT4Kv4xsuYJlKudb4xRIWl4EVsAUmUX0D3XC2ADtMgw4eZ5klolQboYimsWWXZgGEKilSwaQoYUjn72JNAvTXMObvvE513WUbk0VrTp8xcYT+8LimfTg=
+	UIYIKDoyFw0IgP21bEDP81stCjbJyXQXUpWQRlmztNw9W7QFm4DZjiRN62mwUCjmPiBc2o+msJu/RhAtmg2mMv5iASE3MhcvVJltyAFEafDTpRR+GJ+zrmIJ+uClsnSCq7d0F1UHfmwVbWKpBNJwLXIVqYBPGjZKBjZhWyI+KCtIrlBhj1moozG+/c7pkQ14T3bKJL5FkrhNTQCm50l4dZkzYQwbie6C1SbWkRP9YvemQjR1kmaz+RAvNqT/c0Q799W2xoNpkwn6Gbq05v+tRYUBDgb1aKs9wvotVdAP2ELSxOwV5OgmkBC0FV5ie+q8nH9bTBrV91g/AxozFwhv3nKTXVwuhGFQcYAvSkPE28ZIy/E0PmDx65fA7oBCwIlPYGCUe6cs/9ArPJzlUmQPyEdROPmjUlDWTqyEtr/tIeg5Xw6U/U7ZTFqOGS4vdxG0LL/1TGNdJiqmBdZf8jDozmOZDlHT3H22Qz6uOlLlX2plAiQX7GL46piaVFe6Aye34+9o8GjNp6D+mfeJBs/oSoflhXqJhHPSt+JNyjh/r/8KwDIzwk/iAeRe6vH7iU1ATYyl6vcyCqqbgU6nV1SYbSG7tpGOdJreBd4lYceU8Io=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4300e263-175d-4231-1c04-08df13c4d813
+X-MS-Exchange-CrossTenant-Network-Message-Id: 618f5df5-0149-4a51-2410-08df13c61cc8
 X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2026 07:33:47.3228
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2026 07:42:51.8865
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Avndg7W8RH9Yc5aWgw1oRqt31nD5rq1b2CtI+ENB4XbA7c7rjAWzQRUeybm9rqEwqRvWPhh3+pfmToEnKhPHxw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CHAPR10MB997697
+X-MS-Exchange-CrossTenant-UserPrincipalName: UGbbXwDu6hWFgpzlnk6xuzlhEpzOViRIxfJpFSWjtkm91EDi6ImpFQYHvbdAy4MCQJoTINSsqhFBcASA+fD3mw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB998057
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-09-15_05,2026-09-15_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
- lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=0 bulkscore=0
- malwarescore=0 spamscore=0 mlxscore=0 mlxlogscore=999 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2609040000
- definitions=main-2609160096
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE2MDA5NyBTYWx0ZWRfX0fNU6KMSBmSm
- yEXrtz/IShPTqNvoiYUAl9QArj4hm+33qcdsrkpkdYTiqFvMzIJqP0B9qIe0MlUKKmVyHk0FJIh
- WauHyiivZ2xx1RW4dieX+w9e/KMUdwCbvXEwiL1zlz2OCpULp9Z/mrqZNYsJfAilxu/ZByRma/K
- RnN3Ubd0bBCF30lZ2tZ9OlheaexskSQihnXtWwNUcwA6oQX8L8kXTXBTMr+OWdQJE64VtbzUUrH
- ymcJqSvpOdw890wV+ZHiOFu3vCqzO5DCY1j0kdjJi4mXgnaNJTCxr64cxAweo/UckdVM4+hDXoo
- akNUm3pH4mfyyD3eMmcOF2XBDwpRgWrF3tyDad6DfU2rkuItn+Wrk+YIfHJJyIB7K9tyDSMOW6O
- C8aVW7ieNqjM0G0pbnWnBtCvOjBeKDSFwBXh0CksiXUwJoEvglaL0jmgSScLI3pqHUSnVD3Gkub
- 0hw4quMlP0Pl/nW/mcYY5xy/qYFor1y8iTZOPrk0=
-X-Proofpoint-ORIG-GUID: MNkxU1JKI0TfFmfCRAmswsjjtkf1bnFB
-X-Proofpoint-GUID: MNkxU1JKI0TfFmfCRAmswsjjtkf1bnFB
-X-Authority-Analysis: v=2.4 cv=HPhWhYtv c=1 sm=1 tr=0 ts=6aaa4661 b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ lowpriorityscore=0 mlxlogscore=999 adultscore=0 phishscore=0 malwarescore=0
+ mlxscore=0 spamscore=0 suspectscore=0 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2609160099
+X-Proofpoint-GUID: Q-op5x5LhhyoPE9omUrcciFmxBY1JUUa
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE2MDA5OSBTYWx0ZWRfX+Ap1tEr+jgXf
+ /E+E3JVGSssyZN1n0MUVc58RhXpAd6wdZRnQ3awfQfXKMjTuvLjIAK/wR2vFu5c4FflqHWxlXU2
+ mVgOaWQKDoWWGPydNUdXJI+5CcJfN+e+FPNw3PcYyLCVVHU7IF7T
+X-Proofpoint-ORIG-GUID: Q-op5x5LhhyoPE9omUrcciFmxBY1JUUa
+X-Authority-Analysis: v=2.4 cv=c9k+0h9l c=1 sm=1 tr=0 ts=6aaa4882 b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=VdqzKS8jKosA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=NEAV23lmAAAA:8
- a=yPCof4ZbAAAA:8 a=NgNP-luukT9tZliAkbsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=O8hF6Hzn-FEA:10 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf
- awl=host:12107
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE2MDA5NyBTYWx0ZWRfX2xPRseWE0x5X
- lEUC16qemJwSzw9elOUqZs3oFn7FcILfZvw/K5fOGg3sOwkTkgo9vJOZBB2iLgDrt/0DiiP2cEn
- LjT5NuA7bQ7iMIMKHQku4QLyAhEOChTHci/4zcbzeKLYDc6kmBcP
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=x0eKOSpe3m1H3M0S9YoZ:22 a=yPCof4ZbAAAA:8
+ a=VFQcqQG27K28gTGTjAIA:9 a=QEXdDO2ut3YA:10 a=WmVTiCyuxqgg3mnwYu6p:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE2MDA5OSBTYWx0ZWRfX9ia5dXCiMjqm
+ kj11xlXePXA9XE9AOG6XqQoZj/8H7gfxm7aA07Ek7RU8XNnO2LgFL9dXbcVC83IS9Pvaufk+PJj
+ vPaCTzr63bzzR1goqTXNVJ88nnjcdQ1IKrCeuRvyZy5k+0rPdkbXGuL/QKSx+7yFLsyyukszcR7
+ DX62xJBo1ycw02/7McfCB6uzUwwDNenXlndYMMlL0ExEIPbbFDVFo1Mino9yXLVIK9hxIk+YL9W
+ 3m3kuie5UbCVo4Lo5qks2By8Vp/9sQIV9n+0tkMdfSbJ24oWbEo4FhYQ5Vezcdk1WKBX823Dp9P
+ WZFz5BlPfatEjPT0uuavdi87TpXGiGTMxMqcUCnJqkSE9md9BiI/z5q+O+gdzfLu+DJIBt+35eL
+ PpDycaGPO1Jccj93WxNBwDcLcMUSWhqI7awGfB2eS988qgEac/BdceojhU63sMtQqZntrtswQSu
+ 68LEXLxW4l6BQnRwuSw==
 
-On 10/09/2026 10:37, Eduard Zingerman wrote:
-> On Tue, 2026-09-01 at 17:57 +0100, Alan Maguire wrote:
->> Extend btf__permute() with an optional transfer mode.  Type-map entries
->> marked with BTF_PERMUTE_ID_TRANSFER are removed from the input BTF and
->> copied into a newly-created split BTF returned through
->> btf_permute_opts.transfer_btf.
+On 14/09/2026 08:50, Nicolas Schier wrote:
+> On Tue, Sep 01, 2026 at 05:57:52PM +0100, Alan Maguire wrote:
+>> Add CONFIG_DEBUG_INFO_BTF_INLINE to generate BTF inline-location
+>> information with pahole v1.31 and later.
 >> 
->> While moving types, remap type IDs for both retained and transferred
->> types, preserving split-BTF references to the parent BTF where needed.
+>> Enable pahole's inline feature and pass --inline to resolve_btfids.
+>> This extracts LOC_PARAM, LOC_PROTO, and LOCSEC types into a split BTF
+>> blob named <output>.BTF.inline while the ordinary BTF remains in .BTF.
 >> 
->> String handling has to be done carefully as we do not want to have
->> strings that only exist in the split BTF to impose a cost on the base.
->> Copy referenced strings locally first, compact the parent string table
->> after the moved types are gone, rebase split-string offsets, and compact
->> the split string table.  This leaves strings exclusively needed by moved
->> types in the split BTF while retaining shared strings in the parent.
->> This will be important later for function names of inline-only functions;
->> these should not take up space in base BTF but should have strings in
->> inline BTF only.
+>> Embed the resulting blob in a .BTF.inline ELF section for vmlinux and
+>> modules.  Add the vmlinux linker-script output section to avoid it
+>> being treated as an orphan.
 >> 
->> This all provides the support needed to place inline-only BTF
->> in a separate BTF section, which resolve_btfids will use later.
+>> Use the inline pahole feature unconditionally for both in-tree and
+>> external modules; the generated split BTF has the same format in both
+>> cases.
 >> 
 >> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->> Assisted-by: Codex (GPT-5)
 >> ---
+>>  include/asm-generic/vmlinux.lds.h | 11 +++++++++++
+>>  lib/Kconfig.debug                 | 17 +++++++++++++++++
+>>  scripts/Makefile.btf              |  7 +++++++
+>>  scripts/gen-btf.sh                | 17 +++++++++++++++--
+>>  4 files changed, 50 insertions(+), 2 deletions(-)
+>> 
 > 
-> Hi Alan,
+> [...]
+>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>> index 1244dcac2294..dd1b2d9ebe99 100644
+>> --- a/lib/Kconfig.debug
+>> +++ b/lib/Kconfig.debug
+>> @@ -425,6 +425,12 @@ config PAHOLE_HAS_LANG_EXCLUDE
+>>  	  otherwise it would emit malformed kernel and module binaries when
+>>  	  using DEBUG_INFO_BTF_MODULES.
+>>  
+>> +config PAHOLE_HAS_INLINE
+>> +	def_bool PAHOLE_VERSION >= 131
+> [...]
+>> +config DEBUG_INFO_BTF_INLINE
+>> +	bool "Provide information about inline sites in BTF"
+>> +	default n
+>> +	depends on DEBUG_INFO_BTF && PAHOLE_HAS_INLINE && SYSFS
 > 
-> What do you think about an alternative approach to permute and
-> resolve_btfids changes described below?
+> [...]
+>> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+>> index a1812985a61a..d42dbc8d7199 100644
+>> --- a/scripts/Makefile.btf
+>> +++ b/scripts/Makefile.btf
+>> @@ -22,7 +22,14 @@ endif
+>>  
+>>  pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
+>>  
+>> +btf-inline := $(CONFIG_DEBUG_INFO_BTF_INLINE)
+>> +ifneq ($(btf-inline),)
+>> +btf-inline-feat := inline
+>> +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=$(btf-inline-feat)
+>> +endif
+>> +
+>>  export PAHOLE_FLAGS := $(pahole-flags-y)
+>> +export BTF_INLINE := $(btf-inline)
 > 
-> Instead of specifying a permute mapping can just rebuild two BTFs from
-> scratch: base BTF w/o LOC types and .BTF.inline BTF with LOC types only.
-> This would give strings dedup / compaction for free and would not
-> require further changes in libbpf.
 > 
-> Concretely, commit [1] (branch [2]) uses the following steps:
-> - Traverse all types reachable from LOC_PARAM, LOC_PROTO, LOCSEC
->   entries and mark them as having LOC color.
-> - Traverse all types reachable from the remaining types
->   and mark them as having MAIN or SHARED colors.
-> - Create a new base BTF object and copy all MAIN/SHARED types there.
-> - Create a new .BTF.inline object with base set to the new base BTF
->   object, and copy all LOC types there.
+> As btf-inline and btf-inline-feat are not used anywhere else, and 
+> CONFIG_DEBUG_INFO_BTF_INLINE can only be set for PAHOLE_VERSION >= 131, 
+> this looks a bit noisy to me.  I think it would be good to keep that 
+> change in scripts/Makefile.btf as short as possible, e.g.:
 > 
-> This seem to be on par with your current branch with regards to
-> speed / memory usage:
+>     pahole-flags-$(CONFIG_DEBUG_INFO_BTF_INLINE) += --btf_features=inline
 > 
-> │ Version                 │ Elapsed, mean ± SEM │ Peak RSS, mean │
-> ├─────────────────────────┼─────────────────────┼────────────────┤
-> │ Original permute        │ 338.8 ± 8.1 ms      │ 71.20 MiB      │
-> │ Proposed                │ 284.1 ± 10.2 ms     │ 70.10 MiB      │
+> and for scripts/gen-btf.sh something like:
 > 
-> But seems a tad simpler in terms of implementation (~ -250 lines of code).
+>     if is_enabled CONFIG_DEBUG_INFO_BTF_INLINE; then
+>     	BTF_INLINE=inline
+>     fi
 > 
-> I also changed how LOC-only FUNC objects are identified, by using a
-> generic type graph traversal utility function (btf_mark_reachable()).
-> This is a bit less code and opens a possibility to move some more
-> types to .BTF.inline:
-> 
-> │ Section     │ Before (bytes) │ After          │ Change   │
-> ├─────────────┼────────────────┼────────────────┼──────────┤
-> │ .BTF        │ 5,207,078      │ 5,047,510      │ −159,568 │
-> │ .BTF.inline │ 9,867,471      │ 10,027,039     │ +159,568 │
-> 
-> This is the same change, but when allowed to move regular types from
-> base to .BTF.inline, if those types are not used by base.
-> 
-> [1] https://github.com/eddyz87/bpf/commit/abe515962632ad51f8aa50e44354b88f80bbd606
-> [2] https://github.com/eddyz87/bpf/tree/resolve-btf-ids-btf-inline
->     (tests commit is 100% slop, please ignore it).
-> 
+>
 
-Thanks for doing this Eduard, it looks like a really neat solution! The permutation
-approach - which is really a permute and a segmentation - felt a bit clunky and
-doesn't feel like it belongs in libbpf really (it's a very specific problem).
+looks good, I'll make that change for the next revision (splitting this into multiple
+series so the kbuild aspects will follow a bit later). Thanks again for taking a look!
 
-I'll play around with this a bit more, and with your permission maybe we could
-include it in the kbuild inline series? (I'm splitting up the work into the
-libbpf/kernel location support needed for pahole, and a followup to add the
-location info)
-
-Thanks again!
-
-Alan 
-
+Alan
