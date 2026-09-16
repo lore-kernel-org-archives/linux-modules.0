@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD943B14BA
-	for <linux-modules@vger.kernel.org>; Wed, 16 Sep 2026 16:05:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1133AD531
+	for <linux-modules@vger.kernel.org>; Wed, 16 Sep 2026 16:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789574703; cv=none; b=a9a77X8Y/oB4i91dalKgdzKz7/HRyu2zzxiZ1vj2aaHNcXpHhijq07AvVss5gf7G8Zp66wIxg1MvUNkv6AshO5CZW4LbHFC+Wd7N57+hQGuAZlhShrbPQRUwTYWdJ1CKhAxt/Ifu5BI4usej/8jmN8xW54fjCHIf0gFB6bM753A=
+	t=1789575879; cv=none; b=WEWQq4RK9X/rNB+u4tHiCes/o+fz1S58qHsmUUAl/TeGouTAspHSHhkx6QoST9QXuZhcZ3lGAAacDasuSaJHdR9vwAVPQwfbz6jYhFCRxOEEkPiRzHGPiPZCB9oGWoAy5VxGHWTJjMDtxpgbhb6grm/gD2gOe5iy8ZLfNj/FJL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789574703; c=relaxed/simple;
-	bh=02CKzNwdGSd2DWsJDF5ZdUNfGdj/TgMpUou4hpIsc7s=;
+	s=arc-20240116; t=1789575879; c=relaxed/simple;
+	bh=mq9UopfIDuXZQ88sALARPTzjv8ksH8vohBmoXR/s4Ug=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bXGdr1KMs6wZyvHC2pB84zb+05gmAtWx6HBIfsjheVwjqGAoArZT2LziaCjFrN4sFgI6gPJO0ony4IT3r1OKOsn2t6uh79tiqNdppRMGBxb48BR+1sXPGfslxFh+sFg6rfWYjjE79fTlZtfumh06J8T3TmIMmHacdhmHdkYV3F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKOEghhf; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=M6ZaRGIgqyRinw+P/HnKn5BCtNmGS0nR7ZMhCVC2dk3xb0wYGMxuMQ+Da0ZkkCfYslEN4Q6QL6eTy97wuiOumCx6vD4BaG8GAFCI8UfRN+rd8tTAZTpHlDeCIKt4e/A1Lb7DlKshBobUJrLpomYOtZzfi8oL70SZv2zI5DkSwSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mvnePnaj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKOEghhf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4502A1F000FF;
-	Wed, 16 Sep 2026 16:05:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mvnePnaj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6241F000FF;
+	Wed, 16 Sep 2026 16:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789574701;
-	bh=BGFXcKa4LMmifwRNW3tNkMB2h2wJohAf/+UEkNsg8Bw=;
+	s=k20260515; t=1789575867;
+	bh=4SQlnidzW+1l/xiJhjGGyJPT2AkWd+OwVikR6YFgf60=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hKOEghhfWWSmoxceEBKKdHNr2HiCRnrKpFiTRddFe1CIs0yvs9VpVAuZzMpImnSCh
-	 wD3zUaxguKMrUSBqc7bbIKcFCrUpIRi6qu0UnyOkpHL4m6dxyRo3mKigT+U75Pdf/l
-	 XXLAK3ZgGPBsYhpxxrWP/20lfer5m0XH5R/bWGjLyRClkZCpSmPSAfQGKvjH8NbciF
-	 ylES7vjP7QqWIQ8CkQcvkgASrILx4sk2BKrGyG5ATR1ze/BTGtPKrYyWNg6cUVSKXR
-	 vYJH2kTSAh6MqIN39Bo+RbFOtUtf/nAnmX/Zlc2rZ+umSUDWi2Wyz0V3FmcrMonsfk
-	 9Qcx2OOSvMN7w==
+	b=mvnePnajS2kW8kE6SyqZiwiPWT8nmGc1YqZWv7Pezdg49sqPu/3YsARD9GpHbvF+T
+	 iq/w0Cs9vZ/NF1rR6Tet9325N+9XnhIBqqVXaBigLr/c9NqidAtSBC0u1Hr1I4JbdH
+	 LiZfNlOZcNX/+fEiqDDAoC2ca3egwWkoUlBoq5VDcclYQy2c5k7I8T9uM0u0rNTiYK
+	 T7lT/0jbOlSXLxbKzNg3QUJSwXOA4HxWr26dvsuCKUZvHJ3vP803fz5BlsBHjpku69
+	 0p3EhiTJVUOMMny86iVfDJ15GdaDJ9jv6ea52Wl66fLKhvgM+/KdVGe00l1gj9wHCY
+	 xkkBDD5eiPlXQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v10 14/38] dyndbg: Bind callsites and classmaps to
- DDEBUG_MODNAME
+Subject: Re: [PATCH v10 24/38] selftests/dyndbg: Enable
+ FT_classmap_inheritance
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jim Cromie" <jim.cromie@gmail.com>
-Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260916-dd-cmap-part2-clean-v10-14-af4cf4767707@gmail.com>
+Cc: linux-modules@vger.kernel.org, dri-devel@lists.freedesktop.org
+In-Reply-To: <20260916-dd-cmap-part2-clean-v10-24-af4cf4767707@gmail.com>
 References: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
- <20260916-dd-cmap-part2-clean-v10-14-af4cf4767707@gmail.com>
+ <20260916-dd-cmap-part2-clean-v10-24-af4cf4767707@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 16 Sep 2026 16:05:00 +0000
-Message-Id: <20260916160501.4502A1F000FF@smtp.kernel.org>
+Date: Wed, 16 Sep 2026 16:24:26 +0000
+Message-Id: <20260916162426.BF6241F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -47,65 +47,82 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] dyndbg: overriding DDEBUG_MODNAME breaks loadable module classma=
-ps
+- [Medium] selftests: dyndbg: load-time parameters truncated due to shell q=
+uoting bug
 --
 
-commit c306ec85ef6e2f768827879da6cc3ed714ab0291
+commit f2f3cad7addd566a67a218932463053f35d4d782
 Author: Jim Cromie <jim.cromie@gmail.com>
-dyndbg: Bind callsites and classmaps to DDEBUG_MODNAME
 
-This commit defines DDEBUG_MODNAME to allow subsystems to consolidate their
-module names in dynamic debug by overriding it in their Makefiles. It binds
-DDEBUG_MODNAME into the callsite and classmap declarator macros instead of
-hardcoding KBUILD_MODNAME.
+selftests/dyndbg: Enable FT_classmap_inheritance
 
-> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-> index baf5c0853f459..85863e24ad134 100644
-> --- a/include/linux/dynamic_debug.h
-> +++ b/include/linux/dynamic_debug.h
+Exercise classmap state inheritance between supermod and submod,
+verifying that class settings and controlling parameter states propagate
+from parent classmap definitions to dependent class users upon module
+load and during runtime reconfiguration.
+
+> diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/t=
+ools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+> index 09a8dbf239dcf..51338ebc74bf8 100755
+> --- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+> +++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
 [ ... ]
-> @@ -121,7 +129,7 @@ struct ddebug_class_param {
->  	static struct ddebug_class_map __aligned(8) __used		\
->  		__section("__dyndbg_classes") _var =3D {			\
->  		.mod =3D THIS_MODULE,					\
-> -		.mod_name =3D KBUILD_MODNAME,				\
-> +		.mod_name =3D DDEBUG_MODNAME,				\
+> @@ -298,6 +299,78 @@ function FT_basic_queries {
+>      ddcmd "file $f =3D_" "$f"
+>  }
+> =20
+> +function FT_classmap_inheritance {
+> +    v_echo "${GREEN}# TEST_MOD_SUBMOD ${NC}"
+> +
+> +    ifrmmod test_dynamic_debug_submod
+> +    ifrmmod test_dynamic_debug
+> +
+> +    # modprobe with plain-old +p & 3 class enablements
+> +    my_modprobe test_dynamic_debug \
+> +	"dyndbg=3D+p;class D2_CORE +pf;class D2_KMS +pt;class D2_ATOMIC +pm"
 
 [Severity: Medium]
-Will this break loadable module classmaps if a subsystem opts into the
-DDEBUG_MODNAME override?
+Are these load-time parameters truncated during module load due to how the
+shell handles quotes?
 
-When a module is loaded, the module loader assigns the physical module name
-from the .ko filename to dt->mod_name in ddebug_module_notify(). However,
-this macro embeds the overridden DDEBUG_MODNAME into cm->mod_name.
+When bash evaluates and strips the double quotes before executing modprobe,
+modprobe constructs the kernel options string without adding quotes around
+the parameters. The kernel's parse_args() function (using next_arg() in
+lib/cmdline.c) splits module parameters at unquoted spaces.
 
-In lib/dynamic_debug.c:ddebug_attach_module_classes(), there is a strict
-comparison between these two names:
+This means it treats D2_CORE and +pf as separate unknown parameters. The
+dyndbg parsing logic executes +p but fails on the truncated class command,
+completely ignoring the actual class configurations.
 
-    if (!strcmp(cm->mod_name, dt->mod_name)) {
+Does this defeat the test's intent to verify load-time classmap inheritance,
+allowing it to pass only because the golden hash recorded the incorrectly
+applied +p state?
 
-If the DDEBUG_MODNAME differs from the physical module name, won't the
-classmaps be silently discarded for loadable modules?
+It appears this space-splitting flaw persists through the end of the patch
+series, and the newly added FT_test_classes also replicates it.
 
-Also, won't queries against the consolidated module name fail because
-ddebug_change() filters using the physical module name?
+> +    verify_control_slice '\[test_dynamic_debug\]'
+> +
+> +    set_param 5 /sys/module/test_dynamic_debug/parameters/p_level_num
+> +    verify_control_slice '\[test_dynamic_debug\]'
+> +
+> +    my_modprobe test_dynamic_debug_submod
+> +    verify_control_slice 'test_dynamic_debug_submod'
+> +
+> +    # fresh start, to clear all above flags (test-fn limits)
+> +    ifrmmod test_dynamic_debug_submod
+> +    ifrmmod test_dynamic_debug
+> +
+> +    # load submod, which loads supermod
+> +    my_modprobe test_dynamic_debug_submod \
+> +	"dyndbg=3D+p;class D2_CORE +pfs;class D2_KMS +pts;class D2_ATOMIC +pmf"
 
-lib/dynamic_debug.c:ddebug_change() {
-    ...
-    if (query->module &&
-        !match_wildcard(query->module, dt->mod_name))
-            continue;
-    ...
-}
+[Severity: Medium]
+Does this submod load suffer from the same space-splitting issue?
 
-Subsequent patches in the series, such as the one introducing
-dd_set_module_subrange(), appear to preserve this logic.
-
->  		.base =3D _base,						\
->  		.map_type =3D _maptype,					\
->  		.class_names =3D _var##_classnames,			\
+> +    verify_control_slice 'test_dynamic_debug'
+> +
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260916-dd-cmap-pa=
-rt2-clean-v10-0-af4cf4767707@gmail.com?part=3D14
+rt2-clean-v10-0-af4cf4767707@gmail.com?part=3D24
