@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2707525A77;
-	Wed, 16 Sep 2026 15:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1BC53447D;
+	Wed, 16 Sep 2026 15:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789572785; cv=none; b=h/0XkIRtzb6HWsQE1QerJILC+PDZoEPz2NnRbRlpXq4i7feEaC/OmX6gn2hY5OEF5S0OBsxzmLLoJnGak7v8309tri/lDNSI7eZd1ya1f1yjhJ9Te0geGpJAT28mPQOkn1KhvGvNCcxcjXOY1TXFKH9dgKdki8beVPScQZOzwWU=
+	t=1789572784; cv=none; b=uNpi4HU3CY0pKXpxL1TamPC7czfiv9IsiLBRbIm2lLBzZK5nFYb4gmkoQMjq/eWtgZ4n4hJ4D2r02dCzaDKlT1cbfMAvQL5TX029CqyYPpSlSgGD4Lo0umt1XQUlNIMZtDB3cAa7w0fH+BxMlenyRHL1GnDVU3s204qOGbG3VbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789572785; c=relaxed/simple;
-	bh=9g0voY1WpZwJrJcVSXBymdpQKXKsZyQJHLmkfL5AT1A=;
+	s=arc-20240116; t=1789572784; c=relaxed/simple;
+	bh=EiaKxBcFsbn0W1clC6eKs9DiqBTaOD5y5X/TCWlwY+o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=d8MYvjp7Dku8vJmmp/tMb5+M9SyNT2tSh4PJ2k0mZehT6uesR8r2mZkoZLbowSU4IOxJYHmVzctqTxq/vt0aoL4HuBCQUXlOYVNwSIxAgxig6CzWNe5u/SduUGv2sme57weveNm7OV6GAqEFD+pIrpkVsopJYZ5a6R2lQkZb1Es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IzVE0vMX; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=GwYfgNpburUmP6pM8Tnfe9LvF/r+TlYFx0j/AyV1KyopApRBzsOI58krqnI3cWqiZdFFctPjxMQYpCePfToeyg9hM1s19u/GUr3htCVnBVbSIi7h8A6t/vdpmaOfZxfzryv1iZ3cXYLninqeLfJREgP9Vx4CF5E3i6kpoVCOmKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EUjFr55B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IzVE0vMX"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 81398C4AF12;
-	Wed, 16 Sep 2026 15:33:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EUjFr55B"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 76E44C4AF50;
+	Wed, 16 Sep 2026 15:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1789572782;
-	bh=9g0voY1WpZwJrJcVSXBymdpQKXKsZyQJHLmkfL5AT1A=;
+	s=k20201202; t=1789572783;
+	bh=EiaKxBcFsbn0W1clC6eKs9DiqBTaOD5y5X/TCWlwY+o=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=IzVE0vMXMoXCsjt9DuOwuyAUozmZ4ktLinDUuL+st/gYVsl2/QY8vQ5oWs35qQ79m
-	 vRKfORPFln2kRP6sm4hzn+tB938K3JSBQa0E4AD5mwSUOX015w3+HfGLVBTLNh2kJx
-	 YmfLoNYI7fcKz/5CyICZuV50M0uAG7U51xzhwR38WTm1UNX9jJgGi4+XgIdPdI8bIL
-	 i3dJtySPR1NPNH0SiwVnrNoBDU959w6Rx9i0zMORZjHJoGQ694gqNqCTAe7nZ7vYZl
-	 X0tDBjen5QkT93i+OU25CrIXyrUM98wsao04Ha24RwRr1itkHFNaNipfgyfa2wL0BI
-	 4eRD5NofWVwMw==
+	b=EUjFr55BndcDC8BPtRxe7Fcip3zpyHGUv5DUzBMSbr7fIIWxFHKD2o+hmPkn+OGLU
+	 HdAI60lETuPjJwrI6ZHPmNx6pL9moWmX9pYiiXoj3tuJwWslPmdVnSMJhZeqJZpTOB
+	 xg7KJq98TI17h08mZ5TiwFLXXGdKF3Pn9mkbslbXUtrxPVt5t4ESI1S9oaHcO+1BQ9
+	 2ecjGEs+4mCXy6zovp9PsODp3Bwz281tkBSGgg9s8R6uvGMVvxvyYIe2CMzMziEAZ7
+	 8ZYtYV/qeE9zBCpZ7omkTVXGrNMQ+gFCy7hknYFFgrTxzpIzxO9m8rIUtNUuoAIwPZ
+	 6xCFE7my2Qb+A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C9FAC982C3;
-	Wed, 16 Sep 2026 15:33:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6542FC982C9;
+	Wed, 16 Sep 2026 15:33:03 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Wed, 16 Sep 2026 09:33:20 -0600
-Subject: [PATCH v10 28/38] dyndbg-API: promote DYNAMIC_DEBUG_CLASSMAP_PARAM
- to API
+Date: Wed, 16 Sep 2026 09:33:29 -0600
+Subject: [PATCH v10 37/38] dyndbg: add +c flag to count advantage of
+ classmaps for DRM
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260916-dd-cmap-part2-clean-v10-28-af4cf4767707@gmail.com>
+Message-Id: <20260916-dd-cmap-part2-clean-v10-37-af4cf4767707@gmail.com>
 References: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
 In-Reply-To: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -63,14 +63,13 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
  linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jim Cromie <jim.cromie@gmail.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>
+ Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789572777; l=15336;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789572777; l=15846;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=HeXIsZix2F/mOCg1sqddVl9Q55ZdM/0ngfkTnOZFN/0=;
- b=qCciUY2UpzGYTtl0f/nnyEqLb2pe7bcDXbs+ERk+VNZ83zaVuMI3jl9oyop5oVaeg2h02ydun
- 1d08JQm3JFWBXHl/jTdz0OibS+B4w4RqEEMrIwPvrbOX/2HfoLfX/J5
+ bh=UgEpeUYYslZ7ljuve3ooJVvCgWAYyjl+oKIxiw/dQXU=;
+ b=I+A9sR8IVqhFZKqqppVFj+Dfgb8RkKVr+LJ84t42pk5yqvp7mzz6DwHHEnxpS3aPmIgtsGgjf
+ EgWi7Cl71SIACoT5YuQ0jghR9CS5sRPe6zlXsgGEQB1OkY0ND6lxNlC
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -80,385 +79,491 @@ Reply-To: jim.cromie@gmail.com
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-move the DYNAMIC_DEBUG_CLASSMAP_PARAM macro from test-dynamic-debug.c into
-the header, and refine it, by distinguishing the 2 use cases:
+Introduce a +c flag, to increment a per-cpu counter: ddebug_count
+when a flagged pr_debug() is called.
 
-1.DYNAMIC_DEBUG_CLASSMAP_PARAM_REF
-    for DRM, to pass in extern __drm_debug by name.
-    dyndbg keeps bits in it, so drm can still use it as before
+Reset the counter with:
+  echo reset_stats > /proc/dynamic_debug/control
 
-2.DYNAMIC_DEBUG_CLASSMAP_PARAM
-    new user (test_dynamic_debug) doesn't need to share state,
-    declares a u32 to store the bitvec.
+and see the count value with:
+  tail -n1 /proc/dynamic_debug/control
+  #: total count: 2295401
 
-__DYNAMIC_DEBUG_CLASSMAP_PARAM
-   bottom layer - allocate,init a ddebug-class-param, module-param-cb.
+This counter lets us count drm*dbg() callrate without doing the
+printk; it counts how often upstream drm_debug_enabled() would read
+main memory, evict a cache-line, and test a bit.
 
-Also add stub macros, clean up and improve comments in test-code, and
-add MODULE_DESCRIPTIONs.
+CONFIG_DRM_USE_DYNAMIC_DEBUG=y gives drm a per callsite static-key to
+avoid that cache-line insult.  On my amdgpu + nvidia laptop, thats
+~3200 of them.
 
-cc: linux-doc@vger.kernel.org
+The benchmarks below are from a recent build running on my asus
+amdgpu + nouveau laptop, using scripts from below the snip.
+
+  #> count_hits 30 hammer_vk --
+  Banging on: hammer_vk (&)
+  [1] 100847
+  [1]+  Done                       hammer_vk
+  #: total hits: 2295401
+
+  #> count_hits 30 hammer_vk -- DRM_UT_CORE
+  Banging on: hammer_vk (&)
+  [1] 99910
+  [1]+  Done                       hammer_vk
+  #: total hits: 2204406
+
+Notably, the DRM_UT_CORE category dominates the call traffic, not
+DRM_UT_VBL or any others, which contribute little extra to the above.
+
+To see the distribution of debug categories (for vkcube load)
+
+  #> isolate_drm_hits 2> /dev/null
+  Starting isolation study: 10s per class using vkcube
+  ----------------------------------------------------------
+  DRM CLASS            | TOTAL HITS
+  ----------------------------------------------------------
+  DRM_UT_CORE          | 85305
+  DRM_UT_DRIVER        | 0
+  DRM_UT_KMS           | 1435
+  DRM_UT_PRIME         | 0
+  DRM_UT_ATOMIC        | 13645
+  DRM_UT_VBL           | 4071
+  DRM_UT_STATE         | 1780
+  DRM_UT_LEASE         | 0
+  DRM_UT_DP            | 0
+  DRM_UT_DRMRES        | 0
+  FOO                  | 0
+
+REVIEW:
+
+In every minute, 12 vkcubes issue ~4.6M drm_debug_enabled(__drm_debug)
+macro-calls.  To test the bits, they all *may* go out to main memory,
+though __drm_debug is ro-mostly.  Still, theres significant cache-line
+eviction, and potentially meaningful costs we can avoid.
+
+With CONFIG_DRM_USE_DYNAMIC_DEBUG=y, each pr_debug call-site is
+replaced by a static-key, with the off-cost of few NOOPs, avoiding all
+the unpredictable downsides.
+
+NOTES:
+
+The +c flag invokes the callsite, but avoids the heavy syslog writing.
+It is currently independent of +p, but it could be compressed into a
+state-machine, and the bit recovered, but not til we need to do so.
+
+The +c flag has no predictive quality; to count usr_dbg() callsites,
+you must have reimplemnted them already with pr_debug.  This just
+gives DRM some numbers to consider, to balance against the work needed
+o test this series.
+
+Assisted-by: Gemini-CLI:gemini-2.5-pro
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
 v10:
-. define _DPRINTK_CLASSBITS_INIT and initialize static state bitvector.
-. add module_param_named fallback for DYNAMIC_DEBUG_CLASSMAP_PARAM* in !CONFIG_DYNAMIC_DEBUG.
+. add __DYNAMIC_DEBUG_BRANCH() checking _ENABLED while DYNAMIC_DEBUG_BRANCH() checks _ACTIVE.
+. add early return guards in __dynamic_*_dbg() helpers checking _ACTIVE.
 
 v9:
-. fix 4-argument signature for DYNAMIC_DEBUG_CLASSMAP_PARAM_REF fallback macro stub.
-. update format specifier from %d to %u for inrep in ddebug_class_param_clamp_input().
-. drop duplicate v2pr_info() line in param_set_dyndbg_module_classes().
-. drop unused CLASSMAP_BITMASK(width, base) define in test_dynamic_debug.c.
+. add missing kfree(tmpbuf) in reset_stats handler before early return.
+. sum across for_each_possible_cpu() in get_ddebug_call_count() for hotplug stability.
+. update !CONFIG_JUMP_LABEL branch check to check _DPRINTK_FLAGS_ENABLED.
+
+function ddcmd () {
+    local cmd="$*"
+    # Direct write - assume the parent script is run with 'sudo' or as root
+    [ -f /proc/dynamic_debug/control ] || return 1;
+    if ! echo "$cmd" > /proc/dynamic_debug/control 2>/tmp/dd_err; then
+        local ret=$?
+        echo "ERROR ($ret): $(cat /tmp/dd_err)" #>&2
+        # Check dmesg for the "!" syntax error on wk-baseline
+        dmesg | grep -i "dyndbg" | tail -n 2 #>&2
+        return $ret
+    fi
+}
+
+function _get_cal_count() {
+    if [ ! -f /proc/interrupts ]; then
+        echo 0
+        return
+    fi
+    # sum all CPU columns for any line starting with CAL:
+    # the awk starts at $2 to skip the label (CAL:)
+    # NF-2 skips the trailing text "Function call interrupts"
+    grep "^ *CAL:" /proc/interrupts | \
+        awk '{ for(i=2; i<=NF-2; i++) sum+=$i } END { print sum+0 }'
+}
+
+function wrap_cal_count() {
+    local cal_before
+    cal_before=$(_get_cal_count)
+    printf " wrapping: %s\n" "$*" #>&2
+    #time \
+	"$@" || return 1
+    local cal_after
+    cal_after=$(_get_cal_count)
+    local delta=$(( ${cal_after:-0} - ${cal_before:-0} ))
+    printf "Delta-CAL (IPI): %d\n" "$delta" #>&2
+}
+
+TEST_CLASSES_LIST="D2_CORE D2_DRIVER D2_KMS D2_PRIME D2_ATOMIC D2_VBL D2_STATE D2_LEASE D2_DP D2_DRMRES V0 V1 V2 V3 V4 V5 V6 V7"
+
+DRM_CLASSES_LIST="DRM_UT_CORE DRM_UT_DRIVER DRM_UT_KMS DRM_UT_PRIME DRM_UT_ATOMIC DRM_UT_VBL DRM_UT_STATE DRM_UT_LEASE DRM_UT_DP DRM_UT_DRMRES"
+
+function dd_setup_() {
+    local flags="${1:-+p}"
+    # Use $2 if provided, otherwise fallback to the full list
+    local CLASSES_LIST="$2"
+    local q=""
+    local C
+
+    # Safeguard: if list is empty, don't do anything
+    [[ -z "$CLASSES_LIST" ]] && echo "no classes!" && return 0
+
+    for C in $CLASSES_LIST; do
+        q+="class $C $flags ; "
+    done
+    #echo "sending: $q"
+    ddcmd "$q"
+}
+
+function dd_setup_test() {
+    modprobe test_dynamic_debug || return 1
+    dd_setup_ $1 "${2:-$TEST_CLASSES_LIST}"
+}
+
+function dd_setup_drm() {
+    dd_setup_ $1 "${2:-$DRM_CLASSES_LIST}"
+}
+
+function count_hits() {
+    local duration=60
+    [[ "$1" =~ ^[0-9]+$ ]] && { duration=$1; shift; }
+
+    local cmd_to_run=()
+    local custom_classes=""
+    while [[ $# -gt 0 ]]; do
+        if [[ "$1" == "--" ]]; then
+            shift
+            custom_classes="$*"
+            break
+        fi
+        cmd_to_run+=("$1")
+        shift
+    done
+
+    ddcmd reset_stats
+    dd_setup_drm "+c" "$custom_classes"
+
+    if [[ ${#cmd_to_run[@]} -gt 0 ]]; then
+        echo "Banging on: ${cmd_to_run[*]} (&)"
+        # Use eval so bash functions work
+        eval "${cmd_to_run[*]} &"
+        local cmd_pid=$!
+        sleep "$duration"
+        killall vkcube 2>/dev/null
+        kill "$cmd_pid" 2>/dev/null
+    else
+        sleep "$duration"
+    fi
+
+    dd_setup_drm "-c" "$custom_classes"
+    tail -n1 /proc/dynamic_debug/control
+}
+
+function hammer_vk() {
+    for i in {1..12}; do vkcube >/dev/null 2>&1 & done
+}
+
+function isolate_drm_hits() {
+    local duration=${1:-10}
+    local cmd=${2:-vkcube}
+
+    echo "Starting isolation study: ${duration}s per class using ${cmd}"
+    echo "----------------------------------------------------------"
+    printf "%-20s | %-10s\n" "DRM CLASS" "TOTAL HITS"
+    echo "----------------------------------------------------------"
+
+    for class in $DRM_CLASSES_LIST FOO; do
+        # Run count_hits for the specific class
+        # Use 'capture' logic to grab only the hit count from the tail output
+        result=$(count_hits "$duration" "$cmd" -- "$class" | grep "total hits" | awk '{print $NF}')
+
+        printf "%-20s | %-10s\n" "$class" "$result"
+    done
+    #result=$(count_hits "$duration" "$cmd" -- "FOO" | grep "total hits" | awk '{print $NF}')
+    #printf "%-20s | %-10s\n" "$class" "$result"
+}
+
+[ $SHLVL == 2 -a -n "$*" ] && echo " doing: $* in $PWD" #>&2
+
+if [ $SHLVL == 2 ]; then
+    # run args as cmd
+    $@
+fi
 ---
- include/linux/dynamic_debug.h                      | 51 ++++++++++++++
- lib/dynamic_debug.c                                | 77 +++++++++++-----------
- lib/test_dynamic_debug.c                           | 55 ++++++----------
- lib/test_dynamic_debug_submod.c                    |  9 ++-
- .../selftests/dynamic_debug/dyndbg_selftest.sh     |  2 +-
- 5 files changed, 118 insertions(+), 76 deletions(-)
+ include/linux/dynamic_debug.h | 54 ++++++++++++++++++++++++++++++++-----------
+ lib/dynamic_debug.c           | 54 +++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 91 insertions(+), 17 deletions(-)
 
 diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 26c858588eb1..3114f4f28be4 100644
+index d94ad3a2018a..55abe0dc275a 100644
 --- a/include/linux/dynamic_debug.h
 +++ b/include/linux/dynamic_debug.h
-@@ -60,6 +60,8 @@ struct _ddebug {
+@@ -49,6 +49,10 @@ struct _ddebug {
+ #define _DPRINTK_FLAGS_INCL_TID		(1<<4)
+ #define _DPRINTK_FLAGS_INCL_SOURCENAME	(1<<5)
+ #define _DPRINTK_FLAGS_INCL_STACK	(1<<6)
++#define _DPRINTK_FLAGS_COUNT		(1<<7)
++
++#define _DPRINTK_FLAGS_ENABLED (_DPRINTK_FLAGS_PRINT | _DPRINTK_FLAGS_COUNT)
++#define _DPRINTK_FLAGS_ACTIVE  (_DPRINTK_FLAGS_PRINT)
+ 
+ #define _DPRINTK_FLAGS_INCL_ANY		\
+ 	(_DPRINTK_FLAGS_INCL_MODNAME | _DPRINTK_FLAGS_INCL_FUNCNAME |\
+@@ -383,28 +387,44 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 
+ #define _DPRINTK_KEY_INIT .key.dd_key_true = (STATIC_KEY_TRUE_INIT)
+ 
+-#define DYNAMIC_DEBUG_BRANCH(descriptor) \
+-	static_branch_likely(&descriptor.key.dd_key_true)
++#define __DYNAMIC_DEBUG_BRANCH(descriptor) \
++	static_branch_likely(&(descriptor).key.dd_key_true)
  #else
- #define _DPRINTK_FLAGS_DEFAULT 0
+ #define _DPRINTK_KEY_INIT .key.dd_key_false = (STATIC_KEY_FALSE_INIT)
+ 
+-#define DYNAMIC_DEBUG_BRANCH(descriptor) \
+-	static_branch_unlikely(&descriptor.key.dd_key_false)
++#define __DYNAMIC_DEBUG_BRANCH(descriptor) \
++	static_branch_unlikely(&(descriptor).key.dd_key_false)
  #endif
-+#define _DPRINTK_CLASSBITS_INIT ((_DPRINTK_FLAGS_DEFAULT & _DPRINTK_FLAGS_PRINT) ? ~0U : 0U)
-+
- 	unsigned int flags:8;
- #ifdef CONFIG_JUMP_LABEL
- 	union {
-@@ -286,6 +288,44 @@ struct ddebug_class_param {
- 		.offset = _offset					\
- 	}
  
-+/**
-+ * DYNAMIC_DEBUG_CLASSMAP_PARAM - control a ddebug-classmap from a sys-param
-+ * @_name:  sysfs node name
-+ * @_var:   name of the classmap var defining the controlled classes/bits
-+ * @_flags: flags to be toggled, typically just 'p'
-+ *
-+ * Creates a sysfs-param to control the classes defined by the
-+ * exported classmap, with bits 0..N-1 mapped to the classes named.
-+ * This version keeps class-state in a private long int.
-+ */
-+#define DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _var, _flags)		\
-+	static u32 _name##_bvec = _DPRINTK_CLASSBITS_INIT;		\
-+	__DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _name##_bvec, _var, _flags)
-+
-+/**
-+ * DYNAMIC_DEBUG_CLASSMAP_PARAM_REF - wrap a classmap with a controlling sys-param
-+ * @_name:  sysfs node name
-+ * @_bits:  name of the module's u32 bit-vector, ex: __drm_debug
-+ * @_var:   name of the (exported) classmap var defining the classes/bits
-+ * @_flags: flags to be toggled, typically just 'p'
-+ *
-+ * Creates a sysfs-param to control the classes defined by the
-+ * exported clasmap, with bits 0..N-1 mapped to the classes named.
-+ * This version keeps class-state in user @_bits.  This lets drm check
-+ * __drm_debug elsewhere too.
-+ */
-+#define DYNAMIC_DEBUG_CLASSMAP_PARAM_REF(_name, _bits, _var, _flags)	\
-+	__DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _bits, _var, _flags)
-+
-+#define __DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _bits, _var, _flags)	\
-+	static struct ddebug_class_param _name##_##_flags = {		\
-+		.bits = &(_bits),					\
-+		.flags = #_flags,					\
-+		.map = &(_var),						\
-+	};								\
-+	module_param_cb(_name, &param_ops_dyndbg_classes,		\
-+			&_name##_##_flags, 0600)
-+
- extern __printf(2, 3)
- void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...);
+ #else /* !CONFIG_JUMP_LABEL */
  
-@@ -466,9 +506,20 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- #include <linux/errno.h>
- #include <linux/printk.h>
+ #define _DPRINTK_KEY_INIT
  
-+#if defined(DEBUG)
-+#define _DPRINTK_CLASSBITS_INIT ~0U
++#ifdef DEBUG
++#define __DYNAMIC_DEBUG_BRANCH(descriptor) \
++	likely((descriptor).flags & _DPRINTK_FLAGS_ENABLED)
 +#else
-+#define _DPRINTK_CLASSBITS_INIT 0U
++#define __DYNAMIC_DEBUG_BRANCH(descriptor) \
++	unlikely((descriptor).flags & _DPRINTK_FLAGS_ENABLED)
 +#endif
 +
- #define DYNAMIC_DEBUG_CLASSMAP_DEFINE(_var, _mapty, _base, ...)
- #define DYNAMIC_DEBUG_CLASSMAP_USE(_var)
- #define DYNAMIC_DEBUG_CLASSMAP_USE_(_var, _offset)
-+#define DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _var, _flags)		\
-+	static u32 _name##_bvec = _DPRINTK_CLASSBITS_INIT;		\
-+	module_param_named(_name, _name##_bvec, uint, 0600)
-+#define DYNAMIC_DEBUG_CLASSMAP_PARAM_REF(_name, _bits, _var, _flags)	\
-+	module_param_named(_name, _bits, uint, 0600)
- #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
- #define DYNAMIC_DEBUG_BRANCH(descriptor) false
- #define DECLARE_DYNDBG_CLASSMAP(...)
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 7736fb3d3b79..2347d13e1d30 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -697,9 +697,42 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
- 
- #define CLASSMAP_BITMASK(width) ((width) >= 32 ? ~0U : (1U << (width)) - 1)
- 
--/*
-- * param-setter helper to validate numeric input, clamp its value by
-- * the classmap type and size, and apply the bits.
-+static void __maybe_unused ddebug_class_param_clamp_input(u32 *inrep, const struct kernel_param *kp)
-+{
-+	const struct ddebug_class_param *dcp = kp->arg;
-+	const struct ddebug_class_map *map = dcp->map;
++#endif /* CONFIG_JUMP_LABEL */
 +
-+	switch (map->map_type) {
-+	case DD_CLASS_TYPE_DISJOINT_BITS:
-+		/* expect bits. mask and warn if too many */
-+		if (*inrep & ~CLASSMAP_BITMASK(map->length)) {
-+			pr_warn("%s: input: 0x%x exceeds mask: 0x%x, masking\n",
-+				KP_NAME(kp), *inrep, CLASSMAP_BITMASK(map->length));
-+			*inrep &= CLASSMAP_BITMASK(map->length);
-+		}
-+		break;
-+	case DD_CLASS_TYPE_LEVEL_NUM:
-+		/* input is bitpos, of highest verbosity to be enabled */
-+		if (*inrep > map->length) {
-+			pr_warn("%s: level:%u exceeds max:%d, clamping\n",
-+				KP_NAME(kp), *inrep, map->length);
-+			*inrep = map->length;
-+		}
-+		break;
-+	}
-+}
-+
-+/**
-+ * param_set_dyndbg_classes - class FOO >control
-+ * @instr: string echo>d to sysfs, input depends on map_type
-+ * @kp:    kp->arg has state: bits/lvl, map, map_type
-+ * @mod_name: module name or null for all modules with the classes
-+ *
-+ * Enable/disable prdbgs by their class, as given in the arguments to
-+ * DECLARE_DYNDBG_CLASSMAP.  For LEVEL map-types, enforce relative
-+ * levels by bitpos.
-+ *
-+ * Returns: 0 or <0 if error.
-  */
- static int param_set_dyndbg_module_classes(const char *instr,
- 					   const struct kernel_param *kp,
-@@ -718,27 +751,16 @@ static int param_set_dyndbg_module_classes(const char *instr,
- 		       len, instr, KP_NAME(kp));
- 		return -EINVAL;
- 	}
-+	ddebug_class_param_clamp_input(&inrep, kp);
- 
- 	switch (map->map_type) {
- 	case DD_CLASS_TYPE_DISJOINT_BITS:
--		/* expect bits. mask and warn if too many */
--		if (inrep & ~CLASSMAP_BITMASK(map->length)) {
--			pr_warn("%s: input: 0x%x exceeds mask: 0x%x, masking\n",
--				KP_NAME(kp), inrep, CLASSMAP_BITMASK(map->length));
--			inrep &= CLASSMAP_BITMASK(map->length);
--		}
- 		old_val = READ_ONCE(*dcp->bits);
- 		v2pr_info("bits:0x%x > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp));
- 		totct += ddebug_apply_class_bitmap(dcp, &inrep, old_val, mod_name);
- 		WRITE_ONCE(*dcp->bits, inrep);
- 		break;
- 	case DD_CLASS_TYPE_LEVEL_NUM:
--		/* input is bitpos, of highest verbosity to be enabled */
--		if (inrep > map->length) {
--			pr_warn("%s: level:%u exceeds max:%d, clamping\n",
--				KP_NAME(kp), inrep, map->length);
--			inrep = map->length;
--		}
- 		old_val = READ_ONCE(*dcp->lvl);
- 		old_bits = CLASSMAP_BITMASK(old_val);
- 		new_bits = CLASSMAP_BITMASK(inrep);
-@@ -1236,30 +1258,7 @@ static inline u32 ddebug_class_param_to_bits(const struct ddebug_class_param *dc
- 	}
- }
- 
--static void __maybe_unused ddebug_class_param_clamp_input(u32 *inrep, const struct kernel_param *kp)
--{
--	const struct ddebug_class_param *dcp = kp->arg;
--	const struct ddebug_class_map *map = dcp->map;
- 
--	switch (map->map_type) {
--	case DD_CLASS_TYPE_DISJOINT_BITS:
--		/* expect bits. mask and warn if too many */
--		if (*inrep & ~CLASSMAP_BITMASK(map->length)) {
--			pr_warn("%s: input: 0x%x exceeds mask: 0x%x, masking\n",
--				KP_NAME(kp), *inrep, CLASSMAP_BITMASK(map->length));
--			*inrep &= CLASSMAP_BITMASK(map->length);
--		}
--		break;
--	case DD_CLASS_TYPE_LEVEL_NUM:
--		/* input is bitpos, of highest verbosity to be enabled */
--		if (*inrep > map->length) {
--			pr_warn("%s: level:%d exceeds max:%d, clamping\n",
--				KP_NAME(kp), *inrep, map->length);
--			*inrep = map->length;
--		}
--		break;
--	}
--}
- 
- /* called for class-users only, parse_one does this for definer modules */
- static void ddebug_sync_classbits(const struct kernel_param *kp, const char *modname)
-@@ -1270,7 +1269,7 @@ static void ddebug_sync_classbits(const struct kernel_param *kp, const char *mod
- 	if (!dcp || !dcp->map)
- 		return;
- 
--	init_bits = (_DPRINTK_FLAGS_DEFAULT & _DPRINTK_FLAGS_PRINT) ?
-+	init_bits = _DPRINTK_CLASSBITS_INIT ?
- 		CLASSMAP_BITMASK(dcp->map->length) : 0;
- 
- 	switch (dcp->map->map_type) {
-diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
-index 560e23f14ac8..7c10a1ddc630 100644
---- a/lib/test_dynamic_debug.c
-+++ b/lib/test_dynamic_debug.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Kernel module for testing dynamic_debug
-+ * Kernel module to test/demonstrate dynamic_debug features,
-+ * particularly classmaps and their support for subsystems like DRM.
-  *
-  * Authors:
-  *      Jim Cromie	<jim.cromie@gmail.com>
-@@ -68,33 +69,6 @@ static const struct kernel_param_ops param_ops_do_repeats = {
- module_param_cb(do_classes, &param_ops_do_repeats, do_classes, 0600);
- module_param_cb(do_bulk, &param_ops_do_repeats, do_bulk, 0600);
- 
--/*
-- * Using the CLASSMAP api:
-- * - classmaps must have corresponding enum
-- * - enum symbols must match/correlate with class-name strings in the map.
-- * - base must equal enum's 1st value
-- * - multiple maps must set their base to share the 0-30 class_id space !!
-- *   (build-bug-on tips welcome)
-- * Additionally, here:
-- * - tie together sysname, mapname, bitsname, flagsname
-- */
--#define DYNAMIC_DEBUG_CLASSMAP_PARAM_(_model, _flags, _init)		\
--	static u32 bits_##_model = _init;				\
--	static struct ddebug_class_param _flags##_##_model = {		\
--		.bits = &bits_##_model,					\
--		.flags = #_flags,					\
--		.map = &map_##_model,					\
--	};								\
--	module_param_cb(_flags##_##_model, &param_ops_dyndbg_classes,	\
--			&_flags##_##_model, 0600)
--#ifdef DEBUG
--#define DYNAMIC_DEBUG_CLASSMAP_PARAM(_model, _flags)		\
--	DYNAMIC_DEBUG_CLASSMAP_PARAM_(_model, _flags, ~0)
--#else
--#define DYNAMIC_DEBUG_CLASSMAP_PARAM(_model, _flags)		\
--	DYNAMIC_DEBUG_CLASSMAP_PARAM_(_model, _flags, 0)
--#endif
--
- /*
-  * Demonstrate/test DISJOINT & LEVEL typed classmaps with a sys-param.
-  *
-@@ -128,12 +102,15 @@ enum cat_level_num { V1 = 16, V2, V3, V4, V5, V6, V7, V8 };
- /* test _USE_ w offset */
- enum cat_level_offset { Vu1 = V1 + 8, Vu2, Vu3, Vu4, Vu5, Vu6, Vu7, Vu8 };
- 
--/* recapitulate DRM's multi-classmap setup */
-+/*
-+ * use/demonstrate multi-module-group classmaps, as for DRM
-+ */
- #if !defined(TEST_DYNAMIC_DEBUG_SUBMOD)
- /*
-- * In single user, or parent / coordinator (drm.ko) modules, define
-- * classmaps on the client enums above, and then declares the PARAMS
-- * ref'g the classmaps.  Each is exported.
-+ * For module-groups of 1+, define classmaps with names (stringified
-+ * enum-symbols) copied from above. 1-to-1 mapping is recommended.
-+ * The classmap is exported, so that other modules in the group can
-+ * link to it and control their prdbgs.
-  */
- DYNAMIC_DEBUG_CLASSMAP_DEFINE(map_disjoint_bits, DD_CLASS_TYPE_DISJOINT_BITS,
- 			      D2_CORE,
-@@ -151,6 +128,15 @@ DYNAMIC_DEBUG_CLASSMAP_DEFINE(map_disjoint_bits, DD_CLASS_TYPE_DISJOINT_BITS,
- DYNAMIC_DEBUG_CLASSMAP_DEFINE(map_level_num, DD_CLASS_TYPE_LEVEL_NUM,
- 			      V1, "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8");
- 
-+/*
-+ * for use-cases that want it, provide a sysfs-param to set the
-+ * classes in the classmap.  It is at this interface where the
-+ * "v3>v2" property is applied to DD_CLASS_TYPE_LEVEL_NUM inputs.
-+ */
-+
-+DYNAMIC_DEBUG_CLASSMAP_PARAM(p_disjoint_bits,	map_disjoint_bits, p);
-+DYNAMIC_DEBUG_CLASSMAP_PARAM(p_level_num,	map_level_num, p);
-+
- #ifdef FORCE_CLASSID_CONFLICT
- /*
-  * Enable with -Dflag on compile to test overlapping class-id range
-@@ -159,6 +145,7 @@ DYNAMIC_DEBUG_CLASSMAP_DEFINE(map_level_num, DD_CLASS_TYPE_LEVEL_NUM,
- DYNAMIC_DEBUG_CLASSMAP_DEFINE(classid_range_conflict, 0, D2_CORE + 1, "D3_CORE");
+ #ifdef DEBUG
+ #define DYNAMIC_DEBUG_BRANCH(descriptor) \
+-	likely(descriptor.flags & _DPRINTK_FLAGS_PRINT)
++	(__DYNAMIC_DEBUG_BRANCH(descriptor) && \
++	 likely((descriptor).flags & _DPRINTK_FLAGS_ACTIVE))
+ #else
+ #define DYNAMIC_DEBUG_BRANCH(descriptor) \
+-	unlikely(descriptor.flags & _DPRINTK_FLAGS_PRINT)
++	(__DYNAMIC_DEBUG_BRANCH(descriptor) && \
++	 unlikely((descriptor).flags & _DPRINTK_FLAGS_ACTIVE))
  #endif
  
-+
- #if defined(DD_MACRO_ARGCHECK)
- /*
-  * Exersize compile-time arg-checks in DYNAMIC_DEBUG_CLASSMAP_DEFINE.
-@@ -192,8 +179,6 @@ DYNAMIC_DEBUG_CLASSMAP_USE_(fail_offset_big, 100);
- /*
-  * now add the sysfs-params to both sub/super-mods
-  */
--DYNAMIC_DEBUG_CLASSMAP_PARAM(disjoint_bits, p);
--DYNAMIC_DEBUG_CLASSMAP_PARAM(level_num, p);
+-#endif /* CONFIG_JUMP_LABEL */
++void ddebug_increment_call_count(void);
++#define DYNAMIC_DEBUG_COUNT(descriptor) {			\
++	if (unlikely(descriptor.flags & _DPRINTK_FLAGS_COUNT))	\
++		ddebug_increment_call_count();			\
++	}
  
- /* stand-in for all pr_debug etc */
- #define prdbg(SYM) __pr_debug_cls(SYM, #SYM " msg\n")
-@@ -288,5 +273,5 @@ module_init(test_dynamic_debug_init);
- module_exit(test_dynamic_debug_exit);
- 
- MODULE_AUTHOR("Jim Cromie <jim.cromie@gmail.com>");
--MODULE_DESCRIPTION("Kernel module for testing dynamic_debug");
-+MODULE_DESCRIPTION("test/demonstrate dynamic-debug features");
- MODULE_LICENSE("GPL");
-diff --git a/lib/test_dynamic_debug_submod.c b/lib/test_dynamic_debug_submod.c
-index 672aabf40160..3adf3925fb86 100644
---- a/lib/test_dynamic_debug_submod.c
-+++ b/lib/test_dynamic_debug_submod.c
-@@ -1,6 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0
  /*
-- * Kernel module for testing dynamic_debug
-+ * Kernel module to test/demonstrate dynamic_debug features,
-+ * particularly classmaps and their support for subsystems, like DRM,
-+ * which defines its drm_debug classmap in drm module, and uses it in
-+ * helpers & drivers.
-  *
-  * Authors:
-  *      Jim Cromie	<jim.cromie@gmail.com>
-@@ -12,3 +15,7 @@
+  * Factory macros: ($prefix)dynamic_func_call($suffix)
+@@ -417,11 +437,15 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+  * (|_cls):	adds in _DPRINT_CLASS_DFLT as needed
+  * (|_no_desc):	former gets callsite descriptor as 1st arg (for prdbgs)
   */
- #define TEST_DYNAMIC_DEBUG_SUBMOD
- #include "test_dynamic_debug.c"
 +
-+MODULE_DESCRIPTION("test/demonstrate dynamic-debug subsystem support");
-+MODULE_AUTHOR("Jim Cromie <jim.cromie@gmail.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index 1bea45507352..8d3f1e49e9e1 100755
---- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -546,7 +546,7 @@ function GOLDEN_RECORDS {
- #K= c518a50ba30ba8099d0dc874a27ecf16 FT_basic_queries.7
- #K= 69f1958beef98211d4181f9ded9787c4 FT_test_classes.1
- #K= 5516e3d13cba7ea4197a7fb6c033887a FT_test_classes.2
--#K= 22213a7bf431c3e0efd3edbfcba69677 FT_test_classes.3
-+#K= 20d4545f9753e677e72e3adf52527fd3 FT_test_classes.3
- #K= 934d8677872fe26bd636a6c3d6416aa2 FT_classmap_inheritance.1
- #K= cd1389958807063baa1ea4b06c61fa02 FT_classmap_inheritance.2
- #K= 0708a283f0f1959135c797e36119e4af FT_classmap_inheritance.3
+ #define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {	\
+ 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);	\
+-	if (DYNAMIC_DEBUG_BRANCH(id)) {				\
+-		func(&id, ##__VA_ARGS__);			\
+-		__dynamic_dump_stack(id);			\
++	if (__DYNAMIC_DEBUG_BRANCH(id)) {				\
++		DYNAMIC_DEBUG_COUNT(id);			\
++		if (id.flags & _DPRINTK_FLAGS_ACTIVE) {		\
++			func(&id, ##__VA_ARGS__);		\
++			__dynamic_dump_stack(id);		\
++		}						\
+ 	}							\
+ } while (0)
+ #define __dynamic_func_call(id, fmt, func, ...)				\
+@@ -430,9 +454,12 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 
+ #define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) do {	\
+ 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);		\
+-	if (DYNAMIC_DEBUG_BRANCH(id)) {					\
+-		func(__VA_ARGS__);					\
+-		__dynamic_dump_stack(id);				\
++	if (__DYNAMIC_DEBUG_BRANCH(id)) {					\
++		DYNAMIC_DEBUG_COUNT(id);				\
++		if (id.flags & _DPRINTK_FLAGS_ACTIVE) {			\
++			func(__VA_ARGS__);				\
++			__dynamic_dump_stack(id);			\
++		}							\
+ 	}								\
+ } while (0)
+ #define __dynamic_func_call_no_desc(id, fmt, func, ...)			\
+@@ -525,6 +552,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ #define DYNAMIC_DEBUG_CLASSMAP_PARAM_REF(_name, _bits, _var, _flags)	\
+ 	module_param_named(_name, _bits, uint, 0600)
+ #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
++#define __DYNAMIC_DEBUG_BRANCH(descriptor) false
+ #define DYNAMIC_DEBUG_BRANCH(descriptor) false
+ #define DECLARE_DYNDBG_CLASSMAP(...)
+ 
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index 406b64d67440..bdc6d32ec685 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -19,12 +19,14 @@
+ #include <linux/kallsyms.h>
+ #include <linux/types.h>
+ #include <linux/mutex.h>
++#include <linux/percpu.h>
+ #include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
+ #include <linux/list.h>
+ #include <linux/sysctl.h>
+ #include <linux/ctype.h>
+ #include <linux/string.h>
++
+ #include <linux/parser.h>
+ #include <linux/string_helpers.h>
+ #include <linux/uaccess.h>
+@@ -71,6 +73,21 @@ struct flag_settings {
+ 	unsigned int mask;
+ };
+ 
++static DEFINE_PER_CPU(unsigned long, ddebug_call_count);
++void ddebug_increment_call_count(void)
++{
++	this_cpu_inc(ddebug_call_count);
++}
++EXPORT_SYMBOL(ddebug_increment_call_count);
++
++static void reset_ddebug_call_count(void)
++{
++	int cpu;
++
++	for_each_possible_cpu(cpu)
++		per_cpu(ddebug_call_count, cpu) = 0;
++}
++
+ static bool ddebug_class_map_in_range(const int class_id,
+ 				      const struct ddebug_class_map *map);
+ static bool ddebug_class_user_in_range(const int class_id,
+@@ -101,6 +118,7 @@ static const struct { unsigned flag:8; char opt_char; } opt_array[] = {
+ 	{ _DPRINTK_FLAGS_INCL_LINENO, 'l' },
+ 	{ _DPRINTK_FLAGS_INCL_TID, 't' },
+ 	{ _DPRINTK_FLAGS_INCL_STACK, 'd' },
++	{ _DPRINTK_FLAGS_COUNT, 'c' },
+ 	{ _DPRINTK_FLAGS_NONE, '_' },
+ };
+ 
+@@ -365,10 +383,10 @@ static int ddebug_change(const struct ddebug_query *query, struct flag_settings
+ 			if (newflags == dp->flags)
+ 				continue;
+ #ifdef CONFIG_JUMP_LABEL
+-			if (dp->flags & _DPRINTK_FLAGS_PRINT) {
+-				if (!(newflags & _DPRINTK_FLAGS_PRINT))
++			if (dp->flags & _DPRINTK_FLAGS_ENABLED) {
++				if (!(newflags & _DPRINTK_FLAGS_ENABLED))
+ 					static_branch_disable(&dp->key.dd_key_true);
+-			} else if (newflags & _DPRINTK_FLAGS_PRINT) {
++			} else if (newflags & _DPRINTK_FLAGS_ENABLED) {
+ 				static_branch_enable(&dp->key.dd_key_true);
+ 			}
+ #endif
+@@ -727,6 +745,11 @@ static int ddebug_exec_queries(char *query, const char *modname)
+ 		if (!query || !*query || *query == '#')
+ 			continue;
+ 
++		if (!strcmp(query, "reset_stats")) {
++			reset_ddebug_call_count();
++			continue;
++		}
++
+ 		if (modname)
+ 			v2pr_info("query %d: module %s \"%s\"\n", i, modname, query);
+ 		else
+@@ -980,6 +1003,9 @@ void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...)
+ 	BUG_ON(!descriptor);
+ 	BUG_ON(!fmt);
+ 
++	if (!(descriptor->flags & _DPRINTK_FLAGS_ACTIVE))
++		return;
++
+ 	va_start(args, fmt);
+ 
+ 	vaf.fmt = fmt;
+@@ -1000,6 +1026,9 @@ void __dynamic_dev_dbg(struct _ddebug *descriptor,
+ 	BUG_ON(!descriptor);
+ 	BUG_ON(!fmt);
+ 
++	if (!(descriptor->flags & _DPRINTK_FLAGS_ACTIVE))
++		return;
++
+ 	va_start(args, fmt);
+ 
+ 	vaf.fmt = fmt;
+@@ -1031,6 +1060,9 @@ void __dynamic_netdev_dbg(struct _ddebug *descriptor,
+ 	BUG_ON(!descriptor);
+ 	BUG_ON(!fmt);
+ 
++	if (!(descriptor->flags & _DPRINTK_FLAGS_ACTIVE))
++		return;
++
+ 	va_start(args, fmt);
+ 
+ 	vaf.fmt = fmt;
+@@ -1067,6 +1099,9 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 	struct va_format vaf;
+ 	va_list args;
+ 
++	if (!(descriptor->flags & _DPRINTK_FLAGS_ACTIVE))
++		return;
++
+ 	va_start(args, fmt);
+ 
+ 	vaf.fmt = fmt;
+@@ -1106,6 +1141,7 @@ static __init int dyndbg_setup(char *str)
+ 
+ __setup("dyndbg=", dyndbg_setup);
+ 
++
+ /*
+  * File_ops->write method for <debugfs>/dynamic_debug/control.  Gathers the
+  * command text from userspace, parses and executes it.
+@@ -1263,6 +1299,16 @@ static const char *ddebug_class_name(struct _ddebug_info *di, struct _ddebug *dp
+ 	return NULL;
+ }
+ 
++static unsigned long get_ddebug_call_count(void)
++{
++	unsigned long total = 0;
++	int cpu;
++
++	for_each_possible_cpu(cpu)
++		total += per_cpu(ddebug_call_count, cpu);
++	return total;
++}
++
+ /*
+  * Seq_ops show method.  Called several times within a read()
+  * call from userspace, with ddebug_lock held.  Formats the
+@@ -1282,7 +1328,7 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
+ 		return 0;
+ 	}
+ 	if (p == EPILOGUE_TOKEN) {
+-		/* use this soon */
++		seq_printf(m, "#: total call-counts: %lu\n", get_ddebug_call_count());
+ 		return 0;
+ 	}
+ 
 
 -- 
 2.55.0
