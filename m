@@ -1,151 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out28-101.mail.aliyun.com (out28-101.mail.aliyun.com [115.124.28.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7E24DAF96
-	for <linux-modules@vger.kernel.org>; Wed, 16 Sep 2026 16:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A553B47CD;
+	Wed, 16 Sep 2026 17:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789577803; cv=none; b=E1H455UKtRyAwcDsvNjVKfj1g/tAdjbGoF2DQ09qm9GSnTF+jWZIFCAOQwDxdnxIbzCAjvECvZZMb6rQ9dlIxf5edD9U/U8kSBfgxVyKvPqDBEko65FuXU1S7hhc74cZfKS/7D9oGmbx1l6HeDNTc8hU/2q36mrXNDirrS82Uk8=
+	t=1789580890; cv=none; b=PCF59AkSf8rj7vtjkWJae3hHwd6BST4HZUpZj/f4SAM3OTepE0xJmvs0RWjZ6CoaZ4ERdzLzkGQNkOJv5p4X/0kVVG/VZSxXjEpilYT6HhU44UZhHDpYHcv0xGUyqEnkvCjGI8v1Qoc+aIe8X4NPdAZEW5UzeorK18t0An9ieQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789577803; c=relaxed/simple;
-	bh=jL9L8dYH0HF0XotwAegwqqiUJoFF891fmVRzzm2D+0A=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HWYODynBGlRq/+DrrI1ttSWA6vNMyAEzilBE2icubUv6+z2GK7yFCTPvKnZ+yg8G3/UB6PW/SO/yqB15AQ22p+ALLuOwQVGEAsH+Cjr+SC8HnO77bbeOsKpxMmCUPCRdaemCNG+VU8zhVk/Oaqxv+74JHSw9Xnbef4tv26iHu6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fMdoiVCl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789580890; c=relaxed/simple;
+	bh=5SVan4TztOsht+PNjOT1U3SsgeW2aiaq0MZz1YZ/ldo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EnzvCYNNF1590trwECk6SqXjG2gBHeX9RtuWVYp86/r765K5vMNmZg4jjhVVEIbvfo092UzOMoWkJuz7z+3CiW8EkbA7IvqwzaWci/GU3XbCKo3bEWr9ZRJXks+j37xfkQRVZR+393OccK4l5ebU2WNv4s448jY1MTq7+VIyNK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xiaopeng.com; spf=pass smtp.mailfrom=xiaopeng.com; dkim=pass (1024-bit key) header.d=xiaopeng.com header.i=@xiaopeng.com header.b=SIQZAsbz; arc=none smtp.client-ip=115.124.28.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xiaopeng.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaopeng.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fMdoiVCl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6148A1F000FF;
-	Wed, 16 Sep 2026 16:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789577780;
-	bh=S3g6xYYlbmO2Ve8K8DLvb+2r9RmCjeNeWyDLqiGiLqY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fMdoiVCl8H3+zC3SU/J5a4Ri5KRxy9M4GyXRJX1KQZMwCuZWwkdhRJHd4RjgefGW8
-	 I94PZF3Dl6dRN6y4j6M8/BfC5i6lvEpCHIskZqMD60hbHsw1iHKyP+rNust37Gg2U3
-	 fbPLEVrLcD2NsMLv+iMrEIGQq580RCMXLtDPvOeOx3X34mgCZrc0n3XjhkIfmK6j+Z
-	 h6Ln/o7KXyPmPEC6C7t1hF5LeRQbHNlkLz8kEYM/W5ASN9YcP27hpmRj/JBGyTgiIB
-	 hCs36J7S5eJmcyDLRrWneFjHmzOOicev2yhIf/8oA1NN4mOiJFezgJo3ynKHiYeq26
-	 Q0iL43mrEMosQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v10 32/38] dyndbg: resolve "protection" of class'd
- pr_debug
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jim Cromie" <jim.cromie@gmail.com>
-Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260916-dd-cmap-part2-clean-v10-32-af4cf4767707@gmail.com>
-References: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
- <20260916-dd-cmap-part2-clean-v10-32-af4cf4767707@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 16 Sep 2026 16:56:19 +0000
-Message-Id: <20260916165620.6148A1F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=xiaopeng.com header.i=@xiaopeng.com header.b="SIQZAsbz"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xiaopeng.com; s=default;
+	t=1789580877; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=azJubOKUIjMTBXlSrVQ1zbXf17NBQi6Q2PS0BXsTCSo=;
+	b=SIQZAsbzYzt95asFNfnLuwjwhOJlODvEe9e8MfVTEDNVERppOaD0CxxVvTzW6yP+G1RyRvnA/GkNRruc+gFqYzKimBZhmvyhNqmyilI3YQudKqsmK/PgWGA+tMO1vekr7LRd8HtKXsz197uZbsXSXcZjLwIs4McWztb5nWsMU4A=
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.04436835|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0354802-0.00586873-0.958651;FP=5742756620908168539|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam011083013073;MF=fangxy@xiaopeng.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.jFIg.VU_1789580876;
+Received: from localhost.localdomain(mailfrom:fangxy@xiaopeng.com fp:SMTPD_---.jFIg.VU_1789580876 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Thu, 17 Sep 2026 01:47:57 +0800
+From: Fang Xieyan <fangxy@xiaopeng.com>
+To: mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
+	atomlin@atomlin.com
+Cc: mmaurer@google.com,
+	masahiroy@kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH 2/2] module: Validate the __version_ext_names section offset
+Date: Thu, 17 Sep 2026 01:47:53 +0800
+Message-ID: <20260916174753.14870-3-fangxy@xiaopeng.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260916174753.14870-1-fangxy@xiaopeng.com>
+References: <20260916174753.14870-1-fangxy@xiaopeng.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] dyndbg: module's own classmaps bypass protection due to missing co=
-ntrolling_param init
-- [Medium] dyndbg: data race on map->controlling_param due to lockless init=
-ialization
---
+elf_validity_check_sectionheaders() validates the size and offset of
+every section, unless its type is SHT_NULL or SHT_NOBITS:
 
-commit 5ffc9f5551765ac7c4413f320b8e9d1977dbe99a
-Author: Jim Cromie <jim.cromie@gmail.com>
+		switch (shdr->sh_type) {
+		case SHT_NULL:
+		case SHT_NOBITS:
+			/* No contents, offset/size don't mean anything */
+			continue;
+		default:
+			err = validate_section_offset(info, shdr);
 
-dyndbg: resolve "protection" of class'd pr_debug
+elf_validity_cache_index_versions() then reads the extended version
+names by their sh_offset, without checking that the section holds
+data:
 
-This commit updates the protection mechanism for class'd pr_debug callsites
-against unclassed queries. It introduces a requirement that a sysfs paramet=
-er
-(controlling_param) must be present for a classmap to be protected.
+	if (vers_ext_crc) {
+		crc_count = info->sechdrs[vers_ext_crc].sh_size / sizeof(u32);
+		name = (void *)info->hdr +
+			info->sechdrs[vers_ext_name].sh_offset;
+		remaining_len = info->sechdrs[vers_ext_name].sh_size;
+		while (crc_count--) {
+			name_size = strnlen(name, remaining_len) + 1;
 
-> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> index c023d07623f29..ac54a0499369c 100644
-> --- a/lib/dynamic_debug.c
-> +++ b/lib/dynamic_debug.c
+A __version_ext_names section of type SHT_NOBITS reaches here with an
+unvalidated sh_offset, so the name lookup reads past the in-memory
+copy of the module:
 
-[ ... ]
+  BUG: KASAN: vmalloc-out-of-bounds in strnlen+0x73/0x80
+  Read of size 1 at addr ffa00000005534ff by task insmod/79
+  ...
+   strnlen+0x73/0x80
+   load_module+0xef6/0x8600
+  The buggy address belongs to a 43-page vmalloc region starting at
+  0xffa0000000529000 allocated at kernel_read_file+0x7b4/0x9f0
 
-> @@ -257,7 +300,28 @@ static bool ddebug_match_desc(const struct ddebug_qu=
-ery *query,
->  	    dp->lineno > query->last_lineno)
->  		return false;
-> =20
-> -	return true;
-> +	/*
-> +	 * above are all satisfied, so we can make final decisions:
-> +	 * 1- class FOO or implied class __DEFAULT__
-> +	 * 2- site.is_classed or not
-> +	 */
-> +	if (query->class_string) {
-> +		/* class FOO given, exact match required */
-> +		return (dp->class_id =3D=3D selected_class);
-> +	}
-> +	/* query class __DEFAULT__ by omission. */
-> +	if (dp->class_id =3D=3D _DPRINTK_CLASS_DFLT) {
-> +		/* un-classed site */
-> +		return true;
-> +	}
-> +	/* site is class'd */
-> +	site_map =3D ddebug_find_map_by_class_id(di, dp->class_id);
-> +	if (!site_map) {
-> +		WARN_ONCE(1, "unknown class_id %d, check %s's CLASSMAP definitions", d=
-p->class_id, di->mod_name);
-> +		return false;
-> +	}
-> +	/* module(-param) decides protection */
-> +	return !ddebug_class_wants_protection(site_map);
+A real __version_ext_names section is SHT_PROGBITS and has already
+passed validate_section_offset(), so this only rejects a SHT_NOBITS
+section, which holds no names to read. Validate the offset before the
+dereference.
 
-[Severity: High]
-Does this code inadvertently bypass ABI protection for a module's own
-class'd pr_debug sites?
+Fixes: 54ac1ac8edeb ("modules: Support extended MODVERSIONS info")
+Cc: stable@vger.kernel.org
+Assisted-by: Hawkeye:GLM-5.3-flash
+Assisted-by: Qoder:Qwen3.8-Max
+Signed-off-by: Fang Xieyan <fangxy@xiaopeng.com>
+---
 
-Since the ddebug_apply_class_maps() block was removed in v10, it appears
-ddebug_add_module() only initializes user maps (by calling
-ddebug_apply_class_users() when dt->info.users.len > 0), and misses
-initializing the defining module's own native classmaps.
+Found in the same review as patch 1/2. elf_validity_check_sectionheaders()
+exempts SHT_NOBITS from validate_section_offset(), and
+elf_validity_cache_index_versions() then dereferences the __version_ext_names
+section as hdr + sh_offset without re-checking it, so a section of that name and
+type SHT_NOBITS carries an unvalidated offset into the extended version name
+walk. This patch stands on its own; it does not depend on patch 1/2.
 
-Consequently, if a module defines a classmap and parameter but has no
-loaded dependent modules, map->controlling_param remains NULL. This causes
-ddebug_class_wants_protection() to default to false, allowing unclassed
-legacy queries to incorrectly modify these protected sites.
+Reproducer: build a .ko that carries __version_ext_crcs and a
+__version_ext_names section of type SHT_NOBITS whose sh_offset points past the
+end of the module image. insmod it. Before the change the name walk reads out of
+bounds; after it validate_section_offset() rejects the section and insmod fails
+with -ENOEXEC (rc=8, "invalid module format"), which is what a module with a
+malformed version section should do.
 
->  }
-> =20
+Both cases ran on 704340f1cd0d (v7.3-rc4): x86_64 defconfig plus
+CONFIG_KASAN_GENERIC and CONFIG_KASAN_VMALLOC, gcc 13.2.0, QEMU under TCG. The
+unpatched and patched kernels are built from byte-identical .config files and
+differ only by this patch.
 
-[ ... ]
+The same vermagic caveat as patch 1/2 applies: LOCALVERSION is pinned so the
+patched kernel's release string matches the payload, and the loader reaches the
+version walk instead of stopping at the version magic check.
 
-> +static void ddebug_match_apply_kparam(const struct kernel_param *kp,
-> +				      struct ddebug_class_map *map,
-> +				      const char *mod_name)
-> +{
-> +	struct ddebug_class_param *dcp =3D ddebug_get_classmap_kparam(kp, map);
-> =20
->  	if (dcp && dcp->map =3D=3D map) {
-> +		map->controlling_param =3D dcp;
+ kernel/module/main.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-[Severity: Medium]
-Can this assignment introduce a data race?
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index e36bfe4..adaaaca 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2296,6 +2296,16 @@ static int elf_validity_cache_index_versions(struct load_info *info, int flags)
+ 	 * number of entries in every section.
+ 	 */
+ 	if (vers_ext_crc) {
++		/*
++		 * The name section is walked by its sh_offset and sh_size
++		 * below. elf_validity_check_sectionheaders() exempts SHT_NOBITS
++		 * sections from validate_section_offset(), so a __version_ext_names
++		 * section of that type reaches here with an unvalidated sh_offset.
++		 * Bound it before dereferencing hdr + sh_offset.
++		 */
++		if (validate_section_offset(info, &info->sechdrs[vers_ext_name]))
++			return -ENOEXEC;
++
+ 		crc_count = info->sechdrs[vers_ext_crc].sh_size / sizeof(u32);
+ 		name = (void *)info->hdr +
+ 			info->sechdrs[vers_ext_name].sh_offset;
+-- 
+2.50.1 (Apple Git-155)
 
-In ddebug_add_module(), the new debug table is published to the globally
-visible ddebug_tables list under ddebug_lock, but the lock is released
-before calling ddebug_apply_class_users().
-
-Since ddebug_match_apply_kparam() is subsequently called without locks,
-concurrent threads processing ddebug_change() could hold ddebug_lock
-and read map->controlling_param while it is being updated here, leading
-to a data race.
-
->  		v2pr_info(" kp:%s.%s =3D0x%x", mod_name, kp->name, *dcp->bits);
->  		vpr_cm_info(map, " %s maps ", mod_name);
->  		ddebug_sync_classbits(kp, mod_name);
->  	}
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260916-dd-cmap-pa=
-rt2-clean-v10-0-af4cf4767707@gmail.com?part=3D32
