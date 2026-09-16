@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE7E5427E8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A182A5427F8;
 	Wed, 16 Sep 2026 15:33:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789572785; cv=none; b=sdaNHF4Cd8slFwkW32aYE8RED98OuxR0HiybgFhN0Z9i0mcF9/afbIbGmKIR6rFheksVakTr7AjISlGNEHj+MqkuRIkLOGhJZY0DcfHKgN6QWy412DYoow1zoBceQbV76Q1zsEaS5hz06ep5tp8T7ZQR4hLqLulqr1fSpmekWZg=
+	t=1789572785; cv=none; b=bLMxrIrjYklMOaeLXKD/JuTRDWm4sjGxtJns4tf7n+PWe4fA+uyGrnR+Im+Z1dEr3Q4aSx8Iqg43b9VbkTFBrsgLqo8BEGKEkAXRaYYcqWVPPYTlSZAuFcXp9mn0bgcSxBjVIEUDbsqI2I+nZ74Axw/isOc1Hv0migdj2crNhAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789572785; c=relaxed/simple;
-	bh=o+LEUrChLQumXTQ8gVDWro0LRX/RycvDIOK1D/yCvU8=;
+	bh=qXTRbpJ7ReGwZJ5gYtv8LBnx55PmlIa0iKRgL5OtWxI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QrJxsp3EMakZehsb77VBjPr3KPLehYxDwBH0eH6lyybuJunqoTad2e8mwY/Lg41N7qGicZpv2LnldqxVeIB2DPx0Vt5A6qtrUh6f9x1um6srE+Yx6D79f1Ab0s2wEN2lKdzfiOYd2u2Asmx80glrMyCpA2xY6SPS+NLM+/7C3wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mef6Zo3H; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=pbrVTfxb7L3wjBxiSLUn/G+2IKCvQyNS4fkymqPjvzADE1YayMLqRrruAArDNTlHMtOOGtsilZWKds7eK2zSOmnlQEhgsOibF82dqMBf8s/FltgtQlr4R/EpmLWvBxusXOOlt3OKt9z8jcoX0pCUgDTlcMttvQ3ZfvBgOxej8Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oq092fH/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mef6Zo3H"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ECC12C2BCFF;
-	Wed, 16 Sep 2026 15:33:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oq092fH/"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 638B6C4AF1A;
+	Wed, 16 Sep 2026 15:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1789572783;
-	bh=o+LEUrChLQumXTQ8gVDWro0LRX/RycvDIOK1D/yCvU8=;
+	bh=qXTRbpJ7ReGwZJ5gYtv8LBnx55PmlIa0iKRgL5OtWxI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=mef6Zo3Hlb142JUkAotqQXrKYCXOdxCtbTtvPeVSkb5HVU0tcC5ibrJdKu5WWehVZ
-	 yKyjlvD2wrVTc5Kiu0fwXme0G2ihCzgnEEwhH9X6/h+XE9bi8E4GoknvVR42ZoF+QD
-	 ask8nUvZ+ChnafW/ixCsR6fxxKWtHzOKw6T9kny7u/Ib+d+463gse4yzb+fEAtQWUg
-	 jWfk3ewm5aa096igsy53VZivwOuWDJ8CGA4p0TXkH6eJoDcOY5HhF+q4tiw9gAweH2
-	 6aEh2pvXZLqZEWlPJAU6AVVm3g37RMwFsPIw8n0TJW42rbxrF97LqRDMUtMLFZYAtx
-	 p+aDUlakHxC3w==
+	b=oq092fH/CK6MMaxjIjK+vQOodq3WiApLPtq2lDhU8j95i2VzXt3Aq0+PqB/xBwvNL
+	 vZ7mvA/CK8m62cavUZtjfZDfdEMYGFklQ+cvHwUr3GKFqfRUu69Ue8Zue92TeCS+bQ
+	 AIeIDg7r5eBxrJBPjF2EwepSkOU0DdkYm+D0p+n5WzuaJ+D36XB+EKHkzLIMcMfjhH
+	 RCLmUmcIpFA4K/fr2pjwz6R3QKsZFSXnIM/u1CzxdfCyzGD90AzesKk7sqUX9tyykk
+	 Emu+BrWAfZF42ERYPtlyka3UH4XLXsHOyN6cgjAcBsuwxoH5iy00Yy+VDKOrUHuahc
+	 4s+tc794VWwog==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8455C982C3;
-	Wed, 16 Sep 2026 15:33:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50509C982D0;
+	Wed, 16 Sep 2026 15:33:03 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Wed, 16 Sep 2026 09:33:23 -0600
-Subject: [PATCH v10 31/38] dyndbg: split multi-query strings with @
+Date: Wed, 16 Sep 2026 09:33:28 -0600
+Subject: [PATCH v10 36/38] dyndbg: add epilogue to dynamic_debug/control
+ file
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260916-dd-cmap-part2-clean-v10-31-af4cf4767707@gmail.com>
+Message-Id: <20260916-dd-cmap-part2-clean-v10-36-af4cf4767707@gmail.com>
 References: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
 In-Reply-To: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -64,11 +65,11 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
  Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789572777; l=9157;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789572777; l=2252;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=vqt+R6qwfeUJ05tDSEl0oRSLpZTTeZrmflDKRmmc8bE=;
- b=kESQeGZJy5KrAduY0wOdkBWwUqjh0nGxIoifFGgnK0iNnbi6yYCpxYY7DsF1Lu3EJu4WspirE
- wVda4UUIOzvCEY4Fsl66uvbhA6MmsTH+ZvTtBuydQ5t5IkcNgRkiczx
+ bh=t4exfKxrgybri5XrCovAfGOptL2KD/oh7WXXahxPsi4=;
+ b=TohONGMwqA/3OVpvRGOo+ardrof1fhxX4yK8PzFM00MjzZwVBwOX7TvDE9VhdXjc8JE8qGeND
+ ekqnZBFXLgFDwK6nIW3FL4norVhX/ECzjj383X44eJGNQdDSAgRZEMe
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -78,225 +79,80 @@ Reply-To: jim.cromie@gmail.com
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-Since
-commit 85f7f6c0edb8 ("dynamic_debug: process multiple debug-queries on a line")
+Add an epilogue to the control-file, to allow display of statistics
+etc, without disturbing the header.
 
-Multi-query commands have been allowed:
-
-  modprobe drm dyndbg="class DRM_UT_CORE +p; class DRM_UT_KMS +p"
-  modprobe drm dyndbg=<<EOX
-     class DRM_UT_CORE +p
-     class DRM_UT_KMS +p
-  EOX
-
-More recently, the need for quoting was avoided by treating a comma
-like a space/token-terminator:
-
-  modprobe drm dyndbg=class,DRM_UT_CORE,+p\;class,DRM_UT_KMS,+p
-
-That works, but it needs the escaped semicolon, which is a shell
-special-char (one of the bash control operators), so it is brittle
-when passed in/down/around scripts.
-
-So this patch adds '@' to the existing ';' and '\n' multi-command
-separators, which is more shell-friendly, so you can more fully avoid
-quoting and escaping hassles.
-
-Update selftests script, adding a multi-query split on @
+NB: epilogue lines should start with "#: " to distinguish them from
+lines describing pr_debugs (and from the header line).  No new lines
+are added here, only the place to do so.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
-v10:
-. replace strpbrk() with quote-aware ddebug_find_delimiter() to ignore '@' inside quotes.
-
 v9:
-. update FT_multi_query command in dyndbg_selftest.sh to actively test @ delimiter.
-v5: avoid +t flag in content tests - pid is not predictable.
-    remove Reviewed-by: <louis.chauvet@bootlin.com> - too many changes
-
-v2:
-
-replace '%' with '@' as multi-query splitter, as it is:
- - not a sshell special cahr
- - allows matching on format strings with format specifiers
+. update ddebug_proc_start() to return EPILOGUE_TOKEN when seeking directly to epilogue.
 ---
- Documentation/admin-guide/dynamic-debug-howto.rst  |  8 +++--
- lib/dynamic_debug.c                                | 26 ++++++++++++++++-
- .../selftests/dynamic_debug/dyndbg_selftest.sh     | 34 +++++++++++++++-------
- 3 files changed, 53 insertions(+), 15 deletions(-)
+ lib/dynamic_debug.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
-index b9fbb2a12955..a8962ab22aaf 100644
---- a/Documentation/admin-guide/dynamic-debug-howto.rst
-+++ b/Documentation/admin-guide/dynamic-debug-howto.rst
-@@ -85,10 +85,12 @@ by spaces, tabs, or commas.  So these are all equivalent::
-   :#> ddcmd '  file   svcsock.c     line  1603 +p  '
-   :#> ddcmd file,svcsock.c,line,1603,+p
- 
--Command submissions are bounded by a write() system call.
--Multiple commands can be written together, separated by ``;`` or ``\n``::
-+Command submissions are bounded by a write() system call.  Multiple
-+commands can be written together, separated by ``@``, ``;`` or ``\n``::
- 
--  :#> ddcmd "func pnpacpi_get_resources +p; func pnp_assign_mem +p"
-+  :#> ddcmd func foo +p @ func bar +p
-+  :#> ddcmd func foo +p \; func bar +p
-+  :#> ddcmd "func foo +p ; func bar +p"
-   :#> ddcmd <<"EOC"
-   func pnpacpi_get_resources +p
-   func pnp_assign_mem +p
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 0720fc4f7a90..c023d07623f2 100644
+index eb28831a6cb2..406b64d67440 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -621,6 +621,30 @@ static int ddebug_exec_query(char *query_string, const char *modname)
- 	return nfound;
+@@ -1183,6 +1183,9 @@ static struct _ddebug *ddebug_iter_next(struct ddebug_iter *iter)
+  * read() call from userspace.  Takes the ddebug_lock and
+  * seeks the seq_file's iterator to the given position.
+  */
++static char ddebug_epilogue_token;
++#define EPILOGUE_TOKEN (&ddebug_epilogue_token)
++
+ static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
+ {
+ 	struct ddebug_iter *iter = m->private;
+@@ -1198,7 +1201,9 @@ static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
+ 	dp = ddebug_iter_first(iter);
+ 	while (dp != NULL && --n > 0)
+ 		dp = ddebug_iter_next(iter);
+-	return dp;
++	if (dp)
++		return dp;
++	return n <= 1 ? EPILOGUE_TOKEN : NULL;
  }
  
-+/*
-+ * Split multi-query string on delimiters (@, ;, \n), ignoring delimiters
-+ * that appear inside single or double quoted strings.
-+ */
-+static char *ddebug_find_delimiter(char *str, const char *delims)
-+{
-+	bool in_quote = false;
-+	char quote_char = 0;
+ /*
+@@ -1211,12 +1216,20 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
+ 	struct ddebug_iter *iter = m->private;
+ 	struct _ddebug *dp;
+ 
++	(*pos)++;
 +
-+	for (; *str; str++) {
-+		if (*str == '"' || *str == '\'') {
-+			if (!in_quote) {
-+				in_quote = true;
-+				quote_char = *str;
-+			} else if (*str == quote_char) {
-+				in_quote = false;
-+			}
-+		} else if (!in_quote && strchr(delims, *str)) {
-+			return str;
-+		}
++	if (p == EPILOGUE_TOKEN)
++		return NULL;
++
+ 	if (p == SEQ_START_TOKEN)
+ 		dp = ddebug_iter_first(iter);
+ 	else
+ 		dp = ddebug_iter_next(iter);
+-	++*pos;
+-	return dp;
++
++	if (dp)
++		return dp;
++
++	return EPILOGUE_TOKEN;
+ }
+ 
+ static bool ddebug_class_map_in_range(const int class_id, const struct ddebug_class_map *map)
+@@ -1268,6 +1281,10 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
+ 			 "# filename:lineno [module]function flags format\n");
+ 		return 0;
+ 	}
++	if (p == EPILOGUE_TOKEN) {
++		/* use this soon */
++		return 0;
 +	}
-+	return NULL;
-+}
-+
- /* handle multiple queries in query string, continue on error, return
-    last error or number of matching callsites.  Module name is either
-    in the modname arg (for boot args) or perhaps in query string.
-@@ -631,7 +655,7 @@ static int ddebug_exec_queries(char *query, const char *modname)
- 	int i, errs = 0, exitcode = 0, rc, nfound = 0;
  
- 	for (i = 0; query; query = split) {
--		split = strpbrk(query, ";\n");
-+		split = ddebug_find_delimiter(query, "@;\n");
- 		if (split)
- 			*split++ = '\0';
- 
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index bd72a718406c..a91a0ffa92d4 100755
---- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -138,7 +138,6 @@ function ddcmd_load () {
-     local val="$4"
- 
-     # 1. Setup the control filters (using positional ddcmd range-check)
--    echo  "$query" "$range"
-     ddcmd "$query" "$range"
- 
-     # 2. Execute the workload and capture syslog prints
-@@ -332,9 +331,20 @@ function FT_basic_queries {
-     ddcmd "file $f +l"  "$f"
-     ddcmd "file $f -m"  "$f"
-     ddcmd "file $f =_"  "$f"
-+}
-+
-+function FT_multi_query {
-+    v_echo "${GREEN}# MULTI_QUERY_TESTS ${NC}"
-+    if [ $LACK_DD_BUILTIN -eq 1 ]; then
-+	echo "SKIP - test requires dynamic_debug built into kernel"
-+	return
-+    fi
-+    local f='kernel/params.c'
-+    ddcmd =_ # zero everything
- 
--    # multi-query commands split on ; on a single line
-+    # multi-query commands on a single line, split on ;/@ respectively
-     ddcmd "file $f +mf ; file $f func parse_args +sl" "$f"
-+    ddcmd "file $f -f @ file $f func parse_args -l"   "$f"
- 
-     # verify multi-cmd input, newline separated, with embedded comments
-     ddcmd =_ # reset before multiline query to capture full transition
-@@ -380,7 +390,7 @@ function FT_test_classes {
-     verify_control_slice '\[test_dynamic_debug\]'
- 
-     # 2. Verify state transition and live-printing end-to-end via ddcmd_load!
--    ddcmd_load "class D2_CORE +pmf;class D2_KMS +pls;class D2_ATOMIC +pml" \
-+    ddcmd_load "class,D2_CORE,+pmf;class,D2_KMS,+pls;class,D2_ATOMIC,+pml" \
-         '\[test_dynamic_debug\]' \
-         "/sys/module/test_dynamic_debug/parameters/do_classes" "1"
- 
-@@ -474,6 +484,7 @@ builtin_tests=(
-     FT_grammar_errs
-     FT_basic_queries
-     FT_comma_terminators
-+    FT_multi_query
- )
- 
- # Modular Feature Tests (Require CONFIG_MODULES=y and test_dynamic_debug*.ko available)
-@@ -496,8 +507,8 @@ modular_tests=(
- #
- # ==============================================================================
- function GOLDEN_RECORDS {
--    cat << 'EOF' | {
--#K= 26fd1565f209b383d9f2fbf0b54cd5fc FT_grammar_errs.1
-+    cat << 'EO_DYNDBG_GOLDEN_REFS' | {
-+#K= 95b249c7ec2cbd5a436f96060b2bee37 FT_grammar_errs.1
- #K= 200c01632c52a63f6d186da1c6460740 FT_grammar_errs.2
- #K= 7d7141900ce6e32f15c99202309c63a4 FT_grammar_errs.3
- #K= 1bb798a5831d0119789d424ef6cb55c4 FT_grammar_errs.4
-@@ -517,7 +528,7 @@ function GOLDEN_RECORDS {
- #K= cb8288d607b0c5282125852f3ab05107 FT_grammar_errs.18
- #K= b371c6ba52503d037dbc43da788af8be FT_grammar_errs.19
- #K= 98e2bd3e4f3da58536496a38ec3e6238 FT_grammar_errs.20
--#K= 02b210b2646aceb68f3d6d2876a3d57a FT_grammar_errs.21
-+#K= c4e8b7261811e9fdf0c80fa9e374a29e FT_grammar_errs.21
- #K= 51030cd01ed601a68dd48356902954b1 FT_grammar_errs.22
- #K= af8818de076407d4e7f4e384ba110ac5 FT_grammar_errs.23
- #K= 023ba04ffced833b4776fb4fcaae7755 FT_grammar_errs.24
-@@ -537,7 +548,7 @@ function GOLDEN_RECORDS {
- #K= 130bf64b92a5e34d1c4cce98899084e1 FT_grammar_errs.38
- #K= 9681a05658f1a50e3434aa991b5ce992 FT_grammar_errs.39
- #K= 38506317363a188fbb7a417ff50457a9 FT_grammar_errs.40
--#K= 02b210b2646aceb68f3d6d2876a3d57a FT_grammar_errs.41
-+#K= c4e8b7261811e9fdf0c80fa9e374a29e FT_grammar_errs.41
- #K= 8c08a8b5cacbf885d022360ed856e7a1 FT_grammar_errs.42
- #K= f0f4d894a49bd2c1856cf4f013f83e54 FT_grammar_errs.43
- #K= 25b92d52cb299fa8d84c5584e490bd97 FT_grammar_errs.44
-@@ -561,14 +572,15 @@ function GOLDEN_RECORDS {
- #K= db17180b59444e5e34a8fc20c40e4530 FT_basic_queries.2
- #K= f7bd56bd407ff255ef2e3b5fb093ae6a FT_basic_queries.3
- #K= 4ce44468b3b5f80ae42ade1f261b952f FT_basic_queries.4
--#K= 02e4fd94602e108cb89bfc70d47a5dad FT_basic_queries.5
--#K= f03a7ca7316e8db4c0e16523dc41e75d FT_basic_queries.6
--#K= c518a50ba30ba8099d0dc874a27ecf16 FT_basic_queries.7
- #K= c8bbbac639f244ed9088208ebb7d83a6 FT_comma_terminators.1
- #K= bed6350f058f600910837dae83a12f56 FT_comma_terminators.2
- #K= 6e8599556a312200fb6d484565b6c52f FT_comma_terminators.3
- #K= 68b329da9893e34099c7d8ad5cb9c940 FT_comma_terminators.4
- #K= adc1ef04304c861c87fe294a8ba4e402 FT_comma_terminators.5
-+#K= 02e4fd94602e108cb89bfc70d47a5dad FT_multi_query.1
-+#K= c0fc482bbf18b9d5ffd6743b18bc34f7 FT_multi_query.2
-+#K= f03a7ca7316e8db4c0e16523dc41e75d FT_multi_query.3
-+#K= c518a50ba30ba8099d0dc874a27ecf16 FT_multi_query.4
- #K= 8f18ea82c09460434b6e9e4cd12543e8 FT_test_classes.1
- #K= a15ec4843acd721fbdfddc0b512c8032 FT_test_classes.2
- #K= 20d4545f9753e677e72e3adf52527fd3 FT_test_classes.3
-@@ -613,7 +625,7 @@ function GOLDEN_RECORDS {
- #K= 6a320774e2b535ceb89d6cdde6f5d0fb FT_modprobe_w_param.34
- #K= 7f961a7d3facd89bdd4b9d8e7b5541e9 FT_modprobe_w_param.35
- #K= 6a320774e2b535ceb89d6cdde6f5d0fb FT_modprobe_w_param.36
--EOF
-+EO_DYNDBG_GOLDEN_REFS
-         # Read the K-recs and skip those for tests that can't run
-         while read -r line; do
-             # Filter built-in if needed
+ 	seq_printf(m, "%s:%u [%s]%s =%s \"",
+ 		   trim_prefix(dp->filename), dp->lineno,
 
 -- 
 2.55.0
