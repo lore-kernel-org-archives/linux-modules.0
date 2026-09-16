@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2A553444B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EAB534448;
 	Wed, 16 Sep 2026 15:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789572784; cv=none; b=m4Lualw2hiA1zb370r89Tz0K6yY2O535N7Ub/nz9sDskK5vMrglEMStonARnyvEF1so1JOCnAPUveC8pIEKwXt8Dt3gnMQ+1nDLwZLBrkn1rB/DC+R/tA3Z+9JcmdScVPCs/now4IwTd2NxRd5rNbWytJdZGDsfaXywX+NV+GGY=
+	t=1789572784; cv=none; b=jjl+nHKxN0q1TnXT49e+pVXK+B3oxmSMBhbtaqaFLBdqI7ViqhK+qEdbTVFl2R4CoCIQye+1U+vb6KpMxXxkS8xrLhID/RHVRD/EP75RYIa8RBD/QLp/URE2zXSxGeFpmRrKgHfqsgpTviag1zGSW6NkcbaxA/MjNtPQl7aFqTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789572784; c=relaxed/simple;
-	bh=9rDKS7sHJtsb0Bx6Y5Jcawy/ppk1uKvlwlGnLM9zpRk=;
+	bh=NON11zdwLh1jBYgUrUe50YBgyTAFscgK+5XuaYRqhl0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IcuoXNQAhP1F7l2+BHb6LCAvVBhbCDrOyEvTTKPjOULkug254CH/EhgBgEr96qEGyGnPx0PlxYKVu2W9D8wG/o9siQe5uLJMhzX54PJHCblVx6QdFK9hqRdk3pJUM0blF7OdUssm4LtfKsZ/U9Vtmo8VqsKJCWPT3ZuOH2c6M1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mErAqwQ9; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=F6VOybkOctRyVQ8doQ1UA5NQnk8JwKmuTek2CmlCzsx1LKywo172axINWxEIu/fiqbD/xDTnU7rfQUUzwhPehE0AMVjs2eJ6xIvkw5dUdAIiEEEsQZRvIB/PjNxZE3M7N9n9dPesENdX9mdtD0xFAkoweB3qrDIQnvhn8qWT7L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=my9IdKUD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mErAqwQ9"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBF7FC2BCC7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="my9IdKUD"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 01295C4AF0C;
 	Wed, 16 Sep 2026 15:33:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1789572782;
-	bh=9rDKS7sHJtsb0Bx6Y5Jcawy/ppk1uKvlwlGnLM9zpRk=;
+	bh=NON11zdwLh1jBYgUrUe50YBgyTAFscgK+5XuaYRqhl0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=mErAqwQ9xGkbfa+0iu8Ncu3x5XA4/bZCC9flFu1ekP5T2Xygqcrzy5oGQa498xqSo
-	 6/MjlwG5DhycvydpApm4oPYAPnI8SKGsr5iNOH5BwDRo7y43x+9sqY3Kgk27GDj+vN
-	 j8xsMJUH6U4+5ACNP381qRoIPAx3proPY785jcKpPzrTmty1+S+I9qDBi8KhPH+vWl
-	 iieaqVxqwNQH7f3NIa5TwjNRO0cYJPwUJxbJGbsFEvKy1UwnpfdceCNzMNZbX11oXV
-	 eVWEIea8wK2nii4FBQAw7glrIPZ9DJk8RyyWulWJDhrEkT9mMY+zYU9CYPxamQSpur
-	 X864+QKwjQKAg==
+	b=my9IdKUDGj1w5i1oZkUs2p828k4i4K80ouPR/WZmohj7t0uS/8nymRdj7sIMOiZ/U
+	 aomirwRW4fBd8fBVJRVYayrhenIWlxw6EUZy0900XB6lzkrCeZ1h2AOGuxq+IVEOIs
+	 ajnyxQO7ROI6ADPNKWsy7cohAxI7fJR0gOHHpGcKhLc8GNctWz9aN53SO0Oa2q0cUd
+	 0RIQOuXMR89KjsryomLz2w6oz5dGd2zvkulFOgkhJMZ1IM4P3Za7VjyD/sKt8AMmF9
+	 ybA2ZWMxXsUx3h7b1IIRhi0w13ScdzrBztAwZ4aomY4h/0L06ItJwtfpijq4EJlAG3
+	 fITRwln4oPHAQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A92F8C982C3;
-	Wed, 16 Sep 2026 15:33:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E25F9C982C9;
+	Wed, 16 Sep 2026 15:33:01 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Wed, 16 Sep 2026 09:33:21 -0600
-Subject: [PATCH v10 29/38] dyndbg: control-parser: treat comma as a token
- separator
+Date: Wed, 16 Sep 2026 09:33:16 -0600
+Subject: [PATCH v10 24/38] selftests/dyndbg: Enable FT_classmap_inheritance
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -41,7 +40,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260916-dd-cmap-part2-clean-v10-29-af4cf4767707@gmail.com>
+Message-Id: <20260916-dd-cmap-part2-clean-v10-24-af4cf4767707@gmail.com>
 References: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
 In-Reply-To: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -65,11 +64,11 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
  Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789572777; l=4314;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789572777; l=5931;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=ZrDeIcpsLRk/IxP797PogO5syy10nLdePZS+aXPsHJY=;
- b=GB4bsD2HatYcvN0T3z+I9+kLJpIBpn05xlf9MnaBSAgf6+dfC1nEFUw6wpW8Aa3GIrOiPOFgT
- MCJY5DQZWhjDM33VBjQGivsYj/HMtGw2qeA2DJJ2B8Zg9q0svgRKM7P
+ bh=6OJ9UW17PHmqcN0g3YruYiGL+oiRmIXie0aYgidVUu0=;
+ b=++kI8qArwuxEzMKHq4StXWqdWptUzDszSvpOM/3L/YkwYo86t5hk2xEofy93NPwpHpVKRXFdf
+ X2f9LpeYqQ9DBFrgIBH9nWtjL96clDN6XT1DKf0Sis6HdYVx9uOW20e
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -79,112 +78,143 @@ Reply-To: jim.cromie@gmail.com
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-Treat comma as a token terminator, just like a space. This allows a
-user to avoid quoting hassles when spaces are otherwise needed:
+Exercise classmap state inheritance between supermod and submod,
+verifying that class settings and controlling parameter states propagate
+from parent classmap definitions to dependent class users upon module
+load and during runtime reconfiguration.
 
- :#> modprobe drm dyndbg=class,DRM_UT_CORE,+p\;class,DRM_UT_KMS,+p
-
-Add corresponding Strategy 2 control-file fingerprinting checks to
-verify the exact control-file state of kernel/params callsites after
-commas-as-spaces, ignored-commas, and quoted-commas queries.
+Add FT_classmap_inheritance to exercise classmap parameter propagation
+across test_dynamic_debug and test_dynamic_debug_submod. Enable it under
+modular_tests and register its 8 golden record checksums.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- Documentation/admin-guide/dynamic-debug-howto.rst       |  4 +++-
- lib/dynamic_debug.c                                     | 17 +++++++++++++----
- .../testing/selftests/dynamic_debug/dyndbg_selftest.sh  |  4 ++--
- 3 files changed, 18 insertions(+), 7 deletions(-)
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 84 +++++++++++++++++++++-
+ 1 file changed, 83 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
-index 9c2f096ed1d8..b9fbb2a12955 100644
---- a/Documentation/admin-guide/dynamic-debug-howto.rst
-+++ b/Documentation/admin-guide/dynamic-debug-howto.rst
-@@ -78,11 +78,12 @@ Command Language Reference
- ==========================
- 
- At the basic lexical level, a command is a sequence of words separated
--by spaces or tabs.  So these are all equivalent::
-+by spaces, tabs, or commas.  So these are all equivalent::
- 
-   :#> ddcmd file svcsock.c line 1603 +p
-   :#> ddcmd "file svcsock.c line 1603 +p"
-   :#> ddcmd '  file   svcsock.c     line  1603 +p  '
-+  :#> ddcmd file,svcsock.c,line,1603,+p
- 
- Command submissions are bounded by a write() system call.
- Multiple commands can be written together, separated by ``;`` or ``\n``::
-@@ -172,6 +173,7 @@ module
- 	module sunrpc
- 	module nfsd
- 	module drm*	# both drm, drm_kms_helper
-+	module,sunrpc	# with ',' as token separator
- 
- format
-     The given string is searched for in the dynamic debug format
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 2347d13e1d30..0720fc4f7a90 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -322,6 +322,14 @@ static int ddebug_change(const struct ddebug_query *query, struct flag_settings
- 	return nfound;
- }
- 
-+static char *skip_spaces_and_commas(const char *str)
-+{
-+	str = skip_spaces(str);
-+	while (*str == ',')
-+		str = skip_spaces(++str);
-+	return (char *)str;
-+}
-+
- /*
-  * Split the buffer `buf' into space-separated words.
-  * Handles simple " and ' quoting, i.e. without nested,
-@@ -335,8 +343,8 @@ static int ddebug_tokenize(char *buf, char *words[], int maxwords)
- 	while (*buf) {
- 		char *end;
- 
--		/* Skip leading whitespace */
--		buf = skip_spaces(buf);
-+		/* Skip leading whitespace and comma */
-+		buf = skip_spaces_and_commas(buf);
- 		if (!*buf)
- 			break;	/* oh, it was trailing whitespace */
- 		if (*buf == '#')
-@@ -352,7 +360,7 @@ static int ddebug_tokenize(char *buf, char *words[], int maxwords)
- 				return -EINVAL;	/* unclosed quote */
- 			}
- 		} else {
--			for (end = buf; *end && !isspace(*end); end++)
-+			for (end = buf; *end && !isspace(*end) && *end != ','; end++)
- 				;
- 			if (end == buf) {
- 				pr_err("parse err after word:%d=%s\n", nwords,
-@@ -627,7 +635,8 @@ static int ddebug_exec_queries(char *query, const char *modname)
- 		if (split)
- 			*split++ = '\0';
- 
--		query = skip_spaces(query);
-+		query = skip_spaces_and_commas(query);
-+
- 		if (!query || !*query || *query == '#')
- 			continue;
- 
 diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index 8d3f1e49e9e1..d485b9245164 100755
+index 09a8dbf239dc..51338ebc74bf 100755
 --- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
 +++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -544,8 +544,8 @@ function GOLDEN_RECORDS {
+@@ -64,6 +64,7 @@ function ifrmmod {
+ }
+ 
+ # Clean up any leftover loaded test modules at initialization
++ifrmmod test_dynamic_debug_submod
+ ifrmmod test_dynamic_debug
+ 
+ # ===========================================================================
+@@ -196,7 +197,7 @@ function FT_grammar_ok {
+ 
+     # use 4 keywords (max 9 words inc flags)
+     ddcmd "module foo file bar.c func buz class D2_CORE +_"	# 4 keywords
+-    #ddcmd "module foo file bar.c func buz class D2 line 100 +_" # 5 keywords
++    ddcmd "module foo file bar.c func buz class D2 line 100 +_" # 5 keywords
+ 
+     # 3. Dedicated lineno range grammar assertions (side-effect-free proofs)
+     ddcmd "line 42 +_"		# test exact line syntax
+@@ -298,6 +299,78 @@ function FT_basic_queries {
+     ddcmd "file $f =_" "$f"
+ }
+ 
++function FT_classmap_inheritance {
++    v_echo "${GREEN}# TEST_MOD_SUBMOD ${NC}"
++
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++
++    # modprobe with plain-old +p & 3 class enablements
++    my_modprobe test_dynamic_debug \
++	"dyndbg=+p;class D2_CORE +pf;class D2_KMS +pt;class D2_ATOMIC +pm"
++    verify_control_slice '\[test_dynamic_debug\]'
++
++    set_param 5 /sys/module/test_dynamic_debug/parameters/p_level_num
++    verify_control_slice '\[test_dynamic_debug\]'
++
++    my_modprobe test_dynamic_debug_submod
++    verify_control_slice 'test_dynamic_debug_submod'
++
++    # fresh start, to clear all above flags (test-fn limits)
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++
++    # load submod, which loads supermod
++    my_modprobe test_dynamic_debug_submod \
++	"dyndbg=+p;class D2_CORE +pfs;class D2_KMS +pts;class D2_ATOMIC +pmf"
++    verify_control_slice 'test_dynamic_debug'
++
++    # runtime changes to both
++    set_param 0x57 /sys/module/test_dynamic_debug/parameters/p_disjoint_bits
++    set_param 4 /sys/module/test_dynamic_debug/parameters/p_level_num
++    verify_control_slice 'test_dynamic_debug'
++
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++
++    # set super-mod params at load-time
++    my_modprobe test_dynamic_debug p_disjoint_bits=0x16 p_level_num=5
++    verify_control_slice '\[test_dynamic_debug\]'
++
++    # see them picked up by submod
++    my_modprobe test_dynamic_debug_submod
++    verify_control_slice 'test_dynamic_debug'
++
++    # Real-time mathematical proof that load-time (modprobe) parameter parsing
++    # and runtime (sysfs write) parameter configurations are perfectly equivalent!
++    local hash_modprobe=$(slice_and_hash_ddctrl '\[test_dynamic_debug\]')
++
++    # Fresh load with default parameters, then configure them dynamically at runtime
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++    my_modprobe test_dynamic_debug
++    my_modprobe test_dynamic_debug_submod
++    echo 0x16 > /sys/module/test_dynamic_debug/parameters/p_disjoint_bits
++    echo 5 > /sys/module/test_dynamic_debug/parameters/p_level_num
++
++    local hash_sysfs=$(slice_and_hash_ddctrl '\[test_dynamic_debug\]')
++    if [ "$hash_modprobe" != "$hash_sysfs" ]; then
++        echo -e "${RED}: Load-time vs runtime parameter equivalence check failed!${NC}"
++        exit $ksft_fail
++    else
++        v_echo "${GREEN}: Proven: parameter load-time (modprobe) " \
++            "and runtime (sysfs write) are equivalent!${NC}"
++    fi
++    # --- Live Content Fingerprinting Phase ---
++    log_start
++    echo 1 > /sys/module/test_dynamic_debug/parameters/do_prints
++    echo 1 > /sys/module/test_dynamic_debug_submod/parameters/do_prints
++    log_stop
++
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++}
++
+ # Built-in Feature Tests (Can run on any CONFIG_DYNAMIC_DEBUG kernel, modular or monolithic)
+ builtin_tests=(
+     FT_grammar_ok
+@@ -307,6 +380,7 @@ builtin_tests=(
+ 
+ # Modular Feature Tests (Require CONFIG_MODULES=y and test_dynamic_debug*.ko available)
+ modular_tests=(
++    FT_classmap_inheritance
+ )
+ 
+ # ==============================================================================
+@@ -390,6 +464,14 @@ function GOLDEN_RECORDS {
  #K= 02e4fd94602e108cb89bfc70d47a5dad FT_basic_queries.5
  #K= f03a7ca7316e8db4c0e16523dc41e75d FT_basic_queries.6
  #K= c518a50ba30ba8099d0dc874a27ecf16 FT_basic_queries.7
--#K= 69f1958beef98211d4181f9ded9787c4 FT_test_classes.1
--#K= 5516e3d13cba7ea4197a7fb6c033887a FT_test_classes.2
-+#K= 8f18ea82c09460434b6e9e4cd12543e8 FT_test_classes.1
-+#K= a15ec4843acd721fbdfddc0b512c8032 FT_test_classes.2
- #K= 20d4545f9753e677e72e3adf52527fd3 FT_test_classes.3
- #K= 934d8677872fe26bd636a6c3d6416aa2 FT_classmap_inheritance.1
- #K= cd1389958807063baa1ea4b06c61fa02 FT_classmap_inheritance.2
++#K= fb294f02a4207b28b2a874524ef07afd FT_classmap_inheritance.1
++#K= 7a0b87016fdc237077dfe96bbbb3661b FT_classmap_inheritance.2
++#K= 2784d60f5056fc5cc03b3ceb854293f5 FT_classmap_inheritance.3
++#K= bf66aaf8ff612272c0cda29778ed2131 FT_classmap_inheritance.4
++#K= 49fdd29d91a4c1d16f8b59bb431e741b FT_classmap_inheritance.5
++#K= a8aa244285d048b5ebe33061fa99c424 FT_classmap_inheritance.6
++#K= 3060b86a0f553dd5a826bb7023284925 FT_classmap_inheritance.7
++#K= f43e0aff8a4b38435b73d90ed8100d1b FT_classmap_inheritance.8
+ EOF
+         # Read the K-recs and skip those for tests that can't run
+         while read -r line; do
 
 -- 
 2.55.0
