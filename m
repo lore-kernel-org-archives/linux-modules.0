@@ -1,164 +1,401 @@
-Received: from mail-yx2-f43.google.com (mail-yx2-f43.google.com [74.125.224.171])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556B3515889
-	for <linux-modules@vger.kernel.org>; Thu, 17 Sep 2026 16:37:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF27752844D
+	for <linux-modules@vger.kernel.org>; Thu, 17 Sep 2026 17:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789663032; cv=pass; b=ZHrdcBAC4zjvo+XNuxEHAvLhRVE2nYNgdgfA0B2aMUP0FfuJHvyQMZo1mjzDm60TvpJglvbUCDdDYPHoLl186ZbnqqjLCqSh3Rrx2nAY0GYgmYfx7/5gxOxz/CCO+FfzADOPTWCd3Kjdy42N/8tSZT8U4bo8+Er0jhycNczrliI=
+	t=1789665953; cv=pass; b=g0e0cGRGzCmTe5YxTQsXRFccElUX8XNeXN1Chx5Cs4K2SVNnZJqYnrpB+3tjnLU2ki1vhlUV2WNpti/aeP3ff6x57mAhepKbVGvCHz4INHYPSvl/3imSm1RFUX9Y8CbiN+D6OCg44Vjrkedqxb4Phru8Iu2AUQOps2A2HMk6n4o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789663032; c=relaxed/simple;
-	bh=3cEU2FX5sjCKV/9YY1zUxvndLq56ff83jvaQSJxMo1M=;
-	h=From:MIME-Version:Date:Message-ID:Subject:To:Content-Type; b=V9geRudiz8bDBBdaz0ZSNclGOsl8TX1msrXDg0ab6ZGT7wZkQl6LXxxR9FkzfwVdXJ52wTJ3zgcsRj8hSDQUfa0vLs6GFq1i1yx7Lfnd4lUBcxSgmUljYSn/caSSTGUyuaQ3LyXZoFu2/KXMMNFwtG45+vAAWNG0uJyF2QpOhLw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hp61h2Ze; arc=pass smtp.client-ip=74.125.224.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789665953; c=relaxed/simple;
+	bh=ykSGCDC5mG2ODpRQPd0vJL+tlN35Q5hi/KlRm9aqv1k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=er1jQs+G7ETp8eViKRVNgZ1iOD/UgCplKdH9m+fBmvYHK92uJXPQJANcDOrYscuhGZ2g83XG5u1qYsFnitaL2rz1wepRppLYi07+ZcxyWo+/w3T/UFehYltNOk7ieEgvGCMw76vj0H04NOlJt/bQWGFnHDxL8onsb8TFRxE6TAk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fpieXGNv; arc=pass smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hp61h2Ze"
-Received: by mail-yx2-f43.google.com with SMTP id 956f58d0204a3-66e4aac9321so1011660d50.3
-        for <linux-modules@vger.kernel.org>; Thu, 17 Sep 2026 09:37:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789663030; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fpieXGNv"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6a5f9b036f9so419a12.1
+        for <linux-modules@vger.kernel.org>; Thu, 17 Sep 2026 10:25:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789665949; cv=none;
         d=google.com; s=arc-20260327;
-        b=r2NYc67M8vTwcjT2Sfzs3LYFROSalRyyblD6xp2SZ2xxsM3XW/MxyRBPivi1lZJF3Q
-         XmoZrEEEW0lChCJ3LJCAdKZbrwUjAtEUI0AfFHWhGvhS3pIJ8/SDl0d6L749emVywnwN
-         xuBwDIoa0+08ZE597RmzaZ0vsEzNTWi1Ktbnldz1fL/L1HBG8efomdxRsJli+ZCbxtF5
-         ueZxl88RmA4Jb8MUgDfKWH1rgQWw9SnBtYmiB5gB476Q9R/UD+j04ohRrcQPQSW4W/tF
-         NImVN3+ehqdtC96fomAEzg8yG3XOEvhqxtAmbTOJ5pkb0Cmt734lN84ic7mBK9ducYWy
-         wDdg==
+        b=LL+y0444eEi4p09p0Tf09xm4HZK4zz+6tTuwiD3IjmgGKwY0Qsm86rdLQo9C4h9O9N
+         AEIWjZk5K/I3Vy5/STqXOsE3XN5W2/DsVyDHDjg5opaiNa8qowFYYb469+KoxKgbp31X
+         bIRIwyX7ezNBMbcdatgyQrrExG7FxIi/x9kyJ5Dw6xdBTwHDTIi29GLY8aGAvPy1ZJpR
+         M9srqucpoZ9o8kOjc4E8iJvS2X+U7QnKJUZePZetSdjfl1tXiwjtcRsfMmuKBvjzKe8/
+         gQXsDvoJ3+8avSad8HDIWqkpajkCjFPLDZ2Mk0QCRwW2bd2ozL3cOm2wHMu6Z/BAjc0t
+         xeaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=to:subject:message-id:date:mime-version:from:dkim-signature;
-        bh=3gfRyW82mA40VTKRDF3tUXjLNXgKrRICPFMxaXpDiOw=;
-        fh=fdRss8L325mUiLwiR71EIvmfhZkG16t17xGSewnVu9s=;
-        b=dTwW2KQqOVKVo+bLAg7K4a7cPlTb5YL4b/ucYYY1I80BG8eU4P3jkVOFOnzW+N/zRE
-         Ks5CNHESdqtFxs4mMvQsx3pgIQP999JoFLWuIcgh3w+XH1aqEGTEwpQsP6Nku0njB6+m
-         L152P4L4SGYkqO3sZhUnTCH3JOE/PuKz/oxFcPzX4Al6CKykUdDIG/9LxlQSwnyweDQ4
-         0xX1cy7S3KO+EVwxGkOFAxU3KIhMPLdRhNqMCXA7t+H7vYuNsz9hlxiZi15if2+rgELR
-         A5yz7fJGqgXVy2TGHivgGJKZpHn2f9Rc1TlDYCuusRtj1N8j3I4UcYF+Di8Yia0ImS8B
-         TzHQ==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KsTRDsiQkb6uPtn9uEZQZ4pGk/1dXT9fj39UbJRrdLw=;
+        fh=uGdNwaEA7UWH+4whofiogTKOlF3DZjZ/fr6SFqwCSs4=;
+        b=AZLPMAn4mNL1v7oNQYRFIIijRtgeJqu7Xz7VKahz/cDiLNNwzMhY+OmY99wOC7dKoq
+         DTLcLtP45v1HrNPneFvRLf0hNvc6+MVzRDSCm1xTUi1D2v+E4MxhO/f9mAW6FZh+y13u
+         6IYUDmTp9/UhGKniVBjmqO4u2SRvNK9v7BXIwJv8XaHV+3R8v0SDE2nvWLuQbMLvRqYZ
+         nJSEan3UxSDRnY4UR9hkaJruNdDZ4stHq/RTMpVwGGcFhD1qYrkRMLTzi7BPVojcxdfZ
+         ESxsLK87QEggczGkNbJdNsJuUlMBqq/oNDaXWFaxQSZiHTXyK9NtjTEMEuIqBQgy1O5N
+         FvWw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789663030; x=1790267830; darn=vger.kernel.org;
-        h=content-type:to:subject:message-id:date:mime-version:from:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=3gfRyW82mA40VTKRDF3tUXjLNXgKrRICPFMxaXpDiOw=;
-        b=Hp61h2Ze1RvXPyBtj8tx5eReEdsu2Y3Ggt+fyjlmCuJNGXERbNeN8YKWC5pDW+YTrA
-         2Lue30qtPiPFP++9SAF80N6yeoyBbxORmyH/ubfoMJ6XbqyxsZVC1Q3vWeVBgAwT2pQ2
-         vHzCAz039rST0ONfRNDFjBfGB4jTPFB097fc13c6YL5NJoZl/W4U7RUL7hcKQJf8hWnl
-         dD/PUGYFMCCUiuuGj/Xdwuq4eB2aArbCFn1sJvDtJwkHH2RUqSeY+UAQ3HPl6a+HSVa8
-         gJyf8ViKsSLPl6F9Jq9VLSRR+2O6eChS3094694a9OoXyCqf62AOxWQi3erc9gYZ+zKX
-         iohg==
+        d=google.com; s=20251104; t=1789665949; x=1790270749; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KsTRDsiQkb6uPtn9uEZQZ4pGk/1dXT9fj39UbJRrdLw=;
+        b=fpieXGNv/dpPCIHoM36bpK5baM9EzApt3uxLKii1Yz5JoQ+3tiERLf2PgetveMunjI
+         5JrOl90C8iGhRISj/bktHkC5W97XfV13IifKhYajjHJDBZj4vBYqQT/C0QNZzNPWkjUc
+         ycQZ8hJzoMsNPS5bibpdvupvX1XZv8/VhiudLve9jlQ8D0RS9gb8hnX3TM30l2DJz15H
+         JAtD/5Fr9WN2aB95LUul2mWFr+05WImN0K3+yDF7smf7grSCc2FwutDZICx4k1SpaGf4
+         SkgBv9AfD6Dc+ztbYAmamfnt5etJeYf/fS9aUwZKuX7gFyoSW577+mVKLJLrP3DicR24
+         /KDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789663030; x=1790267830;
-        h=content-type:to:subject:message-id:date:mime-version:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1789665949; x=1790270749;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3gfRyW82mA40VTKRDF3tUXjLNXgKrRICPFMxaXpDiOw=;
-        b=E5PFbXQ+D4eZ6JA52dEciNDhTgFiv6soJicYXxq4U9kbvzfr+ZNl2/m6Nl1lpZFsKd
-         aSLxm04N8KRcdwA6cs9f0oX1oZ1oK2+w5QXUOSmmaOffy7SCGn9wMMSkYg1k/ARw0gO7
-         7HevD7xkv8FgS4aSbRJZkbWl1VLN5vDsa6M6yyPjLdSx61noGQzLJYy5/2MQJmfhIzrw
-         RZt9FhtK/5Cvjx8KwfKlSiP4d4/4jXwFuU6he6LYltvMxlgjr2zlH7ybe6wSKPUj2KzA
-         9UiLpSGjBQiZHJU7F8Q0o5cr7Q9rDaIII18f6UuZ2tZ9ZT30ovjoaBz1JHUqW4woilAu
-         wmDA==
-X-Gm-Message-State: AFuF++lVfSsTiMHLq5P45iE3KRQ1lLdkjpHFGy/5y5nymUCH6mCURWWm
-	7fWbGUxc2CUaPSM6c1Lwt1y9fzR370OLWPTtO4taitWcNu9CxE2WD5QQZ66Zw/4WtUuLXycsHKI
-	AV1PLiuzUUI9uC9sjVxFKbB/BYQ5GpMkj5w==
-X-Gm-Gg: AYBFou1bKIscoCJTA+/b+afjrDGHRig+seTXXd7kXMpmJLCnVmqlaORqPEfHNWOxMRR
-	HXQOf6Emyil1kuLro/p70Wj44L8+g2tdeJZ7pOgqP+gEAH6pp8Bzs+SlAQHHCn11Ql4ywAJC3zY
-	Ub/O4cPPX7bx0yEoIQouQMVQC5DpCymAvSutFTMCtmTge40Ug0gmDprQ2M30Um+Lj50ICxyxAQG
-	RfIR35XtUKH83woFwBdHO1t5F2Cy6eqAOu3BQk/JsnmuVZ02lxDcNHMdUzPv5JUdyn9Q2ETUQfM
-	EIp2OCHFI41+3nh6HrG2QHVVjATetP7Cjq3ODw9yhgeH+F0SvfTL55yLUFoJ786AYiqNso9/9KC
-	HAUBYQxZ16OfeJtdL4A==
-X-Received: by 2002:a05:690e:488e:10b0:66f:c1be:a66b with SMTP id
- 956f58d0204a3-671632efcd9mr1602288d50.93.1789663030062; Thu, 17 Sep 2026
- 09:37:10 -0700 (PDT)
-Received: from 313336824172 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 17 Sep 2026 09:37:06 -0700
-Received: from 313336824172 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 17 Sep 2026 09:37:06 -0700
-From: alan.hovgaard@gmail.com
+        bh=KsTRDsiQkb6uPtn9uEZQZ4pGk/1dXT9fj39UbJRrdLw=;
+        b=VP7d8Fhl/hfTtfZ2W5Wur0tg2H08dsI1NsTIRyWL5nQ86+/64vhyq76bApGoqEKJMx
+         gDgUaA1W7mLTAYu6ycFqda5yzgQmk2KjvE2WRjnVCyNFHnb2X/cZ+P6i4+5UBmofbFra
+         PZsfosPbv5TcL2hQE93nd79Ry4CEWVT4sND2tsbJvs0zMsprTJMCm+1EyUxFvEN5/cfE
+         3Tu54Ke6t2gN5LB1POy1Rr0bi6sk5GTK4XerGq9tjMlgErxVg/h8hjoRzu/biN10Q+iw
+         wEDyb//adDytNqk0QPziwEKDtL7wSUX+/L+1D0/VRskDhYtKYD0h8M2muNWid8A+TI7b
+         DrvQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwLrXwesadAZYPsCdNwTEBYhWMCtx0Y9c7iYuu56dL6zMZOAmbwVVHUDbeZPs+lCfGSn1OPNlJUVhAXQEyi@vger.kernel.org
+X-Gm-Message-State: AFuF++lCMEeigDmR7Q/sEIedX4VDJs5Rsp4xAMdpnYUTJ2hrkDGjWj8e
+	RXG11tqfiD4dexMiMEXy64xjm7Ri85JJ166FzRkXBXIiOYJoELWn9bR0KVHk37wBqeYiJWIsCRY
+	xSP5EX4AnOP7onM4GkWmtpRQw1llXBrohlGAoQbJ1
+X-Gm-Gg: AYBFou3W0PhqiiyNuN7mpDVD67OuyyXPht548gsfha8nP27DZnnGYo0QGLR8UTMg1di
+	sTQ4yS507up6z9/5ANZTH19lJTl08Of6n8Hg07YpC5WUGNplOva1OdRmKvIN1dsGEBAjtlZTAHT
+	I3MKnXgJYkIwHtoGpZGo8pjve4cl4V2ICdXfM4ezsHw+o8G5kQGQDuesBLsesxqB7jNVpp2BwjW
+	uhKlgxAtN0N5oAKsAgm/L561OhQbpsftFujZ883VlHXh5zRxC3B9bEEW+3MynyUzOOyTpuSwDY+
+	a6xblOtYb4i8i1XDcBSP1GwpKW80LNl/p+Sld2suzSDjOfgVTwTlnRR9WCud3t4sO4kn2tVxIoE
+	GTFLIKCY=
+X-Received: by 2002:a05:6402:c318:b0:6a7:ef71:28e0 with SMTP id
+ 4fb4d7f45d1cf-6aa4de2f154mr1263a12.0.1789665948368; Thu, 17 Sep 2026 10:25:48
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 17 Sep 2026 09:37:06 -0700
-X-Gm-Features: AcwNN1XZxIlaFpvS8z25GVHhe0THKe516EU7lhiqTWQJ---kQUzEP4QyLHthtGY
-Message-ID: <CAJEbJRDvQ99QY1suT9n-g2LQqGBgFrMj+9=d63xe0qt9_-Jqtw@mail.gmail.com>
-Subject: False-positive missing-firmware warnings for devices not present on
- the machine
-To: linux-modules@vger.kernel.org
+References: <20260915070001.113559-1-hao.ge@linux.dev> <20260915070001.113559-4-hao.ge@linux.dev>
+In-Reply-To: <20260915070001.113559-4-hao.ge@linux.dev>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 17 Sep 2026 10:25:34 -0700
+X-Gm-Features: AcwNN1XYvpWm4JKrRXV9ykFLQYiWSqvvLPav3S2pb3RC8LMV6NkXRBZ6FuHBL-c
+Message-ID: <CAJuCfpHz6V0zT5+QkYdQsBzG9kWCFhP+gris2XRrvSu4hHD6Hw@mail.gmail.com>
+Subject: Re: [PATCH v10 3/6] module: introduce SH_ENTSIZE_STANDALONE for
+ separately allocated sections
+To: Hao Ge <hao.ge@linux.dev>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-modules@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello linux-modules maintainers,
+On Mon, Sep 14, 2026 at 11:59=E2=80=AFPM Hao Ge <hao.ge@linux.dev> wrote:
+>
+> SHF_ALLOC means, per the ELF spec, that a section occupies memory
+> during process execution. Some module sections occupy memory
+> outside the regular module layout, for example the percpu section
+> with its per-CPU allocations. The loader currently excludes such
+> a section from the layout by clearing its SHF_ALLOC, which
+> overloads the flag with a loader-internal meaning.
+> apply_relocations() needs a special case for the section, and
+> find_sec(".data..percpu") returns different results before and
+> after layout_and_allocate().
+>
+> Introduce SH_ENTSIZE_STANDALONE to mark sections with a separate
+> allocation. The percpu section is its first user. layout_sections()
+> and move_module() skip marked sections, and apply_relocations() goes
+> back to testing only SHF_ALLOC. Based on a patch by Petr Pavlu [1].
+>
+> .data..percpu keeps SHF_ALLOC, so it would now show up under
+> /sys/module/*/sections/. The section has one instance per CPU and no
+> single address to report, and the entry never existed before, so
+> skip it in add_sect_attrs(). add_notes_attrs() indexes its attrs[]
+> array and skips it too. No functional change otherwise.
 
-I am an Arch Linux user writing about a user-facing warning that
-appears on every kernel upgrade. It is driven by MODULE_FIRMWARE
-metadata on in-tree modules, then printed by the distro initramfs
-generator (mkinitcpio) as:
+And IIUC no userspace-visible changes too, right?
 
-    WARNING: Possibly missing firmware for module: 'ast'
-    WARNING: Possibly missing firmware for module: 'xhci_pci_renesas'
-    WARNING: Possibly missing firmware for module: 'qla2xxx'
-    WARNING: Possibly missing firmware for module: 'qed'
-    WARNING: Possibly missing firmware for module: 'aic94xx'
-    WARNING: Possibly missing firmware for module: 'bfa'
-    WARNING: Possibly missing firmware for module: 'wd719x'
-    WARNING: Possibly missing firmware for module: 'qla1280'
+>
+> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compress=
+ion")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Link: https://lore.kernel.org/all/499bb60c-c6e3-43a3-bd92-95a0567ece5e@su=
+se.com/ [1]
+> Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
+> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hao Ge <hao.ge@linux.dev>
 
-None of that hardware is in this computer. I find it a strange
-antipattern to report missing firmware for devices that are not
-present. Treating that as a WARNING is, in my view, plain wrong and
-misleading. Why on earth is the default to warn about hardware that
-is not even in the machine?
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
-Machine: Lenovo Legion Pro 5 16IRX8 (laptop)
-GPU:     Intel Raptor Lake-S UHD + NVIDIA GeForce RTX 4070 Max-Q
-USB:     Intel 700 Series xHCI
-Storage: Samsung NVMe
-Ethernet: Realtek RTL8111
-Wi-Fi:   Intel CNVi
-
-  Module              What it is                         On this PC
-  ------------------  ---------------------------------
-------------------------------------------
-  ast                 ASPEED BMC/IPMI server graphics    No -- Intel
-UHD + RTX 4070
-  xhci_pci_renesas    Renesas USB 3.0 xHCI firmware      No -- USB is
-Intel 700-series xHCI
-  qla2xxx             QLogic Fibre Channel HBA           No
-  qed                 QLogic FastLinQ enterprise NIC     No --
-ethernet is Realtek RTL8111
-  aic94xx             Adaptec SAS/SATA RAID              No
-  bfa                 Brocade Fibre Channel HBA          No
-  wd719x              Old Western Digital SCSI HBA       No
-  qla1280             Old QLogic SCSI HBA                No
-
-None of those modules are loaded. lspci shows no matching devices.
-
-I understand MODULE_FIRMWARE lists every blob a driver might request
-for any supported device variant, not "firmware required on this
-host." Distros then treat that list as a checklist when they pack
-generic storage/USB/GPU modules into an initramfs. The result is
-false-positive WARNINGs on ordinary laptops for QLogic Fibre Channel,
-Brocade FC, Adaptec RAID, old SCSI cards, ASPEED BMC, and Renesas USB.
-
-A warning should mean something is actually wrong with this machine.
-I am asking for this default to change.
-
-On the kernel / module-metadata side, that could mean:
-
-  - Distinguishing required vs optional firmware in MODULE_FIRMWARE /
-    modinfo, so initramfs generators can stop false-positive warnings
-  - Or documenting a stable way for userspace to know that a firmware
-    blob is only needed if a given PCI ID is present
-
-I am sending the same request to the Arch mkinitcpio maintainers,
-who emit the warning today, and to linux-firmware / LKML. I would
-like the user-visible default to stop warning about devices that are
-not in the computer.
-
-Thank you,
-Alan Hovgaard
-Arch Linux user
+> ---
+>  include/linux/module.h   |  2 ++
+>  kernel/module/internal.h |  8 ++++++++
+>  kernel/module/kallsyms.c | 13 +++----------
+>  kernel/module/main.c     | 32 +++++++++++++++++---------------
+>  kernel/module/sysfs.c    | 17 +++++++++++++----
+>  5 files changed, 43 insertions(+), 29 deletions(-)
+>
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 96cc98568eea..0c6f32ddcbf2 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -325,6 +325,8 @@ enum mod_mem_type {
+>         MOD_INIT_RODATA,
+>
+>         MOD_MEM_NUM_TYPES,
+> +
+> +       MOD_STANDALONE =3D -2,
+>         MOD_INVALID =3D -1,
+>  };
+>
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index 061161cc79d9..4c738074a27b 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -29,6 +29,14 @@
+>  #define SH_ENTSIZE_TYPE_MASK   ((1UL << SH_ENTSIZE_TYPE_BITS) - 1)
+>  #define SH_ENTSIZE_OFFSET_MASK ((1UL << (BITS_PER_LONG - SH_ENTSIZE_TYPE=
+_BITS)) - 1)
+>
+> +/*
+> + * Marker for sections with a separate allocation, which are not placed
+> + * into mod->mem[].
+> + */
+> +#define SH_ENTSIZE_STANDALONE                                  \
+> +       (((unsigned long)MOD_STANDALONE & SH_ENTSIZE_TYPE_MASK) \
+> +        << SH_ENTSIZE_TYPE_SHIFT)
+> +
+>  /* Maximum number of characters written by module_flags() */
+>  #define MODULE_FLAGS_BUF_SIZE (TAINT_FLAGS_COUNT + 4)
+>
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index f23126d804b2..0dca6d40160e 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -76,7 +76,7 @@ static char elf_type(const Elf_Sym *sym, const struct l=
+oad_info *info)
+>  }
+>
+>  static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
+> -                          unsigned int shnum, unsigned int pcpundx)
+> +                          unsigned int shnum)
+>  {
+>         const Elf_Shdr *sec;
+>         enum mod_mem_type type;
+> @@ -86,11 +86,6 @@ static bool is_core_symbol(const Elf_Sym *src, const E=
+lf_Shdr *sechdrs,
+>             !src->st_name)
+>                 return false;
+>
+> -#ifdef CONFIG_KALLSYMS_ALL
+> -       if (src->st_shndx =3D=3D pcpundx)
+> -               return true;
+> -#endif
+> -
+>         sec =3D sechdrs + src->st_shndx;
+>         type =3D sec->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
+>         if (!(sec->sh_flags & SHF_ALLOC)
+> @@ -131,8 +126,7 @@ void layout_symtab(struct module *mod, struct load_in=
+fo *info)
+>         /* Compute total space required for the core symbols' strtab. */
+>         for (ndst =3D i =3D 0; i < nsrc; i++) {
+>                 if (i =3D=3D 0 || is_livepatch_module(mod) ||
+> -                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
+hnum,
+> -                                  info->index.pcpu)) {
+> +                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
+hnum)) {
+>                         strtab_size +=3D strlen(&info->strtab[src[i].st_n=
+ame]) + 1;
+>                         ndst++;
+>                 }
+> @@ -199,8 +193,7 @@ void add_kallsyms(struct module *mod, const struct lo=
+ad_info *info)
+>         for (ndst =3D i =3D 0; i < kallsyms->num_symtab; i++) {
+>                 kallsyms->typetab[i] =3D elf_type(src + i, info);
+>                 if (i =3D=3D 0 || is_livepatch_module(mod) ||
+> -                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
+hnum,
+> -                                  info->index.pcpu)) {
+> +                   is_core_symbol(src + i, info->sechdrs, info->hdr->e_s=
+hnum)) {
+>                         ssize_t ret;
+>
+>                         mod->core_kallsyms.typetab[ndst] =3D
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index c1b34dc1e89a..ae2678ac7840 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -1619,12 +1619,13 @@ static int apply_relocations(struct module *mod, =
+const struct load_info *info)
+>
+>                 /*
+>                  * Don't bother with non-allocated sections.
+> -                * An exception is the percpu section, which has separate=
+ allocations
+> -                * for individual CPUs. We relocate the percpu section in=
+ the initial
+> -                * ELF template and subsequently copy it to the per-CPU d=
+estinations.
+> +                *
+> +                * Note that .data..percpu has separate allocations for
+> +                * individual CPUs. We relocate the section in the
+> +                * initial ELF template and subsequently copy it to the
+> +                * per-CPU destinations.
+>                  */
+> -               if (!(info->sechdrs[infosec].sh_flags & SHF_ALLOC) &&
+> -                   (!infosec || infosec !=3D info->index.pcpu))
+> +               if (!(info->sechdrs[infosec].sh_flags & SHF_ALLOC))
+>                         continue;
+>
+>                 if (info->sechdrs[i].sh_flags & SHF_RELA_LIVEPATCH)
+> @@ -1715,7 +1716,7 @@ static void __layout_sections(struct module *mod, s=
+truct load_info *info, bool i
+>
+>                         if ((s->sh_flags & masks[m][0]) !=3D masks[m][0]
+>                             || (s->sh_flags & masks[m][1])
+> -                           || s->sh_entsize !=3D ~0UL
+> +                           || s->sh_entsize !=3D ~0UL /* offset or stand=
+alone */
+>                             || is_init !=3D module_init_layout_section(sn=
+ame))
+>                                 continue;
+>
+> @@ -1745,16 +1746,10 @@ static void __layout_sections(struct module *mod,=
+ struct load_info *info, bool i
+>  /*
+>   * Lay out the SHF_ALLOC sections in a way not dissimilar to how ld
+>   * might -- code, read-only data, read-write data, small data.  Tally
+> - * sizes, and place the offsets into sh_entsize fields: high bit means i=
+t
+> - * belongs in init.
+> + * sizes, and place the offsets into sh_entsize fields.
+>   */
+>  static void layout_sections(struct module *mod, struct load_info *info)
+>  {
+> -       unsigned int i;
+> -
+> -       for (i =3D 0; i < info->hdr->e_shnum; i++)
+> -               info->sechdrs[i].sh_entsize =3D ~0UL;
+> -
+>         pr_debug("Core section allocation order for %s:\n", mod->name);
+>         __layout_sections(mod, info, false);
+>
+> @@ -2822,7 +2817,8 @@ static int move_module(struct module *mod, struct l=
+oad_info *info)
+>                 Elf_Shdr *shdr =3D &info->sechdrs[i];
+>                 const char *sname;
+>
+> -               if (!(shdr->sh_flags & SHF_ALLOC))
+> +               if (!(shdr->sh_flags & SHF_ALLOC)
+> +                   || shdr->sh_entsize =3D=3D SH_ENTSIZE_STANDALONE)
+>                         continue;
+>
+>                 sname =3D info->secstrings + shdr->sh_name;
+> @@ -2954,6 +2950,7 @@ core_param(module_blacklist, module_blacklist, char=
+p, 0400);
+>  static struct module *layout_and_allocate(struct load_info *info, int fl=
+ags)
+>  {
+>         struct module *mod;
+> +       unsigned int i;
+>         int err;
+>
+>         /* Allow arches to frob section contents and sizes.  */
+> @@ -2967,8 +2964,13 @@ static struct module *layout_and_allocate(struct l=
+oad_info *info, int flags)
+>         if (err < 0)
+>                 return ERR_PTR(err);
+>
+> +       /* Repurpose sh_entsize to track where each section is allocated.=
+ */
+> +       for (i =3D 0; i < info->hdr->e_shnum; i++)
+> +               info->sechdrs[i].sh_entsize =3D ~0UL;
+> +
+>         /* We will do a special allocation for per-cpu sections later. */
+> -       info->sechdrs[info->index.pcpu].sh_flags &=3D ~(unsigned long)SHF=
+_ALLOC;
+> +       if (info->index.pcpu)
+> +               info->sechdrs[info->index.pcpu].sh_entsize =3D SH_ENTSIZE=
+_STANDALONE;
+>
+>         /*
+>          * Mark relevant sections as SHF_RO_AFTER_INIT so layout_sections=
+() can
+> diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
+> index 01c65d608873..15c6baeb39c4 100644
+> --- a/kernel/module/sysfs.c
+> +++ b/kernel/module/sysfs.c
+> @@ -62,6 +62,15 @@ static void free_sect_attrs(struct module_sect_attrs *=
+sect_attrs)
+>         kfree(sect_attrs);
+>  }
+>
+> +/*
+> + * .data..percpu has a separate allocation per CPU and no single
+> + * address to report.
+> + */
+> +static bool sect_visible(const struct load_info *info, unsigned int i)
+> +{
+> +       return !sect_empty(&info->sechdrs[i]) && i !=3D info->index.pcpu;
+> +}
+> +
+>  static int add_sect_attrs(struct module *mod, const struct load_info *in=
+fo)
+>  {
+>         struct module_sect_attrs *sect_attrs;
+> @@ -72,7 +81,7 @@ static int add_sect_attrs(struct module *mod, const str=
+uct load_info *info)
+>
+>         /* Count loaded sections and allocate structures */
+>         for (i =3D 0; i < info->hdr->e_shnum; i++)
+> -               if (!sect_empty(&info->sechdrs[i]))
+> +               if (sect_visible(info, i))
+>                         nloaded++;
+>         sect_attrs =3D kzalloc_flex(*sect_attrs, attrs, nloaded);
+>         if (!sect_attrs)
+> @@ -92,7 +101,7 @@ static int add_sect_attrs(struct module *mod, const st=
+ruct load_info *info)
+>         for (i =3D 0; i < info->hdr->e_shnum; i++) {
+>                 Elf_Shdr *sec =3D &info->sechdrs[i];
+>
+> -               if (sect_empty(sec))
+> +               if (!sect_visible(info, i))
+>                         continue;
+>                 sysfs_bin_attr_init(sattr);
+>                 sattr->attr.name =3D
+> @@ -159,7 +168,7 @@ static int add_notes_attrs(struct module *mod, const =
+struct load_info *info)
+>         /* Count notes sections and allocate structures.  */
+>         notes =3D 0;
+>         for (i =3D 0; i < info->hdr->e_shnum; i++)
+> -               if (!sect_empty(&info->sechdrs[i]) &&
+> +               if (sect_visible(info, i) &&
+>                     info->sechdrs[i].sh_type =3D=3D SHT_NOTE)
+>                         ++notes;
+>
+> @@ -181,7 +190,7 @@ static int add_notes_attrs(struct module *mod, const =
+struct load_info *info)
+>
+>         nattr =3D &notes_attrs->attrs[0];
+>         for (loaded =3D i =3D 0; i < info->hdr->e_shnum; ++i) {
+> -               if (sect_empty(&info->sechdrs[i]))
+> +               if (!sect_visible(info, i))
+>                         continue;
+>                 if (info->sechdrs[i].sh_type =3D=3D SHT_NOTE) {
+>                         sysfs_bin_attr_init(nattr);
+> --
+> 2.25.1
+>
