@@ -1,207 +1,284 @@
-Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022118.outbound.protection.outlook.com [52.101.101.118])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245A4466B09;
-	Thu, 17 Sep 2026 07:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.118
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789629664; cv=fail; b=kF6DUnrWIvTXwrTou3S9VSIzFhLHO0anRL7MgwD/H/h30X0lU4qfNGl5a510xTiGebxNMgDvDz9rYjAfNWerQbjsAKvbQ/bcgoNzrWEdQFMSoSsMueijVM9XTlrzcUrLbDC7TjWEdczCssvDp1fucEoHbYbwU8foSmrNDC9a3vI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789629664; c=relaxed/simple;
-	bh=Nfd62zPMTgIm/eeaUTFBaOsrOih7zdXjal14KMJeKOw=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:References:
-	 In-Reply-To:MIME-Version; b=KGR/DTFe/SqJTrl3/Snd/B82SbM+B+R3vKzXwRYWuZMB1Fb8aZ2R2TO2tBJROyAScWRsfmWljHTv2n7q6WUt9C2kuUmCAfC89CnQ67miQl3kWiNG5PhH3uaZbTWV1JxC7XyEcSZiLwQ3Hd6YUAScTb+6m4BTRVWvXEBdgIHoQRE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=v6Pi2MM0; arc=fail smtp.client-ip=52.101.101.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390C352B1C2;
+	Thu, 17 Sep 2026 13:37:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789652263; cv=none; b=Xd4wO+8fxuvaczEOutEEm85/oi3aE+X87npda03hIrDU2OB74q4AI9m1s4mNk9OS1WAq+EzZqJA0vq4Lhx6MCGkpojfq5eFxOo5eUaFVdZrzBE1KVT0QQU49+8mma1GXgvWjX3GEqsZUpkQledlG+lFw6rXgaH8u0isQeZM9brg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789652263; c=relaxed/simple;
+	bh=i2e28DSY9OJFMn+Yei5UTwRLlFG6pUChC039RIqj300=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DTQbp34nZDubp2DMe6R5ar8P8OZrcFNdvQnVNRvsoOWYbGGJt8L4UxyOJEmJFU4pT+o5eTi2tUNmOsoDPsreHH61aVOKrkhXxJwbAqKV7EgrfxkZSq2GFWQeB6DyqSNA070+hr6Oi1Zv0OoF+Hhl8RXM3CKYf8BDYYj3PXvR2zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CkdauEtU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="v6Pi2MM0"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JmzMZJ6hR8A9vgtz39E0P3vwTcCYTFj3aLCgd9139Sj9khb3UsIoby/G11uw5ti7SQKRkWWEsriJEF+5h3J8czjsi6ZKdPee2oef6MjOZcnpbxd8eScP3XwtEMN0JL9EfiWxPLNgjafard1GPYQqyi2qgMXiAEEBtQr+FdLjmKohIU+xJaUsxRIvOzoePBvtH/pzdhXykt2cGx7iaqoLuFkM6a4Blm33mTY6T7nVhpMxofnuS91QMCIiRCc9dcp7dhMgV/e+HaCwT/nkFdb3TdXtdEYqbmxhr8edEd8S3fhhnAVGyJRrYTQubGT4SB78ZLjoTyrwu0S2wAsUqiJFwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mpmm2dIRi+WsTTwuSzpkXgXDsAXWbDiF6ZzTZpIqbPM=;
- b=Pxsa2C4XYp+l8C3w/tZ64oB5C2LxH1c8tnfEZyU3zXPPUrf0/6m59aA8rlnwD/EwwSrxuxR8ZeCIC2XAeTL5uHWqQ/KHr4uxc22iP0lF8fMAUab25by5H8e7E+89cSvGaQWX0EUlp4cehIMmlfH8PA2cbTLbjCGXVsDNTKV44TQmq6v2L54u/GnaAe6LGfR4B7sjyReyVecc0Di+jqVJMq4dgog5cTqhG2//SBQ8zD1kjA3SCRwe5wweROtArOr8UiEoHPuJyWe9UjC3yJ8Yyl+8qSTfGiVego7/NGH6Pg3c66Jva/7HnDz3lJwulU2eYe+DLZMbl13O4DHzlvvwgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mpmm2dIRi+WsTTwuSzpkXgXDsAXWbDiF6ZzTZpIqbPM=;
- b=v6Pi2MM0Y4lOV3OkesUVP7ElrpGCwnzw9MNChGUiAwg8m+jfJ8k8GAuTeK8mqlgIp4+7GIBsDKvmVnUehZELovHdSyGYvYA0lMJKe7rSwUr9hP6hICw6QqkP00ccL4+qWuZdWySrtK6xmmj/9ZM1ilmcQDdu4KuVqbtFvqCqrvQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOZP265MB8551.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4b4::24)
- by LO2P265MB3117.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:163::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.12; Thu, 17 Sep
- 2026 07:20:59 +0000
-Received: from LOZP265MB8551.GBRP265.PROD.OUTLOOK.COM
- ([fe80::c07d:488c:d4aa:2a4a]) by LOZP265MB8551.GBRP265.PROD.OUTLOOK.COM
- ([fe80::c07d:488c:d4aa:2a4a%4]) with mapi id 15.21.0406.007; Thu, 17 Sep 2026
- 07:20:59 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Sep 2026 08:20:57 +0100
-Message-Id: <DLHERMQ9DOIC.1TRR4M82WNLIZ@garyguo.net>
-To: =?utf-8?q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>
-Cc: <rust-for-linux@vger.kernel.org>, <linux-modules@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rust: macros: allow non-ASCII characters in `authors`
-From: "Gary Guo" <gary@garyguo.net>
-X-Mailer: aerc 0.22.0
-References: <20260917051147.98775-1-tweek@google.com>
-In-Reply-To: <20260917051147.98775-1-tweek@google.com>
-X-ClientProxiedBy: LO4P123CA0106.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:191::21) To LOZP265MB8551.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:4b4::24)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CkdauEtU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 446B01F000FF;
+	Thu, 17 Sep 2026 13:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789652252;
+	bh=lg/US5lY1LsQarxH6D624+fOci1ZXIwXzP/RrKKTJiE=;
+	h=From:To:Cc:Subject:Date;
+	b=CkdauEtUcuQfeCy7WW0kbl27qF96vhyPoFdaDVAo+mxfulMmOjH1zvV0/0GFY2iWI
+	 7e7gjqXqmSJr2Is6n/mAGW8EqmDWVkDtgn4Tl8bDgYF8hTpv04QRuHI9dDMLxvG3Kx
+	 qqCDYU3k3KIq64l6r+aeYJ8pU3Q2RNbwiF1BrmB0aYCGfeS9FvDsPyTM4PiLX5QL+Z
+	 B+mKCu/ILHdSa7TOXOADcfx7u3/clEXcAqxgwFgbkDzR/N78O7Uaqy2g44DA8JL8Ri
+	 mgvgoxBZML1nc6y8s4qbFKDdQWOoX0bWiytfudnh1cFE+mZHJne7pMCbm0Rw5vQdb1
+	 8jco0V6N8T4KA==
+From: Sasha Levin <sashal@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Richard Weinberger <richard@nod.at>,
+	Juergen Gross <jgross@suse.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Sasha Levin <sashal@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Helge Deller <deller@gmx.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Vivian Wang <wangruikang@iscas.ac.cn>,
+	Zhen Lei <thunder.leizhen@huawei.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v9 0/4] kallsyms: embed source file:line info in kernel stack traces
+Date: Thu, 17 Sep 2026 09:37:21 -0400
+Message-ID: <20260917133727.428546-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOZP265MB8551:EE_|LO2P265MB3117:EE_
-X-MS-Office365-Filtering-Correlation-Id: 24a974f2-1c52-42bf-fad5-08df148c38f9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|1800799024|366016|6133799003|18002099003|22082099003|56012099006|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	Uy9akqNlD06F7mxjJ00oOsxJXmRJ970E4UMBaikaVrb90wU0AVk79xIx3GZbhgWhK9l9mWiveO2bvO/ST0zWRtImbyQyWfFrvQyUBI5B1ySVz/2scwkREL7HdRNe5UBa5dCVlbx4psu6Dg357Q5JBWuLnGUk75eJPrBYGrlDqhRHPU2rJnmhIwT2kumk+jC1QjtUZ10Wb7kEHVHf+7hmZpNhTW5R/urk/mqbKozzHKsxifyIPx1G96/oVDUn2qFGf+oIu75ilIcMZZhq97qRIXC8Fxr5e7ShRXNXUA7PrxHtDOR0d1eDKvux7QAU7wPnT6wR8Q2HzAcWZzzmpDtblzJWSBxcOj5Aot6HSCEHKCAnRlfA8L58m0UfuAiUkjo0Md0fYNHKqy/WCZfTrmPXD+lJAXkb7TFnv1PP0UUEbfiMii5zoZKmUF0FstfpeQ70nT3sQIPxBPWjTHApX2UGDDlC62sPE8A2V5KBZn9IydQqIJB5wFVsRr0DsjPh3Qghp7DJXfMewwlyNh1uEZ6cbvD5XPwNDQTS+gMG3AyyHAtIv80zKDvJuT10jirL3ioxwU++cWoYAxcYoVy62BKNruOkIClt6hoz3+5Y+9u/mhJtkywG5CIPZCqLDglmzSiTiKfXkTw6pj5VAODFYztjR5UXSTHEMuLuPJITWQ1CeZQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOZP265MB8551.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(1800799024)(366016)(6133799003)(18002099003)(22082099003)(56012099006)(10067099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?KzFIbTQyMlV5dlFVR2kvdE1SWkVjYktMU0dIUXlSb2o3MU5sUnQzSXNMbWlv?=
- =?utf-8?B?VENnakpFa09hcHpBQ2NRNWpxSWZrTjhsMXJyMjFxNlpidVBzZHBTYmJzamc5?=
- =?utf-8?B?K2lRZTdOU2lHVnRZNkRPRkpMNTRkaldqdExQYm94QUNwd3JIS3k5WTdQUFQ1?=
- =?utf-8?B?dVVkdkIwbnBORUdCVXhJbUpyaXhhdmVTV3NHVE5qd0NRZm5QdkEvQlpuSkxJ?=
- =?utf-8?B?ajkzOElTVUpaU0gzS0piOUJ6N21yc3RaL2oxRWlxZmx2R2xXV09kTmQ5SGFM?=
- =?utf-8?B?Vk5EOHdCTTJGcHlxeDlEYW43QlgzNXZIdVZBQXJsSWdJeTkyOFAyQ2Z4eWZN?=
- =?utf-8?B?dnh0UTN5U21la2h5V2ptQTJSY29WU05ZQnBiZU5jNGVuSUlSbUp2OEdncGhI?=
- =?utf-8?B?Q1V1QUk3ZjNla0NwTSt1N0V3Nm42Z3lBWTVVN2xBSzcrWVQySkJ4STZBQjZu?=
- =?utf-8?B?c21ETE1HTDhVb2Zkbmx6ZG1YK256ZVJhZ0x1RzhhZk53WE10aGlNRWdvelh6?=
- =?utf-8?B?L1F5eU9ySFRsaUhpdytLT3FURHpiazdSWE1YNzFBZkVvOW5TK0hyRUhVK21K?=
- =?utf-8?B?VDhCN3EzQ0p5c293U3ZXR3FhRnBra05kdWk1ZmJXOURYQjhoczB0WGF2TjBm?=
- =?utf-8?B?Slo2b1RITHFVU2dnaVFXQmFxZWdHOU9TS2N4MmtiSFo5eWd3N0todFVzMlhp?=
- =?utf-8?B?dmF2Umd1RUYrT25ER29XZHJjTm1JWGw3eXRXTG03ckFjYjNkVXREODBLK0E0?=
- =?utf-8?B?ZktYZFd6Z3UwSTFsdzdWdy9vZWgxUWxoWCtTTGtUQUgzeCt1RzQ1NG44TjRy?=
- =?utf-8?B?Q0hoSHYrckFkZU1nd1FpOUIyQzZmK3JwQkhia2tLanJTVGtFZktrUWxSK1F2?=
- =?utf-8?B?bFd2b0xwRXM2SVd5UFd2dXB5bStTVDJpMmpvNUFsTHlKVnpwZUNleFBoVkFZ?=
- =?utf-8?B?VEpkNUpjeWJteXZJa3pOanFOQXA3SnhKZndjRWV3YmVQSHJabnFHaitnS0FY?=
- =?utf-8?B?eVlwb0d5dnczSE9MQ2VWZi9LTTc4bVRkL25uVHJ4eEkySWNDQlViQkJZaDVC?=
- =?utf-8?B?SGZWQUJGdlJZVkU5WEVJVWNNQkl1Qis4clpQUWJTbHlndXFULzU0TVNsQzli?=
- =?utf-8?B?c0xtUEkzZHRhWnFOS093UzdhZERtWXF3TlZxbWtMalZLbkg2NWdUQkpuSFZS?=
- =?utf-8?B?b0ltMVdtMWN0SlRpc2ppMVdlL1lvcGJGSk45NG1UR3RIWVVUU3dBd1BuYW1r?=
- =?utf-8?B?U3EySTBPWXREZEcxa1FUbEZkNkRtL1dHenBWc3hBTHo1QXMxRURyV2RpUXht?=
- =?utf-8?B?b2phNy9GeWFZcjk2cHJkcjVNcVFCem9jbk1KdDVBODlrRnBHbVdCdldON1ow?=
- =?utf-8?B?ZnpmRUhQVTdQdlcySEtzRDhtc3U1ZTR3L0VzNFFGVUxaVnRmQWNIOGM3M2t2?=
- =?utf-8?B?YVN4TkM4WjVseXBKQ1lZcDd0cEQ3bWNLTlJPVmJ6MkI1NlZoOEs4Q3poYUdL?=
- =?utf-8?B?NHljVDVKNURwNEZrRnNuSWRWSWRPNEwvRmR6S1VSYlVrSXRDVWkxZUttdkNj?=
- =?utf-8?B?YmVZbDRJVEJ2SitvczI4Vjg5VUEwR3hPOHpmeXNwYnQ5UlZHWnA0Qkp3WlBu?=
- =?utf-8?B?bGQ2UW52NjI4S2NyYmtka29RdHNNZko3cWFHaGJ3SHpscGRxUDVPUEdxNnRQ?=
- =?utf-8?B?aHBsWUs4WjI3WG5xNmpxNi9QVHNCUGNVV2xCbzlnQTBFYUpEZDBkbHM2M0Zr?=
- =?utf-8?B?RlFEZ2ZwSmdDYUdGS1ZtbXVvaFRhT0hEYzlTRkd6R0UwVnAwVGxUUXlQbEtQ?=
- =?utf-8?B?UTVkL2NQWExtMGdIMnROR1pGTkgxWStaS2Y2b1p6aUlnTzFjcURwL0hsOHlm?=
- =?utf-8?B?bUV2UjVDZXBNdzBITk1nM1hnYlN4SGVzbFdnd0ZzRlQ5SXhvcVNNanIzL21w?=
- =?utf-8?B?endIMXBJWXoveGFOOFhVVVJjRFVPMjZmazFHYTlVSGF0WmVORlMxbC9aeWFW?=
- =?utf-8?B?YXVReGxjemNsWldFTk82RHFrajRRRFpRKzNCRTIvQmMyYnJKSjdzbUVTdEhV?=
- =?utf-8?B?Vm05VC9aR2VEaVlQbDZHNjJ4N3lsaDgyZ0VYQ3I1cVc1bXgxcVlHQXR0bHdx?=
- =?utf-8?B?ajE4anlJNlRiNDR1TUxZZE1FbEVoTStHL3MzdjZKMjdMd2NXVFZ5ZG4wdmhu?=
- =?utf-8?B?MFZSVEtOQ1lzU2pVU0JvTytmTWl6cXNNYjhmN2RmTXowU2hBNUh3Zi9TdHRQ?=
- =?utf-8?B?SFZUTGthUmlldjhnQVU3TFowVEZiQzFjUHp5bEszRzZIWWR3Sit3aHRGMUpt?=
- =?utf-8?Q?MqkYqbI5RO3KPK+qa8?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24a974f2-1c52-42bf-fad5-08df148c38f9
-X-MS-Exchange-CrossTenant-AuthSource: LOZP265MB8551.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2026 07:20:59.5143
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +tQRN2aiweKL1XDU1aeJb6JloHvPpn/cRRHlRkSL1PGeWn8azUihxc2gU81NCu+cS8uCk4iRd8oP7qRcGI3C2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P265MB3117
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu Sep 17, 2026 at 6:11 AM BST, =3D?UTF-8?q?Thi=3DC3=3DA9baud=3D20Wekst=
-een?=3D wrote:
-> Module authors may have non-ASCII characters in their names. In C,
-> `MODULE_AUTHOR` allows arbitrary string literals which are emitted as
-> raw UTF-8 bytes into the `.modinfo` section, and multiple in-tree
-> modules use non-ASCII author names.
->
-> Originally, the single `author` field permitted arbitrary string literals
-> including non-ASCII characters. When support for multiple authors was
-> introduced in commit 38559da6afb2 ("rust: module: introduce `authors`
-> key"), it reused the `expect_string_array` helper that had originally bee=
-n
-> added for module aliases. Because that helper enforced an ASCII check,
-> `authors` inadvertently became restricted to ASCII-only string literals.
-> Later, when the macro parsing was rewritten to use `syn` in commit
-> c578ad703ae9 ("rust: macros: use `syn` to parse `module!` macro"), this
-> restriction was carried over by using AsciiLitStr in `authors` type.
->
-> Change the element type of `authors` in `ModuleInfo` from `AsciiLitStr`
-> to `LitStr` so that UTF-8 author names are permitted.
->
-> Fixes: 38559da6afb2 ("rust: module: introduce `authors` key")
-> Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+CONFIG_KALLSYMS_LINEINFO embeds a compact address-to-line lookup table in
+the kernel image so stack traces print source locations directly, without
+decode_stacktrace.sh or a vmlinux with debug info at runtime:
 
-Off topic, but I have a question for modules maintainers...
+  default_idle+0x9/0x10 (arch/x86/kernel/process.c:768)
+  default_idle_call+0x6e/0xb0 (kernel/sched/idle.c:122)
+  do_idle+0x38f/0x660 (kernel/sched/idle.c:199)
+  cpu_startup_entry+0x4e/0x60 (kernel/sched/idle.c:453)
+  rest_init+0x277/0x280 (init/main.c:732)
+  common_startup_64+0x13e/0x158 (arch/x86/kernel/head_64.S:418)
 
-Does the `authors` field still serve this purpose today?
+Patch 2 extends this to loadable modules, patch 3 delta-compresses the
+tables, patch 4 adds KUnit coverage.
 
-Almost always it is just the initial submitter, while the code has been sub=
-ject
-to many changes (many of them tree wide too), and the maintainers could hav=
-e
-changed as well.
+Why this is useful
+==================
 
-We have copyright comments on top of files, and git for checking the file
-history. What's the point of keeping his inside module metadata?
+A stack trace in a bug report is usually all you get.  The reporter has
+already rebooted, the machine belongs to a customer, or the failure came
+out of an automated run that tore its environment down an hour ago.  What
+lands in the report is a list of symbol+offset frames:
 
-Best,
-Gary
+  ext4_do_update_inode+0x2a1/0x4c0
+  ext4_mark_iloc_dirty+0x5f/0x210
+  __ext4_mark_inode_dirty+0x9c/0x330
 
-> ---
->  rust/macros/lib.rs    | 2 +-
->  rust/macros/module.rs | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-> index 24f96feaeb34..ea2e232b61b1 100644
-> --- a/rust/macros/lib.rs
-> +++ b/rust/macros/lib.rs
-> @@ -129,7 +129,7 @@
->  /// # Supported argument types
->  ///   - `type`: type which implements the [`Module`] trait (required).
->  ///   - `name`: ASCII string literal of the name of the kernel module (r=
-equired).
-> -///   - `authors`: array of ASCII string literals of the authors of the =
-kernel module.
-> +///   - `authors`: array of string literals of the authors of the kernel=
- module.
->  ///   - `description`: string literal of the description of the kernel m=
-odule.
->  ///   - `license`: ASCII string literal of the license of the kernel mod=
-ule (required).
->  ///   - `alias`: array of ASCII string literals of the alias names of th=
-e kernel module.
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index bc7027f8dbb2..0a7b9e24c960 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -369,7 +369,7 @@ pub(crate) struct ModuleInfo {
->      type_: Type,
->      license: AsciiLitStr,
->      name: AsciiLitStr,
-> -    authors: Option<Punctuated<AsciiLitStr, Token![,]>>,
-> +    authors: Option<Punctuated<LitStr, Token![,]>>,
->      description: Option<LitStr>,
->      alias: Option<Punctuated<AsciiLitStr, Token![,]>>,
->      firmware: Option<Punctuated<AsciiLitStr, Token![,]>>,
+Turning that into source locations requires the exact vmlinux that
+produced it, with debug info, fed to decode_stacktrace.sh or addr2line.
+In practice that artifact is the thing that is missing:
+
+- Distributions strip the shipped kernel and put debug info in a separate
+  package of a few hundred megabytes that is not installed by default.
+  Fetching it after the fact only helps if it still matches the build that
+  crashed, and on a machine that has been updated since, it does not.
+
+- A reporter who rebuilds "the same" kernel to decode the trace does not
+  get the same offsets.  A different compiler version, one changed config
+  option, or a different link order moves symbols around.  The decode then
+  yields plausible but wrong line numbers, which is worse than yielding
+  none, because nothing flags it as wrong.
+
+- Panics captured through pstore/ramoops, a serial console, a photograph
+  of a screen, or a customer's ticket system arrive as text.  There is no
+  binary left to go back to.
+
+The usual answer, "please rebuild with CONFIG_DEBUG_INFO and reproduce",
+quietly ends a good share of investigations: the reproducer is rare, the
+machine is in production, or the reporter has moved on.  With the table
+embedded, the trace above decodes itself at the point it is printed, on
+the machine that crashed, with no second artifact to find.
+
+Two cases go beyond convenience, because symbol+offset cannot express
+them at all:
+
+- Inlining.  A frame names the outermost function that survived inlining,
+  so an oops inside a static helper or a header inline reports the caller.
+  The offset is the only clue about which inlined body faulted, and it is
+  not a clue anyone can follow without the binary.  A file:line points
+  into the header the code actually came from.
+
+- Assembly.  Frames in .S files have no useful decode in a plain trace;
+  here they resolve like any other, for instance
+  arch/x86/entry/entry_64.S:121.
+
+Module frames are the worst case today, since decoding them needs the
+matching .ko, built with debug info and kept from the build that ran.
+Patch 2 makes them self-annotating, which matters most for out-of-tree and
+vendor modules, where the person reading the trace rarely has that.
+
+For anyone triaging at scale, syzbot-style pipelines, distribution crash
+aggregation, kdump fleets, traces that carry file:line can be clustered by
+source location instead of by symbol+offset, which changes from build to
+build.  The same trace text stays comparable across kernel versions for
+far longer.
+
+The feature is opt-in and bounded.  On x86_64 defconfig + CONFIG_DEBUG_INFO
+the stripped image grows 8.0 MiB (52.2 -> 60.2 MiB, +15.3%) with the
+compression in 3/4.  There is no cost on any hot path: the tables are
+read-only data, consulted when formatting offset-bearing symbols, with no
+locks and no allocations, so the lookup is safe from NMI and panic
+context.  Lookups use offsets from _text, so KASLR does not disturb them,
+and nothing is needed at runtime: no debuginfod, no symbol server, no
+network.
+
+The information all of this rests on already exists at build time.  Today
+it is discarded at the end of the build and asked for again, months later,
+from whoever hit the bug.  This series keeps 8 MiB of it instead.
+
+Changes since v8
+================
+
+- Rebase on v7.3-rc3; size and entry-count figures re-measured.
+- Keep the last line-program row at an address rather than the first, so an
+  inlined call resolves to the inlined body and not to the call site.
+- Annotate %pS and %pSb as well, not only the sprint_backtrace*() forms.
+- Expand SHF_COMPRESSED debug sections before applying relocations to them.
+- Apply RISC-V and LoongArch ADD/SUB relocation pairs, and refuse an object
+  that leaves any relocation in a patched debug section unapplied.
+- Emit line-0 and end_sequence rows as "no annotation" markers instead of
+  dropping them, so an address DWARF leaves unattributed reports nothing.
+- Resolve rows sharing an address: a line-0 row wins where the line program
+  puts it last, a sequence end yields to a sequence beginning there, and
+  across compile units coverage is the union.
+- Give a function an entry at its own first byte where one row covers
+  several, which is an assembly macro; in C such a row is padding or a
+  split-out fragment, so the unit's language decides.
+- CONFIG_CPU_ENDIAN_BE8: build the table from an unconverted partial link and
+  hold back only --be8 and --build-id for the link that produces the module.
+- Guard EM_LOONGARCH and R_LARCH_*, which glibc gained only in 2.36.
+- Regenerate lineinfo when the final vmlinux link moves text.
+- Decode MIPS n64 r_info by its own layout rather than with GELF_R_*.
+- Refuse architectures with no known absolute relocation type, instead of
+  generating a table from unrelocated DWARF.
+- Fold module table generation into the link command, so a relink caused by a
+  command-line change alone cannot drop the table.
+- Relocate every debug section libdw reads: a module built from several
+  objects carried line info for the first one only.
+- Pass KBUILD_LDFLAGS to the module ld -r, without which ARCH=i386 fails at
+  its first module and 32-bit ARM warns on every one.
+- Check the actual bounds in the init-text KUnit case, which UML fails.
+- 4/4 builds the KUnit module from two objects and covers the inline-site and
+  second-object paths, neither of which a single-object module can reach.
+- From the sashiko.dev review of v8: scnprintf() in __sprint_symbol(), u64
+  sums in the blob offset helpers, and an alignment check on blocks_offset
+  and files_offset.
+
+v8: https://lore.kernel.org/all/20260801143219.3975824-1-sashal@kernel.org/
+
+Testing
+=======
+
+A distribution-style config with CONFIG_DEBUG_INFO, booted under
+QEMU/KVM:
+
+- KUnit, CONFIG_LINEINFO_KUNIT_TEST=y builtin:
+  33 passed, 0 failed, 1 skipped
+- KUnit, =m with CONFIG_KALLSYMS_LINEINFO_MODULES=y:
+  32 passed, 0 failed, 2 skipped
+- KUnit, =m with CONFIG_KALLSYMS_LINEINFO_MODULES=n:
+  8 passed, 0 failed, 26 skipped (skips rather than fails, as intended)
+- Every entry of four built modules diffed against addr2line: 100,725
+  entries agree.  16,098 addresses probed across them in the other two
+  directions: none annotated where DWARF has no location, none left
+  unannotated where it has one
+- The vmlinux table checked the same three ways: 4,000 sampled entries
+  agree with addr2line, and of 4,001 probed addresses none is wrong in
+  either direction.  Repeated on a build with -ffunction-sections, where
+  one compile unit's sequences do end up adjacent, which is the case the
+  rule above turns on
+- SysRq-l backtraces annotated, including .S frames and header inlines
+- Every .ko sub-table header 4-byte aligned, 14 modules with a blob, 9 of
+  them with two or more section descriptors
+- Multi-object coverage checked by dumping the blobs: kvm.ko now names
+  all 30 of its source files, where before it named one
+- Compressed debug info: -gz=zlib and -gz=zstd objects give tables
+  identical to an uncompressed build
+- Relinking a module with only LDFLAGS_MODULE changed keeps its table
+- A module relinked with a stale table object planted in the build tree
+  ignores it and emits the same section, byte for byte
+- MIPS64, SPARC64 and Hexagon objects checked directly: MIPS64 matches
+  llvm-addr2line, the other two are refused rather than mis-generated
+
+Builds:
+
+- Each of the four patches builds standalone on x86_64 defconfig +
+  CONFIG_DEBUG_INFO, 0 objtool warnings at every point
+- arm64 defconfig, ARCH=arm multi_v7_defconfig (943 modules), ARCH=i386
+  defconfig, and x86_64 with LLVM=1: all clean, no warnings
+
+Sasha Levin (4):
+  kallsyms: embed source file:line info in kernel stack traces
+  kallsyms: extend lineinfo to loadable modules
+  kallsyms: delta-compress lineinfo tables for ~2.7x size reduction
+  kallsyms: add KUnit tests for lineinfo feature
+
+ Documentation/admin-guide/index.rst           |    1 +
+ .../admin-guide/kallsyms-lineinfo.rst         |   99 +
+ MAINTAINERS                                   |    9 +
+ include/linux/kallsyms.h                      |   18 +-
+ include/linux/mod_lineinfo.h                  |  319 +++
+ include/linux/module.h                        |   40 +
+ init/Kconfig                                  |   35 +
+ kernel/kallsyms.c                             |  108 +-
+ kernel/kallsyms_internal.h                    |   11 +
+ kernel/module/kallsyms.c                      |  200 ++
+ kernel/module/main.c                          |   26 +
+ lib/Kconfig.debug                             |   10 +
+ lib/tests/Makefile                            |    4 +
+ lib/tests/lineinfo_kunit.c                    | 1109 ++++++++
+ lib/tests/lineinfo_kunit.h                    |   21 +
+ lib/tests/lineinfo_kunit_second.c             |   21 +
+ scripts/.gitignore                            |    1 +
+ scripts/Makefile                              |    3 +
+ scripts/Makefile.modfinal                     |   41 +-
+ scripts/empty_lineinfo.S                      |   38 +
+ scripts/gen-mod-lineinfo.sh                   |   45 +
+ scripts/gen_lineinfo.c                        | 2534 +++++++++++++++++
+ scripts/kallsyms.c                            |   11 +
+ scripts/link-vmlinux.sh                       |   88 +-
+ 24 files changed, 4780 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/admin-guide/kallsyms-lineinfo.rst
+ create mode 100644 include/linux/mod_lineinfo.h
+ create mode 100644 lib/tests/lineinfo_kunit.c
+ create mode 100644 lib/tests/lineinfo_kunit.h
+ create mode 100644 lib/tests/lineinfo_kunit_second.c
+ create mode 100644 scripts/empty_lineinfo.S
+ create mode 100755 scripts/gen-mod-lineinfo.sh
+ create mode 100644 scripts/gen_lineinfo.c
+
+-- 
+2.53.0
+
