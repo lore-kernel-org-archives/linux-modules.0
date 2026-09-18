@@ -1,184 +1,235 @@
-Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021072.outbound.protection.outlook.com [52.101.100.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C64503BCB;
-	Fri, 18 Sep 2026 15:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789746257; cv=fail; b=R+WdzQU/opPWiD4bzgf7zuPp/Pq9VvoFAdm1+clncIpmqrue7l7IIOWZk36nBlLWKTMg2ZzSLJgF9DvTVfkGuPAoBexuS1QqmtJuY9YFXKzfVcLxMTTkpDNjVNriBKa4DVCiUKzjgQb3mDOPJezNF5g145B1nPQ2ioLHOiyhlUs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789746257; c=relaxed/simple;
-	bh=dcN+qnDLI/wBS+UK5TZ8A2iCW8xjQlDpK353mEW0Tp4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=YBp+Bvp5KwtR0AVBMbrhziSEPeT+uwUD3PmnQv/IRXpEGnWU0RpOWfJUfGhFGCayeHBsUK1IKf0Gl0GEpKNTO806B+eNGlFJUVmRMZijQjTTJu+q3J8dZvcBA3HWk1V44KU8n6fSqSVNKqJ6UP20nTgfcLMkNzWEOYlynl5vilw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.100.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lpE0G4UXCu/uJrsxmij+ISV55KR4eIuMofvRJ/kRFcraN2nF4Xx516QWSRazLxmfDzhFpmjGHHm/9069HQ0gOohxjBn0csJJXVWcL8FqGy1AglKv3jlnsKfKj/qbNscvafwmgdW66IG1CI8FRuZydsFkxHtZLrMnA/GpvTkELJw2eKtea4CCiU4JxCmDb4Dtbh0omZ0RrM67vXisddHhMzl/6RuCiahtkAuoCxH4cGhMj5b2QzetwkTASFuOADnfIqp9Qq5AlTelH5kqt+NzzhybGvYT+7HtqpJUx36CZuauJA/cFce35jvhkOJoSoR5Ugd89EotBzN0B402rExFQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=APNEUdWFcLdZMIaIxMndyzxJZd/tdxdGGgaeDY36WoY=;
- b=bEGo5MwFzyc4v/tXohLVafrnt2+aXyDZLT4s0e4UHKAQ23C6GRqyTZ+T7gJ2OSBZi+XmiBWsRUu23RJMdMCvsjXME/Aje21MKRAxXHz0fNU1FVOJ+9F5wPykv65qbnYkb2a2kTVhPQurJjAnQziosptyZxwo+Ztg8vhZ5ziuUoBrKsfhzCPMM6HCOa4wfJ2gYtLgCfuCeF1QkXvZgDir6Kkc+jcN+40wRkwXRFpMAzzLPZz/dbFXxOGCVzIQ/9H8FRGDoPjU+TehFhwd4KGN0USN4h/4l7gZi8o/804rW9fEUeCeBb1G9QUJ3NdlJ9XOp7AJGn/IYKLKSmsjFZN4eQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LO9P123MB7964.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:3e3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Fri, 18 Sep
- 2026 15:44:09 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0428.011; Fri, 18 Sep 2026
- 15:44:09 +0000
-Date: Fri, 18 Sep 2026 11:44:05 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh <nogikh@google.com>, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] module: fix up documentation for add_taint() and
- add_taint_module()
-Message-ID: <k7pmsxqohlkatvwhd4bngycdlegc4d7ss4gj7ghanajga5zsms@ixjphhjwqbue>
-References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
- <20260914-bind_taint-v4-2-eadf8a090903@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260914-bind_taint-v4-2-eadf8a090903@linuxfoundation.org>
-X-ClientProxiedBy: BN0PR03CA0015.namprd03.prod.outlook.com
- (2603:10b6:408:e6::20) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:183::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD8F511232;
+	Fri, 18 Sep 2026 16:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789749310; cv=none; b=rgAcBWnAy7yxp1dPSMksJD6AWMph/chTBMUecr79K5EIdYDPn0mZZvUEtzUhvtYgUAp8vxS2uttXQ9R9PN92LwWgEPxVOtC0RFWN9UbRaJceZo4El9wI6vjhSgZqDEPgfQepaRDs36DfQZYFWNxrCjm2k1rr5I/nv7iEutydJ8M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789749310; c=relaxed/simple;
+	bh=jY1NwgzdxHIRSTmetElXWWQ2egh61PdqNbC/cruHtls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IXwW+fb9RF4nV3Xg1gcWNsI/3dKVmPkJnXJ/UGC/Kswjda6sLSnfIeSvNSsfVNkVOJcpUaefYwRcMGT6Nhhs6BvWeP8mWDnO7GAVgRBmXFKZ0UxoaaP2H447AmbeTgANIRSiq83o+H8eA2sUsWenpNWyPtSyKC7bvJUAWqoY9b8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UNsi5FW/; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UNsi5FW/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72FEE1F00898;
+	Fri, 18 Sep 2026 16:35:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789749308;
+	bh=SZGqO5tWPMSBZG1lXUTnY1c8FiuuLCzJcsIMwbTz0KQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UNsi5FW/17pn89Ref9walQd57L7IG7TkWC5AX+0goE2gCbGP1tWDRSNJ0Q7k+V8We
+	 w49ArJP/vRRnyl2nWJIbNkHCS/1KbD6jEb+FpAfiGcgKM3eXrJEnxhJVoBHxErgKn/
+	 LQe32Sjp8vO6Lmi94U7ATodVBcfM76gQaAyrYAXyGIGkmtLEuq4DTOc9Xer9c74ZhL
+	 plJEDtO0zQjIoM+7zaUxvu7n8Np+Cjm4w81KvqD9aThLmfPq+a+B/7E4wjmqJQs95f
+	 jji3GfvUjk6mcx/spnHlA3kE+qqwGXGMjSEk9IrCyk5hSGSx9yVTaeATLaLiQSJPvG
+	 +uCb/j9wLdiVw==
+Date: Fri, 18 Sep 2026 17:35:02 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Uladzislau Rezki <urezki@gmail.com>
+Cc: Suren Baghdasaryan <surenb@google.com>, Hao Ge <hao.ge@linux.dev>, 
+	"David Hildenbrand (Arm)" <david@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-modules@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 2/6] alloc_tag: clean up the populate failure path
+Message-ID: <aq1noAdz9U3tXH_Y@gremlin>
+References: <20260915070001.113559-1-hao.ge@linux.dev>
+ <20260915070001.113559-3-hao.ge@linux.dev>
+ <CAJuCfpHJSwNhgotMVpmjVvdv=m52_7Kvzpztf0WcN0AaoSeGGw@mail.gmail.com>
+ <60642a7f-2949-428a-8290-40d69c989a77@linux.dev>
+ <CAJuCfpG3d7n=z5WnUQYZsqvrt1pemF8TFvGiGyZGLO7ykVvqAQ@mail.gmail.com>
+ <CAJuCfpGeRdFY6UPF-vXxwHvP2+tN=BKgRkmLR3PMLuWhxgzPRA@mail.gmail.com>
+ <1dff448c-9cbe-4276-bca1-d91283b0c7b4@linux.dev>
+ <b8005c24-ecac-45c4-840a-fd282f9693b5@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO9P123MB7964:EE_
-X-MS-Office365-Filtering-Correlation-Id: caae861a-cb6a-486a-b7de-08df159bae06
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|23010399003|366016|1800799024|6133799003|4143699003|22082099003|10067099003|56012099006|18002099003|27256017;
-X-Microsoft-Antispam-Message-Info:
-	U/ngbM+fNTf4WZnRAG/cFvTUVQs6gAXmzcOUw0yY0jtXiUb4s6CCV4b6z4XYWB71cdGmMZGDYiPbgKolmnjBQAgxWHsRgZ/H/ZVaHB/8I6vasaNx+ogzbUjkynH7NuaGFDjqhkwm+eon/mj0BXa/X7A9xhBjZbBz8V3neWJNbz1etTk4Ot2Mdykb44sGMQpGKQF114vG0fjjEXyjeKgHQOQ2dEUfE+JVtkN/SSDVQccohy3VBy88tBrAe5qR/8YXBBy0bpss3nmGEjps3yPgmdbuqs8lR38PWC6nLGQmHH3eLgluryc63e0F4mt8G7OAoLWWf+/1jMND+ZKQ1NuZlSiZBGer4AVlpwBWlto/43Q96oOcOa/rB3y5cF57XzTfwnrLQWmarxgILaJHk1wiJyStEGRj5y1JbNb8rVU+VdIM3BNWcMnRcD8HgRR5CSkFfevuW07oPz9U5fAVmsm06GuMsSs3gUzRE1dI0H0F6UckdrSVT4tXztSA5vHME1hqyl0TxKhHJ9vTPssOtnrpc+AL28BYbkVkSIf/HiKDZnlq057Sa/mb9GEBr1rSgN9RKyS7x2uFDe4V2IHEf5jfSs5gHEmsAEJWuyeXNruDZBJ11Xs8jPl3TgS0q+6Cbmtbw1qLB0MEKMwCdSTvzHBL5a8fFX24Sqi7MdtZVe0Kjzx2v1E0mXlAXq+/yK4VRq9x1le9bGk/r+Wf21EJKlnRDA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(366016)(1800799024)(6133799003)(4143699003)(22082099003)(10067099003)(56012099006)(18002099003)(27256017);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TWRkZTlJcHdBUVRSRHVuV2NZTThrTk5NTVd0SVBaZW5SZWJKZDRES1BXRnh0?=
- =?utf-8?B?OVdHazJieTFyMzBGVkNHTWFVSlFoMkR5ZDVBQnR5dUpxV1lSU2FqQkIwQk0z?=
- =?utf-8?B?R24vWWx6WXBKQjBweEpvcU1sYm1CeVJod1FTL0VMMm9SZTJObEtoTmJPbWJN?=
- =?utf-8?B?U0tieXN6Qzlma3I1ZUpIdDBReVNsNTNRVzNFWmJ6UHVwalRXbWY5dXNpMFB1?=
- =?utf-8?B?QlVpcWgrakhxN3c0alJoK09pT21MWlVpZ3VSMnBoYVJQMjZRTmgwZU12elhL?=
- =?utf-8?B?VEJZQVNDYjhnQjVhRE16TWxxVGpnQkdXQk90bW1KWDgwbU9QUlMrQ3BPclVY?=
- =?utf-8?B?dUNYNXZGdlUrQ3l5MStGSXhZbXErakpuRFdXbFR1T0kyK05OK1NJZDJ5dGQ2?=
- =?utf-8?B?WTBFT1NNdGp6RGZRMFZWODhNV3hiOFAwY2R0alk1VTh3dXAzc0k4REc2L1Fn?=
- =?utf-8?B?VjVlR2xNWHc4d3N4RGJsR21xV1pta3VzcHdVRGF1ckwwUWJpcFBNdU9UU3BX?=
- =?utf-8?B?SmJWUllkeDNIQUtsR0JYQlA0ZGJGRkFnTjV3anI5MFJtZWtlWlRrTVZnYnE2?=
- =?utf-8?B?T21yeHlKWDBvaXcwVXlpWTFHNzljTHpuV015L0hRRFNIZStmb1F6aC8zTXRG?=
- =?utf-8?B?QjdrYXQyRTNTNk1vMTQ0Z3pyWlFJc3dTTStCQzBFTGptS215Y1ZVOTJ3VG5y?=
- =?utf-8?B?TlZZZlFGeEdKM0FPSWdjMU44MG9RZnQ1clErWVRNRlF3c3J4Y3BLWVVBMTgv?=
- =?utf-8?B?aXNJZ0pSR0ZzOGpiaWZONEI3bnlEZ2lqdW9QaVZpYnRxbjV3R3ZTUktvM09L?=
- =?utf-8?B?SHJUd0IwbTE1OVcvNkJoWkdyRm9SK3U1Z1ZQM1hid25VRkhtWldjMXV0UUNo?=
- =?utf-8?B?SUNIcHNVakFORTR1Y3crVk1CT091UVhkdXZSck1jR1IxYytyQnIwT1p3c3l4?=
- =?utf-8?B?WUJUejUyTVFmc0creFpiK0xYNDVLalR1OVAveENoblpSc29tM1dQekwwVHht?=
- =?utf-8?B?NVdaLzFBd1pVK3ZLYUtrOWlZSHc3L0pGNklpdEpJZVk2cTZ6VmxJZHg5d1JD?=
- =?utf-8?B?Sjhvai9KaG11SHY1YktoSTYzdUpCNnBmUzh2SFV3MU81NUZ2ZWlhZHdCK2M3?=
- =?utf-8?B?M01veUF0YTFUdmkwZEFFMGpnRjFUTFl5N3l6QmlJUUt1REJ2NStqa2w0TGg4?=
- =?utf-8?B?bUpxWGF3b3JkSUdZcG1SdG40Q0x3QVZxbHlBODhwOVNqc2drR1dxWkIra3V1?=
- =?utf-8?B?amdKZU9HZ0JIdmtUTW9lQ084Zk9OQ1BVYkpPLzNWZGdodG4vTUxkVmY1T2Vy?=
- =?utf-8?B?VTJkUHJBLzE5TXNHL3R5Y1htU0JRdjZEbk9MZ3pBRzFUbFBGVFgrditJdU9U?=
- =?utf-8?B?UnBtYmZkZ2FtYzhieWR6RkJCM3lEQjE4Rk1XNWdUaDJVaWMyTWc5b013VmZt?=
- =?utf-8?B?QkNhdFl0RUNUcnlzZ3JKOWxSa01WRG1kMVpXdjZUSFBUWjQrNDFBRnRtUzdm?=
- =?utf-8?B?amVoeUxEVWkyamZJamUyRXNzT3FIdzZoQndBSnl4Zmo3NlplTkVOby9kV00x?=
- =?utf-8?B?M2QvTjdLMThWY2tzOGhWbnJaZ3REbGNlbVEwb1pLaVBjZzBEUzNGQlV6VzJB?=
- =?utf-8?B?RXM1dVRZdHpHNFBLditpaTFSQk56MUZDZ2N2SlVMVUc0OVh6Y0U5U0FjUkhS?=
- =?utf-8?B?d1puV0s5MG9NQmxlOCttME80SU1QRWYwTnpsdDBDN3JyRTNMam5uSGhGaFg2?=
- =?utf-8?B?NXZGL21QT3dmQTRheTM5aVZNVHFsMlBMMHMxTG5MelNHTmdUbjNqTEttazZy?=
- =?utf-8?B?SFowMW5NZ2xJclh1MUJOWXB6ZEhGbVVGbHRtQ2pTSWoxSERHd2I2c0ZUMjdS?=
- =?utf-8?B?a2lqZXhXd1dHaVlMbzBFRm04QmtmSGhOQ1M4dmtsNVd6aGM3ZW8wRC9Kcllp?=
- =?utf-8?B?TEJmcUI3RWVaYk1PY29ocldsVTJ3ZFE5QitiaGorWHhzV3BDazgwLzVDcDU2?=
- =?utf-8?B?VGoxdGVXM1V1UldyT2x3djJWWndFL01INTJrb2o1UEowaW04RnIyZHVvUUFE?=
- =?utf-8?B?OUlMZXVjbzFHR1hwSWRuNGlxWVMrVU5TTWdHNG83Q05RdkV3Szg0SGZGQzcv?=
- =?utf-8?B?TTN4Nk5lS0xwVEN2NmtIMGNuczQ3RjVhRmJtS0FRakxoK0I4TkhPUUNsR1pB?=
- =?utf-8?B?ZHlnQmhIRElhTS83VU5mQXo4MVE1dnVBME9OYkR1Mit6aVpWZE9nandROWVF?=
- =?utf-8?B?dUJUVkR5bUp1cStqRVJpMllaMEpib0hXVFZucE9oc0kzZzJBZzBKTk1VUjVr?=
- =?utf-8?B?djlZTGJyNzRURHZUL1IrVUF4d2QxUTcycGVPZUs5bnhlNit5VGdnQT09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: caae861a-cb6a-486a-b7de-08df159bae06
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2026 15:44:09.4820
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P9FwN7Cf9BCRVlvjhwpdUe570gPyc2QWncyaDZuG5DB0AOtPezpYkhkfXmsUQcLvlNyh43dgSP3CNvNI5XRX3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO9P123MB7964
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b8005c24-ecac-45c4-840a-fd282f9693b5@linux.dev>
 
-On Mon, Sep 14, 2026 at 04:30:32PM +0200, Greg Kroah-Hartman wrote:
-> When add_taint_module() was added, the documentation for it was copied
-> directly from add_taint().  But that documentation was a bit wrong
-> (wrong variable name, and misleading boolean reference.)  Fix up both
-> functions to have the correct documentation for how to use the
-> lockdep_ok parameter to these functions.
-> 
-> Reported-by: Petr Pavlu <petr.pavlu@suse.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  kernel/module/main.c | 5 +++--
->  kernel/panic.c       | 5 +++--
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 444d990c9983..369794876c3e 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -197,8 +197,9 @@ static inline int strong_try_module_get(struct module *mod)
->   * @flag: one of the TAINT_* constants.
->   * @lockdep_ok: whether lock debugging is still OK.
->   *
-> - * If something bad has gone wrong, you'll want @lockdebug_ok = false, but for
-> - * some noteworthy-but-not-corrupting cases, it can be set to true.
-> + * If something bad has gone wrong, you'll want
-> + * @lockdep_ok = LOCKDEP_NOW_UNRELIABLE, but for some
-> + * noteworthy-but-not-corrupting cases, it can be set to LOCKDEP_STILL_OK.
->   */
->  void add_taint_module(struct module *mod, unsigned flag,
->  		      enum lockdep_ok lockdep_ok)
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index 213725b612aa..892045d8409e 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -948,8 +948,9 @@ unsigned long get_taint(void)
->   * @flag: one of the TAINT_* constants.
->   * @lockdep_ok: whether lock debugging is still OK.
->   *
-> - * If something bad has gone wrong, you'll want @lockdebug_ok = false, but for
-> - * some notewortht-but-not-corrupting cases, it can be set to true.
-> + * If something bad has gone wrong, you'll want
-> + * @lockdep_ok = LOCKDEP_NOW_UNRELIABLE, but for some
-> + * noteworthy-but-not-corrupting cases, it can be set to LOCKDEP_STILL_OK.
->   */
->  void add_taint(unsigned flag, enum lockdep_ok lockdep_ok)
->  {
-> 
-> -- 
-> 2.55.0
-> 
+Looping in Ulad who is best placed to respond on this.
 
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+Ulad could you look at the below? Thanks! :)
 
--- 
-Aaron Tomlin
+On Thu, Sep 17, 2026 at 10:32:48AM +0800, Hao Ge wrote:
+> Hi Suren、David、Lorenzo
+>
+> On 2026/9/17 09:12, Hao Ge wrote:
+> > Hi Suren
+> >
+> > On 2026/9/17 03:07, Suren Baghdasaryan wrote:
+> >> On Wed, Sep 16, 2026 at 9:31 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> >>>
+> >>> On Tue, Sep 15, 2026 at 11:00 PM Hao Ge <hao.ge@linux.dev> wrote:
+> >>>>
+> >>>> Hi Suren
+> >>>>
+> >>>> Thanks for you review.
+> >>>>
+> >>>> On 2026/9/16 05:09, Suren Baghdasaryan wrote:
+> >>>>> On Mon, Sep 14, 2026 at 11:59 PM Hao Ge <hao.ge@linux.dev> wrote:
+> >>>>>>
+> >>>>>> The reservation is already stored in the maple tree when
+> >>>>>> vm_module_tags_populate() fails. A failed load never unloads the
+> >>>>>> module, so nothing releases the entry. Release it and roll
+> >>>>>> module_tags.size back. Without the rollback a concurrent load that
+> >>>>>> already passed needs_section_mem() can reuse the freed gap, skip
+> >>>>>> vm_module_tags_populate() and write to unmapped memory.
+> >>>>>>
+> >>>>>> vmap_pages_range() may have installed some PTEs before failing. A
+> >>>>>> retry to populate the same range would BUG on them, so undo them,
+> >>>>>> but only if vmap actually ran.
+> >>>>>>
+> >>>>>> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
+> >>>>>> Fixes: 0f9b685626da ("alloc_tag: populate memory for module tags as needed")
+> >>>>>
+> >>>>> If a patch fixes two other patches, it likely needs to be split so
+> >>>>> that each part fixes one patch only. But read on please. I'm not sure
+> >>>>> if one of the fixes is correct.
+> >>>>>
+> >>>>
+> >>>> Kept them in one patch because they only make sense together.
+> >>>>
+> >>>> After a failed populate the reservation is released and the
+> >>>> size rolled back, so the next load takes the same gap and calls
+> >>>> vm_module_tags_populate() again, and that retry would trip over
+> >>>> the PTEs the failed vmap left behind.
+> >>>>
+> >>>> Without the rollback a load that already passed needs_section_mem()
+> >>>> just reuses the gap, skips populate and writes to unmapped memory.
+> >>>> So splitting them leaves each half broken.
+> >>>
+> >>> Yeah, that's why I think vmap_pages_range() cleanup should be a
+> >>> completely separate patch with vmap_pages_range() doing cleanup
+> >>> itself.
+> >>>
+> >
+> > I think I get where you're coming from now.
+> > Thanks for taking the time to explain.
+> >
+> >>>>
+> >>>>>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> >>>>>> Cc: stable@vger.kernel.org
+> >>>>>> Signed-off-by: Hao Ge <hao.ge@linux.dev>
+> >>>>>> ---
+> >>>>>>  mm/alloc_tag.c | 10 ++++++++++
+> >>>>>>  1 file changed, 10 insertions(+)
+> >>>>>>
+> >>>>>> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+> >>>>>> index 2070e682fe10..95ddf5b743d0 100644
+> >>>>>> --- a/mm/alloc_tag.c
+> >>>>>> +++ b/mm/alloc_tag.c
+> >>>>>> @@ -804,6 +804,13 @@ static int vm_module_tags_populate(void)
+> >>>>>>                                      next_page, PAGE_SHIFT) < 0) {
+> >>>>>>                         release_pages_arg arg = { .pages = next_page };
+> >>>>>>
+> >>>>>> +                       /*
+> >>>>>> +                        * vmap_pages_range() only runs once all pages were
+> >>>>>> +                        * allocated, and it may have installed some mappings
+> >>>>>> +                        * before failing. Undo them.
+> >>>>>
+> >>>>> If vmap_pages_range() failed to map the range, why should we need to
+> >>>>> undo it? If it indeed leaves some partial mapping when failing then I
+> >>>>> would argue that vmap_pages_range() should be undoing these partial
+> >>>>> mappings itself before returning the error.
+> >>>>>
+> >>>> Yeah it does - none of the paths under vmap_pages_range() undo themselves on error.
+> >>>
+> >>> Hmm. I wonder if this behavior is intentional or requires a fix. The
+> >>> only possible reason I can think of is performance but I can't imagine
+> >>> a failure to map is a performance-critical case.
+> >>>
+> >>> +David Hildenbrand (Red Hat), +Lorenzo Stoakes (Oracle) what do you
+> >>
+> >> Huh, my gmail thinks you are still at your previous companies :)
+> >>
+> >
+> > I manually fixed it on the mailing list for this thread.
+> >
+> >>> guys think? Shouldn't vmap_pages_range() undo its possible partial
+> >>> mapping when it fails?
+> >>>
+> >>>
+> >>>> pcpu_map_pages does perform cleanup on its own as well. There may be other similar sites.
+> >>>> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/percpu-vm.c#L255
+> >>>> so I did the same here.
+> >>>>
+> >>>> If we really want vmap_pages_range() to handle this cleanup internally, I believe that would
+> >>>> be a relatively large change, and we would need to consider many more cases. So I think we keep
+> >>>> the current behaviour for now.
+> >>>
+> >>> Yeah, I understand it would require a deeper cut but if that's the
+> >>> right way to handle this we might as well do that. Let's see what MM
+> >>> folks think.
+> >>>
+> >
+> > Sounds good to me. Let's wait and hear what the MM folks say.
+> >
+>
+> I just looked into the call sites for __vmap_pages_range.
+> And I found there's a bug in one vmalloc caller [1].
+> When gfp_mask has __GFP_NOFAIL, the code keeps retrying
+> __vmap_pages_range. If there are leftover PTE mappings,
+> this can trigger a BUG(); [2]
+> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/vmalloc.c#L3946 [1]
+> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/vmalloc.c#L121  [2]
+
+I think best person to look at this is Ulad as vmalloc is his baby :)
+
+Ulad, what do you think?
+
+Thread is at
+https://lore.kernel.org/all/20260915070001.113559-3-hao.ge@linux.dev/ for
+context.
+
+>
+> > Thanks
+> > Best Regards
+> > Hao
+> >
+> >>>>
+> >>>> Thanks
+> >>>> Best Regards
+> >>>> Hao
+> >>>>
+> >>>>>> +                        */
+> >>>>>> +                       if (nr == more_pages)
+> >>>>>> +                               vunmap_range(phys_end, phys_end + (nr << PAGE_SHIFT));
+> >>>>>>                         /* Clean up and error out */
+> >>>>>>                         release_pages(arg, nr);
+> >>>>>>                         return -ENOMEM;
+> >>>>>> @@ -947,6 +954,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+> >>>>>>                 return ret;
+> >>>>>>
+> >>>>>>         if (module_tags.size < offset + size) {
+> >>>>>> +               unsigned long prev_size = module_tags.size;
+> >>>>>>                 int grow_res;
+> >>>>>>
+> >>>>>>                 module_tags.size = offset + size;
+> >>>>>> @@ -961,6 +969,8 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+> >>>>>>                         shutdown_mem_profiling(true);
+> >>>>>>                         pr_err("Failed to allocate memory for allocation tags in the module %s. Memory allocation profiling is disabled!\n",
+> >>>>>>                                mod->name);
+> >>>>>> +                       release_module_tags(mod, false);
+> >>>>>> +                       module_tags.size = prev_size;
+> >>>>>
+> >>>>> Yes, this one is a valid fix. It fixes 0f9b685626da commit.
+> >>>>>
+> >>>>>>                         return ERR_PTR(grow_res);
+> >>>>>>                 }
+> >>>>>>         }
+> >>>>>> --
+> >>>>>> 2.25.1
+> >>>>>>
+
+--
+Cheers, Lorenzo
