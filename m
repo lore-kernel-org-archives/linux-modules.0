@@ -1,224 +1,184 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021072.outbound.protection.outlook.com [52.101.100.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1629C37C903
-	for <linux-modules@vger.kernel.org>; Fri, 18 Sep 2026 13:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789737770; cv=none; b=ME6TQFeK8BLyYeBNpfkIgBPmFSCC1Mrm54UCYMfmJGjn5HoqjkbWFJepcnjYdjy5zt/1CJrMYK4MnKXkCh5edpp6pDNQ/eMAbHDPdn64/Qd6RrFKLDYmeOtSN7tyYNCMo7n/V/cOrAUEtLv/YhbyQ6/+0jmpMhhVi/q0biRIyl0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789737770; c=relaxed/simple;
-	bh=b1No/s+YxvLDDWJ/c9YG5eDsGoNlnCstFBf6EMY3bdM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QE9sIGbd4fUpW6fFiwGtPNPQ/qwXLFvzq41T3eltF02NVUcNH/wkQfWY74DTpfFty2Gb0GwQsB8S6m2YcCeqIxy89rJuW/JQ+SecHlKz4nmw3sETGQAbolBY9aww63BjLi0obSsRexQxwoqiYoBIsMC5tpo7Z/7JtBoALousAu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzs8LdAh; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzs8LdAh"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843f22dcb8so524392f8f.0
-        for <linux-modules@vger.kernel.org>; Fri, 18 Sep 2026 06:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789737766; x=1790342566; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bi9+tp0tdSAqr1IOm/IF32S8WKoTQ+Hz6781U37us8U=;
-        b=gzs8LdAh3l2N1BGYmnmRpRNeJmsU9TLEQKCral5PpadH8AZaNVIKi9SHLNWQNVd2h7
-         Lz7bkfSz4rEyKG07BHrMr287Y98PhOgaizgvjyLlMl5kctIWfXVawoW3rFH8w9FNOtpz
-         pYARzRMqB6dE+/0tKN2gBGyBZTn8TwL43mH4H22ZxdVRExYoEBwuwOoEnQ+U8YBOHS4h
-         AH/21IqMALzTbuZWzg9S3RhmONcElOSJ+uClJhD3OQQY3xQfoeT4JQ2ODh2bIPDB09s+
-         aOueOO3Iv/HI5ZCgZKfrsx+33vG8ZB7slOyfPLyAE2cH6U1fSyFbJcycLxiye4N7v60O
-         DbOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789737766; x=1790342566;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bi9+tp0tdSAqr1IOm/IF32S8WKoTQ+Hz6781U37us8U=;
-        b=dwysaOZCMcrfcMavqe6YWDopolOz9NzWLSMnHzNQ+4Z13JGGig3bQ986fTr0wVojaN
-         0qjkubQWzxfusdvwBi550Nxarwc4rhRqJBSmfVcxnymkqDJCASCQoiu6OBQ/kwPZEGb3
-         eHF+yHqi+tuQzlEB54hMxnSjSLP7XeB+q8m16Cc6OOeSrZPivdQUZ9gn3SyrBt5cFFKw
-         ez3xwmTOWwjT6FlGURxVzaNXOxI6wJZ3pSEejdlNnbIOOoPJid4FaxqqQOkeEOw/lt+9
-         +O4aW+PaiPHGngqsZfZEPr0Khrj6btTggvry6z1orM6FoqnDrBe9tjRHPlMs83bjrzIP
-         dLog==
-X-Forwarded-Encrypted: i=1; AKwUvBz/OUWKcSXs9zYqSu57MG2uRLQsBC/nWmGCa3XUsK20Lok+ptq+BtaGfOUJ6G7LDVnXVmnC8OZ5VBOwNeT3@vger.kernel.org
-X-Gm-Message-State: AFuF++llmlgNmZKWUMfpX7C0/nM5ORiBat0cghjjCL6Mu9K/ckk4W8TZ
-	67EEuYk6WvHypL6rlTHV0hw1cDuclS+drmkOuPqhUaHmCb8BimvExobH
-X-Gm-Gg: AYBFou2ohyhcDIok7BT71ufqXa0VzMfGO22JI5895IHYyYzI2fUdW0YzCGhZnEjNo4C
-	dj+u8drkr009Rwp3/AoZ7xg8h6bcjj2tSDgyyxgBzEIfb1QMHh98ZsbbIoYqTVGuVdeNKNhCJjq
-	faTZXeGY5YhHUx5HVtpmDIC35MaqWlMjJNrfsjT9blIhxuRfj5WG3UXBbZ6mgby1GDQD9h5iFie
-	Uvc4x7dxIs31+KwetWZZTm3rKNaEp4Uh2HCN2x8/6qo+/D2VDcCccLoAiiAnaI/05qmAmfpkRzi
-	InO7tJPDGvfrxBciW6uas7V71jrpu3Da466R6/glwZikHBVrb+H4bp3pfwYC1gsDL//gsDmV8BX
-	wTqtrjvSr11RghPLnE+UeOVoTkQFSGOIq30t64O3VGGfH3czBZQSCCBc18UXTgYeH+WlpC4GC+W
-	cV95h2NbcIZ16ZeEHeyIi2sxuYEeHy6i1BvVV90WB9yFaF60nI8D4rP7GEr6h+QsHLN9bz8vCSC
-	/dSpsZcBcaBq1zz3VoNKnq/9wXSktGRKw8=
-X-Received: by 2002:a5d:5f90:0:b0:486:e737:d94b with SMTP id ffacd0b85a97d-4871e3814ebmr3476154f8f.51.1789737766063;
-        Fri, 18 Sep 2026 06:22:46 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4871ff5605dsm4015260f8f.19.2026.09.18.06.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 06:22:45 -0700 (PDT)
-Date: Fri, 18 Sep 2026 14:22:41 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Mahanta Jambigi <mjambigi@linux.ibm.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-s390@vger.kernel.org, "D. Wythe"
- <alibuda@linux.alibaba.com>, Dust Li <dust.li@linux.alibaba.com>, Sidraya
- Jayagond <sidraya@linux.ibm.com>, Tony Lu <tonylu@linux.alibaba.com>, Wen
- Gu <guwen@linux.alibaba.com>, Alexandra Winter <wintera@linux.ibm.com>,
- Halil Pasic <pasic@linux.ibm.com>, Hidayath Khan <hidayath@linux.ibm.com>
-Subject: Re: [RFC] module: init-failure path can free a module with live
- try_module_get() users
-Message-ID: <20260918142241.55a6630a@pumpkin>
-In-Reply-To: <5dc1fe2b-289e-4786-b9e9-e181dda8d4e9@linux.ibm.com>
-References: <5dc1fe2b-289e-4786-b9e9-e181dda8d4e9@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C64503BCB;
+	Fri, 18 Sep 2026 15:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.72
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789746257; cv=fail; b=R+WdzQU/opPWiD4bzgf7zuPp/Pq9VvoFAdm1+clncIpmqrue7l7IIOWZk36nBlLWKTMg2ZzSLJgF9DvTVfkGuPAoBexuS1QqmtJuY9YFXKzfVcLxMTTkpDNjVNriBKa4DVCiUKzjgQb3mDOPJezNF5g145B1nPQ2ioLHOiyhlUs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789746257; c=relaxed/simple;
+	bh=dcN+qnDLI/wBS+UK5TZ8A2iCW8xjQlDpK353mEW0Tp4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=YBp+Bvp5KwtR0AVBMbrhziSEPeT+uwUD3PmnQv/IRXpEGnWU0RpOWfJUfGhFGCayeHBsUK1IKf0Gl0GEpKNTO806B+eNGlFJUVmRMZijQjTTJu+q3J8dZvcBA3HWk1V44KU8n6fSqSVNKqJ6UP20nTgfcLMkNzWEOYlynl5vilw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.100.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lpE0G4UXCu/uJrsxmij+ISV55KR4eIuMofvRJ/kRFcraN2nF4Xx516QWSRazLxmfDzhFpmjGHHm/9069HQ0gOohxjBn0csJJXVWcL8FqGy1AglKv3jlnsKfKj/qbNscvafwmgdW66IG1CI8FRuZydsFkxHtZLrMnA/GpvTkELJw2eKtea4CCiU4JxCmDb4Dtbh0omZ0RrM67vXisddHhMzl/6RuCiahtkAuoCxH4cGhMj5b2QzetwkTASFuOADnfIqp9Qq5AlTelH5kqt+NzzhybGvYT+7HtqpJUx36CZuauJA/cFce35jvhkOJoSoR5Ugd89EotBzN0B402rExFQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
+ bh=APNEUdWFcLdZMIaIxMndyzxJZd/tdxdGGgaeDY36WoY=;
+ b=bEGo5MwFzyc4v/tXohLVafrnt2+aXyDZLT4s0e4UHKAQ23C6GRqyTZ+T7gJ2OSBZi+XmiBWsRUu23RJMdMCvsjXME/Aje21MKRAxXHz0fNU1FVOJ+9F5wPykv65qbnYkb2a2kTVhPQurJjAnQziosptyZxwo+Ztg8vhZ5ziuUoBrKsfhzCPMM6HCOa4wfJ2gYtLgCfuCeF1QkXvZgDir6Kkc+jcN+40wRkwXRFpMAzzLPZz/dbFXxOGCVzIQ/9H8FRGDoPjU+TehFhwd4KGN0USN4h/4l7gZi8o/804rW9fEUeCeBb1G9QUJ3NdlJ9XOp7AJGn/IYKLKSmsjFZN4eQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
+ by LO9P123MB7964.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:3e3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Fri, 18 Sep
+ 2026 15:44:09 +0000
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0428.011; Fri, 18 Sep 2026
+ 15:44:09 +0000
+Date: Fri, 18 Sep 2026 11:44:05 -0400
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh <nogikh@google.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] module: fix up documentation for add_taint() and
+ add_taint_module()
+Message-ID: <k7pmsxqohlkatvwhd4bngycdlegc4d7ss4gj7ghanajga5zsms@ixjphhjwqbue>
+References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
+ <20260914-bind_taint-v4-2-eadf8a090903@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260914-bind_taint-v4-2-eadf8a090903@linuxfoundation.org>
+X-ClientProxiedBy: BN0PR03CA0015.namprd03.prod.outlook.com
+ (2603:10b6:408:e6::20) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:183::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO9P123MB7964:EE_
+X-MS-Office365-Filtering-Correlation-Id: caae861a-cb6a-486a-b7de-08df159bae06
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|23010399003|366016|1800799024|6133799003|4143699003|22082099003|10067099003|56012099006|18002099003|27256017;
+X-Microsoft-Antispam-Message-Info:
+	U/ngbM+fNTf4WZnRAG/cFvTUVQs6gAXmzcOUw0yY0jtXiUb4s6CCV4b6z4XYWB71cdGmMZGDYiPbgKolmnjBQAgxWHsRgZ/H/ZVaHB/8I6vasaNx+ogzbUjkynH7NuaGFDjqhkwm+eon/mj0BXa/X7A9xhBjZbBz8V3neWJNbz1etTk4Ot2Mdykb44sGMQpGKQF114vG0fjjEXyjeKgHQOQ2dEUfE+JVtkN/SSDVQccohy3VBy88tBrAe5qR/8YXBBy0bpss3nmGEjps3yPgmdbuqs8lR38PWC6nLGQmHH3eLgluryc63e0F4mt8G7OAoLWWf+/1jMND+ZKQ1NuZlSiZBGer4AVlpwBWlto/43Q96oOcOa/rB3y5cF57XzTfwnrLQWmarxgILaJHk1wiJyStEGRj5y1JbNb8rVU+VdIM3BNWcMnRcD8HgRR5CSkFfevuW07oPz9U5fAVmsm06GuMsSs3gUzRE1dI0H0F6UckdrSVT4tXztSA5vHME1hqyl0TxKhHJ9vTPssOtnrpc+AL28BYbkVkSIf/HiKDZnlq057Sa/mb9GEBr1rSgN9RKyS7x2uFDe4V2IHEf5jfSs5gHEmsAEJWuyeXNruDZBJ11Xs8jPl3TgS0q+6Cbmtbw1qLB0MEKMwCdSTvzHBL5a8fFX24Sqi7MdtZVe0Kjzx2v1E0mXlAXq+/yK4VRq9x1le9bGk/r+Wf21EJKlnRDA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(366016)(1800799024)(6133799003)(4143699003)(22082099003)(10067099003)(56012099006)(18002099003)(27256017);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TWRkZTlJcHdBUVRSRHVuV2NZTThrTk5NTVd0SVBaZW5SZWJKZDRES1BXRnh0?=
+ =?utf-8?B?OVdHazJieTFyMzBGVkNHTWFVSlFoMkR5ZDVBQnR5dUpxV1lSU2FqQkIwQk0z?=
+ =?utf-8?B?R24vWWx6WXBKQjBweEpvcU1sYm1CeVJod1FTL0VMMm9SZTJObEtoTmJPbWJN?=
+ =?utf-8?B?U0tieXN6Qzlma3I1ZUpIdDBReVNsNTNRVzNFWmJ6UHVwalRXbWY5dXNpMFB1?=
+ =?utf-8?B?QlVpcWgrakhxN3c0alJoK09pT21MWlVpZ3VSMnBoYVJQMjZRTmgwZU12elhL?=
+ =?utf-8?B?VEJZQVNDYjhnQjVhRE16TWxxVGpnQkdXQk90bW1KWDgwbU9QUlMrQ3BPclVY?=
+ =?utf-8?B?dUNYNXZGdlUrQ3l5MStGSXhZbXErakpuRFdXbFR1T0kyK05OK1NJZDJ5dGQ2?=
+ =?utf-8?B?WTBFT1NNdGp6RGZRMFZWODhNV3hiOFAwY2R0alk1VTh3dXAzc0k4REc2L1Fn?=
+ =?utf-8?B?VjVlR2xNWHc4d3N4RGJsR21xV1pta3VzcHdVRGF1ckwwUWJpcFBNdU9UU3BX?=
+ =?utf-8?B?SmJWUllkeDNIQUtsR0JYQlA0ZGJGRkFnTjV3anI5MFJtZWtlWlRrTVZnYnE2?=
+ =?utf-8?B?T21yeHlKWDBvaXcwVXlpWTFHNzljTHpuV015L0hRRFNIZStmb1F6aC8zTXRG?=
+ =?utf-8?B?QjdrYXQyRTNTNk1vMTQ0Z3pyWlFJc3dTTStCQzBFTGptS215Y1ZVOTJ3VG5y?=
+ =?utf-8?B?TlZZZlFGeEdKM0FPSWdjMU44MG9RZnQ1clErWVRNRlF3c3J4Y3BLWVVBMTgv?=
+ =?utf-8?B?aXNJZ0pSR0ZzOGpiaWZONEI3bnlEZ2lqdW9QaVZpYnRxbjV3R3ZTUktvM09L?=
+ =?utf-8?B?SHJUd0IwbTE1OVcvNkJoWkdyRm9SK3U1Z1ZQM1hid25VRkhtWldjMXV0UUNo?=
+ =?utf-8?B?SUNIcHNVakFORTR1Y3crVk1CT091UVhkdXZSck1jR1IxYytyQnIwT1p3c3l4?=
+ =?utf-8?B?WUJUejUyTVFmc0creFpiK0xYNDVLalR1OVAveENoblpSc29tM1dQekwwVHht?=
+ =?utf-8?B?NVdaLzFBd1pVK3ZLYUtrOWlZSHc3L0pGNklpdEpJZVk2cTZ6VmxJZHg5d1JD?=
+ =?utf-8?B?Sjhvai9KaG11SHY1YktoSTYzdUpCNnBmUzh2SFV3MU81NUZ2ZWlhZHdCK2M3?=
+ =?utf-8?B?M01veUF0YTFUdmkwZEFFMGpnRjFUTFl5N3l6QmlJUUt1REJ2NStqa2w0TGg4?=
+ =?utf-8?B?bUpxWGF3b3JkSUdZcG1SdG40Q0x3QVZxbHlBODhwOVNqc2drR1dxWkIra3V1?=
+ =?utf-8?B?amdKZU9HZ0JIdmtUTW9lQ084Zk9OQ1BVYkpPLzNWZGdodG4vTUxkVmY1T2Vy?=
+ =?utf-8?B?VTJkUHJBLzE5TXNHL3R5Y1htU0JRdjZEbk9MZ3pBRzFUbFBGVFgrditJdU9U?=
+ =?utf-8?B?UnBtYmZkZ2FtYzhieWR6RkJCM3lEQjE4Rk1XNWdUaDJVaWMyTWc5b013VmZt?=
+ =?utf-8?B?QkNhdFl0RUNUcnlzZ3JKOWxSa01WRG1kMVpXdjZUSFBUWjQrNDFBRnRtUzdm?=
+ =?utf-8?B?amVoeUxEVWkyamZJamUyRXNzT3FIdzZoQndBSnl4Zmo3NlplTkVOby9kV00x?=
+ =?utf-8?B?M2QvTjdLMThWY2tzOGhWbnJaZ3REbGNlbVEwb1pLaVBjZzBEUzNGQlV6VzJB?=
+ =?utf-8?B?RXM1dVRZdHpHNFBLditpaTFSQk56MUZDZ2N2SlVMVUc0OVh6Y0U5U0FjUkhS?=
+ =?utf-8?B?d1puV0s5MG9NQmxlOCttME80SU1QRWYwTnpsdDBDN3JyRTNMam5uSGhGaFg2?=
+ =?utf-8?B?NXZGL21QT3dmQTRheTM5aVZNVHFsMlBMMHMxTG5MelNHTmdUbjNqTEttazZy?=
+ =?utf-8?B?SFowMW5NZ2xJclh1MUJOWXB6ZEhGbVVGbHRtQ2pTSWoxSERHd2I2c0ZUMjdS?=
+ =?utf-8?B?a2lqZXhXd1dHaVlMbzBFRm04QmtmSGhOQ1M4dmtsNVd6aGM3ZW8wRC9Kcllp?=
+ =?utf-8?B?TEJmcUI3RWVaYk1PY29ocldsVTJ3ZFE5QitiaGorWHhzV3BDazgwLzVDcDU2?=
+ =?utf-8?B?VGoxdGVXM1V1UldyT2x3djJWWndFL01INTJrb2o1UEowaW04RnIyZHVvUUFE?=
+ =?utf-8?B?OUlMZXVjbzFHR1hwSWRuNGlxWVMrVU5TTWdHNG83Q05RdkV3Szg0SGZGQzcv?=
+ =?utf-8?B?TTN4Nk5lS0xwVEN2NmtIMGNuczQ3RjVhRmJtS0FRakxoK0I4TkhPUUNsR1pB?=
+ =?utf-8?B?ZHlnQmhIRElhTS83VU5mQXo4MVE1dnVBME9OYkR1Mit6aVpWZE9nandROWVF?=
+ =?utf-8?B?dUJUVkR5bUp1cStqRVJpMllaMEpib0hXVFZucE9oc0kzZzJBZzBKTk1VUjVr?=
+ =?utf-8?B?djlZTGJyNzRURHZUL1IrVUF4d2QxUTcycGVPZUs5bnhlNit5VGdnQT09?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: caae861a-cb6a-486a-b7de-08df159bae06
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2026 15:44:09.4820
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P9FwN7Cf9BCRVlvjhwpdUe570gPyc2QWncyaDZuG5DB0AOtPezpYkhkfXmsUQcLvlNyh43dgSP3CNvNI5XRX3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO9P123MB7964
 
-On Mon, 24 Aug 2026 11:43:46 +0530
-Mahanta Jambigi <mjambigi@linux.ibm.com> wrote:
-
-> Hi Luis, Petr, Daniel, Sami, Aaron,
+On Mon, Sep 14, 2026 at 04:30:32PM +0200, Greg Kroah-Hartman wrote:
+> When add_taint_module() was added, the documentation for it was copied
+> directly from add_taint().  But that documentation was a bit wrong
+> (wrong variable name, and misleading boolean reference.)  Fix up both
+> functions to have the correct documentation for how to use the
+> lockdep_ok parameter to these functions.
 > 
-> I'm writing to ask about what looks like a generic module-init failure
-> lifetime problem in the module loader. I ran into it while working on
-> the SMC networking module (net/smc/), but after several patch
-> iterations, it seems the root issue may belong in kernel/module/main.c
-> rather than in SMC itself. I'd appreciate your guidance on whether this
-> reading is correct, and if so, what fix direction would be preferred.
+> Reported-by: Petr Pavlu <petr.pavlu@suse.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  kernel/module/main.c | 5 +++--
+>  kernel/panic.c       | 5 +++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 > 
-> THE ISSUE IN do_init_module()
-> =============================
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 444d990c9983..369794876c3e 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -197,8 +197,9 @@ static inline int strong_try_module_get(struct module *mod)
+>   * @flag: one of the TAINT_* constants.
+>   * @lockdep_ok: whether lock debugging is still OK.
+>   *
+> - * If something bad has gone wrong, you'll want @lockdebug_ok = false, but for
+> - * some noteworthy-but-not-corrupting cases, it can be set to true.
+> + * If something bad has gone wrong, you'll want
+> + * @lockdep_ok = LOCKDEP_NOW_UNRELIABLE, but for some
+> + * noteworthy-but-not-corrupting cases, it can be set to LOCKDEP_STILL_OK.
+>   */
+>  void add_taint_module(struct module *mod, unsigned flag,
+>  		      enum lockdep_ok lockdep_ok)
+> diff --git a/kernel/panic.c b/kernel/panic.c
+> index 213725b612aa..892045d8409e 100644
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -948,8 +948,9 @@ unsigned long get_taint(void)
+>   * @flag: one of the TAINT_* constants.
+>   * @lockdep_ok: whether lock debugging is still OK.
+>   *
+> - * If something bad has gone wrong, you'll want @lockdebug_ok = false, but for
+> - * some notewortht-but-not-corrupting cases, it can be set to true.
+> + * If something bad has gone wrong, you'll want
+> + * @lockdep_ok = LOCKDEP_NOW_UNRELIABLE, but for some
+> + * noteworthy-but-not-corrupting cases, it can be set to LOCKDEP_STILL_OK.
+>   */
+>  void add_taint(unsigned flag, enum lockdep_ok lockdep_ok)
+>  {
 > 
-> include/linux/module.h has a long-standing FIXME in module_is_live():
-> 
->     /* FIXME: It'd be nice to isolate modules during init, too, so they
->        aren't used before they (may) fail. But presently too much code
->        (IDE & SCSI) require entry into the module during init. */
->     static inline bool module_is_live(struct module *mod)
->     {
->         return mod->state != MODULE_STATE_GOING;
->     }
-> 
-> Because MODULE_STATE_COMING is not MODULE_STATE_GOING, try_module_get()
-> can succeed once a module's __init is executing. If __init makes the
-> module externally reachable partway through and then later fails, the
-> failure path in do_init_module() appears to do:
-
-It is rather worse that that.
-If sock_create() auto-loads a module (eg sctp) then nothing stops a second
-sock_create() entering the protocol code before the initialisation completes.
-That can be hit by two separate applications, I hit it from an out of tree
-kernel module and avoided the problem by putting a mutex() around the
-sock_create() call.
-
-It might help by letting try_module_get(THIS_MODULE) always succeed
-while blocking other requests until initialisation completes.
-The code making the call must own a reference (otherwise the code could
-just disappear), and that reference stops the module being unloaded.
-That would let the initialisation code grab extra references (eg for
-a worker thread) without allowing other codes paths enter the
-part-initialised driver.
-
-David
-
-> 
->     fail:
->         mod->state = MODULE_STATE_GOING;
->         synchronize_rcu();
->         module_put(mod);
->         ...
->         free_module(mod);
-> 
-> synchronize_rcu() waits for RCU readers, but not for threads that
-> already obtained a module reference via try_module_get() and are still
-> executing module text.
-> 
-> By contrast, the normal unload path in try_stop_module() refuses to
-> proceed while the refcount is non-zero.
-> 
-> So the asymmetry seems to be that the normal unload path waits for
-> references to drain, while the init-failure path does not.
-> 
-> A concrete race would look like:
-> 
->   1. Module __init registers an externally reachable interface.
->   2. User space enters through that interface and try_module_get()
->      succeeds while the module is still COMING.
->   3. A later __init step fails.
->   4. do_init_module() frees the module.
->   5. The in-flight caller is still executing module text.
-> 
-> SMC AS A CONCRETE EXAMPLE
-> =========================
-> 
-> In SMC, simply moving registration later does not appear to eliminate
-> the window, because there are two separate registration points that can
-> make the module reachable via socket():
-> 
->   1. sock_register(&smc_sock_family_ops)
->      After this, socket(AF_SMC, ...) can succeed and reach
->      try_module_get() via __sock_create().
-> 
->   2. smc_inet_init() -> inet_register_protosw()
->      After this, socket(AF_INET, SOCK_STREAM, IPPROTO_SMC) can succeed
->      and again reach try_module_get().
-> 
-> Either registration point can succeed before a later init step fails.
-> 
-> This may not be specific to SMC; other protocol modules that become
-> reachable during init, such as Bluetooth, may have similar exposure and
-> appear worth auditing as well.
-> 
-> ON THE FIXME'S IDE/SCSI CONCERN
-> ===============================
-> 
-> The FIXME mentions IDE and SCSI as reasons not to isolate modules
-> during init.
-> 
->   1. IDE was removed in Linux 5.14, so that half of the concern no
->      longer applies.
-> 
->   2. SCSI still appears to self-reference during init
->      (scsi_device_get() -> try_module_get(hostt->module) during
->      scsi_scan_host()), so a blanket wait-for-refcount-to-drain
->      approach in the failure path may deadlock there.
-> 
-> Also, strong_try_module_get() already rejects MODULE_STATE_COMING with
-> -EBUSY, so the infrastructure for refusing callers during init already
-> exists in some form.
-> 
-> QUESTIONS
-> =========
-> 
-> First, is my reading of this init-failure refcount/lifetime asymmetry
-> correct?
-> 
-> If so, would one of the following directions be acceptable?
-> 
->   1. An opt-in mechanism (for example, a module flag) for modules that
->      are safe to isolate during init and whose init-failure path should
->      wait for external references to drain.
-> 
->   2. Treating MODULE_STATE_COMING as non-live for normal
->      try_module_get() users, with some explicit escape hatch for the
->      remaining subsystems that genuinely need self-entry during init.
-> 
-> Any guidance on the preferred direction would be much appreciated.
-> 
-> Best regards,
-> Mahanta Jambigi
+> -- 
+> 2.55.0
 > 
 
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+
+-- 
+Aaron Tomlin
