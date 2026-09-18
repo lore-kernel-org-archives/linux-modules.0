@@ -1,235 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD8F511232;
-	Fri, 18 Sep 2026 16:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0353515F9;
+	Fri, 18 Sep 2026 16:39:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789749310; cv=none; b=rgAcBWnAy7yxp1dPSMksJD6AWMph/chTBMUecr79K5EIdYDPn0mZZvUEtzUhvtYgUAp8vxS2uttXQ9R9PN92LwWgEPxVOtC0RFWN9UbRaJceZo4El9wI6vjhSgZqDEPgfQepaRDs36DfQZYFWNxrCjm2k1rr5I/nv7iEutydJ8M=
+	t=1789749549; cv=none; b=fqpg+IN0WbjsntQbWx0tdXlKonUT/c5oIksd6WCxa3iVlnRPs1uj+fRo0t+0y30xXFW+Nzd95piDJPyMamcZrH1lyuXj/FE2Xae8iAEAYu2HekoPLH5JhTgWtZ1Uvt2MiyglH1vPA6iMMZRxmaTOezlz2hb23PcQhco/mAViIvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789749310; c=relaxed/simple;
-	bh=jY1NwgzdxHIRSTmetElXWWQ2egh61PdqNbC/cruHtls=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IXwW+fb9RF4nV3Xg1gcWNsI/3dKVmPkJnXJ/UGC/Kswjda6sLSnfIeSvNSsfVNkVOJcpUaefYwRcMGT6Nhhs6BvWeP8mWDnO7GAVgRBmXFKZ0UxoaaP2H447AmbeTgANIRSiq83o+H8eA2sUsWenpNWyPtSyKC7bvJUAWqoY9b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UNsi5FW/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789749549; c=relaxed/simple;
+	bh=yKgqDhth18rfq4TSlyCvIyYEuIgAYU4N900hfByc7S0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=MFJZfyyeYURrrVrGFH7LTR0q16blkOw1aSvSxS6u+LQx5EnHaKPDzm4Ys+2B0O4K0jTm6B4boyA4qmdSrVvcswEm+pfthaCs+MhmTMBBrG0t9Doh11jMwZtz5/bYdF/GVTRDIc0cg/6tZtUQgNd7F1vhOgAvn06adwI9Hof+cfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PzvJbrnV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UNsi5FW/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72FEE1F00898;
-	Fri, 18 Sep 2026 16:35:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PzvJbrnV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 052EC1F000FF;
+	Fri, 18 Sep 2026 16:39:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789749308;
-	bh=SZGqO5tWPMSBZG1lXUTnY1c8FiuuLCzJcsIMwbTz0KQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UNsi5FW/17pn89Ref9walQd57L7IG7TkWC5AX+0goE2gCbGP1tWDRSNJ0Q7k+V8We
-	 w49ArJP/vRRnyl2nWJIbNkHCS/1KbD6jEb+FpAfiGcgKM3eXrJEnxhJVoBHxErgKn/
-	 LQe32Sjp8vO6Lmi94U7ATodVBcfM76gQaAyrYAXyGIGkmtLEuq4DTOc9Xer9c74ZhL
-	 plJEDtO0zQjIoM+7zaUxvu7n8Np+Cjm4w81KvqD9aThLmfPq+a+B/7E4wjmqJQs95f
-	 jji3GfvUjk6mcx/spnHlA3kE+qqwGXGMjSEk9IrCyk5hSGSx9yVTaeATLaLiQSJPvG
-	 +uCb/j9wLdiVw==
-Date: Fri, 18 Sep 2026 17:35:02 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Uladzislau Rezki <urezki@gmail.com>
-Cc: Suren Baghdasaryan <surenb@google.com>, Hao Ge <hao.ge@linux.dev>, 
-	"David Hildenbrand (Arm)" <david@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-modules@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 2/6] alloc_tag: clean up the populate failure path
-Message-ID: <aq1noAdz9U3tXH_Y@gremlin>
-References: <20260915070001.113559-1-hao.ge@linux.dev>
- <20260915070001.113559-3-hao.ge@linux.dev>
- <CAJuCfpHJSwNhgotMVpmjVvdv=m52_7Kvzpztf0WcN0AaoSeGGw@mail.gmail.com>
- <60642a7f-2949-428a-8290-40d69c989a77@linux.dev>
- <CAJuCfpG3d7n=z5WnUQYZsqvrt1pemF8TFvGiGyZGLO7ykVvqAQ@mail.gmail.com>
- <CAJuCfpGeRdFY6UPF-vXxwHvP2+tN=BKgRkmLR3PMLuWhxgzPRA@mail.gmail.com>
- <1dff448c-9cbe-4276-bca1-d91283b0c7b4@linux.dev>
- <b8005c24-ecac-45c4-840a-fd282f9693b5@linux.dev>
+	s=k20260515; t=1789749548;
+	bh=b5Zrlq13Fo17ThZWJD48N0yBnSkZxyrfKbw9LMfDzNo=;
+	h=Date:To:From:Subject:Cc:References:In-Reply-To;
+	b=PzvJbrnVDw1/FGRQjNdgtxkja4g0UKdhJ6ysQeKqAjw3SPoQdbPUDDDVRezIlzPRn
+	 BizmkSglTWN3z27ESnNWnNJ/BNE/5Pf134Kuopamm2cqa+Vg4m4fskohwsleBAZ2kq
+	 8VeG45ejMxOfvV8B5nlzi3rG7isstYgL+7Zzmi6JW51Bc5581vIt00jI9nQCcL0h5r
+	 TJA42xr+2N1e8Upe7jJRd6iYP4RmP4V22zWBn1trh8Pak11rKzlZgEkDRtY82x6XWn
+	 gOXrlr0hA3dXINFz3CQ2chmBvyX/TG7t9RH5RVc3N8nvBO6tGulEJzrciuRym+vaZ4
+	 UoBQJcmt+Ps+Q==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b8005c24-ecac-45c4-840a-fd282f9693b5@linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 18 Sep 2026 18:39:02 +0200
+Message-Id: <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
+Cc: "Luis Chamberlain" <mcgrof@kernel.org>, "Petr Pavlu"
+ <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
+ Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
+ <skhan@linuxfoundation.org>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, "Steven Rostedt"
+ <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, "Bradley Morgan"
+ <brads@mainlining.org>, "Aleksandr Nogikh" <nogikh@google.com>,
+ <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+ <driver-core@lists.linux.dev>, <linux-trace-kernel@vger.kernel.org>, "Johan
+ Hovold" <johan@kernel.org>
+References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
+In-Reply-To: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
 
-Looping in Ulad who is best placed to respond on this.
-
-Ulad could you look at the below? Thanks! :)
-
-On Thu, Sep 17, 2026 at 10:32:48AM +0800, Hao Ge wrote:
-> Hi Suren、David、Lorenzo
+On Mon Sep 14, 2026 at 4:30 PM CEST, Greg Kroah-Hartman wrote:
+> The ability to add and remove devices from a driver through the sysfs
+> "bind" and "unbind" files was created all those decades ago as a way
+> that kernel developers can iterate faster, and provide a debugging way
+> for users to attempt to add a new device to a driver without having to
+> rebuild their kernel.
 >
-> On 2026/9/17 09:12, Hao Ge wrote:
-> > Hi Suren
-> >
-> > On 2026/9/17 03:07, Suren Baghdasaryan wrote:
-> >> On Wed, Sep 16, 2026 at 9:31 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> >>>
-> >>> On Tue, Sep 15, 2026 at 11:00 PM Hao Ge <hao.ge@linux.dev> wrote:
-> >>>>
-> >>>> Hi Suren
-> >>>>
-> >>>> Thanks for you review.
-> >>>>
-> >>>> On 2026/9/16 05:09, Suren Baghdasaryan wrote:
-> >>>>> On Mon, Sep 14, 2026 at 11:59 PM Hao Ge <hao.ge@linux.dev> wrote:
-> >>>>>>
-> >>>>>> The reservation is already stored in the maple tree when
-> >>>>>> vm_module_tags_populate() fails. A failed load never unloads the
-> >>>>>> module, so nothing releases the entry. Release it and roll
-> >>>>>> module_tags.size back. Without the rollback a concurrent load that
-> >>>>>> already passed needs_section_mem() can reuse the freed gap, skip
-> >>>>>> vm_module_tags_populate() and write to unmapped memory.
-> >>>>>>
-> >>>>>> vmap_pages_range() may have installed some PTEs before failing. A
-> >>>>>> retry to populate the same range would BUG on them, so undo them,
-> >>>>>> but only if vmap actually ran.
-> >>>>>>
-> >>>>>> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
-> >>>>>> Fixes: 0f9b685626da ("alloc_tag: populate memory for module tags as needed")
-> >>>>>
-> >>>>> If a patch fixes two other patches, it likely needs to be split so
-> >>>>> that each part fixes one patch only. But read on please. I'm not sure
-> >>>>> if one of the fixes is correct.
-> >>>>>
-> >>>>
-> >>>> Kept them in one patch because they only make sense together.
-> >>>>
-> >>>> After a failed populate the reservation is released and the
-> >>>> size rolled back, so the next load takes the same gap and calls
-> >>>> vm_module_tags_populate() again, and that retry would trip over
-> >>>> the PTEs the failed vmap left behind.
-> >>>>
-> >>>> Without the rollback a load that already passed needs_section_mem()
-> >>>> just reuses the gap, skips populate and writes to unmapped memory.
-> >>>> So splitting them leaves each half broken.
-> >>>
-> >>> Yeah, that's why I think vmap_pages_range() cleanup should be a
-> >>> completely separate patch with vmap_pages_range() doing cleanup
-> >>> itself.
-> >>>
-> >
-> > I think I get where you're coming from now.
-> > Thanks for taking the time to explain.
-> >
-> >>>>
-> >>>>>> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> >>>>>> Cc: stable@vger.kernel.org
-> >>>>>> Signed-off-by: Hao Ge <hao.ge@linux.dev>
-> >>>>>> ---
-> >>>>>>  mm/alloc_tag.c | 10 ++++++++++
-> >>>>>>  1 file changed, 10 insertions(+)
-> >>>>>>
-> >>>>>> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-> >>>>>> index 2070e682fe10..95ddf5b743d0 100644
-> >>>>>> --- a/mm/alloc_tag.c
-> >>>>>> +++ b/mm/alloc_tag.c
-> >>>>>> @@ -804,6 +804,13 @@ static int vm_module_tags_populate(void)
-> >>>>>>                                      next_page, PAGE_SHIFT) < 0) {
-> >>>>>>                         release_pages_arg arg = { .pages = next_page };
-> >>>>>>
-> >>>>>> +                       /*
-> >>>>>> +                        * vmap_pages_range() only runs once all pages were
-> >>>>>> +                        * allocated, and it may have installed some mappings
-> >>>>>> +                        * before failing. Undo them.
-> >>>>>
-> >>>>> If vmap_pages_range() failed to map the range, why should we need to
-> >>>>> undo it? If it indeed leaves some partial mapping when failing then I
-> >>>>> would argue that vmap_pages_range() should be undoing these partial
-> >>>>> mappings itself before returning the error.
-> >>>>>
-> >>>> Yeah it does - none of the paths under vmap_pages_range() undo themselves on error.
-> >>>
-> >>> Hmm. I wonder if this behavior is intentional or requires a fix. The
-> >>> only possible reason I can think of is performance but I can't imagine
-> >>> a failure to map is a performance-critical case.
-> >>>
-> >>> +David Hildenbrand (Red Hat), +Lorenzo Stoakes (Oracle) what do you
-> >>
-> >> Huh, my gmail thinks you are still at your previous companies :)
-> >>
-> >
-> > I manually fixed it on the mailing list for this thread.
-> >
-> >>> guys think? Shouldn't vmap_pages_range() undo its possible partial
-> >>> mapping when it fails?
-> >>>
-> >>>
-> >>>> pcpu_map_pages does perform cleanup on its own as well. There may be other similar sites.
-> >>>> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/percpu-vm.c#L255
-> >>>> so I did the same here.
-> >>>>
-> >>>> If we really want vmap_pages_range() to handle this cleanup internally, I believe that would
-> >>>> be a relatively large change, and we would need to consider many more cases. So I think we keep
-> >>>> the current behaviour for now.
-> >>>
-> >>> Yeah, I understand it would require a deeper cut but if that's the
-> >>> right way to handle this we might as well do that. Let's see what MM
-> >>> folks think.
-> >>>
-> >
-> > Sounds good to me. Let's wait and hear what the MM folks say.
-> >
+> This api over the years has been abused and recently come under a major
+> fuzzing "attack" through tools like syzbot which decided that it would
+> attempt to just randomly bind any driver to any type of device, causing
+> loads of unneeded errors and pointless kernel patches to be generated by
+> unsuspecting new developers.
 >
-> I just looked into the call sites for __vmap_pages_range.
-> And I found there's a bug in one vmalloc caller [1].
-> When gfp_mask has __GFP_NOFAIL, the code keeps retrying
-> __vmap_pages_range. If there are leftover PTE mappings,
-> this can trigger a BUG(); [2]
-> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/vmalloc.c#L3946 [1]
-> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/vmalloc.c#L121  [2]
-
-I think best person to look at this is Ulad as vmalloc is his baby :)
-
-Ulad, what do you think?
-
-Thread is at
-https://lore.kernel.org/all/20260915070001.113559-3-hao.ge@linux.dev/ for
-context.
-
+> Handle all of this by adding a new taint flag, TAINT_FORCED_BIND, which
+> will be set on the driver if the bind/unbind sysfs files are ever
+> written to.  This lets kernel developers "know" that a user is
+> attempting to do something that is not normal, and as such, if the
+> kernel breaks they get to keep the shiny pieces laying around on the
+> floor.
 >
-> > Thanks
-> > Best Regards
-> > Hao
-> >
-> >>>>
-> >>>> Thanks
-> >>>> Best Regards
-> >>>> Hao
-> >>>>
-> >>>>>> +                        */
-> >>>>>> +                       if (nr == more_pages)
-> >>>>>> +                               vunmap_range(phys_end, phys_end + (nr << PAGE_SHIFT));
-> >>>>>>                         /* Clean up and error out */
-> >>>>>>                         release_pages(arg, nr);
-> >>>>>>                         return -ENOMEM;
-> >>>>>> @@ -947,6 +954,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
-> >>>>>>                 return ret;
-> >>>>>>
-> >>>>>>         if (module_tags.size < offset + size) {
-> >>>>>> +               unsigned long prev_size = module_tags.size;
-> >>>>>>                 int grow_res;
-> >>>>>>
-> >>>>>>                 module_tags.size = offset + size;
-> >>>>>> @@ -961,6 +969,8 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
-> >>>>>>                         shutdown_mem_profiling(true);
-> >>>>>>                         pr_err("Failed to allocate memory for allocation tags in the module %s. Memory allocation profiling is disabled!\n",
-> >>>>>>                                mod->name);
-> >>>>>> +                       release_module_tags(mod, false);
-> >>>>>> +                       module_tags.size = prev_size;
-> >>>>>
-> >>>>> Yes, this one is a valid fix. It fixes 0f9b685626da commit.
-> >>>>>
-> >>>>>>                         return ERR_PTR(grow_res);
-> >>>>>>                 }
-> >>>>>>         }
-> >>>>>> --
-> >>>>>> 2.25.1
-> >>>>>>
+> The flag is 'Y' which was unused, and can remembered as the user is
+> "yeeting" the device being operated on here (thrown with force without
+> regard for the thing being thrown).
+>
+> Note, the taint flag gets set _BEFORE_ the bind/unbind callback happens,
+> as many times crashes/oops/warnings/failures happen within the callback,
+> and the taint flag needs to be there to show what was being attempted.
+> If it were to be set after the callback happens, the oops report would
+> not properly reflect what foolishness was being attempted.
+>
+> Fuzzing tools like syzbot, that doesn't have hand-crafted rules to keep
+> the tool from hitting bind/unbind, should be run with panic_on_taint
+> enabled so that they fall over and don't continue on, thinking that they
+> actually found a real issue.
+>
+> Userspace operations that rely on the bind/unbind files
 
---
-Cheers, Lorenzo
+I agree that this should be avoided.
+
+But I also think the biggest offender really is driver_override. Specifical=
+ly,
+on a hot-pluggable bus a driver must be complient with the device driver
+lifecycle rules and hence shouldn't break on bind/unbind. I think it would =
+be
+nice to not taint the kernel for such busses, and only taint on driver_over=
+ride,
+as I think we'd still want the bug reports for such cases.
+
+But I think this is fine to leave for a follow-up.
+
+Acked-by: Danilo Krummrich <dakr@kernel.org>
+
+> to work around
+> the lack of will to upgrade a kernel image to a newer version with
+> proper support for new devices, or the lack of will to submit valid
+> device ids to driver authors, will still work properly, but now the
+> kernel will be flagged in a way that will show that perhaps those users
+> should reconsider their behavior and work to have the drivers properly
+> support these devices in a "native" manner.
+>
+> Finally, the bind/unbind files can find real use-after-free issues with
+> some drivers by forcing the process to happen virtually without having
+> to rely on manual removal processes.  Those real bugs should still be
+> worked on, but by adding this taint flag, developers can more easily
+> determine bug reports that are actually worth looking at.
+>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
