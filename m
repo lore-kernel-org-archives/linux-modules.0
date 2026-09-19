@@ -1,150 +1,186 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020083.outbound.protection.outlook.com [52.101.196.83])
+Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60552BE7BE;
-	Sat, 19 Sep 2026 01:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.83
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789780689; cv=fail; b=olYHYtkAwI1ER5ZU7r7gKO4815o+LkehPvUANvDctOkhrIUSLYIRIWFlJV89jecrd8372U/WA+XpbmonBOJnusjFr2+vDwqMKs+B9a1BXuKEfmmFxO6ztjlB47Fnv9ZsngPDVZlkCu2FAULUMmmi3Kqjp4LBNWa1kZ4BqEg633s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789780689; c=relaxed/simple;
-	bh=ap6JL+t/QXMgBjwhQI/FUJ5Jw6Y+f4eSyXcwIw+EGx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=LKAz5YBRaWUDgczg6N6AuYmsqCb/WvcYFju3JZjGJeRVjpoLIzdzvHOSS5evHUbTo6uih3/WLr0uslBgnSFvgHg9v8JG3PEmG1zJTInhTiobO5dSn1rSZ+3xG60N8FlpOZ4FAbqBF8ipAPL07mjsLuek15ALxtRclw1V0gMxNz8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.196.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KxDuhILnzfjEPL5UB+qygiJB6a7YATIz62aK0JuEN9VYRHtxGPCfvENG2j+ZvXXRM3hgZpfyH3dXxB9yRzjbb9iOHKDkzLjckj/sbOMrv6NfnEh+TjW8wFgni8i3zmg3zvetDHu2Euobv7xCP2KtaTVCVkINdw65DUGVPH5n2jfC7GSR1eebQU3njd+6FYfmLcRIUGEx6hnSbssQP2+JK5SrwMWKMQFHRPCpxHe8jPE7DGsQH+ZsMfJbWxPWwPnD3JrIfPKKPySxMwmJqINDqwqmekg3UE0oRAeDGhVrKSaNcLAwaHtvr3i5+99UjNvzXn8r0R/Cq+CCsgkcVp0YhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=Vnk5+0g4OxabwNXhckadLYmEjZjnUhMNnva2LT3L2kA=;
- b=J3sI9oyxI16vT0jm5iQxS1pJoE5gUcxmTJpQ6uISMQpVMzLfWVMlVT9qRiAK/ZRSlsgZVgRMURTkd8D/Zuhvd0CZwZ2wvnJ8QKplzHfJy8iYZyq1Pmrqvcl5m2sWSwMTa0DKhAe7WBkXT690MoKY/F2s8Zvd15dL0ZmuMuoG73RDPJOR99dE6QYrVhg6Kv8pSkO3gur5bHhYIkmxqXH39ZfzQR6dmfenCn9IbkUEt1ufZKTbb67rtn2uwelkPTZGXu/LhOgAlCPJQScOvfIXrMud8ZcvoLjPei+4r86HrEqd4QVKMWnwSXiXHt9F/p1HUj9s0d99FB0+yCVExgAAxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LO0P123MB7751.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:407::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.16; Sat, 19 Sep
- 2026 01:17:57 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0428.011; Sat, 19 Sep 2026
- 01:17:56 +0000
-Date: Fri, 18 Sep 2026 21:17:53 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: petr.pavlu@suse.com
-Cc: akpm@linux-foundation.org, gregkh@linuxfoundation.org, 
-	mhiramat@kernel.org, boqun@kernel.org, neelx@suse.com, da.anzani@gmail.com, 
-	sean@ashe.io, chjohnst@mail.com, steve@abita.co, mproche@mail.com, 
-	nick.lane@mail.com, linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 0/3] module: Extend module_blacklist parameter to
- built-in modules
-Message-ID: <nthuwdm7jb63nivqtemkbnoagzu62kng7rqon27se45agxvr6y@6aabdiy3pqs3>
-References: <20260908203230.401020-1-atomlin@atomlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260908203230.401020-1-atomlin@atomlin.com>
-X-ClientProxiedBy: BN9P222CA0025.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:408:10c::30) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:183::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF17E43AB0;
+	Sat, 19 Sep 2026 15:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789832520; cv=none; b=ME+HrFRBxUhZqTOD6Ey6RYmTs+3Yy2hrqsJXKOI2oLFmdCKXWTjgt3oOV3eHhQB9HF6Di85+FcpKuRZDaR7BExHy8riGbu2xghz8Rgq1P99WM7FxcwoxACUePyeyaKAiE3YCFqsd1+vx+RbgrhojEAbaKNPYRJSo6syVZrlyMQ4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789832520; c=relaxed/simple;
+	bh=LYiZl+WOHNSO4n6Gc8EKV7X5LB2Z4F9TAU5gRUGvOKE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Men+KAWJCPOwAe6Uzd8754hiW+HunFpn4Ac9j2T+tviYYVqCs4K153XW8swhWhABou11OApZXpIaQktKQNsF0476iQ7MFoi7TMpZyRR9ZAF/97Yw+tu9tI7SDNtnDs+u7O4PPgwyOm0C46XcsdmN/2v+dsfUZh1Cfb4phPDl450=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xiaopeng.com; spf=pass smtp.mailfrom=xiaopeng.com; dkim=pass (1024-bit key) header.d=xiaopeng.com header.i=@xiaopeng.com header.b=rVAQtq3X; arc=none smtp.client-ip=115.124.28.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xiaopeng.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaopeng.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=xiaopeng.com header.i=@xiaopeng.com header.b="rVAQtq3X"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xiaopeng.com; s=default;
+	t=1789832502; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=OJ2hAYWcDFc6IElR3pmiBTTlx6KjakHAb7QlNaS0XAQ=;
+	b=rVAQtq3XwIdilf4iEIgKzdKUY8Cs3vSLa8eL97t0Mkjzfa1UuRwHPsUR14eu7UyuCV6maRPThVGtCM45L/2UK1i/gwm3gkDTJCl5zDi5am2qKeBtca2eEOChRIexADWMN+LBrFaW3DWeJ90626aK18ORxTszcV0NcN/1UR4Ge90=
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.04436259|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0547553-0.000500871-0.944744;FP=5598000967577699419|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037021217;MF=fangxy@xiaopeng.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.jHWy4NM_1789832500;
+Received: from localhost.localdomain(mailfrom:fangxy@xiaopeng.com fp:SMTPD_---.jHWy4NM_1789832500 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Sat, 19 Sep 2026 23:41:41 +0800
+From: Fang Xieyan <fangxy@xiaopeng.com>
+To: mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
+	atomlin@atomlin.com
+Cc: mmaurer@google.com,
+	masahiroy@kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v3] module: Validate the __version_ext_names section type
+Date: Sat, 19 Sep 2026 23:41:39 +0800
+Message-ID: <20260919154139.52904-1-fangxy@xiaopeng.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO0P123MB7751:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78c42a81-a147-45af-00cc-08df15ebd647
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|23010399003|1800799024|56012099006|10067099003|18002099003|22082099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	TYzdCSbjmMyhB5IBDTgEvDH8L/i3XcB69biAHm5GNOLe3SApodkT+4RJbWRN+3eJCvCANry9cOxVkh841luXiUj3GN6K7JCAPV5eEmw0zXNXUJWKWRNmZ1YeQjbnQvLG+li6fU+pnXNw90XPcroOj7tTLfk7Wek01+5fgt/jxgS+W23TWGONRjVeLxigW0ayKeA3jGatQXFtR48sZMlHrmTtAzh9gVac1fTBUM6P+cvyrCacVBIa7mXsdALhKsp2mbWyndQY0/xwx6XGGRfa+etbzETAlMGOLAmD6BGOHuYs/cay0Jj/geFtktcgjZV8jC/+kDse388apzOmzr01Geiya9gSp21n4finV+9mJ6mzqBAZI2SJmUxrhGpgV8FfDa6LeP3fuqqsT/ZamweMbKqarWQcg3ogEQlGnjeVq1C3HnC3AJxiJu6ejo9RA+Pb4j08e2AS4SaK8ewapMJ3umj1mbtOe41+Yvt82k+a1fk4KDQ/degg/IOJEO1Q2OBc+BJ28YDUQQwvIgfydq0MJqfhBJyKw3Li5M8iu1lrdNmBfuGmvjezEV5x3FXts+t5uTBNrS+4xPOBLV1b0hWIywiMu2XlD2FbRcZcKGzThHBmDTeL5UDYW2Zq4qQw03n0jCjfiWQ7/GtiukmCs32qNy3fJTURrpF1vRrhiC7zHBU=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(23010399003)(1800799024)(56012099006)(10067099003)(18002099003)(22082099003)(6133799003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WXdybUJKS0xzNEJCYW8zdm54bERBUVhjaHhNeC9ZU2VmR21oanVEUkszdUtZ?=
- =?utf-8?B?SXZVTjJnTWFSd3h3dTg5ekd4cE5VSm5ic1F4N3VzMjFCRjdUVTM0MmVPMElk?=
- =?utf-8?B?Q3h1S0hrTkxxaXJMNEFLWklHVC96Q3FNSUk0Wll3TURQVFlhdTQ0TnZsMVdZ?=
- =?utf-8?B?b2o3VE8wcFI3bVZrc2hWbEl0TVIyNjhLWGhQRG12d0pXUGZnRDAyZjZSdEcz?=
- =?utf-8?B?MHFlSWczSml2K2hUWCtsWW9nZ3o2R09SVE11dHl0VzVQWHVQblJVRCt1UE5X?=
- =?utf-8?B?R0dQYUJhRDBRc3UzdFRTUC9uaU9aSjdTQ1piOUpLSDQ5SEJ2QTNlSU1PRkpZ?=
- =?utf-8?B?UnlEWjNmcEFxMXlQYTdKeG40QVZ3c2pkVTZqV05aRzVLVGRzeHFMcThtam9J?=
- =?utf-8?B?MXc2N2txZjRIay83a0s4RXk3dk5qZGIxSkptOWxKU09qaEtkTWNyalcyYWZY?=
- =?utf-8?B?Uk9WcTcreUd6K29qT2VCREprcS9BVzVhekxEdnlzSTlFSVlObEwrRHZqNXI0?=
- =?utf-8?B?M09lUnBKMUVxTTRZQjB3dkVSMUlrY3hBVW45WENlTjlid1g1MkVIQ3lQL2xh?=
- =?utf-8?B?dnVJbk5yemF5VVNPdFZKN0NCeXhsdFQwdjh4Q1JEUXlSWFlMMm1tcUxoUlJh?=
- =?utf-8?B?SlZNMVl0NHVBek5vWTBiUlJxeCtoS0k3OFRSUjhPQjlLNlhDdXRpV0FTN2pj?=
- =?utf-8?B?dnB4SkhNVFZUS29ZUnl6ODRWSEErVkNPN1B5ZWFXb0pSRHp1TVpmR2JEc0Vk?=
- =?utf-8?B?c29XVW44WG9nOTFtTDlpaVFmNnQyMFRFTmxOUFlOMnR5TFFyNE5ISFpSWXNu?=
- =?utf-8?B?aHZZSlFjaHIvYnk1QjVubDExcVRjNUt4TTZiYzJXOUxoOVcra2pSeDZ1N1Ns?=
- =?utf-8?B?NVgzZkMzWVZiayt2d2Z2YUVkMzNNaVdIS3k0UVREVTRvMmxsOHpFOGFDdkEv?=
- =?utf-8?B?U0JHUFhCZGR0MzdMVnhmV2lEMUN6Slpzb0lTR1R4Ty8wek9JbEJ1dVVCR09V?=
- =?utf-8?B?ZktRTGVEallVTXhES1dtaXU0YVBTZVBLQXBReEhZaGh5N3JKb0NKcGdEUXNx?=
- =?utf-8?B?TVNQYnJPRUovM1hiMFh1TUVKUURpa2xSVDdub1Q5MzFHU3VOcVp6OGJaZ0hk?=
- =?utf-8?B?c01CY1E4YStEQTdUODhRVm9VeFd5STgyRjZIV0tQWnc1em1wRkZKNVR6UkJn?=
- =?utf-8?B?akk1b01aTkNTK3NVdSszbTg3SmFEaGptVUFOWjAzSkFRd25JUExqdUdwMDBS?=
- =?utf-8?B?ekhQK0dxS0IzUUZ0WmJLTVJtRDZYMFBsY1FIUTJwWVJEZkcwM04vNGRjNFNj?=
- =?utf-8?B?YUozR1BEcmhKckhDK0tReXpmalZST0E5WFJ1UkE3QjVjUnVUOHhoOHZRVXVK?=
- =?utf-8?B?N0VSaENPOGZ6aDNwQk9QenNZQSt4YXpTZlJFQjhBM3llN1ZYalF1WExhMC9W?=
- =?utf-8?B?MGdpUHN3TnR1UkZuUS9DK0N4eXFidzZIdTFwTTY5VlNXS2d6azZVVDI0RERo?=
- =?utf-8?B?dlZjcDZDaFdwRENQdjNMMlVUalo3KzFpZ1JDYWxRQU9ONVQwYmtSdXJKeVlx?=
- =?utf-8?B?SmZxYStRL0lCaUZGU2J6ckRsaHJOekRFd0kxWHJUemdyN0FWR3dsb0QvTi9k?=
- =?utf-8?B?L202dzBvWlA5ZVpHdWp3UDBUejhyTVZHUUhPSytmcGxLeDZHY21CN0daek81?=
- =?utf-8?B?TThVVk8zdWQ2Q1ViaVhnOFFremFSWXdmdjVnZ3o0cnAwaytDeWVmTVBFNXUx?=
- =?utf-8?B?M3FJazAxajl0MWVNSy8vUjQ0cCtUd1Vpd1RIWjEvNmtZZk1hcWV6Wm9odzRW?=
- =?utf-8?B?S1JpS1hIc2t6VjUvRlI2blNnZEJhMEY4OUZiVk9NTERaeExiL0I5Rm5oMmpD?=
- =?utf-8?B?eFMrVzNsSm9HdkxoSW9MRHZuTEd2WDZqMm9hL1BPTW0ycENoT3F2S3l2Vzl4?=
- =?utf-8?B?d3EzSm1yVk11eUlBbGg4aXhOKzE1NXM0SzFlT1lvUWFTd1VRSlcvSEkwdnRQ?=
- =?utf-8?B?N3J4b3VRWXltbFcrRC9ybGJrZWZITzZ2Y3lXVHBaWldSVUdaejBnbk5nVFo4?=
- =?utf-8?B?MFExaWFiTWs1ckRWSGZkZVBiWVU4L05wTG5WRkRmWURwSUQ0b3NkM053aVRy?=
- =?utf-8?B?WVE0S2x5cDV3STEvTXNJMlVwcG0rYWRHZG1USDBUOGZBSFI3bVFWclhOS0dM?=
- =?utf-8?B?RmFBRCtoVVBIT216SnVSVmlhcmdDUDBCZlFpUUd3V0dINkhvV2djTFhydWYx?=
- =?utf-8?B?SVVDc2d1cXl6bHF1MkJnUkYyWnd4dklwdHhLNGpWdWVwWGhLRERiY0VOeDhH?=
- =?utf-8?B?L1dUWDBIcFFzYkRJMUMvemlxY1AyUWcyQy9wendyVTdJYXR6R0czdz09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78c42a81-a147-45af-00cc-08df15ebd647
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2026 01:17:56.7510
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A3PiIK2+eo7sThpHajAuLdx112zqXzuZ0LuABew+PzYZgy+PGzoKbleCg23UdL5bqixq03GMtgFJ6bkUTsgdyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB7751
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 08, 2026 at 04:32:27PM -0400, Aaron Tomlin wrote:
-> This patch series extends the module_blacklist= command-line parameter (and
-> its modern alias module_denylist=) to intercept built-in modules during
-> early boot. Currently, when a driver is compiled statically into the kernel
-> (=y), the parameter is silently ignored, precluding administrators from
-> suppressing problematic drivers during boot-time disaster recovery. This
-> series resolves that discrepancy by mapping built-in modules to their
-> initialisation routines via transient metadata that is freed post-boot,
-> providing a predictable and consistent administrative interface regardless
-> of whether a driver is built as a loadable module or compiled into the
-> kernel image. Below is a detailed breakdown of the motivation, operational
-> rationale, and concrete use cases addressed by this work.
+elf_validity_cache_sechdrs() validates the size and offset of
+every section, unless its type is SHT_NULL or SHT_NOBITS:
 
-Hi Petr,
+		switch (shdr->sh_type) {
+		case SHT_NULL:
+		case SHT_NOBITS:
+			/* No contents, offset/size don't mean anything */
+			continue;
+		default:
+			err = validate_section_offset(info, shdr);
 
-I hope this e-mail finds you well.
+elf_validity_cache_index_versions() then reads the extended version
+names by their sh_offset, without checking that the section holds
+data:
 
-Whenever your schedule permits, could you please let me know if the current
-approach meets your expectations or if there remain further points you
-would like me to address before proceeding?
+	if (vers_ext_crc) {
+		crc_count = info->sechdrs[vers_ext_crc].sh_size / sizeof(u32);
+		name = (void *)info->hdr +
+			info->sechdrs[vers_ext_name].sh_offset;
+		remaining_len = info->sechdrs[vers_ext_name].sh_size;
+		while (crc_count--) {
+			name_size = strnlen(name, remaining_len) + 1;
 
-Thank you very much for your time and continued guidance.
+A SHT_NOBITS __version_ext_names reaches here with an sh_offset the
+validator never bounded; past the end of the module the name lookup
+reads out of bounds:
 
-Kind regards,
+  BUG: KASAN: vmalloc-out-of-bounds in strnlen+0x73/0x80
+  Read of size 1 at addr ffa00000005534ff by task insmod/79
+  ...
+   strnlen+0x73/0x80
+   load_module+0xef6/0x8600
+  The buggy address belongs to a 43-page vmalloc region starting at
+  0xffa0000000529000 allocated at kernel_read_file+0x7b4/0x9f0
+
+This runs after module_sig_check() but before the blacklist check in
+early_mod_check(). Commit 9a5ff4568932 ("module: validate string table
+section types") closed the same class for .shstrtab and .strtab, but
+not this section.
+
+Bounding the offset is not enough: an in-bounds SHT_NOBITS section
+still passes it, and the walk reads unrelated file data as a version
+name. A real __version_ext_names is SHT_PROGBITS, already offset-bounded
+by elf_validity_cache_sechdrs(), so require that type, matching the
+string-table checks.
+
+Fixes: 54ac1ac8edeb ("modules: Support extended MODVERSIONS info")
+Cc: stable@vger.kernel.org
+Assisted-by: Hawkeye:GLM-5.3-flash
+Assisted-by: Qoder:Qwen3.8-Max
+Signed-off-by: Fang Xieyan <fangxy@xiaopeng.com>
+---
+
+Standalone resubmission of the __version_ext_names fix that was patch 2/2 of
+"[PATCH v2 0/2] module: close two ELF section-validation gaps" (Message-ID
+20260917190618.94759-1-fangxy@xiaopeng.com). The series is split: patch 1/2
+(the SHT_NULL sh_name fix) is withdrawn because Liu Chao posted a cleaner
+fail-closed fix for the same bug ("[PATCH] module: validate sh_name for
+SHT_NULL sections", 20260905110813.150411-1-liuc63@xiaopeng.com), which drops
+the SHT_NULL special case entirely instead of sanitizing sh_name to 0. This
+patch does not depend on it and stands alone.
+
+Changes in v3:
+  - Split from the two-patch series and rebased onto mainline; sent as a
+    single patch with no cover letter.
+  - Corrected the function name in the changelog and the in-code comment:
+    elf_validity_check_sectionheaders() does not exist in the tree, the
+    validator is elf_validity_cache_sechdrs().
+  - Noted where the read sits in load_module(): after module_sig_check() and
+    before the blacklist check in early_mod_check(), matching the rationale
+    for commit 9a5ff4568932 ("module: validate string table section types"),
+    which closed the same class for .shstrtab and .strtab but not this
+    section.
+  - No change to the check itself: still reject sh_type != SHT_PROGBITS.
+
+v1 bounded the offset with validate_section_offset(). Review pointed out that
+is narrower than the bug: a SHT_NOBITS section whose sh_offset is in bounds
+still passes the bound, and the walk then reads whatever file bytes sit there
+as a version name, which violates ELF semantics (SHT_NOBITS holds no file
+data). v2 requires the section to be SHT_PROGBITS instead, so both the
+out-of-bounds and the in-bounds SHT_NOBITS cases are rejected, while a real
+names section (SHT_PROGBITS, already offset-checked) is unaffected.
+
+Reproducer, two variants of a .ko carrying __version_ext_crcs and a
+__version_ext_names of type SHT_NOBITS:
+  - sh_offset past the end of the module image. Before: the name walk reads
+    out of bounds (KASAN vmalloc-out-of-bounds in strnlen). After: rejected.
+  - sh_offset in bounds, aimed at other file data (the harness points it at
+    the relocated .shstrtab). Before: the walk silently consumes those bytes
+    as a version name and the module is accepted; no splat fires, so a
+    crash-only check scores it clean. After: rejected.
+Both variants fail insmod with -ENOEXEC (rc=8, "invalid module format") on the
+patched kernel, which is what a module with a malformed version section should
+do.
+
+Both cases ran on 704340f1cd0d (9 commits past v7.3-rc3): x86_64 defconfig plus
+CONFIG_KASAN_GENERIC and CONFIG_KASAN_VMALLOC, gcc 13.2.0, QEMU under TCG. The
+unpatched and patched kernels are built from byte-identical .config files and
+differ only by this patch.
+
+LOCALVERSION is pinned so the patched kernel's release string matches the
+payload and the loader reaches the version walk instead of stopping at the
+version magic check.
+
+ kernel/module/main.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d0e1e0b..183e3e2 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2287,6 +2287,22 @@ static int elf_validity_cache_index_versions(struct load_info *info, int flags)
+ 	 * number of entries in every section.
+ 	 */
+ 	if (vers_ext_crc) {
++		/*
++		 * The names section is read below as hdr + sh_offset, so it
++		 * must hold file data. A real one is SHT_PROGBITS.
++		 * elf_validity_cache_sechdrs() exempts SHT_NULL and
++		 * SHT_NOBITS from validate_section_offset() on the assumption
++		 * they have no contents, so a SHT_NOBITS __version_ext_names
++		 * would reach the walk with an offset that was never bounded.
++		 * Require the type; a SHT_PROGBITS section is already bounded
++		 * there, so its sh_offset is safe to dereference.
++		 */
++		if (info->sechdrs[vers_ext_name].sh_type != SHT_PROGBITS) {
++			pr_err("Invalid ELF __version_ext_names type: %u\n",
++			       info->sechdrs[vers_ext_name].sh_type);
++			return -ENOEXEC;
++		}
++
+ 		crc_count = info->sechdrs[vers_ext_crc].sh_size / sizeof(u32);
+ 		name = (void *)info->hdr +
+ 			info->sechdrs[vers_ext_name].sh_offset;
 -- 
-Aaron Tomlin
+2.50.1 (Apple Git-155)
+
