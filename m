@@ -1,63 +1,111 @@
-Received: from out28-217.mail.aliyun.com (out28-217.mail.aliyun.com [115.124.28.217])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995C4471267;
-	Mon, 21 Sep 2026 10:22:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EF9492E50
+	for <linux-modules@vger.kernel.org>; Mon, 21 Sep 2026 11:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789986176; cv=none; b=D0FAYAuaX5Db9B9OZsN5MCD+VNhsYc4Oy0ncwuv8/wwYByi8XebYmUtzWA9Pv0JxYKqOfJvpGJNVvr00xOThrrxstGT8JQ8N5Ik6axUffUq/Voikqo9cc9NxQX6gE7wI7qw8DMASphxIXXF4yifhGPX3mz6CDr8ybgprStqQxV4=
+	t=1789991719; cv=none; b=lVk3dGcF1XqUk/Xcz2kfrty56E+g+sNT6aWkah56aPeJ2Ab/3okKka4MR5cMcRwQaSnG4x501Q9vgBt3EZp3IFqaFX3Dm83jQL57gQ09o8XOodL6dIC1Xf365XRSEzbO7zF9uelcOQwEb4vFbBkGSrYH2l0MbEjUtLq72Yf3hvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789986176; c=relaxed/simple;
-	bh=yWZZTzVutN+yZSAQpASDLwN7feUPqNIwpiYTj7YNBOU=;
-	h=Date:From:To:Cc:Message-ID:Subject:MIME-Version:References:
-	 In-Reply-To:Content-Type; b=ThK1Nlzc7YL61zL0D9Fq2q2e8nlYoFuXd200wdXPyJYo+kA2n+MfpbWGNbgpXKH9oE79V+0ql89P+4d+8fy0cs/+Wi0I9rqzSLTZLWYkbFBmWTTICwfoGBTIJ6GsO4s/mkyqb4JmAr2xdkN8i/QGXPlGFj0fWa6wgCQllZ7GG5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xiaopeng.com; spf=pass smtp.mailfrom=xiaopeng.com; dkim=pass (1024-bit key) header.d=xiaopeng.com header.i=@xiaopeng.com header.b=fslDtdHJ; arc=none smtp.client-ip=115.124.28.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xiaopeng.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaopeng.com
+	s=arc-20240116; t=1789991719; c=relaxed/simple;
+	bh=w0043UFoabFN1idwysUYX/vETTsf1aFbar1G7lykZx8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CdLgyri3pjfFM3v3dybjW2L2QfeYTJ+ACza1i2W5Zkc3N4YWO6fS4Qa/JWdXjfrMMCTaGbK7QBYTZ5zhALSAzehj13s8MTkovRe7JDzfKXnB5UnvvI/uaKp8dOQqVwrR3aQrTDRrEAhafSjlryOvtNLOyXKzRk4bdTqXrxSLsMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WS6Ei1L+; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xiaopeng.com header.i=@xiaopeng.com header.b="fslDtdHJ"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xiaopeng.com; s=default;
-	t=1789986165; h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type;
-	bh=yWZZTzVutN+yZSAQpASDLwN7feUPqNIwpiYTj7YNBOU=;
-	b=fslDtdHJI+Ek5Bo0gFLFCrBypNLSetTBOMJNxg+k/8AjZtBee26p+N8y3CsIIsX7XKg1mdauEWqtLf6XsK1RIZd/y8j38pxnU8IgMafeu1lclAbo1P+ye8eAGw1NWtJ9Ks4bR2KryDMY3R4B7OabZ+bThdpJPUb+yxQ9EAI4g9o=
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.1825962|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.0070757-0.000512924-0.992411;FP=6871314568449233201|1|1|1|0|-1|-1|-1;HT=maildocker-contentspam033037028158;MF=fangxy@xiaopeng.com;NM=1;PH=DW;RN=11;RT=11;SR=0;TI=W4_0.2.3_v5ForWebDing_21251D4C_1789986002711_o7001c100j;
-Received: from WS-web (fangxy@xiaopeng.com[W4_0.2.3_v5ForWebDing_21251D4C_1789986002711_o7001c100j] cluster:ay29) at Mon, 21 Sep 2026 18:22:40 +0800
-Date: Mon, 21 Sep 2026 18:22:40 +0800
-From: "Fang Xieyan" <fangxy@xiaopeng.com>
-To: "Bradley Morgan" <brads@mainlining.org>
-Cc: "atomlin" <atomlin@atomlin.com>,
-  "da.gomez" <da.gomez@kernel.org>,
-  "linux-kernel" <linux-kernel@vger.kernel.org>,
-  "linux-modules" <linux-modules@vger.kernel.org>,
-  "masahiroy" <masahiroy@kernel.org>,
-  "mcgrof" <mcgrof@kernel.org>,
-  "mmaurer" <mmaurer@google.com>,
-  "petr.pavlu" <petr.pavlu@suse.com>,
-  "samitolvanen" <samitolvanen@google.com>,
-  "stable" <stable@vger.kernel.org>
-Reply-To: "Fang Xieyan" <fangxy@xiaopeng.com>
-Message-ID: <b80e5e8b-6bf2-417c-a021-5e60b0b382ee.fangxy@xiaopeng.com>
-Subject: =?UTF-8?B?5Zue5aSN77yaW1BBVENIIHYzXSBtb2R1bGU6IFZhbGlkYXRlIHRoZSBfX3ZlcnNpb25fZXh0?=
-  =?UTF-8?B?X25hbWVzIHNlY3Rpb24gdHlwZQ==?=
-X-Mailer: [Alimail-Mailagent][W4_0.2.3][v5ForWebDing][Chrome]
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WS6Ei1L+"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e64ccso20861835e9.0
+        for <linux-modules@vger.kernel.org>; Mon, 21 Sep 2026 04:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1789991716; x=1790596516; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KoGx0ZyZW8wnp5QELsj35eexSkwzaTvnMBYC7KfLg74=;
+        b=WS6Ei1L+793kk57RUzfW66Aj+uKd7LjiOa/s8f7lCLlksQFesVCwYsKg7gbz9PoNVJ
+         ksfQ9E4goZ+9nuf0jh91rIP+Wm5HxApPQ875ru6cOwt7tYJqy3ZbIohmmJgxU2YFqvZf
+         AJDlXMcICsbCoP28puiRVm5Pm54ufLAf221v9kxc8xQvHCqCGfDX1eopwycQ5L46fHrt
+         j+8KTILdtJOrY2hijT9UHkeWFZg8OUxFYatZlZEGU0/Wf/Cst8aw1RYsLw5kegkWipDg
+         6RrqI3CBQ2ncjAz5vuLhT3sE5+gzwI2Q52O86G8dxXsu0cd5WCd/cBTdb9BHGA83UWh4
+         430g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789991716; x=1790596516;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KoGx0ZyZW8wnp5QELsj35eexSkwzaTvnMBYC7KfLg74=;
+        b=Yn1nYqiXUWjhnD+TbuaOCGGhRlW1bBmUcw+9HJSllV+ibRexthI8PDdpgyeCMW7U3g
+         vitLie+ZiBUTBA5Qgz2pk9bTjP4oVeHGIQqhnLKUyEywijQX7ZvzslGm/JUOQoDq896g
+         JLOwClqbqHG8WPGrZn5DgIJBjaFDkVV5dc7oItIxdNWgGdyhiUgL2plCNugaLtKgHh+z
+         JZDSsKkr+kmrLHYu6CdIOXnmGv444aYTL9O8EIJiMS9aAkfbDpIfyoW7bUx7kGk/PyR/
+         I/WIPdeClbDyrhtQyKMJs+gJn/9vLRbeQvkQQHBbOj696ovZHIYUKiwnDGmdW7Ug46Bh
+         QSSQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzT5pMGa/EwJjwYIX5sAiBa2XL1pIBxIISfOdU8i+IAqB25u0ePJFeWt14vPf61ImViUifm6o2v9CfD5YU1@vger.kernel.org
+X-Gm-Message-State: AFuF++mBjukJHA1qr12WD380mo+kzfrJW1lgxSwDrrdnYKzGEMQCXVHp
+	tl+7sB0QUL3NX+YaX/Li/+eguvZD/I36fyBOGnKLo7rVVrAd5iCsaJ3Ts5j43KNudo8=
+X-Gm-Gg: AYBFou2iiYpULk0SFOiPyAC+JEHrEktWsQ8tYHIgaH6pHSv9EpxK7N19vcu1g5qNJhv
+	UaBaPDiDboSZpU2YbZfOzE0cpcLNNVi/cyp3eDRhJ7Mgx02tRXpY67xMFNQTi/T/NW+mzJT4q57
+	iBv5feviq3o1KkfOKp1DZh4dN7h7ys23DzJ2CazXGdQjbF+8tnNwIQu5m2+2PNgLP351B6S/PXU
+	pFse23rlx6DuC+BZRvqcJTrF/WM9WSwG9Me4+bzTHaR31TX39+VfcZWNsMTX8rkiersH0iCHnKn
+	64vRZNkmgk0zX3SXHcPsmX6z8zFELQUMI1Wd4AgcNDLQQo3vPx5LvDK5djuuOB3mfiBy7WhPms1
+	uKj2zFskUghLRdC87vJki95+KjTbSQRgJduurzg4fRGm5QjtHFhYYL3WKiqzRy9hgHj7qoWvVr3
+	NkPYahDJRjuec0JxWRSDZ0b++BK7sqUz9Wf4aYGYjEBTqqm1x1WHcXSCvc0HziLBvLtjZqXDirO
+	zoLGBORok3HV237OHPtPTL7kt4/FqTwB+L7H7dSk/Vxpw==
+X-Received: by 2002:a05:600c:4e4c:b0:49f:bd3c:bc28 with SMTP id 5b1f17b1804b1-49fc574f456mr149078405e9.35.1789991715929;
+        Mon, 21 Sep 2026 04:55:15 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fcd0eab91sm244798625e9.1.2026.09.21.04.55.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2026 04:55:15 -0700 (PDT)
+Message-ID: <d771ad48-9f75-4ca7-84c9-04139afbb7d4@suse.com>
+Date: Mon, 21 Sep 2026 13:55:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-x-aliyun-im-through: {"version":"v1.0"}
-References: <20260919154139.52904-1-fangxy@xiaopeng.com>,<C04CC94F-26D0-4823-84F4-7AFEBCDCA9AE@mainlining.org>
-x-aliyun-mail-creator: W4_0.2.3_v5ForWebDing_QvNTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzE1My4wLjAuMCBTYWZhcmkvNTM3LjM2La
-In-Reply-To: <C04CC94F-26D0-4823-84F4-7AFEBCDCA9AE@mainlining.org>
-x-aliyun-mailtrack: {"foreign-track":"0"}
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] modules/kmod: Allocate argv with kmalloc_array()
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook
+ <kees+treewide@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20260917211229.i.604-kees@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260917211229.i.604-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-SGkgQnJhZGxleSwKClRoYW5rcyBmb3IgdGhlIHJlaXZldy4KSSB1c2VkIEFJLWFzc2lzdGVkIHRv
-b2xpbmcgZm9yIGNvZGUgYW5hbHlzaXMgYW5kIGRyYWZ0aW5nIHRoZSBjb21tZW50LCBidXQgSSBy
-ZXZpZXdlZCAKYW5kIGVkaXRlZCBpdCBteXNlbGYuIEknbGwgc2hvcnRlbiBpdCBpbiB2NC4KCkkg
-YWxzbyBjaGVja2VkIHZlcnNfZXh0X2NyYzsgaXQgbG9va3MgbGlrZSBpdCBuZWVkcyB0aGUgc2Ft
-ZSBoYW5kbGluZyBpbiB0aGUKc2FtZSBwbGFjZSwgc28gSSdsbCBhZGRyZXNzIGl0IHRvZ2V0aGVy
-IGluIHY0IHJhdGhlciB0aGFuIGFzIGEgc2VwYXJhdGUKZm9sbG93LXVwLgoKCgoKCgoK
+On 9/17/26 11:12 PM, Kees Cook wrote:
+> From: Kees Cook <kees+treewide@kernel.org>
+> 
+> In preparation for converting the kmalloc family of allocators to the
+> type-aware kmalloc_obj family, we need to make sure that the returned
+> type from the allocation matches the type of the variable being
+> assigned. (The kmalloc family returns "void *", which can be implicitly
+> cast to any pointer type.)
+> 
+> argv holds 5 pointers, but the size was taken from the array type
+> "char *[5]", which would make the allocation type a pointer to that
+> array rather than the "char **" being assigned. Allocate 5 entries of
+> the target's type instead. The resulting allocation size is the same.
+> 
+> Build tested ARCH=x86_64 allmodconfig with GCC 16.2.0:
+> kernel/module/kmod.o
+> 
+> Assisted-by: LLM coccinelle
+> Signed-off-by: Kees Cook <kees+treewide@kernel.org>
+
+Looks ok to me. I've queued the patch on modules-next for 7.4-rc1.
+
+-- 
+Thanks,
+Petr
