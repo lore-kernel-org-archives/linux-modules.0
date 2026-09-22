@@ -1,130 +1,198 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua2-f43.google.com (mail-ua2-f43.google.com [74.125.226.235])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E5C318BB5;
-	Tue, 22 Sep 2026 12:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A94F542EF8
+	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 12:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.226.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790080736; cv=none; b=FX5P9fNlwUijhtev9jfUu9r8GpQAsecgBbXOhZnzI0PPv4NP8SHTNqUwDDcjzzk4zXPejyo74xyOqT+Wd4dOd6HUVxcTdtTZfZyaFauOPyHKolAajqOEcH/yejFUsKQUJ2D0hMU+bRQvSf0nvlWWUOAmZw/qptQDH7ZPq/zcd2Y=
+	t=1790080803; cv=none; b=jnIxuOiZENcCxvlF+ugcBSR8idGAal9ShoFH4yWgiJBItt3b5isRCFiH0pQMzs/SAOKq2RP6MAhZRcmlPGRY43LHmMBGdgh843B8LNima8nLgxCQOI3F8OpaSp0MahmhTPn8v9G2j5tWVuOoia3BAr5hEmqZ7un1X6lmhOL6amc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790080736; c=relaxed/simple;
-	bh=cScClSEFXuaUS8XKb6a1KH7r1p4cEPwQACRbELUv12o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=G8uxOJtm8MLYVW3hvJTILT2Fyjse9S9uNAAWOuTOqsFK5I50b6Ev1ub7ep1ZV7lQT4rko7w7J29wYruYS1mOiGdYGUirET9uw+q166tV1oxe8cDdkM7xoUZyxb1yLQR8l9cRVoaksXBJFY0MTjCG5i1cNPWvcH68rgXXrAxBoiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T0G2RlRw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790080803; c=relaxed/simple;
+	bh=wFmJBrwWil7bpAeYIpoN4GzUL1HvXOt5ldn6IIIiFHY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uv+JsT0Yb8zIVSy5mU86bYClC1mSuIj1GrLxmQifRnGxXqKlQtxI0QgjSfDpL2RtdmbI8gWOvX3lZs/9SU1Iu6EFwOM1+tfsSw6Y6uRUdo5B+uCaqW/TxzNcajnKzDwHbGiPqQJW//OSIBT+CwJh8KGvjBB3Yrdb+6GobOUTH+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ieee.org; spf=pass smtp.mailfrom=ieee.org; dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b=O2oXCldz; arc=none smtp.client-ip=74.125.226.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ieee.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ieee.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T0G2RlRw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E910B1F00893;
-	Tue, 22 Sep 2026 12:38:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790080734;
-	bh=2ORII6Ge34B1BzAh+lcRHMUXsQkyOQDuClowMpGXjk4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=T0G2RlRwzGqFfKWSYchIgdzk6bssCAtVvqvwQYEnh83z4zKyPyWQFyKlpdsZq8kPm
-	 T1vPM7qljXvr8yRnzC5KSkGxzIAbZp7sGqhryW/b04vq8JNA7PaFLLAOo+MX+Wbiyr
-	 jtSoa7N3CLJjv5YbJvrOLgYt4NJy5iF/tr1+SbPBic+I/Zqu0q4OZRNZbr1EoB34ng
-	 EFu903R11wO/XGBfq36fgaTaMkl1dctQBelFwGFv2qJ+CBOdsPmvmUPrv7Ggt1symW
-	 0dEOeo1TXIweeq/KxWubBj/LlO+Uy169TNVVvkeLXHu/tINd2wH0D763rohMsfwZiz
-	 Zn7HHHnKGOt1g==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Priya Bala Govindasamy <pgovind2@uci.edu>, mcgrof@kernel.org,
- petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
- ojeda@kernel.org
-Cc: atomlin@atomlin.com, boqun@kernel.org, gary@garyguo.net,
- bjorn3_gh@protonmail.com, lossin@kernel.org, aliceryhl@google.com,
- tmgross@umich.edu, dakr@kernel.org, daniel.almeida@collabora.com,
- tamird@kernel.org, acourbot@nvidia.com, work@onurozkan.dev,
- linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org,
- ardalan@uci.edu, zhiyunq@cs.ucr.edu, dzueck@uci.edu, pgovind2@uci.edu
-Subject: Re: [PATCH 1/1] rust: module_param: Fix potentially incorrect
- access of `SetOnce<T>`
-In-Reply-To: <e65203759411aeca4805e3f619f3dd20839dba35.1789426258.git.pgovind2@uci.edu>
-References: <cover.1789426258.git.pgovind2@uci.edu>
- <FdiPIlB8b46OSfjlwz76TUlT6wZZlBnrojdIpqdfcvdhwJDwKrBZama8zVUX8dFHpUYYXw02R732rD5GuNCeKw==@protonmail.internalid>
- <e65203759411aeca4805e3f619f3dd20839dba35.1789426258.git.pgovind2@uci.edu>
-Date: Tue, 22 Sep 2026 14:38:41 +0200
-Message-ID: <8733v14g1a.fsf@t14s.mail-host-address-is-not-set>
+	dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b="O2oXCldz"
+Received: by mail-ua2-f43.google.com with SMTP id a1e0cc1a2514c-97e96a8ba8cso2705512241.3
+        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 05:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google; t=1790080799; x=1790685599; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=o9blDfaIlaDE7zWOzf7sAkl81n8mIgiGQIMLz8R8dVg=;
+        b=O2oXCldzJ3LpA4QHBbXInqG6gPFkiSS8IpezgH8R+ZrmCNrQGw2qZ3cz2HJXPR/LD3
+         nDnwu+h/q1ydJlARyj62co9tTwdWIgt6A4ziEIgZPoWy6ktNQVyLZgBsOE9UYoUt4d3f
+         ApfWcUtfyoMebnbxzEyQSfJL5IYMdQPZlYtb0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790080799; x=1790685599;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=o9blDfaIlaDE7zWOzf7sAkl81n8mIgiGQIMLz8R8dVg=;
+        b=24fx1xLAOV+9CLndrXSKzQCQXNT6rU7DZufzjpG/F8hPj3E1p/rLNP+CGrQGHhiFI+
+         +steMnNRBNHr8UpAydiPuBBu1La2P4Z/dJeFpZ1kcihTqwkEDD3dKmHWFE+6Q8ONnClT
+         biSs1ykwPPRtxD+Ebeanw0Tj3UnArb2/0TE/prKQzcWW6VG2mFZkVGWuPdzVX3KtQqdp
+         WxwQe8luLVbqUeu2qtIkK/vG5l8EkzpbgRdcn43aNNX+aNMU+0qhy4zGd3Ct+o0TMj7Q
+         3u/2xcsSYIZKjEf31gdYkJnuCYk5rpZUxODeE57cKOD4xMgiYpnJzQCKHI/Wa1TpK4Nm
+         fZKQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxyC2Hr9plr0LQpFsRynmQJrCVElgG2P5S8q75r8Xo9EiItZVSs/cQcwo/qGfCJmfmqbGTrM3xmxKfSWWCh@vger.kernel.org
+X-Gm-Message-State: AFuF++m0GBX/tXXxbvDGdsBftYvwChvfSn67DTgG1guG9iey/WtaLzVv
+	rTYw4JHC6Q8H9ZthjFSVDtmHre7M+Uq3gfD4GOEf6yBCXBMxj4fg7CFUPeMUorqi4w==
+X-Gm-Gg: AYBFou15XErem4B8GJJXI4RCp69qx4hKKTg6ynDH9Bl8K3owB72S6QEQMPqalXrk1rZ
+	MZcTNU3nt/Oqn5zvmSXRXzDIHR0W50PHk5ock1O4czMtfkZvMid+N8LFk+/YcBOFlP7uUnLO/Ww
+	r6zxJJGXBPI7qdSxwMdY1dRtJKLQzGK06HHwtOEsjYFRDqqIUQS6raNHbELiNca1LGuYsYsMQN3
+	ErkI0sRxkMJKSwjAeDqJ1gbRwmIu95JXYybZ4a6o68lm53AJx20Z6G9QB9uulgdGn5YJypZDGnB
+	gVTuonsL19R/gLC2EiIHxj7mHpiMQsKRlchIKy2wcYFe/Digw33G7eUFa9UVyH7EjiMTPV6vV1O
+	5IccfOhDQfVku7yLTIz/MdTPaigEx42GcWIrdHjKcSt+4xodzcW9tmjxHZDJBeeHlC+JOLJxB53
+	vV7eOYbXskKc5FIUR+xyIff5ZMFFiGK4MHWFf7cnZj4hgTTb80rzm+7N8hhskPlYJGNO2SHORky
+	5Z3
+X-Received: by 2002:a05:6122:e22b:b0:5c9:a60c:2736 with SMTP id 71dfb90a1353d-5c9b598e442mr8405960e0c.14.1790080799199;
+        Tue, 22 Sep 2026 05:39:59 -0700 (PDT)
+Received: from [172.22.22.28] ([73.62.185.64])
+        by smtp.googlemail.com with ESMTPSA id 6a1803df08f44-91402535ce1sm14566906d6.48.2026.09.22.05.39.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Sep 2026 05:39:53 -0700 (PDT)
+Message-ID: <d2052425-3fb4-4104-b1ed-f2d53e5a710d@ieee.org>
+Date: Tue, 22 Sep 2026 07:39:47 -0500
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] umh, treewide: Explicitly include linux/umh.h
+ where needed
+To: Petr Pavlu <petr.pavlu@suse.com>, Tony Luck <tony.luck@intel.com>,
+ Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Philipp Reisner <philipp.reisner@linbit.com>,
+ Lars Ellenberg <lars.ellenberg@linbit.com>,
+ =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= <christoph.boehmwalder@linbit.com>,
+ Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>,
+ Alex Elder <elder@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Michal Januszewski <spock@gentoo.org>, Helge Deller <deller@gmx.de>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
+ Chuck Lever <cel@kernel.org>, Jeff Layton <jlayton@kernel.org>,
+ NeilBrown <neil@brown.name>, Olga Kornievskaia <okorniev@redhat.com>,
+ Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+ Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+ Joseph Qi <joseph.qi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Pavel Machek <pavel@kernel.org>,
+ Len Brown <lenb@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Danilo Krummrich <dakr@kernel.org>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Kentaro Takeda <takedakn@nttdata.co.jp>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+ drbd-dev@lists.linux.dev, linux-block@vger.kernel.org,
+ greybus-dev@lists.linaro.org, linuxppc-dev@lists.ozlabs.org,
+ linux-acpi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+ cgroups@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-pm@vger.kernel.org, driver-core@lists.linux.dev,
+ bridge@lists.linux.dev, netdev@vger.kernel.org, keyrings@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+References: <20260911-module-include-kmod-v3-0-6ebccc3e0731@suse.com>
+ <20260911-module-include-kmod-v3-1-6ebccc3e0731@suse.com>
+Content-Language: en-US
+From: Alex Elder <elder@ieee.org>
+In-Reply-To: <20260911-module-include-kmod-v3-1-6ebccc3e0731@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-"Priya Bala Govindasamy" <pgovind2@uci.edu> writes:
-
-> The `set_param` function casts `kernel_param.arg` to `*const SetOnce<T>`
-> But the Rust module macro in rust/macros/module.rs initializes `arg` with
-> `#param_name.as_void_ptr()`, and `#param_name` is a `ModuleParamAccess<T>`,
-> not a `SetOnce<T>`.
->
-> ModuleParamAccess<T> has default Rust layout but `set_param` accesses its
-> first field SetOnce<T> assuming it to be at offset 0. This is not
-> guaranteed by Rust and could cause type confusion leading to data
-> corruption.
->
-> Fix this by casting `kernel_param.arg` to `ModuleParamAccess<T>` and
-> then accessing the `value: SetOnce<T>` field.
->
-> Fixes: 0b08fc292842 ("rust: introduce module_param module")
-> Reported-by: Dylan Zueck <dzueck@uci.edu>
-> Assisted-by: LLM
-> Signed-off-by: Priya Bala Govindasamy <pgovind2@uci.edu>
+On 9/11/26 9:46 AM, Petr Pavlu wrote:
+> The usermode helper declarations were previously provided by linux/kmod.h
+> but commit c1f3fa2a4fde ("kmod: split off umh headers into its own file")
+> moved them to linux/umh.h in 2017.
+> 
+> Add explicit includes of linux/umh.h to files that use usermode helpers and
+> remove linux/kmod.h where it is no longer needed.
+> 
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 > ---
->  rust/kernel/module_param.rs | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-> index f9a14765a926..7ae87ffe1d6b 100644
-> --- a/rust/kernel/module_param.rs
-> +++ b/rust/kernel/module_param.rs
-> @@ -75,7 +75,9 @@ pub trait ModuleParam: Sized + Copy {
->          let new_value = T::try_from_param_arg(arg)?;
->
->          // SAFETY: By function safety requirements, this access is safe.
-> -        let container = unsafe { &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<T>>()) };
-> +        let param_access = unsafe { &*((*param)
-> +            .__bindgen_anon_1.arg.cast::<ModuleParamAccess<T>>()) };
-> +        let container = &param_access.value;
->
->          container
->              .populate(new_value)
-> --
-> 2.34.1
+>   arch/x86/kernel/cpu/mce/dev-mcelog.c | 2 +-
+>   drivers/block/drbd/drbd_nl.c         | 1 +
+>   drivers/greybus/svc_watchdog.c       | 1 +
 
-This is indeed a bug. Nice catch.
+For Greybus:
 
-I think the primary reason for this error is that the safety comment is
-lacking. It is also covering two distinct unsafe operations. I think we
-should rephrase as so:
+Acked-by: Alex Elder <elder@riscstar.com>
 
-diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-index 7ae87ffe1d6b..1a2fcbf4a5b3 100644
---- a/rust/kernel/module_param.rs
-+++ b/rust/kernel/module_param.rs
-@@ -74,9 +74,12 @@ pub trait ModuleParam: Sized + Copy {
-     crate::error::from_result(|| {
-         let new_value = T::try_from_param_arg(arg)?;
- 
--        // SAFETY: By function safety requirements, this access is safe.
--        let param_access = unsafe { &*((*param)
--            .__bindgen_anon_1.arg.cast::<ModuleParamAccess<T>>()) };
-+        // SAFETY: By function safety requirements, `param` is valid for read.
-+        let arg = unsafe { (*param).__bindgen_anon_1.arg };
-+        let param_access_ptr = arg.cast::<ModuleParamAccess<T>>();
-+        // SAFETY: The `arg` field is initialized with a pointer to a `static ModuleAccessParam` by
-+        // the rust module macro. Thus, the pointer is valid for use as a reference.
-+        let param_access = unsafe { &*(param_access_ptr) };
-         let container = &param_access.value;
- 
-         container
----
-
-Please also remember to run `make rustfmt` to format the code properly.
-
-
-Best regards,
-Andreas Hindborg
-
-
+>   drivers/macintosh/windfarm_core.c    | 1 +
+>   drivers/pnp/pnpbios/core.c           | 2 +-
+>   drivers/video/fbdev/uvesafb.c        | 1 +
+>   fs/coredump.c                        | 2 +-
+>   fs/nfs/cache_lib.c                   | 2 +-
+>   fs/nfsd/nfs4layouts.c                | 2 +-
+>   fs/nfsd/nfs4recover.c                | 1 +
+>   fs/ocfs2/stackglue.c                 | 1 +
+>   kernel/cgroup/cgroup-v1.c            | 2 +-
+>   kernel/module/kmod.c                 | 1 +
+>   kernel/power/process.c               | 2 +-
+>   kernel/reboot.c                      | 2 +-
+>   kernel/umh.c                         | 2 +-
+>   lib/kobject_uevent.c                 | 2 +-
+>   net/bridge/br_stp_if.c               | 2 +-
+>   security/keys/request_key.c          | 2 +-
+>   security/tomoyo/common.h             | 2 +-
+>   20 files changed, 20 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> index 053555206d81..af4e76babe7a 100644
+> --- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> +++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> @@ -11,7 +11,7 @@
+>   
+>   #include <linux/miscdevice.h>
+>   #include <linux/slab.h>
+> -#include <linux/kmod.h>
+> +#include <linux/umh.h>
+>   #include <linux/poll.h>
+>   
+>   #include "internal.h"
+> diff --git a/drivers/block/drbd/drbd_nl.c b/drivers/block/drbd/drbd_nl.c
+> index b77f901fc3ef..6f5d059394b3 100644
+> --- a/drivers/block/drbd/drbd_nl.c
+> +++ b/drivers/block/drbd/drbd_nl.c
+> @@ -14,6 +14,7 @@
+>   #define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
+>   
+>   #include <linux/module.h>
+> +#include <linux/umh.h>
+>   #include <linux/drbd.h>
+>   #include <linux/in.h>
+>   #include <linux/fs.h>
+> diff --git a/drivers/greybus/svc_watchdog.c b/drivers/greybus/svc_watchdog.c
+> index 16e6de5e9eff..b318eb34bcca 100644
+> --- a/drivers/greybus/svc_watchdog.c
+> +++ b/drivers/greybus/svc_watchdog.c
+> @@ -7,6 +7,7 @@
+>   
+>   #include <linux/delay.h>
+>   #include <linux/suspend.h>
+> +#include <linux/umh.h>
+>   #include <linux/workqueue.h>
+>   #include <linux/greybus.h>
+>   
+. . .
