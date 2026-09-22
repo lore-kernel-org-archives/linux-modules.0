@@ -1,132 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A70F33F589;
-	Tue, 22 Sep 2026 14:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8BF38E129
+	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 14:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790086615; cv=none; b=MZFPm+rOWLgwMzc4k2RHybVsE5oIptbQuTXOockGm6mTn0UN6q/MCtS7m2ASCzTU0TnGYW3A9uPVRIKdBytBiw3pQxliJF2TKC2P3aNcvy4JqoHDVYkX3+iazUCg1r7EB40EQv5FDZVGwHnHKWKaMaRNkhd2g/wk8HUa2wF+pnI=
+	t=1790088340; cv=none; b=s5uVuLJIMIZlvUoX8+V7fF9nmTWvbnfBa+stUpbj17P/fLXx3FUl033WnvteJcG1kRBrSdYRiQt3b+1xKQMGP8hsjbw2i6AnMg/SsevLP1LLHIdNruzNxlZJxaWQ7JSCj0N8uiBm+/MYkl85cP9RJnIlfJyf5284b+UbPS7MqS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790086615; c=relaxed/simple;
-	bh=L/LCEmV/UYkCSascsQtkQrkmEltbz9KiQAg8kh5cVG0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bb5IJ6Gm+5g6gGRsa0O5nY9KB5GdlNT1siu3RcxPjQDVsDgJQL/7WbIKtMahjVWhV/gk/FdbAwOKTM86/EnpakQBwmKXOuwZP7FlF+2X6fvUAv8KfpSGo76dXPUwfJCduwi9T0sRg64/N6o9N5rfX/tAQWIbkIGrKnoCfSzkX0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LfZL6OxF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790088340; c=relaxed/simple;
+	bh=6+7YwPssrYwwbcVyy1E2zRmvrRlDS05FVVsJW9+Xl58=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YNZAab1tCYOaLxWLK+Qi5vq56sFOMSocmwQHY2tmnE7Y5RCvXGhp64Nep2FvhFw9DKS5CaqAjopQj4sySRuxP7pr+kUvVoZBKnZsbMzyh5nhj2lR+z0Ar9b4FUnRwUqyR1g2yO+fgTbR36LS83BSoV8UUNs4SxKe9OxH2z9PbY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CguFkjds; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LfZL6OxF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 176901F000FF;
-	Tue, 22 Sep 2026 14:16:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790086613;
-	bh=V8yh8KrJJLzU6gKefEwrrapB5wwWj7nqm0eP3QIiW38=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LfZL6OxFMxvUhDY5jz3rVf3IEeD//bfSz4Bvzt8QlsOC9nscwcH3kekqyxzaDSZMU
-	 k9Qa1lHMcehqqc69kauR3amTXv/bh468rI2hOlMXdOw34mLvZxoWlkgux1XJi+aTs+
-	 t4PHyP4uTcMKsGtl2Z7X0VG2C2RpWDZZgbgF3/9467FZ0HwID1VczUE4BBQVZ8VQfj
-	 DHi/khgUEEUnyE7pi5aTZxwGWpbc/L4hn2mXKqYrdNPoBbQECFjwMQjd4CnrKDZLOW
-	 qOqo2PYyuFHRRDawFmfpVNPle3ZhwaeAoM2ARuE3KTekWRT44r2I+FS4mgZHJN+HUy
-	 YwsxLzROiclUQ==
-Content-Type: multipart/mixed; boundary="===============0354108412572357667=="
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CguFkjds"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=6+7Y
+	wPssrYwwbcVyy1E2zRmvrRlDS05FVVsJW9+Xl58=; b=CguFkjdsvQ8uo+wX/xEJ
+	3RiokJSXD94GoXAfVLjWKz+1uejkAw7kl4/1xIpbNhEz9+k8g68TzFsoi6LLucFN
+	Ndwn5b23x97IbqfUJS6Ka3H72pLXZn/70hR4VEbM5/VqqBrypDjeacVP/f3C862U
+	QWEM/koX8XX8b5wCCJBbcEyGr3j/76Lp52BWBC+xXj/jZb18FDWsHby8SdFNA5AJ
+	KriCM4PWx7LxDc/OHgfaqQik8Web9Ux9ddtyjZ5Nital6JoZS/EUVbsnJuy5pRGN
+	wavCkHNDjeGpkkALeScB5I6OHW7dAuPRkvR3oBxySwAhM494mYq744+2PmKIpyE+
+	hw==
+Received: (qmail 286476 invoked from network); 22 Sep 2026 16:45:25 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Sep 2026 16:45:25 +0200
+X-UD-Smtp-Session: l3s3148p1@0aq/ahNckKNQT+F6
+Date: Tue, 22 Sep 2026 16:45:25 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Chris Snook <chris.snook@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Duncan Sands <duncan.sands@free.fr>,
+	Chas Williams <3chas3@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, linux-watchdog@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] watchdog: Replace __MODULE_STRING() with
+ __stringify()
+Message-ID: <arKUgQKr99Ox6ZIW@shikoro>
+References: <20260922-module-string-v1-0-c18766690185@suse.com>
+ <20260922-module-string-v1-1-c18766690185@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ee510141f44725527b6a2f60cae4323f26ecde36d3a592ba997648de45c80134@mail.kernel.org>
-In-Reply-To: <20260922-module-stubs-v1-1-abe465a24879@suse.com>
-References: <20260922-module-stubs-v1-1-abe465a24879@suse.com>
-Subject: Re: [PATCH] module: Add stubs.c for CONFIG_MODULES=n module_put_and_kthread_exit()
-From: bot+bpf-ci@kernel.org
-To: petr.pavlu@suse.com,mcgrof@kernel.org,petr.pavlu@suse.com,da.gomez@kernel.org,samitolvanen@google.com,ast@kernel.org,daniel@iogearbox.net
-Cc: atomlin@atomlin.com,john.fastabend@gmail.com,linux-modules@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 22 Sep 2026 14:16:52 +0000 (UTC)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sgLEH0/VtwN7fsyT"
+Content-Disposition: inline
+In-Reply-To: <20260922-module-string-v1-1-c18766690185@suse.com>
 
---===============0354108412572357667==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+--sgLEH0/VtwN7fsyT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 96cc98568eea5..4c7bd7f9f8898 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
+On Tue, Sep 22, 2026 at 03:32:21PM +0200, Petr Pavlu wrote:
+> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+> MODULE_PARM support for older modules" [1] in 2002-12. That change also
+> moved it to the graveyard section at the end of linux/module.h
+>=20
+> Replace the remaining uses of __MODULE_STRING() with __stringify() in
+> preparation for its removal.
+>=20
+> Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-[ ... ]
+I didn't look at all but at some of the drivers (Renesas ones, da905x,
+STMP and a few others). Those looked good. I guess you generated the
+changeset anyhow:
 
-> diff --git a/kernel/Makefile b/kernel/Makefile
-> index 1e1a31673577d..08a94594975d2 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d62c0f74cff5e..193610e20a4a8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> index 50ffcc413b545..72fd2972eacfd 100644
-> --- a/kernel/module/Makefile
-> +++ b/kernel/module/Makefile
-
-[ ... ]
-
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index d0e1e0bd2ad06..a8bf803afa813 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-
-[ ... ]
-
-> diff --git a/kernel/module/stubs.c b/kernel/module/stubs.c
-> new file mode 100644
-> index 0000000000000..81e66c02260c8
-> --- /dev/null
-> +++ b/kernel/module/stubs.c
-> @@ -0,0 +1,11 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/kthread.h>
-> +#include <linux/module.h>
-> +#include "internal.h"
-
-This isn't a bug, but does stubs.c need "internal.h" here, or would
-<linux/kthread.h> plus <linux/module.h> be enough?
-
-kthread_exit() comes from <linux/kthread.h>, and struct module,
-__noreturn, and EXPORT_SYMBOL come from <linux/module.h>. The file
-doesn't appear to use anything that internal.h provides.
-
-This makes stubs.c the only consumer of that header outside
-CONFIG_MODULES=y, which future internal.h changes would have to keep
-working.
-
-> +
-> +void __noreturn __module_put_and_kthread_exit(struct module *mod, long code)
-> +{
-> +	kthread_exit(code);
-> +}
-> +EXPORT_SYMBOL(__module_put_and_kthread_exit);
-
-This isn't a bug, but since stubs.o only exists for CONFIG_MODULES=n, is
-the EXPORT_SYMBOL() reachable by any module, or can it be dropped?
-
-No loadable module can resolve this export when CONFIG_MODULES=n. The
-macro still expands (producing an .export_symbol entry that
-COMMON_DISCARDS drops at link, plus __ADDRESSABLE()), so it's harmless
-but has no consumer.
-
-kernel/time/posix-stubs.c, cited in the commit message as the model,
-exports nothing.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+--sgLEH0/VtwN7fsyT
+Content-Type: application/pgp-signature; name=signature.asc
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35733170542
---===============0354108412572357667==--
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmqylIEACgkQFA3kzBSg
+KbZBaw/9FrBesyOyyDUrnxlHP0bOF3BmqDAG1eHCb7OuWj1Wcqrh68l72s5PrP8Y
+omafJO2i4E1dAJdffYG+gz4rfeaT4Kj9TJCODqKn6pB7cEFOj0Gk9Tlc1Pd3sNpo
+3nNxwod06QpdI/1RpmBPR76rj+a0vaK8WM1j1zoARksJT0LK8Jrfm5d73Hoisng7
+2iNk+ZkddaYmPSqgADJxlB+j3VUcWAIp4t/Q4F0c6+xJgA++OzbgOAvDLpXzi4Ae
+zVzinZ552qM8vWVqf9RHbEz05NCRqlYewqsc6ZzFWcLHOcC9cE9nbgwH6qtd5qWU
+LWqNdIl0WXDwSXi79NzvtqsAIXCMN814bx497Fbz4Xe4Sa3KBDkfUPv/JmmRtxcZ
+BQxDPqXjxauBMrmarjBbr2fJy+6JRoJ44Fb3n3USWvZufXWhUbagITi8bfkE+ikP
+6YriAOJVgsI9IQnTTUN5szRzPcFEHTM9N5qptkcwjCyWa3Z61/a2gmppmR4wwQ1l
+Be/BD93oE4Y+DkKI3w3dWjyamEWcx+Hq9JYIMlemrXpGx5f2OZCIJNHFwvdyS02h
+k8AE3H4VIwo7A/6UYTImr/JQAtwuUTyzcK54vyXsGAPSc1FhvXr+8zgbaR06nqgD
+EfSNpsEVCbms7JBhxZphEoSYGUtYUwHE6x/Vd63n78pA5DJoRQ0=
+=++bp
+-----END PGP SIGNATURE-----
+
+--sgLEH0/VtwN7fsyT--
