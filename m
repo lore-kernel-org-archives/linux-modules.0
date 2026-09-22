@@ -1,39 +1,71 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8BF38E129
-	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 14:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A47577E26
+	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 17:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790088340; cv=none; b=s5uVuLJIMIZlvUoX8+V7fF9nmTWvbnfBa+stUpbj17P/fLXx3FUl033WnvteJcG1kRBrSdYRiQt3b+1xKQMGP8hsjbw2i6AnMg/SsevLP1LLHIdNruzNxlZJxaWQ7JSCj0N8uiBm+/MYkl85cP9RJnIlfJyf5284b+UbPS7MqS0=
+	t=1790097596; cv=none; b=YA08gdoB+dMTfDydx0pFrB6UcWGiVD+dxFntEzVbbmsRx0ZSxRmL2p83f8EXEmNusdM44dLy0tcYY++I8HGYqRiH9v5BnfikHTqbskAyMEvmqo5HkF1vth2oixHlT8V0oAz3vWit0Bgd+YugwzfhrY5Kgx5af+cvYSInDl9CS+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790088340; c=relaxed/simple;
-	bh=6+7YwPssrYwwbcVyy1E2zRmvrRlDS05FVVsJW9+Xl58=;
+	s=arc-20240116; t=1790097596; c=relaxed/simple;
+	bh=6wTYl3fPn9nlTqWjvYm7Nq+9tWOEygh9IVzIKdiR2oA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YNZAab1tCYOaLxWLK+Qi5vq56sFOMSocmwQHY2tmnE7Y5RCvXGhp64Nep2FvhFw9DKS5CaqAjopQj4sySRuxP7pr+kUvVoZBKnZsbMzyh5nhj2lR+z0Ar9b4FUnRwUqyR1g2yO+fgTbR36LS83BSoV8UUNs4SxKe9OxH2z9PbY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CguFkjds; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=bkueuY3hnDq2bJFZA2O9Ls/CEE07LVnYptGiXpFQIivAl0hFuJDmudQQzDEyad+yQwAFN4XNJserhvyhyBDatp8jtpQwfGtJGGb6WYrAxLMPjkagg/T/Ng4ordydURt5S7nWHuf7xPlZonRAihtWOJXC+A1ktgO0M7RBVSj+qSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3fpi2YG; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CguFkjds"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=6+7Y
-	wPssrYwwbcVyy1E2zRmvrRlDS05FVVsJW9+Xl58=; b=CguFkjdsvQ8uo+wX/xEJ
-	3RiokJSXD94GoXAfVLjWKz+1uejkAw7kl4/1xIpbNhEz9+k8g68TzFsoi6LLucFN
-	Ndwn5b23x97IbqfUJS6Ka3H72pLXZn/70hR4VEbM5/VqqBrypDjeacVP/f3C862U
-	QWEM/koX8XX8b5wCCJBbcEyGr3j/76Lp52BWBC+xXj/jZb18FDWsHby8SdFNA5AJ
-	KriCM4PWx7LxDc/OHgfaqQik8Web9Ux9ddtyjZ5Nital6JoZS/EUVbsnJuy5pRGN
-	wavCkHNDjeGpkkALeScB5I6OHW7dAuPRkvR3oBxySwAhM494mYq744+2PmKIpyE+
-	hw==
-Received: (qmail 286476 invoked from network); 22 Sep 2026 16:45:25 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Sep 2026 16:45:25 +0200
-X-UD-Smtp-Session: l3s3148p1@0aq/ahNckKNQT+F6
-Date: Tue, 22 Sep 2026 16:45:25 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3fpi2YG"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-39dacf053eeso94996a91.2
+        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 10:19:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790097594; x=1790702394; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=zCRq4hnTSVTOASY3u8FUiAUCCMw+X4n90vfRzUKE6C0=;
+        b=R3fpi2YGR1iw8Px21lKPuJxQa3xYXCv9Mpn2pp7nvZTr5cx5S8aK5HbtF3oqZWIFQM
+         RMZ3C0IacF5arX5aUdVWDSlMSotuYQA4Op5VFEMGn055iG+3zTrz5B/Kf8iog9lSXhZZ
+         B157y2CkT0mf/XtYGvnhueJQMfUPdVjeLDGegSgXKkejeOexHV8Jc5oDbrKf3Z2qa4mD
+         hts7qgawAiOZuCKQsdQAw5yKxpocn841NQ5Hu1VNYbKlO1f/HGPcNH19kCYQ/UPmaqF9
+         OYKbnmqRDwKR6tzbt0XUMzLli1e6tFFAlATxO9QSteifnJPhfcdMvKQ7lvc6fqOdrGg/
+         xkkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790097594; x=1790702394;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zCRq4hnTSVTOASY3u8FUiAUCCMw+X4n90vfRzUKE6C0=;
+        b=DkYyHAg/qZ+r8GvbIQbgBJTs1enhJ55pewMRon7/TCRgmFzW8dR5DY9kMlAeFFkkBZ
+         eB2LnIinCxtphwwR+lYU7k/e8a/bYftE6rUbKVwyqY2VFRLIhGR0i9qBskjLltvMg9er
+         XtgScn7XIoTRD4Bf9wJGqfXR8sKrN7lpqNeOHNqkpMfFpARkOONihgt79hIT4XuFU3HY
+         aZi3E57kDl+AfUzO/qsDnE0k3wxCpwLIy4yTTg7htuA37ZYjaiJw4lcg/nMXgwkK7OXM
+         kNpTQpxM+hRxEJqzwq7ckjyNH1oV+S7BLsAs5WQ2Ce4ulOrrSnd1rLgu/h2SXXNOFC65
+         W/Kw==
+X-Forwarded-Encrypted: i=1; AKwUvBwnQxbn+3QHcqnvP1jFNaZAzUPLSz7sSufMkT61GCnilfTfMrTkiWqybIDIzSBnOm0/89TaQAmRcneITcp8@vger.kernel.org
+X-Gm-Message-State: AFuF++kTfcxbqY7yfiPnJw0QTFYyshbdKoeaD2RlM4Z/rLB3B/1qvztq
+	EEkFpSwZJjJqFbiiKTSJOVIyP2I2Ic5Es+MFW3MLWW5ANBM24EgddtJ2
+X-Gm-Gg: AYBFou28qqAHt5bwYlqg4pCXaj6S/vooEH/GMHmvLnlHNLxu6My5nvtWTBf8H0FACgg
+	HUpq+LektnHzHFFEmrlbiUfoEkdwDLVLp2XsTf6/P3WdOouciwwQxLy9TjsthqSPTGRzi28V+h1
+	Vggv5YW3z3B+dswVWj6ptyw9S3K8YL7d7RMa8VB0OlOFAHrN0r77VHWJ8I9I9R50h9hqidK/9x1
+	niQxluSUziZ8h02pZkNFBUasXFk5Vph9J4ABUYLhpD4RvlBOXYWjQwUoHrsjxJr0mLKFm9PjOEm
+	9A2q9L/0ons8XZQy3tx/gis7ISF4AbeipnhwL/vhC/Ig0V5rnF7/D/HSq8uU1VJfhoHrZpINXqY
+	V/YfUzlpeLq9BborZpjOymV6mUIuAWcE6T7AVTfadzCf8FGskEYgKmcWpPhxPVuztsTWcjtGEJi
+	BglRom3MSrlJke4wo8mG6r3pY3GvRvD6lUeuOetfjuAddPxjkJq+XuymzyJ+kzQBzfkn8gmPjkn
+	doSVlv7KtmO+g==
+X-Received: by 2002:a17:90b:2b4c:b0:39e:1ff0:331b with SMTP id 98e67ed59e1d1-3a07e4f7b61mr128059a91.2.1790097593735;
+        Tue, 22 Sep 2026 10:19:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07ddaf4f5sm336767a91.4.2026.09.22.10.19.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 10:19:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 22 Sep 2026 10:19:52 -0700
+From: Guenter Roeck <linux@roeck-us.net>
 To: Petr Pavlu <petr.pavlu@suse.com>
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>,
+	Ian Abbott <abbotti@mev.co.uk>,
 	H Hartley Sweeten <hsweeten@visionengravers.com>,
 	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 	Maxime Ripard <mripard@kernel.org>,
@@ -48,7 +80,7 @@ Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Tony Nguyen <anthony.l.nguyen@intel.com>,
 	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Andreas Noever <andreas.noever@gmail.com>,
 	Mika Westerberg <westeri@kernel.org>,
@@ -69,7 +101,7 @@ Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
 	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/3] watchdog: Replace __MODULE_STRING() with
  __stringify()
-Message-ID: <arKUgQKr99Ox6ZIW@shikoro>
+Message-ID: <940e0763-9de3-4d55-90cc-8289d5525b17@roeck-us.net>
 References: <20260922-module-string-v1-0-c18766690185@suse.com>
  <20260922-module-string-v1-1-c18766690185@suse.com>
 Precedence: bulk
@@ -78,52 +110,23 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sgLEH0/VtwN7fsyT"
-Content-Disposition: inline
-In-Reply-To: <20260922-module-string-v1-1-c18766690185@suse.com>
-
---sgLEH0/VtwN7fsyT
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260922-module-string-v1-1-c18766690185@suse.com>
 
 On Tue, Sep 22, 2026 at 03:32:21PM +0200, Petr Pavlu wrote:
 > __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
 > MODULE_PARM support for older modules" [1] in 2002-12. That change also
 > moved it to the graveyard section at the end of linux/module.h
->=20
+> 
 > Replace the remaining uses of __MODULE_STRING() with __stringify() in
 > preparation for its removal.
->=20
+> 
 > Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
 > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-I didn't look at all but at some of the drivers (Renesas ones, da905x,
-STMP and a few others). Those looked good. I guess you generated the
-changeset anyhow:
+Applied to watchdog-next.
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-
---sgLEH0/VtwN7fsyT
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmqylIEACgkQFA3kzBSg
-KbZBaw/9FrBesyOyyDUrnxlHP0bOF3BmqDAG1eHCb7OuWj1Wcqrh68l72s5PrP8Y
-omafJO2i4E1dAJdffYG+gz4rfeaT4Kj9TJCODqKn6pB7cEFOj0Gk9Tlc1Pd3sNpo
-3nNxwod06QpdI/1RpmBPR76rj+a0vaK8WM1j1zoARksJT0LK8Jrfm5d73Hoisng7
-2iNk+ZkddaYmPSqgADJxlB+j3VUcWAIp4t/Q4F0c6+xJgA++OzbgOAvDLpXzi4Ae
-zVzinZ552qM8vWVqf9RHbEz05NCRqlYewqsc6ZzFWcLHOcC9cE9nbgwH6qtd5qWU
-LWqNdIl0WXDwSXi79NzvtqsAIXCMN814bx497Fbz4Xe4Sa3KBDkfUPv/JmmRtxcZ
-BQxDPqXjxauBMrmarjBbr2fJy+6JRoJ44Fb3n3USWvZufXWhUbagITi8bfkE+ikP
-6YriAOJVgsI9IQnTTUN5szRzPcFEHTM9N5qptkcwjCyWa3Z61/a2gmppmR4wwQ1l
-Be/BD93oE4Y+DkKI3w3dWjyamEWcx+Hq9JYIMlemrXpGx5f2OZCIJNHFwvdyS02h
-k8AE3H4VIwo7A/6UYTImr/JQAtwuUTyzcK54vyXsGAPSc1FhvXr+8zgbaR06nqgD
-EfSNpsEVCbms7JBhxZphEoSYGUtYUwHE6x/Vd63n78pA5DJoRQ0=
-=++bp
------END PGP SIGNATURE-----
-
---sgLEH0/VtwN7fsyT--
+Thanks,
+Guenter
