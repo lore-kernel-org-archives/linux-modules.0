@@ -1,162 +1,211 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from mail-wr2-f19.google.com (mail-wr2-f19.google.com [74.125.225.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570954B4887
-	for <linux-modules@vger.kernel.org>; Mon, 21 Sep 2026 15:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8C136DA0D
+	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 07:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.83
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790004833; cv=none; b=P4uuultKVC8BC3L8SgSGvQPyhNSEjDvTVLNepwUbAzy5O/wNDIvYbvDp+Qrx6eGhTknvAmujAZhECzl+3c0wpqBR6bZ3EDfbcZ3YZF3pP4o7zk91p0DL16nLJunObxf73++lmfJOEUOlwES9JlGz8b05cI4ZB7MhUetCzdXISao=
+	t=1790062782; cv=none; b=CHeztpMmHzXfUZt2qxre/2/NF07J741uXGcPa7EejB8dNF8xdCZckKwVraDm8ral9EXRRoLnNAWypThNEVFuRdc9z8CbWOT1IVhWPuf0AjpQB+ksePfM1vVWGfL3VtquBmLJV4u8emd7qIaEEzzmZUGa4gVKKyxZZK8oUolEbaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790004833; c=relaxed/simple;
-	bh=I7UesNNzihhfUM3T9kkjRfplteVqAEnYJpPI/ePgiEY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qNW6mc5mjTleOIV44cUFq4+aaRkkFgEQwZ20YakXYXgkHOS3FGjeNj3zWB6grSsiLUzH/QHRYn95sgyjb9bhQWqk1hsyO3tkbdKRvQjtFpXElz9Acfiy1DZjG8cV0jGttx+d68M9jC69BNokH9K7JXZaedCb/TyjJo91kABBfn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dz0t2q82; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790062782; c=relaxed/simple;
+	bh=dl5o9oQr5B5N85FSOPgTlq/lZbjtY8w27lkb6yxJJ5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PewnXyUN8XYWB3oGL3f6kF4Ac08oWOCqNk9UeIroVenVhApKleoF8IKRq/IDDDrIwnENc4Bz4vEDUq8vxFMPldwojfkHlhP5UMhD9BEPfbJmW0dKJJNv1Q/nfSaLNXk33S9jH4S0UEwbZlnV7FQfXrzODldIFPxNLgqQVNWSHt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=YfL2LgfL; arc=none smtp.client-ip=74.125.225.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dz0t2q82"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f63546c3so2473063f8f.1
-        for <linux-modules@vger.kernel.org>; Mon, 21 Sep 2026 08:33:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="YfL2LgfL"
+Received: by mail-wr2-f19.google.com with SMTP id ffacd0b85a97d-48583cc7ab1so1805039f8f.2
+        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 00:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790004829; x=1790609629; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=baylibre.com; s=google; t=1790062777; x=1790667577; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ATQztYCMyMu3k6DnS/zHcGXiDiuEanDgsZ8XIDNR40k=;
-        b=Dz0t2q82wSX3pw4NUPNIMWFDFyaMLzrpHR3XlMeTROMDG6hkfv3lKtMy+t8UX4DCYZ
-         Yre0uZY0ohhZB/m8uZy+7NKSld+RQl4WeeH3lKWxRJDlI0jTU9kTZYktWnVPoRcdO0tM
-         O02PStEdyvZA/1ewe3YZi37vUbtncXVXn3bg/EPbqaWhOYHpbpwP8SIbHTRblKzE9q7l
-         nGBRSfYcad+DgIL8MobJBaUsECApzuOnQ/nsRfROKkFu03Gms5lDbF3Tihr3PUiStNA7
-         M0LzqB6uep7UWHhTP43YO6bWVcjxoa7FsoT+/mFMmL/xcKoHjtxanaXNqCzWNQDUnag3
-         +Amw==
+        bh=hNYq47O4Ws8Dm5U8XTWW+CRMw749gUzSYK16o/QDHGk=;
+        b=YfL2LgfLlarjpZs2ZUvAKJZf4AoJMihX3yw8LyVNMzFPzxzFUSicxL9MdAJcxXMGW1
+         RrHAdyuiUNn+Zh2I8z3EJnknxUwA7tkEyzOYZIESSIjYggkpqdMXM2i1c1iGokLcp4Kw
+         xttkABjul59jUyu8am1aLvK1Dnt4o3P551/GIpScreZHyGRB+ujV/kvvrhj3BC9Vh3Pa
+         V5Js6ppUZRHqY1MWgRlqwWtUwOf3zTd9dDEA3DIuROsBgZXzkmSpW6s0sUKMgnl/R4WV
+         ER3KVd5Z+luv9zJpOVsXt3/SIqNdw6hwucGB6wAA1CmtHYrxqp74+PbQ2ikUqQPP9IN2
+         PCuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790004829; x=1790609629;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1790062777; x=1790667577;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ATQztYCMyMu3k6DnS/zHcGXiDiuEanDgsZ8XIDNR40k=;
-        b=xdThdyGnSktUhaDXVAupC0kMcKo+utGP8pS94+QDO6GeWM0tg4PssVnE0G3I4p1bWW
-         TqAKjsnUbAv7XYAjF37enGQbaCtxTo7u5Ciq/kJDr30+k3dAYC2LjWpkdQUfKY9sUOzD
-         606N1qrB2p9Fu8E7O/DgBuVOOE4OeDh2s9JDcH8VL9hMJD60WfBW9xH/vMJh8CBz9GWn
-         nbVbktKla7nEpHRbS0jmg58I7vvxvr2NYv0Y3wr1oGdbLpJJuTPZy8jB3ORDRmS+jGrU
-         WPJ+kSTCik2SPtTtGcnqIUWLJ61DOSDWKK0c8g7KApfzW0xtPkE3Kniv9fJ6FEfzt0wv
-         aRMQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxtYGQWc79X0Yliqij/huP5ViwvuakVCSiUFv9Xb+IIquOQSYgeqHa1HnyX7e4eq/Za1GBWLe7W4wjeZ1WC@vger.kernel.org
-X-Gm-Message-State: AFuF++nmh1AoyDf3uyt9sGMhvRB1LGdemNV0JelaEMUWW+0JlRnyxOlL
-	UPaNOYsXKMZtI7CABtt0RZlOmqRjUn0kOR0Wl5y/2n7sfqTZl5UVJbiY
-X-Gm-Gg: AYBFou23zndL8AnaiToNE1icF/GyhayhPcw5Asef6TgfDbdjjitIXvrt+1JZtvMKNrj
-	Km0JTh9CEGWsBsZoP88i2gqyLM2Z2qcDetgmxmKNkABLLBk+ToPOnaewQpuueWBdOlyaAE5kLNM
-	dveK7ANNng8p+hnfa5iURQ7h/VOAmGhHNdgY4GnL9wIsLOLwPYbq7Ri4Km8FZmDn/FUYHzvul6D
-	xQI/OfF8iL0uOumBU8GUEp5H9g+ie6IL5o+DTSrS7FOOzrGbBZIyWoujlNvObzeETHtiHGiP5Qm
-	PrBzg+iU8DB0o7roT7MxFxkCv2K7cXeT4eub9PsK0IcVGWCuariFHlsVwDaEv/JYgrLt3IDVIom
-	nrtsL4FKU272oLe37CXsFCFdLbqQiCy7BjNx7ndg88fFcG9KAiVoNM6MXaFX0bbfrFW406GM565
-	bmp2+q0gKfTnqeJ6MP0mSoTj2wmGWKuDfdnM9IN9/dMQG04Yg1Iz2DaG1dd+f/8vXToFujuk+eW
-	LRyYOmLOx9N8KlnA4xT46p0bwNOpCAQR5DH
-X-Received: by 2002:a05:6000:38f:b0:487:c48:5dae with SMTP id ffacd0b85a97d-4871e21d900mr14510363f8f.17.1790004829281;
-        Mon, 21 Sep 2026 08:33:49 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4872446067asm24137495f8f.12.2026.09.21.08.33.48
+        bh=hNYq47O4Ws8Dm5U8XTWW+CRMw749gUzSYK16o/QDHGk=;
+        b=maT8b5HK+G6yZfiIxKDfa94Sm2Y1Hqq4BT35shEpN6/ZrgWzg8An9WE7SSTMa4OJ/K
+         YEH77LnQfso+YwQr7r1DpQniYHhIZIV1eNLaql5q1aWLTEhA7ltmVsA9wENNa6Si5lXj
+         ozqqk/6+PQqJH1nL8AJPTcweIitU0cqTpNynqkmDX/ag9ySOd1STx+KQ9YafEvszK6R3
+         FR1dNpcV0SajtpM5mKV76Ycgw5m1+meJ43paZ/xRImtzBMp9QZgzzF4OTObWzJS1K375
+         tn5q2ei6ZafDBBZKNWewNaFSf/0Tnu0iaJDY3k5gnvHr94jKAFZPMZg4/b38baEc0vcS
+         PN9w==
+X-Forwarded-Encrypted: i=1; AKwUvBz1UAoPc1eDoryiYyC+l75PR2K+ujeNf76icOyeuGM+Rq4YSjIt2top75ti0mC5rkqYWD3tGl3clJ1guC7z@vger.kernel.org
+X-Gm-Message-State: AFuF++lQeLA+jiwsXNw0mBkEL1iqKCcI242HxCamrdu1Ivxw9EDbfuSS
+	cyG88/zer5jprLf1RSt4/L/LFFFtwBQn1JFU/GInDvhFsqCQ3ykDuVaqDhdaVAkp5wU=
+X-Gm-Gg: AYBFou0A0GZZq9zokaUM+P9sMOZXGLbPwWj25t8X1PGuDyCSVaS57Y5ByXFunXYTzBN
+	VQKEYX+oTCtWRR/Zmia1+jFkOZtatPV/tKZt/BvFWm1y34pJYcoyrQyq0o5ErYto6XPuIl81xz2
+	Luo4MGRpjsfWNgkznIqphO7SnKOrPwXqp8yFoeeeZFWcROdmzmwl2+Ffy4GNJDRw8Ma+chMbeNr
+	p6OCJE2ZvO6tVfnrjo0oFnqgq1EG1T0f+9hbTHiIRKMKyrSnIb/6yGFIRBjAGeDVTqlhlJ52wRk
+	k+ISh8RBVilq/3nb+giK2Ey77gaFXiab/iAkB8q9LOEdxonotkuJ31pnEtQSmVII1FYbKdIRMw6
+	ZSSeEIHU9iRkx9cQSmIOMFRQ7Xlim2NCQA95YI1eQNUUE9ZN5O3pndDdgQzv3WrvtRTwa3lXcSN
+	A4KMHHxuST/1c8JzaLI/kpWgDyYFMFLePptEFeLnqtUGekD1jObNLqDl75pCBLfo7TvH4Pmeqv0
+	D4noIIuIQogGRBkvZzQl8u4fY6CZihpNbQZuRTAxL9rKCUH4RpHulOXx7wNmA==
+X-Received: by 2002:a05:6000:3111:b0:487:8ef:2fcf with SMTP id ffacd0b85a97d-4871e26b86fmr18280691f8f.38.1790062777241;
+        Tue, 22 Sep 2026 00:39:37 -0700 (PDT)
+Received: from localhost (p200300f65f19a9041d0e57515b2ea4c8.dip0.t-ipconnect.de. [2003:f6:5f19:a904:1d0e:5751:5b2e:a4c8])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-48862788f61sm2993133f8f.26.2026.09.22.00.39.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 08:33:48 -0700 (PDT)
-Date: Mon, 21 Sep 2026 16:33:47 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Mahanta Jambigi <mjambigi@linux.ibm.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-s390@vger.kernel.org, "D. Wythe"
- <alibuda@linux.alibaba.com>, Dust Li <dust.li@linux.alibaba.com>, Sidraya
- Jayagond <sidraya@linux.ibm.com>, Tony Lu <tonylu@linux.alibaba.com>, Wen
- Gu <guwen@linux.alibaba.com>, Alexandra Winter <wintera@linux.ibm.com>,
- Halil Pasic <pasic@linux.ibm.com>, Hidayath Khan <hidayath@linux.ibm.com>
-Subject: Re: [RFC] module: init-failure path can free a module with live
- try_module_get() users
-Message-ID: <20260921163347.2630a6f4@pumpkin>
-In-Reply-To: <2cd4adea-9b70-4951-be8b-40c1bcc7ecd6@linux.ibm.com>
-References: <5dc1fe2b-289e-4786-b9e9-e181dda8d4e9@linux.ibm.com>
-	<20260918142241.55a6630a@pumpkin>
-	<2cd4adea-9b70-4951-be8b-40c1bcc7ecd6@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        Tue, 22 Sep 2026 00:39:36 -0700 (PDT)
+Date: Tue, 22 Sep 2026 09:39:35 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh <nogikh@google.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org, 
+	Johan Hovold <johan@kernel.org>, Richard Weinberger <richard@nod.at>
+Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
+Message-ID: <arIvG0nx4LXG9nlW@monoceros>
+References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
+ <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ikoios7rdkqzgpee"
+Content-Disposition: inline
+In-Reply-To: <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
+
+
+--ikoios7rdkqzgpee
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
+MIME-Version: 1.0
 
-On Mon, 21 Sep 2026 20:04:10 +0530
-Mahanta Jambigi <mjambigi@linux.ibm.com> wrote:
-
-> On 18/09/26 6:52 pm, David Laight wrote:
-> > On Mon, 24 Aug 2026 11:43:46 +0530
-> > Mahanta Jambigi <mjambigi@linux.ibm.com> wrote:
-> >  =20
-> >> Hi Luis, Petr, Daniel, Sami, Aaron,
-> >>
-> >> I'm writing to ask about what looks like a generic module-init failure
-> >> lifetime problem in the module loader. I ran into it while working on
-> >> the SMC networking module (net/smc/), but after several patch
-> >> iterations, it seems the root issue may belong in kernel/module/main.c
-> >> rather than in SMC itself. I'd appreciate your guidance on whether this
-> >> reading is correct, and if so, what fix direction would be preferred.
-> >>
-> >> THE ISSUE IN do_init_module()
-> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> >>
-> >> include/linux/module.h has a long-standing FIXME in module_is_live():
-> >>
-> >>     /* FIXME: It'd be nice to isolate modules during init, too, so they
-> >>        aren't used before they (may) fail. But presently too much code
-> >>        (IDE & SCSI) require entry into the module during init. */
-> >>     static inline bool module_is_live(struct module *mod)
-> >>     {
-> >>         return mod->state !=3D MODULE_STATE_GOING;
-> >>     }
-> >>
-> >> Because MODULE_STATE_COMING is not MODULE_STATE_GOING, try_module_get()
-> >> can succeed once a module's __init is executing. If __init makes the
-> >> module externally reachable partway through and then later fails, the
-> >> failure path in do_init_module() appears to do: =20
-> >=20
-> > It is rather worse that that.
-> > If sock_create() auto-loads a module (eg sctp) then nothing stops a sec=
-ond
-> > sock_create() entering the protocol code before the initialisation comp=
-letes.
-> > That can be hit by two separate applications, I hit it from an out of t=
-ree
-> > kernel module and avoided the problem by putting a mutex() around the
-> > sock_create() call.
-> >=20
-> > It might help by letting try_module_get(THIS_MODULE) always succeed
-> > while blocking other requests until initialisation completes.
-> > The code making the call must own a reference (otherwise the code could
-> > just disappear), and that reference stops the module being unloaded.
-> > That would let the initialisation code grab extra references (eg for
-> > a worker thread) without allowing other codes paths enter the
-> > part-initialised driver. =20
+On Fri, Sep 18, 2026 at 06:39:02PM +0200, Danilo Krummrich wrote:
+> On Mon Sep 14, 2026 at 4:30 PM CEST, Greg Kroah-Hartman wrote:
+> > The ability to add and remove devices from a driver through the sysfs
+> > "bind" and "unbind" files was created all those decades ago as a way
+> > that kernel developers can iterate faster, and provide a debugging way
+> > for users to attempt to add a new device to a driver without having to
+> > rebuild their kernel.
+> >
+> > This api over the years has been abused and recently come under a major
+> > fuzzing "attack" through tools like syzbot which decided that it would
+> > attempt to just randomly bind any driver to any type of device, causing
+> > loads of unneeded errors and pointless kernel patches to be generated by
+> > unsuspecting new developers.
+> >
+> > Handle all of this by adding a new taint flag, TAINT_FORCED_BIND, which
+> > will be set on the driver if the bind/unbind sysfs files are ever
+> > written to.  This lets kernel developers "know" that a user is
+> > attempting to do something that is not normal, and as such, if the
+> > kernel breaks they get to keep the shiny pieces laying around on the
+> > floor.
+> >
+> > The flag is 'Y' which was unused, and can remembered as the user is
+> > "yeeting" the device being operated on here (thrown with force without
+> > regard for the thing being thrown).
+> >
+> > Note, the taint flag gets set _BEFORE_ the bind/unbind callback happens,
+> > as many times crashes/oops/warnings/failures happen within the callback,
+> > and the taint flag needs to be there to show what was being attempted.
+> > If it were to be set after the callback happens, the oops report would
+> > not properly reflect what foolishness was being attempted.
+> >
+> > Fuzzing tools like syzbot, that doesn't have hand-crafted rules to keep
+> > the tool from hitting bind/unbind, should be run with panic_on_taint
+> > enabled so that they fall over and don't continue on, thinking that they
+> > actually found a real issue.
+> >
+> > Userspace operations that rely on the bind/unbind files
 >=20
-> Thanks David =E2=80=94 you're right that the race is broader. This patch
-> addresses only the UAF on the __init failure path: once we set
-> MODULE_STATE_GOING and call synchronize_rcu(), new callers see GOING and
-> fail; we then drain existing refs before free_module().
+> I agree that this should be avoided.
 >=20
-> The concurrent-init race you describe =E2=80=94 two callers entering
-> MODULE_STATE_COMING simultaneously during a successful init =E2=80=94 is =
-not
-> addressed here and would require changes to try_module_get() itself, as
-> you suggest. That is the long-standing FIXME in module_is_live() and is
-> a separate, larger change.
+> But I also think the biggest offender really is driver_override. Specific=
+ally,
+> on a hot-pluggable bus a driver must be complient with the device driver
+> lifecycle rules and hence shouldn't break on bind/unbind. I think it woul=
+d be
+> nice to not taint the kernel for such busses, and only taint on driver_ov=
+erride,
+> as I think we'd still want the bug reports for such cases.
+>=20
+> But I think this is fine to leave for a follow-up.
 
-I suspect it is also much more common.
-Module load doesn't normally fail, but if you can persuade the system to
-unload an unused module I'd expect a non-root user can hit the concurrent
-init race.
+I fully agree. I'm fine and support tainting on driver_override, but
+bind/unbind are used occasionally in my bubble and I consider drivers
+not handling that properly buggy.
 
-David
+So please let's do
+
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index c51ad96d4de4..ce8fb14ea19a 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -242,7 +242,6 @@ static ssize_t unbind_store(struct device_driver *drv, =
+const char *buf,
+=20
+ 	dev =3D bus_find_device_by_name(bus, NULL, buf);
+ 	if (dev && dev->driver =3D=3D drv) {
+-		add_taint_module(drv->owner, TAINT_FORCED_BIND, LOCKDEP_STILL_OK);
+ 		device_driver_detach(dev);
+ 		err =3D count;
+ 	}
+@@ -266,7 +265,6 @@ static ssize_t bind_store(struct device_driver *drv, co=
+nst char *buf,
+=20
+ 	dev =3D bus_find_device_by_name(bus, NULL, buf);
+ 	if (dev && driver_match_device(drv, dev)) {
+-		add_taint_module(drv->owner, TAINT_FORCED_BIND, LOCKDEP_STILL_OK);
+ 		err =3D device_driver_attach(drv, dev);
+ 		if (!err) {
+ 			/* success */
+@@ -513,6 +511,7 @@ static ssize_t driver_override_store(struct device *dev,
+ {
+ 	int ret;
+=20
++	add_taint_module(drv->owner, TAINT_FORCED_BIND, LOCKDEP_STILL_OK);
+ 	ret =3D __device_set_driver_override(dev, buf, count);
+ 	if (ret)
+ 		return ret;
+
+(plus the needed documentation adaptions and maybe a rename
+s/TAINT_FORCED_BIND/TAINT_DRIVER_OVERRIDE/).
+
+Best regards
+Uwe
+
+--ikoios7rdkqzgpee
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmqyMLQACgkQj4D7WH0S
+/k5o6wf/QvL9FWWzFHpKfbzsuAgBOWn5AxVXK3QYhCnvpoqfBJNUrHxYRK4N19fK
+lu4zMQZiIF3pIma55K4HT/BspgIU2PEntjwd3qv5PXAJVEIC4zi94t6jtsjwzfyh
+ICPjAIOv/7a9Hs+DxIFIYAynmaljcmJ9KJQFX+THv55SkTbrvlMBJy5hf8TaH/He
+ZKqYDooGLkS4SnRCuALcqrfQ1nFewrCtmGAPrycGrRrmozUmhsbkWpKdPig0wtfg
+y0qv6g2TrwzvGsclwxgMYqEmLjdVs4GRzN5dnqIdnaTXlk1WtEtJlx4wZ6Ff53dV
+aolAtJZL8PkYcEJ0fpeNtFJvZzxMbg==
+=j+xR
+-----END PGP SIGNATURE-----
+
+--ikoios7rdkqzgpee--
