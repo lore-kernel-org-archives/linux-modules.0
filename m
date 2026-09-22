@@ -1,69 +1,69 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B45D541453
-	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 12:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BB153FD54
+	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 12:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790079419; cv=none; b=l1ed0AS6lR0VDPA9CIfjduWpcVv+OHJC1SWDajpcXOrS+Q187q/dQxrSLOcsYHD4yoJvdiqbApiKiL5Zf0F+XuACuIUopzKGQXWEmnn3AJs8N8mBOYgXMT66Qr1Epk/bCbWbndkA6g4NumPJK14Oh7GUqlBI6LWFqiu+mXij7Xg=
+	t=1790079909; cv=none; b=ejo4+NKhTjw8BlBAJ6YkeRx6vPvr9vc9GiyxK2WEZcq8XfcWZnEDh2luCY6Ea+p8OTwnL18V6OQmkD4lemU3bSdMLsFLxZtcPZC8ibbryYWLDZf5NJntAGrJwKqIdFw1ZK4xYHymzT/KWob24vFmVertsgJtX2QmSoqKzkPtWsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790079419; c=relaxed/simple;
-	bh=be2Y1OoUX2Z3H8XLQu3ekiAnAW4Ns+iopXrYkhiGjFw=;
+	s=arc-20240116; t=1790079909; c=relaxed/simple;
+	bh=MpdpneTahvV7dd4HcsSGeHrxkz25aKOWFS75pW4RUUY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FCyWbHMcs1WOLilhsBLtGA8gkqJvpJwZMrAgImEe2zpFCc9xCZ+o5Pq20fq68LFb3JLh81dPwHx1pb1WJq/yolRF6PfA2B/b1dV9ho8+J4X11TxoPK8VzwJMeVCHaDuBs9wYZAM6omcuaUtUoQBUauHvOX0XbKRjgYCQx3iHxPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OQZUocIX; arc=none smtp.client-ip=74.125.225.76
+	 In-Reply-To:Content-Type; b=kS5ootY4sOLeZWS8UGd0gOMJxhNWhP4SxY0CcQQ0jQpmkVAfJs9pZD8spzX3y0E0rgWbP2Sk/xArZ3ddx+vNwQW1JC9eIKHZtHeRtbMyLt8CzQHS5CF849wVVMrusks1VMF+IbN4s1jmsaBQ2rqEJW/z/5Rat4V3OOOd6RFuMBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Hy+l7Nvs; arc=none smtp.client-ip=74.125.225.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OQZUocIX"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f6350f91so2425481f8f.1
-        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 05:16:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Hy+l7Nvs"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49b912e4b11so22502525e9.3
+        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 05:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790079415; x=1790684215; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1790079906; x=1790684706; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qYZAQI2MQFIAWvU45KsUnqIxxfeReE1kdzg/hPVRdMU=;
-        b=OQZUocIXA25N0fPKAIruZntV3ZEP5EN9YvzISI0VjBPrjdipX7NzMz+lzmuBsDyf12
-         9VR0htwPwVJwwbAHd5/2A7+BQA1G5ZkIgbBWZC7fbWneEEZwTF7Uka1iUjEAVx4dg5t5
-         /D+F2VwTjsqGwdh65OAFeJjLmbxfmmAATZqA2d7K2fUdG7Tvj+1z5jMLgq2Orf0uR2VP
-         TwamgpEB0xHuLK2LLBRWj06zls6MheTHDsXVcFQrMVY+iwn7avH3pUwxw8JGOsojM3PB
-         CcNt/a8PcNZqY26jA0M8wD5sEQHLamKAWgOe/al5LPnuhQq9bMGJ3LERbDD09cqhMYL2
-         wecg==
+        bh=Z0UH5f4Xwx0eHqEEdAgzMEXfye5CzpFBUkt22qJELao=;
+        b=Hy+l7Nvsvo9rIAYpCVWkHs6HGyNyhzOkkQRTy8gSbTEX43W5TBKiKl5Rsq2vL2q4Xa
+         tlvCGB3P9/nWTtSS/kfXZsJKmf7DztSyf70rq//z8fnUlWcRY1uUzXYXGROk2IBY33zU
+         8oStgmYcQRd6FTmTHt0Y9+SFUZQE1bdXpWy60pf4ldc7VG5wD09wh3X4ErndVWPRQmu7
+         J5L0WU+fzwMisPGY/tKfKj7COQr8KU/ym+Ca8T/cKcA8o9dJwP2HVy7rvjeaHsiU8GY7
+         vu07oL5xw2yQnNhCyOKJ2ueOAIlDJul1MXNCGAw2fxzkASqhOTkv+y6V25FqfD5TgxDP
+         NxEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790079415; x=1790684215;
+        d=1e100.net; s=20260707; t=1790079906; x=1790684706;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qYZAQI2MQFIAWvU45KsUnqIxxfeReE1kdzg/hPVRdMU=;
-        b=TPdxmmhh9HKI63h25Wt3IuP2rswH2b7MB0vfdf+ij0N4zPbzXuywWq4ZQ5Oj8+pMan
-         DvL1Ht+vantTgeqz8XKvPZEb/HQ3n+Esq4EmmW+qwogUuMWuhvod5rlWzZEPTXK4AH+3
-         +VSwsdZRq+EkbQ7ubJcgvXFvwBeA0adMHQIKGAV3R8w9Q8G5kcCOhMBMxD92opc9vULU
-         9kSAwwzF+88368dc3LdLEO6U3tJwlHdRObQ5rgPSFJxT+WwcIYbxeqhB4YYpM+8ZMHUA
-         c/AytGnn7yTVlD7+jFVpaVKw3VbHB4Ygaa7TvNK4T/h35z9vl/iPytA55GYTiYJeDp9p
-         fYFQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzXbfH+CdT781yq6EsfCAQ3ise7CvdFparoln2OFtxSmr40b+z/DW7q6+Vd09RU/jNG7fY3+OSXmgNuxyZA@vger.kernel.org
-X-Gm-Message-State: AFuF++kzsEGMgiIeq8oUiAN9Y/RQNQ6zqU4chn5VfmHGIMhAFVWaKZYw
-	yKSNqGhHAefltJN5MODEbZOSqi3SeHg3MK7wb/r6gS0qmbcjoUTfV75+pPNXLCRappY=
-X-Gm-Gg: AYBFou3IiwPxBm/BoVEQUn+GCJd5HmJx5Cr5kuy/e2RouH+ToEupOm18GhdlIJ5OAzT
-	5T/EN+d8bphzpBc4Qyf6JYbegpGA7p7Uw6NliaVbnc8vYcrbZxu4Bp44IX8rrIm4/tPEmEjO3/p
-	wSdd1QtfOigIiQ5wcIBSjDOWnEl08QspFK9OQuAN0LywlKPg1xdeLyeIQnFjeEi8Eq7F2lZPu1X
-	VtGa6K6ydiSLulUOQDt7gecE5sORF7FzJfSaS9Ch45Tz01LbkumcT5jV0GpdRIZXc4QBu01t6su
-	z5J6NrdulgXBznL8OADdavKGBuSZaXpOcxY09rMFoVSieHfxHkOsdn5htkazsGpQHfbUnwWMvqa
-	nenPxEHtgaXFzvrxGoz28ITwu10BSl/pidSd41xRrAdT4z11gqtiTFmAHQ1s1P/UaUZc4JpBXmP
-	9u+fHf/JpNHJWVwqzTEhUsJ/dFduThOMChOnRPOP9VHYvl9RAG9cRtwBru+uqv+nAzLqndrfFwW
-	ipztCyCo1lf/cQ3Ri3e+oj0cidGDnD8N8YTOdB+SNJ5cRfaEFI3CR+ecvcYRZ4FWdHOHxKKbZBk
-	BI5IgeAdcDY12g4EnPw+S9UFBBR8i4yarQ7vgaVkGmMlsf8W/7U=
-X-Received: by 2002:a05:6000:29d7:b0:488:5d3e:bf47 with SMTP id ffacd0b85a97d-4885d3ec41fmr4775296f8f.33.1790079414556;
-        Tue, 22 Sep 2026 05:16:54 -0700 (PDT)
+        bh=Z0UH5f4Xwx0eHqEEdAgzMEXfye5CzpFBUkt22qJELao=;
+        b=Q+/rFuEu/0CveWzcS9jnwMGHyRAU8EMygar2ArCK59QRaVAgySXsLcU5kUHRQGSuxG
+         +861OQDz8iDwzMNIKXCcW2xylUjF2C0f81xFT1ivmtNGC3kfKdVe8N6maTKXtQJ53J31
+         E2pOHGs7MuZVi9p2RDhCBc+epRg9S7f+IVKeUr6nUGRZeVSeuc313/6X65O3Y3b9Hsz+
+         IVEPfyyF2k7FukfOxKMKQDE9OLN6EjOwSIgrAb9+ZluxlhY4bQcWrfKk9km3gM+YHjU5
+         vEe4zKk2bu/DzNq6YreI+JP4p01tEbUrQopfjvDS+TSTFPV67aVBbbJt+d5Kqdj54+lq
+         TSPQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzK2TI34g3r6t5MqWLXfim7O3vPJ+w+GnoISFKr6pgUp5+eiUkwT4j1owBgP9H/XLg5JVyQCzGjrDycpu5q@vger.kernel.org
+X-Gm-Message-State: AFuF++mb/onuMftt32iCB7VjJnak9+jDw/2pbn2LGTj7TZGy3gZ2M0Jj
+	DZ1IakDuWKPotUineEHxcbl6GdsDY10+SpeQ7f9d05sAzr7j1gWCi5vSrTi3BHQLa9U=
+X-Gm-Gg: AYBFou0/Tp72KFCN76He97T1zKn6BNIxi2e4Ap4Sj58jzNz0UguMSpdSVt2zTWLu+np
+	ChkiqGd+7cA7lKbDZoouc0jT4O30vlOBP+AjInU6lqqhzRAfybDeXfe+wQbqp8MJf7EqvBqSS+j
+	t3iOTQogLaOPK+XifnDYMLXho2qTGNZ4ju+OLN0NefIY7eHevuPn/Ujn9ddQXeBjMATSSZiKt1T
+	fE6Il/CC/reL+mOt8DUNmXIsrkUqJlyK+afACvOVKTE5q7lhVBXj4Ng4wrS8F80enRerntqeaI0
+	xcKYmNVyxmfmSUELKau9eb52nls4dg9oqr7Pg/VnTjJXRmcJK2fJ7qxI7Ix1/uOp5eP4DmiqG3z
+	aX4mZQD8PKTlySUcHxHzjdOMIq5VWYT3mqjYHozEgMc8EA1L3oAja9eWIdg0DyKwRedcLpBFOuS
+	tgw9qxiHdy/YoaZDhMTHezG18qDpGtUJkDXWOuFfsYu3dAlDSsV1ZRpJjmTzZtJS19+F5djtmUL
+	GMZqjVMEQZLGqqQPD30HfSRR3BVdxydFsdAG9qUjyWtGoaNLEOK+FneQO1di7FOaR9xra9M0MWR
+	amNAQUfnmUug/7hEMmjnix33X5fB4RAHcoeyCXLA
+X-Received: by 2002:a05:600c:1f95:b0:49e:7862:c09e with SMTP id 5b1f17b1804b1-49fc57238b8mr181860835e9.14.1790079905892;
+        Tue, 22 Sep 2026 05:25:05 -0700 (PDT)
 Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488627937b5sm4088822f8f.30.2026.09.22.05.16.53
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdad40b4dsm48644925e9.10.2026.09.22.05.25.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Sep 2026 05:16:54 -0700 (PDT)
-Message-ID: <0f8f5dd7-06b6-4145-8b85-ed62504e2d4f@suse.com>
-Date: Tue, 22 Sep 2026 14:16:53 +0200
+        Tue, 22 Sep 2026 05:25:05 -0700 (PDT)
+Message-ID: <d7bdb421-4c65-4133-95fa-ecf3ea2b7374@suse.com>
+Date: Tue, 22 Sep 2026 14:25:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -71,68 +71,55 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] rust: module_param: Fix potentially incorrect access
- of `SetOnce<T>`
-To: Priya Bala Govindasamy <pgovind2@uci.edu>
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
- ojeda@kernel.org, atomlin@atomlin.com, boqun@kernel.org, gary@garyguo.net,
- bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
- aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org,
- daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com,
- work@onurozkan.dev, linux-modules@vger.kernel.org,
- rust-for-linux@vger.kernel.org, ardalan@uci.edu, zhiyunq@cs.ucr.edu,
- dzueck@uci.edu
-References: <cover.1789426258.git.pgovind2@uci.edu>
- <e65203759411aeca4805e3f619f3dd20839dba35.1789426258.git.pgovind2@uci.edu>
+Subject: Re: [PATCH 0/6] Remove the error-injection.h include from
+ linux/module.h
+To: Jens Axboe <axboe@kernel.dk>, Jakub Kicinski <kuba@kernel.org>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Jani Nikula <jani.nikula@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Tvrtko Ursulin <tursulin@ursulin.net>,
+ Matthew Brost <matthew.brost@intel.com>,
+ =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>
+Cc: Simon Horman <horms@kernel.org>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Francois Dugast
+ <francois.dugast@intel.com>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, linux-block@vger.kernel.org,
+ netdev@vger.kernel.org, linux-api@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260911-module-include-error_injection-v1-0-5da895d8c84d@suse.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <e65203759411aeca4805e3f619f3dd20839dba35.1789426258.git.pgovind2@uci.edu>
+In-Reply-To: <20260911-module-include-error_injection-v1-0-5da895d8c84d@suse.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/17/26 7:43 PM, Priya Bala Govindasamy wrote:
-> The `set_param` function casts `kernel_param.arg` to `*const SetOnce<T>`
-> But the Rust module macro in rust/macros/module.rs initializes `arg` with
-> `#param_name.as_void_ptr()`, and `#param_name` is a `ModuleParamAccess<T>`,
-> not a `SetOnce<T>`.
+On 9/11/26 5:04 PM, Petr Pavlu wrote:
+> linux/module.h appears in roughly 15k #include directives across the
+> kernel. This makes it a "hot" header, so it should avoid pulling in
+> unnecessary definitions.
 > 
-> ModuleParamAccess<T> has default Rust layout but `set_param` accesses its
-> first field SetOnce<T> assuming it to be at offset 0. This is not
-> guaranteed by Rust and could cause type confusion leading to data
-> corruption.
+> The header currently includes linux/error-injection.h to obtain the
+> definition of `struct error_injection_entry`. However, this is unnecessary
+> because the type is only referenced in the file as a pointer, for which an
+> incomplete type is sufficient.
 > 
-> Fix this by casting `kernel_param.arg` to `ModuleParamAccess<T>` and
-> then accessing the `value: SetOnce<T>` field.
+> Add explicit includes of linux/error-injection.h to files that use the
+> ALLOW_ERROR_INJECTION() macro and currently rely on it being provided
+> indirectly via linux/module.h. Then remove the linux/error-injection.h
+> include from linux/module.h.
 > 
-> Fixes: 0b08fc292842 ("rust: introduce module_param module")
-> Reported-by: Dylan Zueck <dzueck@uci.edu>
-> Assisted-by: LLM
-> Signed-off-by: Priya Bala Govindasamy <pgovind2@uci.edu>
-> ---
->  rust/kernel/module_param.rs | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-> index f9a14765a926..7ae87ffe1d6b 100644
-> --- a/rust/kernel/module_param.rs
-> +++ b/rust/kernel/module_param.rs
-> @@ -75,7 +75,9 @@ pub trait ModuleParam: Sized + Copy {
->          let new_value = T::try_from_param_arg(arg)?;
->  
->          // SAFETY: By function safety requirements, this access is safe.
-> -        let container = unsafe { &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<T>>()) };
-> +        let param_access = unsafe { &*((*param)
-> +            .__bindgen_anon_1.arg.cast::<ModuleParamAccess<T>>()) };
-> +        let container = &param_access.value;
->  
->          container
->              .populate(new_value)
+> The first five patches can go through their respective trees if preferred.
+> The final patch depends on the preceding cleanups.
 
-This looks ok to me, except for the formatting. I plan to take it on the
-modules tree, after giving others a bit more time to potentially
-comment.
-
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+Thanks for the Reviewed-by and Acked-by tags so far. They cover the
+majority of the changes, so I plan to pick up this series on
+modules-next at the end of the week. Acked-by tags from the relevant
+maintainers on the remaining patches are still appreciated.
 
 -- 
 Thanks,
