@@ -1,79 +1,112 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C2F442FAA
-	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 13:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C085172DA
+	for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 13:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790082571; cv=none; b=onuU+LWT2MSGWUEmkJ/xnEnt/mBbjHXj3LPu4YZ+OgwNPdqocnq+DrOcrbvUR//zhj3WVx08MEaqLdub/+a+Y0qZqEM4YVlz6Fgfc1PpKgUYdzdOOximyBa7hs1DeCVdphYKrwi6c1Sz3mUAkhlQg4xlkdYAwWyEn1d4guMmS70=
+	t=1790084023; cv=none; b=tzjgC72yuyS4t2OPijs0+Kw+wv0gAt3H//kOo9DrAmfzm61AAyV1r+gsRnrb2WrAXYbLr1LNcba9XbdtunpUlZKe8OTdQzXUmfkNu+EipY/we1Abl9aEYu5BmnBUhE1UWi3/XgP8BbKVZx6YDMUV2wvyRuq31afFqBqfePBfXqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790082571; c=relaxed/simple;
-	bh=mxFdb9DhEoxvID3PHdOx9RZd/MFmjB45cayVkb6tYUc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=q+PAR2J0oWMchiocOFUzimOJK5I3J4pfOtvfZag3QBGVEsid7pydeX7XEBe7IDy1gVu2oTvSdvaNpprIMnIa9RBs7n2Gk91Sj2PqHi0uCe3j7ZXF2yz+CD0tCA5r42fC3T8H+jWj5CD5d69HHN1+crCqs9E2mVPJrN11HYjFyps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OU04iyCd; arc=none smtp.client-ip=74.125.225.76
+	s=arc-20240116; t=1790084023; c=relaxed/simple;
+	bh=Ql6MI6/k6ufAB79dkpGcNbDfwC1zD5p7MkWUMqW4dV4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KcaIkpfU0nw5IXctgMcU8+/MqsloaK0knGcV2ORIbjqntgfe/T28gnQVHXs0LXPYxHOn6DMnMKcIBJPF+0EYxUwWhhKhErVvHg26UQKir/AhGzQ/AfBw3MgA9ILPBjFS8rRh+Z3wg4kkZ/Af356QXc4RDrpWIpe1CRaf9zChvL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Rv4mdAPE; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OU04iyCd"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-485933b24c3so2264654f8f.0
-        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 06:09:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Rv4mdAPE"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d8239so29697255e9.0
+        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 06:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790082567; x=1790687367; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1790084018; x=1790688818; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:message-id:date
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YBWc941sAI+gZg6+h/vlg5P6+DffOCdBEo9RcnEXIgA=;
-        b=OU04iyCdTmkWFMqsQkGmrxQ8WcGVBaD9s7WVxz6maxmhJL9HJAfE1ohlYhbWT3+q3M
-         QvdCUalDsRevwVP6y/qFKh8bDxJwvB74qSZEnZKPRUrQ5InUR+aAYT+y3Pfv39F5pIs+
-         tXKzIwQn+vbZpdDO7xjJXu2zJkl7cyCPOBBrokJeeByyV2JNZbRHrUIFriNJvKVr8fHH
-         v5yDMdt4YwOCe7+G7Zjyw95PhH2ov6KLsMsMMj87bqrb9cC9+G7p5kWPoMX8978Hqgcr
-         US2icvp/1ZK7h1vsF/lNrQEF/wpYrOV7iVr2M3sUIg5xerflIPaUfU8cTJjTs8wCXOXU
-         vC7g==
+        bh=C2Z6J0Xb+XGgk1d/nTkGyflldNnpf7sHk7JSW+3DTk4=;
+        b=Rv4mdAPEO5fg2ZdjGtP0PRYwVoxOc0kpCvXOJOdO6EPSN6IyE/d4o1B6o4qzslE+fS
+         /suZDMGT4yD1u3Co0ADkQyXK56wmcqCJpxNjGOFF6qGiY1ruo3jrEbRN8VXtGViQsu8u
+         AN44BzE0Jn4YzfR9jYawqS6EkwQUkuuBsLwl6XUk1oNf2IKlk2KtXR/JrTtEOmN/x7Iz
+         M84ps9UwBNc5dzxa+/gTa4lTps+GIhRLdpKhuuflm1ACdo5n0zG0/lSbJT+moIJTO4Jf
+         CgZ5w03MjknxS1biJoOFcxlsisvHNwG3HX9nvlBxszTs8/EMxvnRb9s4EmXhfpvu0TPR
+         HGgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790082567; x=1790687367;
+        d=1e100.net; s=20260707; t=1790084018; x=1790688818;
         h=content-transfer-encoding:content-type:mime-version:message-id:date
          :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=YBWc941sAI+gZg6+h/vlg5P6+DffOCdBEo9RcnEXIgA=;
-        b=YoBZavyEh1KTxf/4D2aRzu3PZLjyqya9scTheVKuRlTtpeRKl+EWCyPr+rw7uDDSi+
-         PcDI2wMQZEpcZ4wUk7f5crERu9y0hwpXX9EGp9VHx6NC20aa6ucF0AXpANO5NdHOcbwc
-         4drv4jN+UiiGQqpKz9nRsfyP1X53IxLKhYn9uUBzKP+HQhdtGSjnTW29jwhtWfUyrzhj
-         TU9ixchhC6CU9TiSJa5PScyjSc8+FhvqCVDRAlRh4pfedD6IbkId5YhRVdTMGbTP0e8f
-         +FmguVDP4lexw4/srkwZC6rsKjaLdPWiri8ub1Vzi8sav5hzoS+w0fTz0rk/+HCSbBYL
-         7TSA==
-X-Forwarded-Encrypted: i=1; AKwUvBz24JMot2QevO3c4+Or7I7GnvNJEiKz0u+GScH8plRRCxDxVsdiHru4+NJCTRKDQfsuS/lYcz5KZxhGhCYS@vger.kernel.org
-X-Gm-Message-State: AFuF++kCu61UifresPh/TI8j+XyIfkCjhbZwHAuwAEl84fHghBpGoGrG
-	c4EqIitP48NEohahzMnRCN93Tizdv0D3X1Wund7gC/hHhsxjZ9QAg6gr8WfZDSMyCPEZmOrmKSu
-	Z/jpnqdd8BQ==
-X-Gm-Gg: AYBFou327krhGYLM+rGeHzZ583OaxJ+DuQinYQhKzjrRNqo9P4mKNerNSK81NmLFCsE
-	TCKN7ky/DTmBNouSJG1l4LL9hnpcWv3vSg3TCIKb4ej7fSILFOHX6jXv9QqFw0B9yoQRng+9z1u
-	8jgUJm+6psKmzeljPr+hdOIK+NeJL3PrG9cAFU23N4cQ5hnJI3GRsMVc8dewafmfLf7ir4jUwiI
-	SQgNQlfiI1UeCynOEuw57wBM0W7Nf5Sz38o/QeE34zypgHu6w81SwNt37c6f/7HvEdq5ReDpCvU
-	4hitN2gNJ2F8f2QUrq69xcBoK0UBY4VXij+B9I6FcNtHa5vBfEU/QRldtdnOScO9isDdxNhXEqZ
-	KzyvsUR+37Dpx9BG6AGrSiLyB0+s6QpEyVhb6Sflqua0WRtdTmlGYk1+cEp9pm+znrC8tjhsihT
-	fuGZXX4xhXYqbYu6ho88GrqDjl/gBzUjbkX4UTy8rW71sQ5ugsxLphCK4/PnyXyMAoiX0R+NjE4
-	9AlDf1z1WFDmvczxNuZxzwG6GIjB/OVMzHOoTRD7o13b4G2+/41TAVqYna66M3cFw9NBok=
-X-Received: by 2002:a05:600c:310d:b0:49d:15b9:2a2a with SMTP id 5b1f17b1804b1-49fc5721b9dmr210051475e9.10.1790082566983;
-        Tue, 22 Sep 2026 06:09:26 -0700 (PDT)
+        bh=C2Z6J0Xb+XGgk1d/nTkGyflldNnpf7sHk7JSW+3DTk4=;
+        b=eak1qJcmLEreE6Nke/6GBDuy7Qn6Wz1fgeYDHx5RQFfXkV7m8BNPS65HaPbTjPUaE9
+         toDbaF/YpQJZ4yaU96cLrBS3QqizW7R9DWjyFZToM+kV/72r0IeMxnxWeszJXf1hBGL8
+         9QHnIP1b5JazlgZnZ0Zb/v7//85xxFpHWkf3CG2BxQe0Pfo0V4g/SM4Jfmy4QSswt/Zf
+         mmW4iO50ZpC9Won+QN8SNLj84w8TarnAPDqZpZ1S7BPEgkc5vCaJdJrqkLmbQzNnfFXN
+         LDGf8MVaWsHvuKA2UOM31RidHiU3xPfV3XaNgWOfIveZOAaRzj0b0li8ZJHGLR5Iop2d
+         KeJw==
+X-Forwarded-Encrypted: i=1; AKwUvBx67gnMa8PwtG0EK8Hvu0e1KS7z9sAT3RUVkMTMKG86nHuXYTTcXsE6euwiYCwuBfg976iPARRqevL19OW4@vger.kernel.org
+X-Gm-Message-State: AFuF++k9KOq9Dl2dmxA7QDXoFvAPhAIZlzA63FUhdvU5eFtcrUSNwHFr
+	qglk9TLAu6TnX+TT6ArMVGKIOuyJjBwtqHuKRRRfz7pJ8QVIWr1cDZ3afBIa0u6v5cs=
+X-Gm-Gg: AYBFou2dM7fNgMHrD4SvzMLyumCIpK+Bj3EGbZP6zbk0SarHQhiGhQ7ZsjdcDCGBgW7
+	qV8k/xnGYYR2Yx8+io+SxxZ6cTFSTDElSpc0CmKZ1rwFMEyvS35B36WWOBPkoJ9gXi/rC8RkhP6
+	VoOGaq1wcadD0/8+ufgbHXCJf0SI9GUA2gKVefMKhrpuSLWJ7K1VZRxjV6RvhRvrPrGb3UgYQ2X
+	NscQgXGMpRuT8JNX4a8wQugxobeJLTsyU5u7Sysw+uxrUUIY+RBvjUGhqzFp4LkoMebmYO2tFqz
+	ZTPcXg/pcwqpDeHmLqfg7rX9JogyQ2UQXSiymNCYj1C4ylBS9Ut3DTSdQq7ZeXPPRqWdLOTpuW/
+	iubx9fpPOGF2zbs+YchmNQQlC5NO7jNPGUL+mhBhZXiXNh8hF11hgW6O4n5acR21Qgslb/fk6h3
+	fJXARkhbhcTdcuSg1v7N0QwK4LQC9ju8AHGcTPtjASdf+h/S68zjeOyHrOeZuwJhHglJmYe4jRd
+	AYoE4l4P5BEH8C5PcoD+2hMxUApnFMjB6TICGwY7KMdKSXO2g5wztwEkCuXXE9yx3s+JzI=
+X-Received: by 2002:a05:600c:a085:b0:49d:25b0:cc60 with SMTP id 5b1f17b1804b1-49fc5747f7bmr216383615e9.29.1790084018052;
+        Tue, 22 Sep 2026 06:33:38 -0700 (PDT)
 Received: from zovi.suse.cz (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdab3070asm25001075e9.4.2026.09.22.06.09.26
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdace76e8sm70243845e9.1.2026.09.22.06.33.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 06:09:26 -0700 (PDT)
+        Tue, 22 Sep 2026 06:33:37 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Chris Snook <chris.snook@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Duncan Sands <duncan.sands@free.fr>,
+	Chas Williams <3chas3@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
-	John Fastabend <john.fastabend@gmail.com>,
+	Aaron Tomlin <atomlin@atomlin.com>
+Cc: linux-watchdog@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
 	linux-modules@vger.kernel.org,
-	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] module: Add stubs.c for CONFIG_MODULES=n module_put_and_kthread_exit()
-Date: Tue, 22 Sep 2026 15:08:17 +0200
-Message-ID: <20260922-module-stubs-v1-1-abe465a24879@suse.com>
+Subject: [PATCH 0/3] Remove obsolete __MODULE_STRING()
+Date: Tue, 22 Sep 2026 15:32:20 +0200
+Message-ID: <20260922-module-string-v1-0-c18766690185@suse.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -82,160 +115,177 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20260918-module-stubs-dccefe41dace
+X-Change-ID: 20260919-module-string-d64816f203d9
 Content-Transfer-Encoding: 8bit
 
-Module-related stubs for CONFIG_MODULES=n can normally live in
-linux/module.h. This works well when the stub does nothing or simply
-returns a constant. However, some non-module implementations may be more
-expensive, either because they have a real implementation or because they
-require additional dependencies to be pulled into linux/module.h. This
-header appears in roughly 15k #include directives across the kernel, so it
-should avoid bringing in unnecessary definitions.
+__MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+MODULE_PARM support for older modules" [1] in 2002-12. That change also
+moved it to the graveyard section at the end of linux/module.h
 
-Specifically, linux/module.h defines module_put_and_kthread_exit() as an
-alias for kthread_exit() when CONFIG_MODULES=n. That in turn requires
-linux/kthread.h, even though linux/module.h otherwise has no need for it.
-Note that linux/module.h currently doesn't include linux/kthread.h and
-requires its users to pick it up through other paths, which is itself not
-quite right.
+Replace the remaining uses of __MODULE_STRING() with __stringify() and
+remove the macro.
 
-Introduce kernel/module/stubs.c to hold such stubs, built only for
-CONFIG_MODULES=n. This mirrors kernel/time/posix-stubs.c, which is used for
-CONFIG_POSIX_TIMERS=n.
+Apologies for the wide distribution. Acked-bys are appreciated.
 
-Define module_put_and_kthread_exit() in both CONFIG_MODULES configurations
-to call __module_put_and_kthread_exit() and add a CONFIG_MODULES=n
-implementation of that function to kernel/module/stubs.c. Since
-__module_put_and_kthread_exit() is now implemented even when
-CONFIG_MODULES=n, remove the corresponding '#ifdef CONFIG_MODULES' from the
-noreturn_deny BPF list.
+[1] https://git.kernel.org/tglx/history/c/136839a1b4
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
-kernel/module/stubs.c should also be used for add_taint_module() [1] in the
-future.
+Petr Pavlu (3):
+      watchdog: Replace __MODULE_STRING() with __stringify()
+      drivers: Replace __MODULE_STRING() with __stringify()
+      module: Remove obsolete __MODULE_STRING()
 
-[1] https://lore.kernel.org/linux-modules/a79a6a06-cc48-4036-882d-95e9b4cc01cf@suse.com/
----
- include/linux/module.h |  9 +++------
- kernel/Makefile        |  2 +-
- kernel/bpf/verifier.c  |  2 --
- kernel/module/Makefile |  4 ++++
- kernel/module/main.c   |  1 +
- kernel/module/stubs.c  | 11 +++++++++++
- 6 files changed, 20 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 96cc98568eea..4c7bd7f9f889 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -658,10 +658,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
- /* Search for module by name: must be in a RCU critical section. */
- struct module *find_module(const char *name);
- 
--extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
--			long code);
--#define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
--
- #ifdef CONFIG_MODULE_UNLOAD
- int module_refcount(struct module *mod);
- void __symbol_put(const char *symbol);
-@@ -850,8 +846,6 @@ static inline int unregister_module_notifier(struct notifier_block *nb)
- 	return 0;
- }
- 
--#define module_put_and_kthread_exit(code) kthread_exit(code)
--
- static inline void print_modules(void)
- {
- }
-@@ -879,6 +873,9 @@ static inline void module_for_each_mod(int(*func)(struct module *mod, void *data
- }
- #endif /* CONFIG_MODULES */
- 
-+void __noreturn __module_put_and_kthread_exit(struct module *mod, long code);
-+#define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
-+
- #ifdef CONFIG_SYSFS
- extern struct kset *module_kset;
- extern const struct kobj_type module_ktype;
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 1e1a31673577..08a94594975d 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -58,7 +58,7 @@ obj-y += liveupdate/
- obj-y += dma/
- obj-y += entry/
- obj-y += unwind/
--obj-$(CONFIG_MODULES) += module/
-+obj-y += module/
- 
- obj-$(CONFIG_KCMP) += kcmp.o
- obj-$(CONFIG_FREEZER) += freezer.o
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 72a3f5998dd2..be70f10e4968 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20417,9 +20417,7 @@ BTF_ID(func, __ia32_sys_exit_group)
- BTF_ID(func, __kunit_abort)
- BTF_ID(func, kunit_try_catch_throw)
- #endif
--#ifdef CONFIG_MODULES
- BTF_ID(func, __module_put_and_kthread_exit)
--#endif
- #ifdef CONFIG_X86_64
- BTF_ID(func, __x64_sys_exit)
- BTF_ID(func, __x64_sys_exit_group)
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 50ffcc413b54..72fd2972eacf 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -7,6 +7,7 @@
- # and produce insane amounts of uninteresting coverage.
- KCOV_INSTRUMENT_main.o := n
- 
-+ifeq ($(CONFIG_MODULES),y)
- obj-y += main.o
- obj-y += strict_rwx.o
- obj-y += kmod.o
-@@ -23,3 +24,6 @@ obj-$(CONFIG_KGDB_KDB) += kdb.o
- obj-$(CONFIG_MODVERSIONS) += version.o
- obj-$(CONFIG_MODULE_UNLOAD_TAINT_TRACKING) += tracking.o
- obj-$(CONFIG_MODULE_STATS) += stats.o
-+else
-+obj-y += stubs.o
-+endif
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d0e1e0bd2ad0..a8bf803afa81 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -60,6 +60,7 @@
- #include <linux/codetag.h>
- #include <linux/debugfs.h>
- #include <linux/execmem.h>
-+#include <linux/kthread.h>
- #include <uapi/linux/module.h>
- #include "internal.h"
- 
-diff --git a/kernel/module/stubs.c b/kernel/module/stubs.c
-new file mode 100644
-index 000000000000..81e66c02260c
---- /dev/null
-+++ b/kernel/module/stubs.c
-@@ -0,0 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <linux/kthread.h>
-+#include <linux/module.h>
-+#include "internal.h"
-+
-+void __noreturn __module_put_and_kthread_exit(struct module *mod, long code)
-+{
-+	kthread_exit(code);
-+}
-+EXPORT_SYMBOL(__module_put_and_kthread_exit);
-
+ drivers/comedi/comedi_fops.c                          |  5 +++--
+ drivers/gpu/drm/drm_fb_helper.c                       |  3 ++-
+ drivers/hwmon/fschmd.c                                |  3 ++-
+ drivers/hwmon/nct7904.c                               |  5 +++--
+ drivers/hwmon/sch56xx-common.c                        |  3 ++-
+ drivers/hwmon/w83793.c                                |  5 +++--
+ drivers/i2c/busses/i2c-kempld.c                       |  3 ++-
+ drivers/net/ethernet/atheros/atl1e/atl1e_param.c      |  9 +++++----
+ drivers/net/ethernet/atheros/atlx/atl1.c              |  3 ++-
+ drivers/net/ethernet/atheros/atlx/atl2.c              | 11 ++++++-----
+ drivers/net/ethernet/intel/e1000/e1000_param.c        | 15 ++++++++-------
+ drivers/net/ethernet/intel/e1000e/param.c             | 16 ++++++----------
+ drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_param.c |  7 ++++---
+ drivers/platform/cznic/turris-omnia-mcu-watchdog.c    |  3 ++-
+ drivers/rtc/rtc-ds1374.c                              |  3 ++-
+ drivers/thunderbolt/tb.c                              |  3 ++-
+ drivers/thunderbolt/tunnel.c                          |  5 +++--
+ drivers/tty/serial/8250/8250_platform.c               |  3 ++-
+ drivers/usb/atm/speedtch.c                            | 15 ++++++++-------
+ drivers/usb/atm/usbatm.c                              | 17 +++++++++--------
+ drivers/watchdog/acquirewdt.c                         |  3 ++-
+ drivers/watchdog/advantech_ec_wdt.c                   |  3 ++-
+ drivers/watchdog/advantechwdt.c                       |  5 +++--
+ drivers/watchdog/airoha_wdt.c                         |  5 +++--
+ drivers/watchdog/alim1535_wdt.c                       |  5 +++--
+ drivers/watchdog/alim7101_wdt.c                       |  5 +++--
+ drivers/watchdog/arm_smc_wdt.c                        |  3 ++-
+ drivers/watchdog/armada_37xx_wdt.c                    |  3 ++-
+ drivers/watchdog/aspeed_wdt.c                         |  3 ++-
+ drivers/watchdog/at91rm9200_wdt.c                     |  5 +++--
+ drivers/watchdog/at91sam9_wdt.c                       |  5 +++--
+ drivers/watchdog/atcwdt200_wdt.c                      |  5 +++--
+ drivers/watchdog/ath79_wdt.c                          |  5 +++--
+ drivers/watchdog/bcm2835_wdt.c                        |  3 ++-
+ drivers/watchdog/bcm47xx_wdt.c                        |  5 +++--
+ drivers/watchdog/bcm7038_wdt.c                        |  3 ++-
+ drivers/watchdog/booke_wdt.c                          |  3 ++-
+ drivers/watchdog/cadence_wdt.c                        |  5 +++--
+ drivers/watchdog/cgbc_wdt.c                           |  7 ++++---
+ drivers/watchdog/da9052_wdt.c                         |  5 +++--
+ drivers/watchdog/da9055_wdt.c                         |  3 ++-
+ drivers/watchdog/davinci_wdt.c                        |  5 +++--
+ drivers/watchdog/db8500_wdt.c                         |  5 +++--
+ drivers/watchdog/dw_wdt.c                             |  3 ++-
+ drivers/watchdog/ebc-c384_wdt.c                       |  5 +++--
+ drivers/watchdog/eurotechwdt.c                        |  3 ++-
+ drivers/watchdog/exar_wdt.c                           |  5 +++--
+ drivers/watchdog/f71808e_wdt.c                        |  9 +++++----
+ drivers/watchdog/gef_wdt.c                            |  3 ++-
+ drivers/watchdog/geodewdt.c                           |  5 +++--
+ drivers/watchdog/gpio_wdt.c                           |  3 ++-
+ drivers/watchdog/hpwdt.c                              |  3 ++-
+ drivers/watchdog/i6300esb.c                           |  9 +++++----
+ drivers/watchdog/iTCO_wdt.c                           |  5 +++--
+ drivers/watchdog/ib700wdt.c                           |  5 +++--
+ drivers/watchdog/ibmasr.c                             |  3 ++-
+ drivers/watchdog/ie6xx_wdt.c                          |  5 +++--
+ drivers/watchdog/imgpdc_wdt.c                         |  5 +++--
+ drivers/watchdog/imx2_wdt.c                           |  5 +++--
+ drivers/watchdog/imx7ulp_wdt.c                        |  3 ++-
+ drivers/watchdog/imx_sc_wdt.c                         |  3 ++-
+ drivers/watchdog/indydog.c                            |  3 ++-
+ drivers/watchdog/intel_oc_wdt.c                       |  5 +++--
+ drivers/watchdog/it87_wdt.c                           |  7 ++++---
+ drivers/watchdog/jz4740_wdt.c                         |  7 ++++---
+ drivers/watchdog/keembay_wdt.c                        |  5 +++--
+ drivers/watchdog/kempld_wdt.c                         |  7 ++++---
+ drivers/watchdog/lenovo_se10_wdt.c                    |  5 +++--
+ drivers/watchdog/lenovo_se30_wdt.c                    |  5 +++--
+ drivers/watchdog/lenovo_se30g2_se60_wdt.c             |  5 +++--
+ drivers/watchdog/loongson1_wdt.c                      |  5 +++--
+ drivers/watchdog/lpc18xx_wdt.c                        |  5 +++--
+ drivers/watchdog/ma35d1_wdt.c                         |  3 ++-
+ drivers/watchdog/max63xx_wdt.c                        |  7 ++++---
+ drivers/watchdog/max77620_wdt.c                       |  3 ++-
+ drivers/watchdog/mena21_wdt.c                         |  3 ++-
+ drivers/watchdog/menf21bmc_wdt.c                      |  3 ++-
+ drivers/watchdog/menz69_wdt.c                         |  3 ++-
+ drivers/watchdog/meson_gxbb_wdt.c                     |  5 +++--
+ drivers/watchdog/meson_wdt.c                          |  3 ++-
+ drivers/watchdog/mixcomwd.c                           |  3 ++-
+ drivers/watchdog/mpc8xxx_wdt.c                        |  5 +++--
+ drivers/watchdog/mt7621_wdt.c                         |  3 ++-
+ drivers/watchdog/mtk_wdt.c                            |  3 ++-
+ drivers/watchdog/nct6694_wdt.c                        |  3 ++-
+ drivers/watchdog/ni903x_wdt.c                         |  5 +++--
+ drivers/watchdog/nic7018_wdt.c                        |  5 +++--
+ drivers/watchdog/nv_tco.c                             |  5 +++--
+ drivers/watchdog/octeon-wdt-main.c                    |  5 +++--
+ drivers/watchdog/omap_wdt.c                           |  3 ++-
+ drivers/watchdog/orion_wdt.c                          |  3 ++-
+ drivers/watchdog/pc87413_wdt.c                        |  7 ++++---
+ drivers/watchdog/pcwd.c                               |  5 +++--
+ drivers/watchdog/pcwd_pci.c                           |  5 +++--
+ drivers/watchdog/pcwd_usb.c                           |  5 +++--
+ drivers/watchdog/pika_wdt.c                           |  5 +++--
+ drivers/watchdog/pnx4008_wdt.c                        |  5 +++--
+ drivers/watchdog/pseries-wdt.c                        |  7 ++++---
+ drivers/watchdog/rc32434_wdt.c                        |  5 +++--
+ drivers/watchdog/renesas_wdt.c                        |  3 ++-
+ drivers/watchdog/rn5t618_wdt.c                        |  3 ++-
+ drivers/watchdog/rt2880_wdt.c                         |  3 ++-
+ drivers/watchdog/rti_wdt.c                            |  5 +++--
+ drivers/watchdog/rzg2l_wdt.c                          |  3 ++-
+ drivers/watchdog/rzv2h_wdt.c                          |  3 ++-
+ drivers/watchdog/s32g_wdt.c                           |  5 +++--
+ drivers/watchdog/s3c2410_wdt.c                        |  7 ++++---
+ drivers/watchdog/sama5d4_wdt.c                        |  5 +++--
+ drivers/watchdog/sbc60xxwdt.c                         |  5 +++--
+ drivers/watchdog/sbc7240_wdt.c                        |  5 +++--
+ drivers/watchdog/sbc8360.c                            |  3 ++-
+ drivers/watchdog/sbc_epx_c3.c                         |  3 ++-
+ drivers/watchdog/sbsa_gwdt.c                          |  5 +++--
+ drivers/watchdog/sc1200wdt.c                          |  3 ++-
+ drivers/watchdog/sch311x_wdt.c                        |  5 +++--
+ drivers/watchdog/shwdt.c                              |  7 ++++---
+ drivers/watchdog/simatic-ipc-wdt.c                    |  3 ++-
+ drivers/watchdog/sl28cpld_wdt.c                       |  3 ++-
+ drivers/watchdog/smsc37b787_wdt.c                     |  3 ++-
+ drivers/watchdog/softdog.c                            |  5 +++--
+ drivers/watchdog/sp5100_tco.c                         |  7 ++++---
+ drivers/watchdog/starfive-wdt.c                       |  7 ++++---
+ drivers/watchdog/stmp3xxx_rtc_wdt.c                   |  5 +++--
+ drivers/watchdog/stpmic1_wdt.c                        |  3 ++-
+ drivers/watchdog/sun4v_wdt.c                          |  5 +++--
+ drivers/watchdog/sunplus_wdt.c                        |  3 ++-
+ drivers/watchdog/sunxi_wdt.c                          |  3 ++-
+ drivers/watchdog/tegra_wdt.c                          |  5 +++--
+ drivers/watchdog/tqmx86_wdt.c                         |  3 ++-
+ drivers/watchdog/ts4800_wdt.c                         |  3 ++-
+ drivers/watchdog/twl4030_wdt.c                        |  3 ++-
+ drivers/watchdog/txx9wdt.c                            |  7 ++++---
+ drivers/watchdog/uniphier_wdt.c                       |  5 +++--
+ drivers/watchdog/via_wdt.c                            |  5 +++--
+ drivers/watchdog/visconti_wdt.c                       |  3 ++-
+ drivers/watchdog/w83627hf_wdt.c                       |  5 +++--
+ drivers/watchdog/w83877f_wdt.c                        |  5 +++--
+ drivers/watchdog/w83977f_wdt.c                        |  5 +++--
+ drivers/watchdog/wafer5823wdt.c                       |  5 +++--
+ drivers/watchdog/watchdog_dev.c                       |  5 +++--
+ drivers/watchdog/wdat_wdt.c                           |  5 +++--
+ drivers/watchdog/wdt.c                                |  5 +++--
+ drivers/watchdog/wdt977.c                             |  5 +++--
+ drivers/watchdog/wdt_pci.c                            |  5 +++--
+ drivers/watchdog/wm831x_wdt.c                         |  3 ++-
+ drivers/watchdog/wm8350_wdt.c                         |  3 ++-
+ drivers/watchdog/xen_wdt.c                            |  5 +++--
+ drivers/watchdog/xilinx_wwdt.c                        |  5 +++--
+ drivers/watchdog/ziirave_wdt.c                        |  3 ++-
+ include/linux/module.h                                |  4 ----
+ 150 files changed, 428 insertions(+), 288 deletions(-)
 ---
 base-commit: 93f51579e7df248780214094418f205253383cc5
-change-id: 20260918-module-stubs-dccefe41dace
+change-id: 20260919-module-string-d64816f203d9
