@@ -1,184 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4589C439340;
-	Wed, 23 Sep 2026 09:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C4D2E229F;
+	Wed, 23 Sep 2026 09:46:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790155940; cv=none; b=KREUtRkA3b4aDJDKSuiuPI/8myn4ZdPjEPcpTGr6s36kyyuOCCqM7/RXyx/HpnycHG1jerNC5/BZy2YjPoeuFcglN38hzkDd4qBwLQhNbgxXlkqJCc8acgCze6q/FUmoyPC3yW1MIRFS0X6kwLnGLThhBzjPAO15cmkyXQ//36Q=
+	t=1790156775; cv=none; b=ufy6oV+AlzpdJr6oExqIYAU4evtCkUTudr4HmGA6lvpaY9OwB0eu9ob5uMWaIvWuYcxGvnkYjvLZFB+r1XPKyLI1K9nGdL6CzAK5UTycdGcxO+mwdbGrHaeHz7fWocqTaNrnLup0FC6KWW/5mDZVzYPx56x6v4HdEEF6o44c/dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790155940; c=relaxed/simple;
-	bh=XECchcwy6WjKG99wcXn6E/WpZJTYWLBwpuJb8u5vjQI=;
+	s=arc-20240116; t=1790156775; c=relaxed/simple;
+	bh=PMVYgZO8cP6y5ckMpLn+PFVGTgT8mBDdbyL2LKP5ON4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t3hsRBLjVinwGDnynHcYEITc7/FHmzvE9FIYoXzT+GQ6teeMwq7iWslurt9+jVTCD8WdAWdhR1pwwHR+5Z7DjZdelBueFAqxOpsxrtkO3mjaa9VuzBu+MYulssVi1ApEOE8Wks1Fv+HbueiW2FXbfDCye6Gi++3oIG15Qgu4GXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZXKb5Klq; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=tAjIfh8a1HxTLBj5q1eqsP3ejsTNnGrkBzMWrKidFEAQXJcsy52lCfd4excAMKRtDYv6PlY3knRUipLtan5hNOKpFXURG2SWgdyAvA7nkuBWwYheX0Ngp1oMsYXivL3g+3o4M8o2GyVqXarefsyK32n2E6MFkhzqb/JHwgq9pIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=M/D1iPoF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZXKb5Klq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3BE1F00893;
-	Wed, 23 Sep 2026 09:32:18 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="M/D1iPoF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D0A1F000FF;
+	Wed, 23 Sep 2026 09:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1790155939;
-	bh=QQBKEqJ2+JI0vz7P4rY5Fvd5mWr3I5LswTIfs2maAzU=;
+	s=korg; t=1790156773;
+	bh=T6Qi8YPK1RXqDrx7q/dk8raUpjNTcrjbKdaAJ9D+O7U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZXKb5Klqlx2H0rFKbT554b6ih7cReXnC3p/VYJ4hTpAckzJNawQoZxSaBBgubctIf
-	 3dr66M2PGYnCeb8JTuMkcOF6KpQASN0v9kMLPuVgE7gQyc/hR6/CM1d6C10+tF+f6e
-	 tLMMpz4XbV5b0mJphgSIIFOb21wQiou44yXcFJi8=
-Date: Wed, 23 Sep 2026 11:27:11 +0200
+	b=M/D1iPoFzrqn2W6mcgJ1LRF5Focn/2Y/OUIg5hYwYiMMSR8CT5ZIZD6NWIRtkXhk3
+	 oujVm9FkeETC48xHPmtDrloCMSOmZ/vL27gXOV2pX36pL3yyN4jfhW6fI28IWXFgQc
+	 0QzjkhcjfBTTo3h+lTK1ooSJmJ+pUx4b6t4Eufug=
+Date: Wed, 23 Sep 2026 11:39:59 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Danilo Krummrich <dakr@kernel.org>,
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Chris Snook <chris.snook@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Duncan Sands <duncan.sands@free.fr>,
+	Chas Williams <3chas3@gmail.com>,
 	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Bradley Morgan <brads@mainlining.org>,
-	Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
-	linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-	Richard Weinberger <richard@nod.at>
-Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
- userspace manually messes with devices and drivers
-Message-ID: <2026092321-province-yearly-44aa@gregkh>
-References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
- <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
- <arIvG0nx4LXG9nlW@monoceros>
- <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
- <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
+	Aaron Tomlin <atomlin@atomlin.com>, linux-watchdog@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] drivers: Replace __MODULE_STRING() with __stringify()
+Message-ID: <2026092352-demote-rewire-6df6@gregkh>
+References: <20260922-module-string-v1-0-c18766690185@suse.com>
+ <20260922-module-string-v1-2-c18766690185@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
+In-Reply-To: <20260922-module-string-v1-2-c18766690185@suse.com>
 
-On Tue, Sep 22, 2026 at 11:04:46PM +0200, Armin Wolf wrote:
-> Am 22.09.26 um 15:40 schrieb David Lechner:
+On Tue, Sep 22, 2026 at 03:32:22PM +0200, Petr Pavlu wrote:
+> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+> MODULE_PARM support for older modules" [1] in 2002-12. That change also
+> moved it to the graveyard section at the end of linux/module.h
 > 
-> > On 9/22/26 2:39 AM, Uwe Kleine-König wrote:
-> > > On Fri, Sep 18, 2026 at 06:39:02PM +0200, Danilo Krummrich wrote:
-> > > > On Mon Sep 14, 2026 at 4:30 PM CEST, Greg Kroah-Hartman wrote:
-> > > > > The ability to add and remove devices from a driver through the sysfs
-> > > > > "bind" and "unbind" files was created all those decades ago as a way
-> > > > > that kernel developers can iterate faster, and provide a debugging way
-> > > > > for users to attempt to add a new device to a driver without having to
-> > > > > rebuild their kernel.
-> > > > > 
-> > > > > This api over the years has been abused and recently come under a major
-> > > > > fuzzing "attack" through tools like syzbot which decided that it would
-> > > > > attempt to just randomly bind any driver to any type of device, causing
-> > > > > loads of unneeded errors and pointless kernel patches to be generated by
-> > > > > unsuspecting new developers.
-> > > > > 
-> > > > > Handle all of this by adding a new taint flag, TAINT_FORCED_BIND, which
-> > > > > will be set on the driver if the bind/unbind sysfs files are ever
-> > > > > written to.  This lets kernel developers "know" that a user is
-> > > > > attempting to do something that is not normal, and as such, if the
-> > > > > kernel breaks they get to keep the shiny pieces laying around on the
-> > > > > floor.
-> > > > > 
-> > > > > The flag is 'Y' which was unused, and can remembered as the user is
-> > > > > "yeeting" the device being operated on here (thrown with force without
-> > > > > regard for the thing being thrown).
-> > > > > 
-> > > > > Note, the taint flag gets set _BEFORE_ the bind/unbind callback happens,
-> > > > > as many times crashes/oops/warnings/failures happen within the callback,
-> > > > > and the taint flag needs to be there to show what was being attempted.
-> > > > > If it were to be set after the callback happens, the oops report would
-> > > > > not properly reflect what foolishness was being attempted.
-> > > > > 
-> > > > > Fuzzing tools like syzbot, that doesn't have hand-crafted rules to keep
-> > > > > the tool from hitting bind/unbind, should be run with panic_on_taint
-> > > > > enabled so that they fall over and don't continue on, thinking that they
-> > > > > actually found a real issue.
-> > > > > 
-> > > > > Userspace operations that rely on the bind/unbind files
-> > > > I agree that this should be avoided.
-> > > > 
-> > > > But I also think the biggest offender really is driver_override. Specifically,
-> > > > on a hot-pluggable bus a driver must be complient with the device driver
-> > > > lifecycle rules and hence shouldn't break on bind/unbind. I think it would be
-> > > > nice to not taint the kernel for such busses, and only taint on driver_override,
-> > > > as I think we'd still want the bug reports for such cases.
-> > > > 
-> > > > But I think this is fine to leave for a follow-up.
-> > > I fully agree. I'm fine and support tainting on driver_override, but
-> > > bind/unbind are used occasionally in my bubble and I consider drivers
-> > > not handling that properly buggy.
+> Replace the remaining uses of __MODULE_STRING() with __stringify() in
+> preparation for its removal.
 > 
-> I fully agree with this, drivers should correctly implement the lifecycle model
-> and not just break when being unbound at a improper time. Drivers suffering from
-> this can easily break this way when unloading the associated kernel module, so this
-> taint is no solution.
+> Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-It's a "solution" in that it tells the developer "hey, the user did
-something odd and unsupported".  rmmod is also not a normal operation,
-there's no requirement that it actually work as it's usually a "best
-effort" type of thing.
-
-> > In the IIO subsystem, unbind/rebind is the de-facto way to reset a wedged
-> > chip.
-> > 
-> > A few examples where other reset methods were reject in favor of unbind/bind:
-> > 
-> > https://lore.kernel.org/linux-iio/20240727160216.2488ed29@jic23-huawei/
-> > 
-> > 	This needs documenting as it's custom ABI. Note that we don't often
-> > 	accept custom ABI. Particularly not a hook that seems to reset the
-> > 	device. If you want to do that, unbind and rebind the whole drive[r]
-> > 	so we are in a known state etc.
-> > 
-> > https://lore.kernel.org/linux-iio/20240720163440.03c713dc@jic23-huawei/
-> > 
-> > 	Firstly as stated below, we don't provide interfaces for this
-> > 	because it's a heavy weight process that is most of the effort of
-> > 	unbinding and rebinding the driver. So if you need to reset, do that.
-> > 
-> > https://lore.kernel.org/linux-iio/20250505200609.54756520@jic23-huawei/
-> > 
-> > 	The solution is to run it once at driver bind. Similar to reset
-> > 	below, if the usecase needs to re do it then unbinding and rebinding
-> > 	the driver reflects the fact we are taking it effectively offline
-> > 	for a while.
-> > 
-> I also consider bind/unbind to be an official API to interact with devices,
-> so i want to use them in the future with the WMI subsystem.
-
-Why?
-
-> AFAIK the underlying reason for this series is that some drivers break when
-> being bound to unsupported devices. However IMHO drivers should verify that
-> they support a given device inside their .probe callback, and the associated
-> bus should only match devices with drivers that explicitly claim support for
-> those devices (ignoring driver_override).
-
-No, drivers should NOT have to do that in their .probe() function,
-that's what we moved away from decades ago!  The match function should
-handle all of that for you, otherwise it's contant duplication
-everywhere that is unneeded.
-
-Please, learn from our history, don't make the same mistakes.
-
-Now I might be convinced that driver_override is the way to go here, but
-it still feels really odd as again, bind/unbind was created as a driver
-debugging option only, it should NOT be a normal operation that any user
-should rely on.  The driver should "just work" properly instead, without
-requiring manual bind work, as that's not a good model at all.
-
-thanks,
-
-greg k-h
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
