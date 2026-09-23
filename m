@@ -1,70 +1,69 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5865867E3
-	for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 22:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4070258B6CA
+	for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 22:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790202922; cv=none; b=Dg60iEAEszoDq+CNg46unntASqBsG+m3PW6roqffps6nmxIWmHbggtu3FIlpjs/o0W5vp/xYN9u4kZh4hXuxMLQUorg6j73+if9+YA9I4g6qalyUpwyN8LEbGUWZyj5n2Av2kAKaXlPy/CiNUkvBusxwE0DYO+gOjiLOnB65EkE=
+	t=1790202925; cv=none; b=HesefioU5T4gBWVJqdTyJPzKGPPWgcYk0j2UTKXchyx7gguMam2H7PQZg1Ph+07gtp4KOmenVF2y8Zz3GmZ37PMpEQuzr57Xdr5ru1WVD5r/KQq5S+JbH/f31CxpjB7Mt83/fWnud0HIHa3jBAY13m8X1INjqDfzBGRflwqRqSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790202922; c=relaxed/simple;
-	bh=I+Xnq26sBTEovU8k68EHi/UbMNiSRxDxIqjGuZzsVq0=;
+	s=arc-20240116; t=1790202925; c=relaxed/simple;
+	bh=zCwr+VGqKnNAOkzayghTBT7W0F9XwKbxJ4/xtvRrwII=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TXPk62oiGfFCmw/beDSXNUvBQgDp13A3ctiuGRC9weo2vjg6UTiTRUucP/N04qog2g6f7kS4Y9kOkfEbuAeOmE+YEgw1x5mcsSb1fxvE7bswkonAiHqBuf4abpb+HPZL6JRt1FkDfvYDT+W7l4qTlaEh0/KlTS+SLlPEh7dbLIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r995jDaH; arc=none smtp.client-ip=74.125.231.76
+	 In-Reply-To:To:Cc; b=Pbs+q5AGsqbyzUPBOvyGviOk/DESNAX0qJ5cheWnIs/FQ6BPDM7U3WfqKjjccUVIegZSHSPu6oAXowkTFajIKYoMQcuDSwidZMUZyGUVISbBO+JAv+869dnAJ/1nV8f5Frckm9M66YY31BUoKkLmkPPKbP3qVXa3R+6WafAOk0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nzja11FM; arc=none smtp.client-ip=74.125.231.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r995jDaH"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466ccbd4773so462589fac.2
-        for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 15:35:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nzja11FM"
+Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4c6d6660191so1001210b6e.2
+        for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 15:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790202918; x=1790807718; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790202920; x=1790807720; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7MkNMRdspTbVvOyjj4mP3KDq+HvnZxjdiab1bd88pGA=;
-        b=r995jDaHfEzaXAsM2LRqHR3FJ8kn5W/Mo3PSQE+p0aP7Ullq0bkeSfG8L7GCPIcB6L
-         J4if6VsAQMxhizhaDSZsOK8F8lCeYPEsFIJHFE6Yve1ag/CJQnrzC0czOviPCAYOnlO/
-         Xn8CNxpQrqqcXj6Rhpj8uXp4jUInc82ZxnK/6GCF0X2JpQgYjTqPuLzkXQFEc5+e/9T4
-         kPqyoyP1JAYPIb+gX4Bmm759COfrPvgtqeogPefmNG+D15mVgve828sOYTn/C5ISsSBw
-         prkJDXEelKqBZLM+FCBc/CAWKJCXEVdsgeUzNYR/4PsmUXBn1UZUdWI7S3wMLgy2prwR
-         ufow==
+        bh=zfwGwbUwBRuvPTUiKX1AIC4L/SKKbUUkwfFbVYVud+k=;
+        b=nzja11FMb/s4BNpfi7CK/AvhmbHstDDYJKUhXQfnGZS8AblwgppnFMuZolhLkW4/DU
+         A6bHAmkIXYx8Ovj8ZO5dU5sCL5+MAzfLwRTYdXKferqxJBzV+5m9WHU2fO/Vh+jbDlmZ
+         LROZ+1eGKV5LA5KfbtSrSEZ4W3Qe+KqxpyRjss0m18AMAXDdd0niqpIle8L9bCU5wIXt
+         fqkWECLtaJ5AZ27aG5OF3W6/mW4FIRG1qFr9H9ldmJBQslzztYHuaj28vtO9rc54A5NY
+         3ZvbUuJcaXNg6tXtzwFxjlECYiuECs5JWG9mr6cmuZ6OAjvRW+rkMc6gjicBDF2vs91i
+         ojOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790202918; x=1790807718;
+        d=1e100.net; s=20260707; t=1790202920; x=1790807720;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7MkNMRdspTbVvOyjj4mP3KDq+HvnZxjdiab1bd88pGA=;
-        b=jeWYZky7IY/w+mQcuLyP9RPJj1cNb9dF9LQxidkZQ9zq718kJpAjR5HqBYWcQVOT8y
-         KDErw9qQqBXZp9VRPFqxaMPfmhp6NlGZ4Rpw1KuhAGzSQbVVgb0yaEoUKPG8OYLr77Wn
-         4YRESgVXeunXiXBPbZTxr8XiSQ8XEpmLEqqTUtG1fg7HpgGt9xXZg/TG2hD9W0a1VIG6
-         XyhXdqBHckbV0/oUT3Eu8qXWJC2WBrMurWwqd5HKbbGoR9sYu4R0asomLge6kYi0Jja6
-         dURHq+J/hT2+ut3mvXUYSUhp7z/j+4G4e8nybJmiQT04pGJ6c2C1gsS+AaTR4Eofv4YF
-         oWqA==
-X-Forwarded-Encrypted: i=1; AKwUvBzJKGkmozeDkzK7pfNQpetoy5HYMGSm17DUwo5uH74G0GlzUZEtYZm2gH3lro89+FP6MsO9UD7Op/RTFmVe@vger.kernel.org
-X-Gm-Message-State: AFuF++liTcDC4+6mdJvAoVIKz3RtJefhYW5RYzrlkmUIgo6fo4JSBdQl
-	OITPfVEVL2QEBs2B3tzewgDPRsyO6TXp+fCZ9XMxq0w01p0tMUM0eOir
-X-Gm-Gg: AYBFou1IK9cvYPjTJOVLfUeZa+wi3iiGzNxNe3TuAdinGwk4DS/QwWflaZvNTiXsszY
-	xVTg+jeZYZeKeNJit4KNNBYrHQFU6Z+3Bhor09HnPM1xYsjtsW9rCBmEzXRVkLcWhbBtRNocSgj
-	yaXwyzBjIz+KjqDORzFIuzQp5gKmi6zvD4X7e22nkVGOyWSRRS0rY2RJxyARe4EuH4kFDCu7PEn
-	Do/SOkkzmLdagBsRIOPyQSMS2MguLdlQDSTPCDLwhG3/61AWLYpne7CqdIXNLTyZ1WQxNf/E4+4
-	dr+5iKVth31uWxQmoSvFE4CkzVHLvr464NBCMUHIIHCUIc8boT3BcYZIw/XS+qR/QH9NFufMMlR
-	NDuZzdauItQW9/qbNNj2NK6OIsbnrtrt0BOuBkwc2ZgGK9xp4/FvpH4YtQvcWW24C0WYmF2HABa
-	JUU5UznOhm4/boFm5Y6eWchnYgCWAjxfjWuBTVtykScJOvkKWxU4JmJoSgSjMETTqNzf6HhXnIV
-	/7zmgQy7Qu3OjyZZC9x36enw0oqt0gMslfj+y8pDbBNVY0ZixpQHdfw7LcpazKriUkKoBgNd+PF
-	N+jYIS8CxASZxinZU7U=
-X-Received: by 2002:a05:6870:6590:b0:48f:e290:5afd with SMTP id 586e51a60fabf-491ec0cb1fdmr583623fac.62.1790202917649;
-        Wed, 23 Sep 2026 15:35:17 -0700 (PDT)
+        bh=zfwGwbUwBRuvPTUiKX1AIC4L/SKKbUUkwfFbVYVud+k=;
+        b=zkiX7eWb5ogjCiLTIrKa/3W68f9NUbryhei8TcQMEZiHBjtK/pw8nHKMsgq8qQSVwA
+         4BpMPawcVwoWhxGkYgkXMcmrwseMaOl91cWjU51w0zYucr7WLsJD8URBEIveB9ccA79F
+         YKtU2GRLe3Y6QdMKFVL5OIm4B1xB434H7C+er/PaJ6pouFJ482QdrU2tnMsMNzky88d9
+         fruRBKKlkvsw2UxIb9Cr4jVapuILyROyWqKe40zaNu10zIUfZlY3ITJHVpOcxhCl05hQ
+         qEz0KaV4PDV6aHemYr6c6sLqNxOeQk/jthDZ7R+SkZ9kzpKUJPiP5tgpi9Ad09atC3nN
+         6CxA==
+X-Forwarded-Encrypted: i=1; AKwUvBzokMjfI5r9QJjkBRBUfBwuHwk8eoPEJLO8i4rVl9Kgg++HbaFQEUkXhcQS/N7/pcSE02OdcKO6vmfj6rNC@vger.kernel.org
+X-Gm-Message-State: AFuF++lFFMhpBDzuO7M6tG9wKZVIJAUm1OtkAUXwFdpCbAJl0DKcjaSB
+	gY/0Fvgi1sG8V82dydtrYFoGeQF+v5e71U4de/CzJulHTJd9TvAuZaQR
+X-Gm-Gg: AYBFou3YoBzCvfgncqBFXJjL70YtZWA4Ka6MDCU+CjJ7XRLFARY1cE5I8izp4P17jev
+	Z+Bfzy+MHpQOShLCcs1O2nkNtBUjRRi8OqSqcfbPQpWiZ3JQGMxPedVUbOKGWZseh+u2ouIsbQm
+	oCISPyYc2WbcQlbOnvaH+fl44GbdtOXH74fijMcbq3wYoDR1yr4ceGhB79c2G6ns6AfRd0rVeIk
+	MYVK8nsqjc8KlXOdzfzlW4S4W25BRncE0cx1jTCsHdc5c5BoZiAXuLNT6CEE2yFGi6PF87qeaSJ
+	D7dwM79g3euYWFOHnpFdYDlf+EGNLep/cEnIslEpv4DAnJNHOPJ+1oRXTfkLeuBm+NNkxB2vvB7
+	2nf+azs0Xabbgj0+xj4IgKuGdyO3zIGNDdyznYvJockju5lRfVFzAEqQ9zgN3lmGMyEIA4xu0Gx
+	gkXPQotvObtFIk5psi4V3AYDzLYp3c8DkApmCasbrs5yUalGOT7UDFQSvD2CNGsyqcgw+ABsaa2
+	IJ55+sGnH5i1zzSD9fiLyDyqzSeD7/Yokg+Mpev3cjMmC0xFh9AFHyJnjXpKnAGk6+NbS665MM4
+	cCdSjopoMySwM5Q7t0C8
+X-Received: by 2002:a05:6808:15a0:b0:4d6:9252:4644 with SMTP id 5614622812f47-4d72ea60fb1mr765397b6e.56.1790202919796;
+        Wed, 23 Sep 2026 15:35:19 -0700 (PDT)
 Received: from [100.82.231.29] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-491ee1ac486sm559401fac.16.2026.09.23.15.35.15
+        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-491ee1ac486sm559401fac.16.2026.09.23.15.35.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 15:35:16 -0700 (PDT)
+        Wed, 23 Sep 2026 15:35:19 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Wed, 23 Sep 2026 16:34:41 -0600
-Subject: [PATCH v11 17/38] dyndbg: replace classmap list with an
- array-slice
+Date: Wed, 23 Sep 2026 16:34:42 -0600
+Subject: [PATCH v11 18/38] dyndbg: macrofy a 2-index for-loop pattern
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -73,7 +72,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260923-dd-cmap-part2-clean-v11-17-9b6c217fdf2f@gmail.com>
+Message-Id: <20260923-dd-cmap-part2-clean-v11-18-9b6c217fdf2f@gmail.com>
 References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
 In-Reply-To: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -101,181 +100,82 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Jim Cromie <jim.cromie@gmail.com>, 
  Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790202874; l=5766;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790202874; l=2812;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=I+Xnq26sBTEovU8k68EHi/UbMNiSRxDxIqjGuZzsVq0=;
- b=qYmb/qIjTvx2Z2xKJ0hdaGoZ++bj5qRSayQs2SlUI0rpMOgmmtP8o/QD+pp0vr10imBEKm4J6
- yNiL5fpJ6GzCQ5he2TW8hnWRytO9cXguLK/YO/hTlKONu4w8Loh1PhP
+ bh=zCwr+VGqKnNAOkzayghTBT7W0F9XwKbxJ4/xtvRrwII=;
+ b=MtxKW5tqPWiU+c3h1aFiaFOnaqcptE3iPisUyD4ekvG6WyZ6vBzitYfyBmZ8s+ZdbA9UiPRPj
+ IK6yKEbDE07BHfoCfxQJDvGQ52SxUshC0CGJ1Kcd+c1y+apgADflV6h
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Classmaps are stored in an elf section/array, but currently are
-individually list-linked onto dyndbg's per-module ddebug_table for
-operation. This is unnecessary.
+dynamic-debug currently has 2 __sections (__dyndbg, __dyndb_classes),
+struct _ddebug_info keeps track of them both, with 2 members each:
+_vec and _vec#_len.
 
-Just like dyndbg's descriptors, classmaps are packed in compile order;
-so even with many builtin modules employing multiple classmaps, each
-modules' maps are packed contiguously, and can be treated as a
-array-start-address & array-length.
+We need to loop over these sections, with index and record pointer,
+making ref to both _vec and _vec_len.  This is already fiddly and
+error-prone, and will get worse as we add a 3rd section.
 
-So this drops the whole list building operation done in
-ddebug_attach_module_classes(), and removes the list-head members of
-the classmap structs.  The "select-by-modname" condition is reused to
-find the start,end of the subrange of classmaps belonging to the module.
+Lets instead embed/abstract the fiddly-ness in the `for_subvec()`
+macro, and avoid repeating it going forward.
+
+This is a for-loop macro expander, so it syntactically expects to
+precede either a single statement or a { block } of them, and the
+usual typeof or do-while-0 tricks are unavailable to fix the
+multiple-expansion warning.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v2: RvB after SoB
+v2: move RvB after SoB
 ---
- include/linux/dynamic_debug.h |  1 -
- lib/dynamic_debug.c           | 64 +++++++++++++++++++++++--------------------
- 2 files changed, 35 insertions(+), 30 deletions(-)
+ lib/dynamic_debug.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 85863e24ad13..02a1abdc5b3f 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -84,7 +84,6 @@ enum ddebug_class_map_type {
- };
- 
- struct ddebug_class_map {
--	struct list_head link;
- 	struct module *mod;
- 	const char *mod_name;	/* needed for builtins */
- 	const char **class_names;
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 474df0dbedc1..1c0604d7e3cc 100644
+index 1c0604d7e3cc..84a311fac657 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -45,10 +45,11 @@ extern struct ddebug_class_map __start___dyndbg_classes[];
- extern struct ddebug_class_map __stop___dyndbg_classes[];
- 
- struct ddebug_table {
--	struct list_head link, maps;
-+	struct list_head link;
- 	const char *mod_name;
--	unsigned int num_ddebugs;
- 	struct _ddebug *ddebugs;
-+	struct ddebug_class_map *classes;
-+	unsigned int num_ddebugs, num_classes;
- };
- 
- struct ddebug_query {
-@@ -149,12 +150,13 @@ static void v3pr_info_dq(const struct ddebug_query *query, const char *msg)
+@@ -149,6 +149,20 @@ static void v3pr_info_dq(const struct ddebug_query *query, const char *msg)
+ 		  query->first_lineno, query->last_lineno, query->class_string);
  }
  
++/*
++ * simplify a repeated for-loop pattern walking N steps in a T _vec
++ * member inside a struct _box.  It expects int i and T *_sp to be
++ * declared in the caller.
++ * @_i:  caller provided counter.
++ * @_sp: cursor into _vec, to examine each item.
++ * @_box: ptr to a struct containing @_vec member
++ * @_vec: name of a member in @_box
++ */
++#define for_subvec(_i, _sp, _box, _vec)			\
++	for ((_i) = 0, (_sp) = (_box)->_vec;		\
++	     (_i) < (_box)->num_##_vec;			\
++	     (_i)++, (_sp)++)		/* { block } */
++
  static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table const *dt,
--							  const char *class_string, int *class_id)
-+							const char *class_string,
-+							int *class_id)
- {
+ 							const char *class_string,
+ 							int *class_id)
+@@ -156,7 +170,7 @@ static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table cons
  	struct ddebug_class_map *map;
--	int idx;
-+	int i, idx;
+ 	int i, idx;
  
--	list_for_each_entry(map, &dt->maps, link) {
-+	for (map = dt->classes, i = 0; i < dt->num_classes; i++, map++) {
+-	for (map = dt->classes, i = 0; i < dt->num_classes; i++, map++) {
++	for_subvec(i, map, dt, classes) {
  		idx = match_string(map->class_names, map->length, class_string);
  		if (idx >= 0) {
  			*class_id = idx + map->base;
-@@ -235,7 +237,7 @@ static int ddebug_change(const struct ddebug_query *query,
- 	unsigned int nfound = 0;
- 	struct flagsbuf fbuf, nbuf;
- 	struct ddebug_class_map *map = NULL;
--	int __outvar valid_class;
-+	int valid_class;
- 
- 	/* search for matching ddebugs */
- 	mutex_lock(&ddebug_lock);
-@@ -1067,9 +1069,10 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
- 
- static const char *ddebug_class_name(struct ddebug_iter *iter, struct _ddebug *dp)
- {
--	struct ddebug_class_map *map;
-+	struct ddebug_class_map *map = iter->table->classes;
-+	int i, nc = iter->table->num_classes;
- 
--	list_for_each_entry(map, &iter->table->maps, link)
-+	for (i = 0; i < nc; i++, map++)
- 		if (class_in_range(dp->class_id, map))
- 			return map->class_names[dp->class_id - map->base];
- 
-@@ -1153,30 +1156,34 @@ static const struct proc_ops proc_fops = {
- 	.proc_write = ddebug_proc_write
- };
- 
--static void ddebug_attach_module_classes(struct ddebug_table *dt,
--					 struct ddebug_class_map *classes,
--					 int num_classes)
-+static void ddebug_attach_module_classes(struct ddebug_table *dt, struct _ddebug_info *di)
- {
- 	struct ddebug_class_map *cm;
--	int i, j, ct = 0;
-+	int i, nc = 0;
- 
--	for (cm = classes, i = 0; i < num_classes; i++, cm++) {
-+	/*
-+	 * Find this module's classmaps in a subrange/wholerange of
-+	 * the builtin/modular classmap vector/section.  Save the start
-+	 * and length of the subrange at its edges.
-+	 */
-+	for (cm = di->classes, i = 0; i < di->num_classes; i++, cm++) {
- 
+@@ -1166,8 +1180,7 @@ static void ddebug_attach_module_classes(struct ddebug_table *dt, struct _ddebug
+ 	 * the builtin/modular classmap vector/section.  Save the start
+ 	 * and length of the subrange at its edges.
+ 	 */
+-	for (cm = di->classes, i = 0; i < di->num_classes; i++, cm++) {
+-
++	for_subvec(i, cm, di, classes) {
  		if (!strcmp(cm->mod_name, dt->mod_name)) {
--
--			v2pr_info("class[%d]: module:%s base:%d len:%d ty:%d\n", i,
--				  cm->mod_name, cm->base, cm->length, cm->map_type);
--
--			for (j = 0; j < cm->length; j++)
--				v3pr_info(" %d: %d %s\n", j + cm->base, j,
--					  cm->class_names[j]);
--
--			list_add(&cm->link, &dt->maps);
--			ct++;
-+			if (!nc) {
-+				v2pr_info("start subrange, class[%d]: module:%s base:%d len:%d ty:%d\n",
-+					  i, cm->mod_name, cm->base, cm->length, cm->map_type);
-+				dt->classes = cm;
-+			}
-+			nc++;
-+		} else if (nc) {
-+			/* end of matching classmaps */
-+			break;
- 		}
- 	}
--	if (ct)
--		vpr_info("module:%s attached %d classes\n", dt->mod_name, ct);
-+	if (nc) {
-+		dt->num_classes = nc;
-+		vpr_info("module:%s attached %d classes\n", dt->mod_name, nc);
-+	}
- }
- 
- /*
-@@ -1208,10 +1215,9 @@ static int ddebug_add_module(struct _ddebug_info *di, const char *modname)
- 	dt->num_ddebugs = di->num_descs;
- 
- 	INIT_LIST_HEAD(&dt->link);
--	INIT_LIST_HEAD(&dt->maps);
- 
- 	if (di->classes && di->num_classes)
--		ddebug_attach_module_classes(dt, di->classes, di->num_classes);
-+		ddebug_attach_module_classes(dt, di);
- 
- 	mutex_lock(&ddebug_lock);
- 	list_add_tail(&dt->link, &ddebug_tables);
-@@ -1324,8 +1330,8 @@ static void ddebug_remove_all_tables(void)
- 	mutex_lock(&ddebug_lock);
- 	while (!list_empty(&ddebug_tables)) {
- 		struct ddebug_table *dt = list_entry(ddebug_tables.next,
--						      struct ddebug_table,
--						      link);
-+						     struct ddebug_table,
-+						     link);
- 		ddebug_table_free(dt);
- 	}
- 	mutex_unlock(&ddebug_lock);
+ 			if (!nc) {
+ 				v2pr_info("start subrange, class[%d]: module:%s base:%d len:%d ty:%d\n",
 
 -- 
 2.55.0
