@@ -1,115 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl2-f42.google.com (mail-dl2-f42.google.com [74.125.229.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6D647FAF3;
-	Wed, 23 Sep 2026 10:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25274568558
+	for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 20:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790159419; cv=none; b=TiAMJCHaiANN6aLwA3ebbiDM8avj5VKPstVD7nLqscJqyFYRvXxEuyHzwNe2NYrhZQLG0Rm64IjA5i/xUH8ocdQxpz1JYTcU10xt9lN57gC5Je9l5X6E5p3f2xBjI2pOReKGais5Yx9nd+tOhQKTXsVEklSeZ+gHsca57ga5n6Q=
+	t=1790195522; cv=none; b=IJH/13QMF11oj21mGTuDe47NlsxOojdkyLEhrQqtGBkS12ML/WgiokFodFxAd9GrT8/xXWO//OubKsRvQk8uHPVIXqeztqtELadZ+ZaTRuPIxkVMfxUsQVvESG9gUh7QmZ1qNZ+xF74QvBus0xdn8cVxqIq8A5UQz8oM7Dq5lG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790159419; c=relaxed/simple;
-	bh=4apTzgSnK41fmpqyWoxUgweK1yzL409akGVwvF+wtlg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sx+Z04u6+rMaU7FjWnWOG5DlT3h8jO21Wd8CosnLU/MMZ8I3Te6aqvv80Mvs2gdLD3SnZeNHo2ouT0hMML5fvqX3SSTQ4iq0CGgo0ytTTzKojaz/uArntoObWpE+EfDHEPH3KSowUD41cPul/x7Od376I0QXxFY5S7nUukSDIqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=I+FgPbZ4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790195522; c=relaxed/simple;
+	bh=lsgiFQR0W1RaDSUCFb03bBzHp12jvBbMgfMT0EHXOU0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=dXryBWDtnVULdpiG5qCGImKqdB8sbJsgzVyuWqfjhrYDY+BSsP7AWWHl3iMnjmLH0iHASYfLzSsrSeaVsfuJYTuvoZa3pZU5VRu9A1DM/GfnQG9r5Z/SqNDOJVd0D97uiDAnqEAw36p9azhozXJJrm7vPnlFR+rKx6aU80p5PVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uci.edu; spf=pass smtp.mailfrom=uci.edu; dkim=pass (2048-bit key) header.d=uci.edu header.i=@uci.edu header.b=oz5pMRSA; arc=none smtp.client-ip=74.125.229.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uci.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uci.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="I+FgPbZ4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEBA41F000FF;
-	Wed, 23 Sep 2026 10:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1790159399;
-	bh=6mPB5sAXT6Vhv1gBFH2na4lrNkRozl/FMt/dP7OxjRk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=I+FgPbZ4GvlC7BewOKRNZweanpyegBPw+Z7yAFipreUI0p/iDWPygp288TTzg9fNW
-	 wG6Yil8IMbspsRFI6ZRrV4LujFy4JyuBlEph2Ub330vypNF3BGsVDnezRyMqqWWtxx
-	 NYdOIla4kATkpDlNoDD//vIXw3e1SpHRXfpR7u/g=
-Date: Wed, 23 Sep 2026 12:29:56 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Armin Wolf <W_Armin@gmx.de>, David Lechner <dlechner@baylibre.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Bradley Morgan <brads@mainlining.org>,
-	Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
-	linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-	Richard Weinberger <richard@nod.at>,
-	Thierry Reding <thierry.reding@kernel.org>
-Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
- userspace manually messes with devices and drivers
-Message-ID: <2026092348-victory-erased-0e5a@gregkh>
-References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
- <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
- <arIvG0nx4LXG9nlW@monoceros>
- <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
- <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
- <2026092321-province-yearly-44aa@gregkh>
- <arOfHEsGGglNse7T@monoceros>
+	dkim=pass (2048-bit key) header.d=uci.edu header.i=@uci.edu header.b="oz5pMRSA"
+Received: by mail-dl2-f42.google.com with SMTP id a92af1059eb24-144ecebb6cbso611518c88.3
+        for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 13:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=uci.edu; s=google; t=1790195509; x=1790800309; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rVIQWAnKN98ur25hclWfvj2q8SoQe7T1V/QGgzzXRDE=;
+        b=oz5pMRSANSD2rT04xi0Ga0fDwbcW+o4DGgCerIZ1x+V2qDeEgLh7X1WcwerHDrzKAs
+         lGiTMo1+LF2JnsQvPwOJQoJtvfPvY8c6Ti8NBCOIkcqEmn4FEvjDq0UeYcD2dLnVJPDY
+         DjYopDDfneU50g+c5MG+4PHyophV53eksTZoNUtHxPNjjy38Rf7P5yKhhR9AS7ErBU/b
+         5mLc6cVAHXcL4/Oq93FiQuL8Ywg2SrAXKxbQFd3+IVw1PUThjxyquri1ATku3bFJaxbg
+         0rXpZgkSkHZg1siqA34lopbbD5ip4QlyFpLrO1LDARpBnIOCDdKMw/bRg4KjeHiz1hK8
+         duCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790195509; x=1790800309;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rVIQWAnKN98ur25hclWfvj2q8SoQe7T1V/QGgzzXRDE=;
+        b=O92y8ZDoZy5cyBo6Sfff9gZIFo33w/cGiDfsqwTmBJ8y0kqlheVH/KzrVAd4gr5MNd
+         TO2AQDhgFYWq3vSgFT22fwJxvygjFNgokHDjWk9dx1wsXQ6tRVtXgnrovHcY8NAFyso2
+         iT7ZlAE6LoXKQBWtbO2S4g3WLh+phMwKfN+DGt0zkp2/A7gae6epc7HUvd0DwAwGx/uh
+         AY/CEdkLUTjEbvul37DrzNWgYUylT2Bos3pp9kUB25t/oM2uCAt1lscqYEakQUvdbxYb
+         tieoccx3JRwBE5VF9gvOaDnb18+DgFJr+BWuT+CHNopUCNnJh1+saPXgDdiebE4hc6+Z
+         Nmww==
+X-Forwarded-Encrypted: i=1; AKwUvByCjjsf0R0xkZjDa9SxsF+PHDP6L2ycy6/FCi4h36mnHjwqjZoVv45Dt498eDYNHXf6WcIMpDMNnXVWz8rt@vger.kernel.org
+X-Gm-Message-State: AFuF++mLr6MZipPTMpnTmc9KV+C4KRtptNC+Ag8q8aQ3ipUZ8rpUdMk2
+	me26SDzBjaxqXmipZprRCU0eQDAyJBEQCOdvkWf2G/IR+xtkiRrKz090/ktcEZBstyk=
+X-Gm-Gg: AYBFou3hr4AHMpMk2aVdkNshzgEGE/hQNu7hogQCW6+YeKe43CbaJwup0rz6jyCiH2/
+	iZvgQ3owbhH9qbGc1bZ5QXiUh+cWnx0Gqi0dN+SAHtPnwVy0OZ60PvupdeWOXVtLy7dYdoFSC14
+	1RyB6rhDYvrMA+Iajn8nf7gq6c4erzyPXJbznY3WvycSJJedWUhT8FaBGRxDlCzmOo1XrAK2q8N
+	ROd+SkgvD3KWrwYh3bCjk3a8MTmFdAcBlB9Rny/l5NaZ78/HUEUJhb9DAfv8fTW9oxvPAyvzkvs
+	tCb+AIrsd+xcxJ8dIX+C5O5d8cqcUD58M+snvwVSZRCDR2kNCTQ9axAEWjdZAFr+dZEOHRJ7QmF
+	o1cPKQiarCLaltxS+WyllW0N/DtIkBbGFiw+Fug7s2Qa1TgpCmZjGz6g/4RNUuJhtdsB2IN12pY
+	yjHyN5U2FLnvZWmi0cM8tbTTD9WbhgiiYteMu8r1sEf0cIceeLLUxD8RiLkOtOAZqEHlHWjwJf8
+	i9WljP2injBq8KDmU0h8dD9XFIF8OAXdJN0N8Jq+TEJGg==
+X-Received: by 2002:a05:701b:4512:20b0:143:297d:21f5 with SMTP id a92af1059eb24-14503fc5fedmr228574c88.34.1790195508236;
+        Wed, 23 Sep 2026 13:31:48 -0700 (PDT)
+Received: from guest1.. (charm.ics.uci.edu. [128.195.4.118])
+        by smtp.googlemail.com with ESMTPSA id a92af1059eb24-144f983c5a1sm13276486c88.7.2026.09.23.13.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 13:31:47 -0700 (PDT)
+From: Priya Bala Govindasamy <pgovind2@uci.edu>
+To: mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
+	ojeda@kernel.org
+Cc: atomlin@atomlin.com,
+	boqun@kernel.org,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	dakr@kernel.org,
+	daniel.almeida@collabora.com,
+	tamird@kernel.org,
+	acourbot@nvidia.com,
+	work@onurozkan.dev,
+	linux-modules@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	stable@vger.kernel.org,
+	ardalan@uci.edu,
+	zhiyunq@cs.ucr.edu,
+	dzueck@uci.edu,
+	pgovind2@uci.edu
+Subject: [PATCH v2] rust: module_param: Fix potentially incorrect access of `SetOnce<T>`
+Date: Wed, 23 Sep 2026 20:31:45 +0000
+Message-Id: <20260923203145.18714-1-pgovind2@uci.edu>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1789426258.git.pgovind2@uci.edu>
+References: <cover.1789426258.git.pgovind2@uci.edu>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <arOfHEsGGglNse7T@monoceros>
 
-On Wed, Sep 23, 2026 at 11:54:50AM +0200, Uwe Kleine-König wrote:
-> > No, drivers should NOT have to do that in their .probe() function,
-> > that's what we moved away from decades ago!  The match function should
-> > handle all of that for you, otherwise it's contant duplication
-> > everywhere that is unneeded.
-> 
-> Well then you have to accept that root can provoke a null pointer
-> exception (e.g. by forcing the pwm-tegra driver on a device) because at
-> least with today's platform bus match function such a match is ok.
+The `set_param` function casts `kernel_param.arg` to `*const SetOnce<T>`
+But the Rust module macro in rust/macros/module.rs initializes `arg` with
+`#param_name.as_void_ptr()`, and `#param_name` is a `ModuleParamAccess<T>`,
+not a `SetOnce<T>`.
 
-Agreed, yes, root can cause a crash and can do tons of horrible things
-much worse than this, that's not the issue.
+ModuleParamAccess<T> has default Rust layout but `set_param` accesses its
+first field SetOnce<T> assuming it to be at offset 0. This is not
+guaranteed by Rust and could cause type confusion leading to data
+corruption.
 
-That's why this taint is there, to make it obvious that this is not a
-"real" bug at all.
+Fix this by casting `kernel_param.arg` to `ModuleParamAccess<T>` and
+then accessing the `value: SetOnce<T>` field.
 
-> > Please, learn from our history, don't make the same mistakes.
-> > 
-> > Now I might be convinced that driver_override is the way to go here, but
-> > it still feels really odd as again, bind/unbind was created as a driver
-> > debugging option only, it should NOT be a normal operation that any user
-> > should rely on.  The driver should "just work" properly instead, without
-> > requiring manual bind work, as that's not a good model at all.
-> 
-> I agree in principle, but (in my case wifi) drivers are buggy sometimes
-> (due to missing documentation and/or engineering effort) and being able
-> to rebind the driver instead of rebooting to get a working device again
-> is very useful.
+Fixes: 0b08fc292842 ("rust: introduce module_param module")
+Cc: stable@vger.kernel.org
+Reported-by: Dylan Zueck <dzueck@uci.edu>
+Assisted-by: LLM
+Suggested-by: Andreas Hindborg <a.hindborg@kernel.org>
+Signed-off-by: Priya Bala Govindasamy <pgovind2@uci.edu>
+---
+Changes in v2:
+ - Split unsafe block into two separate unsafe operations
+ - Add safety comments explaining the unsafe operations
 
-Fine, use it!  Just don't expect that to be "normal".
+ rust/kernel/module_param.rs | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-> So yes, theoretically bind/unbind isn't needed, but theory and practise
-> differ in practise.
+diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
+index f9a14765a926..1a2fcbf4a5b3 100644
+--- a/rust/kernel/module_param.rs
++++ b/rust/kernel/module_param.rs
+@@ -74,8 +74,13 @@ pub trait ModuleParam: Sized + Copy {
+     crate::error::from_result(|| {
+         let new_value = T::try_from_param_arg(arg)?;
+ 
+-        // SAFETY: By function safety requirements, this access is safe.
+-        let container = unsafe { &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<T>>()) };
++        // SAFETY: By function safety requirements, `param` is valid for read.
++        let arg = unsafe { (*param).__bindgen_anon_1.arg };
++        let param_access_ptr = arg.cast::<ModuleParamAccess<T>>();
++        // SAFETY: The `arg` field is initialized with a pointer to a `static ModuleAccessParam` by
++        // the rust module macro. Thus, the pointer is valid for use as a reference.
++        let param_access = unsafe { &*(param_access_ptr) };
++        let container = &param_access.value;
+ 
+         container
+             .populate(new_value)
+-- 
+2.34.1
 
-Agreed, but again, don't rely on this as a "real" solution fo ranything.
-
-> OK, as a compromise: Let's keep the taint (after all that's not
-> destroying any functionality, just adding a hint for bug reports),
-> and make driver_override opt-in, which should close an attack surface
-> (mostly for fuzzers?) and so reduce the amount of bug reports instead of
-> marking a part of them as tainted only.
-
-How is that going to change anything?  Confused.
-
-greg k-h
