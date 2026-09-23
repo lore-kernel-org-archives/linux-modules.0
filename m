@@ -1,213 +1,281 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CD644065B;
-	Wed, 23 Sep 2026 06:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E782A443C03
+	for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 06:29:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790144930; cv=none; b=LHgboYSgi4Qa+9Iqi+0mu9UDSRAGJDaK50WuhWlmLTsXJhQqkJ/MVF3LInCg+sPojLoeB+zl7SL5zK3UCV/O2AWMUfjKlpQZRh/WlVsLw7np7YYj1GH/0SDnKl/7T/ZUN3LPpsl5UGPpOksxEd/2VKNkQj9XSOJFuiVzQMwaMfQ=
+	t=1790144961; cv=none; b=p+fQ+/Q96WQjtvcUoIsZ9SVN0nvqDPKpxDdB/5Hl5iTjZUlXvxSKSzyfYKkfsML1vjKpfETQW12M0wtXRGVQcsJQ8EnKWjzgsp8VwjNGaI9SzzlmXR6uTMsMB8zbBhfDU5oimMJ/Gi+M/aiheCG4tCrDCyFRDVm53Prc+TDYVJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790144930; c=relaxed/simple;
-	bh=b3K674XacfU9HJDGPP3f22Z84mjfKdkKProo6csmN0w=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fVQXKcu0pYigkIfhmPf2QI8taTOLTlnLBlzg8+XKUVqtHSEPdD2di6spjZZwLN9YAZakovrRkP3/n+KtPwid0JYBpq/zyLBroVF3kUPUgcYUzv8SZqqa2F+TW5uNPMxy/6A7zOH34ZEhrIlCG0QkQ+4lX86y+kpZ/RM5asGrdfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E2LDhSM3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790144961; c=relaxed/simple;
+	bh=2P1/Y+7yd2b38wkBtdBMXr+oehxAhkxnhsbRjMjb8Ls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p1Tm0kJMSy/km+WLeuXdqOfgnE6UlR0XqHPCdLxxiS2K0NF19J7aqrB3xA2cvIHPBtfisbuYg9ydIQ0fsQf+q/v2j6Radu+GjH2IbL3tV30QxZYv0dQmVvjRz4HtCnB1M0IbBsarLOVlDG+mQbqV75JiCNL//0IFP8Lru+Sxjtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=l6od56IM; arc=none smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E2LDhSM3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F2951F00893;
-	Wed, 23 Sep 2026 06:28:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790144926;
-	bh=eI6+XHcjsk+Aomoq3O+3u/S9cWaPPzDXPaoa4YU8VL4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=E2LDhSM3PpD0MkV00TYcoliypTLubCqwFI6LJFK91oEyrg/57Gy7h/OcWb6+kfZfP
-	 3aTuZQvfoRYlXRdwqF76kUQ+tj9I+2ATTk7pSm36p8oHy4dwCqc+vwbAXzWAt1Bf6z
-	 nVzCise2kn7SLe8xWVgpFmOlzO+JapnX/yFodht20zT2/hsQBEozR6mEhvUAoajztz
-	 5utTZ51r6HgkDgz7VGoMqTr/+IK8X/orwj6X8Lw7xVXRk+JkpF1W9qL8hUnZhR3KJt
-	 uLDwOV3TKDFDClS3sy5ZIX+ILTwmh377YNzcmbjQGpK3pGFf6mQYobKlaXGOCfBLyT
-	 3Hwyv0d5wZKOw==
-Content-Type: multipart/mixed; boundary="===============1161609189727594346=="
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="l6od56IM"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843c2790ccso390130f8f.1
+        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 23:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1790144951; x=1790749751; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=IqBBUCm9D3kcAtSAGWx9YPoXXMR7IIvhwpg10TQoYm0=;
+        b=l6od56IMX74BNqnz4bkTqVsvT7TD24l1V6scX5Gxcm2Ba0nNYt0lyH968epWiozZQX
+         EsQfZEgGNgKa0yumSDHHGtbh8TtcstcLd5rpQkOdGDWJkWOyuZIcy/H2MCD6N2ngdeDZ
+         D/PhGynIR4UpFG+LQ8pifR7209dFV43U2wYIe/4iRiwA8zT6D4Co7F7cvdCcrzLoKfag
+         qM2CyIdWDF8xgmhzsXgYmW7faTWr8aoPqrM309n+jxkHx9OSAiKmmHs3cDYNYM2Ch4GP
+         68kPpsY7cGyX8SGtVyBqRGxz/405HuON/8+PfuCz7oz61mKOwSo9+KhIQPNeHvN8q9n3
+         RUCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790144951; x=1790749751;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IqBBUCm9D3kcAtSAGWx9YPoXXMR7IIvhwpg10TQoYm0=;
+        b=JhWC3ty/ZdCaj+/5+4NfZrYcTF4SWMVvsVKxcJaFZqadn2Cmec7JUrJOQex+WSWbED
+         tiKmai57X89hUOIsNbW/kcS6+4jM3ywx3zXnv+q4DEWgOECAN88QiKr1lNo042YzTzUr
+         CqbG1pVSIf/UFKsEBVQX/hwrrIOxt0T3dSDfNISEseOlvau4BqAvF2wQkiNtS5cwhlQl
+         ANk0k0uvNi0tFVLkITI9blpd84ByYoVFORUqoRpzq2cMb8ujtFKBop4oCdKnPwnxBOgy
+         i85vTRiZ0I4feL7jNPt6QcBws9uKZuHuB8naMqEFdBr9hvlrBFc7H7wFyNZfWAVHK0EZ
+         YX1w==
+X-Forwarded-Encrypted: i=1; AKwUvByUJVK2plw2Sdk2DZjQnj6IZCOeeI3f69T69Oq00EcdOhxm+FdkPY30JtSZtTXfRzgdFObjjnuSuPRvHPYD@vger.kernel.org
+X-Gm-Message-State: AFuF++m1lc0J4oadpVfCJonZCBW5g10qeBJ4VDMdUcob6Iy8Gcf1Ehxu
+	H12la4z4dBoCoiJXljDNIj+kKe0/2llCN+LKJTBLanAnXqs2GCfZMwWSK624Xierwzc=
+X-Gm-Gg: AYBFou2mJmpApomfnwe5cuX0kAZQZztnAPnlejphC48VdZHSXjfLPLl/h0fU+n7q4Cz
+	w9p2VflgcKMcXAx3lispo60WL0f5L4VPE977zOm+q+7L/meQPkI3NvM8IVXjTSg7NFygoeD1fyr
+	/QZgGmGQVxytm8j0aDMVtzVM8OHE/cVs1t/pb8LA6Ep6vFP0yRj0yxfw8fPBQd3fUWa9WiP7y6N
+	fJfLWXkSJUwEIPWC75iKxUv3ckIpB5WNYl9lWK7rCWLX1qQOeID7z/3/3FGDFQUTit58S7B9JDw
+	xO97sUQSg6VKECcA5sx6WmB+tKOCbvwQ430bzLJJYaw2dIv+lWXJU5yGYA4mgEqmq46TM2sFTuH
+	2tgHmbTn0YvNZqRE26MQUXFOj+/ELGzH5CUI1s1njnRgf0vvx1GbyvvmqVBwdKz1qImaHm7U6hf
+	zHC/dyO6+MJB0iZz1WjAFdUOhcFnMptnYKoZG3FMxEAnmBwf869vVm4HfSZT+9fMppgrBATHYJv
+	4Se16bcZnNWuwU=
+X-Received: by 2002:a05:6000:40dd:b0:487:27f6:a4db with SMTP id ffacd0b85a97d-48867092e81mr2065474f8f.43.1790144951218;
+        Tue, 22 Sep 2026 23:29:11 -0700 (PDT)
+Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4886876c1fdsm4980428f8f.14.2026.09.22.23.29.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 23:29:09 -0700 (PDT)
+Date: Wed, 23 Sep 2026 08:29:08 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: David Lechner <dlechner@baylibre.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh <nogikh@google.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org, 
+	Johan Hovold <johan@kernel.org>, Richard Weinberger <richard@nod.at>
+Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
+Message-ID: <arNuIicuNMmA7E3K@monoceros>
+References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
+ <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
+ <arIvG0nx4LXG9nlW@monoceros>
+ <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
+ <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <39f6151d364d966f70b7802cfd4bbca15734a7945478265ecc681f1779e50abb@mail.kernel.org>
-In-Reply-To: <20260923053948.30617-4-wanjay@amazon.com>
-References: <20260923053948.30617-4-wanjay@amazon.com>
-Subject: Re: [PATCH bpf-next 3/6] bpf: fetch the vmlinux BTF where kernel types enter a program
-From: bot+bpf-ci@kernel.org
-To: wanjay@amazon.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: alan.maguire@oracle.com,martin.lau@linux.dev,yonghong.song@linux.dev,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,mcgrof@kernel.org,petr.pavlu@suse.com,linux-modules@vger.kernel.org,arnd@arndb.de,linux-kernel@vger.kernel.org,abuehaze@amazon.com,doebel@amazon.de,jay.wang.upstream@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 23 Sep 2026 06:28:43 +0000 (UTC)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="m4tmncbnbg4g756x"
+Content-Disposition: inline
+In-Reply-To: <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
 
---===============1161609189727594346==
-Content-Type: text/plain; charset="us-ascii"
+
+--m4tmncbnbg4g756x
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index e7c5e203eddd..a3c4caad5dfc 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -3165,6 +3165,7 @@ static inline s32 bpf_call_args_imm(s16 idx)
->  #endif
->
->  struct btf *bpf_get_btf_vmlinux(void);
-> +struct btf *bpf_peek_btf_vmlinux(void);
->
->  /* Map specifics */
->  struct xdp_frame;
+On Tue, Sep 22, 2026 at 11:04:46PM +0200, Armin Wolf wrote:
+> Am 22.09.26 um 15:40 schrieb David Lechner:
+>=20
+> > On 9/22/26 2:39 AM, Uwe Kleine-K=F6nig wrote:
+> > > On Fri, Sep 18, 2026 at 06:39:02PM +0200, Danilo Krummrich wrote:
+> > > > On Mon Sep 14, 2026 at 4:30 PM CEST, Greg Kroah-Hartman wrote:
+> > > > > The ability to add and remove devices from a driver through the s=
+ysfs
+> > > > > "bind" and "unbind" files was created all those decades ago as a =
+way
+> > > > > that kernel developers can iterate faster, and provide a debuggin=
+g way
+> > > > > for users to attempt to add a new device to a driver without havi=
+ng to
+> > > > > rebuild their kernel.
+> > > > >=20
+> > > > > This api over the years has been abused and recently come under a=
+ major
+> > > > > fuzzing "attack" through tools like syzbot which decided that it =
+would
+> > > > > attempt to just randomly bind any driver to any type of device, c=
+ausing
+> > > > > loads of unneeded errors and pointless kernel patches to be gener=
+ated by
+> > > > > unsuspecting new developers.
+> > > > >=20
+> > > > > Handle all of this by adding a new taint flag, TAINT_FORCED_BIND,=
+ which
+> > > > > will be set on the driver if the bind/unbind sysfs files are ever
+> > > > > written to.  This lets kernel developers "know" that a user is
+> > > > > attempting to do something that is not normal, and as such, if the
+> > > > > kernel breaks they get to keep the shiny pieces laying around on =
+the
+> > > > > floor.
+> > > > >=20
+> > > > > The flag is 'Y' which was unused, and can remembered as the user =
+is
+> > > > > "yeeting" the device being operated on here (thrown with force wi=
+thout
+> > > > > regard for the thing being thrown).
+> > > > >=20
+> > > > > Note, the taint flag gets set _BEFORE_ the bind/unbind callback h=
+appens,
+> > > > > as many times crashes/oops/warnings/failures happen within the ca=
+llback,
+> > > > > and the taint flag needs to be there to show what was being attem=
+pted.
+> > > > > If it were to be set after the callback happens, the oops report =
+would
+> > > > > not properly reflect what foolishness was being attempted.
+> > > > >=20
+> > > > > Fuzzing tools like syzbot, that doesn't have hand-crafted rules t=
+o keep
+> > > > > the tool from hitting bind/unbind, should be run with panic_on_ta=
+int
+> > > > > enabled so that they fall over and don't continue on, thinking th=
+at they
+> > > > > actually found a real issue.
+> > > > >=20
+> > > > > Userspace operations that rely on the bind/unbind files
+> > > > I agree that this should be avoided.
+> > > >=20
+> > > > But I also think the biggest offender really is driver_override. Sp=
+ecifically,
+> > > > on a hot-pluggable bus a driver must be complient with the device d=
+river
+> > > > lifecycle rules and hence shouldn't break on bind/unbind. I think i=
+t would be
+> > > > nice to not taint the kernel for such busses, and only taint on dri=
+ver_override,
+> > > > as I think we'd still want the bug reports for such cases.
+> > > >=20
+> > > > But I think this is fine to leave for a follow-up.
+> > > I fully agree. I'm fine and support tainting on driver_override, but
+> > > bind/unbind are used occasionally in my bubble and I consider drivers
+> > > not handling that properly buggy.
+>=20
+> I fully agree with this, drivers should correctly implement the lifecycle=
+ model
+> and not just break when being unbound at a improper time. Drivers sufferi=
+ng from
+> this can easily break this way when unloading the associated kernel modul=
+e, so this
+> taint is no solution.
+>=20
+> > In the IIO subsystem, unbind/rebind is the de-facto way to reset a wedg=
+ed
+> > chip.
+> >=20
+> > A few examples where other reset methods were reject in favor of unbind=
+/bind:
+> >=20
+> > https://lore.kernel.org/linux-iio/20240727160216.2488ed29@jic23-huawei/
+> >=20
+> > 	This needs documenting as it's custom ABI. Note that we don't often
+> > 	accept custom ABI. Particularly not a hook that seems to reset the
+> > 	device. If you want to do that, unbind and rebind the whole drive[r]
+> > 	so we are in a known state etc.
+> >=20
+> > https://lore.kernel.org/linux-iio/20240720163440.03c713dc@jic23-huawei/
+> >=20
+> > 	Firstly as stated below, we don't provide interfaces for this
+> > 	because it's a heavy weight process that is most of the effort of
+> > 	unbinding and rebinding the driver. So if you need to reset, do that.
+> >=20
+> > https://lore.kernel.org/linux-iio/20250505200609.54756520@jic23-huawei/
+> >=20
+> > 	The solution is to run it once at driver bind. Similar to reset
+> > 	below, if the usecase needs to re do it then unbinding and rebinding
+> > 	the driver reflects the fact we are taking it effectively offline
+> > 	for a while.
+> >=20
+> I also consider bind/unbind to be an official API to interact with device=
+s,
+> so i want to use them in the future with the WMI subsystem.
+>=20
+> AFAIK the underlying reason for this series is that some drivers break wh=
+en
+> being bound to unsupported devices. However IMHO drivers should verify th=
+at
+> they support a given device inside their .probe callback, and the associa=
+ted
+> bus should only match devices with drivers that explicitly claim support =
+for
+> those devices (ignoring driver_override).
+>=20
+> Can we get some example bugs uncovered this way?
 
-[ ... ]
+There is a related set of mail threads, that however are not the trigger
+for Greg's effort.=20
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index a7c9e2d8965d..2425ea74b61d 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+Initially I suggested to protect the pwm-tegra driver from attaching
+to unexpected devices via a check in .probe():
 
-[ ... ]
+   https://lore.kernel.org/linux-pwm/ed943d9be3b785514e0f65a5b8c13a78aba7a0=
+90.1789741839.git.u.kleine-koenig@baylibre.com/
 
-> @@ -21724,7 +21762,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
->  	if (ret)
->  		goto err_prep;
->
-> -	bpf_get_btf_vmlinux();
-> +	/*
-> +	 * The vmlinux BTF is not fetched up front: with CONFIG_DEBUG_INFO_BTF=m
-> +	 * it is loaded on demand, at the points where kernel types enter the
-> +	 * program (attach_btf, kfuncs, ksyms, map pointers, BTF-typed helpers).
-> +	 */
->
->  	/* Serialize verification of unprivileged programs. */
->  	if (!is_priv)
+Thierry suggested a dedicated flag in struct device_driver instead
+allowing to opt out of the driver_override mechanism:
 
-Does removing this unconditional bpf_get_btf_vmlinux() call break
-program-context type resolution? The removed call was the sole caller of
-btf_parse_vmlinux(), which is the only place that populates the file-scope
-bpf_ctx_convert.t table needed by find_canonical_prog_ctx_type().
+   https://lore.kernel.org/linux-pwm/20260922-driver-override-opt-out-v1-0-=
+58c35ded3b83@nvidia.com/
 
-On a CONFIG_DEBUG_INFO_BTF=m kernel where the BTF hasn't been parsed yet,
-consider this chain:
+I think Greg was motivated by syzcaller triggering various exceptions
+using driver_override.
 
-bpf_check() -> do_check_subprogs() -> do_check_common() ->
-btf_prepare_func_args() -> btf_is_prog_ctx_type() ->
-find_canonical_prog_ctx_type()
+So my opinion on the right way forward is:
 
-At this point, find_canonical_prog_ctx_type() returns NULL because
-conv_struct = bpf_ctx_convert.t is still NULL. Then btf_is_prog_ctx_type()
-logs "btf_vmlinux is malformed" and returns false.
+ - Given that there are only very few drivers that are supposed to be
+   used for a driver override, there should be an opt-in (instead of the
+   opt-out that Thierry suggested).
 
-A global subprog argument like 'struct __sk_buff *skb' or 'struct xdp_md
-*ctx' then falls through to the 'generic user data pointer' branch and gets
-typed ARG_PTR_TO_MEM instead of ARG_PTR_TO_CTX. At the call site
-btf_check_func_arg_match() -> check_mem_reg() rejects the caller's
-PTR_TO_CTX register with a confusing type error.
+ - The changes from this thread (i.e. make usage of bind/unbind result
+   in a taint) should be dropped. I wrote earlier that I'm ok with a
+   taint for a usage of driver_override, but with the previous item
+   implemented, I don't think that is necessary.
 
-When libbpf emits the common 'arg:ctx' decl tag, btf_prepare_func_args()
--> btf_validate_prog_ctx_type() returns -EINVAL directly with "btf_vmlinux
-is malformed".
+Best regards
+Uwe
 
-The same NULL bpf_ctx_convert.t also breaks btf_ctx_access() ->
-btf_translate_to_vmlinux() for BPF_PROG_TYPE_EXT programs loaded with
-attach_prog_fd, so ctx member access in the replacement program fails.
+--m4tmncbnbg4g756x
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The changelog lists the new fetch sites: kfuncs, ksyms, map_ptr access,
-BTF-typed helpers, attach_btf. None of these cover the program-context
-path, which needs the vmlinux BTF but never touches a PTR_TO_BTF_ID
-register. The claim that "every PTR_TO_BTF_ID register a program can hold
-originates from one of these sites" is true but insufficient as a coverage
-argument.
+-----BEGIN PGP SIGNATURE-----
 
-The failure is non-deterministic: if anything else (a kfunc-using program,
-mounting bpffs, BPF_BTF_GET_NEXT_ID) already forced the parse, the same
-program loads fine. Programs that work on CONFIG_DEBUG_INFO_BTF=y
-intermittently fail on =m.
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmqzcbIACgkQj4D7WH0S
+/k5/RAf/SE7NQiSIqLNn4DRqC5N/7ANJOhVQL7lvqZeGImpxnvizJPahFAQ5wgHr
+TqvOjwfgQW2cjqr0dT1HbkBIxqhE/FQQPy/wGiSAEwVqGPoaf3NQ2+EJhFtbkW3A
+UhHydl1NRAl0lJI3aDHu8yvr2fYi1JsjVoGk6bEHLa8H3g4mxV09GAmn5486tQ6N
+WbofIbgRNtpIYlMN9eWRKKBBB8j/EQvMHXZwBIy05z/jru237w9UWObXjS/FhwD6
+ktITAnnTBacmzUAC1u5hm2Z3lpH88/MCe014xcIal73LJ1HgVnwnjH7uaBmRrzsR
+r/G6IKsL4nPw3DX9iCQvpNDM+a44MQ==
+=ea/U
+-----END PGP SIGNATURE-----
 
-Commits later in this series make this reachable: d80d57b4ec13 defers
-kfunc registration until the BTF is available (removing the boot-time parse
-from the first kfunc registration), and 2f5aab95d2b8 makes
-CONFIG_DEBUG_INFO_BTF=m selectable. A search of the forward range
-90fe51b6b36a..2f5aab95d2b8 for bpf_ctx_convert, find_canonical_prog_ctx_type,
-btf_is_prog_ctx_type and btf_prepare_func_args finds only
-comment/documentation text - no fix.
-
-> @@ -21790,0 +21832,5 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
->  	if (IS_ERR(btf_vmlinux)) {
->  		/* Either gcc or pahole or kernel are broken. */
->  		verbose(env, "in-kernel BTF is malformed\n");
->  		ret = PTR_ERR(btf_vmlinux);
->  		goto skip_full_check;
->  	}
-
-This check a few lines below the deleted fetch was the consumer of that
-fetch: bpf_get_btf_vmlinux() stores an error pointer with
-smp_store_release(&btf_vmlinux, btf) on parse failure, and bpf_check() then
-converted it into the "in-kernel BTF is malformed" diagnostic.
-
-With the fetch gone, this check reads a global that this program hasn't
-caused to be populated. Whether a malformed-BTF kernel reports the clear
-error or a confusing downstream one now depends on whether some earlier,
-unrelated program already triggered the parse.
-
-It also reads btf_vmlinux directly rather than through the new
-bpf_peek_btf_vmlinux() accessor, so the load is not ordered against the
-smp_store_release() that publishes it.
-
-Could this check either move next to a real fetch or be dropped and let the
-per-site IS_ERR_OR_NULL() handling report the failure?
-
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 195f78db9bda..c022b2877f0b 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1015,7 +1015,8 @@ static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
->  	if (btf_ptr_size != sizeof(struct btf_ptr))
->  		return -EINVAL;
->
-> -	*btf = bpf_get_btf_vmlinux();
-> +	/* Called from a running program: only use the BTF if it is parsed. */
-> +	*btf = bpf_peek_btf_vmlinux();
->
->  	if (IS_ERR_OR_NULL(*btf))
->  		return IS_ERR(*btf) ? PTR_ERR(*btf) : -EINVAL;
-
-Swapping bpf_get_btf_vmlinux() for bpf_peek_btf_vmlinux() is correct as a
-sleeping-in-program-context fix, but does anything in this commit arrange
-for the BTF to have been parsed by the time bpf_snprintf_btf() or
-bpf_seq_printf_btf() run?
-
-The compensating verifier-time fetch in check_helper_call() is gated on
-helper_uses_vmlinux_btf(), which only matches base_type(ret_type) ==
-RET_PTR_TO_BTF_ID or base_type(arg_type[i]) == ARG_PTR_TO_BTF_ID.
-
-bpf_snprintf_btf_proto and bpf_seq_printf_btf_proto contain neither: their
-arguments are ARG_PTR_TO_MEM / ARG_CONST_SIZE / ARG_ANYTHING and the return
-is RET_INTEGER, because the BTF type id travels inside the struct btf_ptr
-the program passes by value rather than in a register type.
-
-So helper_uses_vmlinux_btf() returns false for exactly the two helpers
-whose runtime fetch was just weakened.
-
-On a CONFIG_DEBUG_INFO_BTF=m kernel where the BTF is present but not yet
-parsed, bpf_peek_btf_vmlinux() returns NULL and the helper returns -EINVAL.
-A working bpf_snprintf_btf() or bpf_seq_printf_btf() call silently starts
-failing, depending on whether unrelated activity already triggered the
-parse.
-
-The changelog frames this as behaving "as they do on a kernel without BTF",
-but the BTF is available, just unparsed, and the previous code would have
-produced correct output.
-
-Should the fix be at verify time - teaching helper_uses_vmlinux_btf(), or
-check_bpf_snprintf_call(), or the *_btf protos, to force the fetch? The
-forward range 90fe51b6b36a..2f5aab95d2b8 contains no code change for this.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35824427607
---===============1161609189727594346==--
+--m4tmncbnbg4g756x--
