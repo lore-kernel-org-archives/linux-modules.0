@@ -1,281 +1,405 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E782A443C03
-	for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 06:29:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABCF415F00;
+	Wed, 23 Sep 2026 06:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790144961; cv=none; b=p+fQ+/Q96WQjtvcUoIsZ9SVN0nvqDPKpxDdB/5Hl5iTjZUlXvxSKSzyfYKkfsML1vjKpfETQW12M0wtXRGVQcsJQ8EnKWjzgsp8VwjNGaI9SzzlmXR6uTMsMB8zbBhfDU5oimMJ/Gi+M/aiheCG4tCrDCyFRDVm53Prc+TDYVJ8=
+	t=1790145690; cv=none; b=GO2kbRirEh12DD3zA8l8sNiuOYbKIrzWOjf7nZxjCJPgIUQqy54LlASZx+ZcYFbm1bO2a6LCR9jXtuA0dzv4fLYmiiQwsK8FjCfFzJaAPfkpMrOy1/2QTwkLjUXX4RQ2OrLOOiV3S7ocq2rAlcl1u0d2uu9Ca/XDPWYXGhjxCWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790144961; c=relaxed/simple;
-	bh=2P1/Y+7yd2b38wkBtdBMXr+oehxAhkxnhsbRjMjb8Ls=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p1Tm0kJMSy/km+WLeuXdqOfgnE6UlR0XqHPCdLxxiS2K0NF19J7aqrB3xA2cvIHPBtfisbuYg9ydIQ0fsQf+q/v2j6Radu+GjH2IbL3tV30QxZYv0dQmVvjRz4HtCnB1M0IbBsarLOVlDG+mQbqV75JiCNL//0IFP8Lru+Sxjtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=l6od56IM; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1790145690; c=relaxed/simple;
+	bh=vMRciAZ175VWO2J32cGUF/F9D7Trztf0tZEVIb+di+o=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=EGKrXTQ6++sHHH1KNb0nrDPU6IDeOPx5ldC6dwieutRI8NETEDbvNgCUIoSU14ncVZyBKEZck5iWVzdUTCtVj9eIseuyhYP8smgjXC9pn/81o4GW9HBxsFyqm1E6QWAixjoQ5JUcF6m3NSToLOPQgSjiePhoFvJmUYsVaT+t6WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kh4AQ26O; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="l6od56IM"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843c2790ccso390130f8f.1
-        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 23:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1790144951; x=1790749751; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IqBBUCm9D3kcAtSAGWx9YPoXXMR7IIvhwpg10TQoYm0=;
-        b=l6od56IMX74BNqnz4bkTqVsvT7TD24l1V6scX5Gxcm2Ba0nNYt0lyH968epWiozZQX
-         EsQfZEgGNgKa0yumSDHHGtbh8TtcstcLd5rpQkOdGDWJkWOyuZIcy/H2MCD6N2ngdeDZ
-         D/PhGynIR4UpFG+LQ8pifR7209dFV43U2wYIe/4iRiwA8zT6D4Co7F7cvdCcrzLoKfag
-         qM2CyIdWDF8xgmhzsXgYmW7faTWr8aoPqrM309n+jxkHx9OSAiKmmHs3cDYNYM2Ch4GP
-         68kPpsY7cGyX8SGtVyBqRGxz/405HuON/8+PfuCz7oz61mKOwSo9+KhIQPNeHvN8q9n3
-         RUCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790144951; x=1790749751;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IqBBUCm9D3kcAtSAGWx9YPoXXMR7IIvhwpg10TQoYm0=;
-        b=JhWC3ty/ZdCaj+/5+4NfZrYcTF4SWMVvsVKxcJaFZqadn2Cmec7JUrJOQex+WSWbED
-         tiKmai57X89hUOIsNbW/kcS6+4jM3ywx3zXnv+q4DEWgOECAN88QiKr1lNo042YzTzUr
-         CqbG1pVSIf/UFKsEBVQX/hwrrIOxt0T3dSDfNISEseOlvau4BqAvF2wQkiNtS5cwhlQl
-         ANk0k0uvNi0tFVLkITI9blpd84ByYoVFORUqoRpzq2cMb8ujtFKBop4oCdKnPwnxBOgy
-         i85vTRiZ0I4feL7jNPt6QcBws9uKZuHuB8naMqEFdBr9hvlrBFc7H7wFyNZfWAVHK0EZ
-         YX1w==
-X-Forwarded-Encrypted: i=1; AKwUvByUJVK2plw2Sdk2DZjQnj6IZCOeeI3f69T69Oq00EcdOhxm+FdkPY30JtSZtTXfRzgdFObjjnuSuPRvHPYD@vger.kernel.org
-X-Gm-Message-State: AFuF++m1lc0J4oadpVfCJonZCBW5g10qeBJ4VDMdUcob6Iy8Gcf1Ehxu
-	H12la4z4dBoCoiJXljDNIj+kKe0/2llCN+LKJTBLanAnXqs2GCfZMwWSK624Xierwzc=
-X-Gm-Gg: AYBFou2mJmpApomfnwe5cuX0kAZQZztnAPnlejphC48VdZHSXjfLPLl/h0fU+n7q4Cz
-	w9p2VflgcKMcXAx3lispo60WL0f5L4VPE977zOm+q+7L/meQPkI3NvM8IVXjTSg7NFygoeD1fyr
-	/QZgGmGQVxytm8j0aDMVtzVM8OHE/cVs1t/pb8LA6Ep6vFP0yRj0yxfw8fPBQd3fUWa9WiP7y6N
-	fJfLWXkSJUwEIPWC75iKxUv3ckIpB5WNYl9lWK7rCWLX1qQOeID7z/3/3FGDFQUTit58S7B9JDw
-	xO97sUQSg6VKECcA5sx6WmB+tKOCbvwQ430bzLJJYaw2dIv+lWXJU5yGYA4mgEqmq46TM2sFTuH
-	2tgHmbTn0YvNZqRE26MQUXFOj+/ELGzH5CUI1s1njnRgf0vvx1GbyvvmqVBwdKz1qImaHm7U6hf
-	zHC/dyO6+MJB0iZz1WjAFdUOhcFnMptnYKoZG3FMxEAnmBwf869vVm4HfSZT+9fMppgrBATHYJv
-	4Se16bcZnNWuwU=
-X-Received: by 2002:a05:6000:40dd:b0:487:27f6:a4db with SMTP id ffacd0b85a97d-48867092e81mr2065474f8f.43.1790144951218;
-        Tue, 22 Sep 2026 23:29:11 -0700 (PDT)
-Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4886876c1fdsm4980428f8f.14.2026.09.22.23.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 23:29:09 -0700 (PDT)
-Date: Wed, 23 Sep 2026 08:29:08 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: David Lechner <dlechner@baylibre.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh <nogikh@google.com>, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org, 
-	Johan Hovold <johan@kernel.org>, Richard Weinberger <richard@nod.at>
-Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
- userspace manually messes with devices and drivers
-Message-ID: <arNuIicuNMmA7E3K@monoceros>
-References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
- <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
- <arIvG0nx4LXG9nlW@monoceros>
- <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
- <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kh4AQ26O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C8A1F000FF;
+	Wed, 23 Sep 2026 06:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790145682;
+	bh=2W4NE5J+KhZtrDQBDt/XwIKj7xSOG+lvJrpx1ZfD3WE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Kh4AQ26OksIbGC0k1FMrdRH1tU4dxQXllArQlHmZTRMDpXMRnanD2BWVhKMZQwcE3
+	 hbpz1OqO+DqS6dTie61sfkqtqxMkCbbcKs/vEKtqt/pNjMofBp07CzWuMkSvCpzN5H
+	 7fnatDP5xuirLARW53rk9INT2Cy61r5x+LUsT6zdUdI8PalaBJskEabFe9Clt/9Grr
+	 4JpYlA4YmzCMozxuAOIuv5zOUyG0g2M5kcmcXR0HW271DHdGHXE4M7FMC80BJVIamb
+	 JW7xOe4A66iM+uR1omSSG1LZsHQuqjjQYfWO8m/+mrMpRh5UT0ljTGJAgJbMnSb4NU
+	 kCPbicPsDU8nA==
+Content-Type: multipart/mixed; boundary="===============0426560887140224341=="
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="m4tmncbnbg4g756x"
-Content-Disposition: inline
-In-Reply-To: <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
+Message-Id: <f0a28d1ffadcd0dbc3209da34afb902c4911ad9e31cd90a1b640d4c1592cf11d@mail.kernel.org>
+In-Reply-To: <20260923053948.30617-6-wanjay@amazon.com>
+References: <20260923053948.30617-6-wanjay@amazon.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: defer registrations until the vmlinux BTF is available
+From: bot+bpf-ci@kernel.org
+To: wanjay@amazon.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: alan.maguire@oracle.com,martin.lau@linux.dev,yonghong.song@linux.dev,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,mcgrof@kernel.org,petr.pavlu@suse.com,linux-modules@vger.kernel.org,arnd@arndb.de,linux-kernel@vger.kernel.org,abuehaze@amazon.com,doebel@amazon.de,jay.wang.upstream@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 23 Sep 2026 06:41:19 +0000 (UTC)
 
-
---m4tmncbnbg4g756x
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
- userspace manually messes with devices and drivers
+--===============0426560887140224341==
+Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 22, 2026 at 11:04:46PM +0200, Armin Wolf wrote:
-> Am 22.09.26 um 15:40 schrieb David Lechner:
->=20
-> > On 9/22/26 2:39 AM, Uwe Kleine-K=F6nig wrote:
-> > > On Fri, Sep 18, 2026 at 06:39:02PM +0200, Danilo Krummrich wrote:
-> > > > On Mon Sep 14, 2026 at 4:30 PM CEST, Greg Kroah-Hartman wrote:
-> > > > > The ability to add and remove devices from a driver through the s=
-ysfs
-> > > > > "bind" and "unbind" files was created all those decades ago as a =
-way
-> > > > > that kernel developers can iterate faster, and provide a debuggin=
-g way
-> > > > > for users to attempt to add a new device to a driver without havi=
-ng to
-> > > > > rebuild their kernel.
-> > > > >=20
-> > > > > This api over the years has been abused and recently come under a=
- major
-> > > > > fuzzing "attack" through tools like syzbot which decided that it =
-would
-> > > > > attempt to just randomly bind any driver to any type of device, c=
-ausing
-> > > > > loads of unneeded errors and pointless kernel patches to be gener=
-ated by
-> > > > > unsuspecting new developers.
-> > > > >=20
-> > > > > Handle all of this by adding a new taint flag, TAINT_FORCED_BIND,=
- which
-> > > > > will be set on the driver if the bind/unbind sysfs files are ever
-> > > > > written to.  This lets kernel developers "know" that a user is
-> > > > > attempting to do something that is not normal, and as such, if the
-> > > > > kernel breaks they get to keep the shiny pieces laying around on =
-the
-> > > > > floor.
-> > > > >=20
-> > > > > The flag is 'Y' which was unused, and can remembered as the user =
-is
-> > > > > "yeeting" the device being operated on here (thrown with force wi=
-thout
-> > > > > regard for the thing being thrown).
-> > > > >=20
-> > > > > Note, the taint flag gets set _BEFORE_ the bind/unbind callback h=
-appens,
-> > > > > as many times crashes/oops/warnings/failures happen within the ca=
-llback,
-> > > > > and the taint flag needs to be there to show what was being attem=
-pted.
-> > > > > If it were to be set after the callback happens, the oops report =
-would
-> > > > > not properly reflect what foolishness was being attempted.
-> > > > >=20
-> > > > > Fuzzing tools like syzbot, that doesn't have hand-crafted rules t=
-o keep
-> > > > > the tool from hitting bind/unbind, should be run with panic_on_ta=
-int
-> > > > > enabled so that they fall over and don't continue on, thinking th=
-at they
-> > > > > actually found a real issue.
-> > > > >=20
-> > > > > Userspace operations that rely on the bind/unbind files
-> > > > I agree that this should be avoided.
-> > > >=20
-> > > > But I also think the biggest offender really is driver_override. Sp=
-ecifically,
-> > > > on a hot-pluggable bus a driver must be complient with the device d=
-river
-> > > > lifecycle rules and hence shouldn't break on bind/unbind. I think i=
-t would be
-> > > > nice to not taint the kernel for such busses, and only taint on dri=
-ver_override,
-> > > > as I think we'd still want the bug reports for such cases.
-> > > >=20
-> > > > But I think this is fine to leave for a follow-up.
-> > > I fully agree. I'm fine and support tainting on driver_override, but
-> > > bind/unbind are used occasionally in my bubble and I consider drivers
-> > > not handling that properly buggy.
->=20
-> I fully agree with this, drivers should correctly implement the lifecycle=
- model
-> and not just break when being unbound at a improper time. Drivers sufferi=
-ng from
-> this can easily break this way when unloading the associated kernel modul=
-e, so this
-> taint is no solution.
->=20
-> > In the IIO subsystem, unbind/rebind is the de-facto way to reset a wedg=
-ed
-> > chip.
-> >=20
-> > A few examples where other reset methods were reject in favor of unbind=
-/bind:
-> >=20
-> > https://lore.kernel.org/linux-iio/20240727160216.2488ed29@jic23-huawei/
-> >=20
-> > 	This needs documenting as it's custom ABI. Note that we don't often
-> > 	accept custom ABI. Particularly not a hook that seems to reset the
-> > 	device. If you want to do that, unbind and rebind the whole drive[r]
-> > 	so we are in a known state etc.
-> >=20
-> > https://lore.kernel.org/linux-iio/20240720163440.03c713dc@jic23-huawei/
-> >=20
-> > 	Firstly as stated below, we don't provide interfaces for this
-> > 	because it's a heavy weight process that is most of the effort of
-> > 	unbinding and rebinding the driver. So if you need to reset, do that.
-> >=20
-> > https://lore.kernel.org/linux-iio/20250505200609.54756520@jic23-huawei/
-> >=20
-> > 	The solution is to run it once at driver bind. Similar to reset
-> > 	below, if the usecase needs to re do it then unbinding and rebinding
-> > 	the driver reflects the fact we are taking it effectively offline
-> > 	for a while.
-> >=20
-> I also consider bind/unbind to be an official API to interact with device=
-s,
-> so i want to use them in the future with the WMI subsystem.
->=20
-> AFAIK the underlying reason for this series is that some drivers break wh=
-en
-> being bound to unsupported devices. However IMHO drivers should verify th=
-at
-> they support a given device inside their .probe callback, and the associa=
-ted
-> bus should only match devices with drivers that explicitly claim support =
-for
-> those devices (ignoring driver_override).
->=20
-> Can we get some example bugs uncovered this way?
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> index 0bf10811fe53..3b99d6386dec 100644
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
 
-There is a related set of mail threads, that however are not the trigger
-for Greg's effort.=20
+[ ... ]
 
-Initially I suggested to protect the pwm-tegra driver from attaching
-to unexpected devices via a check in .probe():
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 50eb7a95fd82..cbba20a908e9 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 
-   https://lore.kernel.org/linux-pwm/ed943d9be3b785514e0f65a5b8c13a78aba7a0=
-90.1789741839.git.u.kleine-koenig@baylibre.com/
+[ ... ]
 
-Thierry suggested a dedicated flag in struct device_driver instead
-allowing to opt out of the driver_override mechanism:
+> @@ -8792,11 +8857,55 @@ static int btf_vmlinux_module_coming(struct module *mod)
+>  	smp_store_release(&btf_vmlinux_raw, data);
+>  	return 0;
+>  }
+> +
+> +/*
+> + * The vmlinux BTF is not available yet and must not be loaded from the
+> + * module notifier (that would nest a module load into a module load).  Keep
+> + * the module's BTF for btf_parse_deferred_modules().  The .BTF data can be
+> + * exposed in sysfs right away, it needs no parsing.
+> + */
+> +static int btf_module_defer(struct btf_module *btf_mod, struct module *mod)
+> +{
+> +	int err;
+> +
+> +	btf_mod->data = kvmemdup(mod->btf_data, mod->btf_data_size,
+> +				 GFP_KERNEL | __GFP_NOWARN);
+> +	if (!btf_mod->data)
+> +		return -ENOMEM;
+> +	btf_mod->data_size = mod->btf_data_size;
+> +
+> +	if (mod->btf_base_data) {
+> +		btf_mod->base_data = kvmemdup(mod->btf_base_data,
+> +					      mod->btf_base_data_size,
+> +					      GFP_KERNEL | __GFP_NOWARN);
+> +		if (!btf_mod->base_data) {
+> +			kvfree(btf_mod->data);
+> +			return -ENOMEM;
+> +		}
+> +		btf_mod->base_data_size = mod->btf_base_data_size;
+> +	}
+> +
+> +	err = btf_module_sysfs_add(btf_mod, mod->name, btf_mod->data,
+> +				   btf_mod->data_size);
+> +	if (err) {
+> +		kvfree(btf_mod->data);
+> +		kvfree(btf_mod->base_data);
+> +		return err;
+> +	}
 
-   https://lore.kernel.org/linux-pwm/20260922-driver-override-opt-out-v1-0-=
-58c35ded3b83@nvidia.com/
+The comment states the .BTF data "can be exposed in sysfs right away,
+it needs no parsing". For modules with a .BTF.base section (split BTF),
+is this accurate?
 
-I think Greg was motivated by syzcaller triggering various exceptions
-using driver_override.
+btf_parse_deferred_modules() later calls btf_relocate() which rewrites
+btf_mod->data in place (btf_relocate_rewrite_type_id() and
+btf_relocate_rewrite_strs() modify btf->data directly). The sysfs file
+exposes unrelocated BTF until that runs.
 
-So my opinion on the right way forward is:
+Can userspace tools reading /sys/kernel/btf/<module> between module load
+and vmlinux BTF arrival get type ids and string offsets relative to the
+distilled .BTF.base (which is never exposed), making the data unusable?
 
- - Given that there are only very few drivers that are supposed to be
-   used for a driver override, there should be an opt-in (instead of the
-   opt-out that Thierry suggested).
+Also, can reads that overlap the btf_relocate() in-place rewrite get a
+mix of pre- and post-relocation bytes, since sysfs_bin_attr_simple_read()
+reads attr->private/attr->size with no synchronization against
+btf_parse_deferred_modules()?
 
- - The changes from this thread (i.e. make usage of bind/unbind result
-   in a taint) should be dropped. I wrote earlier that I'm ok with a
-   taint for a usage of driver_override, but with the previous item
-   implemented, I don't think that is necessary.
+Does treating btf_module_sysfs_add() failure as fatal make sense here?
+A few lines below, the non-deferred path at kernel/bpf/btf.c:8984
+deliberately ignores the same failure as non-fatal:
 
-Best regards
-Uwe
+    /* not fatal, the module BTF is usable without the sysfs file */
+    btf_module_sysfs_add(btf_mod, btf->name, btf->data, btf->data_size);
 
---m4tmncbnbg4g756x
-Content-Type: application/pgp-signature; name="signature.asc"
+A transient -ENOMEM or unexpected -EEXIST in sysfs_create_bin_file()
+costs the module its BTF entirely instead of just its sysfs file.
 
------BEGIN PGP SIGNATURE-----
+> +
+> +	list_add(&btf_mod->list, &btf_modules);
+> +	return 0;
+> +}
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmqzcbIACgkQj4D7WH0S
-/k5/RAf/SE7NQiSIqLNn4DRqC5N/7ANJOhVQL7lvqZeGImpxnvizJPahFAQ5wgHr
-TqvOjwfgQW2cjqr0dT1HbkBIxqhE/FQQPy/wGiSAEwVqGPoaf3NQ2+EJhFtbkW3A
-UhHydl1NRAl0lJI3aDHu8yvr2fYi1JsjVoGk6bEHLa8H3g4mxV09GAmn5486tQ6N
-WbofIbgRNtpIYlMN9eWRKKBBB8j/EQvMHXZwBIy05z/jru237w9UWObXjS/FhwD6
-ktITAnnTBacmzUAC1u5hm2Z3lpH88/MCe014xcIal73LJ1HgVnwnjH7uaBmRrzsR
-r/G6IKsL4nPw3DX9iCQvpNDM+a44MQ==
-=ea/U
------END PGP SIGNATURE-----
+[ ... ]
 
---m4tmncbnbg4g756x--
+> @@ -8905,6 +9033,87 @@ static int __init btf_module_init(void)
+>  }
+>
+>  fs_initcall(btf_module_init);
+> +
+> +#if IS_MODULE(CONFIG_DEBUG_INFO_BTF)
+> +/*
+> + * CONFIG_DEBUG_INFO_BTF=m: the vmlinux BTF has just become available.  Parse
+> + * the BTF of the modules that were loaded before it, and apply the
+> + * registrations that waited for them.  Called from bpf_get_btf_vmlinux()
+> + * once btf_vmlinux is published, with no locks held.
+> + */
+> +void btf_parse_deferred_modules(void)
+> +{
+> +	/* Pairs with the publication in bpf_get_btf_vmlinux() */
+> +	struct btf *vmlinux_btf = smp_load_acquire(&btf_vmlinux);
+> +	struct btf_deferred_reg *reg, *rtmp;
+> +	struct btf_module *btf_mod, *tmp;
+> +	bool parsed = false;
+> +	LIST_HEAD(regs);
+> +	struct btf *btf;
+> +	int err;
+> +
+> +	if (IS_ERR_OR_NULL(vmlinux_btf))
+> +		return;
+> +
+> +	mutex_lock(&btf_module_mutex);
+> +	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+> +		if (btf_mod->btf)
+> +			continue;
+> +
+> +		btf = btf_parse_module(btf_mod->module->name, vmlinux_btf,
+> +				       btf_mod->data, btf_mod->data_size, true,
+> +				       btf_mod->base_data, btf_mod->base_data_size);
+> +		err = PTR_ERR_OR_ZERO(btf);
+> +		if (!err) {
+> +			err = btf_alloc_id(btf);
+> +			if (err) {
+> +				/* btf owns the data now, btf_free() drops it */
+> +				btf_mod->data = NULL;
+> +				btf_free(btf);
+> +			}
+> +		}
+
+[ ... ]
+
+> +		/*
+> +		 * Registrations are applied after dropping the mutex (they
+> +		 * walk btf_modules); pin what they need until then.
+> +		 */
+> +		list_for_each_entry_safe(reg, rtmp, &btf_mod->deferred_regs, list) {
+> +			list_del(&reg->list);
+> +			if (!try_module_get(btf_mod->module)) {
+> +				btf_free_deferred_reg(reg);
+> +				continue;
+> +			}
+> +			btf_get(btf);
+> +			reg->btf = btf;
+> +			reg->module = btf_mod->module;
+> +			list_add_tail(&reg->list, &regs);
+> +		}
+> +	}
+> +	mutex_unlock(&btf_module_mutex);
+
+Can try_module_get() on a MODULE_STATE_COMING module guarantee the module
+image outlives the registration?
+
+The deferred registrations are created from the module's own init routine
+(register_btf_kfunc_id_set() / register_btf_id_dtor_kfuncs() /
+__register_bpf_struct_ops() call btf_defer_reg()), so they are queued
+while the module is still MODULE_STATE_COMING.
+
+btf_try_get_module() at kernel/bpf/btf.c:9128 deliberately refuses to pin
+COMING modules:
+
+    /* We must only consider module whose __init routine has
+     * finished, hence we must check for BTF_MODULE_F_LIVE flag,
+     * which is set from the notifier callback for
+     * MODULE_STATE_LIVE.
+     */
+    if ((btf_mod->flags & BTF_MODULE_F_LIVE) && try_module_get(btf_mod->module))
+
+tools/testing/selftests/bpf/prog_tests/bpf_mod_race.c exercises this
+check because a refcount on a COMING module is not a lifetime guarantee.
+
+If that module's init then fails, kernel/module/main.c:3208 does:
+
+  fail:
+    mod->state = MODULE_STATE_GOING;
+    synchronize_rcu();
+    module_put(mod);
+    blocking_notifier_call_chain(&module_notify_list, MODULE_STATE_GOING, mod);
+    ...
+    free_module(mod);
+
+free_module() (kernel/module/main.c:1417) never waits for the module
+refcount and goes straight to free_mod_mem(mod). The pin taken above
+does not defer the free, so btf_apply_deferred_regs() then dereferences
+reg->kfunc.kset / reg->st_ops in the freed module image and writes the
+freed per-cpu refcount with module_put(reg->module).
+
+[ ... ]
+
+> @@ -10335,8 +10574,183 @@ int __register_bpf_struct_ops(struct bpf_struct_ops *st_ops)
+>  	return err;
+>  }
+>  EXPORT_SYMBOL_GPL(__register_bpf_struct_ops);
+> +#else
+> +static int btf_struct_ops_add(struct btf *btf, struct bpf_struct_ops *st_ops)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +#endif
+
+Is the new btf_struct_ops_add() stub reachable?
+
+Preprocessor structure in kernel/bpf/btf.c:
+
+  10421  #ifdef CONFIG_BPF_JIT
+  10536    static int btf_struct_ops_add(...)        /* real */
+  10553    int __register_bpf_struct_ops(...)
+  10572      err = btf_struct_ops_add(btf, st_ops);
+  10577  #else
+  10578    static int btf_struct_ops_add(...)        /* NEW stub */
+  10582  #endif
+  10591  #ifdef BTF_MODULE_NOTIFIER
+  10670    return btf_struct_ops_add(btf, reg->st_ops);
+  10752  #endif /* BTF_MODULE_NOTIFIER */
+
+The stub's only reference is inside btf_apply_deferred_reg(), compiled
+only when BTF_MODULE_NOTIFIER is defined:
+
+  kernel/bpf/btf.c:8706  #if IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES) || IS_MODULE(CONFIG_DEBUG_INFO_BTF)
+  kernel/bpf/btf.c:8707  #define BTF_MODULE_NOTIFIER 1
+
+With CONFIG_BPF_SYSCALL=y (btf.c is built), CONFIG_BPF_JIT=n and
+CONFIG_DEBUG_INFO_BTF=n (or =y with CONFIG_MODULES=n), the stub is
+defined and never referenced. CONFIG_BPF_JIT is a plain bool with no
+default (kernel/bpf/Kconfig:46), so =n with BPF_SYSCALL=y is an ordinary
+configuration.
+
+This produces a -Wunused-function warning, which is a build failure with
+CONFIG_WERROR=y.
+
+> +
+> +/*
+> + * CONFIG_DEBUG_INFO_BTF=m: registrations made before the BTF they apply to
+> + * is available.  Registrations for vmlinux wait in btf_vmlinux_deferred_regs
+> + * until btf_parse_vmlinux() applies them; registrations for a module wait in
+> + * its struct btf_module until btf_parse_deferred_modules() does.  Both lists
+> + * are protected by btf_module_mutex.
+> + */
+> +#ifdef BTF_MODULE_NOTIFIER
+> +static LIST_HEAD(btf_vmlinux_deferred_regs);
+> +/* Set when the vmlinux BTF is parsed; new registrations apply directly */
+> +static bool btf_vmlinux_regs_closed;
+
+[ ... ]
+
+> +/*
+> + * The vmlinux BTF has just been parsed; apply the registrations that waited
+> + * for it.  Runs under btf_vmlinux_lock, before @btf is published, so nothing
+> + * can observe a vmlinux BTF without its kfuncs and struct_ops.
+> + *
+> + * Applying a registration can queue further ones: a struct_ops ->init()
+> + * registers the kfuncs of its hook.  Those must not go through
+> + * bpf_get_btf_vmlinux() (we hold its lock), so the queue stays open until
+> + * a pass applies nothing new, and only then are registrations applied directly.
+> + */
+> +static void btf_apply_deferred_vmlinux_regs(struct btf *btf)
+> +{
+> +	struct btf_deferred_reg *reg, *tmp;
+> +	LIST_HEAD(regs);
+> +	int err;
+> +
+> +	if (!IS_MODULE(CONFIG_DEBUG_INFO_BTF))
+> +		return;
+> +
+> +	mutex_lock(&btf_module_mutex);
+> +	while (!list_empty(&btf_vmlinux_deferred_regs)) {
+> +		list_splice_init(&btf_vmlinux_deferred_regs, &regs);
+> +		mutex_unlock(&btf_module_mutex);
+
+Can this introduce a circular lock dependency?
+
+btf_apply_deferred_vmlinux_regs() is called from btf_parse_vmlinux()
+(kernel/bpf/btf.c:6597), which runs with btf_vmlinux_lock held by
+bpf_get_btf_vmlinux():
+
+  kernel/bpf/verifier.c:21184  mutex_lock(&btf_vmlinux_lock);
+  kernel/bpf/verifier.c:21187      btf = btf_parse_vmlinux();
+  kernel/bpf/verifier.c:21197  mutex_unlock(&btf_vmlinux_lock);
+
+The new mutex_lock(&btf_module_mutex) at kernel/bpf/btf.c:10724 creates:
+
+  (A) btf_vmlinux_lock -> btf_module_mutex  [NEW]
+
+Two pre-existing edges close the cycle:
+
+  (B) cand_cache_mutex -> btf_vmlinux_lock
+      bpf_core_apply() kernel/bpf/btf.c:10269  mutex_lock(&cand_cache_mutex);
+      bpf_core_apply() kernel/bpf/btf.c:10270  cc = bpf_core_find_cands(...);
+      bpf_core_find_cands() kernel/bpf/btf.c:10165  main_btf = bpf_get_btf_vmlinux();
+
+  (C) btf_module_mutex -> cand_cache_mutex
+      btf_module_notify() MODULE_STATE_GOING kernel/bpf/btf.c:9001
+          mutex_lock(&btf_module_mutex);
+      btf_module_notify() kernel/bpf/btf.c:9015  btf_module_free(btf_mod);
+      btf_module_free() kernel/bpf/btf.c:8810  purge_cand_cache(btf_mod->btf);
+      purge_cand_cache() kernel/bpf/btf.c:10092  mutex_lock(&cand_cache_mutex);
+
+Both edges (B) and (A) are taken by the same thread:
+
+  CPU 0: BPF_PROG_LOAD with CO-RE relocations    |  CPU 1: rmmod <module with BTF>
+    bpf_check() -> bpf_check_btf_info()          |
+      -> check_core_relo()                       |
+        -> bpf_core_apply()                      |
+           mutex_lock(&cand_cache_mutex)  [10269]|    mutex_lock(&btf_module_mutex) [9001]
+           -> bpf_core_find_cands()              |
+              -> bpf_get_btf_vmlinux()           |
+                 mutex_lock(&btf_vmlinux_lock)   |
+                                        [21184]  |
+                 -> btf_parse_vmlinux()          |
+                   -> btf_apply_deferred_vmlinux_regs()
+                      mutex_lock(&btf_module_mutex) <-- BLOCKS [10724]
+                                                   |
+                                                   |    btf_module_free() -> purge_cand_cache()
+                                                   |      mutex_lock(&cand_cache_mutex) [10092]
+                                                   |      <-- BLOCKS
+
+Both waits are plain uninterruptible mutex_lock(); there is no trylock,
+timeout or bounded retry, so the two tasks hang permanently.
+
+Required config: CONFIG_DEBUG_INFO_BTF=m (the IS_MODULE() guard at 10721)
+together with CONFIG_DEBUG_INFO_BTF_MODULES=y, which supplies the
+module-BTF entries that edge (C) frees. That combination is supported and
+explicitly exercised: DEBUG_INFO_BTF_MODULES is 'default y' and 'depends
+on DEBUG_INFO_BTF && MODULES' (lib/Kconfig.debug:428), and the final
+commit 2f5aab95d2b8 states it was 'Tested with ... =y vs =m, both with
+CONFIG_DEBUG_INFO_BTF_MODULES=y'.
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a7b73bc146a8..b6f094d5306a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -21160,12 +21160,14 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+>  /*
+>   * Returns the parsed vmlinux BTF, NULL if the kernel has none, or an ERR_PTR
+>   * if it is malformed.  With CONFIG_DEBUG_INFO_BTF=m the BTF lives in the
+> - * btf_vmlinux module; the first caller loads it and parses it.  May sleep.
+> + * btf_vmlinux module; the first caller loads it, parses it and then registers
+> + * the BTF of the modules that were loaded before it.  May sleep.
+>   */
+>  struct btf *bpf_get_btf_vmlinux(void)
+>  {
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35824427607
+--===============0426560887140224341==--
