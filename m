@@ -1,332 +1,278 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C732451EE1D;
-	Tue, 22 Sep 2026 21:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790111127; cv=none; b=mPNA8SVif7mOa9d3B1KySrj911KdgTtgt4JGCcwa2I2PnKZJWZXP7QqAWtTWpd9f6PCnaCfOW4zP4Rb5mzZDJPBALlQ+ePjWPB2OfmHnlKnXwg9rt3e893MEZUODBDWiTy0zSHXEjvYfNYrghTXfS9TnVpPDhMajl1W+T8geJ68=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790111127; c=relaxed/simple;
-	bh=9Dv0Y/BGh3R8PeSvjophk2YPpeulfdBgLbKzqOhLo4Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pEApja8Rw1sEdn0ls2fozz/1domfambFEQAFTUGpRVdZpAh+DTlMEVJETUCTaKkiF1dD89AE3Q9FZ1vLTjBzsEzJv5Dy0pplyox0Xv+gk1/jlboz/w9K0x4YH0+ew1EpHmUIP+rGWd0mU4bx5H+ljbeVAZ66GkmeBgP7iZmTU3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=BVPf6FMy; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B89738238C
+	for <linux-modules@vger.kernel.org>; Wed, 23 Sep 2026 02:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790131315; cv=pass; b=orE0H3VsCqgT38G5yoz7d8b5g7vP0uI+/uXgtOwLa4kMtjm8Yzstmd/s1obfIREdxSu14wPfrQWP8OdjzIszjaWDTXrMBLLhOL4qufz51aehek57l3br3N4K1SX9QeFVCnijFUIg2+ut6ZT0NAYLprZWATAy9qbcXRLk/eqFoJ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790131315; c=relaxed/simple;
+	bh=NIu+NeDM/UfBH3wljgY3yC8VLjhCj1QmSfsdQ3mVeIg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aGoBpGtMcciOk5NoEbTQ2528tALtg0yRX+wrn0CAx1e+nBMHmPfBqs8oWbLY7KvcZAcbS/LfeHeEwXhSicPnt6oRGtq0XCEGf9nciR7JZ2Esrnxx5F5IeYEPEAIdyp9Qc4UNENG9jRQDo8RZ6oNgET5uHTVYjU2nTpAULQit968=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DT1W02ra; arc=pass smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="BVPf6FMy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1790111089; x=1790715889; i=w_armin@gmx.de;
-	bh=HPj6QE4B/HefE3yLab3sUv06uJRi8t/2qBCqZDYS9/A=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=BVPf6FMyTeIyxJMRjkg4iy0eYXktcUzQwdvMkeZ7WJAxtCckYxOGRZ3tTnvXwj5J
-	 +MhhbNRexm4GKX7XJxofDjMyztapU8G93s33wGkwg758e/YJxMqfr7g1CTlV5xWCn
-	 9gtodpcZWuMtHXc4IepVXto86qHxeo/p6kN6+msHm/334a5uXA7oG1rP2tXvbD+yd
-	 mw5fG7rCLZNlbwug98cynB5QYfy0ovFIxss11iE+AMOYY39/3OdTd+5wHCpNpLf+B
-	 59EYHM+UkKCPoOPGOAj7pWftPeVvQO+oHd9yZhW5DRZIPWmb/wmFYVK5W7/oPb0uw
-	 0umH3cvZ6h0J6AQb2A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MHoRA-1wwSD040xC-00HAHh; Tue, 22
- Sep 2026 23:04:49 +0200
-Message-ID: <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
-Date: Tue, 22 Sep 2026 23:04:46 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DT1W02ra"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-52faa58bff5so78801cf.0
+        for <linux-modules@vger.kernel.org>; Tue, 22 Sep 2026 19:41:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790131311; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BWNBUH5IVFkYz7US2icb+EZRwZHhAlPYC9Cm3PYknN3rPctiHeF3slPFmBjgLSCG6d
+         NqmU/MBIqouYvaohMo6czAt8lhuFYUhoQHOkkwzcg3oqR81tFPy88cZa5k+c71sDZqi8
+         0CdyCSroBUINTAdw+p3hueEaQYW6lxrd43eosLhC+KrfqVKiMSA/RcQlX48swN9wuNxR
+         FUqBSB6HLAt0JnC5xWNbuutPBJ2AxMIPf+AJYK66U3DEkTzB5p0KtRnmcrT8vSRU9VVF
+         CL4UXnp0jrcagfRo/aZpDeWEh/d8SeLJcj6OnmSpMBVx6md7Fwdz3zZI+x0A7COdUUd6
+         21BA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=aMdgikVEgbwQAqoDuHQqMGEpgmnZ1PYCVyMsDBPWuTQ=;
+        fh=WtlcIhHlUl9z/vjoQ301cIvvhluoD0LJ2MTK1JT6f/U=;
+        b=LYS5vqO+XlquW5tiSujyuDgQw7A5SKQbqlRrsitnKNj+aBNhFmMErTb+mt9m0DCCDt
+         9MnlehkRYfyViZmObugvEmqzuMOgiJBVNH6wBC0vHdD6u+3Z7t4yqvVdJTlSO7vUM+ZJ
+         TfQirKmgtYyQNUwdOfIOFQVfoNTJME32FvUTSV35HID/t6to6DRBTxRlh/+GCRMyR89M
+         i9jW4u/DnVuyzXsM8laqoelT2HS/4ul3UJrXoQhX34F3g4I24UIW4rzmNeik1qWuh6FY
+         q3uv9wJKJPHbNxqvVmUYk0GKk/g7/AN1SA0qyNkykiwt99xeUamo3vqfznh2PGI2gF/S
+         KcpA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790131311; x=1790736111; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=aMdgikVEgbwQAqoDuHQqMGEpgmnZ1PYCVyMsDBPWuTQ=;
+        b=DT1W02raeS+hW3/C1qSNjqMVjIf3NWcnvGst835THgTfuVngPpweTSbAKXN+8hSfTQ
+         bmaB+dHOo6kYGpw1iWMu2jFHoadhOGxgrUlmuGoHMBz1mLRndAZYWhcazqXWq81PpYH0
+         7sxOQUwCya+l0hbC6pxo9YNHrwZnLwelw0hQ5Rysz0N/OwAFCyWAy3MiqNjG7gLcBi+U
+         djHrcKyK7OykriXa8hK0rRVP66po9CfZlInugkTtaCV3JFcra3chljhd7TND9z6GpNkT
+         sYlgwBxWw+hLXk20W4mxpkz2WyMw5CinpNof+pkd/g5nNugowpwNzfpSuwE0PWdnWUY5
+         kF6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790131311; x=1790736111;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aMdgikVEgbwQAqoDuHQqMGEpgmnZ1PYCVyMsDBPWuTQ=;
+        b=qE568BecGmwgT99fDhgPAgeieIH2YkGKa1gj1kzNrpCzNMwwZnfIC+dw3Zh+NbiFpL
+         0QDxoDF+d7nmlV8yXnL8F6jV5hXoe15FSOm22hwzqoljRsBJK5JrbN7OSQlyXDISYMiX
+         vpATuMrdEMe69cxGsi/cLFKcjCQ1GEEuUImqh6GrBY0e2cmnAU12iY3R6l0/C62Whtnt
+         fuw5F75foOQr6WFZTSeLah2X5QUZOBQAhCpOu4gAT01U7J+RdRbvPvc5sg+cWZq2/Tbe
+         YDeSdROgZErcWeZgP346FzvHamxS74Aw+WbOLO5AkrN6vFP/xAXeD6gAv+1hhK8p5Umu
+         ua8g==
+X-Forwarded-Encrypted: i=1; AKwUvBzV1vnQJm8RhJQRANnotOQX0WecKPfB+hEd9nyIX4FBYP7EkCWGnvotLuFSHfCGp7BpJu1/pV41Uw6TOhjg@vger.kernel.org
+X-Gm-Message-State: AFuF++mu2BoBE2JcsFgy2OOnjFfnz6TgT2oZnVuhVc2QYrPvX7Jhw28G
+	D9M0zTIgXu3xLAYTGLX9FNyQKy4vwm/Tk5pw12pVjWdaV4+GcqufWWmfhCsoWP5hvRMFCgD9GpC
+	PEFjkXdA+FO14cPWjwL2DuSK+CCFrBzvBf+ZBrJuE
+X-Gm-Gg: AYBFou0zv7fN/U7RYlYzywNr/nTjeZzlSAtLPCVa+KV1KZ8zvlcvLRqzHDX0tXKCZhd
+	pO3H+V2pKGYTLNRDMCmvmH9VOr/7rG0q5LqmtV8g39wyO6JnvUXhzCWL6NW29kQw2Yv07N8lSpg
+	bB/I7iif5Au4ucS6vKQl+4mIWoYpDxd47CaYmAzbwvGgqiFS808TIF1J0GKAkKwFxtM2E0rDG33
+	4YvqNhZnlgobj7t8LttXzfTofIyDq8GaYSj6/IFgn0Uem7qGErpjypjgMZFa9bvbZDdIg0PrfbM
+	XqA8OHbREOzienUq8DQ2G2UvOQwL4+p7Ilm4S3qjA6PvPUL8R7A7HA==
+X-Received: by 2002:a05:622a:8307:b0:532:c8ca:5ae9 with SMTP id
+ d75a77b69052e-532ef021d41mr3289381cf.11.1790131310427; Tue, 22 Sep 2026
+ 19:41:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
- userspace manually messes with devices and drivers
-To: David Lechner <dlechner@baylibre.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Danilo Krummrich <dakr@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh <nogikh@google.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
- driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
- Johan Hovold <johan@kernel.org>, Richard Weinberger <richard@nod.at>
-References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
- <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org> <arIvG0nx4LXG9nlW@monoceros>
- <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20260915070001.113559-1-hao.ge@linux.dev> <20260915070001.113559-7-hao.ge@linux.dev>
+ <CAJuCfpGMQqjHsAvW=XUA1Q3AyaVJKM2bKYVja_fgn0wa1tk7DA@mail.gmail.com> <d7327cdd-43df-46f8-92d4-c25dda7ae684@linux.dev>
+In-Reply-To: <d7327cdd-43df-46f8-92d4-c25dda7ae684@linux.dev>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Tue, 22 Sep 2026 19:41:38 -0700
+X-Gm-Features: AclHuK8G_VNDItmD1FBLXjWgMC7CO-sPt9k4BV7Zop_hKhE8VPUN1FVpIu4Rkf8
+Message-ID: <CAJuCfpHMdZzJNSRgysbS7vOBmTwEPSYfPYUvt_5+uZ-Ydvw+hw@mail.gmail.com>
+Subject: Re: [PATCH v10 6/6] alloc_tag: Defer /proc/allocinfo removal to a workqueue
+To: Hao Ge <hao.ge@linux.dev>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-modules@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:WC7Q3H3s8ZsHb6GZdlAH2xhbLNtKPMe9amNYtSfQcE1J7vdyDAD
- oaZxnVdrivGNmsT1JMOr3xUOZQxBJ8xLk6rh2KvA9bA8/6tc+D+LysIS906O/DpMgKS+ktn
- l1Kdz2RqzTEneLk5opZq55AEXwMmUeKoQ/eku4K1a3dtOjllrJ1SIufdF46AndHkdZsK7TY
- 1YrgmsEz6BLYETy1qazqg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:PuQ2TbBFUU0=;SPWpip2IlpAv3IU5dtJ3vj3wwSh
- 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
- Mbz06IpVbstePJ/LEY8LXhgweA==
 
-Am 22.09.26 um 15:40 schrieb David Lechner:
+On Thu, Sep 17, 2026 at 6:38=E2=80=AFPM Hao Ge <hao.ge@linux.dev> wrote:
+>
+> Hi Suren
+>
+>
+> On 2026/9/18 09:09, Suren Baghdasaryan wrote:
+> > On Mon, Sep 14, 2026 at 11:59=E2=80=AFPM Hao Ge <hao.ge@linux.dev> wrot=
+e:
+> >>
+> >> shutdown_mem_profiling() calls remove_proc_entry() from
+> >> reserve_module_tags(), which runs under mod_lock held for write.
+> >> remove_proc_entry() waits for readers, and a reader takes mod_lock for
+> >> read in allocinfo_start():
+> >>
+> >>   CPU0 (insmod)                      CPU1 (read /proc/allocinfo)
+> >>   ----------------                   ----------------------------
+> >>   reserve_module_tags()
+> >>     down_write(&mod_lock)  [held]
+> >>                                      use_pde()            [in_use++]
+> >>                                      allocinfo_start()
+> >>                                        down_read(&mod_lock)  <- blocks
+> >>     shutdown_mem_profiling()
+> >>       remove_proc_entry()
+> >>         wait for in_use =3D=3D 0         <- blocks
+> >>
+> >> Move remove_proc_entry() to a workqueue.
+> >>
+> >> The file creation is moved to the end of alloc_tag_init() as well.
+> >> If alloc_tag_init() fails with alloc_tag_cttype still NULL or an
+> >> error pointer, a concurrent reader of the leftover file would
+> >> dereference it in allocinfo_start() and panic.
+> >>
+> >> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> >> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compr=
+ession")
+> >> Cc: stable@vger.kernel.org
+> >> Signed-off-by: Hao Ge <hao.ge@linux.dev>
+> >> ---
+> >>  mm/alloc_tag.c | 26 +++++++++++++++++---------
+> >>  1 file changed, 17 insertions(+), 9 deletions(-)
+> >>
+> >> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+> >> index 1ca0409b492b..cfa0fc84b68f 100644
+> >> --- a/mm/alloc_tag.c
+> >> +++ b/mm/alloc_tag.c
+> >> @@ -15,6 +15,7 @@
+> >>  #include <linux/seq_file.h>
+> >>  #include <linux/string_choices.h>
+> >>  #include <linux/vmalloc.h>
+> >> +#include <linux/workqueue.h>
+> >>  #include <linux/kmemleak.h>
+> >>  #include <uapi/linux/alloc_tag.h>
+> >>
+> >> @@ -591,6 +592,13 @@ void pgalloc_tag_swap(struct folio *new, struct f=
+olio *old)
+> >>         put_page_tag_ref(handle_new);
+> >>  }
+> >>
+> >> +static void remove_allocinfo_file(struct work_struct *work)
+> >> +{
+> >> +       remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
+> >> +}
+> >> +
+> >> +static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
+> >> +
+> >>  static void shutdown_mem_profiling(bool remove_file)
+> >>  {
+> >>         if (mem_alloc_profiling_enabled())
+> >> @@ -600,7 +608,7 @@ static void shutdown_mem_profiling(bool remove_fil=
+e)
+> >>                 return;
+> >>
+> >>         if (remove_file)
+> >> -               remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
+> >> +               schedule_work(&remove_allocinfo_work);
+> >>         mem_profiling_support =3D false;
+> >>  }
+> >>
+> >> @@ -1358,16 +1366,10 @@ static int __init alloc_tag_init(void)
+> >>                 return 0;
+> >>         }
+> >>
+> >> -       if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_p=
+roc_ops)) {
+> >> -               pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NA=
+ME);
+> >> -               shutdown_mem_profiling(false);
+> >> -               return -ENOMEM;
+> >> -       }
+> >> -
+> >>         res =3D alloc_mod_tags_mem();
+> >>         if (res) {
+> >>                 pr_err("Failed to reserve address space for module tag=
+s, errno =3D %d\n", res);
+> >> -               shutdown_mem_profiling(true);
+> >> +               shutdown_mem_profiling(false);
+> >>                 return res;
+> >>         }
+> >>
+> >> @@ -1375,10 +1377,16 @@ static int __init alloc_tag_init(void)
+> >>         if (IS_ERR(alloc_tag_cttype)) {
+> >>                 pr_err("Allocation tags registration failed, errno =3D=
+ %pe\n", alloc_tag_cttype);
+> >>                 free_mod_tags_mem();
+> >> -               shutdown_mem_profiling(true);
+> >> +               shutdown_mem_profiling(false);
+> >>                 return PTR_ERR(alloc_tag_cttype);
+> >>         }
+> >>
+> >> +       if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_p=
+roc_ops)) {
+> >> +               pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NA=
+ME);
+> >> +               shutdown_mem_profiling(false);
+> >
+> > You need free_mod_tags_mem() here.
+> >
+>
+> Right. Another problem is exposed here: moving proc_create() to the end
+> implies successful return from codetag_register_type(),
+> so alloc_tag is already added into codetag_types.
+> That looks a bit odd to me. Because all places inside codetag that access=
+ this
+> linked list will access this incompletely=E2=80=91initialized codetag_typ=
+e.
+> There is currently no matching unregister interface to tear it down.
+> So I drafted one previously:
+> void codetag_unregister_type(struct codetag_type *cttype)
+> {
+>         struct codetag_module *cmod;
+>         unsigned long id, tmp;
+>
+>         mutex_lock(&codetag_lock);
+>         list_del(&cttype->link);
+>         mutex_unlock(&codetag_lock);
+>
+>         codetag_lock_module_list(cttype);
+>         idr_for_each_entry_ul(&cttype->mod_idr, cmod, tmp, id)
+>                 kfree(cmod);
+>         idr_destroy(&cttype->mod_idr);
+>         codetag_unlock_module_list(cttype);
+>
+>         kfree(cttype);
+> }
+>
+> But looking back, do we really need to do this? I'm not so sure.
 
-> On 9/22/26 2:39 AM, Uwe Kleine-K=C3=B6nig wrote:
->> On Fri, Sep 18, 2026 at 06:39:02PM +0200, Danilo Krummrich wrote:
->>> On Mon Sep 14, 2026 at 4:30 PM CEST, Greg Kroah-Hartman wrote:
->>>> The ability to add and remove devices from a driver through the sysfs
->>>> "bind" and "unbind" files was created all those decades ago as a way
->>>> that kernel developers can iterate faster, and provide a debugging wa=
-y
->>>> for users to attempt to add a new device to a driver without having t=
-o
->>>> rebuild their kernel.
->>>>
->>>> This api over the years has been abused and recently come under a maj=
-or
->>>> fuzzing "attack" through tools like syzbot which decided that it woul=
-d
->>>> attempt to just randomly bind any driver to any type of device, causi=
-ng
->>>> loads of unneeded errors and pointless kernel patches to be generated=
- by
->>>> unsuspecting new developers.
->>>>
->>>> Handle all of this by adding a new taint flag, TAINT_FORCED_BIND, whi=
-ch
->>>> will be set on the driver if the bind/unbind sysfs files are ever
->>>> written to.  This lets kernel developers "know" that a user is
->>>> attempting to do something that is not normal, and as such, if the
->>>> kernel breaks they get to keep the shiny pieces laying around on the
->>>> floor.
->>>>
->>>> The flag is 'Y' which was unused, and can remembered as the user is
->>>> "yeeting" the device being operated on here (thrown with force withou=
-t
->>>> regard for the thing being thrown).
->>>>
->>>> Note, the taint flag gets set _BEFORE_ the bind/unbind callback happe=
-ns,
->>>> as many times crashes/oops/warnings/failures happen within the callba=
-ck,
->>>> and the taint flag needs to be there to show what was being attempted=
-.
->>>> If it were to be set after the callback happens, the oops report woul=
-d
->>>> not properly reflect what foolishness was being attempted.
->>>>
->>>> Fuzzing tools like syzbot, that doesn't have hand-crafted rules to ke=
-ep
->>>> the tool from hitting bind/unbind, should be run with panic_on_taint
->>>> enabled so that they fall over and don't continue on, thinking that t=
-hey
->>>> actually found a real issue.
->>>>
->>>> Userspace operations that rely on the bind/unbind files
->>> I agree that this should be avoided.
->>>
->>> But I also think the biggest offender really is driver_override. Speci=
-fically,
->>> on a hot-pluggable bus a driver must be complient with the device driv=
-er
->>> lifecycle rules and hence shouldn't break on bind/unbind. I think it w=
-ould be
->>> nice to not taint the kernel for such busses, and only taint on driver=
-_override,
->>> as I think we'd still want the bug reports for such cases.
->>>
->>> But I think this is fine to leave for a follow-up.
->> I fully agree. I'm fine and support tainting on driver_override, but
->> bind/unbind are used occasionally in my bubble and I consider drivers
->> not handling that properly buggy.
+I think having codetag_unregister_type() would be a good idea. For now
+it's used only in this failure case, so we can make it an __init
+function and not waste any memory at all.
 
-I fully agree with this, drivers should correctly implement the lifecycle =
-model
-and not just break when being unbound at a improper time. Drivers sufferin=
-g from
-this can easily break this way when unloading the associated kernel module=
-, so this
-taint is no solution.
-
-> In the IIO subsystem, unbind/rebind is the de-facto way to reset a wedge=
-d
-> chip.
+> I previously thought the issue reported by Sashiko was a false positive,
+> and I laid out my thoughts back then:
+> https://lore.kernel.org/all/afa606df-3d5b-47c2-9972-f3e0c2e13c12@linux.de=
+v/
+> and I thought the change would be straightforward, and defensive programm=
+ing
+> felt acceptable to me, but it turns out to be a little more complex than =
+I expected.
 >
-> A few examples where other reset methods were reject in favor of unbind/=
-bind:
+> Suren, could you help me analyze this? Thank you very much for your valua=
+ble feedback
 >
-> https://lore.kernel.org/linux-iio/20240727160216.2488ed29@jic23-huawei/
+> Thanks
+> Best Regards
+> Hao
 >
-> 	This needs documenting as it's custom ABI. Note that we don't often
-> 	accept custom ABI. Particularly not a hook that seems to reset the
-> 	device. If you want to do that, unbind and rebind the whole drive[r]
-> 	so we are in a known state etc.
->
-> https://lore.kernel.org/linux-iio/20240720163440.03c713dc@jic23-huawei/
->
-> 	Firstly as stated below, we don't provide interfaces for this
-> 	because it's a heavy weight process that is most of the effort of
-> 	unbinding and rebinding the driver. So if you need to reset, do that.
->
-> https://lore.kernel.org/linux-iio/20250505200609.54756520@jic23-huawei/
->
-> 	The solution is to run it once at driver bind. Similar to reset
-> 	below, if the usecase needs to re do it then unbinding and rebinding
-> 	the driver reflects the fact we are taking it effectively offline
-> 	for a while.
->
-I also consider bind/unbind to be an official API to interact with devices=
-,
-so i want to use them in the future with the WMI subsystem.
-
-AFAIK the underlying reason for this series is that some drivers break whe=
-n
-being bound to unsupported devices. However IMHO drivers should verify tha=
-t
-they support a given device inside their .probe callback, and the associat=
-ed
-bus should only match devices with drivers that explicitly claim support f=
-or
-those devices (ignoring driver_override).
-
-Can we get some example bugs uncovered this way?
-
-Thanks,
-Armin Wolf
-
->> So please let's do
->>
->> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
->> index c51ad96d4de4..ce8fb14ea19a 100644
->> --- a/drivers/base/bus.c
->> +++ b/drivers/base/bus.c
->> @@ -242,7 +242,6 @@ static ssize_t unbind_store(struct device_driver *d=
-rv, const char *buf,
->>  =20
->>   	dev =3D bus_find_device_by_name(bus, NULL, buf);
->>   	if (dev && dev->driver =3D=3D drv) {
->> -		add_taint_module(drv->owner, TAINT_FORCED_BIND, LOCKDEP_STILL_OK);
->>   		device_driver_detach(dev);
->>   		err =3D count;
->>   	}
->> @@ -266,7 +265,6 @@ static ssize_t bind_store(struct device_driver *drv=
-, const char *buf,
->>  =20
->>   	dev =3D bus_find_device_by_name(bus, NULL, buf);
->>   	if (dev && driver_match_device(drv, dev)) {
->> -		add_taint_module(drv->owner, TAINT_FORCED_BIND, LOCKDEP_STILL_OK);
->>   		err =3D device_driver_attach(drv, dev);
->>   		if (!err) {
->>   			/* success */
->> @@ -513,6 +511,7 @@ static ssize_t driver_override_store(struct device =
-*dev,
->>   {
->>   	int ret;
->>  =20
->> +	add_taint_module(drv->owner, TAINT_FORCED_BIND, LOCKDEP_STILL_OK);
->>   	ret =3D __device_set_driver_override(dev, buf, count);
->>   	if (ret)
->>   		return ret;
->>
->> (plus the needed documentation adaptions and maybe a rename
->> s/TAINT_FORCED_BIND/TAINT_DRIVER_OVERRIDE/).
->>
->> Best regards
->> Uwe
+> >> +               return -ENOMEM;
+> >> +       }
+> >> +
+> >>         return 0;
+> >>  }
+> >>  module_init(alloc_tag_init);
+> >> --
+> >> 2.25.1
+> >>
