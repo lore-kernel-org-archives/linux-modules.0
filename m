@@ -1,143 +1,140 @@
 Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0587E476686
-	for <linux-modules@vger.kernel.org>; Thu, 24 Sep 2026 11:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BBE332E12E
+	for <linux-modules@vger.kernel.org>; Thu, 24 Sep 2026 12:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790249204; cv=none; b=XDgoE90eJkTU0Csyy+qqFStfNgDQuT8tip3hFQwCbQbkixrz7/0OoYIMGi9xwuULmcZETCZb2BpZUpIafde/09nTDjAZPZlY/G1Xc1vQ31y6bo6MJNtbqYrn8H5T8P/2Gtq/OZSMP5BHtrul/wXpCTR+WAVQBI6lJmaglxXwRnc=
+	t=1790253672; cv=none; b=s7xhSSJ1V2sOYhr9HF6I95tgX3AcPHDT9TSshUzHzrYbak/w2tFszrw/MItS7GwDlmfWDquExI9IVuvx3yfKp9OAGxD4Iv4Z4Lqjv+Ed5Cu85RyI8iFUg5LJPnKin0Ysjnc0c53XvTd3NpcUixTEjri1RheLoSPx01Y8VZYHWtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790249204; c=relaxed/simple;
-	bh=uV91OIdoGT1hJro1OTQxii5/OoY5c2o+jAR2m75TEWs=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UaTyNCFPaYI4nrM8u7dZvQTXSiJww4jU3Zcm3UlmS47BHykI50ZdsIS3/tKv2vtCHuFxmN6rS7+4K2GNRjNHL0lG2xKkBrIgmxLsLyLsWXSwm5YNbmvql/pL8l6mYY9J7Qtpwc52OikNA0paWQpw9hKNistsVAE6WKtCvpQWauA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DafOEmt/; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790253672; c=relaxed/simple;
+	bh=0lQB1A6p8+X7aK18vQ2T7xJjipK5Cs4nvBNiXn5k5hE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TebFBw1zJW3TEsy09sG7ljPmRDUtjd6RgEWS++FWh57ycK53ZX+XuNc/jcRjr3ofm6HTRUIlnf1hLnMHB8X26Mt7GF4SdbS/g/3KqsCrFff/rxwI4ovodNkMozUWKq1383nt2axzwfkTnOR2lWYtwpkAM6qTgZECsFk/Z+pkwm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ef6uSAnN; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DafOEmt/"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd38e0f79so10949735e9.3
-        for <linux-modules@vger.kernel.org>; Thu, 24 Sep 2026 04:26:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ef6uSAnN"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d37b5so11997425e9.2
+        for <linux-modules@vger.kernel.org>; Thu, 24 Sep 2026 05:41:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790249200; x=1790854000; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=wOJC0I+fG63bz2W6Hzkg61w6664DvUwJdI07aaUCw1Y=;
-        b=DafOEmt/RUdsdfzhek29Gaoz8CEt1RMYBCAlL9jfFQ9tmoETEnKpaEQPnpM5juq4/v
-         4ftxpZmcoe9DFVsIlPkRz9JTOM9A8h5JZDuU+m7lFmHCtXjI56oX4N/l4vROJsjIqODo
-         DVfU7QMp9F5S1lSCNv5D4CUuqev7aqPQALXi0vPhoqptoVh765ExoxNJsNacJQXNzord
-         BYMHsFxxBu7l9YDvg6jM9yV9IvY86ljFoUVqwMkw3MWkChPMBOOk+TxeJ9mJUsxXQgA1
-         T34wgJnRxoHgFRfaImKAmlAf4E7IrEDWmwURADk2/re9KAkueVuikW/dhhqci9KIu3wr
-         Sd/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790249200; x=1790854000;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=suse.com; s=google; t=1790253666; x=1790858466; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=wOJC0I+fG63bz2W6Hzkg61w6664DvUwJdI07aaUCw1Y=;
-        b=Y52etavKGeT3aeuCeNGX8g172/QvLUNlhhaBCtgUhOWH+cxtq+Kb6lZ4gXHyjBvnuV
-         waGrZIg0L2QzHC5lHO83+5782Sj5rvPAD0lf+LomD1F0Db/K/ENweuZSUFinOALhiu6d
-         S2jIwGr07qQP3NxdRSHS4uQByXCuI2F4ZJDFtI0BLGU8Zci0HsKviLe9oJOxafye16mq
-         J7glhMStakeSDXJ1rOzlT6XEZyeoN7vE5y9WYHrmAq6vSDb6sZ+QpxiZZ7Tju3tyNNSa
-         ymjJEEA9v9b5+hQNSDfpiAlq5ojK95ffTo9EnnuZW+4FbnwuoiPMXaMTJl32r3I8TBMw
-         VDAw==
-X-Forwarded-Encrypted: i=1; AKwUvBxMLPYGME7NQVPXb11Gw37uZpLUyz2NjwUJuKhb8jnV7+wsOzKabHv/vpiLZt5H6mhCoARFkVxTMewqTXiQ@vger.kernel.org
-X-Gm-Message-State: AFuF++mshhvHLg1cuN1Dwf/A3UrJl6GBHC1p8GBNmSpFvO+jHZLg95AU
-	Ug1lFSMhxqQc1XF6QULDdVh6g4aaGaWqo2D50FDhvHGH4xCniKp3tsqg
-X-Gm-Gg: AYBFou3xcFtxPXWtdWnYCWuq/YSo5Aw4txAik/wxSND4V+2AfrER9P43MMmM/xJG4Cj
-	lhHPbOMGT2YgaC7t1f5BoX5ReCt/egrP2q+73mJLRNR+6VJ8WnQ/CankZGBPjtLGPS/JVQqG03i
-	8aCNRc4Xcc6jHH5+77ZABEwTQnc3Dqhy/LJ4ajMEBFqlWjUP3nVw2fIXOS7mWMKF/qmh8nFwUse
-	UlqQ2boMwubVuCleB76ljO9NaFRHZk/aFrqu2hwajrkJo8+04fnPP6ljsguyineH6NRNQSOav+2
-	OPAtkDSC+18Re9VsgKhuUo6MOUh27D14q95xbAqC61l+Jyl6Q2p5tcJMiEtTXlgiIs+tqnYYoPG
-	6IYYEnybOceK76oKDbp4iZyIHppZ3QkLZMwgV4iMqyqodtdqhleT3cCObqboBW7PdKI766GydyQ
-	SOcr5LnQIWbFF3Us4zgEKfN3KvMqac9xvhaHFGNJZ0523gzaUMr8SpmtKtJrU=
-X-Received: by 2002:a05:600c:4e8b:b0:49f:ce78:356a with SMTP id 5b1f17b1804b1-49fe66fb018mr35842225e9.27.1790249199969;
-        Thu, 24 Sep 2026 04:26:39 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5cc90ccsm98428825e9.10.2026.09.24.04.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 04:26:38 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 24 Sep 2026 13:26:36 +0200
-To: bot+bpf-ci@kernel.org
-Cc: wanjay@amazon.com, bpf@vger.kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-	memxor@gmail.com, alan.maguire@oracle.com, martin.lau@linux.dev,
-	yonghong.song@linux.dev, nathan@kernel.org, nsc@kernel.org,
-	linux-kbuild@vger.kernel.org, mcgrof@kernel.org,
-	petr.pavlu@suse.com, linux-modules@vger.kernel.org, arnd@arndb.de,
-	linux-kernel@vger.kernel.org, abuehaze@amazon.com, doebel@amazon.de,
-	jay.wang.upstream@gmail.com, martin.lau@kernel.org,
-	mason@kernel.org, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next 3/6] bpf: fetch the vmlinux BTF where kernel
- types enter a program
-Message-ID: <arUI7ORFZCegI5ep@krava>
-References: <20260923053948.30617-4-wanjay@amazon.com>
- <39f6151d364d966f70b7802cfd4bbca15734a7945478265ecc681f1779e50abb@mail.kernel.org>
+        bh=m+K9xI1+b45+Hx50rEe06X/tskVciHAk+ndafWRnnYs=;
+        b=Ef6uSAnN1G23WQfE+lhtOb0XuJdoDKeMU3FC4unVrPCFnGpUELO7+iSnm87cFobZEQ
+         vrBJuhed/4G4BJuc07lAVQLzhND4cDXfxmJ9OU8PgNfKh7FULDp1JbDsOaSp2PEfxekW
+         0n/0dG99ZwPfrKjiFWq1jBtiVv0ApgmuqnanaA1w33mEGa12NqylqyR3Bxd9e5k15z4y
+         I9d+7CkuxmHcBF5hKJxwkmA30kNUNAalh9XMzPjiUF7t6bctA+NcRiD4d/IrdARpih+J
+         p/3cc3zmUsx/QQ+nJPxD4TsIr2kuOXEIr+ExHUkWm95kROgz/Jn20n0tZN+j3DRwxHNx
+         jfHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790253666; x=1790858466;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=m+K9xI1+b45+Hx50rEe06X/tskVciHAk+ndafWRnnYs=;
+        b=HPazGOBKRLTsehg7ydzzxC+2Hsp2TPvAxNyreWp0iG7d4jh6SWC5uOS19kmJ+Dm2go
+         RsxyF5I0LXVZKnx0jxHDuWttYysMCEnaax4snll/ctssaj/U3AOPefyc/PWlZ9nlVg+A
+         5rJB99kJlv0PtdKaa4zX2Ta2RcV5yncC0Ei1SY70fKUfw27Abm1s9NffEdjZUcd+oYAO
+         jtXcOmALavG4CgH7CQi59gMRymPbkRxsZSXq5Mc6xFpW1O2rk62S4Kea0SVN9RVKF0Eq
+         jOMvCcvJ3AXX3bUwJ9Lep5BlSy2jDTuKCUfwD+WnN7ktOYA3u5MF00T/7VMoS/hu8aMF
+         7xOg==
+X-Forwarded-Encrypted: i=1; AKwUvBy/jkLyrB6SPnyexyB0nl/BKRK45aidwWUjFziRERl6rqsEiO/I6oyuvx16tKJVVGvEoAS4Ew3u3CPLa1zU@vger.kernel.org
+X-Gm-Message-State: AFuF++knViBlLeOuFlCmllwV4jKu7lhtNRy4w3kZBoKlpurnDuFr08j4
+	gb5Z3OrqW9OcSSZPdHD39TlrUd8Tafb5H0bM9M1chWXrj9o5ay4sPJNyh+bG3gpg9hk=
+X-Gm-Gg: AYBFou020ISWUhwZRlwb4U3bPkHhDnX8tTOdUsahZePcTOiFaIjwGO90SjzkUr1/SXM
+	Hx6hHRnV+VGQF5W0UiFQCMHbAJuI2HQRs7GetFPNj2N/BRPAsRkqRuA+yJmXqTVNEx+CMClH1l3
+	dwDtiS7K+Y5dLN1dXbcurmeD1WNBbw5fZz4ona0bcQBFTHyWAvRHK74PuJhAbrLHvxqU+fCr/BJ
+	NEa4phh/eeOme8h9B41Pk4uVse8r5Fx08novvrGZUVQJVMvmmyCQLo/Bd7j8IJBs2+qe3Cd7YYd
+	7bvd2C9N68shDDknWKJKyy7LhVDtcHmuz2tJkH5jZTpX9F6tmNpKc7AHzwj+K/NHpSmyCWCB59j
+	Azsr12WVyr8stDiWPMvm0h6tZYoxKv+fKXZHHmTZEW0eZnphxOtGXZfEfjahlELJ/9kgMKO7Up2
+	AkjXuRpaiQl8BhpXdlW+Dndg4/5ARDTjuw5pB4aijgRWTUhTNftyGCZCTWoenBMI1J8eCavTDom
+	BvA+TIonQdeixb71wm6mIAhaM1g51ZLZLw=
+X-Received: by 2002:a05:600d:8642:20b0:49f:e8bf:c38 with SMTP id 5b1f17b1804b1-49fe8bf0d97mr19384015e9.34.1790253665749;
+        Thu, 24 Sep 2026 05:41:05 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5cbd77bsm78152645e9.8.2026.09.24.05.41.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 05:41:05 -0700 (PDT)
+Message-ID: <f3b91a89-2733-4159-98b4-129e3127e7e4@suse.com>
+Date: Thu, 24 Sep 2026 14:41:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39f6151d364d966f70b7802cfd4bbca15734a7945478265ecc681f1779e50abb@mail.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] drivers: Replace __MODULE_STRING() with __stringify()
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Ian Abbott
+ <abbotti@mev.co.uk>, H Hartley Sweeten <hsweeten@visionengravers.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Rudolf Marek <r.marek@assembler.cz>, Andi Shyti <andi.shyti@kernel.org>,
+ Chris Snook <chris.snook@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat
+ <YehezkelShB@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Duncan Sands <duncan.sands@free.fr>,
+ Chas Williams <3chas3@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, linux-watchdog@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+ linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-atm-general@lists.sourceforge.net, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260922-module-string-v1-0-c18766690185@suse.com>
+ <20260922-module-string-v1-2-c18766690185@suse.com>
+ <cc03390d-8fc7-422a-bbcf-93bfbb82276f@roeck-us.net>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <cc03390d-8fc7-422a-bbcf-93bfbb82276f@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 23, 2026 at 06:28:43AM +0000, bot+bpf-ci@kernel.org wrote:
+On 9/22/26 7:21 PM, Guenter Roeck wrote:
+> On Tue, Sep 22, 2026 at 03:32:22PM +0200, Petr Pavlu wrote:
+>> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+>> MODULE_PARM support for older modules" [1] in 2002-12. That change also
+>> moved it to the graveyard section at the end of linux/module.h
+>>
+>> Replace the remaining uses of __MODULE_STRING() with __stringify() in
+>> preparation for its removal.
+>>
+>> Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> ---
+>>  drivers/comedi/comedi_fops.c                          |  5 +++--
+>>  drivers/gpu/drm/drm_fb_helper.c                       |  3 ++-
+>>  drivers/hwmon/fschmd.c                                |  3 ++-
+>>  drivers/hwmon/nct7904.c                               |  5 +++--
+>>  drivers/hwmon/sch56xx-common.c                        |  3 ++-
+>>  drivers/hwmon/w83793.c                                |  5 +++--
+> 
+> I don't know how other subsystem maintainers want to handle it,
+> but please send the hwmon patches separately; I'll want to apply
+> it through the hwmon tree to avoid the potential of merge conflicts.
 
-SNIP
+Sure, I'll do it in v2.
 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 195f78db9bda..c022b2877f0b 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -1015,7 +1015,8 @@ static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
-> >  	if (btf_ptr_size != sizeof(struct btf_ptr))
-> >  		return -EINVAL;
-> >
-> > -	*btf = bpf_get_btf_vmlinux();
-> > +	/* Called from a running program: only use the BTF if it is parsed. */
-> > +	*btf = bpf_peek_btf_vmlinux();
-> >
-> >  	if (IS_ERR_OR_NULL(*btf))
-> >  		return IS_ERR(*btf) ? PTR_ERR(*btf) : -EINVAL;
-> 
-> Swapping bpf_get_btf_vmlinux() for bpf_peek_btf_vmlinux() is correct as a
-> sleeping-in-program-context fix, but does anything in this commit arrange
-> for the BTF to have been parsed by the time bpf_snprintf_btf() or
-> bpf_seq_printf_btf() run?
-> 
-> The compensating verifier-time fetch in check_helper_call() is gated on
-> helper_uses_vmlinux_btf(), which only matches base_type(ret_type) ==
-> RET_PTR_TO_BTF_ID or base_type(arg_type[i]) == ARG_PTR_TO_BTF_ID.
-> 
-> bpf_snprintf_btf_proto and bpf_seq_printf_btf_proto contain neither: their
-> arguments are ARG_PTR_TO_MEM / ARG_CONST_SIZE / ARG_ANYTHING and the return
-> is RET_INTEGER, because the BTF type id travels inside the struct btf_ptr
-> the program passes by value rather than in a register type.
-> 
-> So helper_uses_vmlinux_btf() returns false for exactly the two helpers
-> whose runtime fetch was just weakened.
-> 
-> On a CONFIG_DEBUG_INFO_BTF=m kernel where the BTF is present but not yet
-> parsed, bpf_peek_btf_vmlinux() returns NULL and the helper returns -EINVAL.
-> A working bpf_snprintf_btf() or bpf_seq_printf_btf() call silently starts
-> failing, depending on whether unrelated activity already triggered the
-> parse.
-> 
-> The changelog frames this as behaving "as they do on a kernel without BTF",
-> but the BTF is available, just unparsed, and the previous code would have
-> produced correct output.
-> 
-> Should the fix be at verify time - teaching helper_uses_vmlinux_btf(), or
-> check_bpf_snprintf_call(), or the *_btf protos, to force the fetch? The
-> forward range 90fe51b6b36a..2f5aab95d2b8 contains no code change for this.
+If other maintainers would also like changes affecting their drivers to
+be split into separate patches, please let me know.
 
-seems valid to me, could we just check for these two print helpers in
-helper_uses_vmlinux_btf ?
-
-jirka
+-- 
+Thanks,
+Petr
