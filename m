@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B47B40B0E6;
-	Fri, 25 Sep 2026 21:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE23048097B;
+	Fri, 25 Sep 2026 21:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790371987; cv=none; b=SV67pZjmHCtZiKr4LUnh+HtpzvvECSO5tfY1IuIi9saN+HcXuuKsqh7X+xuV1pbtFOftlTlyuQgH/dskrLoTW1V/4rd160O2U3ZuwtYQp8Mru5iJqHtFWcK5z2qBsqy01gCbI9kW8I90hPiqdDgmJYISW+zS4wMvozDlcmQUqvw=
+	t=1790372564; cv=none; b=Cor14mGP6UxLHQMAta5HCqbkLxIvKw6z95MCKPjkp8aP0crQzwT7xm/iVhTH7ubRrStCKghfv7azTODnSCLQQIkJHOAZco1U7FEtA5Qa1VwxRaMLt+1WtYXMir92mlZRiLMNZ+TPOadkRwDWp14+6BlOLido/UGKpNJoJDX4Qig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790371987; c=relaxed/simple;
-	bh=oFzVmRidh8A7hLbK7dnJIflNNaFtAjbE1RmpP4AhD5s=;
+	s=arc-20240116; t=1790372564; c=relaxed/simple;
+	bh=6cBTDfXrN3G+VKLi/fzl4YGdODAM1ltZ4omSGjVotvU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HNmius4jHdT0N01hBlYxujsSkuHyn8m7jyeQMtJuvQ73/V6kvJn/X6/vYljgiRhSjtcOklM0nnTIrNnRXFlaZyhuAOOkek1atOKHOtYUCojXvseECKsBKSSVyT5Pp/wluC1WnlpR7nPe/1y/q5B7c4VPZWj4xqjgliY5jF/RKuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBqWZZBI; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=RbrWGNokcpRXk7hZgm542cURvXJWJNa/66OWSidwrBJTfjRtsk0FSBSWrvEkD80LJno1uYn7PECOaVFEcz3T0f9EKm5z+tOssIN3MFdCls25beHbWYzzZHARJQTKz7rukQrvJObyhdWkw2iZ3ctfAblS7zOYovIR2HG3Wjuv0jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jzfOVELl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBqWZZBI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C371F000FF;
-	Fri, 25 Sep 2026 21:33:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jzfOVELl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367201F000FF;
+	Fri, 25 Sep 2026 21:42:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790371985;
-	bh=bEyB0hFzcNjqnvyi3s6ue1V4vlnrFUcfpW0f0eI9Kis=;
+	s=k20260515; t=1790372562;
+	bh=KoPDG8/do7TX+GsahT3CIdo/LvRtlXhe38jTPslnFZA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DBqWZZBIplh9zujyJHuJdeHcCaElSJ3iME8q+AsA21EP7TRgsGTHTckuqXSA8tagv
-	 EViwGO+eJHOvd483i1vDwNjWWZQMktSStlq6W6atqdjMLwDs10c+TDFTEnM9lkIDo/
-	 mBy2sOy/fapuYc4p2kpriWrj4aa8Kk9vQOVfqGkBajKqc+q3RHpLGIztNibUQeGFGM
-	 7ftmXZ6HRWaVXN+Nks64E6w8RgzN85vPcIm21Psa6IqJtIBCgx545RTfxID5wUZ7Oy
-	 diPexwfiGnthaNks03LcYqWvOR3UB9L7PodYAkEZA9QW8VbwmlO5xvKtad5pzoDKvS
-	 svczG5CP4IFvA==
+	b=jzfOVELlSzFUt5STifeU/d5/o125+hPI7uNyzbaDwrqP2w6184o1iJh52mfAM0TT0
+	 ZNMz/bQhE6bhOccdr/xJFFH3ib8R8YkUIDSb0HqDR/0i6zvxQWFVKJV5AKYefmeQdX
+	 gY54+YqW8IQGjx9vfkFH3LuWIaLR+416bb28HrMLR0HaBA3ta2Uv4i1o7BiOxqxRmU
+	 O9KnOEGkgKl5mlGF9DKCY/fUgmp9MgrEp7N2p7Nd5e9U8W3gK4pNalVd1naR2ktfgi
+	 hHAD2FUHhjrCy0HOQ8mErGHWmyiQ9p7Hq6FOIgOPzrl5FoR5bTzOykpQvYFEOAgc1s
+	 HlH1KfGw69fCQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 9/9] kbuild, bpf: allow building the vmlinux
- BTF as a module
+Subject: Re: [PATCH bpf-next v2 3/9] bpf: fetch the vmlinux BTF where kernel
+ types enter a program
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jay Wang" <wanjay@amazon.com>
 Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260925211314.5118-10-wanjay@amazon.com>
+In-Reply-To: <20260925211314.5118-4-wanjay@amazon.com>
 References: <20260925211314.5118-1-wanjay@amazon.com>
- <20260925211314.5118-10-wanjay@amazon.com>
+ <20260925211314.5118-4-wanjay@amazon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 25 Sep 2026 21:33:05 +0000
-Message-Id: <20260925213305.A7C371F000FF@smtp.kernel.org>
+Date: Fri, 25 Sep 2026 21:42:41 +0000
+Message-Id: <20260925214242.367201F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -47,48 +47,84 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] kconfig: turning DEBUG_INFO_BTF into tristate silently disables de=
-pendent bool features
+- [High] bpf: NULL pointer dereference in process_arg_ptr_to_btf_id due to =
+missing ARG_PTR_TO_BTF_ID_SOCK_COMMON
 --
 
-commit f23aaa487601db0500af9e21873fa5fc4f1af7b5
+commit 84d2361be82e8cb989ae15ca8d3347130aa3ce1b
 Author: Jay Wang <wanjay@amazon.com>
 
-kbuild, bpf: allow building the vmlinux BTF as a module
+bpf: fetch the vmlinux BTF where kernel types enter a program
 
-This commit makes CONFIG_DEBUG_INFO_BTF a tristate. It allows the vmlinux
-BTF to be built as a module (btf_vmlinux) that is loaded on demand, saving
-memory when it is not needed.
+This commit defers fetching the vmlinux BTF in the BPF verifier until
+kernel types are actually needed by a program. This optimization avoids
+loading and parsing BTF data for programs that do not use kernel types,
+such as simple socket filters.
 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 134b15a44625e..418025c5e6577 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -396,7 +396,7 @@ config DEBUG_INFO_SPLIT
->  	  Incompatible with older versions of ccache.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a7c9e2d8965d5..f02ecb0dae75c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -11568,6 +11570,24 @@ static int release_reg(struct bpf_verifier_env *=
+env, struct bpf_reg_state *reg,
+>  	return err;
+>  }
 > =20
->  config DEBUG_INFO_BTF
-> -	bool "Generate BTF type information"
-> +	tristate "Generate BTF type information"
+> +/* Does calling helper @func_id bring kernel BTF types into the program?=
+ */
+> +static bool helper_uses_vmlinux_btf(enum bpf_func_id func_id,
+> +				    const struct bpf_func_proto *fn)
+> +{
+> +	int i;
+> +
+> +	/* these take the kernel type id in a struct btf_ptr, not in a register=
+ */
+> +	if (func_id =3D=3D BPF_FUNC_snprintf_btf || func_id =3D=3D BPF_FUNC_seq=
+_printf_btf)
+> +		return true;
+> +	if (base_type(fn->ret_type) =3D=3D RET_PTR_TO_BTF_ID)
+> +		return true;
+> +	for (i =3D 0; i < MAX_BPF_FUNC_ARGS; i++) {
+> +		if (base_type(fn->arg_type[i]) =3D=3D ARG_PTR_TO_BTF_ID)
+> +			return true;
 
 [Severity: High]
-Does this change cause a regression where dependent boolean features are
-disabled when CONFIG_DEBUG_INFO_BTF is configured as a module?
+Does this logic also need to check for ARG_PTR_TO_BTF_ID_SOCK_COMMON?
 
-In Kconfig, when a bool option depends on an expression that evaluates to
-m, its upper bound is restricted. Since a bool cannot hold an m value,
-Kconfig evaluates the option to disabled.
+If ARG_PTR_TO_BTF_ID_SOCK_COMMON is omitted here, helpers like
+bpf_sk_release() that accept this argument type will skip loading
+btf_vmlinux.
 
-Several major kernel features are boolean options that depend directly on
-CONFIG_DEBUG_INFO_BTF, including CONFIG_SCHED_CLASS_EXT, CONFIG_NET_SCH_BPF,
-CONFIG_DEBUG_INFO_BTF_MODULES, and CONFIG_PROBE_EVENTS_BTF_ARGS.
+If a program synthesizes a PTR_TO_BTF_ID pointing to a module's BTF using
+ldimm64, btf_vmlinux could remain NULL. Later, in check_func_args(),
+arg_btf is assigned from btf_vmlinux:
 
-Setting CONFIG_DEBUG_INFO_BTF to m evaluates these dependencies to m,
-which causes these features to be omitted from the build.
+check_func_args() {
+    ...
+    case ARG_PTR_TO_BTF_ID:
+    case ARG_PTR_TO_BTF_ID_SOCK_COMMON:
+    {
+        const u32 *arg_btf_id =3D fn->arg_btf_id[arg];
+        const struct btf *arg_btf =3D meta->btf ?: btf_vmlinux;
+    ...
+}
 
-Could the dependencies be updated to evaluate to y when BTF is built
-as a module, such as using depends on DEBUG_INFO_BTF !=3D n?
+Because btf_vmlinux is NULL, arg_btf becomes NULL. Could this lead to a
+NULL pointer dereference when process_arg_ptr_to_btf_id() unconditionally
+dereferences it?
+
+process_arg_ptr_to_btf_id() {
+    ...
+    arg_t =3D btf_type_skip_modifiers(arg_btf, arg_btf_id, &arg_btf_id);
+    ...
+}
+
+> +	}
+> +	return false;
+> +}
+> +
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925211314.5118=
--1-wanjay@amazon.com?part=3D9
+-1-wanjay@amazon.com?part=3D3
