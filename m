@@ -1,68 +1,68 @@
-Received: from mail-wr2-f32.google.com (mail-wr2-f32.google.com [74.125.225.96])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34CF471D03
-	for <linux-modules@vger.kernel.org>; Fri, 25 Sep 2026 09:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D162E484232
+	for <linux-modules@vger.kernel.org>; Fri, 25 Sep 2026 09:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790327840; cv=none; b=tI4X+0oGb+ESqr6GitwKRhg3Ti6d79gfdjmK72YVEFEGsXLxiNNL4rZrWrfm+NLJMTKd1va13+2wAbqeGLza4nQ7vBwOIzToZVmG7fdckFn68uIsHOvNC6V6Z7zYSLCt184oSc6ylyOYT84NHR/tY5kWQ5KwCtd83VATifCoaO4=
+	t=1790328493; cv=none; b=MLKvefni/tAck7ejJPigzXvF8VuU5Tq66ybA5RqloZvjfUKU3xUs/khf2///LKC/oe9c8270/BKcnNQ7NjuCYar0X7IyjTZm77ebXQ+rlL7iCppXEEiUXmwh0pAnrPo2Pnr789B2eoBJr72CqjmmATxuE7IHOK7GH1i5/LGneXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790327840; c=relaxed/simple;
-	bh=APreP2O6tYmZ0sgnofROIYS7faftnQh6nQ7b0OujIjQ=;
+	s=arc-20240116; t=1790328493; c=relaxed/simple;
+	bh=RyhPOU+vvqd3rl1UlRjckMuKAfbjLaCIW52sS+yfk0s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nsXzj0kKRYbP5acjxC7VJUYycSO1JjhwuLZKnSqBXQAxegHEqecMfwB0oBRZqRz8sMsmAuDTqLh7g4wrwup14iQ5Sgp+oEArzkOnFfzxdHEit/f2bUSw7IzFi3FrsdJwhajjjAhRtO0FEXleXRofrGq0iXlJrh7jG8VCk+1xl/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=K8bx1wRg; arc=none smtp.client-ip=74.125.225.96
+	 In-Reply-To:Content-Type; b=JDwudrzU+dU36/2S2SHoZyYN0qkCNzaoQHXsyD7CGbIU+cVgOiBoAViQZ05JEe87ppYtzD9fk9nAwCy9Xfr/S5oKEWEQPOmCC1OlBdKNGQztvOdHRTR6wDSAeJjBpxQ2fW0u7XBrofnhfXMKGFCPg3HgddXnRs6qY+zJEQr0b/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YCaa5B8/; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="K8bx1wRg"
-Received: by mail-wr2-f32.google.com with SMTP id ffacd0b85a97d-482f6350f91so357612f8f.1
-        for <linux-modules@vger.kernel.org>; Fri, 25 Sep 2026 02:17:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YCaa5B8/"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49e620fa473so4207205e9.1
+        for <linux-modules@vger.kernel.org>; Fri, 25 Sep 2026 02:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790327837; x=1790932637; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1790328488; x=1790933288; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Nnmbgx42B2WKMVnWZdimnYHvUD+KfWZiyEk99BwL/To=;
-        b=K8bx1wRgFrG9JKkNzfaJDBH+IzlCkE/ysxF3AaKBrzK+U5qFmqB12KamMjuou/W81k
-         Iq/th3bAa2fdxJSyP4iS17GbO0wXaSwOY0cfZ5SyXpPykzfa1OnKNSu8Gg3vdwat3fhe
-         /XC7rClw084h2P74mKMnCoAl7uKIQ8nsoNp4fyAVB8nz9HUEY617baBLc8m+/vV9ckct
-         Z9TgkDMJf39kQTeY9lR9WDjAxTcEqtdeF+ZaVZjmmqYDvzG0UXfUZ9a4NOlXU9v5FCGx
-         D5+ncYJ8RWkQGwvEJiMhiQWNbw7exbTSfa/i5LDdr0D0A20Pmt8HCzsQQUZ9doVuU0G/
-         QJPg==
+        bh=GuAasn6M17RraKJz85D0VGepUYYLmKKd6LjzFHjVWiA=;
+        b=YCaa5B8/bbraaj9MXbfcKga+R1L3Oy53Dlm+QLJ9PluOw2HJuSZ4RD0OUgpEKjEDys
+         1iIjGIzlaLXJl+fJzhD4jsJKpX5ftjb/LWFjKjNSvN0uwzojBFSmYZYw1vDOyCInGbUe
+         d5kHIKVqyg3wLnQ6C0VSNz7g/+iaP/c5K3E5bSPY0TEFeHNVg4IhHe4Q2p8E6MzsC8dT
+         n8na7+M39OVdS6Nak1AG1EpnfI6rPQBVhwmwML6M8v349eGyR3HHS2N8OshqSNp6V+WE
+         IUEAemD4YTNyORvF5Su0LA+6HBShR5Rw8n06UjjwBYuJSJyZ6FP2VmqYggRcG9WSYKNN
+         nCKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790327837; x=1790932637;
+        d=1e100.net; s=20260707; t=1790328488; x=1790933288;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Nnmbgx42B2WKMVnWZdimnYHvUD+KfWZiyEk99BwL/To=;
-        b=JlSEnGhP4r5g1KGV+abAQjXtXngVichpH/KwcIu5rThNdudbPOqF8J6nh3v+Z7epUU
-         8cLqkToGt7TvkbVjYPnCfzkb3JY63JEFp+ExgoAGYn8rkz2WVENQAr3xX9JM3VDj1flo
-         GXtXKnncrzg0f3pesdJmlk3oudxQX6bK3Vld7cmHdzmVKTXCNcrsBOwn33DXpJibORrG
-         tOE5phuZQ3SXniYTj7ydrbuQtgGRGKVae9dbD2DZF+grRW6bi4R4S8OdFIzajmyPTU2Y
-         xsS5vzLaJtEAcYGWTPJfq/UdbTUxvK4T5jSjLA9bkCAHdeRUMDHuCg5S3YexiTL3PeZy
-         pq5Q==
-X-Forwarded-Encrypted: i=1; AKwUvBxkbtAG1koAeUHSaZ6ctunmtQfOiojhoMml3hZ+kL9mcW+XwIEiuOWJaavU+VF2Gue190+a5ZYA0YoOTDJj@vger.kernel.org
-X-Gm-Message-State: AFuF++nPZQBAsau4h6H0wotHyH8kHsP+So4QJ5NgE1+ayZotdwK1sXf7
-	GxuHtasbQHhnOFhGEpER3cI6STdKOm/dEXSGthHzrnEmhf3bl6S2PDAlvOiKWnKZPOw=
-X-Gm-Gg: AYBFou0YeIcj073I0159vI5wzFo2z7X8vF/PM3AgUAAuJLajh4mPCoR8qA4oD32hsdC
-	CjpPVrGY+9tW5qmYd3FOA1hLTVKtoieL7r5AagleBzniOLXKO92m7HJmZprgOq9sYSXskAKJhcR
-	EG7IFYdftFZCscRVYFUd1jYd6P9LwiKY7FPJYgtNpiX5+WNFhEEh14xzUNFFlGZJOUFEUhVWvCi
-	lQoH13knKaESPM7V2em/02smc6mM1Vp67/O7C58YGMRRuO313/4P0MLYvfbS1zccnlR1a2BLvQj
-	9bFW+2zNB+XRQOETWluvIB4jIGEi/98iX1EQZChqRIYOyEC2csUSZgwxErBNc76bPEyAJ07eOQe
-	AOU534CvR2R8o8Cj+LfM5c47QTHapmnksNncO5WuWFXA/YFwJof9OvrqD9HAUn/MXQsnHNnZNs9
-	wZueHyvkyqu75iulSoZJS+XSzMZ8mztWozbE/wKbAp3IbuZdZTZFYqEkARvQih+6l4G0uOdB7Wv
-	QM9kx3Kdn9N3QfujOpXQOSvQaAIS2wCXYA=
-X-Received: by 2002:a5d:5d88:0:b0:487:c43:e577 with SMTP id ffacd0b85a97d-4887db0b3acmr2954651f8f.24.1790327837078;
-        Fri, 25 Sep 2026 02:17:17 -0700 (PDT)
+        bh=GuAasn6M17RraKJz85D0VGepUYYLmKKd6LjzFHjVWiA=;
+        b=tA2rmOtrEfuzPbt2eHnK/D4BAkC3NkMHdUiBUyOjPNY7RQ6YiiLuF5A+XqbSnoMsPg
+         B1e3gUzbVHPhTmOcX2W3ZM7s7RleAJWCUbWxkBqyUF2eqGecOcI4NAMpKbDXMMJrGaG1
+         2FqhTh/FPJ5E5j0B4JOixu1DkTAdW8oKhQiC2izCt8v5vZCaIVcvyvYiDUUwXsaQrcB0
+         XOhj9ENIh8YQUuofE0FWkFy9YKSidaNNCAKWQp6noET73NpsFaRZ0FAvNp26WRiA74eU
+         Q0jjZ3eu2amnb1zsHr1lr5i1aJcOM6ImxAidlFjFNQz9K2hLTjrG/Dv092tkTpdeNGmD
+         3DQg==
+X-Forwarded-Encrypted: i=1; AKwUvBx7JIceFyfDdw/c42j67OTlBwz4wBA5ADOiGpLj1QRcqw4c9jMovkKo3hwdryu6Ax4Re4YSMIkczxgrWIsF@vger.kernel.org
+X-Gm-Message-State: AFuF++nLJPXm8etn11SUFfkeXi2aKfxteiwpdtqiI7uaRSkXYUf88G2N
+	MM8Kt+9CsvIS0PRcy2BwvfQ83W4a99qRjz4b9jHgp/k97dopTrUqiIesUzQ78DpHYeI=
+X-Gm-Gg: AYBFou3SZf0qpb9Oy0qiWZXNJW/2DVcrpSW7sJGIH828GEpwg02Et+nhs33TcM0RgTn
+	F1rHUV2ftYVWq5fXkVBfni2IebAoyi2CviBhKE/x58i52DVZ+Iko0DvMoGvwStthXJesSGG7eYv
+	1PAaRtVitZ/V3pDYMaJv4if0p/zQcN6ExenzOYy4apVpxl0Sqd0uOddZwlf+dAmDC5tLhHmpwIc
+	TeL+antyB2YUvkZXRxQ5tfF4D6j5IhTHebPMAU7MdjCpU2/DbqBy6hCuxDzU0d3zH2Lh0ylrM5b
+	dnhiC8vMI+Jx+d1EagPvsA1xmB13g8SkfOGf9cs00laR+8qvum6DJM9PknqC/Yl1oDL+laQEj99
+	wrJnbhHWWKntKqeJs3fDkWxyHQm5YBvVQ5is0zzxoC6IK4kbwk9DuPi60ZyoDRrAnmxrofhBkFW
+	uQB1GWtuFQbCxsmIwIaB/qWThfrhnhS1++gHQiZQ+yZSh4m/dGu98C80hnu8htxgbByJMQbYtJI
+	Z/bjJU/dpO3wuL+ZK4J1srA7Im/uWQ1afL4LJum8aGfjA==
+X-Received: by 2002:a05:600c:19cd:b0:49d:2536:402e with SMTP id 5b1f17b1804b1-49ff06f7a45mr28683465e9.30.1790328488006;
+        Fri, 25 Sep 2026 02:28:08 -0700 (PDT)
 Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a64f9bcsm5496772f8f.32.2026.09.25.02.17.16
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fee6ced69sm37140085e9.0.2026.09.25.02.28.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2026 02:17:16 -0700 (PDT)
-Message-ID: <2452a9dc-4622-4de5-b58a-ea9e0a911387@suse.com>
-Date: Fri, 25 Sep 2026 11:17:15 +0200
+        Fri, 25 Sep 2026 02:28:07 -0700 (PDT)
+Message-ID: <f1d25d13-4adb-428a-805d-d3e19cf1013b@suse.com>
+Date: Fri, 25 Sep 2026 11:28:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,70 +70,93 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module: Add stubs.c for CONFIG_MODULES=n
- module_put_and_kthread_exit()
-To: bot+bpf-ci@kernel.org
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
- ast@kernel.org, daniel@iogearbox.net, atomlin@atomlin.com,
- john.fastabend@gmail.com, linux-modules@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, andrii@kernel.org,
- martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260922-module-stubs-v1-1-abe465a24879@suse.com>
- <ee510141f44725527b6a2f60cae4323f26ecde36d3a592ba997648de45c80134@mail.kernel.org>
+Subject: Re: [PATCH v11 20/38] dyndbg,module: make proper substructs in
+ _ddebug_info
+To: Jim Cromie <jim.cromie@gmail.com>
+Cc: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@net.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Petr Mladek <pmladek@suse.com>,
+ Steven Rostedt <rostedt@goodmis.org>, John Ogness
+ <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org,
+ Louis Chauvet <louis.chauvet@bootlin.com>
+References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
+ <20260923-dd-cmap-part2-clean-v11-20-9b6c217fdf2f@gmail.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <ee510141f44725527b6a2f60cae4323f26ecde36d3a592ba997648de45c80134@mail.kernel.org>
+In-Reply-To: <20260923-dd-cmap-part2-clean-v11-20-9b6c217fdf2f@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/22/26 4:16 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/module/stubs.c b/kernel/module/stubs.c
->> new file mode 100644
->> index 0000000000000..81e66c02260c8
->> --- /dev/null
->> +++ b/kernel/module/stubs.c
->> @@ -0,0 +1,11 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +
->> +#include <linux/kthread.h>
->> +#include <linux/module.h>
->> +#include "internal.h"
+On 9/24/26 12:34 AM, Jim Cromie wrote:
+> recompose struct _ddebug_info, inserting proper sub-structs.
 > 
-> This isn't a bug, but does stubs.c need "internal.h" here, or would
-> <linux/kthread.h> plus <linux/module.h> be enough?
+> The struct _ddebug_info has 2 pairs of _vec, num_##_vec fields, for
+> descs and classes respectively.  for_subvec() makes walking these
+> vectors less cumbersome, now lets move those field pairs into their
+> own "vec" structs: _ddebug_descs & _ddebug_class_maps, and re-compose
+> struct _ddebug_info to contain them cleanly.  This also lets us get
+> rid of for_subvec()'s num_##_vec paste-up.
 > 
-> kthread_exit() comes from <linux/kthread.h>, and struct module,
-> __noreturn, and EXPORT_SYMBOL come from <linux/module.h>. The file
-> doesn't appear to use anything that internal.h provides.
+> Also recompose struct ddebug_table to contain a _ddebug_info.  This
+> reinforces _ddebug_info's use as a cursor into relevant data for a
+> builtin module, and access to the full _ddebug state for modules.
 > 
-> This makes stubs.c the only consumer of that header outside
-> CONFIG_MODULES=y, which future internal.h changes would have to keep
-> working.
+> NOTES:
+> 
+> rename section:__dyndbg_classes to _class_maps, to better align with
+> struct _ddebug_class_maps.
+> 
+> names together, for more obvious name pairing.
+> 
+> Invariant: These vectors ref a contiguous subrange of __section memory
+> in builtin/DATA or in loadable modules via mod->dyndbg_info; with
+> guaranteed life-time for us.
+> 
+> struct module contains a _ddebug_info field and module/main.c sets it
+> up, so that gets adjusted rather obviously.
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> ---
+> v8: set maps.len = nc unconditionally
+> v3: squash in section name changes.
+> 
+> v2:
+> 
+> Move RvB after SoB
+> In structs _ddebug_descs & _ddebug_class_maps, change int length to unsigned int
+> No use of <0 vals is contemplated.
+> 
+> dyndbg: improve section names
+> 
+> change __dyndbg to __dyndbg_descs
+> change __dyndbg_classes to __dyndbg_class_maps
+> 
+> this sets up for adding __dyndbg_class_users
+> 
+> fixup-drmprint
+> ---
+>  include/asm-generic/dyndbg.lds.h |  14 +++---
+>  include/linux/dynamic_debug.h    |  34 ++++++++-----
+>  kernel/module/main.c             |  12 ++---
+>  lib/dynamic_debug.c              | 101 +++++++++++++++++++--------------------
+>  4 files changed, 86 insertions(+), 75 deletions(-)
 
-Ack.
-
-> 
->> +
->> +void __noreturn __module_put_and_kthread_exit(struct module *mod, long code)
->> +{
->> +	kthread_exit(code);
->> +}
->> +EXPORT_SYMBOL(__module_put_and_kthread_exit);
-> 
-> This isn't a bug, but since stubs.o only exists for CONFIG_MODULES=n, is
-> the EXPORT_SYMBOL() reachable by any module, or can it be dropped?
-> 
-> No loadable module can resolve this export when CONFIG_MODULES=n. The
-> macro still expands (producing an .export_symbol entry that
-> COMMON_DISCARDS drops at link, plus __ADDRESSABLE()), so it's harmless
-> but has no consumer.
-> 
-> kernel/time/posix-stubs.c, cited in the commit message as the model,
-> exports nothing.
-
-Ack.
-
-I'll incorporate these two suggested cleanups in v2.
+Acked-by: Petr Pavlu <petr.pavlu@suse.com> # modules
 
 -- Petr
