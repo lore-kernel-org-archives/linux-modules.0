@@ -1,98 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f32.google.com (mail-wr2-f32.google.com [74.125.225.96])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7E542D746;
-	Thu, 24 Sep 2026 20:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34CF471D03
+	for <linux-modules@vger.kernel.org>; Fri, 25 Sep 2026 09:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.96
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790282205; cv=none; b=HE1j46EZdnJJvNKmLxg0h0gmUZueSfV8c2CQgU6Ag+Y/Y1kIP5YjNvGRdSHcIkKKT8ksUB70p7PZG42sYYSOjYDZKGRoB+Es8B9ckEZURqy6Y2KtzqrxNWUEzlOSwIgxAqH8DVB7YQ81I9uk0W/fuEEje5fZWIXb4NDhAb5MiuI=
+	t=1790327840; cv=none; b=tI4X+0oGb+ESqr6GitwKRhg3Ti6d79gfdjmK72YVEFEGsXLxiNNL4rZrWrfm+NLJMTKd1va13+2wAbqeGLza4nQ7vBwOIzToZVmG7fdckFn68uIsHOvNC6V6Z7zYSLCt184oSc6ylyOYT84NHR/tY5kWQ5KwCtd83VATifCoaO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790282205; c=relaxed/simple;
-	bh=oQ/14GPTrChnfT4++jF5s3SdHkpdcIG4XD6YdC81Ltk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RBV5dTAbaKdZVz+AHYiHt7pktCb27jf1KCbU2hHukdu0pREX8NWTO9JsyZmduNEFzJr9xryDE0blPyi9TQ0wfkvSCcLlyWsbmR4g8xaeBiBWPGLC21wLH+zetIqRLrrIKuy8e4DKPPpSjXhMkBPPQU4rWj/8jYfaX3GdQnHTF90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XytdA4iD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790327840; c=relaxed/simple;
+	bh=APreP2O6tYmZ0sgnofROIYS7faftnQh6nQ7b0OujIjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nsXzj0kKRYbP5acjxC7VJUYycSO1JjhwuLZKnSqBXQAxegHEqecMfwB0oBRZqRz8sMsmAuDTqLh7g4wrwup14iQ5Sgp+oEArzkOnFfzxdHEit/f2bUSw7IzFi3FrsdJwhajjjAhRtO0FEXleXRofrGq0iXlJrh7jG8VCk+1xl/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=K8bx1wRg; arc=none smtp.client-ip=74.125.225.96
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XytdA4iD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B26901F000FF;
-	Thu, 24 Sep 2026 20:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790282200;
-	bh=dIOLARr1d9hXxeNQvXpWRmH1lYfFthB2RDeZ4OCZT4c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XytdA4iDZvNN4QiVf5tVZbDOKbCzmcp5D7O0hDDQbFke8477mtkXHMB7ZuOBbQaxx
-	 rkn8aClgeZJx/Lwq7LENUeUGYhSRzuE+SlaZtx+4Foj+9gcCdmDZBbKuaWLoAl8k7W
-	 Qk1RQK4ol6BJZFrnmyZLi9QFiqpEniM+rm8eFr+Iue9top0TgeLxpKI9d89/aIiN+N
-	 b+825DSDYMWbG1LdhIfUrDH6SEECG3MG2+DFYxJsU4Geu3MZTcugAi9jCgDv+Snptg
-	 yaJxEwDdxhQi69Y8xDNGji5JVczHLnzTBJLIlH6kzh1ZQKUpuohN4YQDJnfthMFNjk
-	 WcXb8gBUgwNbw==
-Date: Thu, 24 Sep 2026 21:36:36 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Aaron Tomlin <atomlin@atomlin.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	linux-modules@vger.kernel.org
-Subject: Re: linux-next: build failure in the last build
-Message-ID: <d930924e-17ff-4b3d-82a0-7220abfd121e@sirena.org.uk>
-References: <arVxd8GejREjgvPt@sirena.org.uk>
- <qascvrv6wprgcnd5rtc2n63ryq23exbzfcshmejmk4tapmrbnc@rxce2vktppvs>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="K8bx1wRg"
+Received: by mail-wr2-f32.google.com with SMTP id ffacd0b85a97d-482f6350f91so357612f8f.1
+        for <linux-modules@vger.kernel.org>; Fri, 25 Sep 2026 02:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1790327837; x=1790932637; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Nnmbgx42B2WKMVnWZdimnYHvUD+KfWZiyEk99BwL/To=;
+        b=K8bx1wRgFrG9JKkNzfaJDBH+IzlCkE/ysxF3AaKBrzK+U5qFmqB12KamMjuou/W81k
+         Iq/th3bAa2fdxJSyP4iS17GbO0wXaSwOY0cfZ5SyXpPykzfa1OnKNSu8Gg3vdwat3fhe
+         /XC7rClw084h2P74mKMnCoAl7uKIQ8nsoNp4fyAVB8nz9HUEY617baBLc8m+/vV9ckct
+         Z9TgkDMJf39kQTeY9lR9WDjAxTcEqtdeF+ZaVZjmmqYDvzG0UXfUZ9a4NOlXU9v5FCGx
+         D5+ncYJ8RWkQGwvEJiMhiQWNbw7exbTSfa/i5LDdr0D0A20Pmt8HCzsQQUZ9doVuU0G/
+         QJPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790327837; x=1790932637;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Nnmbgx42B2WKMVnWZdimnYHvUD+KfWZiyEk99BwL/To=;
+        b=JlSEnGhP4r5g1KGV+abAQjXtXngVichpH/KwcIu5rThNdudbPOqF8J6nh3v+Z7epUU
+         8cLqkToGt7TvkbVjYPnCfzkb3JY63JEFp+ExgoAGYn8rkz2WVENQAr3xX9JM3VDj1flo
+         GXtXKnncrzg0f3pesdJmlk3oudxQX6bK3Vld7cmHdzmVKTXCNcrsBOwn33DXpJibORrG
+         tOE5phuZQ3SXniYTj7ydrbuQtgGRGKVae9dbD2DZF+grRW6bi4R4S8OdFIzajmyPTU2Y
+         xsS5vzLaJtEAcYGWTPJfq/UdbTUxvK4T5jSjLA9bkCAHdeRUMDHuCg5S3YexiTL3PeZy
+         pq5Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxkbtAG1koAeUHSaZ6ctunmtQfOiojhoMml3hZ+kL9mcW+XwIEiuOWJaavU+VF2Gue190+a5ZYA0YoOTDJj@vger.kernel.org
+X-Gm-Message-State: AFuF++nPZQBAsau4h6H0wotHyH8kHsP+So4QJ5NgE1+ayZotdwK1sXf7
+	GxuHtasbQHhnOFhGEpER3cI6STdKOm/dEXSGthHzrnEmhf3bl6S2PDAlvOiKWnKZPOw=
+X-Gm-Gg: AYBFou0YeIcj073I0159vI5wzFo2z7X8vF/PM3AgUAAuJLajh4mPCoR8qA4oD32hsdC
+	CjpPVrGY+9tW5qmYd3FOA1hLTVKtoieL7r5AagleBzniOLXKO92m7HJmZprgOq9sYSXskAKJhcR
+	EG7IFYdftFZCscRVYFUd1jYd6P9LwiKY7FPJYgtNpiX5+WNFhEEh14xzUNFFlGZJOUFEUhVWvCi
+	lQoH13knKaESPM7V2em/02smc6mM1Vp67/O7C58YGMRRuO313/4P0MLYvfbS1zccnlR1a2BLvQj
+	9bFW+2zNB+XRQOETWluvIB4jIGEi/98iX1EQZChqRIYOyEC2csUSZgwxErBNc76bPEyAJ07eOQe
+	AOU534CvR2R8o8Cj+LfM5c47QTHapmnksNncO5WuWFXA/YFwJof9OvrqD9HAUn/MXQsnHNnZNs9
+	wZueHyvkyqu75iulSoZJS+XSzMZ8mztWozbE/wKbAp3IbuZdZTZFYqEkARvQih+6l4G0uOdB7Wv
+	QM9kx3Kdn9N3QfujOpXQOSvQaAIS2wCXYA=
+X-Received: by 2002:a5d:5d88:0:b0:487:c43:e577 with SMTP id ffacd0b85a97d-4887db0b3acmr2954651f8f.24.1790327837078;
+        Fri, 25 Sep 2026 02:17:17 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a64f9bcsm5496772f8f.32.2026.09.25.02.17.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Sep 2026 02:17:16 -0700 (PDT)
+Message-ID: <2452a9dc-4622-4de5-b58a-ea9e0a911387@suse.com>
+Date: Fri, 25 Sep 2026 11:17:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="0JWrN5Yj7wTJJBEM"
-Content-Disposition: inline
-In-Reply-To: <qascvrv6wprgcnd5rtc2n63ryq23exbzfcshmejmk4tapmrbnc@rxce2vktppvs>
-X-Cookie: Oh, so there you are!
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module: Add stubs.c for CONFIG_MODULES=n
+ module_put_and_kthread_exit()
+To: bot+bpf-ci@kernel.org
+Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
+ ast@kernel.org, daniel@iogearbox.net, atomlin@atomlin.com,
+ john.fastabend@gmail.com, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, andrii@kernel.org,
+ martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260922-module-stubs-v1-1-abe465a24879@suse.com>
+ <ee510141f44725527b6a2f60cae4323f26ecde36d3a592ba997648de45c80134@mail.kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <ee510141f44725527b6a2f60cae4323f26ecde36d3a592ba997648de45c80134@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 9/22/26 4:16 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/module/stubs.c b/kernel/module/stubs.c
+>> new file mode 100644
+>> index 0000000000000..81e66c02260c8
+>> --- /dev/null
+>> +++ b/kernel/module/stubs.c
+>> @@ -0,0 +1,11 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +
+>> +#include <linux/kthread.h>
+>> +#include <linux/module.h>
+>> +#include "internal.h"
+> 
+> This isn't a bug, but does stubs.c need "internal.h" here, or would
+> <linux/kthread.h> plus <linux/module.h> be enough?
+> 
+> kthread_exit() comes from <linux/kthread.h>, and struct module,
+> __noreturn, and EXPORT_SYMBOL come from <linux/module.h>. The file
+> doesn't appear to use anything that internal.h provides.
+> 
+> This makes stubs.c the only consumer of that header outside
+> CONFIG_MODULES=y, which future internal.h changes would have to keep
+> working.
 
---0JWrN5Yj7wTJJBEM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ack.
 
-On Thu, Sep 24, 2026 at 04:28:07PM -0400, Aaron Tomlin wrote:
-> On Thu, Sep 24, 2026 at 07:52:39PM +0100, Mark Brown wrote:
+> 
+>> +
+>> +void __noreturn __module_put_and_kthread_exit(struct module *mod, long code)
+>> +{
+>> +	kthread_exit(code);
+>> +}
+>> +EXPORT_SYMBOL(__module_put_and_kthread_exit);
+> 
+> This isn't a bug, but since stubs.o only exists for CONFIG_MODULES=n, is
+> the EXPORT_SYMBOL() reachable by any module, or can it be dropped?
+> 
+> No loadable module can resolve this export when CONFIG_MODULES=n. The
+> macro still expands (producing an .export_symbol entry that
+> COMMON_DISCARDS drops at link, plus __ADDRESSABLE()), so it's harmless
+> but has no consumer.
+> 
+> kernel/time/posix-stubs.c, cited in the commit message as the model,
+> exports nothing.
 
-> > ld: can not size stub section: file truncated
-> > `$d' referenced in section `__patchable_function_entries' of kernel/khe=
-aders.o: defined in discarded section `.discard.addressable' of kernel/khea=
-ders.o
-> > `$d' referenced in section `.init_array' of kernel/kheaders.o: defined =
-in discarded section `.discard.addressable' of kernel/kheaders.o
-> > `$d' referenced in section `.initcall.modnames' of kernel/kheaders.o: d=
-efined in discarded section `.note.gnu.property' of kernel/kheaders.o
+Ack.
 
-> > I have reverted that commit and 1ca4515ee4e01 (module: rename
-> > module_blacklist to module_denylist) which collided with it. =20
+I'll incorporate these two suggested cleanups in v2.
 
-> At first glance, this appears to be caused by a corrupted/truncated
-> kernel/kheaders.o on the build runner rather than an issue in the patch
-> itself, no? Could you try a clean rebuild of arm64 allyesconfig with the
-> commits re-applied? It should build cleanly.
-
-This was a completely clean build, I only do one of the allyesconfigs a
-day and the builds are done in tmpfs with the machine powered off
-between -next runs.  My first guess would be that you have overflowed
-some size limit in something.
-
---0JWrN5Yj7wTJJBEM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmq1idQACgkQJNaLcl1U
-h9DBPQf/atjHRXsv0kKSliy/Sozsr9Lv/Kcfeb3/zqs9q9hGR7X/sr7FzVUUJ22C
-Xw2i+LcDBfEA4JTS2Rlt51xdcPHX/9KWQbnZE6ZIbs6cpgmk4OE+tzmrEmrXuPsP
-THHAiXaaEzstFu4Ay67fkWTL0FWcwGJeW2f3tP13y+gt1URSoTHmCpBhb6/SNcXL
-PN+aGpSaNsOOxEklmmfly6J1H8b11kJVsBVclIirfdbzvfzYslLirqqLEZpmw1Sa
-1i0TWS75rUV08qTLwGnIcQtaBV/5pfVru6Aw+CTk0TcIdLkIEqn2xgyd0ABQgwMp
-pHXItLrifiMSW1c2zyzPw+Jusap2Hw==
-=PnK4
------END PGP SIGNATURE-----
-
---0JWrN5Yj7wTJJBEM--
+-- Petr
