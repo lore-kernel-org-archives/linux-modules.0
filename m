@@ -1,84 +1,106 @@
-Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334ED50C2B0;
-	Fri, 25 Sep 2026 23:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.155.198.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2380C3E00B4;
+	Fri, 25 Sep 2026 23:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790377379; cv=none; b=PPL+1Y0to8dml/64tHxpOZxSP5vewTKUm0fvwwsVdTr1X0dtE9vxu/QIFaVv+jgEUm3lEQ0xjhzTXwsHopusETTtyGPaauBhhHTyN3S8owHWyRrlsCpFgf8rydHilI53Lpr0AlP+snDqtX6wBLEex94qGvM16i5vBt7Cui2hkbo=
+	t=1790377862; cv=none; b=VVxgTXKlddu8CHJZNFpL2K0zY5hYR+cBKIlWo8KRqwgtRBdpVoALuIyd38kRfaHv3seFRgW2p4mOa4dvYlv6Ves5CA6uvLK9NA/AhWZ92BjE59TNhe+3M0foajMVlBT7GT8aZtgunq1RJPTuFmFmTOHTGNP6zxAP6pIqeBLQznQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790377379; c=relaxed/simple;
-	bh=/c5Co9F/am8EjP/vE2uczd6+1rxzpiX4bq+WxQVokQs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QhdUZowl+gf0+kcT2xNqj35cF3SOLyojqWV5H483VpHTeR1IT8C07vPqxirtVkuMmD3j+tPkN00EdrdOHltIM0I70y3w7Qa0OJamGQwVFe1z1GzG/3E6rkcSzOeQR8BjIeR9pJvliRg+pmOmEDqJDpNkgNE/6Is06flrEgHXgTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=IUJUYpw5; arc=none smtp.client-ip=35.155.198.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1790377862; c=relaxed/simple;
+	bh=j2LCXnq/0nvFxK7djD2qFB1ji+VFRbUMFaTrd2IvSH0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=S0Dr7uIxPlQB11nwcMmU3lOc+D46/4DwyV1FB9NWGIlyAMK+jh6VDQGzv5Qf75fpv2LXFZk8mp0YjMefOVfBbTZDQ0pWHYOVNwYDF1I9z3uiRW0iK3i/RMiU3h057yaht4Kpg+MFWqJLV1ykBx561yKMJU4wdDaBEgmC3yNVDG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJkReceY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="IUJUYpw5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1790377373; x=1821913373;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/nC5Hs6za1TBw6xFElyyI5lgMUaptfWcUfplRQMPLdU=;
-  b=IUJUYpw5i+Si931kCt8RZG29wcvsJHkEde6EE+TeHE6iy6bm6LNGj7M0
-   gVjRnnAUb5jH+7BWQHWdfYSACvxuTsYaOc/mZuiGNWDhd/FHtD3h+M/Vr
-   l/ZGi+gzq0Hpi5ubFWDgUA+nd7x7JnA3ErbQOH8MJFmIgn/iF9YO3H/9i
-   NX9URxuSp9cqpxJVc69AJqWJerVpWSwLBgybRI/BXhl58Eevu5abzjpG+
-   U25Y7oPboe/0PqWcPnuOZV/UupR0rMCluQg07DZGcn6ZgaRF7tLDL1eDs
-   ECUJNM/0MY0bHB+X1Hh7OCku+1+BRW6sTNRXSeJTDORVeo0hK8SeQTxu1
-   Q==;
-X-CSE-ConnectionGUID: 0e0YVNQNRTC6OhS2S1B8ZQ==
-X-CSE-MsgGUID: u3vSdn/eT5egbyqJCBrOxw==
-X-IronPort-AV: E=Sophos;i="6.27,123,1787011200"; 
-   d="scan'208";a="29582881"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 23:02:53 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:25894]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.13.104:2525] with esmtp (Farcaster)
- id a5162554-736a-4bf5-8a0e-aec9cf76434b; Fri, 25 Sep 2026 23:02:52 +0000 (UTC)
-X-Farcaster-Flow-ID: a5162554-736a-4bf5-8a0e-aec9cf76434b
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Fri, 25 Sep 2026 23:02:52 +0000
-Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Fri, 25 Sep 2026 23:02:52 +0000
-From: Jay Wang <wanjay@amazon.com>
-To: <sashiko-bot@kernel.org>
-CC: <bpf@vger.kernel.org>, <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 9/9] kbuild, bpf: allow building the vmlinux BTF as a module
-Date: Fri, 25 Sep 2026 23:02:52 +0000
-Message-ID: <20260925230252.34602-1-wanjay@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260925213305.A7C371F000FF@smtp.kernel.org>
-References: <20260925213305.A7C371F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJkReceY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2481F00893;
+	Fri, 25 Sep 2026 23:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790377860;
+	bh=1ApWPVlZwDTKbVzAx8PbdHu0DODCVzXUDaAtYdC6lvc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VJkReceY6W7SlJMCPE/lVl1X6RgtufaOq94Smw1IIhb43INdb4k9HU3Jsx9xFC56l
+	 WEn3COAE9azdAS/i5C1YsEr2HRYBu8WWpKBi1KtDnP9CUpwGTaqaz65U25JsA83a6Q
+	 ok117EV8qR2Lu8dr4dDqvW9sYWsPnPGhhBj2o2+bH6BStzejbrRL5KC71etVeCNAwS
+	 Ziz79hLhuq7ERkSgvwd2yYYWCrf1KZqrgYWf8lHOG8MQxilJk/JaH36uvp/IvGgL3O
+	 vNMdgGMDjCW2BxSEVaVy8QmCFSVcyCttMosYGi4V8B0B1IPWIq/N7EGr2n2vkFL2q1
+	 waA3dBN8BSEQw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 3/9] bpf: fetch the vmlinux BTF where kernel
+ types enter a program
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jay Wang" <wanjay@amazon.com>
+Cc: gary@garyguo.net, bpf@vger.kernel.org, linux-modules@vger.kernel.org, ojeda@kernel.org
+In-Reply-To: <20260925224229.1850-4-wanjay@amazon.com>
+References: <20260925224229.1850-1-wanjay@amazon.com>
+ <20260925224229.1850-4-wanjay@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 25 Sep 2026 23:10:59 +0000
+Message-Id: <20260925231100.6A2481F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D040UWA003.ant.amazon.com (10.13.139.6) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-For "depends on DEBUG_INFO_BTF" this does not happen: Kconfig turns an
-m upper bound into y for a bool symbol (scripts/kconfig/symbol.c,
-sym_calc_visibility()).  I checked it with olddefconfig: with
-SCHED_CLASS_EXT, NET_SCH_BPF, PROBE_EVENTS_BTF_ARGS, BINFMT_MISC_BPF,
-IO_URING_BPF_OPS and DEBUG_INFO_BTF_MODULES enabled, switching
-DEBUG_INFO_BTF from y to m changes nothing but BPF_PRELOAD, which the
-series excludes on purpose.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: state-dependent verification failure for BTF-independent prog=
+rams
+--
 
-Looking at the other uses turned up the reverse case, though: RUST and
-GENDWARFKSYMS say "depends on !DEBUG_INFO_BTF", and !m is m, which a
-bool again takes as y, so with =m those pahole restrictions no longer
-applied.  v3 writes them as DEBUG_INFO_BTF=n (patch 8/9):
-https://lore.kernel.org/bpf/20260925224229.1850-1-wanjay@amazon.com/
+commit f6fc508c855b2ee6adf6ef6d3d2ccfe35410bcf1
+Author: Jay Wang <wanjay@amazon.com>
 
-Jay
+bpf: fetch the vmlinux BTF where kernel types enter a program
+
+This commit delays fetching the vmlinux BTF until kernel types actually
+enter the verifier state. This prevents unnecessary loading and parsing
+of BTF for BTF-independent programs like socket filters, saving memory
+and parsing overhead.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -22532,10 +22580,10 @@ int bpf_check(struct bpf_prog **prog, union bpf=
+_attr *attr, bpfptr_t uattr,
+> =20
+>  	mark_verifier_state_clean(env);
+> =20
+> -	if (IS_ERR(btf_vmlinux)) {
+> +	if (IS_ERR(bpf_peek_btf_vmlinux())) {
+
+[Severity: High]
+Could this introduce a state-dependent verification failure for
+BTF-independent programs?
+
+When a BTF-independent program (like a systemd socket filter) is loaded
+initially, the bpf_peek_btf_vmlinux() helper returns a null pointer and this
+check is bypassed.
+
+If a BTF-dependent program is later loaded under memory pressure, the
+btf_parse_vmlinux() routine could fail with a memory allocation error. When
+the kernel is configured with BTF enabled, bpf_get_btf_vmlinux() permanently
+stores this error pointer in the global btf_vmlinux variable.
+
+Subsequent loads of completely unrelated, BTF-independent programs will now
+see the error pointer returned by bpf_peek_btf_vmlinux() evaluate to true
+and fail with an in-kernel BTF is malformed error in bpf_check().
+
+Will this unintentionally cause transient memory failures during BTF parsing
+to permanently break unrelated critical system services?
+
+>  		/* Either gcc or pahole or kernel are broken. */
+>  		verbose(env, "in-kernel BTF is malformed\n");
+> -		ret =3D PTR_ERR(btf_vmlinux);
+> +		ret =3D PTR_ERR(bpf_peek_btf_vmlinux());
+>  		goto skip_full_check;
+>  	}
+>
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925224229.1850=
+-1-wanjay@amazon.com?part=3D3
