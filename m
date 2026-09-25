@@ -1,68 +1,81 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D162E484232
-	for <linux-modules@vger.kernel.org>; Fri, 25 Sep 2026 09:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A5F46D551;
+	Fri, 25 Sep 2026 12:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790328493; cv=none; b=MLKvefni/tAck7ejJPigzXvF8VuU5Tq66ybA5RqloZvjfUKU3xUs/khf2///LKC/oe9c8270/BKcnNQ7NjuCYar0X7IyjTZm77ebXQ+rlL7iCppXEEiUXmwh0pAnrPo2Pnr789B2eoBJr72CqjmmATxuE7IHOK7GH1i5/LGneXA=
+	t=1790339811; cv=none; b=SsJM88JE1cvJQb97yhLfcn0ON2aOxOWkxo+en1bpDYXYuHY2fjmaJSYtVIf7EgHSRXT5NdGr50LDuuz6fIh2siez7SXOR8zIDP/ZCFEIqffBQdf3+lIp4vawbnkToCLswMDgCWAmFiyBish09euJfXXNh1gqDXS4C/JlZ8qydIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790328493; c=relaxed/simple;
-	bh=RyhPOU+vvqd3rl1UlRjckMuKAfbjLaCIW52sS+yfk0s=;
+	s=arc-20240116; t=1790339811; c=relaxed/simple;
+	bh=P8A4+Z5vOanFOaPLgNfl0mrEegSjtkFlrCupnu7Ts8k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JDwudrzU+dU36/2S2SHoZyYN0qkCNzaoQHXsyD7CGbIU+cVgOiBoAViQZ05JEe87ppYtzD9fk9nAwCy9Xfr/S5oKEWEQPOmCC1OlBdKNGQztvOdHRTR6wDSAeJjBpxQ2fW0u7XBrofnhfXMKGFCPg3HgddXnRs6qY+zJEQr0b/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YCaa5B8/; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 In-Reply-To:Content-Type; b=pK48gpoum+3l3uAb8My25I9UjThZLwPZ0EJv2wXJgj57UcHz+vlSSXnJZDUDTeoHDhEHaAMmtCfw9B1MIf0lr0O1uLYAP9aCRSsIquTK8Zd0YfJp9gPYiSMqe4UadaHd53+ljeXNC+naC8dy3w9cJ4+Ln9SulRaM/F8f7ZuXAGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=WHm0v3by; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=w4f4k4HJ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=qliJyqv6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qSXwyh5g; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YCaa5B8/"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49e620fa473so4207205e9.1
-        for <linux-modules@vger.kernel.org>; Fri, 25 Sep 2026 02:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790328488; x=1790933288; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GuAasn6M17RraKJz85D0VGepUYYLmKKd6LjzFHjVWiA=;
-        b=YCaa5B8/bbraaj9MXbfcKga+R1L3Oy53Dlm+QLJ9PluOw2HJuSZ4RD0OUgpEKjEDys
-         1iIjGIzlaLXJl+fJzhD4jsJKpX5ftjb/LWFjKjNSvN0uwzojBFSmYZYw1vDOyCInGbUe
-         d5kHIKVqyg3wLnQ6C0VSNz7g/+iaP/c5K3E5bSPY0TEFeHNVg4IhHe4Q2p8E6MzsC8dT
-         n8na7+M39OVdS6Nak1AG1EpnfI6rPQBVhwmwML6M8v349eGyR3HHS2N8OshqSNp6V+WE
-         IUEAemD4YTNyORvF5Su0LA+6HBShR5Rw8n06UjjwBYuJSJyZ6FP2VmqYggRcG9WSYKNN
-         nCKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790328488; x=1790933288;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GuAasn6M17RraKJz85D0VGepUYYLmKKd6LjzFHjVWiA=;
-        b=tA2rmOtrEfuzPbt2eHnK/D4BAkC3NkMHdUiBUyOjPNY7RQ6YiiLuF5A+XqbSnoMsPg
-         B1e3gUzbVHPhTmOcX2W3ZM7s7RleAJWCUbWxkBqyUF2eqGecOcI4NAMpKbDXMMJrGaG1
-         2FqhTh/FPJ5E5j0B4JOixu1DkTAdW8oKhQiC2izCt8v5vZCaIVcvyvYiDUUwXsaQrcB0
-         XOhj9ENIh8YQUuofE0FWkFy9YKSidaNNCAKWQp6noET73NpsFaRZ0FAvNp26WRiA74eU
-         Q0jjZ3eu2amnb1zsHr1lr5i1aJcOM6ImxAidlFjFNQz9K2hLTjrG/Dv092tkTpdeNGmD
-         3DQg==
-X-Forwarded-Encrypted: i=1; AKwUvBx7JIceFyfDdw/c42j67OTlBwz4wBA5ADOiGpLj1QRcqw4c9jMovkKo3hwdryu6Ax4Re4YSMIkczxgrWIsF@vger.kernel.org
-X-Gm-Message-State: AFuF++nLJPXm8etn11SUFfkeXi2aKfxteiwpdtqiI7uaRSkXYUf88G2N
-	MM8Kt+9CsvIS0PRcy2BwvfQ83W4a99qRjz4b9jHgp/k97dopTrUqiIesUzQ78DpHYeI=
-X-Gm-Gg: AYBFou3SZf0qpb9Oy0qiWZXNJW/2DVcrpSW7sJGIH828GEpwg02Et+nhs33TcM0RgTn
-	F1rHUV2ftYVWq5fXkVBfni2IebAoyi2CviBhKE/x58i52DVZ+Iko0DvMoGvwStthXJesSGG7eYv
-	1PAaRtVitZ/V3pDYMaJv4if0p/zQcN6ExenzOYy4apVpxl0Sqd0uOddZwlf+dAmDC5tLhHmpwIc
-	TeL+antyB2YUvkZXRxQ5tfF4D6j5IhTHebPMAU7MdjCpU2/DbqBy6hCuxDzU0d3zH2Lh0ylrM5b
-	dnhiC8vMI+Jx+d1EagPvsA1xmB13g8SkfOGf9cs00laR+8qvum6DJM9PknqC/Yl1oDL+laQEj99
-	wrJnbhHWWKntKqeJs3fDkWxyHQm5YBvVQ5is0zzxoC6IK4kbwk9DuPi60ZyoDRrAnmxrofhBkFW
-	uQB1GWtuFQbCxsmIwIaB/qWThfrhnhS1++gHQiZQ+yZSh4m/dGu98C80hnu8htxgbByJMQbYtJI
-	Z/bjJU/dpO3wuL+ZK4J1srA7Im/uWQ1afL4LJum8aGfjA==
-X-Received: by 2002:a05:600c:19cd:b0:49d:2536:402e with SMTP id 5b1f17b1804b1-49ff06f7a45mr28683465e9.30.1790328488006;
-        Fri, 25 Sep 2026 02:28:08 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fee6ced69sm37140085e9.0.2026.09.25.02.28.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2026 02:28:07 -0700 (PDT)
-Message-ID: <f1d25d13-4adb-428a-805d-d3e19cf1013b@suse.com>
-Date: Fri, 25 Sep 2026 11:28:06 +0200
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="WHm0v3by";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="w4f4k4HJ";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qliJyqv6";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qSXwyh5g"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B4E281FF19;
+	Fri, 25 Sep 2026 12:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1790339803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5PQD/gP9HcwZvTFe4S+U8lCpH3yLiPZ8vm6DacsXn1I=;
+	b=WHm0v3byaFwQe+OkzjsJkiuJOsh779o1q6qJ9mu7zU9TBWkziuN9dAgyiUfG15y2SiL45+
+	jFuX5RqjS5zes6XH0jcLzt4k8topgVmk6gdtbxbqP58vnn05IuHO5b2KvVqwWCTp5Z4pML
+	xY9x8KweRrDU4aJnLbZydS/i4GiE8XA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1790339803;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5PQD/gP9HcwZvTFe4S+U8lCpH3yLiPZ8vm6DacsXn1I=;
+	b=w4f4k4HJUBTcOmoQC9olN6gCIJ+cr0d/SKzRJCgwQda0D/zG3DQUsU4loREAsVSKhmXP9r
+	kQBYKNYUUJWxMhCg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=qliJyqv6;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=qSXwyh5g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1790339799; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5PQD/gP9HcwZvTFe4S+U8lCpH3yLiPZ8vm6DacsXn1I=;
+	b=qliJyqv6wcyiqIATiE0jrio8qNFyOT+OqCP635IH1AsIhiTAI3MPMcFRvApQbbV4hN9fZH
+	dwfne3zCzBB6fLKySMqm3h4L3PGfyPrZh0i/okP2fA+8nwKKQwjBb4JarlEsUka0KKTDAF
+	ElDh+brNb35L5Dd8f9aPd1r/4UJa5h8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1790339799;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5PQD/gP9HcwZvTFe4S+U8lCpH3yLiPZ8vm6DacsXn1I=;
+	b=qSXwyh5gBuBmidY46MUu9I2enCpz3zW4oCEJP1Erpuf/7S1r0aHoC+1ClezRy4s2/UeoI/
+	415v78ZGnCWQPiCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 70B3713432;
+	Fri, 25 Sep 2026 12:36:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 4A4UEtdqtmqxdQAAD6G6ig
+	(envelope-from <ppavlu@suse.cz>); Fri, 25 Sep 2026 12:36:39 +0000
+Message-ID: <0ecdcba9-a0a5-456f-8d30-e2201828cd07@suse.cz>
+Date: Fri, 25 Sep 2026 14:36:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,93 +83,101 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 20/38] dyndbg,module: make proper substructs in
- _ddebug_info
-To: Jim Cromie <jim.cromie@gmail.com>
-Cc: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@net.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Petr Mladek <pmladek@suse.com>,
- Steven Rostedt <rostedt@goodmis.org>, John Ogness
- <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org,
- Louis Chauvet <louis.chauvet@bootlin.com>
-References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
- <20260923-dd-cmap-part2-clean-v11-20-9b6c217fdf2f@gmail.com>
+Subject: Re: [PATCH] rust: macros: allow non-ASCII characters in `authors`
+To: Gary Guo <gary@garyguo.net>
+Cc: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260917051147.98775-1-tweek@google.com>
+ <DLHERMQ9DOIC.1TRR4M82WNLIZ@garyguo.net>
 Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260923-dd-cmap-part2-clean-v11-20-9b6c217fdf2f@gmail.com>
+From: Petr Pavlu <ppavlu@suse.cz>
+In-Reply-To: <DLHERMQ9DOIC.1TRR4M82WNLIZ@garyguo.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: B4E281FF19
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_TLS_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Spam-Flag: NO
+X-Spam-Score: -4.51
 
-On 9/24/26 12:34 AM, Jim Cromie wrote:
-> recompose struct _ddebug_info, inserting proper sub-structs.
+On 9/17/26 9:20 AM, Gary Guo wrote:
+> On Thu Sep 17, 2026 at 6:11 AM BST, =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= wrote:
+>> Module authors may have non-ASCII characters in their names. In C,
+>> `MODULE_AUTHOR` allows arbitrary string literals which are emitted as
+>> raw UTF-8 bytes into the `.modinfo` section, and multiple in-tree
+>> modules use non-ASCII author names.
+>>
+>> Originally, the single `author` field permitted arbitrary string literals
+>> including non-ASCII characters. When support for multiple authors was
+>> introduced in commit 38559da6afb2 ("rust: module: introduce `authors`
+>> key"), it reused the `expect_string_array` helper that had originally been
+>> added for module aliases. Because that helper enforced an ASCII check,
+>> `authors` inadvertently became restricted to ASCII-only string literals.
+>> Later, when the macro parsing was rewritten to use `syn` in commit
+>> c578ad703ae9 ("rust: macros: use `syn` to parse `module!` macro"), this
+>> restriction was carried over by using AsciiLitStr in `authors` type.
+>>
+>> Change the element type of `authors` in `ModuleInfo` from `AsciiLitStr`
+>> to `LitStr` so that UTF-8 author names are permitted.
+>>
+>> Fixes: 38559da6afb2 ("rust: module: introduce `authors` key")
+>> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
 > 
-> The struct _ddebug_info has 2 pairs of _vec, num_##_vec fields, for
-> descs and classes respectively.  for_subvec() makes walking these
-> vectors less cumbersome, now lets move those field pairs into their
-> own "vec" structs: _ddebug_descs & _ddebug_class_maps, and re-compose
-> struct _ddebug_info to contain them cleanly.  This also lets us get
-> rid of for_subvec()'s num_##_vec paste-up.
+> Off topic, but I have a question for modules maintainers...
 > 
-> Also recompose struct ddebug_table to contain a _ddebug_info.  This
-> reinforces _ddebug_info's use as a cursor into relevant data for a
-> builtin module, and access to the full _ddebug state for modules.
+> Does the `authors` field still serve this purpose today?
 > 
-> NOTES:
+> Almost always it is just the initial submitter, while the code has been subject
+> to many changes (many of them tree wide too), and the maintainers could have
+> changed as well.
 > 
-> rename section:__dyndbg_classes to _class_maps, to better align with
-> struct _ddebug_class_maps.
-> 
-> names together, for more obvious name pairing.
-> 
-> Invariant: These vectors ref a contiguous subrange of __section memory
-> in builtin/DATA or in loadable modules via mod->dyndbg_info; with
-> guaranteed life-time for us.
-> 
-> struct module contains a _ddebug_info field and module/main.c sets it
-> up, so that gets adjusted rather obviously.
-> 
-> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-> Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
-> ---
-> v8: set maps.len = nc unconditionally
-> v3: squash in section name changes.
-> 
-> v2:
-> 
-> Move RvB after SoB
-> In structs _ddebug_descs & _ddebug_class_maps, change int length to unsigned int
-> No use of <0 vals is contemplated.
-> 
-> dyndbg: improve section names
-> 
-> change __dyndbg to __dyndbg_descs
-> change __dyndbg_classes to __dyndbg_class_maps
-> 
-> this sets up for adding __dyndbg_class_users
-> 
-> fixup-drmprint
-> ---
->  include/asm-generic/dyndbg.lds.h |  14 +++---
->  include/linux/dynamic_debug.h    |  34 ++++++++-----
->  kernel/module/main.c             |  12 ++---
->  lib/dynamic_debug.c              | 101 +++++++++++++++++++--------------------
->  4 files changed, 86 insertions(+), 75 deletions(-)
+> We have copyright comments on top of files, and git for checking the file
+> history. What's the point of keeping his inside module metadata?
 
-Acked-by: Petr Pavlu <petr.pavlu@suse.com> # modules
+MODULE_AUTHOR() was apparently added in 2.1.18 back in 1996 [1], with
+a comment that it is for documentation purposes.
 
--- Petr
+I don't have a full picture of how this modinfo field is currently used
+by module authors, maintainers and users. I think it can be useful as
+a record of all past and present primary authors of a specific module,
+and it has also value for external modules. Unlike copyright statements
+and Git history, the information is directly visible to users through
+the modinfo utility.
+
+It is up to individual module maintainers whether they want to use this
+field and maintain its information. The module loader doesn't enforce
+its setting in any way.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/commit/?id=e69db0c2dafd9206cdc859b0361c6d4f07d77676
+
+-- 
+Cheers,
+Petr
