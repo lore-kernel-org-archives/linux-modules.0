@@ -1,138 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFFE3B0AEF
-	for <linux-modules@vger.kernel.org>; Tue, 29 Sep 2026 08:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BFE4FDE73
+	for <linux-modules@vger.kernel.org>; Tue, 29 Sep 2026 10:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790671247; cv=none; b=rfTDJbNDGA12xLS3b0NVtqJYQxnH/aIIT/WNj7kw3eIy5auZtt+h2+06EVsxofjK4uce45LiQw94OBjynmIdfIlO56Yf4Rhv6f2O7ZZ7RNLY1UHhJxI1o+Hkr7FfqG6HH/4DIO8BThsJLcspC+M75h7ds8wC1/SBBqP0pCX5JFk=
+	t=1790676011; cv=none; b=OkkknUaRxPUyG3Fp65b8e6np/obh829uIZdxBjtCFcjz/5U/XIfwqQxPfs5MdECyEy7+5wrbykj6OUGLt8FwE2yPc3K1CFeRgajBFxNjEj7dSnTzHVczcHL4AHpUAgzZx3RwAORuEJs+FKLCx1QB3uPx9Tvtsa5gM00Zj6O8qzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790671247; c=relaxed/simple;
-	bh=S+PjPkM3pr6yeCyz40gCIxrsP3KtdEpQWJmrEPggij4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uEUUi/vVzBYle3dcRP4pgmlC5HOFMj3tCxJ7+MkuWb6icury0xHPJn6f7apNEB1A7N03SGfK5ZAqUpxM6wtSdAq//3x7N7FyLOg0OnAjOYUY86Kn9mxS06QfjiVwUw9vH6jY0a4F/+WfwJPg52HYNwJ13UbKk0FhGx9pvaFxwIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWrZRsxx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790676011; c=relaxed/simple;
+	bh=nW2BpZfMFPJe+aNQAl50PTVcOHGXLoiRKZhhr8y1y+A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PvfmffISvFtKO6MgSdgUBKfqk9lsvmQioLJF1gerPC0V79vKSn1bC94UqxFo8huWBbvW/xHBajDX3U/+6dCAmscnMvUrDlT6GjMZvlXTS2W5iXGw8h9n1GvKtRIVTnrzVIM6iAN8V2qcN84bJINMZycqBKcaYlYlfKwh68/GzIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=czAYU6TD; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWrZRsxx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4591F000FF;
-	Tue, 29 Sep 2026 08:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790671245;
-	bh=5cy6j9fNirX12qNnxqo63Vd5kGmkoTDefJ5oVac7vYE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hWrZRsxxZcVJ2hwCt7j6Z2AvUlx/mIZP9I/MWcIRMRsgMySJDvzPGUg/ZqHnvrG09
-	 +4FW/qLoVZ3WonYuSHtzLURwqFd9yv/aoqznGKtgGRsBFCDgBmp8f5BqcvDZqCNAt+
-	 bL9X7nS4/evNSRMG/JH9X6P4hKlV880prh+Z+oZuOZKjyJ4kQXd3+L8yY81qwd1AvE
-	 HtuU1T2b1mXVGCgQq/ejDmVWqaQPLHZ6PLecZAFax68OkhisK3XnZfQHA3MIsq11vG
-	 dgpGcEsLNiaQe9t+lZrMV91vDT6d7mwfnHnmOFbR3kLifsrjALfgCGFZXA+5cdAUpz
-	 hm/98gksb1KZg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 6/7] alloc_tag: skip percpu counter allocation when
- profiling is disabled
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hao Ge" <hao.ge@linux.dev>
-Cc: "Petr Pavlu" <petr.pavlu@suse.com>, linux-modules@vger.kernel.org
-In-Reply-To: <20260929082014.160587-7-hao.ge@linux.dev>
-References: <20260929082014.160587-1-hao.ge@linux.dev>
- <20260929082014.160587-7-hao.ge@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 08:40:45 +0000
-Message-Id: <20260929084045.9E4591F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="czAYU6TD"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ffed768deso4978925e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 29 Sep 2026 03:00:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1790676003; x=1791280803; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=t0YyI8T0uXaAdN/WX1SYDvqqDpfpjOyIiMHz8pNiIDc=;
+        b=czAYU6TDs/qJpUEvcimzBjaxgvwROLjK4nR/VKetr20qgtaU081Xl4ZARCZdYI5Yyi
+         7hIdrkEmun9CrNQWgNpboFQeenC8U2N+8WK4k5Dl4/Qi2zbuCiMnALioo5UM2cEeO1pI
+         UCGwq/bdT2c9wCpBQyMlNUEDcm/3HznisXRItGBY1PEc98tCpPKU79isBWbQnIcNcCBB
+         j+G1uUtjSaDPhOtUF3nHq6OrXLg9uFPQjMCxF+6am+Agi/2CBvSgZgP2/YGnIixxFMcg
+         pIypha3+sSTgCcDIVxN14EM9MBzsTWn85bD0VqoGNWcPhU7s+zaADPo9niyqjWoI16vI
+         cZ3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790676003; x=1791280803;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=t0YyI8T0uXaAdN/WX1SYDvqqDpfpjOyIiMHz8pNiIDc=;
+        b=10vkbM883MJHNze+L5mYYo7hHWSsn7B+ZoW7wE0nLCi9MsCCnWjpSv+PUKwwIuB6s0
+         FS74Kh7UBAOYkcDMaiwkn/EsnZ4Q4ZYYA10CcF+B7e4+Tt2PKKmV+yhANnCuea+J3Duw
+         sLEPzhf6EkWAHXxf66U1VhVX4WPrX+f73uLO3XtR4O/PdDQ8EdcYvsJ5sah2KaFZNlfH
+         vhoZTYiLkniUhIqd0RZlgNPgAj1FnRfscP3GtjFJodWwCKGt6i/Xr5hgAybWbMsMgzq3
+         QD3gG8ONXFqZuMFF+B09TDngyMxK031gN58Q3ebCvVUIwR1tCKFTPp952P5u2kfwvTkC
+         wZag==
+X-Forwarded-Encrypted: i=1; AKwUvBxCyZNpd5yYOleDW3dT0eb9xJguWol1lGbgh9G+aqqlgGOTOVNm0UPsksVRY/F/+79+fa6llGzah/S3sFz4@vger.kernel.org
+X-Gm-Message-State: AFuF++lcLQAp61Aq4nFjghGvv+TRJonJZTUO4q+uhyxyexm/1JG3CW+c
+	YL6E+qk999DVJLDAK15zHzdTvz/1TwqdiyaBTUMx0geA/UDfl7w3QHVNHcbGqm2lZ0u3s2E8lYf
+	wc6AvIvo=
+X-Gm-Gg: AYBFou1NE+PwiHytd2up7eHbjlp4i8fu3M6WuH5rdvQJtQ2uUb+3GHM7x8AGF5vqdw2
+	u4HxlvI6OKctbf4cVwsTW3OROV6Lh8O9xbJdHoO7QIEb9Y5khMcsIYCBOsX7z/n/OpvyuHfyocY
+	SlYMXy4gOzqBUPmGhY890qA8V4+scrsT/XWqkp1kw3qR3wBtmsTUCQt9gnE1I534moUKzBR3BDd
+	O9xVrcm6svpS3VshdXKNMz49yQ7FwyPvicSJO+weYnyhC5fBnZ9FenlM+m8Sc75Tl9wEdhmW+AK
+	Gar22MeFnS2nTm9+9zTmYBHkH36KIFkKm67oPWHVOIZKc++aAQFmXEMxw8HeJ0CkNvd9iFnF5HA
+	VrWAcPE1zuJVSqBOtu3KOL/7/mxBNw6Ev9ghdGpeIlYtkZWVFkAgo4z1EdFYQt6z7Vc0LovTqlL
+	sKwa+ApWP3djTIPU1CfurkIWuZrNzlEVSZyU8B3X34YV7H5GoQMUixgbQSGrsKHHW/CVtD6wc1o
+	rTma5B+F0vUjNKnaRzNhj7nTQ==
+X-Received: by 2002:a05:600c:470d:b0:4a0:34a:588c with SMTP id 5b1f17b1804b1-4a00d778efemr28813305e9.14.1790676003381;
+        Tue, 29 Sep 2026 03:00:03 -0700 (PDT)
+Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00cf4598esm69391025e9.0.2026.09.29.03.00.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2026 03:00:02 -0700 (PDT)
+Date: Tue, 29 Sep 2026 12:00:00 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>,
+	Kees Cook <kees@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
+	Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v6 0/3] kallsyms: Accelerate symbol name lookups by ~7x
+Message-ID: <aruMIFRPBEVX_j0N@pathway.suse.cz>
+References: <20260926-ksyms-tune-v6-0-236620c65e98@gmail.com>
+ <20260926133859.c8232c439184dfa17472b020@linux-foundation.org>
+ <20260927065728.7f159234@pumpkin>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260927065728.7f159234@pumpkin>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] mm: crash on freeing static percpu variable when module load fails=
- or profiling disabled
---
+On Sun 2026-09-27 06:57:28, David Laight wrote:
+> On Sat, 26 Sep 2026 13:38:59 -0700
+> Andrew Morton <akpm@linux-foundation.org> wrote:
+> 
+> > On Sat, 26 Sep 2026 13:40:11 -0600 Jim Cromie <jim.cromie@gmail.com> wrote:
+> > 
+> > > As measured by kernel/kallsyms_selftest across ~184k symbols,
+> > > kallsyms_lookup_names() binary search takes ~6.1 us per lookup due to
+> > > two inner-loop costs:  
+> > 
+> > We don't have a kallsyms maintainer afaik.  Petr is pretty active in
+> > there so let's give him a hopeful cc.
 
-commit 1ed77a1b45b5a7a434417c336e13dff08f4838d1
-Author: Hao Ge <hao.ge@linux.dev>
+I am not sure if I could find time to look at the code deeper anytime
+soon. I put it on my TODO list but I do not promise anything...
 
-alloc_tag: skip percpu counter allocation when profiling is disabled
+Anyway, the kallsyms search speed might be interesting for tracing,
+livepatching, bpf, and maybe module loader. AFAIK, Geert used to
+interested into the kernel size. Adding them into Cc...
 
-After shutdown_mem_profiling() clears mem_profiling_support,
-needs_section_mem() returns false, so later modules have their codetag
-section placed as regular data and never enter the alloc_tag maple tree.
-codetag_load_module() still called load_module(), which allocated a percpu
-counter for every tag; release_module_tags() could not find these modules
-on unload, so the counters leaked.
+Best Regards,
+Petr
 
-> diff --git a/lib/codetag.c b/lib/codetag.c
-> index a9cda4c962a30..a0b600720afc1 100644
-> --- a/lib/codetag.c
-> +++ b/lib/codetag.c
-[ ... ]
-> @@ -388,7 +390,11 @@ void codetag_unload_module(struct module *mod)
->  			++cttype->content_id;
->  		}
->  		up_write(&cttype->mod_lock);
-> -		if (found && cttype->desc.free_section_mem)
-> +		/*
-> +		 * A module whose module_load() returned -EOPNOTSUPP is not
-> +		 * in the idr but may still hold reserved section memory.
-> +		 */
-> +		if (cttype->desc.free_section_mem)
->  			cttype->desc.free_section_mem(mod, true);
->  	}
->  	mutex_unlock(&codetag_lock);
-
-[Severity: High]
-Does this unconditional call to free_section_mem() lead to a crash when
-freeing statically allocated percpu memory?
-
-On architectures defining CONFIG_ARCH_MODULE_NEEDS_WEAK_PER_CPU,
-DEFINE_ALLOC_TAG initializes tag->counters to the statically allocated
-&_shared_alloc_tag.
-
-If a module load skips dynamic counter allocation (either because
-mem_profiling_support is false and load_module() returns -EOPNOTSUPP, or if
-alloc_percpu() fails with -ENOMEM), tag->counters remains pointing to
-&_shared_alloc_tag.
-
-Because free_section_mem() is now called unconditionally here on module unl=
-oad
-or load failure, it triggers the cleanup path for these uninitialized tags:
-release_module_tags() -> clean_unused_counters()
-
-In clean_unused_counters(), since the static _shared_alloc_tag has 0 bytes,
-it unconditionally calls free_percpu(tag->counters):
-
-mm/alloc_tag.c:clean_unused_counters() {
-	...
-		if (!counter.bytes) {
-			free_percpu(tag->counters);
-			tag->counters =3D NULL;
-	...
-}
-
-Calling free_percpu() on a statically allocated per-cpu variable that doesn=
-'t
-belong to a managed chunk can corrupt memory and cause a crash.
-
-> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-> index 1a6108a596684..1106fc60dc89c 100644
-> --- a/mm/alloc_tag.c
-> +++ b/mm/alloc_tag.c
-> @@ -981,6 +981,10 @@ static int load_module(struct module *mod, struct co=
-detag *start, struct codetag
->  	struct alloc_tag *stop_tag;
->  	struct alloc_tag *tag;
-> =20
-> +	/* Profiling disabled: load the module without its tags. */
-> +	if (!mem_profiling_support)
-> +		return -EOPNOTSUPP;
-> +
->  	/* percpu counters for core allocations are already statically allocate=
-d */
->  	if (!mod)
->  		return 0;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260929082014.1605=
-87-1-hao.ge@linux.dev?part=3D6
+> > > 0. Candidate symbols are fully decompressed into a 512-byte stack buffer
+> > >    before calling strcmp(), even though non-matching steps could choose on the
+> > >    first differing character (0..N-1).
+> > > 
+> > > 1. Probes scan sequentially from 256:1 markers in kallsyms_names[],
+> > >    decoding an average of 127.5 symbols per probe (~2,170 hops across a
+> > >    17-step search).
+> > > 
+> > > This 3-patch series addresses both:
+> > > 
+> > > 0. Patch 1 introduces kallsyms_strcmp_symbol() to compare ASCII queries
+> > >    against compressed tokens on the fly, bailing out on first mismatch.
+> > >    Drops the 512-byte stack buffer and saves ~530 ns.
+> > > 
+> > > 1. Patch 2 increases marker density from 256:1 to 16:1, cutting average
+> > >    scan distance from 127.5 to 7.5 hops and dropping lookup latency from
+> > >    6,102 ns to 866 ns for +42.2 KiB of .rodata.
+> > > 
+> > > 2. Patch 3 inlines and unrolls get_symbol_seq() 24-bit reconstruction.
+> > > 
+> > > Results (kernel/kallsyms_selftest across ~184k symbols):
+> > > - Baseline (256:1):  6,102 ns
+> > > - Patch 1 (strcmp):  5,572 ns (-530 ns)
+> > > - Patch 2 (16:1):      866 ns (7.0x faster)
+> > > - Memory: +42.2 KiB .rodata, 0 bytes dynamic RAM  
+> > 
+> > Can you better explain the tradeoffs here?  Increased memory use?  If
+> > so how much?  Is any change in build time expected?
+> 
+> I've had a thought of a scheme that should give most of the ~19x
+> improvement of the original patch without increasing the data size and
+> with only a small increase in code size.
+> The downside is a slight slow down for sequential access.
+> 
+> The thing to do is replace the 24bit 'symbol number' in the 'sorted by name'
+> list with the offset of the beginning of the name.
+> (For very large kernels it may need to be 32bit.)
+> The binary search for the symbol name then doesn't need a linear scan
+> and also loses one level of indirection.
+> You then need to do another binary search over the 'offset of every 256th
+> entry' table, followed by a linear search to find the correct address.
+> 
+> For sequential access there is a reasonable chance the next symbol is in
+> the same 256 symbol block (in address order), that can be quickly checked.
+> 
+> I got the code to run in userspace yesterday (with a real kernel symbol
+> table), I might look at some changes later today.
+> 
+> David
+> 
+> > 
+> > 
+> > What isn't addressed in here (afaict) is "who cares".  Is there some
+> > workload which is kallsyms-intensive?
+> > 
+> > This info really should be right in the first para of the [0/N], and in
+> > detail.  What benefit does this work offer to our users?  Use cases,
+> > example scenarios, etc.
+> > 
+> > Apologies if I missed this in earlier discussions, but if it was in the
+> > [0/N] this wouldn't matter!
