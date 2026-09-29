@@ -1,312 +1,305 @@
-Received: from mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from mta1.migadu.com (out-57.mta1.migadu.com [95.215.58.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061993B2FD0
-	for <linux-modules@vger.kernel.org>; Tue, 29 Sep 2026 08:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84138372B3B
+	for <linux-modules@vger.kernel.org>; Tue, 29 Sep 2026 08:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790670061; cv=none; b=dL9JylHcAk7P/ep1yiFNZVO0WUkMNlC8Ix6R39jaBqj/LNByJ6qIRDR15eDDYlr1WCYFTBiKnJMXDYRwMkJZRIpyfesGY3eRwteaa4unYzJ0NjZB6m5hByqiJsw7Dusncwjq87HD1L3O0jLa/4Mklkd8XiIICDFIVIQFL3H9vtk=
+	t=1790670472; cv=none; b=Cd1Gfeku9ZDmxDwFWttU2RCqOZR2bQmBqB2/UlqGkJwQdtH7AaSOPfZ9m74Q/MTEVSqiYTDKTAz5bO6dhwa7bphfQ5JKTLTVGm5e58xJwb+JX0jmbs2wpvGX5sOdlTdzJFkxdYuVcHpS32nfgspzhncmKQPmfA9XwrgwSckgbsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790670061; c=relaxed/simple;
-	bh=fpRNa2I+DmBqaF8ZhHQ4c09SGKG5OLX8LlAhVqaV/kE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lbS/7UDzAirtEN++qbGmKEJRIALl5r96W5neSoavydOLR9xIyTDJsq/907edx2SMCPghVJc7FIEOVp1zBJHAyWr08RSwsSnOcuIx5lE3mT/cR7blMq2PefegeburWy6q4z0xGzltjpGXQlX120+3dr2Ihb+8b5AuBEVPiSBD64w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=glyp3+EF; arc=none smtp.client-ip=95.215.58.178
+	s=arc-20240116; t=1790670472; c=relaxed/simple;
+	bh=hc4h/kvHWGvaNo1pJZ/tYxpgeXysmHfvzY1S7Hs/p0I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JYxAp0eQGMNs3eVWOa0NfIVjORBLhcPGBylZkhyiL/g/Rj2UYOynfh8qiq23YQ5E2iwm1ZAcKkU16PxH8LKhHN1elBpAWzkOHmZIbmb/gwfAIH5a573jVOKUCu3B4Ui/MfK+5r1Cbhgr/Ess0kZMRdS20CdplWLOzWMf5v2wssc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eHqG7ZjU; arc=none smtp.client-ip=95.215.58.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="glyp3+EF"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eHqG7ZjU"
 X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=fpRNa2I+DmBqaF8ZhHQ4c09SGKG5OLX8LlAhVqaV/kE=;
+DKIM-Signature: a=rsa-sha256; bh=hc4h/kvHWGvaNo1pJZ/tYxpgeXysmHfvzY1S7Hs/p0I=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790670049; v=1; x=1791274849;
- b=glyp3+EFt2xA249QLipx0o4Z7hV5tkYJbIBdAt3wUA7AmaMta84VUzxn3uWJQmcuNqyYB5TP
- Sp2N8yIBjLj4t8glm3zfxX6R3890/CfZzvCRX7o+AMe7NFp9tf+PP+iHmuwV8akdU0mRqeO9idp
- uPgJTUrEupOLubAdSgOYaN/I=
+ t=1790670468; v=1; x=1791275268;
+ b=eHqG7ZjUFKbbCPFO+k/fPKhIWrJ6nqdscW0NL6AIy2EL9CIXp8tMAXk8hOrS8bAAbxBbUP9I
+ EB0D8Zlz+pYRc/SLJJkfqD1dP8a8oKB9i+N6yRC2fmoinGolU4HhVh9z9gLYKViA4wi01iPh5WP
+ egs/8g9+WD95Mu6zQiOnPSMY=
 X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9af9c7f7ec312c14;
-	Tue, 29 Sep 2026 08:20:49 +0000
-X-Mizu-Trace-ID: 9af9c7f7ec312c14
+Received: by smtp.migadu.com with ESMTPS id f1ea05f0f1f24b17;
+	Tue, 29 Sep 2026 08:27:47 +0000
+X-Mizu-Trace-ID: f1ea05f0f1f24b17
 X-Migadu-Flow: FLOW_OUT
-From: Hao Ge <hao.ge@linux.dev>
-To: Suren Baghdasaryan <surenb@google.com>,
-	=Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexander Potapenko <glider@google.com>,
-	Marco Elver <elver@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Brendan Jackman <brendan.jackman@linux.dev>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Uladzislau Rezki <urezki@gmail.com>
-Cc: linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	Hao Ge <hao.ge@linux.dev>,
-	Sashiko <sashiko-bot@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH v11 7/7] alloc_tag: fix the /proc/allocinfo lifecycle
-Date: Tue, 29 Sep 2026 16:20:14 +0800
-Message-Id: <20260929082014.160587-8-hao.ge@linux.dev>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260929082014.160587-1-hao.ge@linux.dev>
-References: <20260929082014.160587-1-hao.ge@linux.dev>
+Message-ID: <978154c0-d919-4e78-9ece-30f1739d6c51@linux.dev>
+Date: Tue, 29 Sep 2026 16:28:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 2/6] alloc_tag: clean up the populate failure path
+To: Suren Baghdasaryan <surenb@google.com>,
+ Uladzislau Rezki <urezki@gmail.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
+ "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-modules@vger.kernel.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
+References: <20260915070001.113559-3-hao.ge@linux.dev>
+ <CAJuCfpHJSwNhgotMVpmjVvdv=m52_7Kvzpztf0WcN0AaoSeGGw@mail.gmail.com>
+ <60642a7f-2949-428a-8290-40d69c989a77@linux.dev>
+ <CAJuCfpG3d7n=z5WnUQYZsqvrt1pemF8TFvGiGyZGLO7ykVvqAQ@mail.gmail.com>
+ <CAJuCfpGeRdFY6UPF-vXxwHvP2+tN=BKgRkmLR3PMLuWhxgzPRA@mail.gmail.com>
+ <1dff448c-9cbe-4276-bca1-d91283b0c7b4@linux.dev>
+ <b8005c24-ecac-45c4-840a-fd282f9693b5@linux.dev> <arpK2bQrrUMvEvTP@milan>
+ <arqDHnBFGKQZm7VU@milan>
+ <CAJuCfpHuTzFBUm2uAbkFsKF85GxcqFATmKgT50AQgWkLjf7NMw@mail.gmail.com>
+ <arqoPs4ZplfcGmLo@milan>
+ <CAJuCfpFT=QKy_5G6GYQ1OHhvjXt807jn0pUq-eF9QonNKhx=aQ@mail.gmail.com>
+Content-Language: en-US
+From: Hao Ge <hao.ge@linux.dev>
+In-Reply-To: <CAJuCfpFT=QKy_5G6GYQ1OHhvjXt807jn0pUq-eF9QonNKhx=aQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-shutdown_mem_profiling() calls remove_proc_entry() from
-reserve_module_tags(), which runs under mod_lock held for write.
-remove_proc_entry() waits for readers, and a reader takes mod_lock for
-read in allocinfo_start():
+Hi Suren and Uladzislau
 
-  CPU0 (insmod)                      CPU1 (read /proc/allocinfo)
-  ----------------                   ----------------------------
-  reserve_module_tags()
-    down_write(&mod_lock)  [held]
-                                     use_pde()            [in_use++]
-                                     allocinfo_start()
-                                       down_read(&mod_lock)  <- blocks
-    shutdown_mem_profiling()
-      remove_proc_entry()
-        wait for in_use == 0         <- blocks
+On 2026/9/29 01:54, Suren Baghdasaryan wrote:
+> On Mon, Sep 28, 2026 at 10:47 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+>>
+>> On Mon, Sep 28, 2026 at 08:16:18AM -0700, Suren Baghdasaryan wrote:
+>>> On Mon, Sep 28, 2026 at 8:09 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+>>>>
+>>>> On Mon, Sep 28, 2026 at 01:09:13PM +0200, Uladzislau Rezki wrote:
+>>>>> On Thu, Sep 17, 2026 at 10:32:48AM +0800, Hao Ge wrote:
+>>>>>> Hi Suren、David、Lorenzo
+>>>>>>
+>>>>>> On 2026/9/17 09:12, Hao Ge wrote:
+>>>>>>> Hi Suren
+>>>>>>>
+>>>>>>> On 2026/9/17 03:07, Suren Baghdasaryan wrote:
+>>>>>>>> On Wed, Sep 16, 2026 at 9:31 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>>>>>>>>>
+>>>>>>>>> On Tue, Sep 15, 2026 at 11:00 PM Hao Ge <hao.ge@linux.dev> wrote:
+>>>>>>>>>>
+>>>>>>>>>> Hi Suren
+>>>>>>>>>>
+>>>>>>>>>> Thanks for you review.
+>>>>>>>>>>
+>>>>>>>>>> On 2026/9/16 05:09, Suren Baghdasaryan wrote:
+>>>>>>>>>>> On Mon, Sep 14, 2026 at 11:59 PM Hao Ge <hao.ge@linux.dev> wrote:
+>>>>>>>>>>>>
+>>>>>>>>>>>> The reservation is already stored in the maple tree when
+>>>>>>>>>>>> vm_module_tags_populate() fails. A failed load never unloads the
+>>>>>>>>>>>> module, so nothing releases the entry. Release it and roll
+>>>>>>>>>>>> module_tags.size back. Without the rollback a concurrent load that
+>>>>>>>>>>>> already passed needs_section_mem() can reuse the freed gap, skip
+>>>>>>>>>>>> vm_module_tags_populate() and write to unmapped memory.
+>>>>>>>>>>>>
+>>>>>>>>>>>> vmap_pages_range() may have installed some PTEs before failing. A
+>>>>>>>>>>>> retry to populate the same range would BUG on them, so undo them,
+>>>>>>>>>>>> but only if vmap actually ran.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
+>>>>>>>>>>>> Fixes: 0f9b685626da ("alloc_tag: populate memory for module tags as needed")
+>>>>>>>>>>>
+>>>>>>>>>>> If a patch fixes two other patches, it likely needs to be split so
+>>>>>>>>>>> that each part fixes one patch only. But read on please. I'm not sure
+>>>>>>>>>>> if one of the fixes is correct.
+>>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> Kept them in one patch because they only make sense together.
+>>>>>>>>>>
+>>>>>>>>>> After a failed populate the reservation is released and the
+>>>>>>>>>> size rolled back, so the next load takes the same gap and calls
+>>>>>>>>>> vm_module_tags_populate() again, and that retry would trip over
+>>>>>>>>>> the PTEs the failed vmap left behind.
+>>>>>>>>>>
+>>>>>>>>>> Without the rollback a load that already passed needs_section_mem()
+>>>>>>>>>> just reuses the gap, skips populate and writes to unmapped memory.
+>>>>>>>>>> So splitting them leaves each half broken.
+>>>>>>>>>
+>>>>>>>>> Yeah, that's why I think vmap_pages_range() cleanup should be a
+>>>>>>>>> completely separate patch with vmap_pages_range() doing cleanup
+>>>>>>>>> itself.
+>>>>>>>>>
+>>>>>>>
+>>>>>>> I think I get where you're coming from now.
+>>>>>>> Thanks for taking the time to explain.
+>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>>>>>>>>>>>> Cc: stable@vger.kernel.org
+>>>>>>>>>>>> Signed-off-by: Hao Ge <hao.ge@linux.dev>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>  mm/alloc_tag.c | 10 ++++++++++
+>>>>>>>>>>>>  1 file changed, 10 insertions(+)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+>>>>>>>>>>>> index 2070e682fe10..95ddf5b743d0 100644
+>>>>>>>>>>>> --- a/mm/alloc_tag.c
+>>>>>>>>>>>> +++ b/mm/alloc_tag.c
+>>>>>>>>>>>> @@ -804,6 +804,13 @@ static int vm_module_tags_populate(void)
+>>>>>>>>>>>>                                      next_page, PAGE_SHIFT) < 0) {
+>>>>>>>>>>>>                         release_pages_arg arg = { .pages = next_page };
+>>>>>>>>>>>>
+>>>>>>>>>>>> +                       /*
+>>>>>>>>>>>> +                        * vmap_pages_range() only runs once all pages were
+>>>>>>>>>>>> +                        * allocated, and it may have installed some mappings
+>>>>>>>>>>>> +                        * before failing. Undo them.
+>>>>>>>>>>>
+>>>>>>>>>>> If vmap_pages_range() failed to map the range, why should we need to
+>>>>>>>>>>> undo it? If it indeed leaves some partial mapping when failing then I
+>>>>>>>>>>> would argue that vmap_pages_range() should be undoing these partial
+>>>>>>>>>>> mappings itself before returning the error.
+>>>>>>>>>>>
+>>>>>>>>>> Yeah it does - none of the paths under vmap_pages_range() undo themselves on error.
+>>>>>>>>>
+>>>>>>>>> Hmm. I wonder if this behavior is intentional or requires a fix. The
+>>>>>>>>> only possible reason I can think of is performance but I can't imagine
+>>>>>>>>> a failure to map is a performance-critical case.
+>>>>>>>>>
+>>>>>>>>> +David Hildenbrand (Red Hat), +Lorenzo Stoakes (Oracle) what do you
+>>>>>>>>
+>>>>>>>> Huh, my gmail thinks you are still at your previous companies :)
+>>>>>>>>
+>>>>>>>
+>>>>>>> I manually fixed it on the mailing list for this thread.
+>>>>>>>
+>>>>>>>>> guys think? Shouldn't vmap_pages_range() undo its possible partial
+>>>>>>>>> mapping when it fails?
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>> pcpu_map_pages does perform cleanup on its own as well. There may be other similar sites.
+>>>>>>>>>> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/percpu-vm.c#L255
+>>>>>>>>>> so I did the same here.
+>>>>>>>>>>
+>>>>>>>>>> If we really want vmap_pages_range() to handle this cleanup internally, I believe that would
+>>>>>>>>>> be a relatively large change, and we would need to consider many more cases. So I think we keep
+>>>>>>>>>> the current behaviour for now.
+>>>>>>>>>
+>>>>>>>>> Yeah, I understand it would require a deeper cut but if that's the
+>>>>>>>>> right way to handle this we might as well do that. Let's see what MM
+>>>>>>>>> folks think.
+>>>>>>>>>
+>>>>>>>
+>>>>>>> Sounds good to me. Let's wait and hear what the MM folks say.
+>>>>>>>
+>>>>>>
+>>>>>> I just looked into the call sites for __vmap_pages_range.
+>>>>>> And I found there's a bug in one vmalloc caller [1].
+>>>>>> When gfp_mask has __GFP_NOFAIL, the code keeps retrying
+>>>>>> __vmap_pages_range. If there are leftover PTE mappings,
+>>>>>> this can trigger a BUG(); [2]
+>>>>>> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/vmalloc.c#L3946 [1]
+>>>>>> https://elixir.bootlin.com/linux/v7.3-rc3/source/mm/vmalloc.c#L121  [2]
+>>>>>>
+>>>>> Indeed the below code is incomplete:
+>>>>>
+>>>>> <snip>
+>>>>>       /*
+>>>>>        * page tables allocations ignore external gfp mask, enforce it
+>>>>>        * by the scope API
+>>>>>        */
+>>>>>       flags = memalloc_apply_gfp_scope(gfp_mask);
+>>>>>       do {
+>>>>>               ret = __vmap_pages_range(addr, addr + size, prot, area->pages,
+>>>>>                               page_shift, nested_gfp);
+>>>>>               if (nofail && (ret < 0))
+>>>>>                       schedule_timeout_uninterruptible(1);
+>>>>>       } while (nofail && (ret < 0));
+>>>>>       memalloc_restore_scope(flags);
+>>>>> <snip>
+>>>>>
+>>>>> and it should be fixed. As the __vmap_pages_range() can actually fail
+>>>>> and leave some installed mappings, we have to perform some cleanups
+>>>>> on failure or on repeat(if nofail is true).
+>>>>>
+>>>>> Below code:
+>>>>>
+>>>>> +                     /*
+>>>>> +                      * vmap_pages_range() only runs once all pages were
+>>>>> +                      * allocated, and it may have installed some mappings
+>>>>> +                      * before failing. Undo them.
+>>>>> +                      */
+>>>>> +                     if (nr == more_pages)
+>>>>> +                             vunmap_range(phys_end, phys_end + (nr << PAGE_SHIFT));
+>>>>>
+>>>>> we can use but we need to check if partially mapped space is not an
+>>>>> issue for the vunmap_range(). And it looks like it is not.
+>>>>>
+>>>>> <snip>
+>>>>> @@ -3953,8 +3990,15 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+>>>>>         do {
+>>>>>                 ret = __vmap_pages_range(addr, addr + size, prot, area->pages,
+>>>>>                                 page_shift, nested_gfp);
+>>>>> -               if (nofail && (ret < 0))
+>>>>> -                       schedule_timeout_uninterruptible(1);
+>>>>> +               if (ret < 0) {
+>>>>> +                       /*
+>>>>> +                        * __vmap_pages_range() may have installed some mappings
+>>>>> +                        * before failing. Undo them before returning or retrying.
+>>>>> +                        */
+>>>>> +                       vunmap_range(addr, addr + size);
+>>>>> +                       if (nofail)
+>>>>> +                               schedule_timeout_uninterruptible(1);
+>>>>> +               }
+>>>>>         } while (nofail && (ret < 0));
+>>>>>         memalloc_restore_scope(flags);
+>>>>> <snip>
+>>>>>
+>>>> And looking further. If the __vmap_pages_range()/__vmap_pages_range_noflush()
+>>>> and friends fail, a proper cleanups should be done inside, IMO.
+>>>
+>>> Sounds like we are in agreement.
+>>>
+>>>>
+>>>> But i am checking callers and see that some do some not:
+>>>>
+>>>> <snip hooks.c>
+>>>>         __vunmap_range_noflush(
+>>>>                 vmalloc_shadow(start),
+>>>>                 vmalloc_shadow(start + clean * PAGE_SIZE));
+>>>>         __vunmap_range_noflush(
+>>>>                 vmalloc_origin(start),
+>>>>                 vmalloc_origin(start + clean * PAGE_SIZE));
+>>>> <snip hooks.c>
+>>>>
+>>>> kmsan_ioremap_page_range() it does clean ups;
+>>>> kmsan_vmap_pages_range_noflush() looks like does not care in shadow.c;
+>>>> __vmalloc_area_node() as noted, it is broken as there is a BUG() on next try if nofail;
+>>>> pcpu_map_pages() it does cleanups.
+>>>> ...
+>>>>
+>>>> and so on.
+>>>
+>>> Yeah, the callers that do the cleanup should stop doing that once the
+>>> vmap functions handle it themselves. I expect an overall reduction in
+>>> code size.
+>>>
+>> Agree. If mapping API is called and it fails the caller should expect
+>> the state as it was before calling that API function, IMO.
+> 
+> Thanks for confirmation!
+> 
+> Hao, do you need help with making the change in vmap functions to
+> cleanup upon a failure?
+>
 
-Move remove_proc_entry() to a workqueue.
+Thanks everyone for your help. I think we have reached a consensus.
+I spent a day sorting out the logic and generated the patches below:
+https://lore.kernel.org/all/20260929082014.160587-3-hao.ge@linux.dev/
+Some edge cases might still be missing, please kindly review.
 
-The deferred removal also affects alloc_tag_init(). The file is
-created before the type, so on a failure it is still there with
-alloc_tag_cttype NULL or an error pointer, and a reader panics in
-allocinfo_start(). Create the file at the end of alloc_tag_init()
-instead, a failed init leaves nothing behind.
+Thanks
+Best Regards
+Hao
 
-If proc_create() fails, the codetag type and the module tags memory
-leak. Call codetag_unregister_type() and free the memory.
-
-alloc_tag_cttype can now be freed at runtime. alloc_tag_top_users()
-reads it from __show_mem() without locks, read the pointer under
-rcu_read_lock() and take mod_lock before dropping the RCU lock, the
-type stays alive until then. The only caller never sleeps, drop the
-can_sleep argument.
-
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hao Ge <hao.ge@linux.dev>
----
- include/linux/alloc_tag.h |  2 +-
- include/linux/codetag.h   |  2 ++
- lib/codetag.c             | 26 ++++++++++++++++++++
- mm/alloc_tag.c            | 52 +++++++++++++++++++++++++++------------
- mm/show_mem.c             |  2 +-
- 5 files changed, 66 insertions(+), 18 deletions(-)
-
-diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
-index 7f2d80a59792..852dc10c00ee 100644
---- a/include/linux/alloc_tag.h
-+++ b/include/linux/alloc_tag.h
-@@ -81,7 +81,7 @@ struct codetag_bytes {
- 	s64 bytes;
- };
- 
--size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sleep);
-+size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count);
- 
- static inline struct alloc_tag *ct_to_alloc_tag(struct codetag *ct)
- {
-diff --git a/include/linux/codetag.h b/include/linux/codetag.h
-index a25a085c2df1..0c4e0337b474 100644
---- a/include/linux/codetag.h
-+++ b/include/linux/codetag.h
-@@ -87,6 +87,8 @@ void codetag_to_text(struct seq_buf *out, struct codetag *ct);
- struct codetag_type *
- codetag_register_type(const struct codetag_type_desc *desc);
- 
-+void codetag_unregister_type(struct codetag_type *cttype);
-+
- #if defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES)
- 
- bool codetag_needs_module_section(struct module *mod, const char *name,
-diff --git a/lib/codetag.c b/lib/codetag.c
-index a0b600720afc..46d0904b08b3 100644
---- a/lib/codetag.c
-+++ b/lib/codetag.c
-@@ -429,3 +429,29 @@ codetag_register_type(const struct codetag_type_desc *desc)
- 
- 	return cttype;
- }
-+
-+/**
-+ * codetag_unregister_type - unregister a codetag type
-+ * @cttype: the codetag type to unregister
-+ *
-+ * Undo codetag_register_type() and free @cttype. The caller must make
-+ * sure no lockless reader still uses @cttype, e.g. clear the pointer
-+ * to it and wait for an RCU grace period first.
-+ */
-+void __init codetag_unregister_type(struct codetag_type *cttype)
-+{
-+	struct codetag_module *cmod;
-+	unsigned long id, tmp;
-+
-+	mutex_lock(&codetag_lock);
-+	list_del(&cttype->link);
-+	mutex_unlock(&codetag_lock);
-+
-+	down_write(&cttype->mod_lock);
-+	idr_for_each_entry_ul(&cttype->mod_idr, cmod, tmp, id)
-+		kfree(cmod);
-+	idr_destroy(&cttype->mod_idr);
-+	up_write(&cttype->mod_lock);
-+
-+	kfree(cttype);
-+}
-diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-index ba8a651769e3..b9af5fe5bba2 100644
---- a/mm/alloc_tag.c
-+++ b/mm/alloc_tag.c
-@@ -15,6 +15,7 @@
- #include <linux/seq_file.h>
- #include <linux/string_choices.h>
- #include <linux/vmalloc.h>
-+#include <linux/workqueue.h>
- #include <linux/kmemleak.h>
- #include <uapi/linux/alloc_tag.h>
- 
-@@ -484,22 +485,28 @@ static const struct proc_ops allocinfo_proc_ops = {
- #endif
- };
- 
--size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sleep)
-+size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count)
- {
- 	struct codetag_iterator iter;
-+	struct codetag_type *cttype;
- 	struct codetag *ct;
- 	struct codetag_bytes n;
- 	unsigned int i, nr = 0;
-+	bool locked;
- 
--	if (IS_ERR_OR_NULL(alloc_tag_cttype))
-+	rcu_read_lock();
-+	cttype = READ_ONCE(alloc_tag_cttype);
-+	if (IS_ERR_OR_NULL(cttype)) {
-+		rcu_read_unlock();
- 		return 0;
-+	}
- 
--	if (can_sleep)
--		codetag_lock_module_list(alloc_tag_cttype);
--	else if (!codetag_trylock_module_list(alloc_tag_cttype))
-+	locked = codetag_trylock_module_list(cttype);
-+	rcu_read_unlock();
-+	if (!locked)
- 		return 0;
- 
--	iter = codetag_get_ct_iter(alloc_tag_cttype);
-+	iter = codetag_get_ct_iter(cttype);
- 	while ((ct = codetag_next_ct(&iter))) {
- 		struct alloc_tag_counters counter = alloc_tag_read(ct_to_alloc_tag(ct));
- 
-@@ -520,7 +527,7 @@ size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sl
- 		}
- 	}
- 
--	codetag_unlock_module_list(alloc_tag_cttype);
-+	codetag_unlock_module_list(cttype);
- 
- 	return nr;
- }
-@@ -591,6 +598,13 @@ void pgalloc_tag_swap(struct folio *new, struct folio *old)
- 	put_page_tag_ref(handle_new);
- }
- 
-+static void remove_allocinfo_file(struct work_struct *work)
-+{
-+	remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
-+}
-+
-+static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
-+
- static void shutdown_mem_profiling(bool remove_file)
- {
- 	if (mem_alloc_profiling_enabled())
-@@ -600,7 +614,7 @@ static void shutdown_mem_profiling(bool remove_file)
- 		return;
- 
- 	if (remove_file)
--		remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
-+		schedule_work(&remove_allocinfo_work);
- 	mem_profiling_support = false;
- }
- 
-@@ -1351,16 +1365,10 @@ static int __init alloc_tag_init(void)
- 		return 0;
- 	}
- 
--	if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops)) {
--		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
--		shutdown_mem_profiling(false);
--		return -ENOMEM;
--	}
--
- 	res = alloc_mod_tags_mem();
- 	if (res) {
- 		pr_err("Failed to reserve address space for module tags, errno = %d\n", res);
--		shutdown_mem_profiling(true);
-+		shutdown_mem_profiling(false);
- 		return res;
- 	}
- 
-@@ -1368,10 +1376,22 @@ static int __init alloc_tag_init(void)
- 	if (IS_ERR(alloc_tag_cttype)) {
- 		pr_err("Allocation tags registration failed, errno = %pe\n", alloc_tag_cttype);
- 		free_mod_tags_mem();
--		shutdown_mem_profiling(true);
-+		shutdown_mem_profiling(false);
- 		return PTR_ERR(alloc_tag_cttype);
- 	}
- 
-+	if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops)) {
-+		struct codetag_type *cttype = alloc_tag_cttype;
-+
-+		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
-+		shutdown_mem_profiling(false);
-+		WRITE_ONCE(alloc_tag_cttype, NULL);
-+		synchronize_rcu();
-+		codetag_unregister_type(cttype);
-+		free_mod_tags_mem();
-+		return -ENOMEM;
-+	}
-+
- 	return 0;
- }
- module_init(alloc_tag_init);
-diff --git a/mm/show_mem.c b/mm/show_mem.c
-index b938cbcd774a..a2e710404a48 100644
---- a/mm/show_mem.c
-+++ b/mm/show_mem.c
-@@ -439,7 +439,7 @@ void __show_mem(unsigned int filter, const nodemask_t *nodemask,
- 		struct codetag_bytes tags[10];
- 		size_t i, nr;
- 
--		nr = alloc_tag_top_users(tags, ARRAY_SIZE(tags), false);
-+		nr = alloc_tag_top_users(tags, ARRAY_SIZE(tags));
- 		if (nr) {
- 			pr_notice("Memory allocations (profiling is currently turned %s):\n",
- 				mem_alloc_profiling_enabled() ? "on" : "off");
--- 
-2.25.1
-
+>>
+>> --
+>> Uladzislau Rezki
