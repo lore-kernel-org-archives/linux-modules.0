@@ -1,228 +1,496 @@
-Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E8929B799
-	for <linux-modules@vger.kernel.org>; Thu,  1 Oct 2026 22:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.141
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790895235; cv=pass; b=QpFfmONVhRopCr2ptVYhlOkAjt734MuZk3V9nGtcqnsp+Z1mCR+ouvZCD9NuOv+Ox58rli8O1Lt+i745n2h1m0GFMInyMM49wuVZis+gk6nIaio0iuscM2AnTBYaGHdOoWcfwpdEA1uwKed/TlCIenh2BBUPVKiqcAl/hsTd1Z0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790895235; c=relaxed/simple;
-	bh=9WU6gk8eX4Rgb9wpGURVmjH7c1vwFJ+Sl5X4ljE9SyY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dhWugNnPyGUGyH0eMau2ifN+ydV8upzcCrhlZU3VKog7r5b841lADA/FWSVuNOlHPkcCklRXQT7qKX+TfBkFehxRMJ0ZPcvugekKpt4MUlt+K4LHCraYKuqqKolDgOQc+b07CFthnsxCLpX72oun/LYtxunjCQuaRB4K/6yJRXw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZnwP/OFo; arc=pass smtp.client-ip=74.125.224.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598BA4B828D;
+	Thu,  1 Oct 2026 22:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.34.181.151
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790895238; cv=none; b=Vb3vyONj2EV1Viunc6BF+meeF9Y/40bsz2zCwjNE9M/RR3OaDf1fPV+YT5/WX2jUvc59fnsXO0J7MVaHmiqICM3449dyoH/S5ugGhDUzV7PsEcUY/VZYK9qXrMd+F4J+5FSgJeGwxkQyTAS1JBczoxg1uPtTRTnsrHbymQXk9yI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790895238; c=relaxed/simple;
+	bh=RMsqgCD7Mx2tYSltlpaqJFtVB6ImEwaLj0C/belD0o0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z1zNzS953BNx3INClaFILwwXNRxa23f7Ko9JcJW6+tx3XHNvi27Kuim5Ppxn8zGdM0uItRJqcEXvR3GcUOzZTPh86LE7Yd7btcTAWXfrIZGBQ5NozYCtPyY6rVd56tqrumz3h29F5TM2Yu1GgNYJq3jroESYe9vWfvLimuPkcJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=IB9ve49k; arc=none smtp.client-ip=52.34.181.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZnwP/OFo"
-Received: by mail-yx2-f13.google.com with SMTP id 956f58d0204a3-66f7a9afe43so6193432d50.1
-        for <linux-modules@vger.kernel.org>; Thu, 01 Oct 2026 15:53:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790895232; cv=none;
-        d=google.com; s=arc-20260327;
-        b=EoD0WEuzz4c639ynSDuznuFdsK/Hk2kDU+4b7VYwoRbdd4v1iY4U8ts3JpcPY7ZU3o
-         /CDBdh1Jo8AU4Mph1WO4WVPxfX6JS2yZlMFSx01kQwHWwf03xLOs5KNzr2bVOwDVohmB
-         lzCXk8ZfY8CmQkSmF0CTpfNy3hiVqKj+U9MKJiHwFVVdMr2HD0omfJtU4SDoCVqCW/oW
-         JeUmLOZDLir9jNDiyAJd4Q5g7mqhFKY/83iuX54ixsT0KzcvfNxD4DkAUH8HycvMAQRZ
-         GcDV4XmZHYMquveKdl0tCHF7Iqzr5rLEiDkfwkhb6fOx3RM5id4H+J4vvF7IbQTX+eX5
-         bc+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TBYFdlPzVVihY84Cq15ZaQjohkF0LhdMTg9utDLtVGs=;
-        fh=Rr3QhJkBeovmLd9zVznyZRVT1mV4H/MELdbXVPpPqu0=;
-        b=aXlnr/sYxObMhMV31/q+JHPW9iwmrBTSTLyQqZyooz2VHqHG1+bvoUEIOoXPvHu1aJ
-         S+nVRUM9tHxGfhUi2x3f9or1zJgqx2UfIz1/smowgGbtAmTGDzuiRZ5Wjn6YW/HBYk0N
-         v7KkITITppeyZ7E2HF8RFJXtu1GQ2LnIYawgXclgrifkxYTvrYDSObUrCczeJW8Oav/s
-         46C4zqenoyuaIRN+hbv7Qf+UA4IegjnkjX8yyPIJyE7BjKl4tENhb0q8QNsaDQEeFY8M
-         C7vU3h/mG6xghEaAsPkb1YVy0Pi1U62iZCzUhXG8PUI4ktkwNWf5XMgV3/eZVSK3KV5G
-         udDQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="IB9ve49k"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790895232; x=1791500032; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TBYFdlPzVVihY84Cq15ZaQjohkF0LhdMTg9utDLtVGs=;
-        b=ZnwP/OFomGoS544V6g6964xH7OTAHk+gDWea3g3Z3zgVJVcWOd5VmUpvwEOm57hD+b
-         iNzEQ8dEkY7ilSREet5rvOs5l9RqzoFl/ASt7TEwkKsD1NTHNwWWG70MYe9arM7tZQH3
-         p0rv7hnGnpofWUVOLEQvb8BBSY5wVVmGx8IpNTaQKQCDUOtFqQnW+Xb777aClBFNGpVL
-         QbmeVZros6qFV2MaMcRYdpmfWfAzghGYTcw+54B8D6VQXNwPdg6NzjTrz813jO6m/sn1
-         sdi+mi9TfO6yBK8XkR0/SbfDxDJYKUo33B5rfNdwg84A7PbwH8pryQVXJs7wCw8zz3ts
-         6ssA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790895232; x=1791500032;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TBYFdlPzVVihY84Cq15ZaQjohkF0LhdMTg9utDLtVGs=;
-        b=WNXTiMrYCKivTB2FEe/3GMNKHPU8rlI3D4qOMiX485FxbWv6SuMr5kYKTRcNN+L/dU
-         Hu6uMGeVYa3MvbymyuaUTx02lmAfXQilRpSKr6cXhKI8y/KVTHTZwvXWScrwCOfDQNRL
-         YwzWxcp5OIjeOdf28kUWyuh+9hnlW41QqjZHW/DHU6Y/lqzx8pK5pee7qCguNjeDXcuK
-         GggzbCCkTGFL81XEVKCa1+h1IiVO9Af7WVDPuttCuX18X6YNDJ7vuv3lAmcTPYVDn5xP
-         GoiZ3B5wBx6YXXMiTlXuC9aTa3cO+aLSGhrBbSZTeHIqrt8e0ZlzM3+mhbG9dRDsbT1X
-         1LVA==
-X-Forwarded-Encrypted: i=1; AKwUvByNV/s0Aqxi4RsBRXUUMSAeMYl+8VzAEEeBt1KEvARvKMp3Iu2AeV32G4JgBsct7Vn+Udwyrf787jO6Z8W8@vger.kernel.org
-X-Gm-Message-State: AFq9FYLvOhnPq/u1muq7GdkUrF+EaiulcFefAjZG8PBZTcliAUxpGXkG
-	Njq79H1pSIuOsoADDqOG6LB21GuVVWJAf8/VIUsN8youFUsgR/h/kIyL9Wfl6ZO0xaZ49LZA4cF
-	18oMYJxXkEMhdC0NASg9cWbDNfjQ5fOA=
-X-Gm-Gg: AYBFou1GONYj9GSNTPRIl0nb4ktRpAPUL9pjvNZwZKp0Vbmd2ezNbm9S8z4SCmOMm4Z
-	3J/FzCNOmx4aYEduAonZhc6gAL8Wkmi4boNA6+tl2OYbmjyloQ2qwElmLZaAJ9NY+UEyMSFzXsb
-	LFTA4eOE1umA2dR6Hx1JB5JBYGzDToQkFcehC0w6K4ie4rj14CJfXcoR+bTxDAMkyeugO4CVFri
-	TZZsdm1w4iSdDIn/xPu45sc9LUhPo44ZjjL5wtvK4/iugyrin28CwEIAnK/QJTSGbSDWHPAIb72
-	Y+5A78P8tMltOnVts5Kcl1paysWrwjLGUfq8lXnG6/uaAQCXk6n0OB5lex7UrV+FjTtSBcel1nL
-	mmjJ4otrWiyqck8NbUKr/itHLjQXe6YKeeJl5dGBx0NzX
-X-Received: by 2002:a05:690e:1c08:b0:676:87c6:4f71 with SMTP id
- 956f58d0204a3-677ac165db5mr389082d50.99.1790895231491; Thu, 01 Oct 2026
- 15:53:51 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1790895236; x=1822431236;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xsVBl4lbVXYKvc84DcomMFE+JKw551Jx6qM17D38wUc=;
+  b=IB9ve49k6Q5iknVh13HrDk02U/SYKyZ/vHTYZiMpZq/OoDs2+yFqbwOn
+   ytEFSjxPUnz3DhHNdkmZBQfdpLd8Q/OFcZV2cIGPPz+7aOsb+xKljuyM5
+   I88H0rCnD3xOKynbLRFgd5t4NSNRoLIovVHMdofYJphHup2McEO86LCSi
+   eE+Z8ONQ8e+6uNqiFu7fmnaLVFsGX5e9E5Y/iGf4Xa/mkpdeAVuKuPBwm
+   i+g1ZtutOtnC+HusGLuyOORXySt+inpa1EeU29aDtuJ/6pKn0c1vRZPgd
+   yq+tHqBfk1oAM4p11X2haMy0UqeL6dPtB0NSTthUOoZiI9HXxd6V/MYwF
+   Q==;
+X-CSE-ConnectionGUID: FxGqClP3QIeyFecIMM3Etw==
+X-CSE-MsgGUID: +Y3hfgP4SPiGyYHMWZs3iQ==
+X-IronPort-AV: E=Sophos;i="6.27,135,1787011200"; 
+   d="scan'208";a="30175450"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 22:53:56 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:3008]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.61.153:2525] with esmtp (Farcaster)
+ id 781587d9-7db1-412c-b237-3f814f310e21; Thu, 1 Oct 2026 22:53:55 +0000 (UTC)
+X-Farcaster-Flow-ID: 781587d9-7db1-412c-b237-3f814f310e21
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Thu, 1 Oct 2026 22:53:55 +0000
+Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Thu, 1 Oct 2026 22:53:55 +0000
+From: Jay Wang <wanjay@amazon.com>
+To: <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+	"Eduard Zingerman" <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
+	<memxor@gmail.com>
+CC: Alan Maguire <alan.maguire@oracle.com>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+	<jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet
+	<qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+	<nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>, Christian Heusel
+	<christian@heusel.eu>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
+	<petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
+	<linux-modules@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	"Masami Hiramatsu" <mhiramat@kernel.org>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>, <linux-trace-kernel@vger.kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+	<namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	<linux-perf-users@vger.kernel.org>, Jiri Kosina <jikos@kernel.org>, "Benjamin
+ Tissoires" <bentiss@kernel.org>, <linux-input@vger.kernel.org>, Tejun Heo
+	<tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi
+	<arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
+	<sched-ext@lists.linux.dev>, Shuah Khan <shuah@kernel.org>,
+	<linux-kselftest@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	<rust-for-linux@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Hazem Mohamed
+ Abuelfotoh" <abuehaze@amazon.com>, Bjoern Doebel <doebel@amazon.de>, "Martin
+ Pohlack" <mpohlack@amazon.de>, <jay.wang.upstream@gmail.com>
+Subject: [PATCH bpf-next v4 06/12] bpf: defer vmlinux kfunc and struct_ops registrations
+Date: Thu, 1 Oct 2026 22:52:08 +0000
+Message-ID: <20261001225214.12351-7-wanjay@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261001225214.12351-1-wanjay@amazon.com>
+References: <20261001225214.12351-1-wanjay@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
- <20260923-dd-cmap-part2-clean-v11-23-9b6c217fdf2f@gmail.com> <20260923224940.ABEB51F00893@smtp.kernel.org>
-In-Reply-To: <20260923224940.ABEB51F00893@smtp.kernel.org>
-From: jim.cromie@gmail.com
-Date: Thu, 1 Oct 2026 16:53:25 -0600
-X-Gm-Features: AclHuK89upHDiixXSE95YCeG6kGs9RvurvEycW_YR863IjXCz2W8iVCgqdQxxeI
-Message-ID: <CAJfuBxzPMjqAsnqGqEESjZCfz=nmFGiOj6vFZby0kpAdFnNEFg@mail.gmail.com>
-Subject: Re: [PATCH v11 23/38] dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
-To: sashiko-reviews@lists.linux.dev
-Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D039UWB004.ant.amazon.com (10.13.138.57) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Wed, Sep 23, 2026 at 4:49=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [Medium] dyndbg: TOCTOU race in ddebug_sync_classbits allows stale modu=
-le settings
-> - [Low] dyndbg: incompatible pointer type in module section load
-> --
->
-> commit 0e12bed35baa8c038def6b06ffc95416176ee997
-> Author: Jim Cromie <jim.cromie@gmail.com>
->
-> dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
->
-> This commit replaces DECLARE_DYNDBG_CLASSMAP with an explicit client-serv=
-er
-> model using DEFINE and USE macros. It resolves boot-time parameter
-> propagation failures by establishing a robust reference linkage. At modul=
-e
-> load time, dyndbg now scans and resolves parent classmap references.
->
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> [ ... ]
-> > @@ -2791,6 +2791,9 @@ static int find_module_sections(struct module *mo=
-d, struct load_info *info)
-> >       mod->dyndbg_info.maps.start =3D section_objs(info, "__dyndbg_clas=
-s_maps",
-> >                                                  sizeof(*mod->dyndbg_in=
-fo.maps.start),
-> >                                                  &mod->dyndbg_info.maps=
-.len);
-> > +     mod->dyndbg_info.users.start =3D section_objs(info, "__dyndbg_cla=
-ss_users",
-> > +                                                sizeof(*mod->dyndbg_in=
-fo.users.start),
-> > +                                                &mod->dyndbg_info.user=
-s.len);
->
-> [Severity: Low]
-> The len field in struct _ddebug_class_users is declared as a signed int, =
-but
-> section_objs() expects an unsigned int pointer for its num parameter. Cou=
-ld
-> passing &mod->dyndbg_info.users.len here trigger an incompatible pointer
-> type compiler warning and result in a build error under standard
-> configurations?
->
+With CONFIG_DEBUG_INFO_BTF=m the vmlinux BTF is loaded on first use.  For
+that to save anything, nothing may pull it in at boot.  The verifier no
+longer does since the previous patches, but register_btf_kfunc_id_set(),
+register_btf_id_dtor_kfuncs() and register_bpf_struct_ops() for vmlinux
+run from initcalls and need the parsed BTF.
 
-fixed for v12
+Queue them instead (btf_defer_reg()) and apply them in
+btf_parse_vmlinux(), before the BTF is published, so that no program can
+see a vmlinux BTF without its kfuncs and struct_ops, not even by id: the
+id is reserved before the queue is applied, so that nothing can fail once
+it is, and installed afterwards (btf_reserve_id(), btf_install_id()).
+Applying a struct_ops runs its ->init(), which registers the kfunc sets
+of its hook; those land back on the queue, so it is drained in a loop
+until a pass adds nothing, and only then are new registrations applied
+directly.  The dtor arrays are copied: every caller in the tree builds
+them on the stack of its initcall.
 
+The queue has its own lock, btf_vmlinux_regs_mutex: it is drained under
+btf_vmlinux_lock, and with its own lock btf_module_mutex, which the
+module notifier takes, is never taken under btf_vmlinux_lock, so the two
+stay unordered.
 
+A parse failure other than -ENOMEM is remembered by
+bpf_load_btf_vmlinux(), so nothing would ever apply the queue: it is then
+freed and closed, and later registrations fail as they do with =y.
 
+Module registrations are not queued yet; the next patch does that
+together with deferring the module BTF itself.  With =y the BTF is
+present from boot and nothing is queued.  Nothing here is reachable
+until the Kconfig symbol becomes a tristate.
 
-> [ ... ]
-> > diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> > --- a/lib/dynamic_debug.c
-> > +++ b/lib/dynamic_debug.c
-> [ ... ]
-> > +static void ddebug_sync_classbits(const struct kernel_param *kp, const=
- char *modname)
-> > +{
-> > +     const struct ddebug_class_param *dcp =3D kp->arg;
-> > +     u32 val, new_bits;
-> > +
-> > +     if (!dcp || !dcp->map)
-> > +             return;
-> > +
-> > +     switch (dcp->map->map_type) {
-> > +     case DD_CLASS_TYPE_DISJOINT_BITS:
-> > +             val =3D READ_ONCE(*dcp->bits);
-> > +             new_bits =3D val;
-> > +             v2pr_info("  %s: classbits: 0x%x\n", KP_NAME(kp), new_bit=
-s);
-> > +             ddebug_apply_class_bitmap(dcp, &new_bits, 0, modname);
->
-> [Severity: Medium]
-> Because dcp->bits is read locklessly via READ_ONCE() before
-> ddebug_apply_class_bitmap() takes ddebug_lock, is there a race condition
-> here?
->
-> If a user concurrently writes to the corresponding sysfs parameter, the s=
-ysfs
-> thread will update existing modules under the lock, release it, and then
-> update the parameter value.
->
-> If a concurrent module load thread executing ddebug_sync_classbits() read=
-s
-> the old parameter value right before the sysfs thread writes the new valu=
-e,
-> and then acquires the lock to apply the settings:
->
-> sysfs thread:
-> param_set_dyndbg_module_classes()
->     mutex_lock(&ddebug_lock);
->     // updates existing modules
->     mutex_unlock(&ddebug_lock);
->
-> Module load thread in ddebug_sync_classbits():
->     val =3D READ_ONCE(*dcp->bits); // reads old stale value
->
-> sysfs thread:
->     *dcp->bits =3D new_value;
->
-> Module load thread in ddebug_sync_classbits():
->     ddebug_apply_class_bitmap(...)
->         mutex_lock(&ddebug_lock);
->         // applies stale value
->
-> Would the newly loading module miss the concurrent sysfs update and
-> initialize with stale debug class settings?
->
+Signed-off-by: Jay Wang <wanjay@amazon.com>
+---
+ kernel/bpf/btf.c | 271 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 268 insertions(+), 3 deletions(-)
 
-Holding ddebug_lock during the READ_ONCE() in ddebug_sync_classbits()
-would deadlock against ddebug_change(), which acquires ddebug_lock to
-iterate ddebug_tables and toggle descriptor flags.
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 2aa9d4b3f438..96241dc62dc3 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1786,13 +1786,13 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
+ 	return 0;
+ }
+ 
+-static int btf_alloc_id(struct btf *btf)
++static int __btf_alloc_id(struct btf *btf, struct btf *entry)
+ {
+ 	int id;
+ 
+ 	idr_preload(GFP_KERNEL);
+ 	spin_lock_bh(&btf_idr_lock);
+-	id = idr_alloc_cyclic(&btf_idr, btf, 1, INT_MAX, GFP_ATOMIC);
++	id = idr_alloc_cyclic(&btf_idr, entry, 1, INT_MAX, GFP_ATOMIC);
+ 	if (id > 0)
+ 		btf->id = id;
+ 	spin_unlock_bh(&btf_idr_lock);
+@@ -1804,6 +1804,29 @@ static int btf_alloc_id(struct btf *btf)
+ 	return id > 0 ? 0 : id;
+ }
+ 
++static int btf_alloc_id(struct btf *btf)
++{
++	return __btf_alloc_id(btf, btf);
++}
++
++/*
++ * A BTF that gets registrations applied after it is parsed, with
++ * CONFIG_DEBUG_INFO_BTF=m, has its id reserved before, so that nothing can
++ * fail once they are applied, and installed after, so that nobody finds it
++ * by id in the meantime (btf_get_fd_by_id() and idr_get_next() skip NULL).
++ */
++static int btf_reserve_id(struct btf *btf)
++{
++	return __btf_alloc_id(btf, NULL);
++}
++
++static void btf_install_id(struct btf *btf)
++{
++	spin_lock_bh(&btf_idr_lock);
++	idr_replace(&btf_idr, btf, btf->id);
++	spin_unlock_bh(&btf_idr_lock);
++}
++
+ static void btf_free_id(struct btf *btf)
+ {
+ 	unsigned long flags;
+@@ -6960,6 +6983,9 @@ static struct btf *btf_parse_base(struct btf_verifier_env *env, const char *name
+ 	return ERR_PTR(err);
+ }
+ 
++static void btf_apply_deferred_vmlinux_regs(struct btf *btf);
++static void btf_drop_deferred_vmlinux_regs(void);
++
+ struct btf *btf_parse_vmlinux(void)
+ {
+ 	struct btf_verifier_env *env = NULL;
+@@ -6986,13 +7012,29 @@ struct btf *btf_parse_vmlinux(void)
+ 
+ 	/* btf_parse_vmlinux() runs under btf_vmlinux_lock */
+ 	bpf_ctx_convert.t = btf_type_by_id(btf, bpf_ctx_convert_btf_id[0]);
+-	err = btf_alloc_id(btf);
++	err = btf_reserve_id(btf);
+ 	if (err) {
+ 		bpf_ctx_convert.t = NULL;
+ 		btf_free(btf);
+ 		btf = ERR_PTR(err);
++		goto err_out;
+ 	}
++
++	/*
++	 * With CONFIG_DEBUG_INFO_BTF=m, kfunc, dtor kfunc and struct_ops
++	 * registrations for vmlinux made before the BTF was available were
++	 * queued; apply them now, before the BTF becomes visible to anyone,
++	 * by id or through bpf_get_btf_vmlinux().
++	 */
++	btf_apply_deferred_vmlinux_regs(btf);
++	btf_install_id(btf);
+ err_out:
++	/*
++	 * Any failure but -ENOMEM is remembered by bpf_load_btf_vmlinux(), so
++	 * the queued registrations would never be applied.
++	 */
++	if (IS_ERR(btf) && PTR_ERR(btf) != -ENOMEM)
++		btf_drop_deferred_vmlinux_regs();
+ 	btf_verifier_env_free(env);
+ 	return btf;
+ }
+@@ -9110,6 +9152,33 @@ enum {
+ #define BTF_MODULE_NOTIFIER 1
+ #endif
+ 
++/*
++ * CONFIG_DEBUG_INFO_BTF=m: a kfunc, dtor kfunc or struct_ops registration
++ * made while the BTF it applies to is not available yet.  Kept until the BTF
++ * arrives, see btf_defer_reg().
++ */
++enum btf_deferred_reg_kind {
++	BTF_DEFERRED_KFUNC_SET,
++	BTF_DEFERRED_DTOR_KFUNCS,
++	BTF_DEFERRED_STRUCT_OPS,
++};
++
++struct btf_deferred_reg {
++	struct list_head list;
++	enum btf_deferred_reg_kind kind;
++	union {
++		struct {
++			enum btf_kfunc_hook hook;
++			const struct btf_kfunc_id_set *kset;
++		} kfunc;
++		struct {
++			const struct btf_id_dtor_kfunc *dtors;
++			u32 cnt;
++		} dtor;
++		struct bpf_struct_ops *st_ops;
++	};
++};
++
+ #ifdef BTF_MODULE_NOTIFIER
+ struct btf_module {
+ 	struct list_head list;
+@@ -9905,12 +9974,22 @@ static int btf_kfunc_id_set_add(struct btf *btf, enum btf_kfunc_hook hook,
+ 	return btf_populate_kfunc_set(btf, hook, kset);
+ }
+ 
++static int btf_defer_reg(struct module *owner, const struct btf_deferred_reg *tmpl);
++
+ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+ 				       const struct btf_kfunc_id_set *kset)
+ {
++	struct btf_deferred_reg tmpl = {
++		.kind = BTF_DEFERRED_KFUNC_SET,
++		.kfunc = { .hook = hook, .kset = kset },
++	};
+ 	struct btf *btf;
+ 	int ret;
+ 
++	ret = btf_defer_reg(kset->owner, &tmpl);
++	if (ret)
++		return ret > 0 ? 0 : ret;
++
+ 	btf = btf_get_module_btf(kset->owner);
+ 	if (!btf)
+ 		return check_btf_kconfigs(kset->owner, "kfunc");
+@@ -10079,9 +10158,17 @@ static int btf_dtor_kfuncs_add(struct btf *btf, const struct btf_id_dtor_kfunc *
+ int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_cnt,
+ 				struct module *owner)
+ {
++	struct btf_deferred_reg tmpl = {
++		.kind = BTF_DEFERRED_DTOR_KFUNCS,
++		.dtor = { .dtors = dtors, .cnt = add_cnt },
++	};
+ 	struct btf *btf;
+ 	int ret;
+ 
++	ret = btf_defer_reg(owner, &tmpl);
++	if (ret)
++		return ret > 0 ? 0 : ret;
++
+ 	btf = btf_get_module_btf(owner);
+ 	if (!btf)
+ 		return check_btf_kconfigs(owner, "dtor kfuncs");
+@@ -10751,9 +10838,17 @@ static int btf_struct_ops_register(struct btf *btf, struct bpf_struct_ops *st_op
+ 
+ int __register_bpf_struct_ops(struct bpf_struct_ops *st_ops)
+ {
++	struct btf_deferred_reg tmpl = {
++		.kind = BTF_DEFERRED_STRUCT_OPS,
++		.st_ops = st_ops,
++	};
+ 	struct btf *btf;
+ 	int err;
+ 
++	err = btf_defer_reg(st_ops->owner, &tmpl);
++	if (err)
++		return err > 0 ? 0 : err;
++
+ 	btf = btf_get_module_btf(st_ops->owner);
+ 	if (!btf)
+ 		return check_btf_kconfigs(st_ops->owner, "struct_ops");
+@@ -10765,8 +10860,178 @@ int __register_bpf_struct_ops(struct bpf_struct_ops *st_ops)
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(__register_bpf_struct_ops);
++#elif defined(BTF_MODULE_NOTIFIER)
++static int btf_struct_ops_register(struct btf *btf, struct bpf_struct_ops *st_ops)
++{
++	return -EOPNOTSUPP;
++}
+ #endif
+ 
++/*
++ * CONFIG_DEBUG_INFO_BTF=m: registrations for vmlinux made before its BTF is
++ * available wait in btf_vmlinux_deferred_regs until btf_parse_vmlinux()
++ * applies them.
++ */
++#ifdef BTF_MODULE_NOTIFIER
++/*
++ * The queue has its own lock: it is drained under btf_vmlinux_lock, and
++ * with its own lock btf_module_mutex, which the module notifier takes, is
++ * never taken under btf_vmlinux_lock, so the two stay unordered.
++ */
++static DEFINE_MUTEX(btf_vmlinux_regs_mutex);
++static LIST_HEAD(btf_vmlinux_deferred_regs);
++/* Set when the vmlinux BTF is parsed; new registrations apply directly */
++static bool btf_vmlinux_regs_closed;
++
++/*
++ * Queue @tmpl if the BTF for @owner is not available yet.  Returns 1 if the
++ * registration was queued and is to be considered done, 0 if the caller has
++ * to apply it, or -ENOMEM.  Only vmlinux registrations are queued so far.
++ */
++static int btf_defer_reg(struct module *owner, const struct btf_deferred_reg *tmpl)
++{
++	struct list_head *head = NULL;
++	struct btf_deferred_reg *reg;
++
++	if (!IS_MODULE(CONFIG_DEBUG_INFO_BTF) || owner)
++		return 0;
++
++	guard(mutex)(&btf_vmlinux_regs_mutex);
++	if (!btf_vmlinux_regs_closed)
++		head = &btf_vmlinux_deferred_regs;
++	if (!head)
++		return 0;
++
++	reg = kmemdup(tmpl, sizeof(*reg), GFP_KERNEL);
++	if (!reg)
++		return -ENOMEM;
++	/*
++	 * kfunc id sets and struct_ops are static data of their owner, but
++	 * the dtor arrays are commonly built on the stack of the initcall.
++	 */
++	if (reg->kind == BTF_DEFERRED_DTOR_KFUNCS) {
++		reg->dtor.dtors = kmemdup_array(tmpl->dtor.dtors, tmpl->dtor.cnt,
++						sizeof(*tmpl->dtor.dtors), GFP_KERNEL);
++		if (!reg->dtor.dtors) {
++			kfree(reg);
++			return -ENOMEM;
++		}
++	}
++	list_add_tail(&reg->list, head);
++	return 1;
++}
++
++static void btf_free_deferred_reg(struct btf_deferred_reg *reg)
++{
++	if (reg->kind == BTF_DEFERRED_DTOR_KFUNCS)
++		kfree(reg->dtor.dtors);
++	kfree(reg);
++}
++
++static const char *btf_deferred_reg_name(const struct btf_deferred_reg *reg)
++{
++	switch (reg->kind) {
++	case BTF_DEFERRED_KFUNC_SET:	return "kfunc set";
++	case BTF_DEFERRED_DTOR_KFUNCS:	return "dtor kfuncs";
++	case BTF_DEFERRED_STRUCT_OPS:	return "struct_ops";
++	}
++	return "?";
++}
++
++static int btf_apply_deferred_reg(struct btf *btf, const struct btf_deferred_reg *reg)
++{
++	switch (reg->kind) {
++	case BTF_DEFERRED_KFUNC_SET:
++		return btf_kfunc_id_set_add(btf, reg->kfunc.hook, reg->kfunc.kset);
++	case BTF_DEFERRED_DTOR_KFUNCS:
++		return btf_dtor_kfuncs_add(btf, reg->dtor.dtors, reg->dtor.cnt);
++	case BTF_DEFERRED_STRUCT_OPS:
++		return btf_struct_ops_register(btf, reg->st_ops);
++	}
++	return -EINVAL;
++}
++
++/* Apply and free the registrations in @regs to @btf. */
++static void btf_apply_deferred_regs(struct btf *btf, struct list_head *regs)
++{
++	struct btf_deferred_reg *reg, *tmp;
++	int err;
++
++	list_for_each_entry_safe(reg, tmp, regs, list) {
++		err = btf_apply_deferred_reg(btf, reg);
++		if (err)
++			pr_warn("failed to register deferred %s for [%s] BTF: %d\n",
++				btf_deferred_reg_name(reg), btf->name, err);
++		list_del(&reg->list);
++		btf_free_deferred_reg(reg);
++	}
++}
++
++/*
++ * The vmlinux BTF has just been parsed; apply the registrations that waited
++ * for it.  Runs under btf_vmlinux_lock, before @btf is published, so nothing
++ * can observe a vmlinux BTF without its kfuncs and struct_ops.
++ *
++ * Applying a registration can queue further ones: a struct_ops ->init()
++ * registers the kfuncs of its hook.  Those cannot be applied directly, the
++ * BTF is only published once we are done, so the queue stays open until a
++ * pass applies nothing new, and only then are registrations applied directly.
++ */
++static void btf_apply_deferred_vmlinux_regs(struct btf *btf)
++{
++	LIST_HEAD(regs);
++
++	if (!IS_MODULE(CONFIG_DEBUG_INFO_BTF))
++		return;
++
++	mutex_lock(&btf_vmlinux_regs_mutex);
++	while (!list_empty(&btf_vmlinux_deferred_regs)) {
++		list_splice_init(&btf_vmlinux_deferred_regs, &regs);
++		mutex_unlock(&btf_vmlinux_regs_mutex);
++		btf_apply_deferred_regs(btf, &regs);
++		mutex_lock(&btf_vmlinux_regs_mutex);
++	}
++	btf_vmlinux_regs_closed = true;
++	mutex_unlock(&btf_vmlinux_regs_mutex);
++}
++
++/*
++ * The vmlinux BTF will not become available: free the queued registrations
++ * and close the queue, so that later ones fail as they do with =y.
++ */
++static void btf_drop_deferred_vmlinux_regs(void)
++{
++	struct btf_deferred_reg *reg, *tmp;
++	LIST_HEAD(regs);
++
++	if (!IS_MODULE(CONFIG_DEBUG_INFO_BTF))
++		return;
++
++	mutex_lock(&btf_vmlinux_regs_mutex);
++	list_splice_init(&btf_vmlinux_deferred_regs, &regs);
++	btf_vmlinux_regs_closed = true;
++	mutex_unlock(&btf_vmlinux_regs_mutex);
++
++	list_for_each_entry_safe(reg, tmp, &regs, list) {
++		list_del(&reg->list);
++		btf_free_deferred_reg(reg);
++	}
++}
++#else
++static int btf_defer_reg(struct module *owner, const struct btf_deferred_reg *tmpl)
++{
++	return 0;
++}
++
++static void btf_apply_deferred_vmlinux_regs(struct btf *btf)
++{
++}
++
++static void btf_drop_deferred_vmlinux_regs(void)
++{
++}
++#endif /* BTF_MODULE_NOTIFIER */
++
+ bool btf_param_match_suffix(const struct btf *btf,
+ 			    const struct btf_param *arg,
+ 			    const char *suffix)
+-- 
+2.47.3
 
-ddebug_add_module() publishes dt to ddebug_tables under ddebug_lock
-before calling ddebug_sync_classbits(). Because ddebug_change()
-acquires ddebug_lock while walking ddebug_tables, any concurrent sysfs
-write either completes before publication (so ddebug_sync_classbits()
-reads the new value) or executes after publication (so ddebug_change()
-finds and updates the new module directly).
-
-
-
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923-dd-cmap-=
-part2-clean-v11-0-9b6c217fdf2f@gmail.com?part=3D23
