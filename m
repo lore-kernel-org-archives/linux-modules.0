@@ -1,338 +1,228 @@
-Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC50365192;
-	Thu,  1 Oct 2026 22:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.34.181.151
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790895223; cv=none; b=UUrtqddyN7WK0i5RUrsz4FlKcCC9ljE1Yu14ER6t5ruqhqeiTrNfzarizEAj7LEd7sHGhsvZdfIcOUtEZMZ3eQAc/Rgq8uG6WGhCViGH3qv5qbigfK1rGdWf4a2NfO2K1jLsUrZ67QZr8BbKCaiK6Y+MwFCIDmLpslzVbvREs54=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790895223; c=relaxed/simple;
-	bh=T43jUJi2kR/rX5xIRdsVTQQF8erXtEIOLoPVyhU91As=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O+5SGNx5v/XfsrXjOB/dbUBQKIKFJxfvF9pcZtMTEB9m5NBKZGoFgWVR1CW5Ro/x9l0aSNe6BP9iWDJdGdl/DALWMFG0QTiLen6SSobBqW5OJcpxV9LUstAM55TnjOZ3bU7TG9lRnz8MWU3UQRTDTVn2w4t8AJYCDcOO6yfOaCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=KD373dBd; arc=none smtp.client-ip=52.34.181.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E8929B799
+	for <linux-modules@vger.kernel.org>; Thu,  1 Oct 2026 22:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.141
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790895235; cv=pass; b=QpFfmONVhRopCr2ptVYhlOkAjt734MuZk3V9nGtcqnsp+Z1mCR+ouvZCD9NuOv+Ox58rli8O1Lt+i745n2h1m0GFMInyMM49wuVZis+gk6nIaio0iuscM2AnTBYaGHdOoWcfwpdEA1uwKed/TlCIenh2BBUPVKiqcAl/hsTd1Z0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790895235; c=relaxed/simple;
+	bh=9WU6gk8eX4Rgb9wpGURVmjH7c1vwFJ+Sl5X4ljE9SyY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dhWugNnPyGUGyH0eMau2ifN+ydV8upzcCrhlZU3VKog7r5b841lADA/FWSVuNOlHPkcCklRXQT7qKX+TfBkFehxRMJ0ZPcvugekKpt4MUlt+K4LHCraYKuqqKolDgOQc+b07CFthnsxCLpX72oun/LYtxunjCQuaRB4K/6yJRXw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZnwP/OFo; arc=pass smtp.client-ip=74.125.224.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="KD373dBd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZnwP/OFo"
+Received: by mail-yx2-f13.google.com with SMTP id 956f58d0204a3-66f7a9afe43so6193432d50.1
+        for <linux-modules@vger.kernel.org>; Thu, 01 Oct 2026 15:53:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790895232; cv=none;
+        d=google.com; s=arc-20260327;
+        b=EoD0WEuzz4c639ynSDuznuFdsK/Hk2kDU+4b7VYwoRbdd4v1iY4U8ts3JpcPY7ZU3o
+         /CDBdh1Jo8AU4Mph1WO4WVPxfX6JS2yZlMFSx01kQwHWwf03xLOs5KNzr2bVOwDVohmB
+         lzCXk8ZfY8CmQkSmF0CTpfNy3hiVqKj+U9MKJiHwFVVdMr2HD0omfJtU4SDoCVqCW/oW
+         JeUmLOZDLir9jNDiyAJd4Q5g7mqhFKY/83iuX54ixsT0KzcvfNxD4DkAUH8HycvMAQRZ
+         GcDV4XmZHYMquveKdl0tCHF7Iqzr5rLEiDkfwkhb6fOx3RM5id4H+J4vvF7IbQTX+eX5
+         bc+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TBYFdlPzVVihY84Cq15ZaQjohkF0LhdMTg9utDLtVGs=;
+        fh=Rr3QhJkBeovmLd9zVznyZRVT1mV4H/MELdbXVPpPqu0=;
+        b=aXlnr/sYxObMhMV31/q+JHPW9iwmrBTSTLyQqZyooz2VHqHG1+bvoUEIOoXPvHu1aJ
+         S+nVRUM9tHxGfhUi2x3f9or1zJgqx2UfIz1/smowgGbtAmTGDzuiRZ5Wjn6YW/HBYk0N
+         v7KkITITppeyZ7E2HF8RFJXtu1GQ2LnIYawgXclgrifkxYTvrYDSObUrCczeJW8Oav/s
+         46C4zqenoyuaIRN+hbv7Qf+UA4IegjnkjX8yyPIJyE7BjKl4tENhb0q8QNsaDQEeFY8M
+         C7vU3h/mG6xghEaAsPkb1YVy0Pi1U62iZCzUhXG8PUI4ktkwNWf5XMgV3/eZVSK3KV5G
+         udDQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1790895220; x=1822431220;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5VvPPVPWMXiqIcqmtv3/HdT5S1eE1Fvx9dtRsICpElQ=;
-  b=KD373dBdZb/g/JwST5UPUbxUd4Hhlwa8nUd/vH2iatYixAsYCV466G1K
-   kqppGOC0mXsO2tp5FU6zPbzPhSicoc7Rgj91VCPCV+Vzu9mlOk/H5rISV
-   LWgAWfEpAS2HjLKsRg4A8Ev+1jFHl1hI3BlAHCr86pZaxaVlgztFkb1i4
-   PZmGWY/wP7AF78oNaC6qnUFdikG3YkgZRRuEwVgScKYuIUAxWCbkpadxW
-   qlN6JcyXTHMk6p8EGjivcYivcSzVCdxCmenmI2QOHbWTPp6ppjoLmhB6i
-   dYZ/7FNq0Tfe/iwK1utRE5aHF4jqe7JC9kwyYFAAQeW5zySsQicbZcl/j
-   w==;
-X-CSE-ConnectionGUID: A4PC98ueQAGMvC6ojp1PVw==
-X-CSE-MsgGUID: 7appViYMTciK14eh3fBgag==
-X-IronPort-AV: E=Sophos;i="6.27,135,1787011200"; 
-   d="scan'208";a="30175436"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 22:53:40 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.48:1307]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.10.141:2525] with esmtp (Farcaster)
- id 5c4f78e8-b119-45c3-a048-13aaeb9d79e7; Thu, 1 Oct 2026 22:53:40 +0000 (UTC)
-X-Farcaster-Flow-ID: 5c4f78e8-b119-45c3-a048-13aaeb9d79e7
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Thu, 1 Oct 2026 22:53:39 +0000
-Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Thu, 1 Oct 2026 22:53:39 +0000
-From: Jay Wang <wanjay@amazon.com>
-To: <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
-	"Eduard Zingerman" <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
-	<memxor@gmail.com>
-CC: Alan Maguire <alan.maguire@oracle.com>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
-	<jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet
-	<qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
-	<nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>, Christian Heusel
-	<christian@heusel.eu>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
-	<petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
-	<linux-modules@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	"Masami Hiramatsu" <mhiramat@kernel.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, <linux-trace-kernel@vger.kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
-	<namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	<linux-perf-users@vger.kernel.org>, Jiri Kosina <jikos@kernel.org>, "Benjamin
- Tissoires" <bentiss@kernel.org>, <linux-input@vger.kernel.org>, Tejun Heo
-	<tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi
-	<arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
-	<sched-ext@lists.linux.dev>, Shuah Khan <shuah@kernel.org>,
-	<linux-kselftest@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	<rust-for-linux@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Hazem Mohamed
- Abuelfotoh" <abuehaze@amazon.com>, Bjoern Doebel <doebel@amazon.de>, "Martin
- Pohlack" <mpohlack@amazon.de>, <jay.wang.upstream@gmail.com>
-Subject: [PATCH bpf-next v4 05/12] bpf, tracing: load the vmlinux BTF where tracefs and bpffs requests start
-Date: Thu, 1 Oct 2026 22:52:07 +0000
-Message-ID: <20261001225214.12351-6-wanjay@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261001225214.12351-1-wanjay@amazon.com>
-References: <20261001225214.12351-1-wanjay@amazon.com>
+        d=gmail.com; s=20251104; t=1790895232; x=1791500032; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=TBYFdlPzVVihY84Cq15ZaQjohkF0LhdMTg9utDLtVGs=;
+        b=ZnwP/OFomGoS544V6g6964xH7OTAHk+gDWea3g3Z3zgVJVcWOd5VmUpvwEOm57hD+b
+         iNzEQ8dEkY7ilSREet5rvOs5l9RqzoFl/ASt7TEwkKsD1NTHNwWWG70MYe9arM7tZQH3
+         p0rv7hnGnpofWUVOLEQvb8BBSY5wVVmGx8IpNTaQKQCDUOtFqQnW+Xb777aClBFNGpVL
+         QbmeVZros6qFV2MaMcRYdpmfWfAzghGYTcw+54B8D6VQXNwPdg6NzjTrz813jO6m/sn1
+         sdi+mi9TfO6yBK8XkR0/SbfDxDJYKUo33B5rfNdwg84A7PbwH8pryQVXJs7wCw8zz3ts
+         6ssA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790895232; x=1791500032;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TBYFdlPzVVihY84Cq15ZaQjohkF0LhdMTg9utDLtVGs=;
+        b=WNXTiMrYCKivTB2FEe/3GMNKHPU8rlI3D4qOMiX485FxbWv6SuMr5kYKTRcNN+L/dU
+         Hu6uMGeVYa3MvbymyuaUTx02lmAfXQilRpSKr6cXhKI8y/KVTHTZwvXWScrwCOfDQNRL
+         YwzWxcp5OIjeOdf28kUWyuh+9hnlW41QqjZHW/DHU6Y/lqzx8pK5pee7qCguNjeDXcuK
+         GggzbCCkTGFL81XEVKCa1+h1IiVO9Af7WVDPuttCuX18X6YNDJ7vuv3lAmcTPYVDn5xP
+         GoiZ3B5wBx6YXXMiTlXuC9aTa3cO+aLSGhrBbSZTeHIqrt8e0ZlzM3+mhbG9dRDsbT1X
+         1LVA==
+X-Forwarded-Encrypted: i=1; AKwUvByNV/s0Aqxi4RsBRXUUMSAeMYl+8VzAEEeBt1KEvARvKMp3Iu2AeV32G4JgBsct7Vn+Udwyrf787jO6Z8W8@vger.kernel.org
+X-Gm-Message-State: AFq9FYLvOhnPq/u1muq7GdkUrF+EaiulcFefAjZG8PBZTcliAUxpGXkG
+	Njq79H1pSIuOsoADDqOG6LB21GuVVWJAf8/VIUsN8youFUsgR/h/kIyL9Wfl6ZO0xaZ49LZA4cF
+	18oMYJxXkEMhdC0NASg9cWbDNfjQ5fOA=
+X-Gm-Gg: AYBFou1GONYj9GSNTPRIl0nb4ktRpAPUL9pjvNZwZKp0Vbmd2ezNbm9S8z4SCmOMm4Z
+	3J/FzCNOmx4aYEduAonZhc6gAL8Wkmi4boNA6+tl2OYbmjyloQ2qwElmLZaAJ9NY+UEyMSFzXsb
+	LFTA4eOE1umA2dR6Hx1JB5JBYGzDToQkFcehC0w6K4ie4rj14CJfXcoR+bTxDAMkyeugO4CVFri
+	TZZsdm1w4iSdDIn/xPu45sc9LUhPo44ZjjL5wtvK4/iugyrin28CwEIAnK/QJTSGbSDWHPAIb72
+	Y+5A78P8tMltOnVts5Kcl1paysWrwjLGUfq8lXnG6/uaAQCXk6n0OB5lex7UrV+FjTtSBcel1nL
+	mmjJ4otrWiyqck8NbUKr/itHLjQXe6YKeeJl5dGBx0NzX
+X-Received: by 2002:a05:690e:1c08:b0:676:87c6:4f71 with SMTP id
+ 956f58d0204a3-677ac165db5mr389082d50.99.1790895231491; Thu, 01 Oct 2026
+ 15:53:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D040UWA001.ant.amazon.com (10.13.139.22) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
+ <20260923-dd-cmap-part2-clean-v11-23-9b6c217fdf2f@gmail.com> <20260923224940.ABEB51F00893@smtp.kernel.org>
+In-Reply-To: <20260923224940.ABEB51F00893@smtp.kernel.org>
+From: jim.cromie@gmail.com
+Date: Thu, 1 Oct 2026 16:53:25 -0600
+X-Gm-Features: AclHuK89upHDiixXSE95YCeG6kGs9RvurvEycW_YR863IjXCz2W8iVCgqdQxxeI
+Message-ID: <CAJfuBxzPMjqAsnqGqEESjZCfz=nmFGiOj6vFZby0kpAdFnNEFg@mail.gmail.com>
+Subject: Re: [PATCH v11 23/38] dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
+To: sashiko-reviews@lists.linux.dev
+Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With CONFIG_DEBUG_INFO_BTF=m, bpf_get_btf_vmlinux() and
-bpf_find_btf_id() do not load the vmlinux BTF: loading waits for user
-space, and their callers were not written for that.  Besides the bpf()
-system call and /sys/kernel/btf/vmlinux, some tracefs and bpffs requests
-need the BTF.  Load it at the start of those, with
-bpf_load_btf_vmlinux(), and have the code that only uses the BTF if it
-happens to be there peek:
+On Wed, Sep 23, 2026 at 4:49=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [Medium] dyndbg: TOCTOU race in ddebug_sync_classbits allows stale modu=
+le settings
+> - [Low] dyndbg: incompatible pointer type in module section load
+> --
+>
+> commit 0e12bed35baa8c038def6b06ffc95416176ee997
+> Author: Jim Cromie <jim.cromie@gmail.com>
+>
+> dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
+>
+> This commit replaces DECLARE_DYNDBG_CLASSMAP with an explicit client-serv=
+er
+> model using DEFINE and USE macros. It resolves boot-time parameter
+> propagation failures by establishing a robust reference linkage. At modul=
+e
+> load time, dyndbg now scans and resolves parent classmap references.
+>
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> [ ... ]
+> > @@ -2791,6 +2791,9 @@ static int find_module_sections(struct module *mo=
+d, struct load_info *info)
+> >       mod->dyndbg_info.maps.start =3D section_objs(info, "__dyndbg_clas=
+s_maps",
+> >                                                  sizeof(*mod->dyndbg_in=
+fo.maps.start),
+> >                                                  &mod->dyndbg_info.maps=
+.len);
+> > +     mod->dyndbg_info.users.start =3D section_objs(info, "__dyndbg_cla=
+ss_users",
+> > +                                                sizeof(*mod->dyndbg_in=
+fo.users.start),
+> > +                                                &mod->dyndbg_info.user=
+s.len);
+>
+> [Severity: Low]
+> The len field in struct _ddebug_class_users is declared as a signed int, =
+but
+> section_objs() expects an unsigned int pointer for its num parameter. Cou=
+ld
+> passing &mod->dyndbg_info.users.len here trigger an incompatible pointer
+> type compiler warning and result in a build error under standard
+> configurations?
+>
 
- - Reading a tracepoint's btf_ids file (events/*/btf_ids): built-in
-   events use the vmlinux BTF, and module BTF is only registered once
-   that is loaded.  event_btf_ids_read() looks the BTF up under
-   event_mutex, which the trace notifier of the btf_vmlinux module
-   takes, so load it before taking the mutex, on the first read() of
-   the file (not again for the one that returns EOF).
- - Probe events with BTF arguments ($argN, argument names, $retval,
-   $current, typecasts): the parser loads the BTF before looking a
-   function or struct up.  It holds dyn_event_ops_mutex, which loading
-   a module never takes: besides event creation, only
-   dyn_event_register() takes it, from built-in init code.  Loading
-   here also keeps a $retval from silently losing its type.
- - The ftrace function argument printer (func-args, funcgraph-args)
-   runs in the trace output path, which includes ftrace_dump() with
-   interrupts disabled.  It only prints the arguments if the BTF is
-   already loaded, and never loads it: that also avoids one modprobe
-   per trace line when the module is not installed.
- - bpffs: parsing delegate_* mount options (fs_context) loads the BTF
-   when a value names commands or types, which are looked up in it;
-   "any" and numeric masks need no BTF and do not load it.  Showing the
-   options in /proc/*/mountinfo runs under namespace_sem; it only uses
-   the names if the BTF is already there and falls back to hex, as it
-   already does without BTF.
+fixed for v12
 
-With CONFIG_DEBUG_INFO_BTF=y bpf_load_btf_vmlinux() is
-bpf_get_btf_vmlinux() and the BTF is parsed at boot, so nothing changes.
 
-Signed-off-by: Jay Wang <wanjay@amazon.com>
----
- kernel/bpf/inode.c          | 44 ++++++++++++++++++++++++-------------
- kernel/trace/trace_events.c | 10 +++++++++
- kernel/trace/trace_output.c |  7 ++++++
- kernel/trace/trace_probe.c  | 16 ++++++++++++++
- 4 files changed, 62 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 7837968c0842..d05bbb61a593 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -658,7 +658,11 @@ struct bpffs_btf_enums {
- 	const struct btf_type *attach_t;
- };
- 
--static int find_bpffs_btf_enums(struct bpffs_btf_enums *info)
-+/*
-+ * @load: load the vmlinux BTF if necessary (CONFIG_DEBUG_INFO_BTF=m), see
-+ * bpf_load_btf_vmlinux(); otherwise only use it if it is already parsed.
-+ */
-+static int find_bpffs_btf_enums(struct bpffs_btf_enums *info, bool load)
- {
- 	struct {
- 		const struct btf_type **type;
-@@ -674,7 +678,7 @@ static int find_bpffs_btf_enums(struct bpffs_btf_enums *info)
- 
- 	memset(info, 0, sizeof(*info));
- 
--	btf = bpf_get_btf_vmlinux();
-+	btf = load ? bpf_load_btf_vmlinux() : bpf_peek_btf_vmlinux();
- 	if (IS_ERR(btf))
- 		return PTR_ERR(btf);
- 	if (!btf)
-@@ -795,8 +799,11 @@ static int bpf_show_options(struct seq_file *m, struct dentry *root)
- 	    opts->delegate_progs || opts->delegate_attachs) {
- 		struct bpffs_btf_enums info;
- 
--		/* ignore errors, fallback to hex */
--		(void)find_bpffs_btf_enums(&info);
-+		/*
-+		 * ignore errors, fallback to hex; this runs under
-+		 * namespace_sem, so do not load the BTF from here
-+		 */
-+		(void)find_bpffs_btf_enums(&info, false);
- 
- 		mask = (1ULL << __MAX_BPF_CMD) - 1;
- 		seq_print_delegate_opts(m, "delegate_cmds",
-@@ -1052,35 +1059,33 @@ static int bpf_parse_param(struct fs_context *fc, struct fs_parameter *param)
- 	case OPT_DELEGATE_MAPS:
- 	case OPT_DELEGATE_PROGS:
- 	case OPT_DELEGATE_ATTACHS: {
--		struct bpffs_btf_enums info;
--		const struct btf_type *enum_t;
-+		struct bpffs_btf_enums info = {};
-+		const struct btf_type **enum_t;
-+		bool enums_tried = false;
- 		const char *enum_pfx;
--		u64 *delegate_msk, msk = 0;
-+		u64 *delegate_msk, msk = 0, num;
- 		char *p, *str;
- 		int val;
- 
--		/* ignore errors, fallback to hex */
--		(void)find_bpffs_btf_enums(&info);
--
- 		switch (opt) {
- 		case OPT_DELEGATE_CMDS:
- 			delegate_msk = &opts->delegate_cmds;
--			enum_t = info.cmd_t;
-+			enum_t = &info.cmd_t;
- 			enum_pfx = "BPF_";
- 			break;
- 		case OPT_DELEGATE_MAPS:
- 			delegate_msk = &opts->delegate_maps;
--			enum_t = info.map_t;
-+			enum_t = &info.map_t;
- 			enum_pfx = "BPF_MAP_TYPE_";
- 			break;
- 		case OPT_DELEGATE_PROGS:
- 			delegate_msk = &opts->delegate_progs;
--			enum_t = info.prog_t;
-+			enum_t = &info.prog_t;
- 			enum_pfx = "BPF_PROG_TYPE_";
- 			break;
- 		case OPT_DELEGATE_ATTACHS:
- 			delegate_msk = &opts->delegate_attachs;
--			enum_t = info.attach_t;
-+			enum_t = &info.attach_t;
- 			enum_pfx = "BPF_";
- 			break;
- 		default:
-@@ -1089,9 +1094,18 @@ static int bpf_parse_param(struct fs_context *fc, struct fs_parameter *param)
- 
- 		str = param->string;
- 		while ((p = strsep(&str, ":"))) {
-+			/*
-+			 * Only names need the vmlinux BTF: "any" and numbers do
-+			 * not load it.  Ignore errors, fallback to hex.
-+			 */
-+			if (strcmp(p, "any") && kstrtou64(p, 0, &num) && !enums_tried) {
-+				(void)find_bpffs_btf_enums(&info, true);
-+				enums_tried = true;
-+			}
-+
- 			if (strcmp(p, "any") == 0) {
- 				msk |= ~0ULL;
--			} else if (find_btf_enum_const(info.btf, enum_t, enum_pfx, p, &val)) {
-+			} else if (find_btf_enum_const(info.btf, *enum_t, enum_pfx, p, &val)) {
- 				msk |= 1ULL << val;
- 			} else {
- 				err = kstrtou64(p, 0, &msk);
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 30c0ddf90887..c887ac6a4857 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -23,6 +23,7 @@
- #include <linux/sort.h>
- #include <linux/slab.h>
- #include <linux/delay.h>
-+#include <linux/bpf.h>
- #include <linux/btf.h>
- 
- #include <trace/events/sched.h>
-@@ -2245,6 +2246,15 @@ event_btf_ids_read(struct file *filp, char __user *ubuf, size_t cnt, loff_t *ppo
- 	char buf[128];
- 	int len;
- 
-+	/*
-+	 * Built-in events use the vmlinux BTF, and with CONFIG_DEBUG_INFO_BTF=m
-+	 * module BTF is only registered once that is loaded.  Loading it loads
-+	 * a module, whose trace notifier takes event_mutex: load it before
-+	 * taking that, and only for the first read, not again for the EOF one.
-+	 */
-+	if (!*ppos)
-+		bpf_load_btf_vmlinux();
-+
- 	/* Module unload could free call->class and ids[] mid-read. */
- 	scoped_guard(mutex, &event_mutex) {
- 		file = event_file_file(filp);
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index a5ad76175d10..1f346e524ee6 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -739,6 +739,13 @@ void print_function_args(struct trace_seq *s, unsigned long *args,
- 	if (lookup_symbol_name(func, name))
- 		goto out;
- 
-+	/*
-+	 * This can run with interrupts disabled (ftrace_dump()): only use
-+	 * the vmlinux BTF if it is parsed, never load it from here.
-+	 */
-+	if (IS_ERR_OR_NULL(bpf_peek_btf_vmlinux()))
-+		goto out;
-+
- 	/* TODO: Pass module name here too */
- 	t = btf_find_func_proto(name, &btf);
- 	if (IS_ERR_OR_NULL(t))
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 804442b2f7d2..d53ee1ef820c 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -531,6 +531,19 @@ static const char *fetch_type_from_btf_type(struct btf *btf,
- 	return NULL;
- }
- 
-+/*
-+ * Arguments described by BTF need the vmlinux BTF.  With
-+ * CONFIG_DEBUG_INFO_BTF=m it may not be loaded yet, so load it before looking
-+ * anything up.  Parsing holds dyn_event_ops_mutex, which loading a module
-+ * never takes: besides event creation, only dyn_event_register() takes it,
-+ * from built-in init code.
-+ */
-+static void trace_probe_load_btf(void)
-+{
-+	lockdep_assert_held(&dyn_event_ops_mutex);
-+	bpf_load_btf_vmlinux();
-+}
-+
- static int query_btf_context(struct traceprobe_parse_context *ctx)
- {
- 	const struct btf_param *param;
-@@ -544,6 +557,7 @@ static int query_btf_context(struct traceprobe_parse_context *ctx)
- 	if (!ctx->funcname)
- 		return -EINVAL;
- 
-+	trace_probe_load_btf();
- 	type = btf_find_func_proto(ctx->funcname, &btf);
- 	if (!type)
- 		return -ENOENT;
-@@ -762,6 +776,7 @@ static int parse_btf_arg(char *varname,
- 	if (!strcmp(varname, "$current")) {
- 		code->op = FETCH_OP_CURRENT;
- 		/* If no typecast is specified for $current, use task_struct by default */
-+		trace_probe_load_btf();
- 		ret = bpf_find_btf_id("task_struct", BTF_KIND_STRUCT, &ctx->struct_btf);
- 		if (ret < 0) {
- 			trace_probe_log_err(ctx->offset, NO_BTF_ENTRY);
-@@ -890,6 +905,7 @@ static int query_btf_struct(const char *sname, struct traceprobe_parse_context *
- 		ctx->struct_btf = NULL;
- 	}
- 
-+	trace_probe_load_btf();
- 	id = bpf_find_btf_id(sname, BTF_KIND_STRUCT, &btf);
- 	if (id < 0)
- 		return id;
--- 
-2.47.3
 
+> [ ... ]
+> > diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+> > --- a/lib/dynamic_debug.c
+> > +++ b/lib/dynamic_debug.c
+> [ ... ]
+> > +static void ddebug_sync_classbits(const struct kernel_param *kp, const=
+ char *modname)
+> > +{
+> > +     const struct ddebug_class_param *dcp =3D kp->arg;
+> > +     u32 val, new_bits;
+> > +
+> > +     if (!dcp || !dcp->map)
+> > +             return;
+> > +
+> > +     switch (dcp->map->map_type) {
+> > +     case DD_CLASS_TYPE_DISJOINT_BITS:
+> > +             val =3D READ_ONCE(*dcp->bits);
+> > +             new_bits =3D val;
+> > +             v2pr_info("  %s: classbits: 0x%x\n", KP_NAME(kp), new_bit=
+s);
+> > +             ddebug_apply_class_bitmap(dcp, &new_bits, 0, modname);
+>
+> [Severity: Medium]
+> Because dcp->bits is read locklessly via READ_ONCE() before
+> ddebug_apply_class_bitmap() takes ddebug_lock, is there a race condition
+> here?
+>
+> If a user concurrently writes to the corresponding sysfs parameter, the s=
+ysfs
+> thread will update existing modules under the lock, release it, and then
+> update the parameter value.
+>
+> If a concurrent module load thread executing ddebug_sync_classbits() read=
+s
+> the old parameter value right before the sysfs thread writes the new valu=
+e,
+> and then acquires the lock to apply the settings:
+>
+> sysfs thread:
+> param_set_dyndbg_module_classes()
+>     mutex_lock(&ddebug_lock);
+>     // updates existing modules
+>     mutex_unlock(&ddebug_lock);
+>
+> Module load thread in ddebug_sync_classbits():
+>     val =3D READ_ONCE(*dcp->bits); // reads old stale value
+>
+> sysfs thread:
+>     *dcp->bits =3D new_value;
+>
+> Module load thread in ddebug_sync_classbits():
+>     ddebug_apply_class_bitmap(...)
+>         mutex_lock(&ddebug_lock);
+>         // applies stale value
+>
+> Would the newly loading module miss the concurrent sysfs update and
+> initialize with stale debug class settings?
+>
+
+Holding ddebug_lock during the READ_ONCE() in ddebug_sync_classbits()
+would deadlock against ddebug_change(), which acquires ddebug_lock to
+iterate ddebug_tables and toggle descriptor flags.
+
+ddebug_add_module() publishes dt to ddebug_tables under ddebug_lock
+before calling ddebug_sync_classbits(). Because ddebug_change()
+acquires ddebug_lock while walking ddebug_tables, any concurrent sysfs
+write either completes before publication (so ddebug_sync_classbits()
+reads the new value) or executes after publication (so ddebug_change()
+finds and updates the new module directly).
+
+
+
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923-dd-cmap-=
+part2-clean-v11-0-9b6c217fdf2f@gmail.com?part=3D23
