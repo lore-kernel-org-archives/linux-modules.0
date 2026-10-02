@@ -1,111 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBF73BED55;
-	Fri,  2 Oct 2026 08:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1D04746AE;
+	Fri,  2 Oct 2026 09:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790930974; cv=none; b=WRduyv6y+4ZqgsC1PJceh6QcnDIGnIc8z7ReVmiYwdBSCRZQMtZvLQslCvzf0/mqr8NJRKtgpLP3axBtqCtPOjeVBwGSlPZr/gZneLtuEan8hqeXAwGrNb6JM6rFM1wzzhp+76G+b7zkGquZzmEgsCK+/DIwZk6l6kJtxGFMI18=
+	t=1790932449; cv=none; b=OO8TE/65TBrPSF9+KEJ0yVUcOQh7InFpyyUHImbx0FouAD9ZYBIMw4KrVj4gJLG+B1Fp/Gu+UKzeCyq+E0tu0ij6Ptqj34V/oYnvCx1x2K79j84kwQI8YUuOs66IxmhPxBPzkjQGO60s2fMBQMftH0wcKz6RVePuOyb5YAAESHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790930974; c=relaxed/simple;
-	bh=YN0wOfl6bDY8nqUj5Q/9V9fQKfz4SuIc2QBNbMndnaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qgs/y03T6IypxSQ58DrSzyvkuE1c2UnbOkwuBb5j+750aAucl6e7g5xkYAJ6sN14ou5g9m4VgGHTPwNXn8n38/4E43C0L5HS/5lWdRcKoo6r+kOM538oGcYahlNGPWaQE2F7K9L0XAM3EcDblHBOJnaep8iEfBBS4WYEnIVOKus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ewr6WtPx; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1790932449; c=relaxed/simple;
+	bh=i+L6umLn8Z+swB5e/ezod3yKaQQItgE1+v82GarEcf8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hJHN07UDTY4/FKol0tQ4KICptw9InHxZXS1BdWPBxkzz1+wFsxBDp4qbmpE43D2wYV5fEGmar/JZAXWfsJRo9wJYLe6A755Pl9Gn7kdsefsKbRAQ2LZbcAZpSdmVHMLDuOPldTPrXW6XY8FMADcG92kjS4S6q6ezzYCYq7eJQqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PorT1Gxe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ewr6WtPx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790930971; x=1822466971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YN0wOfl6bDY8nqUj5Q/9V9fQKfz4SuIc2QBNbMndnaU=;
-  b=ewr6WtPxd1KcfTkOjEaFKJyKc75/Y9ggUa++rwzPuGuLMr3O1e/yacA1
-   VKr5tDSI4xVYOR2ZIA3Ycav/DngT2j0am5uNJgSb+8oa81mVzE4zEHLwD
-   qfYWzEim4TYvdnC3zjvfndlX7ou3RRBKdL7oHL/O265n8uzck6EGZlUdh
-   8Wap/KlXI/k3oAnxiXUniRw8YrFmzbPieF7qOcswHhvsZ/7e+9C6UNEwK
-   +AOGQHQQSUtQjT9vGaO1R3JH8YLKBXieZCydptiwlph1nkdjBYzDxtRZV
-   0hWYRdsBhbd7ETibOzjinoQm2PEuuuEdi0ImuOxy67bSWi8uKe5TquVMF
-   Q==;
-X-CSE-ConnectionGUID: 36XcxpI7QJy8kA/qQnaUjA==
-X-CSE-MsgGUID: VCaKetnRQFCxYkZgEKvXUQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="102219845"
-X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
-   d="scan'208";a="102219845"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 01:49:30 -0700
-X-CSE-ConnectionGUID: EzkXN5aeRSCVrzI5i6k/hQ==
-X-CSE-MsgGUID: jPdD+Ty8Tqyt/zWixcl59g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
-   d="scan'208";a="276262414"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa009.jf.intel.com with ESMTP; 02 Oct 2026 01:49:22 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id F042199; Fri, 02 Oct 2026 10:49:20 +0200 (CEST)
-Date: Fri, 2 Oct 2026 10:49:20 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Rudolf Marek <r.marek@assembler.cz>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Chris Snook <chris.snook@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Duncan Sands <duncan.sands@free.fr>,
-	Chas Williams <3chas3@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] drivers: Replace __MODULE_STRING() with
- __stringify()
-Message-ID: <20261002084920.GF176164@black.igk.intel.com>
-References: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
- <20261002-module-string-v2-2-fc7438acaf4d@suse.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PorT1Gxe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1161F000FF;
+	Fri,  2 Oct 2026 09:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790932447;
+	bh=5ellbPr8x94rTylTsDiFZddy2NzL3VmyKG0ClhU0u9s=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=PorT1GxeCTQYPX519lAxP8lBCW/e9L3vsM3kOW2FhASinPrhK1PZgggB7nVem9Dye
+	 38oJDlarSF3Qq99AtrLY0+hCkpnvDAAaVZSx1p7VNjh5TNTrKOHn3TCp1gy3dBoDB5
+	 HiYwhacb6o12jQoncy8xM0Eut7oRcH+aGwKpWajJP8ISS1aLP5fH0GSR+yUyHCb3WT
+	 id3CoqEvKNyFhgiCYk2hFH4GSC20biINPIzT7y5wCukbBu9p2Drpfk8mzDZw9D2J53
+	 15qM3EqLY8CO0yXqJk031hNu6en2YgwCEeG8G19+DM0rs5PNXH4MPqIaHa1ABp+5l1
+	 GItR7pK2y7ruA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 10/12] resolve_btfids: add --btf_link to
+ fill in .BTF.link records
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jay Wang" <wanjay@amazon.com>
+Cc: linux-input@vger.kernel.org, dmitry.torokhov@gmail.com, bpf@vger.kernel.org, sched-ext@lists.linux.dev, linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org, "Petr
+ Pavlu" <petr.pavlu@suse.com>, gary@garyguo.net, linux-modules@vger.kernel.org, ojeda@kernel.org
+In-Reply-To: <20261001225214.12351-11-wanjay@amazon.com>
+References: <20261001225214.12351-1-wanjay@amazon.com>
+ <20261001225214.12351-11-wanjay@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 02 Oct 2026 09:14:06 +0000
+Message-Id: <20261002091407.4E1161F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261002-module-string-v2-2-fc7438acaf4d@suse.com>
 
-Hi,
+> From: Alan Maguire <alan.maguire@oracle.com>
+>=20
+> With CONFIG_DEBUG_INFO_BTF=3Dm the vmlinux BTF is not part of the kernel
+> image but carried by a module, and the kernel has to know, before that
+> module is loaded, which module that is, how large the BTF is and which
+> BTF it was built with.  It keeps that in a .BTF.link record (struct
+> btf_link): the name of the module, NUL-padded to the target's
+> __MODULE_NAME_LEN, the SHA-256 of the BTF, and its size in the byte
+> order of the target.  Inline BTF delivered as a module, a planned
+> follow-up, needs the same for its own section, in .BTF.inline.link.
+>=20
+> Fill these records in where .BTF_ids is patched, after the final link,
+> when the BTF is final: the --patch_btfids pass takes one or more
+>=20
+>     --btf_link <section>:<module>:<raw BTF file>
+> [ ... ]
+>  inline BTF changes; take the ELF class and byte order from the ELF
+>  header in patch_btf_link() rather than from elf_collect(), set up libelf
+>  there too, report each failure, refuse an overlong section name and
+>  --btf_link without --patch_btfids, document the option]
+> Signed-off-by: Jay Wang <wanjay@amazon.com>
 
-On Fri, Oct 02, 2026 at 10:31:02AM +0200, Petr Pavlu wrote:
->  drivers/thunderbolt/tb.c                              |  3 ++-
->  drivers/thunderbolt/tunnel.c                          |  5 +++--
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-For Thunderbolt,
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001225214.1235=
+1-1-wanjay@amazon.com?part=3D10
 
-Acked-by: Mika Westerberg <westeri@kernel.org>
