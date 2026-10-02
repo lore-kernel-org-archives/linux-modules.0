@@ -1,117 +1,79 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97671468C31
-	for <linux-modules@vger.kernel.org>; Fri,  2 Oct 2026 08:32:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60055442B32
+	for <linux-modules@vger.kernel.org>; Fri,  2 Oct 2026 08:40:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790929953; cv=none; b=hz5UGmqdFaz1rmmy6/CkB5/kJr2v//SV3PlbXIDmOole6BOOp7AK0qc3uf+1afkKOdtvo72vXiLkVBnDdVZy/WyjPGDJCUfejTwWV30QwxRSAP6X1aP+Q9FJfjGp1xtIawH1CXQvGPY3I8tiA+NrHQ6SYxoIN2anfz6WPoH47XU=
+	t=1790930461; cv=none; b=rcsztwTzRhPt5pj3wNPqy6TN2QAQ4tMJUQvO/RirjwmYitROSuG+AthurELzp39lGqMVdCbHvQ+578wItpz3XzYKCtuDM/ACIsETLqJpZXpLaAK/TWH9EchJqZrUjkpua+kKoWHw67aCVrn/izqeHvqyGp90ouciB5VtxfhTyUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790929953; c=relaxed/simple;
-	bh=zF76oz4WZP/X06K0KuuyliwnKkh6eH6J1UrreBkUc1o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QfMs6HuwJ/rNpjMYZML09ZI/RIXtyP1mNw527g/C3qWT/362KOtSxdsg+ynMMqfdO7eQfIBYORzHTkCy2SMfRw4ZlW6qpCViAh2lGwwM7rcwEbWOxR7GQPJUnNQE/ug54888OBL+opVIO7ZY00V7o8MVX3AH2KvsRaoZip8Ze08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VhAXFi8a; arc=none smtp.client-ip=74.125.225.141
+	s=arc-20240116; t=1790930461; c=relaxed/simple;
+	bh=XGIsPe5VYmFTNDwvI1iPoU75K1/ZEYNX0bKGPikeEIE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pCq6l45ur9EEoJtVgPqfPGLGWw0ooOIsstuszWzwtRgV7b65y79So0tKAdEz+h7T4bgiB2S2U8/gTOcqCDbBvkYqBQBO2obGULofpIpbWg53T3wRg3PjlFVeQssz2iiL3FAlJ7zDWM0xQdQuotDYqFLirfx2qY1P4TY0MBoB/VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Pijqgz60; arc=none smtp.client-ip=74.125.225.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VhAXFi8a"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e7bcb94d3so56005325e9.2
-        for <linux-modules@vger.kernel.org>; Fri, 02 Oct 2026 01:32:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Pijqgz60"
+Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-482f635552aso5714471f8f.2
+        for <linux-modules@vger.kernel.org>; Fri, 02 Oct 2026 01:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790929946; x=1791534746; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ys5uWke9XBV3Ke8D3pwy0Lwn7XKjGlruZIy2p0X3uuk=;
-        b=VhAXFi8ambzYBv9n69bMkNca7/NJ7sPb3NrTSVe8FVSpIht92qKmRTWr3tjSBTgiAa
-         WEsXt8TnPQBCeLDTFhaciL/1AhWWGFe6ayK+7SOSdDRNa/PzqYvvcXpbwZ2l4Rg7sYLW
-         ub83ANUrqJxByICIMfe9EvytuOhHA7VsAHZ970gA82BMzNqXu09AOys9CXWQMAA5dZt4
-         D+MMNz9D23iBMBb7o9+YtCcjJOuH28IpKRGX/lgKEHdnz/oe0G4+7ETkTNoBGkf2yw72
-         I4+J8aQXuY5lvnMaFAvK11UlQoSh8GupOYg1ItqU4LvGv+OdWKtV7Qo5NOt7M7nrF7Xj
-         EzpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790929946; x=1791534746;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=suse.com; s=google; t=1790930458; x=1791535258; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ys5uWke9XBV3Ke8D3pwy0Lwn7XKjGlruZIy2p0X3uuk=;
-        b=txetKvBB+KQXknzUI/sFFPRdx3MkdDHL6f/1H+6w0NaLCqOxsWkWvf0azADxwx4PwC
-         zxCuoy0O9tiHVFfG6cPe2sb1E5wtU7G4ojXWdzf2aIDhscayI3Zjk4tBnDcEaK5+r7hl
-         kfO7PGO7Qj2x39bDAAiPgmH5if72PD2CGYE1E143RaB4szb370+01kJFi1D2ryX3E/lj
-         dBn0OYNsWA/aXKC0kzAzTtMbtx3E4I05JZ3lxrB9FN1LOAZt2LgRlaYNnOn0s8xUL8iA
-         HNoblADP37EAls+OmPtnFxeHh4NYoWeN28GcgJcgae760QfYAvNCZ1nknIbpvrNnCOGw
-         5T6Q==
-X-Forwarded-Encrypted: i=1; AKwUvBzGxsao+Akxn0Eot+Fun/EF0bZz4MtvSYxn1r/tDMOHVYtjawdgs6lr8hMzRDBTqqZyuxKaXITB8IIJZ2MO@vger.kernel.org
-X-Gm-Message-State: AFuF++lGY/hNTjhuXcz6jKS8K4OeuKihoQV0FNN/TCttwgtFcz0WSkRn
-	/Fdh31bhiTmlPf3GoxUq25bAJccJcNZANk2Bv88LgI1zpY9pC+IhChLjVPY+pxymRw0=
-X-Gm-Gg: AYBFou2kwmRtYPoET+DMMIMZwUxJgaR8KRPZPDY6lXLFV5MTsyrM9KC8kcNtKCM9Ono
-	5n0BkNrN7R+oiEEezKDbszEEV9omgv30ip1sSmeyGDktMe/GcE0Ttg9GorX+Aj3Yte1p7r4a/LC
-	0jcLvPIKteRffKK5GTl73AXdHVdNPYnnWgYgu8JZuaIKx3JM7Vn3CecmNAINTzOYxLGxJ7H0bx5
-	I3xH1Exf2lgZplCFB2zyNQP2iyzGqD7OfaGlMqujGF3kqhkyj/u52E9QQzONU9CB8v0rfJQdRSk
-	k6S9DbC8GZ2d3Q3jgRNguIifCKooWp8MCS7XCxBiUnMfjg7DIqpFlxf9c/WwzfBq8K2Cyi9tTqT
-	ych+BD3O1FyN5YKFBVS41whJGn0cAcP/N0+g7AdL3VzrMfiI/f2MI/s0dQdFlK6k07SZZNv7Miw
-	68cMLJnfG6XyEroHtQTdFYG1aJ2GxcKUQE2euRY2htrtIsRtVK9ydJ2jWsWK6dEQ24Zic=
-X-Received: by 2002:a05:600c:4307:b0:4a0:b6:4619 with SMTP id 5b1f17b1804b1-4a0274569f9mr25694905e9.0.1790929945843;
-        Fri, 02 Oct 2026 01:32:25 -0700 (PDT)
+        bh=GhEtQbOD3vIkiy+Uh+aMP3dcdjE75yUCtt048jlfAEk=;
+        b=Pijqgz60LB2iEJOIlBfCKpq814urkYYZGr0jSz2BpUpnL1HebWRgwGNqmmxdb4VcBg
+         fVX9928eD8cLHVLKx6PxvsNDP5Pa1Xv9VJLEAaUfyCmHQOe04VH4Wty1Vbte+C9e72Fd
+         YB2TuHv+ZQUbIZuxF0KpEuHvjY2knOMVD1ogZPJ1fd+2O323gYfICEnQSXA0feOexA3O
+         mm2eiUPiWvL10jvoXUt8EyI51FttVHB5uFv5CX2Bn/jaoj76c1zPDr887C3xP32miZI1
+         lRz7NaMrw8sQMIFdVxg64rUB8Z/rgT2SNZxupsgrbz2ldNagwx5nMQjewfALFg8Gtyrr
+         3R6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790930458; x=1791535258;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GhEtQbOD3vIkiy+Uh+aMP3dcdjE75yUCtt048jlfAEk=;
+        b=wnp7mzuItW33dcEOcfxtGx0khxS5neSsn54A09mILPk9BL/B5lqS29Ge881USxI5o/
+         wCm1vRsjLIwKMGSB3icvZlv29/SholCdW27h0dwuo+3PczjAHHXPnHEfUurn4P6iY2Hd
+         a9p0SqSg8ovjs+3XGbLFm4b6K4GcAZ0foEdjFjDCQglCmKisIP1KvtXfYEBv3IdqUrmz
+         rthQGczVGe/qP+ke88hKCwmaKrM20EpFR4/JXLbgm4fsJViS3odr7HNy/k8qS6kYBgx5
+         GAQ4CjI7R3OZJM+owj1fjXDpkCCe1NwU40tMiD/iLljGs1O9qenq7PV2eJ9PU4uNhsj4
+         W7vQ==
+X-Forwarded-Encrypted: i=1; AKwUvByR0ljk49mBOQDww9e6FdN5/H2mNHv0DqIFYyvCrzfw3miAQrCbfX09zR3OvKGtjm03k1ULak0qr8NFSn9c@vger.kernel.org
+X-Gm-Message-State: AFq9FYI/2bdWbqpJezuT7phASiDHVTfjBiRnYMEtmD/gRK8W9L7GlQCK
+	+mKljXmT9Jgh/Wb7TpNzWOqxblnifGdwoR/IdLuj2EvTP8yHGeweUOFvVutSfXaaqtAPt3UB4Af
+	BfOJ/NLA=
+X-Gm-Gg: AYBFou2Ni9MWlAWLQsNh9J1aGK7WFI6scY4kriQ6+Jg+RaL278tm614U8sI7Ohn6Zn+
+	Ud1UFwgb53KDQIgc0P5bkA6Dj4C2w7tR8IpTVaxWkgOgsdyri05f49pRzpWAC+PDcXfcgzP5fmo
+	sB92Wc0b4CHOKAUjA6RqB+WQS2xVpG2heNqljO1cpgwEWKBt0KbHoW7L1qr4Hv/Qt1e0SRZq+JR
+	lh0XvD+ET2Z0yKAEwrEXHtS4Bc7IfkRrwoP/z2zk/nR6ifLttcGU5LMLMI4SpHbeU3sT0J/pZF1
+	7UfCLXMRj46pvj0hPtNqK1gUBC0pJA4E8zDnXqd3fd6XaWg2L08zdRDpEQQnsJ6DWOGxFjHO6pV
+	fIL1knMicZhlRdxdztQZ0fsLVbZOySv39AoAw4ka7TOch70el5pndgILotnXnZDODGokjdCPTrf
+	9x0iNcJh581iKsughFHhQlKYTJ3Et4CbTJHuL8UaAslTAdrIRTGu4w8/33eosnJCTV2A==
+X-Received: by 2002:a05:6000:4717:b0:487:7fd:730 with SMTP id ffacd0b85a97d-48b1271cda5mr3589115f8f.13.1790930457545;
+        Fri, 02 Oct 2026 01:40:57 -0700 (PDT)
 Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a03feed16bsm42507905e9.4.2026.10.02.01.32.24
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380f07cdsm4103624f8f.10.2026.10.02.01.40.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 01:32:25 -0700 (PDT)
+        Fri, 02 Oct 2026 01:40:57 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Rudolf Marek <r.marek@assembler.cz>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Chris Snook <chris.snook@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Duncan Sands <duncan.sands@free.fr>,
-	Chas Williams <3chas3@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
+To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-watchdog@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-hwmon@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	netdev@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: Aaron Tomlin <atomlin@atomlin.com>,
+	John Fastabend <john.fastabend@gmail.com>,
 	linux-modules@vger.kernel.org,
+	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] module: Remove obsolete __MODULE_STRING()
-Date: Fri,  2 Oct 2026 10:31:03 +0200
-Message-ID: <20261002-module-string-v2-3-fc7438acaf4d@suse.com>
+Subject: [PATCH v2] module: Add stubs.c for CONFIG_MODULES=n module_put_and_kthread_exit()
+Date: Fri,  2 Oct 2026 10:40:38 +0200
+Message-ID: <20261002-module-stubs-v2-1-a0d8c6ad1738@suse.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
-References: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -119,37 +81,164 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260918-module-stubs-dccefe41dace
 Content-Transfer-Encoding: 8bit
 
-__MODULE_STRING() has been an alias for __stringify() since "[PATCH]
-MODULE_PARM support for older modules" [1] in 2002-12. That change also
-moved it to the graveyard section at the end of linux/module.h
+Module-related stubs for CONFIG_MODULES=n can normally live in
+linux/module.h. This works well when the stub does nothing or simply
+returns a constant. However, some non-module implementations may be more
+expensive, either because they have a real implementation or because they
+require additional dependencies to be pulled into linux/module.h. This
+header appears in roughly 15k #include directives across the kernel, so it
+should avoid bringing in unnecessary definitions.
 
-Remove __MODULE_STRING() now that all remaining uses have been replaced
-directly with __stringify().
+Specifically, linux/module.h defines module_put_and_kthread_exit() as an
+alias for kthread_exit() when CONFIG_MODULES=n. That in turn requires
+linux/kthread.h, even though linux/module.h otherwise has no need for it.
+Note that linux/module.h currently doesn't include linux/kthread.h and
+requires its users to pick it up through other paths, which is itself not
+quite right.
 
-Link: https://git.kernel.org/tglx/history/c/136839a1b4 [1]
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+Introduce kernel/module/stubs.c to hold such stubs, built only for
+CONFIG_MODULES=n. This mirrors kernel/time/posix-stubs.c, which is used for
+CONFIG_POSIX_TIMERS=n.
+
+Define module_put_and_kthread_exit() in both CONFIG_MODULES configurations
+to call __module_put_and_kthread_exit() and add a CONFIG_MODULES=n
+implementation of that function to kernel/module/stubs.c. Since
+__module_put_and_kthread_exit() is now implemented even when
+CONFIG_MODULES=n, remove the corresponding '#ifdef CONFIG_MODULES' from the
+noreturn_deny BPF list.
+
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- include/linux/module.h | 4 ----
- 1 file changed, 4 deletions(-)
+kernel/module/stubs.c should also be used for add_taint_module() [1] in the
+future.
+
+[1] https://lore.kernel.org/linux-modules/a79a6a06-cc48-4036-882d-95e9b4cc01cf@suse.com/
+---
+Changes in v2:
+- Remove the unnecessary include of internal.h in stubs.c.
+- Remove the unnecessary EXPORT_SYMBOL(__module_put_and_kthread_exit) in
+  stubs.c.
+- Link to v1: https://patch.msgid.link/20260922-module-stubs-v1-1-abe465a24879@suse.com
+---
+ include/linux/module.h | 9 +++------
+ kernel/Makefile        | 2 +-
+ kernel/bpf/verifier.c  | 2 --
+ kernel/module/Makefile | 4 ++++
+ kernel/module/main.c   | 1 +
+ kernel/module/stubs.c  | 9 +++++++++
+ 6 files changed, 18 insertions(+), 9 deletions(-)
 
 diff --git a/include/linux/module.h b/include/linux/module.h
-index f6f90cd88f15..37de77340032 100644
+index 96cc98568eea..4c7bd7f9f889 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -896,10 +896,6 @@ extern const struct kobj_type module_ktype;
+@@ -658,10 +658,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
+ /* Search for module by name: must be in a RCU critical section. */
+ struct module *find_module(const char *name);
  
- #define symbol_request(x) try_then_request_module(symbol_get(x), "symbol:" #x)
+-extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
+-			long code);
+-#define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
+-
+ #ifdef CONFIG_MODULE_UNLOAD
+ int module_refcount(struct module *mod);
+ void __symbol_put(const char *symbol);
+@@ -850,8 +846,6 @@ static inline int unregister_module_notifier(struct notifier_block *nb)
+ 	return 0;
+ }
  
--/* BELOW HERE ALL THESE ARE OBSOLETE AND WILL VANISH */
+-#define module_put_and_kthread_exit(code) kthread_exit(code)
 -
--#define __MODULE_STRING(x) __stringify(x)
--
- #ifdef CONFIG_GENERIC_BUG
- void module_bug_finalize(const Elf_Ehdr *, const Elf_Shdr *,
- 			 struct module *);
+ static inline void print_modules(void)
+ {
+ }
+@@ -879,6 +873,9 @@ static inline void module_for_each_mod(int(*func)(struct module *mod, void *data
+ }
+ #endif /* CONFIG_MODULES */
+ 
++void __noreturn __module_put_and_kthread_exit(struct module *mod, long code);
++#define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
++
+ #ifdef CONFIG_SYSFS
+ extern struct kset *module_kset;
+ extern const struct kobj_type module_ktype;
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 1e1a31673577..08a94594975d 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -58,7 +58,7 @@ obj-y += liveupdate/
+ obj-y += dma/
+ obj-y += entry/
+ obj-y += unwind/
+-obj-$(CONFIG_MODULES) += module/
++obj-y += module/
+ 
+ obj-$(CONFIG_KCMP) += kcmp.o
+ obj-$(CONFIG_FREEZER) += freezer.o
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 72a3f5998dd2..be70f10e4968 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20417,9 +20417,7 @@ BTF_ID(func, __ia32_sys_exit_group)
+ BTF_ID(func, __kunit_abort)
+ BTF_ID(func, kunit_try_catch_throw)
+ #endif
+-#ifdef CONFIG_MODULES
+ BTF_ID(func, __module_put_and_kthread_exit)
+-#endif
+ #ifdef CONFIG_X86_64
+ BTF_ID(func, __x64_sys_exit)
+ BTF_ID(func, __x64_sys_exit_group)
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index 50ffcc413b54..72fd2972eacf 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -7,6 +7,7 @@
+ # and produce insane amounts of uninteresting coverage.
+ KCOV_INSTRUMENT_main.o := n
+ 
++ifeq ($(CONFIG_MODULES),y)
+ obj-y += main.o
+ obj-y += strict_rwx.o
+ obj-y += kmod.o
+@@ -23,3 +24,6 @@ obj-$(CONFIG_KGDB_KDB) += kdb.o
+ obj-$(CONFIG_MODVERSIONS) += version.o
+ obj-$(CONFIG_MODULE_UNLOAD_TAINT_TRACKING) += tracking.o
+ obj-$(CONFIG_MODULE_STATS) += stats.o
++else
++obj-y += stubs.o
++endif
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d0e1e0bd2ad0..a8bf803afa81 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -60,6 +60,7 @@
+ #include <linux/codetag.h>
+ #include <linux/debugfs.h>
+ #include <linux/execmem.h>
++#include <linux/kthread.h>
+ #include <uapi/linux/module.h>
+ #include "internal.h"
+ 
+diff --git a/kernel/module/stubs.c b/kernel/module/stubs.c
+new file mode 100644
+index 000000000000..1385c87e8169
+--- /dev/null
++++ b/kernel/module/stubs.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <linux/kthread.h>
++#include <linux/module.h>
++
++void __noreturn __module_put_and_kthread_exit(struct module *mod, long code)
++{
++	kthread_exit(code);
++}
 
--- 
-2.55.0
+---
+base-commit: 93f51579e7df248780214094418f205253383cc5
+change-id: 20260918-module-stubs-dccefe41dace
