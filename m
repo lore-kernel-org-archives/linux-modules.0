@@ -1,136 +1,170 @@
-Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7E843DEC6;
-	Fri,  2 Oct 2026 07:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.1.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F171045DF4B
+	for <linux-modules@vger.kernel.org>; Fri,  2 Oct 2026 08:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790926465; cv=none; b=amkjYiYHW3DCLDIyKTUmXCMwGMWsqWbajf//YSIO7DWlmFIXitiQJhxYtyaf5oR2XzCzvg2uajjD9XtA/+tvsGP9fmwUL3aGs70gu12Hp/qhM5ESknDuFd+LrVeMtAu5V7LkPhA6Lqf730VX61N8wMpQVnKkj2eySzIvWQYa71Q=
+	t=1790929945; cv=none; b=Xa7c6+04TOFNUYIKt8hmf7sBjoGmSJJ021O2k99kYoRK9K69fcG7xy2GRxWLwkiivGxT5nthG1uvLaoU57aZU6uTM6BBWdL6mofLBrMgiJd5fkM1BqCn+saCzfwVZlNyczFWIYjDe5+3mFwcGz1OLQbTvlnII7kudAPVlooMV7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790926465; c=relaxed/simple;
-	bh=m+LVU2zi0zSOvknT2CQZ4vuI1VWQtPXUViI/XoHlI50=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M+d5T2ds2YMHYPnnG7W7IdERmZlXmNQQ+UehJrh/xK4wXjCkJ9nGxbWgjSnerfezJT8yAQdIAHbMGCrveDPen6HBhs19LPtL554nbD4YYK9TGaw22bzHGzeH3XJiEbZWfRZzwGz6GRdL4YG+8yz8ScwvwUgrm4PBZFb8u4lqh10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=pWkW/SR5; arc=none smtp.client-ip=44.246.1.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1790929945; c=relaxed/simple;
+	bh=rm25fPbnkxJO7HK0YmIVPZ5xoj6VizjjzCiLuZ4wrBI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D3uGhPVS4TsEiqu1I1rYv2wBp/DbobbC1OFjsgnWrHIc03meSydrvGS4axptjArovxxsIzJfCBiEjlo5K5AizwXXeHzKkLAT8C39sQKjVfE71xjHceHOyi7HlXVEOj/R4aFp67S7oXDU0PPV1KvC3yfL/SkMqL/kF0E2SV432aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gOM8/Y/X; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="pWkW/SR5"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gOM8/Y/X"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ff9621c5dso46616725e9.0
+        for <linux-modules@vger.kernel.org>; Fri, 02 Oct 2026 01:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1790926463; x=1822462463;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Tpiacak94CnVvVjiQqt6BeZBKKqRNWtVDXJ5p2keyyY=;
-  b=pWkW/SR5o4ecfiiDnP7CK1rmOpiI1VeyVJ6JWRumilOAInAoMaI/m/F+
-   OEx9y8NDVUzFsmRn1Y0urdTZRVruBT+JKCIfohxUQoIF8PZUZ+zx50Cpr
-   DF4rTY2doqH2dq6PXt+krMhaO+c/CwDBtA3bIdYVgaVDXAtolsO186IdI
-   1iU3rsmUS92WZB3xOamZJTGvFsCEtIofPrb/HF1KEUtzWDbfYdv1CNLye
-   dPZll+uMcY0JB+gKg6XNPyC/SOInfqGxv2OPhrSIPh4l+sl8/5sbbST73
-   bAvDPwCSTCYUlD4bIi+c/1BbVcsaHeJZNEEt5ZMShZYxqj6PYmu2OJ1nz
-   Q==;
-X-CSE-ConnectionGUID: mQGoYcZMSYWiuYG0x9YIvQ==
-X-CSE-MsgGUID: yxmXURUMRpy+DovE+/uubw==
-X-IronPort-AV: E=Sophos;i="6.27,136,1787011200"; 
-   d="scan'208";a="30213323"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 07:34:23 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:10260]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.164:2525] with esmtp (Farcaster)
- id c36c8b8c-7ef4-4a34-8890-c411c7f7ff52; Fri, 2 Oct 2026 07:34:23 +0000 (UTC)
-X-Farcaster-Flow-ID: c36c8b8c-7ef4-4a34-8890-c411c7f7ff52
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Fri, 2 Oct 2026 07:34:23 +0000
-Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Fri, 2 Oct 2026 07:34:22 +0000
-From: Jay Wang <wanjay@amazon.com>
-To: <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
-	<memxor@gmail.com>
-CC: <alan.maguire@oracle.com>, <martin.lau@linux.dev>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <qmo@kernel.org>,
-	<nathan@kernel.org>, <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
-	<linux@weissschuh.net>, <christian@heusel.eu>, <mcgrof@kernel.org>,
-	<petr.pavlu@suse.com>, <samitolvanen@google.com>,
-	<linux-modules@vger.kernel.org>, <rostedt@goodmis.org>,
-	<mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<linux-trace-kernel@vger.kernel.org>, <acme@kernel.org>,
-	<namhyung@kernel.org>, <irogers@google.com>,
-	<linux-perf-users@vger.kernel.org>, <jikos@kernel.org>, <bentiss@kernel.org>,
-	<linux-input@vger.kernel.org>, <tj@kernel.org>, <void@manifault.com>,
-	<arighi@nvidia.com>, <changwoo@igalia.com>, <sched-ext@lists.linux.dev>,
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ojeda@kernel.org>,
-	<rust-for-linux@vger.kernel.org>, <arnd@arndb.de>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<abuehaze@amazon.com>, <doebel@amazon.de>, <mpohlack@amazon.de>,
-	<jay.wang.upstream@gmail.com>
-Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
-Date: Fri, 2 Oct 2026 07:34:22 +0000
-Message-ID: <20261002073422.14253-1-wanjay@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
-References: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
+        d=suse.com; s=google; t=1790929941; x=1791534741; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/bn76FEyPAPXjCUYSZydeUnbTPozt7o+Jc45Ge3nFyQ=;
+        b=gOM8/Y/X8QSRBJid0XZciWOdROVf+RMhL25AJV8yolknw87gSL5S/vwYMGFwT7H5hA
+         qXGE9lSVooIes0Vc4UgAG3LG/BZ9xd4DNEI8yalLTbWdnK7zo9E3qC4sQh/WZsg4g+ew
+         TG7vz7RjF0PXObU4LdFW+flyGSQAjElyrsiKimXf/Q7jeIyF6NdrWu8uAkgciAuvZWUo
+         OBv+8tLd9uDIxz+IKaeOrk3a4nX0buiJNmpeFmfK40wb3okDczzjrmsX/z5dAlEIMczF
+         Kckecudd1heVZnr6LXfMIgW2ybIFHdyDhajsaW9wnpYlPuRYwPKB9CVqflmDPXEMfUBh
+         lKMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790929941; x=1791534741;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/bn76FEyPAPXjCUYSZydeUnbTPozt7o+Jc45Ge3nFyQ=;
+        b=pIYGFFvVPQC9+c910GYu2Yq0A8gKtu34ha1t/zZGw1KXtAjmKTY7bgI2iU/N3WzOEc
+         RHao6KAx0ql8RT4Rq1mpDE7dGaeEoMrP2E/Y6tvRlYJIe2ywCCUStOGbLrf44oi837YY
+         O0eQlp87NF0OVPqnaPoL0og6X+YnmuupYItjjFa1cWD0aGXCZPqps6/qx/4sJho//k5Y
+         m+ipYh2830iKA+d/IpA2Q+9oqqVCJV34U1Pqg+DsLdMgR9Ze3QeA1NJ6ylMYuaskdo9+
+         a2h8ZoqZrictwy+dTmzLHUXGT8gN5/YpqhNEDZG4bDYfw8drfeKRiqWvnM5ie80IX98z
+         4Lgg==
+X-Forwarded-Encrypted: i=1; AKwUvBwKbDp32p+9bqZE61eBofOTb4sDkKQqw6ko0xc1a/KIItg/jwGsY/VrwBBhckPbbSjQFyU5y916LhPc7Npq@vger.kernel.org
+X-Gm-Message-State: AFuF++msNbN3UFRUNe07mH/1mY+qE1HYrww21zKQBU5wg/XRQrREqRoF
+	A7ms0oksgKqFN+JbpychbzxyxZiYOqJm2VnPLEo3wkean4NqkgogsJ1vtpgleCAFCSo=
+X-Gm-Gg: AYBFou33DGL8kl1wcsFL9ujYFHt+S7raKH4d/dx04tHFNIWoA0Pc63/c9gOhRzgB0VP
+	zHUy0XjRcsbwui4A2GFbrvJz031jPEha4QTrocs5CxudbYBXQwb4KbEjB9JrWOm6vlHxouA08lb
+	KgkSKzBbRHtEBksZU7ARGTNup+DgOC0tXG1RVl61h+ekK4q//HAdRhA3ddhjo7TipY4TwMPj6u5
+	eiHyD487Ki4L1m7/rVsj5yDZL1akw5vh4fNfFUWvZ8CPdMHjL2KfrBAr9SLQIfE9nshE2GkeoOo
+	P365SqEHV/quu1+dDoWUNud1rCE5XS2tK/LWl7hjOASuvgUhsGp9ydhyNxbThPYYAFvmC57WZBC
+	esBgCOK3OUP5z3abnghCKcvhunmTYex0j9WEZVQkafiQ5IWqKQLQJCYEyfLwMHgOm2ix42p5n9R
+	e7fYt9p4sc+FxhB4PBk3pe+nh4nIxWtJk418jojYNV1+NQcN5mkxMgATzgWu8aPTWChg==
+X-Received: by 2002:a05:600c:4e41:b0:49c:e27c:6b10 with SMTP id 5b1f17b1804b1-4a0274f9bfbmr42577955e9.3.1790929940907;
+        Fri, 02 Oct 2026 01:32:20 -0700 (PDT)
+Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a03feed16bsm42507905e9.4.2026.10.02.01.32.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2026 01:32:20 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Chris Snook <chris.snook@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Duncan Sands <duncan.sands@free.fr>,
+	Chas Williams <3chas3@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-watchdog@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Remove obsolete __MODULE_STRING()
+Date: Fri,  2 Oct 2026 10:31:00 +0200
+Message-ID: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260919-module-string-d64816f203d9
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-> A question I had: is it really worth 2k of complicated kernel code to
-> *maybe sometimes* save <10Mb of memory?
+__MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+MODULE_PARM support for older modules" [1] in 2002-12. That change also
+moved it to the graveyard section at the end of linux/module.h
 
-There are many reasons this is worth it.  The main ones:
+Replace the remaining uses of __MODULE_STRING() with __stringify() and
+remove the macro.
 
-1. This did not start from a number we picked, but from a real use
-   case: users who run large fleets of small instances, 1 GiB of
-   memory or less, with their workloads sized to fit.  We are not able
-   to disclose more detail, but for them 5.4 MB on every instance is
-   real money, and it can be exactly what pushes a workload over its
-   memory budget and onto the next instance size.  That is why we took
-   this on, even though we knew it would not be a small change.
+Apologies for the wide distribution. Acked-bys are appreciated.
 
-2. Loading code and data only when a system needs them is what kernel
-   modules exist for.  And most of them take well under ~1 MB once
-   loaded (nf_conntrack, overlay, vfat); even big ones like ext4, kvm
-   and btrfs stay around 1-2.5 MB.  The vmlinux BTF is 5.4 MB.
+[1] https://git.kernel.org/tglx/history/c/136839a1b4
 
-3. We are not alone in trying to keep BTF out of memory until it is
-   needed.  The inline BTF work [1] plans to deliver its data, which
-   is even larger, through a module too.  The .BTF.link record and the
-   resolve_btfids option that serve both are already part of this
-   series (patch 10), so this is not machinery for the vmlinux BTF
-   alone.
+---
+Changes in v2:
+- Rebase on top of next-20260930.
+- Drop 'watchdog: Replace __MODULE_STRING() with __stringify()' since it
+  has already been queued on watchdog-next.
+- Split the hwmon changes into a separate patch.
+- Link to v1: https://patch.msgid.link/20260922-module-string-v1-0-c18766690185@suse.com
 
-> Do those tiny VMs that you target run systemd with BPF LSM?
+---
+Petr Pavlu (3):
+      hwmon: Replace __MODULE_STRING() with __stringify()
+      drivers: Replace __MODULE_STRING() with __stringify()
+      module: Remove obsolete __MODULE_STRING()
 
-Not necessarily, and that is the image's choice.  Even with BPF LSM
-built in and bpf in CONFIG_LSM, memory-conscious users can turn it off
-at boot with an lsm= list that leaves it out, and then systemd does not
-load restrict_fs at all.
-
-And even where user space is in the way, which as above it does not
-have to be, the answer is to fix user space so it gets this win too,
-not to give up on it.
-
-> If the answer is "yes" for the majority of them,
-
-"The majority" is also hard to pin down here: what runs at boot
-depends on the user space packages built into each image, and on the
-workload.
-
-So the question should be what it takes to make this work, not whether
-to drop it because it is complicated.  If there are ways to cut it
-down, or issues found in the implementation, we would be happy to take
-them and go through every one.
-
-
-[1] https://lore.kernel.org/bpf/20260916074118.1007116-1-alan.maguire@oracle.com/
+ drivers/comedi/comedi_fops.c                          |  5 +++--
+ drivers/gpu/drm/drm_fb_helper.c                       |  3 ++-
+ drivers/hwmon/fschmd.c                                |  3 ++-
+ drivers/hwmon/nct7904.c                               |  5 +++--
+ drivers/hwmon/sch56xx-common.c                        |  3 ++-
+ drivers/hwmon/w83793.c                                |  5 +++--
+ drivers/i2c/busses/i2c-kempld.c                       |  3 ++-
+ drivers/net/ethernet/atheros/atl1e/atl1e_param.c      |  9 +++++----
+ drivers/net/ethernet/atheros/atlx/atl1.c              |  3 ++-
+ drivers/net/ethernet/atheros/atlx/atl2.c              | 11 ++++++-----
+ drivers/net/ethernet/intel/e1000/e1000_param.c        | 15 ++++++++-------
+ drivers/net/ethernet/intel/e1000e/param.c             | 16 ++++++----------
+ drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_param.c |  7 ++++---
+ drivers/platform/cznic/turris-omnia-mcu-watchdog.c    |  3 ++-
+ drivers/rtc/rtc-ds1374.c                              |  3 ++-
+ drivers/thunderbolt/tb.c                              |  3 ++-
+ drivers/thunderbolt/tunnel.c                          |  5 +++--
+ drivers/tty/serial/8250/8250_platform.c               |  3 ++-
+ drivers/usb/atm/speedtch.c                            | 15 ++++++++-------
+ drivers/usb/atm/usbatm.c                              | 17 +++++++++--------
+ include/linux/module.h                                |  4 ----
+ 21 files changed, 76 insertions(+), 65 deletions(-)
+---
+base-commit: 6c2cb8b8b843d216ab549b678a0d8831c43153e0
+change-id: 20260919-module-string-d64816f203d9
