@@ -1,244 +1,111 @@
-Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60055442B32
-	for <linux-modules@vger.kernel.org>; Fri,  2 Oct 2026 08:40:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBF73BED55;
+	Fri,  2 Oct 2026 08:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790930461; cv=none; b=rcsztwTzRhPt5pj3wNPqy6TN2QAQ4tMJUQvO/RirjwmYitROSuG+AthurELzp39lGqMVdCbHvQ+578wItpz3XzYKCtuDM/ACIsETLqJpZXpLaAK/TWH9EchJqZrUjkpua+kKoWHw67aCVrn/izqeHvqyGp90ouciB5VtxfhTyUM=
+	t=1790930974; cv=none; b=WRduyv6y+4ZqgsC1PJceh6QcnDIGnIc8z7ReVmiYwdBSCRZQMtZvLQslCvzf0/mqr8NJRKtgpLP3axBtqCtPOjeVBwGSlPZr/gZneLtuEan8hqeXAwGrNb6JM6rFM1wzzhp+76G+b7zkGquZzmEgsCK+/DIwZk6l6kJtxGFMI18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790930461; c=relaxed/simple;
-	bh=XGIsPe5VYmFTNDwvI1iPoU75K1/ZEYNX0bKGPikeEIE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pCq6l45ur9EEoJtVgPqfPGLGWw0ooOIsstuszWzwtRgV7b65y79So0tKAdEz+h7T4bgiB2S2U8/gTOcqCDbBvkYqBQBO2obGULofpIpbWg53T3wRg3PjlFVeQssz2iiL3FAlJ7zDWM0xQdQuotDYqFLirfx2qY1P4TY0MBoB/VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Pijqgz60; arc=none smtp.client-ip=74.125.225.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1790930974; c=relaxed/simple;
+	bh=YN0wOfl6bDY8nqUj5Q/9V9fQKfz4SuIc2QBNbMndnaU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qgs/y03T6IypxSQ58DrSzyvkuE1c2UnbOkwuBb5j+750aAucl6e7g5xkYAJ6sN14ou5g9m4VgGHTPwNXn8n38/4E43C0L5HS/5lWdRcKoo6r+kOM538oGcYahlNGPWaQE2F7K9L0XAM3EcDblHBOJnaep8iEfBBS4WYEnIVOKus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ewr6WtPx; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Pijqgz60"
-Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-482f635552aso5714471f8f.2
-        for <linux-modules@vger.kernel.org>; Fri, 02 Oct 2026 01:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790930458; x=1791535258; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GhEtQbOD3vIkiy+Uh+aMP3dcdjE75yUCtt048jlfAEk=;
-        b=Pijqgz60LB2iEJOIlBfCKpq814urkYYZGr0jSz2BpUpnL1HebWRgwGNqmmxdb4VcBg
-         fVX9928eD8cLHVLKx6PxvsNDP5Pa1Xv9VJLEAaUfyCmHQOe04VH4Wty1Vbte+C9e72Fd
-         YB2TuHv+ZQUbIZuxF0KpEuHvjY2knOMVD1ogZPJ1fd+2O323gYfICEnQSXA0feOexA3O
-         mm2eiUPiWvL10jvoXUt8EyI51FttVHB5uFv5CX2Bn/jaoj76c1zPDr887C3xP32miZI1
-         lRz7NaMrw8sQMIFdVxg64rUB8Z/rgT2SNZxupsgrbz2ldNagwx5nMQjewfALFg8Gtyrr
-         3R6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790930458; x=1791535258;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GhEtQbOD3vIkiy+Uh+aMP3dcdjE75yUCtt048jlfAEk=;
-        b=wnp7mzuItW33dcEOcfxtGx0khxS5neSsn54A09mILPk9BL/B5lqS29Ge881USxI5o/
-         wCm1vRsjLIwKMGSB3icvZlv29/SholCdW27h0dwuo+3PczjAHHXPnHEfUurn4P6iY2Hd
-         a9p0SqSg8ovjs+3XGbLFm4b6K4GcAZ0foEdjFjDCQglCmKisIP1KvtXfYEBv3IdqUrmz
-         rthQGczVGe/qP+ke88hKCwmaKrM20EpFR4/JXLbgm4fsJViS3odr7HNy/k8qS6kYBgx5
-         GAQ4CjI7R3OZJM+owj1fjXDpkCCe1NwU40tMiD/iLljGs1O9qenq7PV2eJ9PU4uNhsj4
-         W7vQ==
-X-Forwarded-Encrypted: i=1; AKwUvByR0ljk49mBOQDww9e6FdN5/H2mNHv0DqIFYyvCrzfw3miAQrCbfX09zR3OvKGtjm03k1ULak0qr8NFSn9c@vger.kernel.org
-X-Gm-Message-State: AFq9FYI/2bdWbqpJezuT7phASiDHVTfjBiRnYMEtmD/gRK8W9L7GlQCK
-	+mKljXmT9Jgh/Wb7TpNzWOqxblnifGdwoR/IdLuj2EvTP8yHGeweUOFvVutSfXaaqtAPt3UB4Af
-	BfOJ/NLA=
-X-Gm-Gg: AYBFou2Ni9MWlAWLQsNh9J1aGK7WFI6scY4kriQ6+Jg+RaL278tm614U8sI7Ohn6Zn+
-	Ud1UFwgb53KDQIgc0P5bkA6Dj4C2w7tR8IpTVaxWkgOgsdyri05f49pRzpWAC+PDcXfcgzP5fmo
-	sB92Wc0b4CHOKAUjA6RqB+WQS2xVpG2heNqljO1cpgwEWKBt0KbHoW7L1qr4Hv/Qt1e0SRZq+JR
-	lh0XvD+ET2Z0yKAEwrEXHtS4Bc7IfkRrwoP/z2zk/nR6ifLttcGU5LMLMI4SpHbeU3sT0J/pZF1
-	7UfCLXMRj46pvj0hPtNqK1gUBC0pJA4E8zDnXqd3fd6XaWg2L08zdRDpEQQnsJ6DWOGxFjHO6pV
-	fIL1knMicZhlRdxdztQZ0fsLVbZOySv39AoAw4ka7TOch70el5pndgILotnXnZDODGokjdCPTrf
-	9x0iNcJh581iKsughFHhQlKYTJ3Et4CbTJHuL8UaAslTAdrIRTGu4w8/33eosnJCTV2A==
-X-Received: by 2002:a05:6000:4717:b0:487:7fd:730 with SMTP id ffacd0b85a97d-48b1271cda5mr3589115f8f.13.1790930457545;
-        Fri, 02 Oct 2026 01:40:57 -0700 (PDT)
-Received: from zovi.suse.cz ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380f07cdsm4103624f8f.10.2026.10.02.01.40.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 01:40:57 -0700 (PDT)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ewr6WtPx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790930971; x=1822466971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YN0wOfl6bDY8nqUj5Q/9V9fQKfz4SuIc2QBNbMndnaU=;
+  b=ewr6WtPxd1KcfTkOjEaFKJyKc75/Y9ggUa++rwzPuGuLMr3O1e/yacA1
+   VKr5tDSI4xVYOR2ZIA3Ycav/DngT2j0am5uNJgSb+8oa81mVzE4zEHLwD
+   qfYWzEim4TYvdnC3zjvfndlX7ou3RRBKdL7oHL/O265n8uzck6EGZlUdh
+   8Wap/KlXI/k3oAnxiXUniRw8YrFmzbPieF7qOcswHhvsZ/7e+9C6UNEwK
+   +AOGQHQQSUtQjT9vGaO1R3JH8YLKBXieZCydptiwlph1nkdjBYzDxtRZV
+   0hWYRdsBhbd7ETibOzjinoQm2PEuuuEdi0ImuOxy67bSWi8uKe5TquVMF
+   Q==;
+X-CSE-ConnectionGUID: 36XcxpI7QJy8kA/qQnaUjA==
+X-CSE-MsgGUID: VCaKetnRQFCxYkZgEKvXUQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="102219845"
+X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
+   d="scan'208";a="102219845"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 01:49:30 -0700
+X-CSE-ConnectionGUID: EzkXN5aeRSCVrzI5i6k/hQ==
+X-CSE-MsgGUID: jPdD+Ty8Tqyt/zWixcl59g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
+   d="scan'208";a="276262414"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa009.jf.intel.com with ESMTP; 02 Oct 2026 01:49:22 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id F042199; Fri, 02 Oct 2026 10:49:20 +0200 (CEST)
+Date: Fri, 2 Oct 2026 10:49:20 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Chris Snook <chris.snook@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Duncan Sands <duncan.sands@free.fr>,
+	Chas Williams <3chas3@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	linux-modules@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] module: Add stubs.c for CONFIG_MODULES=n module_put_and_kthread_exit()
-Date: Fri,  2 Oct 2026 10:40:38 +0200
-Message-ID: <20261002-module-stubs-v2-1-a0d8c6ad1738@suse.com>
-X-Mailer: git-send-email 2.55.0
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] drivers: Replace __MODULE_STRING() with
+ __stringify()
+Message-ID: <20261002084920.GF176164@black.igk.intel.com>
+References: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
+ <20261002-module-string-v2-2-fc7438acaf4d@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20260918-module-stubs-dccefe41dace
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261002-module-string-v2-2-fc7438acaf4d@suse.com>
 
-Module-related stubs for CONFIG_MODULES=n can normally live in
-linux/module.h. This works well when the stub does nothing or simply
-returns a constant. However, some non-module implementations may be more
-expensive, either because they have a real implementation or because they
-require additional dependencies to be pulled into linux/module.h. This
-header appears in roughly 15k #include directives across the kernel, so it
-should avoid bringing in unnecessary definitions.
+Hi,
 
-Specifically, linux/module.h defines module_put_and_kthread_exit() as an
-alias for kthread_exit() when CONFIG_MODULES=n. That in turn requires
-linux/kthread.h, even though linux/module.h otherwise has no need for it.
-Note that linux/module.h currently doesn't include linux/kthread.h and
-requires its users to pick it up through other paths, which is itself not
-quite right.
+On Fri, Oct 02, 2026 at 10:31:02AM +0200, Petr Pavlu wrote:
+>  drivers/thunderbolt/tb.c                              |  3 ++-
+>  drivers/thunderbolt/tunnel.c                          |  5 +++--
 
-Introduce kernel/module/stubs.c to hold such stubs, built only for
-CONFIG_MODULES=n. This mirrors kernel/time/posix-stubs.c, which is used for
-CONFIG_POSIX_TIMERS=n.
+For Thunderbolt,
 
-Define module_put_and_kthread_exit() in both CONFIG_MODULES configurations
-to call __module_put_and_kthread_exit() and add a CONFIG_MODULES=n
-implementation of that function to kernel/module/stubs.c. Since
-__module_put_and_kthread_exit() is now implemented even when
-CONFIG_MODULES=n, remove the corresponding '#ifdef CONFIG_MODULES' from the
-noreturn_deny BPF list.
-
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
-kernel/module/stubs.c should also be used for add_taint_module() [1] in the
-future.
-
-[1] https://lore.kernel.org/linux-modules/a79a6a06-cc48-4036-882d-95e9b4cc01cf@suse.com/
----
-Changes in v2:
-- Remove the unnecessary include of internal.h in stubs.c.
-- Remove the unnecessary EXPORT_SYMBOL(__module_put_and_kthread_exit) in
-  stubs.c.
-- Link to v1: https://patch.msgid.link/20260922-module-stubs-v1-1-abe465a24879@suse.com
----
- include/linux/module.h | 9 +++------
- kernel/Makefile        | 2 +-
- kernel/bpf/verifier.c  | 2 --
- kernel/module/Makefile | 4 ++++
- kernel/module/main.c   | 1 +
- kernel/module/stubs.c  | 9 +++++++++
- 6 files changed, 18 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 96cc98568eea..4c7bd7f9f889 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -658,10 +658,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
- /* Search for module by name: must be in a RCU critical section. */
- struct module *find_module(const char *name);
- 
--extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
--			long code);
--#define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
--
- #ifdef CONFIG_MODULE_UNLOAD
- int module_refcount(struct module *mod);
- void __symbol_put(const char *symbol);
-@@ -850,8 +846,6 @@ static inline int unregister_module_notifier(struct notifier_block *nb)
- 	return 0;
- }
- 
--#define module_put_and_kthread_exit(code) kthread_exit(code)
--
- static inline void print_modules(void)
- {
- }
-@@ -879,6 +873,9 @@ static inline void module_for_each_mod(int(*func)(struct module *mod, void *data
- }
- #endif /* CONFIG_MODULES */
- 
-+void __noreturn __module_put_and_kthread_exit(struct module *mod, long code);
-+#define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
-+
- #ifdef CONFIG_SYSFS
- extern struct kset *module_kset;
- extern const struct kobj_type module_ktype;
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 1e1a31673577..08a94594975d 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -58,7 +58,7 @@ obj-y += liveupdate/
- obj-y += dma/
- obj-y += entry/
- obj-y += unwind/
--obj-$(CONFIG_MODULES) += module/
-+obj-y += module/
- 
- obj-$(CONFIG_KCMP) += kcmp.o
- obj-$(CONFIG_FREEZER) += freezer.o
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 72a3f5998dd2..be70f10e4968 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20417,9 +20417,7 @@ BTF_ID(func, __ia32_sys_exit_group)
- BTF_ID(func, __kunit_abort)
- BTF_ID(func, kunit_try_catch_throw)
- #endif
--#ifdef CONFIG_MODULES
- BTF_ID(func, __module_put_and_kthread_exit)
--#endif
- #ifdef CONFIG_X86_64
- BTF_ID(func, __x64_sys_exit)
- BTF_ID(func, __x64_sys_exit_group)
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 50ffcc413b54..72fd2972eacf 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -7,6 +7,7 @@
- # and produce insane amounts of uninteresting coverage.
- KCOV_INSTRUMENT_main.o := n
- 
-+ifeq ($(CONFIG_MODULES),y)
- obj-y += main.o
- obj-y += strict_rwx.o
- obj-y += kmod.o
-@@ -23,3 +24,6 @@ obj-$(CONFIG_KGDB_KDB) += kdb.o
- obj-$(CONFIG_MODVERSIONS) += version.o
- obj-$(CONFIG_MODULE_UNLOAD_TAINT_TRACKING) += tracking.o
- obj-$(CONFIG_MODULE_STATS) += stats.o
-+else
-+obj-y += stubs.o
-+endif
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d0e1e0bd2ad0..a8bf803afa81 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -60,6 +60,7 @@
- #include <linux/codetag.h>
- #include <linux/debugfs.h>
- #include <linux/execmem.h>
-+#include <linux/kthread.h>
- #include <uapi/linux/module.h>
- #include "internal.h"
- 
-diff --git a/kernel/module/stubs.c b/kernel/module/stubs.c
-new file mode 100644
-index 000000000000..1385c87e8169
---- /dev/null
-+++ b/kernel/module/stubs.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <linux/kthread.h>
-+#include <linux/module.h>
-+
-+void __noreturn __module_put_and_kthread_exit(struct module *mod, long code)
-+{
-+	kthread_exit(code);
-+}
-
----
-base-commit: 93f51579e7df248780214094418f205253383cc5
-change-id: 20260918-module-stubs-dccefe41dace
+Acked-by: Mika Westerberg <westeri@kernel.org>
