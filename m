@@ -1,209 +1,129 @@
-Received: from mta1.migadu.com (out-207.mta1.migadu.com [95.215.58.207])
+Received: from mail-dy2-f41.google.com (mail-dy2-f41.google.com [74.125.229.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9920935FF58
-	for <linux-modules@vger.kernel.org>; Fri,  2 Oct 2026 04:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.207
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790915801; cv=none; b=ORSaB96TGzTfUwxWq20zZqqlaA78RxLklvMepJhkcp4eoq0YxcnFqOiDfpVByN0DL994iS9QjPIA7dqYtYhuJZOsIMWWeKWukl1hWTAT2ot3iaRvdPNjfzRe40SI+p2dE6BPV7SezAkH1APeKicrsbvIQj0gyvfPr/jhbMUTOPE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790915801; c=relaxed/simple;
-	bh=y/0CXx9eIXXSUi0htzgjyz98uoanzac/KLtq3JYsrjo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ViQtp1vNdfVxzhDWedvalhDM2jidKRxbSo1kgTscp8P6S1xxoHX5K34PfFVQElsm1RBaRv/oTtUs5tEZZDCXzSLkMNeEj60p7DB8AY/1/yqfUlJBUSKJ7VxtEuShD98wsCU7OUyqe4SXky8XeYi33cwpO9UT0LM89RWY/NHi1Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xP7aSUJC; arc=none smtp.client-ip=95.215.58.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E645A1F3BAC
+	for <linux-modules@vger.kernel.org>; Fri,  2 Oct 2026 07:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790924797; cv=pass; b=Flfzk2e0HfxPWHgsJPM4UvuARLdEwIQG4Y23s4z2W7aM3sdQMR7MtlegA25prWseGIuuiI/4IzKc3CNYtJZTfFD0sqBtTOlF5bHc/QDRLfeQAOU3nnSU9eEHdFwu9htr5IvCIqA0oGhEFy9HwjX5oZJLV6iKgL4dQA8Y2R2v8aE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790924797; c=relaxed/simple;
+	bh=p5mHTSid7ZHG73d5vk/neGkwUD4BDQU+cFE79JqE43I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=STbnwcXHgnrxLjhUK7N/nb+COLVKJPEzVRQiXnhNayhQ0hvJT3hgubSBmOE9JHOOvwdy1Qjqmzn2MPapKnl8qHHiXOn2LvyNbqt7cVWI8QwjW2qEhdGoiwfwi19LPubpFgk+BTxaLgY1ihSyFMMxkYfVyi1PSiEm86IXmMHoVTI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfCbAi8G; arc=pass smtp.client-ip=74.125.229.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xP7aSUJC"
-X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=y/0CXx9eIXXSUi0htzgjyz98uoanzac/KLtq3JYsrjo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790915796; v=1; x=1791520596;
- b=xP7aSUJCP1VTTt6HWpzfU6gfjbJUEIPtiK8ipSLspAPJnzEqFk/WM+JNBurF6U2QCmVsxMvG
- 3PR1iwIg3AKQMVR7+YU7efgObTMGdGBxsTGYBdZZ+wpGtupWp9dgG2wr3Cg9QLQOQHoKY73d1nf
- KBHl4A10s6law16XIbcTgVec=
-X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d68e9918b237ea7b;
-	Fri, 02 Oct 2026 04:36:36 +0000
-X-Mizu-Trace-ID: d68e9918b237ea7b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
-Date: Thu, 1 Oct 2026 21:36:24 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfCbAi8G"
+Received: by mail-dy2-f41.google.com with SMTP id 5a478bee46e88-34c5d196b0bso356554eec.3
+        for <linux-modules@vger.kernel.org>; Fri, 02 Oct 2026 00:06:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790924795; cv=none;
+        d=google.com; s=arc-20260327;
+        b=PGgUML37CaSpK8j2o4zxfIZXEd7fq/www4TF+DKSBELgimLyB7GMbPKDaPeUHHE+Ef
+         Ou0QdCnVxrDwXJsBG+ktVkT9YJH+etE0xHgkb0pDWOK/+JnIyYMOwFj5Ue759JLFE3Kc
+         LB0kYADHYHECV4PEn6llxzkPQNN12/w3SIQCTFAFoU2KpHYQDHDcCzftdSP+/55X8iEC
+         WQP/WAArecE719wKets2U1Qxy178RhdQM9UMb3Talby1pHha7AWQ6pXdJxI4WeTom7dv
+         vusE5TedVshmLV9rignGkbg9PcSrM0RrA+mrt/Lcs8s6AW59mBtbw8hCRTdowTBm68be
+         rLiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=p5mHTSid7ZHG73d5vk/neGkwUD4BDQU+cFE79JqE43I=;
+        fh=qySSKzzsIPS8N1X0AvDgfrsQk8GcNMZkfgA7mU3YsdA=;
+        b=CaeF9sUviLeEA0zhFkC79CYYAL7VxmBlagUGh6x7rCBANqMTdcx7ACXZb2trQKzUK6
+         wrvaeKHuA14ddc8fuIE/DAdWxB8YNeTFPSbvFFMUABjIhH+ex2MsjVikouU3d1sOoDKM
+         pckFCmcjxNW71eI77+1cLKpPvfiFlY8Z+SDSXPrYDysvkEQCIBiWJoIVrCSJlkZ31vRO
+         gyfVkWXGrfOtbqo/YKwSKsFSmpBPBG5urzOas0bP+yx8bVNmn6mSuaQnF7ZN8aCUyF1J
+         m1xqsvhDtEMyIUwf9X4bFAyDrlDe3tp5l6MG/mmA0yK5H2Y2NDlLMAP7p10S2sL874wP
+         6iEQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790924795; x=1791529595; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=p5mHTSid7ZHG73d5vk/neGkwUD4BDQU+cFE79JqE43I=;
+        b=DfCbAi8G4hznGrFWoblcSqWRCssxNIT46MMEbrJ5S3UutsGsLkvze3DaVQ/O8j2fi+
+         0B/NSFJykr+lMUIsHAh3x0EKXpMSQykxwm5LtWnVZP23YXhJYeyEwXbcC97oXQKMmI71
+         8YRJde+nZu8M/u8Qb2ikM0Q1YeLmu0QV253CjcAG8AcbIX69TAn8bVZ7YxjiJzNB4rNp
+         TFyX9VSmuV+zcbdul1Q12k9UNyypiyqY7VsQe14RP4ISvnAy0f0iZ0gc86FWVekS3ZVS
+         k+9YM+3F8thpHkd3TzGv6izWCD0S1mKsbA3YN0x6BiCC7CkB4Am/CCwX5A4lbQZ3qS+c
+         MqJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790924795; x=1791529595;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=p5mHTSid7ZHG73d5vk/neGkwUD4BDQU+cFE79JqE43I=;
+        b=WRNrM9FNfj2A1L+Mk0GMsdlpmbx2b2I2O8y9dRH+MSdktGbFSL6Tev0eXALkAP5406
+         dkNKyJw/uIYUElpCGPK5zrRMd4crK6VkU1uVihupA7B9nBAWhMYVdjnBjtJC62mm0M5u
+         T8JfFvLDk7spvWx8VZr5ZvauhzwV2PRDQ3Zatn58XyGqW+YQZ3V5dv+xWmSI6wVu61Ad
+         CTQKIuMJ3yVxsVCjS0pKTOeB0tHWb6mVLUdqJsiz4yRWZbTCgIv8cqmUpNukbEmXERlF
+         LYsnP6ntC/+vUfhRleTNP4HVJVOc8omzJAwXVGUzpa3mNm93HoNePFHYbqaUybAkCr8f
+         vLGw==
+X-Forwarded-Encrypted: i=1; AKwUvBxZa2qj6yLPaVuQq0scjrv1Z4+yEALbSuNgz/9SVKs0FaFjb3Dev9EaBY1ysVBUQ6QfBozV653DRjDZwW5B@vger.kernel.org
+X-Gm-Message-State: AFq9FYL86NTYeyE08q76uVYJtFtG4VqNWhUJv8seya78sLAA66B/AbUm
+	+8zVyfPWFbfoi9qXXeQj5DtzYCfzeGfbe0mFPi6ryRYKJ7ptzONn2Fhrwj+TIy0EYvhaR8jQ5gl
+	THNNXipTT7GwbHJV6VAfMlq3AYnDa3k4=
+X-Gm-Gg: AYBFou0s2dOQbEGeciSL9r9EfyfKFp63el3HkRSLJc3jDFmk5RmKGFUZCLpVrxczH3E
+	Xl5C1G0vEd/hbFH3bsSZBgEOnHiAMb1A5cWQDDJOXNf+j0Z64w612iOvM9ggAiB5B/QWnjWZWCV
+	IcOjl2PhT9Xk/A//3yr2l+YPXwYs6WIEL0NwVANhffQ6nuadSXpQj95fjQj0IxW7UOOVz1om3Al
+	ryPTiJQu6KO65UVnuR+7lqQZqz91xhdNrGXSAnv+5XUAWBiI7QPOBLmn1BN0LjLSqt9F4ZfSL0W
+	ie+CdSks8nwFAlYDSkb+xc/Y6PCP+F7BmgB5ISehEgydqojufkPTFTONFgdoYXF3UYxYJDOhu6G
+	/XWkPNZkLjyIqkin7ZygKeciYsWkk53Epva+GeAApQZJNR4mCzYXtRXcutTBSRPY47KLkIitn5+
+	hh9CKJQlPjJEd9KRpTacILRz5BDsUoIcdhvPaYoNwd6CNLK2anlTrohiH+6i/p8w==
+X-Received: by 2002:a05:7300:54c3:b0:34b:47b2:677e with SMTP id
+ 5a478bee46e88-34f14ff2bb8mr3462444eec.1.1790924794805; Fri, 02 Oct 2026
+ 00:06:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand
- loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
-To: Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Christian Heusel <christian@heusel.eu>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-trace-kernel@vger.kernel.org,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org,
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- sched-ext@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
- rust-for-linux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
- Bjoern Doebel <doebel@amazon.de>, Martin Pohlack <mpohlack@amazon.de>,
- jay.wang.upstream@gmail.com
-References: <20261001225214.12351-1-wanjay@amazon.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261001225214.12351-1-wanjay@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260917051147.98775-1-tweek@google.com>
+In-Reply-To: <20260917051147.98775-1-tweek@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 2 Oct 2026 09:06:21 +0200
+X-Gm-Features: AclHuK8lJ9lWMbMYvuPCA4PNhehiCTluRjGb1PR9k0qMsRR1b7vJrjMUZYoSk6M
+Message-ID: <CANiq72=SX8xxCAzf6tcQb1CUoa_f8Y9fxVSqEBsSwqUtfsxn6g@mail.gmail.com>
+Subject: Re: [PATCH] rust: macros: allow non-ASCII characters in `authors`
+To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-10-01 3:52 p.m., Jay Wang wrote:
-> Based on and tested against bpf-next commit b5a4aa31abd6 ("bpf, cgroup:
-> Fix cgroup struct_ops query for a second attach type").
-> 
-> This series makes CONFIG_DEBUG_INFO_BTF a tristate, so that it can be
-> set to =m.  With =m the vmlinux BTF is carried by a module, btf_vmlinux,
-> that the kernel loads the first time user space asks for something that
-> needs the BTF.  On a system where nothing does, that saves ~5.4 MB of
-> RAM with a distribution config; on a system that uses BTF, it behaves as
-> with =y.  =y itself is untouched.
-> 
-> Problem
-> -------
-> 
-> The vmlinux BTF that CONFIG_DEBUG_INFO_BTF=y builds into the kernel
-> image takes ~5.4 MB of memory, resident from boot whether anything uses
-> it or not.  On small instances that is not negligible.
-> 
-> A distribution cannot simply turn it off for the users who do not need
-> it: it ships one kernel build for all its users, and BTF is not debug
-> info anymore.  CO-RE, fentry/fexit, kfuncs, struct_ops, sched_ext and
-> bpf-lsm all depend on it, so =n takes those away from everyone who does
-> use them.
-> 
-> Hence this series adds CONFIG_DEBUG_INFO_BTF=m: the BTF becomes an
-> on-demand module.  Users who never use BTF get the memory back; for
-> users who do, the first request that needs it loads it, and everything
-> works as with =y.
-> 
-> [...]
-> 
->   Documentation/bpf/btf.rst                  |   68 ++
->   Makefile                                   |    8 +-
->   include/asm-generic/vmlinux.lds.h          |   32 +-
->   include/linux/bpf.h                        |   15 +
->   include/linux/btf.h                        |   11 +
->   include/linux/btf_ids.h                    |    2 +-
->   include/linux/compiler_types.h             |    2 +-
->   include/linux/module.h                     |    2 +-
->   include/trace/trace_events.h               |    2 +-
->   init/Kconfig                               |    2 +-
->   kernel/bpf/Makefile                        |    6 +-
->   kernel/bpf/bpf_struct_ops.c                |    3 +-
->   kernel/bpf/btf.c                           | 1085 ++++++++++++++++++--
->   kernel/bpf/btf_vmlinux.c                   |   23 +
->   kernel/bpf/inode.c                         |   44 +-
->   kernel/bpf/preload/Kconfig                 |    4 +
->   kernel/bpf/syscall.c                       |   51 +-
->   kernel/bpf/sysfs_btf.c                     |   97 +-
->   kernel/bpf/verifier.c                      |  172 +++-
->   kernel/module/Kconfig                      |    2 +-
->   kernel/module/main.c                       |    4 +-
->   kernel/trace/bpf_trace.c                   |    3 +-
->   kernel/trace/trace_events.c                |   10 +
->   kernel/trace/trace_output.c                |    7 +
->   kernel/trace/trace_probe.c                 |   16 +
->   kernel/trace/trace_syscalls.c              |    6 +-
->   lib/Kconfig.debug                          |   30 +-
->   net/netfilter/Makefile                     |    6 +-
->   net/xfrm/Makefile                          |    4 +-
->   samples/bpf/Makefile                       |    6 +-
->   samples/hid/Makefile                       |    6 +-
->   scripts/Makefile.modfinal                  |   28 +-
->   scripts/Makefile.vmlinux                   |    5 +
->   scripts/gen-btf.sh                         |   53 +-
->   scripts/link-vmlinux.sh                    |   25 +-
->   scripts/package/PKGBUILD                   |    7 +
->   scripts/package/kernel.spec                |    4 +
->   scripts/package/mkspec                     |    7 +
->   tools/bpf/bpftool/Makefile                 |    6 +-
->   tools/bpf/resolve_btfids/main.c            |  217 +++-
->   tools/perf/bpf_skel.mak                    |    8 +-
->   tools/sched_ext/Makefile                   |    6 +-
->   tools/testing/selftests/bpf/Makefile       |    6 +-
->   tools/testing/selftests/hid/Makefile       |    6 +-
->   tools/testing/selftests/sched_ext/Makefile |    6 +-
->   45 files changed, 1936 insertions(+), 177 deletions(-)
+On Thu, Sep 17, 2026 at 7:11=E2=80=AFAM Thi=C3=A9baud Weksteen <tweek@googl=
+e.com> wrote:
+>
+> Module authors may have non-ASCII characters in their names. In C,
+> `MODULE_AUTHOR` allows arbitrary string literals which are emitted as
+> raw UTF-8 bytes into the `.modinfo` section, and multiple in-tree
+> modules use non-ASCII author names.
+>
+> Originally, the single `author` field permitted arbitrary string literals
+> including non-ASCII characters. When support for multiple authors was
+> introduced in commit 38559da6afb2 ("rust: module: introduce `authors`
+> key"), it reused the `expect_string_array` helper that had originally bee=
+n
+> added for module aliases. Because that helper enforced an ASCII check,
+> `authors` inadvertently became restricted to ASCII-only string literals.
+> Later, when the macro parsing was rewritten to use `syn` in commit
+> c578ad703ae9 ("rust: macros: use `syn` to parse `module!` macro"), this
+> restriction was carried over by using AsciiLitStr in `authors` type.
+>
+> Change the element type of `authors` in `ModuleInfo` from `AsciiLitStr`
+> to `LitStr` so that UTF-8 author names are permitted.
+>
+> Fixes: 38559da6afb2 ("rust: module: introduce `authors` key")
+> Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
 
-This series caught my attention because of the sheer amount of the code
-and the iteration speed. I've tried to read the cover (it was
-tiresome, please ask your "agent" to be concise), and fed the series
-to my bot.
+Applied to `rust-next` -- thanks!
 
-A question I had: is it really worth 2k of complicated kernel code to
-*maybe sometimes* save <10Mb of memory?
-
-And then the bot found this:
-
-     What systemd does at every boot
-
-     PID1 loads and attaches a BTF-dependent LSM program at every boot
-
-       src/core/manager.c:1026-1059, in manager_new():
-
-       if (FLAGS_SET(test_run_flags, MANAGER_TEST_RUN_MINIMAL)) {
-               ...
-       } else {
-               ...
-               (void) bpf_restrict_fs_setup(m);
-       }
-
-https://github.com/systemd/systemd/blob/main/src/core/manager.c#L1026-L1059
-https://github.com/systemd/systemd/blob/main/src/core/bpf-restrict-fs.c#L27-L85
-
-Do those tiny VMs that you target run systemd with BPF LSM?
-I assume you target concrete VMs, not "small instances" in a vacuum.
-
-You can check this by booting them with =m and then:
-   $ lsmod | grep btf_vmlinux
-   $ systemctl --version  # look for +BPF_FRAMEWORK
-   $ cat /sys/kernel/security/lsm
-
-If the answer is "yes" for the majority of them, the whole project is
-moot, because the module will be loaded immediately on boot.
-
-My bot found more stuff implementation-wise...
-
-I suggest to slow down, stop burning tokens for a bit, and first try
-to figure out the important details:
-   - who will actually benefit from these memory savings and do they care?
-   - is it worth it in terms of implementation complexity?
-
-Even for LLM it's easier to deal with a 100 lines of code than with 2k.
-
-pw-bot: cr
-
->   create mode 100644 kernel/bpf/btf_vmlinux.c
-> 
-> 
-> base-commit: b5a4aa31abd6fe90009b63e35dc18c67d041ec0c
-
+Cheers,
+Miguel
