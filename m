@@ -1,374 +1,203 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4CC3B813C
-	for <linux-modules@vger.kernel.org>; Sun,  4 Oct 2026 18:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B5F477292
+	for <linux-modules@vger.kernel.org>; Sun,  4 Oct 2026 18:38:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791138257; cv=pass; b=MzCFdpw6TkrqMpD88JNT61BTbyh04/JrMJjOCCP87B5xqeMtNqn6jiciGUFoQZIROVltEM1SmTwIraEL93AEbgdj3UYHv0L1He+j85oA5wUWWvYwzQpJX3Ipuy6cIif7w8qktudw40kw+dn3retU/JR2QHnL/RdHrt8yL1rOtNE=
+	t=1791139091; cv=pass; b=SvEWvS/THB7tXdOXxbB6M09MbfBfBPdrfF1S0LI9XZvibEAtRGZ0SUfDwPTC8LgK17JESYdzyM7Ibh9odqnuLcgYS0r8vaEtVaHCbO1n/iEpxmudDzFS69gy4hHrXbB2U7ngeumXxpEiGfHcjQHe4ueDdfVqAWnl9Ies7YQ6Sbs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791138257; c=relaxed/simple;
-	bh=zLwoLrxRD9bnB1A5PWyAC+jyBSiDyJrolS6BO3uVX+k=;
+	s=arc-20240116; t=1791139091; c=relaxed/simple;
+	bh=czHf1y5s0XiTKD3HwlV6gqG6rPLD25IXCbNXKX3jGrg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gZh5JYSplWv9iwZrlGI4+bBuPGXdA6ITWGyu49b+V3fpCxyjfQ1QBZ7Z8DOcKa1oyE1RG4OLJS3HaY1tPNHMCs7qTt9BF2FlkUyT+MwCrrDgLYBE9wk8Ftm/Cf0aXoW5jbn5Nao1UNuicF8g7DzoWuAtbm7QB+TN0SW3GPwpTRw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e9NB+9gI; arc=pass smtp.client-ip=209.85.208.44
+	 To:Cc:Content-Type; b=MbIJzhg6SernBI0bsD0jf7x217PaALTpDvn6AtMrKrBWh3hu8m6lrT90q7pBT130eTSkkfS8EvzosHZSD6Rh6AjAnjTXguSnYEpcAahdvuuO11lIp28neqYOfEpiEdsfPG9u2lhZdhp/JLXyOTLMtVfyHvMNlxySxd4fmF7SNf0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cUgA/H2U; arc=pass smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e9NB+9gI"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6afac79b3a3so5640a12.1
-        for <linux-modules@vger.kernel.org>; Sun, 04 Oct 2026 11:24:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791138254; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cUgA/H2U"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5337c7b9937so265301cf.0
+        for <linux-modules@vger.kernel.org>; Sun, 04 Oct 2026 11:38:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791139088; cv=none;
         d=google.com; s=arc-20260327;
-        b=qyQUSel3sVghaiP1K6OlAnrjvAzjW+p7cOnkquGzD29mUUUm1FuJCwN8cMsl/Y4twL
-         PhQpKQVEjiFzbXUC/F1pmB6jGDd74wYPU+/9Zm8RqmmRhFok+CnuPAwJ4peX4N1iNWXR
-         C6+xuJoZalIV+jcyXSkrzf2x9ofgUfbvrVGzszY16c/JuRibPi0O2yrUL6Qt8CxK8T6Q
-         90EbZ6b6aBf8FG8KZJ9n0HiBSFmmCX8NTtLLMAC/Mx7O8kVmcCH7mUSJNFCDavvOcgf8
-         e7/wZByp+a4Vx54cRD3KpR04DByOEIl1RampdWjCzEOOjXD8ZzGZ6qL8YCsKCBpsoo+s
-         tbHQ==
+        b=n1f60G4DTauQWJV+y1uk1mgwy3/3HZaLft5e5CeKrVfMnRuYxaltu0IMdztINgv8Iu
+         owmy5v/X0g29soBdlHb1g46a0gCORkKcFP1rp0qn9++DMDaSoWZd6WNIweS99EKF0P56
+         yBPtLwUTMIIO5kHskVe6+BAg29ihownoGkZI8nsFd6MJFWnRJNm7A14uuVeBu/hAITD9
+         WXdT/8dHRgCdKXS5Fk1d0wd1sz0cKke5Rv8Pcyplc00B2RUyrqRhO/aP0RnCqeZSvNG6
+         O5X9U5kSy1EjYp+vuXzXTlIWdGetFguzP6lU3FVFcTBZArlK79vYypdBuGJVH1nMTLNU
+         rdyw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+kvayuBhXRE2GquXHfPa/A7+zWFdbc7YesX/WrD9SmY=;
-        fh=HfwRBQ9qTxz43HpEn2nqato1C3psls0PSqmtfk93aW4=;
-        b=kozp6Va+XZ7E8r9dH3L5fd5ejIaSy6HjNW+Q2ERIrvTRvSW6NxjhorJRozwkL4IMOw
-         SX0zfi8hFbMQZP2gj6PLrOmx/vP9DrFh7Vc9Gr2qf0JgGGXzFHQFmppLfNi0XLce2Zzq
-         7PJRifwhu0qYgABKrrYVHAT1lYEZnArKKqQkGThYaRjnfYbAt5JJYea6xEeCadkysblN
-         c4I7I6PgefNL3bG66rac7ff7Vs1wF1+naj7vQ9sglPi+HyRHbPrSi6MXtIU2/inSd5FH
-         fGoz7tubA0FTcb552+gI5XSAxNkdZ6sUl1LKAd9yaKOUzj+XC2r1qddRoiKTq7s1WYfp
-         7mZw==;
+        bh=4c7dYjrT6sZNHYJQlTA+JnOu2XHVq9WNP85b0Iivahw=;
+        fh=e1ESbJ6Io5Sdlid4Xyt9bme3Z6RAq/VZbDOxXVCyXoM=;
+        b=ZtV9XAuU3YlkgVyb+NjfWnR1F3qsIwTDxe3g4GWiBMpOWWi2OwqCjv3hsIHyBD5AJm
+         Zl12FRR/WhRKoinM+NWMsgKWW07t/RptDWpZFHFE5YhJ+lSGHRl5udlbWjz8BTIPM52Z
+         iY+ifUsEOK5OKHO7qyqKSj4MyYtDzvqLR98L77TubOIlDAisLcLGgpzgzc2FYuGzTTz/
+         wkApd9RrmdcJhh4BZDX++JRUglJvNsI95kuAaOJRA7bAAeqO+xEv6hScT/icE0agc4rv
+         0G2HtAC8j/hHTiqVqwEwTNCSxn1pSXaCB721Vke9Dth4j2+sm1/usr4MFcf5UOsFySf8
+         S0Jw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791138254; x=1791743054; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1791139088; x=1791743888; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=+kvayuBhXRE2GquXHfPa/A7+zWFdbc7YesX/WrD9SmY=;
-        b=e9NB+9gIoM4uA2CHvRW0/2Nk3hptMSh640cVkBS1gZauPadKna8ayfo4ezmWPpB9bd
-         uMT83RMJfX4N9nfG7+USOcHLQ88QoDLPWu/+1/web98ZuNt6x7WuDqJNKHYBO0imTz1n
-         7XOyUcWjLg0bwrbQsuxrGO8DY4I3VCqmnqTDXzWNBKi8jAlZm30RByV05iJyzwMxmU8v
-         GM8gbvnxcGjvLT1zXjnuQ3TTvXkQMbCcSbl69NmA0fMYlQj+lXuZ/AYirYpBHQp8yWif
-         bRp2WcRA5TeRXNanwihcMdm4Hesw2fsEq6/Nd7XHMccKnW1HbN6g+z/A3YkxUPPBuR+Z
-         VTSg==
+        bh=4c7dYjrT6sZNHYJQlTA+JnOu2XHVq9WNP85b0Iivahw=;
+        b=cUgA/H2UGYjty5o+6+XxOm/pWmTA1x+NpJxEjouio3RqmFvE5jBaLDRh8hzE77DDe6
+         gIaHAWWp37fgVb9W0DH93Ka/t+R95qpqUehK4s+5PIF0gsC4RlzulW4ijRW9G6HPRAc1
+         4u3d6X26e+ZYAzJ23yP14GHWFtQnG59Lk4CQUSgpz9+5UNwDQWlCkrdviru7HB/CpWj+
+         vUeZuCO8u4f7BuCfSA533lzfDtFL00p0ISt6uwz0C9TrPRw5NbSsuF8WdY5Yh81Aw7U4
+         8IWko+WPfdnWGjVKONtU81hsKnC95i/qLSq4aSd5WQBXI03GZSAwuffUVOuLeTpLdK6m
+         5TWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791138254; x=1791743054;
+        d=1e100.net; s=20260707; t=1791139088; x=1791743888;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+kvayuBhXRE2GquXHfPa/A7+zWFdbc7YesX/WrD9SmY=;
-        b=wioFeAfgF3MyYFXPIWi7xxjBYz7hxFVYXOOnaIrR9HoQXVp2peff7lKai/CA8WR4Db
-         UBLJLEQnlQOt8ikpaGGCoFuNqowEe0la3hihOUqQNVsadOZSk+mRiUIiU88SnxbrQdo5
-         KcTamNxjiGSsr9GEkyWKwZTroqqWKqAN3kpKDR56meBFJAoJDbjn4KuYHiiwhtS3yXKC
-         XBOSDHn53/1rFvDIkPnD0XyVoHw1HpcgIiYErBNnwkklQOQsCzxRDLYhekr8mWe+6Am0
-         31YCBCq2yLQlZbUvcNSEfI9cdOLFj/kD1VtlGRM9dDyEZu/d9bFdysnSgOafzGPi/eL8
-         FPgg==
-X-Forwarded-Encrypted: i=1; AKwUvBzNTS5FUbHyVylqxNs3ac78PMxTsVG0aLa6yLrt3c9E+AsPMaDFjuCER6bB5LCVblL7tBXQpBsXAW5aUCqb@vger.kernel.org
-X-Gm-Message-State: AFq9FYIa3NdO30TGdfdEYQ41/qtDcdCI7iEHxMiUG1Tgr90GWvGTS5tj
-	GUbgodlXtQisKWwbpUkhjt2neMq+RsYq5OkDIaL1vpPfl8E2sGbgKmAWyMP8lM9CHZF8Bj+bfDg
-	zVOp9xHw4P1jwlvRdC5DQvVxWtDAtrv2mnVXDd/pB
-X-Gm-Gg: AYBFou2uuLhed4U8y1/lS7R4++RQWUVrHBrzX8XBRu1pwIeVa4xYWF0KElfqQEXlsV+
-	wXg//hqVysFybmgT6d9sY1ApFOtFwQn6QG7kGQ/i/ZNvhLfdB+B3tx6muhizNcnuSUzpEknJIbe
-	tPIJ62M7fx7yZKT1JQZ0CBJHOhaVhS0oSbnLQbcrP0dmoR4FqeyFu+dhpT0jm1LcjweQQUVsUoG
-	73BWCX7maLWSkLLT+JSpbz4xFPsivLado13GR5roWZFC1NRSVG7ICStdFo6XsQGMzmu66yl2tcs
-	8ivCTgWxLb7MgSuYKeLF8pgyrRyHOtZVEqvHsbcCVpvMnbbKTybD0hUB
-X-Received: by 2002:a05:6402:22d0:b0:6ae:1866:cdfe with SMTP id
- 4fb4d7f45d1cf-6afaf69c8dfmr26911a12.11.1791138252600; Sun, 04 Oct 2026
- 11:24:12 -0700 (PDT)
+        bh=4c7dYjrT6sZNHYJQlTA+JnOu2XHVq9WNP85b0Iivahw=;
+        b=Cm0S7OoFgq6ENXxdBnir6fILI8tD8cBTFwuw5jlmqgsbO/kpxpgMONBgJwqjVCpkAQ
+         R25ygwgLr2nBnxrzW3zdwsIxK9hNTANdhy/avD1yyKjMVhawVg+X3zEskXsjncjgbfuT
+         Uyi+6MjlRrwql3Ztt5+ib2f7GXCi96OES0wR916C1VNhhSOYXInOAaBS8kFTGYFz3CS7
+         g1dw1s0wuJaJSEXAjlrCYkrZtNsDCFHI1Wd5pU7Wr+wriZR4dyIGlzBZd2Wo3JFJh8HJ
+         DAWqX+zdhBnnwAHe7w+TRWeY8ROeMvLkWVSQXY9z8fKbrz2yJZ8VAq+bF7Gacg1yaM+0
+         Uw8g==
+X-Forwarded-Encrypted: i=1; AKwUvByp0RNqN0J0mjFxUzF2JXiZWtNrqfufgf3n8JYBQ9UP0pVsEB3+hKhzO5dTfmKiqI2eU43zdzYOd4dAPmnk@vger.kernel.org
+X-Gm-Message-State: AFuF++mXQ/xIiQk/Q5zGtw0pQUYe4VJJ3Cvhyxjyzdw33e7VVXPQhLrS
+	3TwSYSmLpnurzUhS6Tltuq02ajW37z65YIXHCyJZrhEDd8d47OQh+rfefzIxU1BHy6yRFIcgnkr
+	9nz4ttsz+1iZ1FPMqBeKPoblwOMCPoLzwOSKzF1Qb
+X-Gm-Gg: AYBFou3wYdJTBvrOW/T4xP5JOHemadg1VE6so25C7VOn7KlFXaGWlDrwzcwSxS4bMWO
+	5OpDLWTXYPq7W4KC3YGgPG0bSochPDeT1OLZtdAp0RgVWrhwk8ayZwqkHYJj9/3Fb9pWBEnkyHO
+	NAu3I4bBkmrgur3xlb5D3/Do1/bL2BIHAbqTuYKgBia3v7TEdeyD3ADl+l0osK5Ri/QmadoQnTX
+	Rcsw5LqBHwNa4iOzYgUu7GbY69e32j/m847qjS0n+VpJseF3syfMZKWEyn4fJMYPn4Hnl4nHD9m
+	h+jxgVJI4k8Bb3ORTVyROaq/uiPQCxWUxpXqyCoxfF18pmlrIIYl9OOT
+X-Received: by 2002:a05:622a:5984:b0:532:858d:e791 with SMTP id
+ d75a77b69052e-535131b5a91mr17889301cf.8.1791139087466; Sun, 04 Oct 2026
+ 11:38:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260929082014.160587-1-hao.ge@linux.dev> <20260929082014.160587-8-hao.ge@linux.dev>
-In-Reply-To: <20260929082014.160587-8-hao.ge@linux.dev>
+References: <20260929082014.160587-1-hao.ge@linux.dev> <20260929134401.a1a385ff4369661f879b5d2f@linux-foundation.org>
+ <CAJuCfpFRW3uNUW_VrjpOfLwS1LBHqGEpqK3yBTPSpGOORY5jiQ@mail.gmail.com> <fc4f3d08-393f-43ed-934b-e7e1ba6d0137@linux.dev>
+In-Reply-To: <fc4f3d08-393f-43ed-934b-e7e1ba6d0137@linux.dev>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Sun, 4 Oct 2026 20:23:57 +0200
-X-Gm-Features: AclHuK86etgyIPJ222To041zNkSoFNgDLomueBKSopElcapCeLMOxFHBtlsBju0
-Message-ID: <CAJuCfpEwrdOKQmt9_=J4Qawtg48AUuwwbc2Lp-1oWiNbKO_UVw@mail.gmail.com>
-Subject: Re: [PATCH v11 7/7] alloc_tag: fix the /proc/allocinfo lifecycle
+Date: Sun, 4 Oct 2026 20:37:54 +0200
+X-Gm-Features: AclHuK-tgnRy3c8tRpdQgoIviLT7ezLMAJcWRyqSp8rv6XK6Qm-JduLkT1yGnnc
+Message-ID: <CAJuCfpGAZUcQnursYh=rvp+EzckvDmXX_KveJvEuyjzzG=9mww@mail.gmail.com>
+Subject: Re: [PATCH v11 0/7] alloc_tag and module codetag section fixes
 To: Hao Ge <hao.ge@linux.dev>
-Cc: "=Kent Overstreet" <kent.overstreet@linux.dev>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Alexander Potapenko <glider@google.com>, 
-	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+Cc: Andrew Morton <akpm@linux-foundation.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vlastimil Babka <vbabka@kernel.org>, Michal Hocko <mhocko@suse.com>, 
 	Brendan Jackman <brendan.jackman@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
 	Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 29, 2026 at 10:20=E2=80=AFAM Hao Ge <hao.ge@linux.dev> wrote:
+On Wed, Sep 30, 2026 at 5:25=E2=80=AFAM Hao Ge <hao.ge@linux.dev> wrote:
 >
-> shutdown_mem_profiling() calls remove_proc_entry() from
-> reserve_module_tags(), which runs under mod_lock held for write.
-> remove_proc_entry() waits for readers, and a reader takes mod_lock for
-> read in allocinfo_start():
+> Hi Suren and Andrew
 >
->   CPU0 (insmod)                      CPU1 (read /proc/allocinfo)
->   ----------------                   ----------------------------
->   reserve_module_tags()
->     down_write(&mod_lock)  [held]
->                                      use_pde()            [in_use++]
->                                      allocinfo_start()
->                                        down_read(&mod_lock)  <- blocks
->     shutdown_mem_profiling()
->       remove_proc_entry()
->         wait for in_use =3D=3D 0         <- blocks
 >
-> Move remove_proc_entry() to a workqueue.
+> On 2026/9/30 10:39, Suren Baghdasaryan wrote:
+> > On Tue, Sep 29, 2026 at 8:44=E2=80=AFPM Andrew Morton <akpm@linux-found=
+ation.org> wrote:
+> >>
+> >> On Tue, 29 Sep 2026 16:20:07 +0800 Hao Ge <hao.ge@linux.dev> wrote:
+> >>
+> >>> With profiling toggled off, the overflow check in
+> >>> reserve_module_tags() did not run, a module could load with more
+> >>> tags than the page flags can address, and re-enabling profiling
+> >>> then silently corrupted /proc/allocinfo. On overflow the fix shuts
+> >>> profiling down, releases the reservation and returns -EAGAIN, and
+> >>> the codetag section lands as regular module data in the same load,
+> >>> so the module loads without profiling.
+> >>>
+> >>> Review of the earlier series by Sashiko turned up more problems.
+> >>>
+> >>> One is a race. layout_sections() and move_module() both asked
+> >>> codetag_needs_module_section() where a codetag section goes, and
+> >>> mem_profiling_support can change between the two calls, for instance
+> >>> when another module load overflows the tag index and shuts profiling
+> >>> down. move_module() then copied the codetag section to offset 0 of
+> >>> its regular destination and clobbered the first section placed in
+> >>> that region.
+> >>>
+> >>> v7 reworks where codetag sections are allocated, on a prototype by
+> >>> Petr Pavlu [1]. The allocation runs before layout_sections() and the
+> >>> placement is decided in one step, so nothing re-asks the question
+> >>> and the race is gone. The retry is gone too, on -EAGAIN the section
+> >>> is laid out as regular module data right in the same load.
+> >>
+> >> Thanks.
+> >>
+> >> Seven patches, all cc:stable.  Why is a backport proposed?
+> >> Documentation/process/stable-kernel-rules.rst gives guidelines - does
+> >> this series meet them?  Does Suren have thoughts?
 >
-> The deferred removal also affects alloc_tag_init(). The file is
-> created before the type, so on a failure it is still there with
-> alloc_tag_cttype NULL or an error pointer, and a reader panics in
-> allocinfo_start(). Create the file at the end of alloc_tag_init()
-> instead, a failed init leaves nothing behind.
+> Thanks, I've just gone through this carefully.
 >
-> If proc_create() fails, the codetag type and the module tags memory
-> leak. Call codetag_unregister_type() and free the memory.
+> >
+> > I think vmalloc fix in patch#2 should be posted separately and clearly
+> > quialifies for backporting as if fixes issues Hao found at [1].
 >
-> alloc_tag_cttype can now be freed at runtime. alloc_tag_top_users()
-> reads it from __show_mem() without locks, read the pointer under
-> rcu_read_lock() and take mod_lock before dropping the RCU lock, the
-> type stays alive until then. The only caller never sleeps, drop the
-> can_sleep argument.
->
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compress=
-ion")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hao Ge <hao.ge@linux.dev>
-> ---
->  include/linux/alloc_tag.h |  2 +-
->  include/linux/codetag.h   |  2 ++
->  lib/codetag.c             | 26 ++++++++++++++++++++
->  mm/alloc_tag.c            | 52 +++++++++++++++++++++++++++------------
->  mm/show_mem.c             |  2 +-
->  5 files changed, 66 insertions(+), 18 deletions(-)
->
-> diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
-> index 7f2d80a59792..852dc10c00ee 100644
-> --- a/include/linux/alloc_tag.h
-> +++ b/include/linux/alloc_tag.h
-> @@ -81,7 +81,7 @@ struct codetag_bytes {
->         s64 bytes;
->  };
->
-> -size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, boo=
-l can_sleep);
-> +size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count);
->
->  static inline struct alloc_tag *ct_to_alloc_tag(struct codetag *ct)
->  {
-> diff --git a/include/linux/codetag.h b/include/linux/codetag.h
-> index a25a085c2df1..0c4e0337b474 100644
-> --- a/include/linux/codetag.h
-> +++ b/include/linux/codetag.h
-> @@ -87,6 +87,8 @@ void codetag_to_text(struct seq_buf *out, struct codeta=
-g *ct);
->  struct codetag_type *
->  codetag_register_type(const struct codetag_type_desc *desc);
->
-> +void codetag_unregister_type(struct codetag_type *cttype);
-> +
->  #if defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES)
->
->  bool codetag_needs_module_section(struct module *mod, const char *name,
-> diff --git a/lib/codetag.c b/lib/codetag.c
-> index a0b600720afc..46d0904b08b3 100644
-> --- a/lib/codetag.c
-> +++ b/lib/codetag.c
-> @@ -429,3 +429,29 @@ codetag_register_type(const struct codetag_type_desc=
- *desc)
->
->         return cttype;
->  }
-> +
-> +/**
-> + * codetag_unregister_type - unregister a codetag type
-> + * @cttype: the codetag type to unregister
-> + *
-> + * Undo codetag_register_type() and free @cttype. The caller must make
-> + * sure no lockless reader still uses @cttype, e.g. clear the pointer
-> + * to it and wait for an RCU grace period first.
-> + */
-> +void __init codetag_unregister_type(struct codetag_type *cttype)
-> +{
-> +       struct codetag_module *cmod;
-> +       unsigned long id, tmp;
-> +
-> +       mutex_lock(&codetag_lock);
-> +       list_del(&cttype->link);
-> +       mutex_unlock(&codetag_lock);
-> +
-> +       down_write(&cttype->mod_lock);
-> +       idr_for_each_entry_ul(&cttype->mod_idr, cmod, tmp, id)
-> +               kfree(cmod);
-> +       idr_destroy(&cttype->mod_idr);
-> +       up_write(&cttype->mod_lock);
-> +
-> +       kfree(cttype);
-> +}
-> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-> index ba8a651769e3..b9af5fe5bba2 100644
-> --- a/mm/alloc_tag.c
-> +++ b/mm/alloc_tag.c
-> @@ -15,6 +15,7 @@
->  #include <linux/seq_file.h>
->  #include <linux/string_choices.h>
->  #include <linux/vmalloc.h>
-> +#include <linux/workqueue.h>
->  #include <linux/kmemleak.h>
->  #include <uapi/linux/alloc_tag.h>
->
-> @@ -484,22 +485,28 @@ static const struct proc_ops allocinfo_proc_ops =3D=
- {
->  #endif
->  };
->
-> -size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, boo=
-l can_sleep)
-> +size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count)
->  {
->         struct codetag_iterator iter;
-> +       struct codetag_type *cttype;
->         struct codetag *ct;
->         struct codetag_bytes n;
->         unsigned int i, nr =3D 0;
-> +       bool locked;
->
-> -       if (IS_ERR_OR_NULL(alloc_tag_cttype))
-> +       rcu_read_lock();
-> +       cttype =3D READ_ONCE(alloc_tag_cttype);
+> Agreed. Patch #2 was added to this patch series because vm_module_tags_po=
+pulate
+> suffers from the same issue. If we want to be more conservative, I'd pref=
+er to keep
+> vm_module_tags_populate as it was in V10:
+> https://lore.kernel.org/all/20260915070001.113559-3-hao.ge@linux.dev/
 
-Code looks correct to me but if you are changing alloc_tag_cttype to
-be accessed under RCU, then you should declare it as __rcu and use
-rcu_assign_pointer()/rcu_access_pointer()/rcu_dereference()/rcu_dereference=
-_protected().
+I disagree with this approach. That means we are introducing an extra
+code inside vm_module_tags_populate() only to clean it up later.
+Instead please post Patch #2 separately. That posting should have your
+current patch that changes vmap_pages_xxx() to clean up on failure,
+followed by patch(es) which remove unnecessary cleanup that some
+functions currently perform by themselves. This patchset should
+definitely be tagged for stable.
+Once that patchset is accepted, the rest of your current patchset
+fixing alloc_tags can be posted with correct assumption that
+vmap_pages_range() cleans up its partial mapping when it fails.
 
-> +       if (IS_ERR_OR_NULL(cttype)) {
-> +               rcu_read_unlock();
->                 return 0;
-> +       }
+I know this sequence will take longer to upstream but I think it's the
+right way to go.
+
 >
-> -       if (can_sleep)
-> -               codetag_lock_module_list(alloc_tag_cttype);
-> -       else if (!codetag_trylock_module_list(alloc_tag_cttype))
-> +       locked =3D codetag_trylock_module_list(cttype);
-> +       rcu_read_unlock();
-> +       if (!locked)
->                 return 0;
+> Then we can submit a fix for __GFP_NOFAIL retry loop in __vmalloc_area_no=
+de() as a hotfix together
+> with our new patch #2. While at it, we can also check if there are any un=
+necessary calls to
+> vunmap_range family functions that can be cleaned up now that patch #2 is=
+ applied.
 >
-> -       iter =3D codetag_get_ct_iter(alloc_tag_cttype);
-> +       iter =3D codetag_get_ct_iter(cttype);
->         while ((ct =3D codetag_next_ct(&iter))) {
->                 struct alloc_tag_counters counter =3D alloc_tag_read(ct_t=
-o_alloc_tag(ct));
 >
-> @@ -520,7 +527,7 @@ size_t alloc_tag_top_users(struct codetag_bytes *tags=
-, size_t count, bool can_sl
->                 }
->         }
+> >
+> > The rest are also bug fixes but their size is concerning. I'll review
+> > them first before advising on which ones should be backported. Some
+> > fixes address issues that happen very rarely and if a fix is too
+> > complex it might make sense to leave it be or fix it some other way
+> > with less churn. Please give me a couple of days to review them. With
+> > the upcoming LPC I'm trying to multiplex between several projects.
 >
-> -       codetag_unlock_module_list(alloc_tag_cttype);
-> +       codetag_unlock_module_list(cttype);
+> Thanks, sorry for all the hassle on you folks.
 >
->         return nr;
->  }
-> @@ -591,6 +598,13 @@ void pgalloc_tag_swap(struct folio *new, struct foli=
-o *old)
->         put_page_tag_ref(handle_new);
->  }
+> Thanks
+> Best Regards
+> Hao
 >
-> +static void remove_allocinfo_file(struct work_struct *work)
-> +{
-> +       remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
-> +}
-> +
-> +static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
-> +
->  static void shutdown_mem_profiling(bool remove_file)
->  {
->         if (mem_alloc_profiling_enabled())
-> @@ -600,7 +614,7 @@ static void shutdown_mem_profiling(bool remove_file)
->                 return;
->
->         if (remove_file)
-> -               remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
-> +               schedule_work(&remove_allocinfo_work);
->         mem_profiling_support =3D false;
->  }
->
-> @@ -1351,16 +1365,10 @@ static int __init alloc_tag_init(void)
->                 return 0;
->         }
->
-> -       if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc=
-_ops)) {
-> -               pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME)=
-;
-> -               shutdown_mem_profiling(false);
-> -               return -ENOMEM;
-> -       }
-> -
->         res =3D alloc_mod_tags_mem();
->         if (res) {
->                 pr_err("Failed to reserve address space for module tags, =
-errno =3D %d\n", res);
-> -               shutdown_mem_profiling(true);
-> +               shutdown_mem_profiling(false);
->                 return res;
->         }
->
-> @@ -1368,10 +1376,22 @@ static int __init alloc_tag_init(void)
->         if (IS_ERR(alloc_tag_cttype)) {
->                 pr_err("Allocation tags registration failed, errno =3D %p=
-e\n", alloc_tag_cttype);
->                 free_mod_tags_mem();
-> -               shutdown_mem_profiling(true);
-> +               shutdown_mem_profiling(false);
->                 return PTR_ERR(alloc_tag_cttype);
->         }
->
-> +       if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc=
-_ops)) {
-> +               struct codetag_type *cttype =3D alloc_tag_cttype;
-> +
-> +               pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME)=
-;
-> +               shutdown_mem_profiling(false);
-> +               WRITE_ONCE(alloc_tag_cttype, NULL);
-> +               synchronize_rcu();
-> +               codetag_unregister_type(cttype);
-> +               free_mod_tags_mem();
-> +               return -ENOMEM;
-> +       }
-> +
->         return 0;
->  }
->  module_init(alloc_tag_init);
-> diff --git a/mm/show_mem.c b/mm/show_mem.c
-> index b938cbcd774a..a2e710404a48 100644
-> --- a/mm/show_mem.c
-> +++ b/mm/show_mem.c
-> @@ -439,7 +439,7 @@ void __show_mem(unsigned int filter, const nodemask_t=
- *nodemask,
->                 struct codetag_bytes tags[10];
->                 size_t i, nr;
->
-> -               nr =3D alloc_tag_top_users(tags, ARRAY_SIZE(tags), false)=
-;
-> +               nr =3D alloc_tag_top_users(tags, ARRAY_SIZE(tags));
->                 if (nr) {
->                         pr_notice("Memory allocations (profiling is curre=
-ntly turned %s):\n",
->                                 mem_alloc_profiling_enabled() ? "on" : "o=
-ff");
-> --
-> 2.25.1
->
+> >
+> > [1] https://lore.kernel.org/all/b8005c24-ecac-45c4-840a-fd282f9693b5@li=
+nux.dev/
+> >
+> >>
+> >> Also, Sashiko has been busy again:
+> >>         https://sashiko.dev/#/patchset/20260929082014.160587-1-hao.ge@=
+linux.dev
