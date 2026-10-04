@@ -1,331 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f41.google.com (mail-oi2-f41.google.com [74.125.231.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92E8547071;
-	Sat,  3 Oct 2026 20:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECEE3BAD95
+	for <linux-modules@vger.kernel.org>; Sun,  4 Oct 2026 03:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791060123; cv=none; b=bboncs3DihH7Jii/c3Rhj60ULH6X2Pt7UkrPNmH+vh7vV4rQg99da/kQn3xwjLKx3+/7DA33xX5txh7vQmYSoGWBG+zA795V1J+DEeCW+o8KiI6JhYB0txz0+yFdIbM5ln1FhxmdOdsB8D0JQQasJsq9iux+rvKZ14rCRiGarv0=
+	t=1791083222; cv=none; b=V+N6OGGb6qRslxw8bEbBNeiVE3rT7WaB17R0bYt7U6n0eAhs6tTAW1o//xWYILMz0a8Bnnaio3Xz/4rkNNQg5dXjjiRVYS7ojWO8MMjwOSax9W9A+Tc/innoJQSqSEVb3N6VZ19waPq0LarPLAnqC1cVj7NN6ja8x+YYOaMrgKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791060123; c=relaxed/simple;
-	bh=LxvFZFlNOEgX1oxiEQ1vT1nLthMuWiPUEF31iAeRdDU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bUl/e63NPNC2AGEzm3lsilxJol3EK0xdkOeDkQs+hAZlHEQGfOqCCK241z4xzRPaqD5PkiBgRfp8vo8kkqreoMfseVOJf43UxsKQ5SiMJ+lAxgPhGnDt8E86DyevszZZklxneGfFh6lfEaGk/gZzPIqDarWEhOYKERgq76xLGrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oakwtlXJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791083222; c=relaxed/simple;
+	bh=97w+wyZ4hAu1HtKz96oDWN8wbNGmXiBGOXZd1CtEwPo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mqv/y98h/0FJRyhRqZUjedyR/GW5evCbFT0k4mNi0X6A91S/XJr6MrVBg88LZX8fc22WSD2Bz8c+jY1fHnfFu5HzHUOXotda2HXputXWVmQD0JnGBr8OKGgPHWqGGgDOdvuS19lV8yVzO8zPUSLiZYpdkWLGuGgHd9KUImKvqow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=esNvopqe; arc=none smtp.client-ip=74.125.231.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oakwtlXJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC601F0089B;
-	Sat,  3 Oct 2026 20:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791060121;
-	bh=qxDz7L6MBfjIz7h7pDjVBsFAKxwqnTJRLvd8MOgdizA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=oakwtlXJumTBRgjcI68Q8zQ1dTjfWzcKAcW/BuuykF6BRvKivmd0PTGqScacEA8Qv
-	 lMNUqY4JaGOkFLcAncQNWkc9i+FICAN/Nq2FPK4nImrXbb3gYpX/WH2/lDp7okz0Nf
-	 aClM2+7zqUT8yaSAHZZ0ribfIHwc/udwaWIZdOFYszBidwak02xm+Pg2a/ycuAsobX
-	 uChvlGSj01cz+ZgTkzjvIIzIb8ODpmpjaM5clMuwi/vdB/D8+CWRZxrDzt9d3/Ov0G
-	 id4yKICCWbw9hsVa6HY++aldVcInXFVSCxEdreURpAXFj6R26ZxfAdi4fpTMm76Gu+
-	 NJTCvren0AFrw==
-Content-Type: multipart/mixed; boundary="===============7786763177781177600=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="esNvopqe"
+Received: by mail-oi2-f41.google.com with SMTP id 5614622812f47-4f1b285e934so332421b6e.0
+        for <linux-modules@vger.kernel.org>; Sat, 03 Oct 2026 20:07:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791083219; x=1791688019; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xGDw689I2nieuspdwl4thgn6puX+R1JqxzAeq5vzaqg=;
+        b=esNvopqei4cqufxFq8JI2el58SZvD8t6JtDv3CgX9XCIdPziR/jTqzVNGsJBgpK8zq
+         zdflu6iP/vs8UlIDCR4ITTBrT/bVmkN5X2l8BHATrnAhdvvD7Q/iiVIn+vy7BPDubaeI
+         GMj6R6tjlOOCZTRhnwJengbA1Zf/a5QpaWD8qRnFwWswurAZiabhlmOa+Je49muMSf7f
+         kVBvQxWjNdTNbrd6957UzSOyGApM+nK7443xC+D7dmYPp1xbjlLlmmtoBZD2IWUJnyTA
+         IAc93ssF/R3+mH+YOIPsFAqgnBQH2P2cG/i+udAlIcwJfjxhi4BJyM6UCaOaMa+3O3jn
+         KFaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791083219; x=1791688019;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xGDw689I2nieuspdwl4thgn6puX+R1JqxzAeq5vzaqg=;
+        b=W3IzMifTudByuxF+Hir4ot70BYjFKvops5kFRLB+TZP8xUA6U83AsK+mlCXxB/oivb
+         Zwpn5cS5rNDZNLpX4EzyG/5NlWgv5aule//xJo1wZgTVV/AE3P7+7//zbSHs6QOIGwuM
+         ZVyt36FTqYgZRouQo2ACIx/0zBBSCmIMWIvbG1oWgD0vZFlVdc3EHMo3U+luIWeO1d5l
+         OS3Gi0sh4fToXj9RM0Knngll4ly9hgwq7lO9snOWihUl6Be/80TrVp00aAj9bkZ2/Enh
+         QqVNPZDneAuy/TwqFsc0ri+nuUCbViYE7a5InJBt7d029DtqHSPaZ65g698/nc/GetMA
+         dzxA==
+X-Forwarded-Encrypted: i=1; AKwUvBzXCGNsq+gf89MFzRwsH2hb+yrhURhcNvUgjDOCBpgJ1etm3msYSaoGViuGfdJp9xZCaungWBAcKLX7qCY3@vger.kernel.org
+X-Gm-Message-State: AFuF++mUeNtb4Pqkx1mfJ31O6pMybUVy4DAjAhVkHDJZ2ojRdB+vH/HU
+	ySm0iGf8nbtdUMo/fPDpNAtevMSdMkCZgz+oDOszkla+21tq7p+Y/aqW
+X-Gm-Gg: AYBFou3i9D8sqUzpVSa5ENCmrQmMwzQw/wRt6x0qy7W1KAvPTryVy0lRZcuyEr1Dugw
+	wNEJmSK5n8jW5B+TzzoccmfAta+ccS8je1PREsd/IpBoehaWI9v186wmPjpXsGr3+OmsFfzojTs
+	hwhxk7Pd7wT+3KDxqt5km/4HzolkEbRKOd4KKbp1C52M7QPSCKtg920h02pmuOnsNVKxlqt5Rk+
+	Ij5GPOS8HcDzR3hTYbYjkg5CYU8vpPLY+/T+Vgv06SWoEjM+n9KMAKzqRmALMYsDrAbNe48d7sM
+	LMQe5KLtRlR37TRGEeHlEUX97VtPnfeWKR4uBFUX3GMJW251m4B2iA1Mwib5ezUTySMbpjDvYMH
+	BY0wSqsrnp7xIMvViC2GLn1kZ0zVZZEt4PS2aiUXaZeTGbAJbBJ2X9zNLp5Mnr6atCXTwqtyDfa
+	AqtjTcScs2QhKL0F9nfjgBRYv/WfZS/5uhq0Jvn4ruH5ZmeZ+4iMmd6QZBVbEfTgXjRVDVDs9dW
+	QNLZzjZbXJadDltfwdui1aWQB9gv4tiBHu+WIwNPZQ1+iXHeGRIEjYnYlL2AnjpVQJIL/voCHqW
+	B4MJdIB8uw==
+X-Received: by 2002:a05:6808:f88:b0:4ab:318c:6b38 with SMTP id 5614622812f47-4f526442119mr5877208b6e.1.1791083219254;
+        Sat, 03 Oct 2026 20:06:59 -0700 (PDT)
+Received: from starship.unifi.local (107-216-42-6.lightspeed.austtx.sbcglobal.net. [107.216.42.6])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4f5249dc2e3sm6503800b6e.11.2026.10.03.20.06.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Oct 2026 20:06:57 -0700 (PDT)
+From: Lawrence Lin <deduce@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Stanislaw Gruszka <stf_xl@wp.pl>,
+	linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ftrace: Avoid quadratic symbol lookups in ftrace_module_enable()
+Date: Sat,  3 Oct 2026 22:03:58 -0500
+Message-ID: <20261004030438.434327-1-deduce@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261003-ftrace-mod-bsearch-v1-1-92e2fd2d80ff@gmail.com>
+References: <20261003-ftrace-mod-bsearch-v1-1-92e2fd2d80ff@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <970e7d2486a44d57b0bc68b9ac39c74e21e13df8957c952ec310c55a171115d9@mail.kernel.org>
-In-Reply-To: <20261003194323.817885-4-alan.maguire@oracle.com>
-References: <20261003194323.817885-4-alan.maguire@oracle.com>
-Subject: Re: [PATCH v3 bpf-next 3/7] kbuild, btf: Expose vmlinux inline BTF through sysfs
-From: bot+bpf-ci@kernel.org
-To: alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com
-Cc: jolsa@kernel.org,ihor.solodrai@linux.dev,yonghong.song@linux.dev,song@kernel.org,qmo@kernel.org,martin.lau@linux.dev,memxor@gmail.com,emil@etsalapatis.com,mcgrof@kernel.org,petr.pavlu@suse.com,tj@kernel.org,kees@kernel.org,nathan@kernel.org,arnd@arndb.de,puranjay@kernel.org,yatsenko@meta.com,atenart@kernel.org,ojeda@kernel.org,linux-modules@vger.kernel.org,arnaldo.melo@gmail.com,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  3 Oct 2026 20:41:58 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============7786763177781177600==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Krzysztof Wilczyński reviewed this off-list while looking at carrying it
+in a distribution kernel, and raised two points. I'd like to bring them
+here, with numbers, before sending a v2. Cc'ing him.
 
-> kbuild, btf: Expose vmlinux inline BTF through sysfs
+1. ftrace_cmp_addr() duplicates ftrace_cmp_ips().
 
-TL;DR:
-- Module load may fail with -ENOENT for modules without .BTF or with BTF
-  mismatch allowed
-- mmap of /sys/kernel/btf/vmlinux may return -EINVAL on arm64
-- __SIZEOF_LONG__ may break 32-bit builds
-- Nits: .gitignore, NULL return
+Agreed. For v2 I have dropped ftrace_cmp_addr() and moved
+ftrace_cmp_ips() up, above the FTRACE_MCOUNT_MAX_OFFSET block, so that
+ftrace_process_locs() still sees it on architectures that don't define
+FTRACE_MCOUNT_MAX_OFFSET. That builds on x86_64 and arm64, and on x86_64
+with CONFIG_MODULES=n.
 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index b2988aa12f66..863f02660bc3 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
+2. Should the sort use sort_nonatomic()?
 
-[ ... ]
+I timed the collection and the sort with ktime_get_ns() on a Ryzen 3
+3200U (v7.3-rc5 plus this patch, debug printk only):
 
-> @@ -675,12 +675,39 @@
-> +#ifdef CONFIG_DEBUG_INFO_BTF_INLINE_MODULE
-> +/* __MODULE_NAME_LEN + SHA-256 digest + u32 BTF size */
-> +#define BTF_LINK_SIZE	(64 - __SIZEOF_LONG__ + 32 + 4)
-> +#define BTF_INLINE_LINK						\
-> +	. = ALIGN(PAGE_SIZE);					\
-> +	.BTF.inline.link : AT(ADDR(.BTF.inline.link) - LOAD_OFFSET) { \
-> +		__start_BTF_inline_link = .;				\
-> +		BYTE(0)						\
-> +		. += BTF_LINK_SIZE - 1;					\
+  module     addresses   collect     sort()
+  amdgpu        64983    0.41 ms    36.4 ms
+  mac80211       8199    0.11 ms    12.0 ms
+  nouveau       19354    0.06 ms     9.6 ms
+  kvm            7993    0.07 ms     7.9 ms
+  radeon         9882    0.03 ms     4.6 ms
+  all 141 modules loaded at boot:
+                         1.09 ms    94.3 ms
 
-Is __SIZEOF_LONG__ reliable in a linker script?
+So the sort dominates the new code, and amdgpu spends 36 ms in it.
+It runs in ftrace_module_enable() before ftrace_lock is taken, so it is
+sleepable and is preempted normally under full or lazy preemption.
+What it does not have is a resched point, which only matters for
+PREEMPT_NONE and PREEMPT_VOLUNTARY. sort_nonatomic() would add one, but
+commit 340e3c5165d4 ("iommu/arm-smmu-v3: Replace sort_nonatomic() with
+sort()") removed its last caller with the intent of dropping it, so I'd
+rather not add a user. For comparison, the lookups this replaces took
+about 4 s for amdgpu on this machine under ftrace_lock, and needed the
+cond_resched() from commit 4099b98203d6 ("ftrace: Fix softlockup in
+ftrace_module_enable").
 
-The lds is preprocessed with KBUILD_CPPFLAGS only.  On x86, -m32 is added
-only to KBUILD_CFLAGS and KBUILD_AFLAGS, and with clang KBUILD_CPPFLAGS
-carries --target=x86_64-linux-gnu for all of SRCARCH=x86.  So for a 32-bit
-x86 build with clang, or with a gcc whose default target is x86_64,
-__SIZEOF_LONG__ is 8 while the lds is preprocessed, and BTF_LINK_SIZE
-becomes 64 - 8 + 32 + 4 = 92.
+Is 36 ms without a resched point acceptable here, or would you prefer
+something else?
 
-On a 32-bit kernel __MODULE_NAME_LEN is 64 - sizeof(unsigned long) = 60, so
-sizeof(struct btf_link) is 96.
+For reference, the cold-boot A/B with v1 and the v2 change, on the same
+machine with a distribution kernel (linux-omarchy 7.2.5, amdgpu from the
+initramfs, three boots each):
 
-With CONFIG_DEBUG_INFO_BTF_INLINE=m, link-vmlinux.sh runs:
+                     stock     v1        v2
+  amdgpu probed      6.17 s    2.03 s    2.03 s
+  kernel (systemd)   6.64 s    2.48 s    2.50 s
+  modprobe radeon    155 ms     83 ms     83 ms
+  modprobe nouveau   468 ms    141 ms    138 ms
 
-  resolve_btfids --btf_link .BTF.inline:btf_vmlinux_inline:vmlinux.BTF.inline
+(medians; radeon and nouveau have no device on this machine). The list
+of functions in available_filter_functions is identical across the three
+(84301 entries), and none of the boots logged a warning or soft lockup.
 
-patch_btf_link() uses module_name_len = BTF_LINK_MODULE_NAME_MAX - 4 for
-ELFCLASS32 and rejects the section if
+The same three kernels on a faster machine, a Ryzen AI MAX+ 395
+(Strix Halo), three boots each:
 
-  data->d_size != module_name_len + BTF_SHA256_DIGEST_LENGTH + sizeof(u32)
+                     stock     v1        v2
+  amdgpu probed      4.84 s    3.80 s    3.81 s
+  modprobe radeon     47 ms     32 ms     32 ms
+  modprobe nouveau   130 ms     60 ms     59 ms
 
-Since 92 != 96, it prints "FAILED: section .BTF.inline.link is not a
-writable BTF link", returns -1, and the vmlinux link fails.  Even if the
-build got past that, btf_parse_link() checks size != sizeof(*link) and would
-reject the record.
+The saving is smaller there, about 1 s for amdgpu rather than 4 s, as
+expected with a cheaper per-symbol lookup. available_filter_functions is
+again identical across the three (84676 entries), and no boot logged a
+warning or soft lockup. The systemd kernel time is left out because on
+this machine it includes a LUKS passphrase prompt.
 
-riscv32 looks the same: -mabi=ilp32 is only in KBUILD_CFLAGS and
-KBUILD_AFLAGS, and the clang target is riscv64-linux-gnu.
+Unless there are other comments, I'll send v2 with the change in (1)
+and these numbers in the changelog in a few days.
 
-Could this use something tied to Kconfig instead, such as #ifdef
-CONFIG_64BIT, or BITS_PER_LONG / 8 from asm/bitsperlong.h, rather than the
-compiler's default ABI macro?
-
-[ ... ]
-
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 0630675377aa..732ba0684667 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-
-[ ... ]
-
-> @@ -9015,21 +9016,122 @@ static DEFINE_MUTEX(btf_module_mutex);
-> +static const struct btf_link *btf_parse_link(void *start, unsigned int size)
-> +{
-> +	const struct btf_link *link = start;
-> +	unsigned int module_name_len;
-> +
-> +	if (!link || size != sizeof(*link))
-> +		return NULL;
-> +
-> +	if (link->btf_size == 0)
-> +		return 0;
-
-this isn't a bug, but btf_parse_link() returns a pointer and this path
-returns a plain integer 0 where the other failure paths return NULL.  sparse
-reports "Using plain integer as NULL pointer" here.
-
-The only caller, btf_vmlinux_inline_lazy_init(), handles this the same way
-as the other failures and prints "invalid vmlinux inline BTF link".  Could
-this return NULL, or be folded into the check above?
-
-[ ... ]
-
->  static int btf_module_notify(struct notifier_block *nb, unsigned long op,
->  			     void *module)
->  {
-> [ ... ]
->  	int err = 0;
->
-> -	if (mod->btf_data_size == 0 ||
-> -	    (op != MODULE_STATE_COMING && op != MODULE_STATE_LIVE &&
-> -	     op != MODULE_STATE_GOING))
-> +	if (op != MODULE_STATE_COMING && op != MODULE_STATE_LIVE &&
-> +	    op != MODULE_STATE_GOING)
->  		goto out;
->
->  	switch (op) {
->  	case MODULE_STATE_COMING:
-> +		err = btf_module_handle_vmlinux_inline(mod);
-> +		if (err != -ENOENT) {
-> +			err = 0;
-> +			break;
-> +		}
-> +		if (!mod->btf_data_size)
-> +			break;
->  		btf_mod = kzalloc_obj(*btf_mod);
-
-Can this reject every module that has no .BTF section?
-
-btf_module_handle_vmlinux_inline() returns -ENOENT for any module that is
-not the vmlinux inline carrier, and the
-!IS_MODULE(CONFIG_DEBUG_INFO_BTF_INLINE) stub returns -ENOENT
-unconditionally.  That value stays in err.
-
-The old code returned early with err == 0 when mod->btf_data_size was 0.
-Now a module without .BTF hits:
-
-		if (!mod->btf_data_size)
-			break;
-
-and btf_module_notify() returns notifier_from_errno(-ENOENT) from the out:
-label.
-
-The same leftover err is returned when btf_parse_module() fails with
-CONFIG_MODULE_ALLOW_BTF_MISMATCH=y:
-
-		if (IS_ERR(btf)) {
-			kfree(btf_mod);
-			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
-				...
-			} else {
-				pr_warn_once("Kernel module BTF mismatch detected, ...");
-			}
-			goto out;
-		}
-
-That branch never resets err, so a mismatched module, which that option
-exists to let load, now fails with -ENOENT as well.
-
-notifier_from_errno() sets NOTIFY_STOP_MASK, notifier_call_chain_robust()
-rolls back the COMING chain, prepare_coming_module() returns
-notifier_to_errno() == -ENOENT, and load_module() goes to bug_cleanup.  The
-module load then fails with "No such file or directory".
-
-Modules without .BTF are a normal case.  scripts/Makefile.modfinal prints
-"Skipping BTF generation for %s due to unavailability of vmlinux" for
-external/DKMS modules, and the kernel.spec comment changed in this same
-commit says eu-strip removes .BTF when find-debuginfo has no --keep-section.
-Before this patch both cases loaded fine.
-
-The problem is still there at the end of the series (e1c2367cf1b5);
-3357b172196f ("btf: Relocate and expose module inline BTF") keeps the same
-COMING prologue.
-
-Would resetting err to 0 when the helper returns -ENOENT work?
-
-	err = btf_module_handle_vmlinux_inline(mod);
-	if (err != -ENOENT) {
-		err = 0;
-		break;
-	}
-	err = 0;
-
-[ ... ]
-
-> diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
-> index 9cbe15ce3540..a3c54b5fe294 100644
-> --- a/kernel/bpf/sysfs_btf.c
-> +++ b/kernel/bpf/sysfs_btf.c
-
-[ ... ]
-
-> @@ -33,24 +31,149 @@ static int btf_sysfs_vmlinux_mmap(struct file *filp, struct kobject *kobj,
-> +static int btf_sysfs_mmap_direct(struct file *filp, struct kobject *kobj,
-> +				 const struct bin_attribute *attr,
-> +				 struct vm_area_struct *vma)
-> +{
-> +	void *data = READ_ONCE(attr->private);
-> [ ... ]
-> +	err = btf_sysfs_mmap_check(data, attr->size, vma);
-> +	if (err)
-> +		return err;
-> +	if (is_vmalloc_addr(data))
-> +		return remap_vmalloc_range(vma, data, 0);
-> +
-> +	addr = __pa_symbol(data);
-> [ ... ]
->  static struct bin_attribute bin_attr_btf_vmlinux __ro_after_init = {
->  	.attr = { .name = "vmlinux", .mode = 0444, },
->  	.read = sysfs_bin_attr_simple_read,
-> -	.mmap = btf_sysfs_vmlinux_mmap,
-> +	.mmap = btf_sysfs_mmap_direct,
->  };
-
-Does this break mmap() of /sys/kernel/btf/vmlinux on arm64?
-
-bin_attr_btf_vmlinux now uses btf_sysfs_mmap_direct(), which chooses between
-remap_vmalloc_range() and remap_pfn_range() based on is_vmalloc_addr(data).
-On arm64 the kernel image lives inside the vmalloc range:
-
-  arch/arm64/include/asm/memory.h:  #define KIMAGE_VADDR (MODULES_END)
-  arch/arm64/include/asm/pgtable.h: #define VMALLOC_START (MODULES_END)
-
-So is_vmalloc_addr(__start_BTF) returns true, and the call goes to
-remap_vmalloc_range() -> remap_vmalloc_range_partial().  There,
-find_vm_area() finds the vm_struct that declare_kernel_vmas() registered for
-the image rodata segment:
-
-  declare_vma(&vmlinux_seg[1], __start_rodata, __inittext_begin, VM_NO_GUARD);
-  ...
-  vma->flags = VM_MAP | vm_flags;
-
-That vm_struct has no VM_USERMAP, so this check:
-
-  if (!(area->flags & (VM_USERMAP | VM_DMA_COHERENT)))
-          return -EINVAL;
-
-fails and mmap() returns -EINVAL.  Before this patch,
-btf_sysfs_vmlinux_mmap() always used __pa_symbol(__start_BTF) plus
-remap_pfn_range(), which worked on arm64 since .BTF sits inside RO_DATA,
-between __start_rodata and __inittext_begin.
-
-The same applies to the built-in /sys/kernel/btf/vmlinux.inline, which the
-commit message says supports read-only mmap().  The selftest
-test_btf_mmap_sysfs("/sys/kernel/btf/vmlinux") would fail on arm64 as well.
-
-Would it be better to use remap_vmalloc_range() only for the lazily
-populated vmalloc_user() entries, for example from btf_sysfs_mmap_lazy() or
-by recording the backing type in struct btf_sysfs_entry, and keep the
-__pa_symbol()/remap_pfn_range() path for kernel image data instead of
-testing the address range?
-
-[ ... ]
-
-> diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
-> index 8ca96eb10a69..e638291753d0 100755
-> --- a/scripts/gen-btf.sh
-> +++ b/scripts/gen-btf.sh
-
-[ ... ]
-
-> @@ -83,14 +88,28 @@ gen_btf_o()
-> +	btf_inline=${ELF_FILE}.BTF.inline
-> +	if [ "${BTF_INLINE}" = "m" ]; then
-> +		if [ -f "${btf_inline}" ]; then
-> +			cp "${btf_inline}" "${objtree}/vmlinux.BTF.inline"
-> +		else
-> +			rm -f "${objtree}/vmlinux.BTF.inline"
-> +		fi
-> +	fi
-
-With CONFIG_DEBUG_INFO_BTF_INLINE=m, this leaves a long-lived top-level
-build artifact, vmlinux.BTF.inline.  link-vmlinux.sh reads it for
---btf_link, and Makefile.modfinal reads it later to embed .BTF.inline into
-btf_vmlinux_inline.ko.
-
-The patch adds it to CLEAN_FILES in the top-level Makefile but not to
-.gitignore, where the other top-level vmlinux artifacts are listed
-(/vmlinux, /vmlinux.32, /vmlinux.map, /vmlinux.symvers,
-/vmlinux.thinlto-index, /vmlinux.unstripped).  In an in-tree build,
-"git check-ignore -v vmlinux.BTF.inline" returns nothing, so the file shows
-up as untracked in git status.
-
-Should /vmlinux.BTF.inline be added to .gitignore next to
-/vmlinux.unstripped?  The later commits in the series (f61c6417ac15 through
-e1c2367cf1b5) do not touch .gitignore.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37149955093
---===============7786763177781177600==--
+Thanks,
+Lawrence
