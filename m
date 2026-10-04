@@ -1,69 +1,70 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mail-oa2-f34.google.com (mail-oa2-f34.google.com [74.125.231.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153D03F12CB
-	for <linux-modules@vger.kernel.org>; Sun,  4 Oct 2026 17:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415EC368277
+	for <linux-modules@vger.kernel.org>; Sun,  4 Oct 2026 17:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791133580; cv=none; b=Sba5CAQXwsrB/9WwVqk2S4WoB1x1IQJkvo8zU9YXuSQ35jqF9bO+M2T940IDXIHRgdj8P3VVFoPwkF6Gx0k4xA2C287BhDXdcdyjKFT58GIL09zT+1TCKiRGiN7PU5FE19+L9xTHbcvj1+yvTbzcvA++qu+kbTjLTtHM4rfOAJ0=
+	t=1791133586; cv=none; b=BFtfRYRh0X/f4AppbohCaSFD/bQK4Xk8dWsBr45mCVIkw5RX80ZzL9HNvsoXj2hLpboKO8BEoLu0Waadx7Tgcf0uUPG86WpyVrHwPFHbKUAVOLoJx/YKLP2kbfvlN7kWutvZI3LSk6ErNKSBOiOpdIX44hmrg8gPeEXMHQO/2/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791133580; c=relaxed/simple;
-	bh=Fvw3a11k1H96MSgvLcQCHxdBO3T96s8ZzddX0DVJ1pA=;
+	s=arc-20240116; t=1791133586; c=relaxed/simple;
+	bh=vEr4v5UzCxd7Q67cxL7C+j9r5X+UpcvxAXoDSa/XGrU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=quvF4/VtyYzBOhfDMe+2a2RGGMhddwehJuigM0ZtLUb5J43KOVuroiy2yfcbeqN7wjMjfJZejEzc6KKhTWX+ZVt7CNftkNa+6+wjXkfGM4Cxq/V/Z1OrV7eMJ4okRVaMvb3Q6uLdjRRlnZkEvLtjw2CsrY5q9jsPFXP48FQEn8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFZaQnRB; arc=none smtp.client-ip=74.125.231.76
+	 Content-Type:MIME-Version; b=OtpsMe9r4Jb9lGDoUW0DE930DRdU2AemBBUT6swscml3+Gh0SERoHyAGh3aRQaFnrcCo0It1tLoXleMOdF2E4Ci/A39hF6GoYFHzq8NuD1mW0BUA0IVPypkQBiIq8IN/B0cliWGxKmyXF+NgoS2HjQZj52sDja4nIeWDOOXp4No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RqlYikaO; arc=none smtp.client-ip=74.125.231.98
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFZaQnRB"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466ccde2ad8so574676fac.2
-        for <linux-modules@vger.kernel.org>; Sun, 04 Oct 2026 10:06:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RqlYikaO"
+Received: by mail-oa2-f34.google.com with SMTP id 586e51a60fabf-49aa2fa57adso125688fac.0
+        for <linux-modules@vger.kernel.org>; Sun, 04 Oct 2026 10:06:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791133577; x=1791738377; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791133584; x=1791738384; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:content-type:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Fvw3a11k1H96MSgvLcQCHxdBO3T96s8ZzddX0DVJ1pA=;
-        b=iFZaQnRBTxHhqkgur48WM1HO8TyCe0zFlpgzDitYmGqCC3fb+elMjTXxXq9/DAoMwn
-         uYMZgh9L6Xvd/vjeMw5O7Nnz+qdGxQKq+05bL35efQDKxcB/ruQdiRxkzkyV2OYt3eqE
-         yJ5qCSikCwFrL59lARRgJbA+bn3wdwUS9o1e8BH2+NG0OGm8joR+Yk8PsSK3Pxq0wRoo
-         syuVd4lPFVyVQOAl1M+EvKRIpEI160smZnOGEb+xh7F1o1L0Pl8nWJ8WXopkm9GO3FtU
-         Iy8ReazmqfhQqDEY5+FH1JS0BU6S4qdabo2aR23b7fYHUditNSYJV95Ys7+OO5N0rXq9
-         Dtqg==
+        bh=vEr4v5UzCxd7Q67cxL7C+j9r5X+UpcvxAXoDSa/XGrU=;
+        b=RqlYikaOnxkDd6DbFJrHXtch1lcBXpVJyZqO2aJ7xM2QOZKTmcygg2u40hZOZgfs1N
+         Mbm4jgiuGdCfyBS0VDO47O0OdRYuxAorVMYwiaWGtLlHz7oyFoEvwXZ2SbQkrueHhCT1
+         mTESKW+zVXxLk23BeLti6t0Ais8X6jGTdGD5HoGrnEQEHmBIBayZYgddExZopd0bJ/zD
+         +hNqzxMW5p2aISIEsoR/fTHbyUpjVroqYb4ZBZZutAlqr4YRzH0fhWrV7S5mzMSMZWje
+         DK3Bida6sorx1VAD5nQKGeqdzIar0Rakk9/I3C83446nIysUoNy1dGzGlFGJx8H0MMod
+         seLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791133577; x=1791738377;
+        d=1e100.net; s=20260707; t=1791133584; x=1791738384;
         h=content-transfer-encoding:mime-version:content-type:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Fvw3a11k1H96MSgvLcQCHxdBO3T96s8ZzddX0DVJ1pA=;
-        b=j5Rv6I+geg8jufzvQNKj3zEAT13P6k9ohbgkW94pYoPGLwPh4Eiyjmo8RWvkAm2zzW
-         yYpch9Dpr8LB7hSU19GDOkrC5xIvDs1Gjh+9Be/OlzTaoQc4ajuVF67JqkwqBeQy9p7a
-         mKEAHAab5jpcMMl4w+UvXgA12OZ3Den7d4tnBD/nI9YETY06p41F7hErfE6HRhJXnLG/
-         HgFIatsBtekD9S3zKZHD1zsOkolz+xMn85CU5ZW11SeuPWIisEySJwAy82tIcF6MPUO8
-         GyG45sIoMHmb3lHX7DRzIbRaV98CnL16At1StUMCNTs+N/hJxhS2WczkMZj/485xnQwu
-         sxpQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw/5lKHv8ps+YkKhQZbov0RXNssGvfU4taIFOJEtbTvTtSA27E7bvcvnwZVDgPLvmYMLLXiHP1X+aDPDCOS@vger.kernel.org
-X-Gm-Message-State: AFuF++mHF3pnjh5aEDbf9IrsXrwPTBk0c2PcP7GPLoJ6cPS6r6bX7U6v
-	jyaW0L0C3A7DSbhZrK8TufP8xpcKHiYjMVCOcogfGER/nHh4cli5QHif
-X-Gm-Gg: AYBFou0DE/9/k1m7eHxSw5lGB8aPajrIlD4dRD0D5iJ0OwQg8MoKRlxrsNadfT6j4vB
-	Qj2jjlUUt/RmH2aUQ7sTLEchNyx/3q06R5cYaZHsqe89pmA7IRL7TR+jXmSxm8Klctd/o0hBe2Y
-	WSpTdmB1jCXjHV1J7XmYLP83bfySzwP4ArgatMcCuS4EnALKhQa9QE3Ojm9sf0VV87rAH5yLCXm
-	+qkFJFJHwkk6CX3NPpVbxYpwB4vvXWX+RSHZoeVFMnNQF6fkRcglGGgHm4ArFkRCvUoZhAZyUPM
-	QBd66CLmlKALWnUCAXYR0ofAgaN9lBK34qr4R80nzRfBxjb+zseR3FH/SBzLoYw1pQq60NOyKZs
-	5OTHB0HoiYgTU/t/eUCXXuY4d+Agql9vj/d/HngbY8b26ZxdUeaseTlhmWBo91/rHJEmTcvugQO
-	rwdC5ZDntvhWj4UE6Gs9dlh7GASeltLxwrvh0FveGm3W9D2AMekPtOdMCPDUHJ5sijGn6UI9pTH
-	AvFv0SSy5rdrPC27jtnAtTb6DxfB00SirTp8Yunc6mtLnTDv5YiUN39NPlRA5lRkxdrYkCN5rO9
-	6e1x3rjeFw==
-X-Received: by 2002:a05:6870:b50d:b0:485:d31b:7767 with SMTP id 586e51a60fabf-49e15dc52bfmr7641789fac.37.1791133576582;
-        Sun, 04 Oct 2026 10:06:16 -0700 (PDT)
+        bh=vEr4v5UzCxd7Q67cxL7C+j9r5X+UpcvxAXoDSa/XGrU=;
+        b=zPBt9ctApTwj8bC9q8ONNhI5dCI85ELCT0/7q+v1MeUIv670NveSsPWEtDnCR7jJfQ
+         Z36TveKW3+xmvup+79WWuZkTdSTX8IGfUHUBaSiVnjeZdtSNG6RR8y8QlySg/wcrCzQp
+         YMp8QIGjRBTSHfXmzg1jBFSfw3qWWv+otu5sG2jQ+792enl1pgqcDIYYwA/FP2iaCbUR
+         0xOvw1pkQEflRCTMXcLGxBhT2HVk2Yzx2XrlsIA4rIgAsU3NTze0xx8FGkF6W3O1eWz6
+         KVwjZp9h9cjme7DX4MlQ69JOCOl6H8qxQWGgm0Qz15LwOtVDQljRnqATStKv/4+q+AZO
+         sVMw==
+X-Forwarded-Encrypted: i=1; AKwUvBye2qFnI70Pa1vbfag15zl1u0PfHGtO6rmTOOoVZrtIthi3I1OCzVbagkxMBCvhE3GM9h5O9GyWiRV+ZB7y@vger.kernel.org
+X-Gm-Message-State: AFq9FYIjkDGbA3uVyRNI1XJMwwaw29Py6+JRAo1wAWd7jfmMrGWyYbXu
+	RUNR8wiGFeNNOtZGm3Paoa2/Rf2SLGU0Jggcx/IevZ/wOYx5rpfnvWGc
+X-Gm-Gg: AYBFou3giVtoAoPsluWm5DlM01kMVl0Ra+VohtA4VoPdNLqjfQM9nnOcZZVq5+U+xsO
+	yF0ADVXW0flhhnhIyoxjaMFR0s61Hohp/Fo7XnxmcVL4gBDONElfpa8drjvAsO1MinJNjWlCH7f
+	f/7bWRNT98ouDdrUThBp+xdxARAwiewaUzu3Qt0KTHrpWOXXicqRX2xFgd21tAnDHL4A+qBP8WG
+	tb4qONuzwwJPjZZNoQ6JAGpb4790yCMDkLEp/4OrZ5sYW3bs5uQB5Ar+RsKQLDBKs/nDL576Lyc
+	sImcYiui8OXWUicfLQCj45+bqcsdDV8ZjBBk90TWASUy/6V1MGzsoUF8vTTxnr3jIjBTV7pfAZ4
+	C/0VkfAlcxGwsmMK9amv7hB4qDNESGrrZLf+Zm2rZizc9xMeRX2jMNDfgEwAv9Zvj+aiR5XRJoh
+	FyQKxHZz1ipl2M3B+YP/l+gNPWYndo4Zbc9CpQCnY6LPXxKwbc71H8OW7awd8KSiEtrduaoLjUh
+	FSeGd/x8cabvWAON1Sr2f7fIqe0kpcjN0H1KVW5tfKRGeX1fZDjQ86lZOOOWozdVrbvoMfjBWUL
+	tHfvl9BHJg==
+X-Received: by 2002:a05:6870:c115:b0:497:2e21:f7e5 with SMTP id 586e51a60fabf-49e15e91b0fmr5947738fac.25.1791133584217;
+        Sun, 04 Oct 2026 10:06:24 -0700 (PDT)
 Received: from starship.unifi.local (107-216-42-6.lightspeed.austtx.sbcglobal.net. [107.216.42.6])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-49e16545353sm7403626fac.0.2026.10.04.10.06.13
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-49e16545353sm7403626fac.0.2026.10.04.10.06.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 10:06:15 -0700 (PDT)
+        Sun, 04 Oct 2026 10:06:22 -0700 (PDT)
 From: Lawrence Lin <deduce@gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -72,11 +73,11 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
 Subject: Re: [PATCH] ftrace: Avoid quadratic symbol lookups in ftrace_module_enable()
-Date: Sun,  4 Oct 2026 12:05:58 -0500
-Message-ID: <20261004170600.1541723-1-deduce@gmail.com>
+Date: Sun,  4 Oct 2026 12:05:59 -0500
+Message-ID: <20261004170600.1541723-2-deduce@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261004050904.06a5ecab@fedora>
-References: <20261003-ftrace-mod-bsearch-v1-1-92e2fd2d80ff@gmail.com> <20261004050904.06a5ecab@fedora>
+In-Reply-To: <20261004100030.189b1c3d@pumpkin>
+References: <20261003-ftrace-mod-bsearch-v1-1-92e2fd2d80ff@gmail.com> <20261004100030.189b1c3d@pumpkin>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -86,42 +87,15 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Sun, 4 Oct 2026 05:09:04 -0400, Steven Rostedt wrote:
-> It would be interesting if it actually triggers (finds something). If
-> it doesn't, then I think we should just remove that code instead of
-> adding more complexity to it.
+On Sun, 4 Oct 2026 10:00:30 +0100, David Laight wrote:
+> Surely it would be better to add the sorted index as part of module load
+> so that all symbol lookups could make use of it?
 
-It does trigger, but only for modules. On x86_64 v7.2.5 with kvm loaded,
-available_filter_functions has 18 __ftrace_invalid_address___ entries,
-all of them in [kvm] and none in vmlinux. Each one is a __weak default
-from virt/kvm/ (kvm_arch_vm_compat_ioctl, kvm_arch_shutdown,
-kvm_arch_dy_runnable, ...) that arch/x86/kvm/ overrides inside the same
-kvm.ko. In kvm.ko, no symbol covers any of the 18 addresses, and each
-body is a stub that returns, returns a constant, or tail calls.
+A sorted index used by every lookup is roughly what [1] tried, and its
+review showed what that involves: aliases, livepatch's references into
+the symbol table, and the lookups by name. I'd rather leave that to the
+module maintainers.
 
-ef378c3b823385 fixed this for vmlinux at build time, but sorttable only
-runs on vmlinux, so modules still depend on the check. In its changelog
-you wrote that "the real solution is to not add a weak function into
-the ftrace table in the first place". For modules, that can be done at
-load time, and it would make this patch much smaller.
-
-ftrace_module_init() runs after the module's symbols are set up and
-before any record exists, and ftrace_process_locs() already sorts the
-module's locations and skips zero entries. A location is valid exactly
-when some symbol, under the filters find_kallsyms_symbol() applies, lies
-within FTRACE_MCOUNT_MAX_OFFSET below it. So one pass over the module's
-symbols, with a binary search of the sorted locations for each symbol,
-can mark the valid locations in a bitmap, one bit per location. The
-remaining locations can then be zeroed before the records are created.
-ftrace_module_enable() would then drop its test_for_valid_rec() call,
-and the weak stubs would disappear from available_filter_functions the
-same way they did for vmlinux.
-
-That keeps the work out of ftrace_lock, avoids sorting the symbols and
-replaces the 500 KB array with a bitmap of a few KB, at the cost of a
-small iterator in kernel/module/kallsyms.c, since the symbol filters
-live there.
-
-Would you take a v2 along those lines? I'm starting a prototype now and
-will measure it on the same machine with the same boots as v1. Then
-I'll post the numbers with the v2.
+For this problem, Steve's reply suggests something smaller. The weak
+locations can be dropped once at module load, so ftrace no longer looks
+up symbols per record, and no index is needed. I'm prototyping that now.
