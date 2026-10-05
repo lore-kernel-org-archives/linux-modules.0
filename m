@@ -1,182 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-240.mta1.migadu.com [95.215.58.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B95E47DFB9;
-	Mon,  5 Oct 2026 11:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A731240611
+	for <linux-modules@vger.kernel.org>; Mon,  5 Oct 2026 19:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791200016; cv=none; b=OA6b1DOp5X+myjozcRP3MVPfqEHdbuPDuxbFrqguE8AsjXMXP0N09p6x8lfV3zJwoudtm4ZXu6DG/XjdWzvaEMHX4zCkv5uHBrtYyA/N9zJ08C84MLjCAP/aScpo0kEpIW9Z9AUgUtjBKsffwqzR9NyD53KycH3H6AQYUC95XpQ=
+	t=1791226895; cv=none; b=nDisoNThLzl5G0+nqx/YDMPluCUwx0JFEvcceeUCU24iwHP+RokBHO0Cr1Ks7Xxh9KLcGfHl21fvA7CXQOBOW6Lbu/AR2PcXiuEoZHlGFAN8jm20eNTx7UTa/qxoGk1/NiZ5YoiTkPr8+Pui/6OHlFG0rxLda6OrVFzMwmLlT48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791200016; c=relaxed/simple;
-	bh=ahBIlnJEjw2sBwQJf8wwHpcKkVLVi+ixJDkQPGiwDsI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TK1thZL7s2A078pDYRxN+aKOO6rZV3pE3Yd2gZ4qXvqfYbd3qLC9/rgPnqSKBNR2Z0iGljhKpz2bTyMK6cqdVU/xmPsxKRoGO08QOUFmRAHpD7OTjw235fg5vccvTvM5Cfbu2mPPO3gxbdiqyaK3j3aZQcmIpH4LYe5lYBFNdM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=daXvwKBf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791226895; c=relaxed/simple;
+	bh=rJT8G0sgga4UeEHY50WFHahh2k7AQRpW/V4C83LPcM4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T++hxqVn/V8H76KlBdRyIxV0VGTzLhNgZRbvHyDElImvve90Wpl2vQD1/LpMHIRlRsZh/4n1ARWt/rXwEWrZp2EOQfhkP3lpwK5FDGvXiZ2dXQyJ57m0cbBWbkib9sLdz4B+/hZjxB81xq1CL9kBoPB6CmZjYhokc62ucKeXtxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rpgOxRCu; arc=none smtp.client-ip=95.215.58.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="daXvwKBf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9607C1F000FF;
-	Mon,  5 Oct 2026 11:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791200015;
-	bh=44k8QmXo0RbzfFYGwBkCWl1z3Rv7AbzCxmoTN/2j7jE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=daXvwKBfn45TTkPjYEogaW/8bzC7dWExtHjFuOSW+CTnZI8UZJqisOLHtEWUxdmjS
-	 WfR76xQK5ZicHJnvrYGEoLXulXVsrCIzmDyJ9lsvn8Rzme4/ipxNWMP0d8csQdQyTH
-	 qW0Up9Ia05nx3LwvkJ5rKWOUxTVuME3Q7ijIutS1DFPEMA2qqB/G/NducNpTv5StJI
-	 EuTNz1S1c7ZbizJub5Xe5DXhXe87wAdSVK6m/xr550MJVVsJXo+zptvU1KjUHk/VFy
-	 Ep4ud9da7IQSmdxwQ57Hqx3JmE1yzEUstTeqq86eR2N+WPAHxLwii/mxOSjLUaxaYk
-	 r6mFtzcpuM+QA==
-Date: Mon, 5 Oct 2026 13:32:52 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: Jay Wang <wanjay@amazon.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Christian Heusel <christian@heusel.eu>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-trace-kernel@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
-	Bjoern Doebel <doebel@amazon.de>,
-	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
-Subject: Re: [PATCH bpf-next v4 09/12] bpf, trace, net: prepare
- CONFIG_DEBUG_INFO_BTF checks for a tristate
-Message-ID: <asOK5Gl1Oe9d5bwr@derry.ads.avm.de>
-Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
-	Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Christian Heusel <christian@heusel.eu>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-trace-kernel@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
-	Bjoern Doebel <doebel@amazon.de>,
-	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
-References: <20261001225214.12351-1-wanjay@amazon.com>
- <20261001225214.12351-10-wanjay@amazon.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rpgOxRCu"
+X-Envelope-To: linux-modules@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=rJT8G0sgga4UeEHY50WFHahh2k7AQRpW/V4C83LPcM4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791226891; v=1; x=1791831691;
+ b=rpgOxRCuBdRBG9Cruva0qem46KyAXqHLWajd0ZjIRz0kgD8tNqxyOJ2IoAc2uiVFYp0AWqwU
+ fYK9s+nOEwPq6TEVKyQTb7ZG9spRm+B0UmWQ9BG569oC3jH+5BUQFc768yIcjo1AEuCsOtbT9Nt
+ bjqyL+C+m3j1OwXepyyLRNU0=
+X-Envelope-To: linux-modules@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 3eee9485e3972e9f;
+	Mon, 05 Oct 2026 19:01:30 +0000
+X-Mizu-Trace-ID: 3eee9485e3972e9f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <7844ef03-d9b2-4a10-8f14-1b498ada9043@linux.dev>
+Date: Mon, 5 Oct 2026 12:01:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261001225214.12351-10-wanjay@amazon.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand
+ loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+To: Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: alan.maguire@oracle.com, martin.lau@linux.dev, yonghong.song@linux.dev,
+ jolsa@kernel.org, qmo@kernel.org, nathan@kernel.org, nsc@kernel.org,
+ linux-kbuild@vger.kernel.org, linux@weissschuh.net, christian@heusel.eu,
+ mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
+ linux-modules@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org,
+ acme@kernel.org, namhyung@kernel.org, irogers@google.com,
+ linux-perf-users@vger.kernel.org, jikos@kernel.org, bentiss@kernel.org,
+ linux-input@vger.kernel.org, tj@kernel.org, void@manifault.com,
+ arighi@nvidia.com, changwoo@igalia.com, sched-ext@lists.linux.dev,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ojeda@kernel.org,
+ rust-for-linux@vger.kernel.org, arnd@arndb.de, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, abuehaze@amazon.com, doebel@amazon.de,
+ mpohlack@amazon.de, jay.wang.upstream@gmail.com
+References: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
+ <20261004222127.31128-1-wanjay@amazon.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20261004222127.31128-1-wanjay@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 01, 2026 at 10:52:11PM +0000, Jay Wang wrote:
-> The next patch makes CONFIG_DEBUG_INFO_BTF a tristate.  With =m, Kconfig
-> defines CONFIG_DEBUG_INFO_BTF_MODULE instead of CONFIG_DEBUG_INFO_BTF,
-> so every check that must hold for both =y and =m has to be written for
-> it:
+On 10/4/26 3:21 PM, Jay Wang wrote:
+>>    - If I know I don't need BPF on the workload, and these 5.4 MB
+>>      bite me, I can just turn off BPF
 > 
->  - #ifdef CONFIG_DEBUG_INFO_BTF becomes #if IS_ENABLED(...) where the
->    generated BTF and its id tables must be the same for =y and =m: the
->    .BTF_ids tables (btf_ids.h), the BTF type tags (compiler_types.h), and
->    the tracepoint and syscall BTF ids (trace_events.h, trace_syscalls.c).
->    Leaving them would silently produce empty id sets with =m.
+> They cannot, even when they know they do not need it.  As the cover
+> letter says, the cloud provider usually ships one kernel build to all of
+> its customers. [...]
+
+Ah, I get it now. Thanks.
+
+So the constraint is that the cloud provider ships a single kernel
+revision to all users, and there is currently no mechanism to on/off
+BPF other than a kernel build flag.
+
+I'd be tempted to say "just ship two kernels", it's simpler than the
+upstream change. But I understand the downsides of that as well.
+
+And obviously a good upstream feature may benefit many more users.
+
+> [...]
+>>      Keep zstd-compressed blob in the kernel image and decompress and
+>>      parse it synchronously on first use.
 > 
->  - obj-$(CONFIG_DEBUG_INFO_BTF) and include-$(CONFIG_DEBUG_INFO_BTF)
->    become $(subst m,y,...) where the object is built into the kernel
->    regardless: sysfs_btf.o, the netfilter and xfrm kfunc objects, and
->    scripts/Makefile.btf.  Otherwise =m would try to build them as
->    modules (xfrm_state_bpf.o fails modpost for lack of MODULE_LICENSE)
->    or skip the BTF generation flags.
+> Thanks for putting this forward.  This compression approach is simpler 
+> than loading a module.  I expect the overall code complexity to stay similar
+> to v3, since both need to find the first user and defer the module BTF parsing
+> until then, but it should be easier to merge into mainline because it avoids
+> the request_module() deadlocks.
 > 
->  - "depends on !DEBUG_INFO_BTF" becomes "depends on DEBUG_INFO_BTF=n"
->    for RUST and GENDWARFKSYMS: with =m the BTF is generated as with =y,
->    so the pahole restrictions they express still apply, but !m is m,
->    which a bool option takes as y.
+> Would you like to prepare it for a formal submission, or would you
+> like me to do so?  Either works for me.  Ideally it lands in time for
+> the next LTS kernel, so that we can adopt it there.
+
+Please go ahead and submit the compression approach. Looks like we are
+converging on that. Feel free to use the prototype code if it's
+useful, it uses parts of your series anyway.
+
 > 
-> No functional change: CONFIG_DEBUG_INFO_BTF is still a bool, for which
-> IS_ENABLED() and #ifdef agree, $(subst m,y,y) is y and "=n" is "!".
-> 
-> Signed-off-by: Jay Wang <wanjay@amazon.com>
-> ---
->  Makefile                       | 3 ++-
->  include/linux/btf_ids.h        | 2 +-
->  include/linux/compiler_types.h | 2 +-
->  include/trace/trace_events.h   | 2 +-
->  init/Kconfig                   | 2 +-
->  kernel/bpf/Makefile            | 2 +-
->  kernel/module/Kconfig          | 2 +-
->  kernel/trace/trace_syscalls.c  | 6 +++---
->  net/netfilter/Makefile         | 6 +++---
->  net/xfrm/Makefile              | 4 ++--
->  10 files changed, 16 insertions(+), 15 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 751a08643bf8..f561516e1735 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1208,7 +1208,8 @@ endif
->  # include additional Makefiles when needed
->  include-y			:= scripts/Makefile.warn
->  include-$(CONFIG_DEBUG_INFO)	+= scripts/Makefile.debug
-> -include-$(CONFIG_DEBUG_INFO_BTF)+= scripts/Makefile.btf
-> +# CONFIG_DEBUG_INFO_BTF is a tristate; BTF is generated for both y and m
-> +include-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += scripts/Makefile.btf
+> From what I can see, most of the work left is in that deferral.
+> Whoever needs the BTF first also parses the waiting module BTFs and
+> replays the queued registrations, struct_ops ->init() included, under
+> whatever locks it holds at that point, e.g. event_mutex or
+> bpf_verifier_lock, or inside the module notifier.  So the
+> cand_cache_mutex ABBA you found may not be the only deadlock.  Besides
+> that, only x86_64 was touched so far, so it needs extending to the
+> other architectures as well.
 
-Please drop the comment and use the shorter 'm' to 'y' conversion:
+Yes, I think you are right that the hard part here is the deferral,
+because everything expects vmlinux BTF to just be there.  I don't
+think this is avoidable whatever memory saving approach we choose.
 
-include-$(CONFIG_DEBUG_INFO_BTF:m=y)	+= scripts/Makefile.btf
-
-and possibly also for kernel/bpf/Makefile and net/netfilter/Makefile.
-
-Thanks
-
-
--- 
-Nicolas
