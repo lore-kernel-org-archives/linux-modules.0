@@ -1,128 +1,177 @@
-Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B944040BCDB;
-	Sun,  4 Oct 2026 22:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.155.198.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2C631F989;
+	Mon,  5 Oct 2026 11:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791152503; cv=none; b=hP5NcYUQLz0SEAJoHtZvA/+7a3j3G/qmQopPJYb39DFEgyPypN20ETVfDg1uIp/diGfrAe7hPCIR1NLLN+wcOb68sjQn/gDsB1HA/GmrVbKT4HGbZ9V0y9nbsH4tXVONd3KkCZ4Y8fMnUmewpU9l91961IX0f729rgW2ZwPkD5Q=
+	t=1791200013; cv=none; b=nBW5HHe91frdpTjpBoYu2VeOtTD/4KQoaRmB90jUD5xR06gQgLcEYK1IguOBkmaxVGkrt2jMeot+Wuht0+VKPtfNNanbAmmS7RBUzRV1+vztcZwycKJNpfbn7X1uC7bsTCvYNBP9TR6MsjwPMkonUCEqbEoeASMbITl7PkvqVKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791152503; c=relaxed/simple;
-	bh=8MfZas74TP4bH2JkIBPs6F1Wj3cq6DvSuL/z6D0z5ro=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XMkpqibyn48tYhDvpD2uwRxOE32m5JsEQEzT5g3o3BwcH5c+hiC2XvWc9sP8vUr1qhDP1vGwhWhG1PR4/uHxitA0S/UmlWzxXkNwIIH903s0X2ePc5gZGzaJ6G3wzp0vNaKzDUDBF3AsBSyQ60Zm9au3e1s0xQowgkT5gDOZS0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Af33HbjK; arc=none smtp.client-ip=35.155.198.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1791200013; c=relaxed/simple;
+	bh=Wpr48c94oU5+NvzPcit0pqXalaVgtcp9KdCZNclssVY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X8jMVXeL7TlbVEZsbJU9uWLOhXOpOt6JMsIWa0kVWvta6QAIRxZBeQp76aBGFsT410PsnH523H6O8PimdwY2XCCX2vaxYkBdzKHnPmM1AYzNH5AWj2chZzdbBs0uoPz6Y4Og8ucCp+52nC2GBBm9pyfajJQ5K1VTYvzl0HV1mqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAIHjFWA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Af33HbjK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1791152497; x=1822688497;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gGkA92gKn6Umlg7Do4va51y7OdkAYyeZaeaCQws/E94=;
-  b=Af33HbjKYOCoaBHpbzVoHqqWybQPyWBlTj0a00UAD2IeqbAc3dpdQkBL
-   mh4WA9KlMwvATVJKClsCma4kaZvyhOSZmnydGJyi+AiB5AhirTES9AkYQ
-   Bl72vIFxnHNfYbAsPgH1GOuHcyRUSMDYBjuq29vnP4tVB5c9OyDTOzTox
-   dT/QMY1RX1/1ZdkuQGmEEWrRhyvs10S/rU8Ta/PeEVA/gaw1ffZkPsuR7
-   zZ+P9C+lTnTro5hq1CDTahhEnDh1GbFv9TRyjUihioWWtkcv/5u6Edvo3
-   0bXjSK8UAustB45O2nSHSJrLvOEWZLs3GVQMCXFtI0EX6dtSIEQkq8g4n
-   g==;
-X-CSE-ConnectionGUID: bhwPuL6iQoibWn7EKQVtmQ==
-X-CSE-MsgGUID: iF4tuhgNQbWGyCqDCfgFXA==
-X-IronPort-AV: E=Sophos;i="6.27,141,1787011200"; 
-   d="scan'208";a="30278872"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2026 22:21:32 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:21386]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.164:2525] with esmtp (Farcaster)
- id 0691faea-dd80-4741-bdc2-6e25b9dd697c; Sun, 4 Oct 2026 22:21:32 +0000 (UTC)
-X-Farcaster-Flow-ID: 0691faea-dd80-4741-bdc2-6e25b9dd697c
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Sun, 4 Oct 2026 22:21:31 +0000
-Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Sun, 4 Oct 2026 22:21:31 +0000
-From: Jay Wang <wanjay@amazon.com>
-To: <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
-	<memxor@gmail.com>
-CC: <alan.maguire@oracle.com>, <martin.lau@linux.dev>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <qmo@kernel.org>,
-	<nathan@kernel.org>, <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
-	<linux@weissschuh.net>, <christian@heusel.eu>, <mcgrof@kernel.org>,
-	<petr.pavlu@suse.com>, <samitolvanen@google.com>,
-	<linux-modules@vger.kernel.org>, <rostedt@goodmis.org>,
-	<mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<linux-trace-kernel@vger.kernel.org>, <acme@kernel.org>,
-	<namhyung@kernel.org>, <irogers@google.com>,
-	<linux-perf-users@vger.kernel.org>, <jikos@kernel.org>, <bentiss@kernel.org>,
-	<linux-input@vger.kernel.org>, <tj@kernel.org>, <void@manifault.com>,
-	<arighi@nvidia.com>, <changwoo@igalia.com>, <sched-ext@lists.linux.dev>,
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ojeda@kernel.org>,
-	<rust-for-linux@vger.kernel.org>, <arnd@arndb.de>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<abuehaze@amazon.com>, <doebel@amazon.de>, <mpohlack@amazon.de>,
-	<jay.wang.upstream@gmail.com>
-Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
-Date: Sun, 4 Oct 2026 22:21:27 +0000
-Message-ID: <20261004222127.31128-1-wanjay@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
-References: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAIHjFWA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80CC1F000FF;
+	Mon,  5 Oct 2026 11:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791200012;
+	bh=CDSI1fzd06xogRlRsAAlSIYZUx/yG6yhOmXVab/hmYc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=DAIHjFWAxf3xmj/jwYqfZwZ3E1mfmWBY9gBGxuEz+hac12tLDEw1xFYEQai0vqGXr
+	 jv3ltiorrhLfi+YBk4d0asUZKPAWiQQzrw3Qbx9y9k0u9CBjZmqR3vQRqM0A4YxSAE
+	 iiovdQT0LoDxmYm/9q/caD/w+O/o18v1JgDKvZVuQmdQbgeZt13oSKtalEfh6pWnCq
+	 xyqUqNNRIsn3ptFwE7sm24QRwi1YS6P5LeHZxFJBCmGMhsTKS0RYmsY9vQ+HsINNyY
+	 QVInw/TGlIBjwKHGRD6i6noNqm8SLkI6cm2x1sWh+Q0ojxZRHXJIvUw0d5RPUF7AkF
+	 PYy1fF/7cq7zw==
+Date: Mon, 5 Oct 2026 13:17:12 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Jay Wang <wanjay@amazon.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Christian Heusel <christian@heusel.eu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-trace-kernel@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
+	Bjoern Doebel <doebel@amazon.de>,
+	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
+Subject: Re: [PATCH bpf-next v4 11/12] tools, samples: take the vmlinux BTF
+ from vmlinux.unstripped first
+Message-ID: <asOHOPlWCp1kKZiT@derry.ads.avm.de>
+Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
+	Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Christian Heusel <christian@heusel.eu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-trace-kernel@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
+	Bjoern Doebel <doebel@amazon.de>,
+	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
+References: <20261001225214.12351-1-wanjay@amazon.com>
+ <20261001225214.12351-12-wanjay@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261001225214.12351-12-wanjay@amazon.com>
 
->    - If I know I don't need BPF on the workload, and these 5.4 MB
->      bite me, I can just turn off BPF
+On Thu, Oct 01, 2026 at 10:52:13PM +0000, Jay Wang wrote:
+> With CONFIG_DEBUG_INFO_BTF=m, which the next patch makes possible, the
+> vmlinux BTF is not part of vmlinux: scripts/Makefile.vmlinux strips .BTF
+> from it, and only vmlinux.unstripped, from which vmlinux is made, keeps
+> it.  The tools and samples that generate vmlinux.h from a kernel build
+> tree take the first vmlinux they find, so after an =m build they would
+> pick one without BTF and fail, e.g. the bpftool skeletons when bpftool is
+> built from the kernel tree right after the kernel.
+> 
+> Look for vmlinux.unstripped before vmlinux in each of these lists.  Every
+> kernel build produces it, and with =y it carries the same BTF as vmlinux,
+> so nothing changes there.  perf filters the candidates for a .BTF
+> section, but its unanchored grep also matches .BTF_ids and .BTF.link,
+> which vmlinux keeps with =m; match the section name exactly.
+> 
+> Signed-off-by: Jay Wang <wanjay@amazon.com>
+> ---
+>  samples/bpf/Makefile                       | 6 +++++-
+>  samples/hid/Makefile                       | 6 +++++-
+>  tools/bpf/bpftool/Makefile                 | 6 +++++-
+>  tools/perf/bpf_skel.mak                    | 8 ++++++--
+>  tools/sched_ext/Makefile                   | 6 +++++-
+>  tools/testing/selftests/bpf/Makefile       | 6 +++++-
+>  tools/testing/selftests/hid/Makefile       | 6 +++++-
+>  tools/testing/selftests/sched_ext/Makefile | 6 +++++-
+>  8 files changed, 41 insertions(+), 9 deletions(-)
+> 
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index c28e65046986..fb5cd2d5b6f8 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -305,8 +305,12 @@ $(obj)/$(TRACE_HELPERS): TPROGS_CFLAGS := $(TPROGS_CFLAGS) -D__must_check=
+>  
+>  -include $(BPF_SAMPLES_PATH)/Makefile.target
+>  
+> -VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux))				\
+> +# With CONFIG_DEBUG_INFO_BTF=m only vmlinux.unstripped has the BTF
+> +VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux.unstripped))		\
+> +		     $(abspath $(if $(O),$(O)/vmlinux))				\
+> +		     $(abspath $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux.unstripped))	\
+>  		     $(abspath $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux))	\
+> +		     $(abspath $(objtree)/vmlinux.unstripped)			\
+>  		     $(abspath $(objtree)/vmlinux)
 
-They cannot, even when they know they do not need it.  As the cover
-letter says, the cloud provider usually ships one kernel build to all of
-its customers.  Customers install their own packages and workloads around
-that kernel, but they do not build or customize the kernel.  Turning
-BPF off is not a switch they have.
+(out-of-scope for the concrete patch)
 
-> What I find strange is for a user of this scale *to not know* whether
-> BPF will be used in the workload or not, which is what lazy load may
-> solve.
+I am surprised that of these multi-ambiguous path list.  It looks to me
+as if samples/bpf/ and samples/hid/ are always built via Kbuild, thus
+there is proper management of variables like O, KBUILD_OUTPUT and
+objtree already.  I'd expect 
 
-They do know.  They run predictable workloads on a large number of
-small instances, and BPF is not part of them.  They spread the load by
-resource usage, so at that scale every byte matters: more free memory
-on each instance means fewer instances in total.
+		     $(abspath $(objtree)/vmlinux.unstripped)			\
+  		     $(abspath $(objtree)/vmlinux)
 
->    * Compress it.
-[...]
->      Keep zstd-compressed blob in the kernel image and decompress and
->      parse it synchronously on first use.
+to be enough here.  But I may be missing something.
 
-Thanks for putting this forward.  This compression approach is simpler 
-than loading a module.  I expect the overall code complexity to stay similar
-to v3, since both need to find the first user and defer the module BTF parsing
-until then, but it should be easier to merge into mainline because it avoids
-the request_module() deadlocks.
 
-Would you like to prepare it for a formal submission, or would you
-like me to do so?  Either works for me.  Ideally it lands in time for
-the next LTS kernel, so that we can adopt it there.
-
-From what I can see, most of the work left is in that deferral.
-Whoever needs the BTF first also parses the waiting module BTFs and
-replays the queued registrations, struct_ops ->init() included, under
-whatever locks it holds at that point, e.g. event_mutex or
-bpf_verifier_lock, or inside the module notifier.  So the
-cand_cache_mutex ABBA you found may not be the only deadlock.  Besides
-that, only x86_64 was touched so far, so it needs extending to the
-other architectures as well.
+Kind regards,
+Nicolas
