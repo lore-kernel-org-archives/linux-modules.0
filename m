@@ -1,183 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5111037F739
-	for <linux-modules@vger.kernel.org>; Tue,  6 Oct 2026 22:32:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A98B41440E;
+	Wed,  7 Oct 2026 08:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791325934; cv=none; b=jn3s8YZNVE1Ujy3W9iqYGe6SxDMRuWbe1p49iTFfzy/AcT4IDDAabu7PWu/c8Say24ZYZHnt0ctus1ikoT8uXPLLMaJFnqFddwJmdBzbZ494E5A1RV2f53dPcJOi0P/NaZXsf1Z5401XoRCABo+kwjAv0+MDklgt8nPFF8G/EHc=
+	t=1791360603; cv=none; b=n97Db1z/PjZe/2HM3HOU+RFfyhz8A1AYdHpmPVUlyZHJUdGvFdhaSdwkKM4CXU1Vh467Ss+KukYeLsuaGXlQJKZ/7ZwhkFG2o+atSWtIUATrFg5C0RRCrZKgbf6PLj7ENVEXZAxLend68RTVBJjtfNlts1J3JSWIW8PJj2RJe8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791325934; c=relaxed/simple;
-	bh=hFv0MXVPvhz0WRBwfQqUoYE9onwt9hZH/QfKgJ+frzw=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=H5EaJqkw5DxkW6yy3/J9dt9EdLHYwCWS+iHI7hX9kiFd907GlH6LHiJthm+DVX/NSjy/yfOdAKlHGB3w5RAw3HBO9o3dcvbkavRJO1crsgvedAFvaYUh38b0zCIvemG17XcyXPKZN7BfCE/p5ox8oPU5M92sq49UY0GBhuec5BY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9T2Pg6S; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791360603; c=relaxed/simple;
+	bh=XkR9yeNdMSFEwvPlpk4SbHA8XMyXCGDkACApJUQd+iE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=INGejbs/jSyeALv/wI8vJ5rs82xNgNmDDIgOFQE9vl4yXAj9gCCORH7p3+wzTg3ERn2dFWowml42zk4JteP3ZErI6JOiZa2Gb5jHJazqtpIHspV7Amco2/ZMO+0D41C+LBAehkJiu7jWMhO3U/Wun/2Zhdq2bTmvCY5cak+oYis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=eG5BO9Fl; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9T2Pg6S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDDC1F0089B;
-	Tue,  6 Oct 2026 22:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791325932;
-	bh=dWh1taBC+CTGq8F29sJLi1r2d0P0/jxQqLMz5jUGYBQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=U9T2Pg6SYlQPOz1pTlYhNm8D9v0P7/DvlFqU86I9R7TFx8L6M8+CqSbOmRDPYU3Rq
-	 NeCAuW3ZDlhf5ZlrlUQumjjirYXhudIB+8o8fGMat+exlR8XZTYuocSEAcutK/u7ad
-	 4YpyXqGmAV1DlWYLDmKnoMddFZWzLDhWQNO4KvRAj4hSD8WglEQMHNcYEKXum6bsWs
-	 rI6DQ6WpGjzWPeRtgF7AYXKJ2SKwIdS3W6JZreB3S1JWj2EMi9Y1mj+7muRWuHD0xz
-	 OsERnajrzgGhZdpmXNXYM7i85TA4Qu8BLO/QdbV1o58ymdgudYpatvtm/h//Mvig6p
-	 HcvLu0veAM1nA==
-Message-ID: <sashiko-outbox-162492@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC 1/3] kbuild: modules: Add arm64 BTI fixup utility
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jeremy Linton" <jeremy.linton@arm.com>
-Cc: "Petr Pavlu" <petr.pavlu@suse.com>, linux-modules@vger.kernel.org
-In-Reply-To: <20261006221815.2823252-2-jeremy.linton@arm.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="eG5BO9Fl"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FAFD1477;
+	Wed,  7 Oct 2026 01:09:45 -0700 (PDT)
+Received: from NH27D9T0LF (unknown [10.57.10.243])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 613683F86F;
+	Wed,  7 Oct 2026 01:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791360588; bh=XkR9yeNdMSFEwvPlpk4SbHA8XMyXCGDkACApJUQd+iE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eG5BO9Flg7nSzjbWy5bqmKFKgAHlOCOJlq2tABAMJWVnr/aRSBRa28JtcMNCyyeqW
+	 L+w+oytM08OB3NUR7Q0vZuiCxVworucaLfx7Gl44JfOHnZsKOe6OQAPHyFm0cmebfY
+	 whZMe1g0GAvtVEubvL+paqu6vV/2PJFTlSlZdG60=
+Date: Wed, 7 Oct 2026 10:09:37 +0200
+From: Emanuele Rocca <emanuele.rocca@arm.com>
+To: Jeremy Linton <jeremy.linton@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	linux-modules@vger.kernel.org, broonie@kernel.org,
+	jpoimboe@kernel.org, nathan@kernel.org, nsc@kernel.org,
+	mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
+	samitolvanen@google.com, atomlin@atomlin.com,
+	ndesaulniers@google.com, mark.rutland@arm.com, will@kernel.org,
+	catalin.marinas@arm.com, ardb@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC 0/3]  kbuild: modules: Fixup arm64 BTI relocations
+Message-ID: <asX-QZPtpUG5UdBU@NH27D9T0LF>
 References: <20261006221815.2823252-1-jeremy.linton@arm.com>
- <20261006221815.2823252-2-jeremy.linton@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 06 Oct 2026 22:32:12 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261006221815.2823252-1-jeremy.linton@arm.com>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] build: missing elf_flagdata() causes relocation updates to be sile=
-ntly discarded
-- [Medium] build: POSIX exit code truncation wraps unfixed BTI counts of ex=
-actly 256 to success
-- [Medium] scripts: module-bti-check conflates fatal errors with violation =
-counts
---
+On 2026-10-06 05:18, Jeremy Linton wrote:
+> The kernel module loader, the arm64 ABI, GCC/Clang, and the static
+> linkers operate with slightly different assumptions about which
+> functions require BTI landing pads.
+> 
+> A static function called only directly does not normally need a BTI
+> landing pad, so compilers omit it. A static linker producing an ET_REL
+> module treats R_AARCH64_CALL26 as a direct branch and leaves the
+> relocation for the module loader or later link pass. It does not know
+> the final distance between sections or whether the loader will later
+> require an indirect branch fixup.
+> 
+> This matters when a caller and callee are placed in different sections,
+> for example by __init. The arm64 module loader may replace such a
+> CALL26 relocation with a fixup containing an indirect branch, making an
+> otherwise direct only function a BTI target. Ftrace makes this more
+> likely because its entry NOP can replace a PAC instruction that would
+> otherwise be a valid BTI landing pad.
+> 
+> A linker could conservatively add veneers to affected cross section
+> calls, but that would require knowledge of arm64 module loader fixup
+> semantics and is not part of the generic relocatable link contract.
+> 
+> Lets fix this by handling the module specific transformation during
+> the kernel build. Scan cross section calls and, when the target lacks
+> a BTI compatible landing pad, place a veneer in the target section,
+> redirect the relocation to the veneer, and branch directly from the
+> veneer to the original function entry.
+> 
+> Jeremy Linton (3):
+>   kbuild: modules: Add arm64 BTI fixup utility
+>   kbuild: modules: Build and trigger BTI scanner for arm64
+>   arm64: bti: Drop compiler specific BTI checks
 
-commit f30f3429bd0a90f5e903b1b7fe22a7c8b76f0249
-Author: Jeremy Linton <jeremy.linton@arm.com>
+Tested as follows on BTI-capable hardware:
 
-kbuild: modules: Add arm64 BTI fixup utility
+- Built a kernel with these patches and CONFIG_ARM64_BTI_KERNEL=y
+- Verified that a test kernel module can successfully branch indirectly
+  to a valid 'bti c' landing pad
+- The same test kernel module triggers an Oops - BTI if branching
+  indirectly to a nop
 
-This commit introduces a new host build tool, module-bti-check, to verify
-and fix up arm64 cross-section module calls that lack BTI landing pads.
-It accomplishes this by scanning R_AARCH64_CALL26 relocations and placing
-veneers in the target section where necessary.
+  Internal error: Oops - BTI: 0000000036000002 [#1]  SMP
+  Modules linked in: bti_probe(OE+) binfmt_misc nls_iso8859_1 aes_ce_blk [...]
+  
+  [...]
+  
+  pc : bti_bad+0x1c/0x28 [bti_probe]
+  lr : bti_bad+0x14/0x28 [bti_probe]
+  sp : ffff800083933a40
+  x29: ffff800083933a40 x28: 000000000000000c x27: 0000000000000000
+  x26: 0000000000000000 x25: ffff800083933c90 x24: ffffaaa7c52c7058
+  x23: ffffaaa7567d1040 x22: 0000000000000000 x21: 0000000000000000
+  x20: ffff0000d11cd100 x19: 0000000000000001 x18: ffff800083795058
+  x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+  x14: ffffffffffffffff x13: 7465677261742049 x12: 54422064696c6176
+  x11: 6e6920676e697265 x10: 0000000000000000 x9 : 0000000000000000
+  x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+  x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+  x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffffaaa7567cf044
+  Call trace:
+   bti_bad+0x1c/0x28 [bti_probe] (P)
+   bti_probe_init+0x78/0xff8 [bti_probe]
 
-> diff --git a/scripts/module-bti-check.c b/scripts/module-bti-check.c
-> new file mode 100644
-> index 0000000000000..c8bef0ed90bb7
-> --- /dev/null
-> +++ b/scripts/module-bti-check.c
+No Oops was hit, as expected, booting the kernel with arm64.nobti.
+Other than that, the system works fine under regular workloads.
 
-[ ... ]
-
->  			if (fix) {
->  				ret =3D get_veneer(obj, veneers, &target, &veneer);
->  				if (ret)
->  					goto out;
-> =20
->  				rela.r_info =3D GELF_R_INFO(veneer->secsym, R_AARCH64_CALL26);
->  				rela.r_addend =3D veneer->value;
->  				if (!gelf_update_rela(data, j, &rela))
->  					return elf_error(obj);
-
-[Severity: High]
-Does this miss setting the libelf dirty flag on the data descriptor?
-
-When gelf_update_rela() is called in scan_relocations(), it updates the
-in-memory buffer, but libelf requires elf_flagdata(data, ELF_C_SET,=20
-ELF_F_DIRTY) to actually write the modifications back to the file during
-elf_update().=20
-
-Without the dirty flag, won't the new landing pad veneers be silently
-discarded when the updated .rela section is dropped during the file write?
-
-> =20
->  				obj->changed =3D true;
->  				continue;
->  			}
-
-[ ... ]
-
->  			fprintf(stderr,
->  				"%s: cross-section call from %s%s%s+0x%llx to %s (%s+0x%llx) lacks a=
- BTI landing pad\n",
->  				obj->name, source ?: "", source ? " " : "",
->  				section_name(obj, shdr.sh_info),
->  				(unsigned long long)rela.r_offset, target.name,
->  				section_name(obj, target.section_index),
->  				(unsigned long long)target.value);
-> =20
->  			unfixed++;
->  		}
->  	}
-> =20
->  	ret =3D unfixed;
->  out:
->  	return ret;
-
-[Severity: Medium]
-Is there a risk of exit code truncation here? scan_relocations() returns
-the raw count of unfixed occurrences, which is eventually propagated up
-to main() and used as the process exit code.
-
-Since POSIX exit codes are truncated to 8 bits, what happens if the tool
-encounters exactly 256 (or 512, etc.) unfixed occurrences? It appears=20
-returning 256 would wrap to 0, which might trick the build system into=20
-treating it as a successful execution despite missing BTI pads.
-
-[ ... ]
-
->  	/* Must happen after elf end, to assure correctness */
->  	while (veneers) {
->  		struct veneer *next =3D veneers->next;
-> =20
->  		free(veneers);
->  		veneers =3D next;
->  	}
-> =20
->  	if (fd >=3D 0)
->  		close(fd);
-> =20
->  	if (ret < 0) {
->  		if (ret !=3D -ELIBBAD)
->  			fprintf(stderr, "%s: %s\n", name, strerror(-ret));
->  		return EXIT_FAILURE;
->  	}
-> =20
->  	return ret;
->  }
-
-[Severity: Medium]
-Could this error handling conflate fatal OS or libelf errors with violation
-counts?
-
-In process_file(), negative error codes like -ENOMEM are converted to
-EXIT_FAILURE (which is 1). Because this overlaps with the value returned
-when there is exactly 1 unfixed violation, main() cannot differentiate
-between a tool failure and a BTI warning.
-
-[ ... ]
-
->  	if (elf_version(EV_CURRENT) =3D=3D EV_NONE) {
->  		fprintf(stderr, "libelf initialization failed: %s\n", elf_errmsg(-1));
->  		goto out;
->  	}
-> =20
->  	for (i =3D optind; i < argc; i++) {
->  		int status =3D process_file(argv[i], fix);
-> =20
->  		if (status && !warn) {
->  			ret =3D status;
->  			goto out;
->  		}
->  	}
-
-When the --warn flag is active, it ignores all non-zero status codes. Won't
-this silently mask build environment failures, returning success even if=20
-the file couldn't be opened or processed?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261006221815.2823=
-252-1-jeremy.linton@arm.com?part=3D1
+Tested-By: Emanuele Rocca <emanuele.rocca@arm.com>
