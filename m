@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-107.mta0.migadu.com [91.218.175.107])
+Received: from mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856DF3F44E4
-	for <linux-modules@vger.kernel.org>; Thu,  8 Oct 2026 08:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D3E3D6465
+	for <linux-modules@vger.kernel.org>; Thu,  8 Oct 2026 08:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791446935; cv=none; b=cMZh1O8mVUPZa4hWeXDOBD0nWmVpTOo+wDc+qHqoqiFEueK6LTmMBO/h3JfNAQH4fGe3ArzxDaV1yCOE0fRDOMmQtIUZFeJJcOxRkFit2lMQB44KKOITsKV6/UFab0m1hPqz1QwCnlBtzNrogNciZ7RdadipZsm1fcSsv+UfYOw=
+	t=1791447142; cv=none; b=lqxU1D1T8Yltd6ptrUgZse9wEzDc32dsAszicV9Sviu9YbcUui9iI1IpKNcDh6tlHLtusXjJT3DgelyPtQ/1qDDc9EwlCvnovPWY7itCYSZ3HI1aPCWlMC7e/TauR+WsxcfcQtEY3nyrqbLcPhWPsKK3qzPOhyI5qn7CiDwfvj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791446935; c=relaxed/simple;
-	bh=Yhnnial9CyXjQfMJe0x/bX884j72gzHkQhTCBK9VwN4=;
+	s=arc-20240116; t=1791447142; c=relaxed/simple;
+	bh=PLvbKK8F/Bm5bhh9c08LKLirJfE5QGxiNc7t1L+MVUA=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KEkdQQ9m4lSUYcNhFtgukzwGmk+pD8Z7WCCLQva/ffUiqY87PXEaQtm8GiWZtN4PGNaCsv2KzwnKxpgtTQNEOQjfdklz9PTjQl3RkTtPDT/D3BC4T9ViejTItK/y9babBsz+Q4qBqVLdGhjDoOWadxfHQqhLJzQEtrxYzywYVs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MYvdfg28; arc=none smtp.client-ip=91.218.175.107
+	 In-Reply-To:Content-Type; b=Oa63OqJ5QdI58FWgNRLbcZn2lL42BCIt6E9brvhdf8az2klaoSpDFZBo1K/w8brLi6Tlgwz3dKqy0ZfM1P5hzDR3oDjsYn2G7WrMFpA+5eGz9gXcFa1wlu6u6fy2hVqqqkhqI/grp4xT/hVuhCJXITTH4Xr4wUBGYmGdjXyGW5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vWA+RxS2; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MYvdfg28"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vWA+RxS2"
 X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Yhnnial9CyXjQfMJe0x/bX884j72gzHkQhTCBK9VwN4=;
+DKIM-Signature: a=rsa-sha256; bh=PLvbKK8F/Bm5bhh9c08LKLirJfE5QGxiNc7t1L+MVUA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791446929; v=1; x=1792051729;
- b=MYvdfg28EDDZxHLrbIMD8LSFd2V6WESK+O+0i94XAs8hY0qrmW42FaDC2R3O58GV0LOKy/E7
- JIVlOecD3PJedK8YS74Vj7myc9+i3YqthNLrwXLvk6PLJOy3pJjfaNmDXnnpCui7qNxLZ7jGKls
- SHw9KB7EZpnzCMu6gFVQDLTw=
+ t=1791447137; v=1; x=1792051937;
+ b=vWA+RxS2zeAYwJrl/QBJtmF6IaLB+kMyO61+dMRbeXGmiRTaJd0co5ibWcBsc7zvwWLdMCyc
+ VQQv9ruCRXvqzB7vA9RBmX/jLXnnI7E4a2VOBx5RHHVcWu5ONJdn61SoQ7WuIuqjYX92slY4apz
+ 2iLUPthszWYs1apmRNOKKMHw=
 X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ef9c66e098076910;
-	Thu, 08 Oct 2026 08:08:38 +0000
-X-Mizu-Trace-ID: ef9c66e098076910
+Received: by smtp.migadu.com with ESMTPS id 226010a611eb6f78;
+	Thu, 08 Oct 2026 08:12:17 +0000
+X-Mizu-Trace-ID: 226010a611eb6f78
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <f70fd2a2-cf46-4c25-babf-9382aed69730@linux.dev>
-Date: Thu, 8 Oct 2026 16:09:41 +0800
+Message-ID: <896c2dc7-4787-4c22-90dc-a3cd607be6fa@linux.dev>
+Date: Thu, 8 Oct 2026 16:13:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -43,7 +43,7 @@ Subject: Re: [PATCH v11 2/7] mm/vmalloc: undo partial mappings inside the
 From: Hao Ge <hao.ge@linux.dev>
 To: Uladzislau Rezki <urezki@gmail.com>
 Cc: Suren Baghdasaryan <surenb@google.com>,
- Kent Overstreet <kent.overstreet@linux.dev>,
+ =Kent Overstreet <kent.overstreet@linux.dev>,
  Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
  Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
  Aaron Tomlin <atomlin@atomlin.com>, Andrew Morton
@@ -149,14 +149,13 @@ On 2026/10/8 14:53, Hao Ge wrote:
 >  }
 >
 
-I'd rather put this logic inside kmsan_vmap_pages_range_noflush
-
-This function should clean things up on its own, not depend on the
-caller to do it, just like kmsan_ioremap_page_range.
+I'd rather put this logic inside kmsan_vmap_pages_range_noflush.
+This function should clean things up on its own, not depend on
+the caller to do it, just like kmsan_ioremap_page_range.
 
 https://elixir.bootlin.com/linux/v7.3-rc5/source/mm/kmsan/hooks.c#L185
 
-Uladzislau，WDYT?
+Uladzislau, WDYT?
 
 Thanks
 Best Regards
