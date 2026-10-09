@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-245.mta1.migadu.com [95.215.58.245])
+Received: from mta0.migadu.com (out-66.mta0.migadu.com [91.218.175.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15CA31BCAE
-	for <linux-modules@vger.kernel.org>; Fri,  9 Oct 2026 08:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10824C9DF6
+	for <linux-modules@vger.kernel.org>; Fri,  9 Oct 2026 11:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791534176; cv=none; b=AeFphOw3uJ4JGHje+6aHQA2zBDbcQDKmdH7zS1vYAn0e3h6IwZQt1buAch82GIL6iiDb6trXhJh7b7Qy2hfI9YEhulecH9uLHDwD2JZmYaOPt0OGIL2vjyK9QFTUw+3uQQF1Bb57OkOHdSFVtNuNp9KLa4/TGuXm2AyBGHLGlaE=
+	t=1791544575; cv=none; b=Sp1ZRaWlwywHrIoJxM9M/W+8mxOhcGSzBgjWV/3YeKlYnGqLwm8rLUxSNAjSdMfgg3MGVzzhYtS4OGdPgWO8NDgVSw7QASgNAIAQRsJHY8hg4v3bQLKD74c05LV5bOOGC2x1wPN6W99LtTWyTT3aowzgiznAOHkJl3nFe2upCOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791534176; c=relaxed/simple;
-	bh=c5aDOqijhnGPpwPCmjSXCbIeHPczQrKsPxgMJv3hKPQ=;
+	s=arc-20240116; t=1791544575; c=relaxed/simple;
+	bh=4KiuDAG3gm65cIQ2mqPJSAHpZO66H8hjIEiCXFAoNYM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lcMWNw8xcqPMcgPap4hBJR4lfuHscFJ1pJANpbJYPbhhHZNb/N5QLXyqPXL9ekKbuFYcpQ28252bsk0dN13LqtJe8lehd1FXE5ox2vLp06GpvhUug3Jfh0T+36nn8zOZ79P2Zb9sLEeWJpOEXTBefEelYWnVrbBTJ8ZkCwwV3wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lzAQwm46; arc=none smtp.client-ip=95.215.58.245
+	 In-Reply-To:Content-Type; b=o8ryhgpZEy2pb80Al0jBHgmPrui3CqCC3tEb+8df5dkt0R8n9FFKON7P3DAxo/oxrM7/VoO5tl78DXvB/6EgUVk1TuLM9nWJ8BYXh7pDRnemcvpudkrie3+nhoEkTR/ke88h09hTa51yuwZW96uhgRcG8w4maSQbt/5Y/37VddY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AvBWyQWP; arc=none smtp.client-ip=91.218.175.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lzAQwm46"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AvBWyQWP"
 X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=c5aDOqijhnGPpwPCmjSXCbIeHPczQrKsPxgMJv3hKPQ=;
+DKIM-Signature: a=rsa-sha256; bh=4KiuDAG3gm65cIQ2mqPJSAHpZO66H8hjIEiCXFAoNYM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791534172; v=1; x=1792138972;
- b=lzAQwm46m7c4MXznCJpzzcM+m+QYqY79uC477fKHXPozG/TetRQTbA0vJOMxchj/3j05PAjF
- eK75Cgrlpo1SdPkaa8te5lVHheGmwx9rCxDtBMg0d6q3B93sF6D3ZgXNWsJO5YwYrEHbCwqcuFe
- 4quKoBYkubaynDJbtZkWlveo=
+ t=1791544560; v=1; x=1792149360;
+ b=AvBWyQWP3rcBetVOVIU7NVk4oy7VlA7D2gOQ9G2FqXEJIAuc6JbovwF6sEWyCCcTD4SMEWP4
+ CV8x9Owgu04HIuwn/uyXTzZllBRfPxm2XSW0iuy51DV+F/obP1wWO5KqfS4V/q/rErOZtcIzkxU
+ oBk1aMzCkFs9V3dcGRxwraHk=
 X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 23e08e172bfdef72;
-	Fri, 09 Oct 2026 08:22:52 +0000
-X-Mizu-Trace-ID: 23e08e172bfdef72
+Received: by smtp.migadu.com with ESMTPS id 50b57414bfeda855;
+	Fri, 09 Oct 2026 11:15:47 +0000
+X-Mizu-Trace-ID: 50b57414bfeda855
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <baa5ac6e-e7ea-496b-bea7-a3790d277d73@linux.dev>
-Date: Fri, 9 Oct 2026 16:23:53 +0800
+Message-ID: <fc32fbb9-9db2-40f1-88fc-c087927a1eb8@linux.dev>
+Date: Fri, 9 Oct 2026 19:16:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -38,10 +38,8 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 2/7] mm/vmalloc: undo partial mappings inside the
- mapping functions
-To: Suren Baghdasaryan <surenb@google.com>,
- Uladzislau Rezki <urezki@gmail.com>
+Subject: Re: [PATCH v11 7/7] alloc_tag: fix the /proc/allocinfo lifecycle
+To: Suren Baghdasaryan <surenb@google.com>
 Cc: Kent Overstreet <kent.overstreet@linux.dev>,
  Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
  Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
@@ -51,239 +49,276 @@ Cc: Kent Overstreet <kent.overstreet@linux.dev>,
  Vlastimil Babka <vbabka@kernel.org>, Michal Hocko <mhocko@suse.com>,
  Brendan Jackman <brendan.jackman@linux.dev>,
  Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
+ Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ kasan-dev@googlegroups.com, Sashiko <sashiko-bot@kernel.org>,
+ stable@vger.kernel.org
 References: <20260929082014.160587-1-hao.ge@linux.dev>
- <20260929082014.160587-3-hao.ge@linux.dev> <arzgoe-bXAz1poAt@milan>
- <CAJuCfpHavrwaJ2T6daHnJc+r=9khBwrv_zOp8s3Cwi347SHXRw@mail.gmail.com>
+ <20260929082014.160587-8-hao.ge@linux.dev>
+ <CAJuCfpEwrdOKQmt9_=J4Qawtg48AUuwwbc2Lp-1oWiNbKO_UVw@mail.gmail.com>
 Content-Language: en-US
 From: Hao Ge <hao.ge@linux.dev>
-In-Reply-To: <CAJuCfpHavrwaJ2T6daHnJc+r=9khBwrv_zOp8s3Cwi347SHXRw@mail.gmail.com>
+In-Reply-To: <CAJuCfpEwrdOKQmt9_=J4Qawtg48AUuwwbc2Lp-1oWiNbKO_UVw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Suren 
+Hi Suren
 
-On 2026/10/5 01:42, Suren Baghdasaryan wrote:
-> On Wed, Sep 30, 2026 at 12:12 PM Uladzislau Rezki <urezki@gmail.com> wrote:
+
+On 2026/10/5 02:23, Suren Baghdasaryan wrote:
+> On Tue, Sep 29, 2026 at 10:20 AM Hao Ge <hao.ge@linux.dev> wrote:
 >>
->> On Tue, Sep 29, 2026 at 04:20:09PM +0800, Hao Ge wrote:
->>> __vmap_pages_range_noflush() and friends can install some PTEs before
->>> failing and leave them mapped, and the kernel callers do not agree on
->>> who cleans them up. For example, pcpu_map_pages() and
->>> kmsan_ioremap_page_range() unmap the leftovers themselves, while
->>> vm_module_tags_populate() and the __GFP_NOFAIL retry loop in
->>> __vmalloc_area_node() relied on the mapping functions cleaning up and
->>> did not call anything like vunmap_range() themselves. When the same
->>> range is mapped again, the attempt hits the leftovers and fails, with
->>> BUG() in vmap_pte_range() for huge mappings.
->>>
->>> After discussing with Suren and Ulad, we decided the cleanup belongs
->>> to __vmap_pages_range_noflush() and friends, so the callers no longer
->>> need to unmap the partial mappings themselves. Each function now
->>> undoes the PTEs it installed itself.
->>>
->>> The rollback calls the low-level __vunmap_range_noflush(), it just
->>> clears the PTEs of the range it is given, which is all a rollback
->>> needs. It cannot use vunmap_range_noflush() because these mapping
->>> functions also map the KMSAN shadow and origin, and for a metadata
->>> range its hook would look up the metadata of the metadata, get 0
->>> and BUG() on addr >= end. The failed mappings were never accessed,
->>> no TLB flush needed.
->>>
->>> Fixes: 9376130c390a ("mm/vmalloc: add support for __GFP_NOFAIL")
->>> Fixes: 0f9b685626da ("alloc_tag: populate memory for module tags as needed")
+>> shutdown_mem_profiling() calls remove_proc_entry() from
+>> reserve_module_tags(), which runs under mod_lock held for write.
+>> remove_proc_entry() waits for readers, and a reader takes mod_lock for
+>> read in allocinfo_start():
+>>
+>>   CPU0 (insmod)                      CPU1 (read /proc/allocinfo)
+>>   ----------------                   ----------------------------
+>>   reserve_module_tags()
+>>     down_write(&mod_lock)  [held]
+>>                                      use_pde()            [in_use++]
+>>                                      allocinfo_start()
+>>                                        down_read(&mod_lock)  <- blocks
+>>     shutdown_mem_profiling()
+>>       remove_proc_entry()
+>>         wait for in_use == 0         <- blocks
+>>
+>> Move remove_proc_entry() to a workqueue.
+>>
+>> The deferred removal also affects alloc_tag_init(). The file is
+>> created before the type, so on a failure it is still there with
+>> alloc_tag_cttype NULL or an error pointer, and a reader panics in
+>> allocinfo_start(). Create the file at the end of alloc_tag_init()
+>> instead, a failed init leaves nothing behind.
+>>
+>> If proc_create() fails, the codetag type and the module tags memory
+>> leak. Call codetag_unregister_type() and free the memory.
+>>
+>> alloc_tag_cttype can now be freed at runtime. alloc_tag_top_users()
+>> reads it from __show_mem() without locks, read the pointer under
+>> rcu_read_lock() and take mod_lock before dropping the RCU lock, the
+>> type stays alive until then. The only caller never sleeps, drop the
+>> can_sleep argument.
+>>
+>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Hao Ge <hao.ge@linux.dev>
+>> ---
+>>  include/linux/alloc_tag.h |  2 +-
+>>  include/linux/codetag.h   |  2 ++
+>>  lib/codetag.c             | 26 ++++++++++++++++++++
+>>  mm/alloc_tag.c            | 52 +++++++++++++++++++++++++++------------
+>>  mm/show_mem.c             |  2 +-
+>>  5 files changed, 66 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
+>> index 7f2d80a59792..852dc10c00ee 100644
+>> --- a/include/linux/alloc_tag.h
+>> +++ b/include/linux/alloc_tag.h
+>> @@ -81,7 +81,7 @@ struct codetag_bytes {
+>>         s64 bytes;
+>>  };
+>>
+>> -size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sleep);
+>> +size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count);
+>>
+>>  static inline struct alloc_tag *ct_to_alloc_tag(struct codetag *ct)
+>>  {
+>> diff --git a/include/linux/codetag.h b/include/linux/codetag.h
+>> index a25a085c2df1..0c4e0337b474 100644
+>> --- a/include/linux/codetag.h
+>> +++ b/include/linux/codetag.h
+>> @@ -87,6 +87,8 @@ void codetag_to_text(struct seq_buf *out, struct codetag *ct);
+>>  struct codetag_type *
+>>  codetag_register_type(const struct codetag_type_desc *desc);
+>>
+>> +void codetag_unregister_type(struct codetag_type *cttype);
+>> +
+>>  #if defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES)
+>>
+>>  bool codetag_needs_module_section(struct module *mod, const char *name,
+>> diff --git a/lib/codetag.c b/lib/codetag.c
+>> index a0b600720afc..46d0904b08b3 100644
+>> --- a/lib/codetag.c
+>> +++ b/lib/codetag.c
+>> @@ -429,3 +429,29 @@ codetag_register_type(const struct codetag_type_desc *desc)
+>>
+>>         return cttype;
+>>  }
+>> +
+>> +/**
+>> + * codetag_unregister_type - unregister a codetag type
+>> + * @cttype: the codetag type to unregister
+>> + *
+>> + * Undo codetag_register_type() and free @cttype. The caller must make
+>> + * sure no lockless reader still uses @cttype, e.g. clear the pointer
+>> + * to it and wait for an RCU grace period first.
+>> + */
+>> +void __init codetag_unregister_type(struct codetag_type *cttype)
+>> +{
+>> +       struct codetag_module *cmod;
+>> +       unsigned long id, tmp;
+>> +
+>> +       mutex_lock(&codetag_lock);
+>> +       list_del(&cttype->link);
+>> +       mutex_unlock(&codetag_lock);
+>> +
+>> +       down_write(&cttype->mod_lock);
+>> +       idr_for_each_entry_ul(&cttype->mod_idr, cmod, tmp, id)
+>> +               kfree(cmod);
+>> +       idr_destroy(&cttype->mod_idr);
+>> +       up_write(&cttype->mod_lock);
+>> +
+>> +       kfree(cttype);
+>> +}
+>> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+>> index ba8a651769e3..b9af5fe5bba2 100644
+>> --- a/mm/alloc_tag.c
+>> +++ b/mm/alloc_tag.c
+>> @@ -15,6 +15,7 @@
+>>  #include <linux/seq_file.h>
+>>  #include <linux/string_choices.h>
+>>  #include <linux/vmalloc.h>
+>> +#include <linux/workqueue.h>
+>>  #include <linux/kmemleak.h>
+>>  #include <uapi/linux/alloc_tag.h>
+>>
+>> @@ -484,22 +485,28 @@ static const struct proc_ops allocinfo_proc_ops = {
+>>  #endif
+>>  };
+>>
+>> -size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sleep)
+>> +size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count)
+>>  {
+>>         struct codetag_iterator iter;
+>> +       struct codetag_type *cttype;
+>>         struct codetag *ct;
+>>         struct codetag_bytes n;
+>>         unsigned int i, nr = 0;
+>> +       bool locked;
+>>
+>> -       if (IS_ERR_OR_NULL(alloc_tag_cttype))
+>> +       rcu_read_lock();
+>> +       cttype = READ_ONCE(alloc_tag_cttype);
 > 
-> I don't think this fixes 0f9b685626da. I mean it fixes it but
-> indirectly. That patch expects vmap_pages_range() to undo the mappings
-> when it fails, which is a reasonable assumption. By fixing
-> vmap_pages_xxx we fix all its users, including
-> vm_module_tags_populate(). So, it indirectly fixes several callers but
-> when adding a Fixes tag we do not list all patches we indirectly fix.
->
+> Code looks correct to me but if you are changing alloc_tag_cttype to
+> be accessed under RCU, then you should declare it as __rcu and use
+> rcu_assign_pointer()/rcu_access_pointer()/rcu_dereference()/rcu_dereference_protected().
 
-Got it, learned something new here. I used to think we had to add a Fixes tag
-so stable folks know which branches to backport to.
-I went back and re-read Documentation/process/stable-kernel-rules.rst, and turns out
-that's not how it works.
+Yes. I missed that. Will fix in the next version.
 
-Both Fixes tags should be removed then. At the end of the day we're just normalizing the API;
-those other commits are merely beneficiaries of this change.
-
-Thanks for your patient guidance.
-
+Thanks
 Best Regards
 Hao
 
->>> Reported-by: Sashiko <sashiko-bot@kernel.org>
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Hao Ge <hao.ge@linux.dev>
->>> ---
->>>  mm/kmsan/shadow.c |  4 ++++
->>>  mm/vmalloc.c      | 31 +++++++++++++++++++++++++++++--
->>>  2 files changed, 33 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/mm/kmsan/shadow.c b/mm/kmsan/shadow.c
->>> index 0c88d89bf0d6..2166086d3dc3 100644
->>> --- a/mm/kmsan/shadow.c
->>> +++ b/mm/kmsan/shadow.c
->>> @@ -258,6 +258,10 @@ int kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
->>>                                           o_pages, page_shift);
->>>       kmsan_leave_runtime();
->>>       if (mapped) {
->>> +             /* Undo the shadow mapping set up above. */
->>> +             kmsan_enter_runtime();
->>> +             __vunmap_range_noflush(shadow_start, shadow_end);
->>> +             kmsan_leave_runtime();
->>>               err = mapped;
->>>               goto ret;
->>>       }
->>>
->> Can we just do that inside the vmalloc? For example in the
->> __vmap_pages_range_noflush() as entry function for all(?) helpers?
->> So we do not need do it manually?
 > 
-> Agree, that would be better.
-> 
+>> +       if (IS_ERR_OR_NULL(cttype)) {
+>> +               rcu_read_unlock();
+>>                 return 0;
+>> +       }
 >>
->>> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
->>> index 859e6d2d57a3..9bbf75706627 100644
->>> --- a/mm/vmalloc.c
->>> +++ b/mm/vmalloc.c
->>> @@ -349,6 +349,10 @@ static int vmap_range_noflush(unsigned long addr, unsigned long end,
->>>       if (mask & ARCH_PAGE_TABLE_SYNC_MASK)
->>>               arch_sync_kernel_mappings(start, end);
->>>
->>> +     /* Undo the PTEs installed before the failure. */
->>> +     if (err)
->>> +             __vunmap_range_noflush(start, end);
->>> +
->>>       return err;
->>>  }
->>>
->>> @@ -363,6 +367,9 @@ int vmap_page_range(unsigned long addr, unsigned long end,
->>>       if (!err)
->>>               err = kmsan_ioremap_page_range(addr, end, phys_addr, prot,
->>>                                              ioremap_max_page_shift);
->>> +     if (err)
->>> +             __vunmap_range_noflush(addr, end);
->>> +
->>>       return err;
->>>  }
->>>
->>> @@ -667,6 +674,10 @@ static int vmap_small_pages_range_noflush(unsigned long addr, unsigned long end,
->>>       if (mask & ARCH_PAGE_TABLE_SYNC_MASK)
->>>               arch_sync_kernel_mappings(start, end);
->>>
->>> +     /* Undo the PTEs installed before the failure. */
->>> +     if (err)
->>> +             __vunmap_range_noflush(start, end);
->>> +
->>>       return err;
->>>  }
->>>
->> The only one user of that function is __vmap_pages_range_noflush()
->> so we can cover both cases there small and huge path.
+>> -       if (can_sleep)
+>> -               codetag_lock_module_list(alloc_tag_cttype);
+>> -       else if (!codetag_trylock_module_list(alloc_tag_cttype))
+>> +       locked = codetag_trylock_module_list(cttype);
+>> +       rcu_read_unlock();
+>> +       if (!locked)
+>>                 return 0;
 >>
->> Is that enough just to do unroll in the below:
+>> -       iter = codetag_get_ct_iter(alloc_tag_cttype);
+>> +       iter = codetag_get_ct_iter(cttype);
+>>         while ((ct = codetag_next_ct(&iter))) {
+>>                 struct alloc_tag_counters counter = alloc_tag_read(ct_to_alloc_tag(ct));
 >>
->> __vmap_pages_range_noflush()
->> vmap_page_range()
->>
->> functions? It will also fix NOFAIL case:
->>
->> <snip>
->> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
->> index 89c327a6ce7d..fa1f357ecf3f 100644
->> --- a/mm/vmalloc.c
->> +++ b/mm/vmalloc.c
->> @@ -359,10 +359,19 @@ int vmap_page_range(unsigned long addr, unsigned long end,
->>
->>         err = vmap_range_noflush(addr, end, phys_addr, pgprot_nx(prot),
->>                                  ioremap_max_page_shift);
->> +       if (err)
->> +               goto error_cleanup_range;
->> +
->>         flush_cache_vmap(addr, end);
->> -       if (!err)
->> -               err = kmsan_ioremap_page_range(addr, end, phys_addr, prot,
->> +       err = kmsan_ioremap_page_range(addr, end, phys_addr, prot,
->>                                                ioremap_max_page_shift);
->> +       if (err)
->> +               goto error_cleanup_range;
->> +
->> +       return 0;
->> +
->> +error_cleanup_range:
->> +       __vunmap_range_noflush(addr, end);
->>         return err;
->>  }
->>
->> @@ -683,26 +692,35 @@ int __vmap_pages_range_noflush(unsigned long addr, unsigned long end,
->>                 pgprot_t prot, struct page **pages, unsigned int page_shift)
->>  {
->>         unsigned int i, nr = (end - addr) >> PAGE_SHIFT;
->> +       unsigned long start = addr;
->> +       int err;
->>
->> -       WARN_ON(page_shift < PAGE_SHIFT);
->> -
->> -       if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMALLOC) ||
->> -                       page_shift == PAGE_SHIFT)
->> -               return vmap_small_pages_range_noflush(addr, end, prot, pages);
->> +       if (WARN_ON(addr >= end))
->> +               return -EINVAL;
->>
->> -       for (i = 0; i < nr; i += 1U << (page_shift - PAGE_SHIFT)) {
->> -               int err;
->> +       if (WARN_ON(page_shift < PAGE_SHIFT))
->> +               return -EINVAL;
->>
->> -               err = vmap_range_noflush(addr, addr + (1UL << page_shift),
->> +       if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMALLOC) ||
->> +               page_shift == PAGE_SHIFT) {
->> +               err = vmap_small_pages_range_noflush(addr, end, prot, pages);
->> +       } else {
->> +               for (i = 0; i < nr; i += 1U << (page_shift - PAGE_SHIFT)) {
->> +                       err = vmap_range_noflush(addr, addr + (1UL << page_shift),
->>                                         page_to_phys(pages[i]), prot,
->>                                         page_shift);
->> -               if (err)
->> -                       return err;
->> +                       if (err)
->> +                               break;
->>
->> -               addr += 1UL << page_shift;
->> +                       addr += 1UL << page_shift;
->> +               }
+>> @@ -520,7 +527,7 @@ size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sl
+>>                 }
 >>         }
 >>
->> -       return 0;
->> +       if (err)
->> +               __vunmap_range_noflush(start, end);
->> +
->> +       /* 0 on success. */
->> +       return err;
+>> -       codetag_unlock_module_list(alloc_tag_cttype);
+>> +       codetag_unlock_module_list(cttype);
+>>
+>>         return nr;
+>>  }
+>> @@ -591,6 +598,13 @@ void pgalloc_tag_swap(struct folio *new, struct folio *old)
+>>         put_page_tag_ref(handle_new);
 >>  }
 >>
->>  int vmap_pages_range_noflush(unsigned long addr, unsigned long end,
->> @@ -714,7 +732,13 @@ int vmap_pages_range_noflush(unsigned long addr, unsigned long end,
+>> +static void remove_allocinfo_file(struct work_struct *work)
+>> +{
+>> +       remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
+>> +}
+>> +
+>> +static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
+>> +
+>>  static void shutdown_mem_profiling(bool remove_file)
+>>  {
+>>         if (mem_alloc_profiling_enabled())
+>> @@ -600,7 +614,7 @@ static void shutdown_mem_profiling(bool remove_file)
+>>                 return;
 >>
->>         if (ret)
->>                 return ret;
->> -       return __vmap_pages_range_noflush(addr, end, prot, pages, page_shift);
->> +
->> +       ret = __vmap_pages_range_noflush(addr, end, prot, pages, page_shift);
->> +       if (ret)
->> +               /* Cleanup KMSAN metadata. */
->> +               kmsan_vunmap_range_noflush(addr, end);
->> +
->> +       return ret;
+>>         if (remove_file)
+>> -               remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
+>> +               schedule_work(&remove_allocinfo_work);
+>>         mem_profiling_support = false;
 >>  }
 >>
->>  static int __vmap_pages_range(unsigned long addr, unsigned long end,
->> <snip>
+>> @@ -1351,16 +1365,10 @@ static int __init alloc_tag_init(void)
+>>                 return 0;
+>>         }
 >>
+>> -       if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops)) {
+>> -               pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
+>> -               shutdown_mem_profiling(false);
+>> -               return -ENOMEM;
+>> -       }
+>> -
+>>         res = alloc_mod_tags_mem();
+>>         if (res) {
+>>                 pr_err("Failed to reserve address space for module tags, errno = %d\n", res);
+>> -               shutdown_mem_profiling(true);
+>> +               shutdown_mem_profiling(false);
+>>                 return res;
+>>         }
+>>
+>> @@ -1368,10 +1376,22 @@ static int __init alloc_tag_init(void)
+>>         if (IS_ERR(alloc_tag_cttype)) {
+>>                 pr_err("Allocation tags registration failed, errno = %pe\n", alloc_tag_cttype);
+>>                 free_mod_tags_mem();
+>> -               shutdown_mem_profiling(true);
+>> +               shutdown_mem_profiling(false);
+>>                 return PTR_ERR(alloc_tag_cttype);
+>>         }
+>>
+>> +       if (!proc_create(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_proc_ops)) {
+>> +               struct codetag_type *cttype = alloc_tag_cttype;
+>> +
+>> +               pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
+>> +               shutdown_mem_profiling(false);
+>> +               WRITE_ONCE(alloc_tag_cttype, NULL);
+>> +               synchronize_rcu();
+>> +               codetag_unregister_type(cttype);
+>> +               free_mod_tags_mem();
+>> +               return -ENOMEM;
+>> +       }
+>> +
+>>         return 0;
+>>  }
+>>  module_init(alloc_tag_init);
+>> diff --git a/mm/show_mem.c b/mm/show_mem.c
+>> index b938cbcd774a..a2e710404a48 100644
+>> --- a/mm/show_mem.c
+>> +++ b/mm/show_mem.c
+>> @@ -439,7 +439,7 @@ void __show_mem(unsigned int filter, const nodemask_t *nodemask,
+>>                 struct codetag_bytes tags[10];
+>>                 size_t i, nr;
+>>
+>> -               nr = alloc_tag_top_users(tags, ARRAY_SIZE(tags), false);
+>> +               nr = alloc_tag_top_users(tags, ARRAY_SIZE(tags));
+>>                 if (nr) {
+>>                         pr_notice("Memory allocations (profiling is currently turned %s):\n",
+>>                                 mem_alloc_profiling_enabled() ? "on" : "off");
 >> --
->> Uladzislau Rezki
+>> 2.25.1
+>>
