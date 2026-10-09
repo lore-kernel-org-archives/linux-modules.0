@@ -1,170 +1,178 @@
-Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DD54CE677
-	for <linux-modules@vger.kernel.org>; Fri,  9 Oct 2026 11:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B45B4E1C61;
+	Fri,  9 Oct 2026 12:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545367; cv=none; b=hVIe3NeClRp0Hje9GtUQgwEeQxsafGxysY/YZu3NaUiYtg4DN3cMxszD7BVb9as4NsbCevV/uDbv25qpuI15T/YINvrul29IUYsX05SHj1tdbSH5lOWEQ1UVWfAbB4+Kft3CWG7VgJCuJ+04ipJBCpCymlRiJggha6VFZ/2wEcs=
+	t=1791547317; cv=none; b=LM/0DzwF6XKXiMX/omMRE7ANLnfpIwPdmNbYJIW2WM1gR9uFmwEO0NB7R1QQMCrNJXuimLJNiuanYRrMf8/e9FdcteR7IK8GraE6BKh2H4n1Uqe+8IbEby2jN07/Biaxi5YCcCaeg0fZQ3tRnqh6GvZiNy8RgpfUenX4mzXLMb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545367; c=relaxed/simple;
-	bh=9x2VgaCQqq1qe9Sd3mI+ji7pCRHxHu0WOqvf+sHVC10=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nzrZor5MouatyJQ9eCH8dmkU2wTGR51aE7GZ9vnFQiH9taK8fM2ewfdP/yNeo+sVnzKy8vtD21oHRca/HqUipZ4LeISKJ/ZXlqQlK1GD7JnwDuVvd3J0TllCsXNdYmXsg14aAoHOb4r1gwwmrtjjTKqdSyddua4KudH1/DMLx7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oIAtzHD+; arc=none smtp.client-ip=95.215.58.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791547317; c=relaxed/simple;
+	bh=kWMME6oo51ZWLhEEuLGEHk+ALABso4VacarviwVxuqY=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=VNS3jl7H5QWiQ7c4ArOGchbwyaCr0VsTvvZnhtlOY1ZOCnnKXePVdOPsglVI0om+pXcZFbfr0uvrHGBiZYgcufhg8fgDZAKMNTvOBmoO4CyAg7DgX5d2hoq1V2I1JTeWKWXIq0PyOZ2VisVo0HZ6AehRWhB9KRsQwsZ6Rybkduk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j09YlFAx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oIAtzHD+"
-X-Envelope-To: linux-modules@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9x2VgaCQqq1qe9Sd3mI+ji7pCRHxHu0WOqvf+sHVC10=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791545353; v=1; x=1792150153;
- b=oIAtzHD+uyGDbZl2cSPP5H6EUsoC6yqhf1U++gKNvFIMGOyKEhJClrLnVuvCY793VrA007Y7
- 5eas06fDn2HdlS0g6su4jxWsW63kqxYajDnrDpvqWf1nPUNL8H5v6V5Vf43MWNRIQPhU9aYyojF
- tf6q36X2dohhfQoMuRkM9n0E=
-X-Envelope-To: linux-modules@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 13a9e522eed7582a;
-	Fri, 09 Oct 2026 11:29:13 +0000
-X-Mizu-Trace-ID: 13a9e522eed7582a
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <839d13ef-8ca3-4e58-9bd0-84137f2d6866@linux.dev>
-Date: Fri, 9 Oct 2026 19:30:21 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j09YlFAx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 395991F000FF;
+	Fri,  9 Oct 2026 12:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791547308;
+	bh=msJ9U2+D0K9Sksl3SMcYGQxyJraA87PnSs7nZTVG3YY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=j09YlFAxrRT0GGDlIiQ7eYkU5IFm+0Xq5WR2oOu+w6GDIpIuI3ULE9S5ahQER7Ww6
+	 PpzVOlUAX5fSqWKA/6AIuStDY0oJaGQFGAH6JbtJy1K2V2Mk2rDgvQwrnftUZv11Ij
+	 08Nf/eWVFlEu8nMSUjdFuPDapWXGoye0OB9a5HvjP1yLd9iQfMagyBO8wfRhC8xGeS
+	 E3vku2a4PDULBWCq/vMmxSSSDEnCb95JQqA4Vzy5Of87pMZyNnhw/kS9duvCYxcPEo
+	 fsiXhtWXPGy2JityHWMCbSmjHAN88gD1BXVes8ZSD+MNDf5O2zTtRuvBWU0Yf59GEn
+	 6k1dcnxSX+nlg==
+Message-ID: <sashiko-outbox-165464@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 bpf-next 4/7] btf: Preserve string relocation maps
+ for split BTF
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alan Maguire" <alan.maguire@oracle.com>
+Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>
+In-Reply-To: <20261009112324.1442319-5-alan.maguire@oracle.com>
+References: <20261009112324.1442319-1-alan.maguire@oracle.com>
+ <20261009112324.1442319-5-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 09 Oct 2026 12:01:47 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 0/7] alloc_tag and module codetag section fixes
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Kent Overstreet <kent.overstreet@linux.dev>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Alexander Potapenko <glider@google.com>,
- Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vlastimil Babka <vbabka@kernel.org>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <brendan.jackman@linux.dev>,
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- kasan-dev@googlegroups.com
-References: <20260929082014.160587-1-hao.ge@linux.dev>
- <20260929134401.a1a385ff4369661f879b5d2f@linux-foundation.org>
- <CAJuCfpFRW3uNUW_VrjpOfLwS1LBHqGEpqK3yBTPSpGOORY5jiQ@mail.gmail.com>
- <fc4f3d08-393f-43ed-934b-e7e1ba6d0137@linux.dev>
- <CAJuCfpGAZUcQnursYh=rvp+EzckvDmXX_KveJvEuyjzzG=9mww@mail.gmail.com>
-Content-Language: en-US
-From: Hao Ge <hao.ge@linux.dev>
-In-Reply-To: <CAJuCfpGAZUcQnursYh=rvp+EzckvDmXX_KveJvEuyjzzG=9mww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hi Suren
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [High] btf: memory corruption and invalid string offsets with split base =
+BTF
+- [High] bpf: heap buffer overflow in btf_relocate_map_distilled_base() on =
+split BTF
+- [Medium] libbpf: NULL pointer dereference in btf_relocate() when btf has =
+no base
+- [Low] bpf: btf_relocate_rewrite_strs prints empty string in warning
+--
 
-On 2026/10/5 02:37, Suren Baghdasaryan wrote:
-> On Wed, Sep 30, 2026 at 5:25 AM Hao Ge <hao.ge@linux.dev> wrote:
->>
->> Hi Suren and Andrew
->>
->>
->> On 2026/9/30 10:39, Suren Baghdasaryan wrote:
->>> On Tue, Sep 29, 2026 at 8:44 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->>>>
->>>> On Tue, 29 Sep 2026 16:20:07 +0800 Hao Ge <hao.ge@linux.dev> wrote:
->>>>
->>>>> With profiling toggled off, the overflow check in
->>>>> reserve_module_tags() did not run, a module could load with more
->>>>> tags than the page flags can address, and re-enabling profiling
->>>>> then silently corrupted /proc/allocinfo. On overflow the fix shuts
->>>>> profiling down, releases the reservation and returns -EAGAIN, and
->>>>> the codetag section lands as regular module data in the same load,
->>>>> so the module loads without profiling.
->>>>>
->>>>> Review of the earlier series by Sashiko turned up more problems.
->>>>>
->>>>> One is a race. layout_sections() and move_module() both asked
->>>>> codetag_needs_module_section() where a codetag section goes, and
->>>>> mem_profiling_support can change between the two calls, for instance
->>>>> when another module load overflows the tag index and shuts profiling
->>>>> down. move_module() then copied the codetag section to offset 0 of
->>>>> its regular destination and clobbered the first section placed in
->>>>> that region.
->>>>>
->>>>> v7 reworks where codetag sections are allocated, on a prototype by
->>>>> Petr Pavlu [1]. The allocation runs before layout_sections() and the
->>>>> placement is decided in one step, so nothing re-asks the question
->>>>> and the race is gone. The retry is gone too, on -EAGAIN the section
->>>>> is laid out as regular module data right in the same load.
->>>>
->>>> Thanks.
->>>>
->>>> Seven patches, all cc:stable.  Why is a backport proposed?
->>>> Documentation/process/stable-kernel-rules.rst gives guidelines - does
->>>> this series meet them?  Does Suren have thoughts?
->>
->> Thanks, I've just gone through this carefully.
->>
->>>
->>> I think vmalloc fix in patch#2 should be posted separately and clearly
->>> quialifies for backporting as if fixes issues Hao found at [1].
->>
->> Agreed. Patch #2 was added to this patch series because vm_module_tags_populate
->> suffers from the same issue. If we want to be more conservative, I'd prefer to keep
->> vm_module_tags_populate as it was in V10:
->> https://lore.kernel.org/all/20260915070001.113559-3-hao.ge@linux.dev/
-> 
-> I disagree with this approach. That means we are introducing an extra
-> code inside vm_module_tags_populate() only to clean it up later.
-> Instead please post Patch #2 separately. That posting should have your
-> current patch that changes vmap_pages_xxx() to clean up on failure,
-> followed by patch(es) which remove unnecessary cleanup that some
-> functions currently perform by themselves. This patchset should
-> definitely be tagged for stable.
+commit 5e8ac630aea03f4aa4b3a237792c60ad3c7a0956
+Author: Alan Maguire <alan.maguire@oracle.com>
 
-You are right. Sorry for the confusion - my earlier deviation came
-from not fully understanding the rules for getting patches into the
-stable trees.
+btf: Preserve string relocation maps for split BTF
 
-> Once that patchset is accepted, the rest of your current patchset
-> fixing alloc_tags can be posted with correct assumption that
-> vmap_pages_range() cleans up its partial mapping when it fails.
-> 
-> I know this sequence will take longer to upstream but I think it's the
-> right way to go.
+Make btf_relocate() optionally return the string-offset map it builds
+while relocating a BTF relative to a distilled base. A subsequent split
+BTF object can use that map to rebase references to base strings.
 
-Make sense. Thanks for your continued support.
+Also account for the accumulated base string offset when assigning a
+new BTF base. This is required when the base is itself split.
 
-Best Regards
-Hao
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 592b71a838410..22dd123450c3e 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -1936,7 +1936,7 @@ void btf_set_base_btf(struct btf *btf, const struct=
+ btf *base_btf)
+>  {
+>  	btf->base_btf =3D (struct btf *)base_btf;
+>  	btf->start_id =3D btf_nr_types(base_btf);
+> -	btf->start_str_off =3D base_btf->hdr.str_len;
+> +	btf->start_str_off =3D base_btf->start_str_off + base_btf->hdr.str_len;
+>  }
 
-> 
->>
->> Then we can submit a fix for __GFP_NOFAIL retry loop in __vmalloc_area_node() as a hotfix together
->> with our new patch #2. While at it, we can also check if there are any unnecessary calls to
->> vunmap_range family functions that can be cleaned up now that patch #2 is applied.
->>
->>
->>>
->>> The rest are also bug fixes but their size is concerning. I'll review
->>> them first before advising on which ones should be backported. Some
->>> fixes address issues that happen very rarely and if a fix is too
->>> complex it might make sense to leave it be or fix it some other way
->>> with less churn. Please give me a couple of days to review them. With
->>> the upcoming LPC I'm trying to multiplex between several projects.
->>
->> Thanks, sorry for all the hassle on you folks.
->>
->> Thanks
->> Best Regards
->> Hao
->>
->>>
->>> [1] https://lore.kernel.org/all/b8005c24-ecac-45c4-840a-fd282f9693b5@linux.dev/
->>>
->>>>
->>>> Also, Sashiko has been busy again:
->>>>         https://sashiko.dev/#/patchset/20260929082014.160587-1-hao.ge@linux.dev
+[Severity: High]
+Since this allows using a split BTF as the base, will it cause out-of-bounds
+heap writes in tools/lib/bpf/btf_relocate.c:btf_relocate_map_distilled_base=
+()?
+
+When relocating against a split base BTF, the function allocates an array
+using only the local string section length of the target base BTF:
+
+	base_name_cnt =3D calloc(r->base_str_len, sizeof(*base_name_cnt));
+
+It then iterates over all types in the BTF hierarchy, indexing into this
+array using the absolute name_off of inherited types:
+
+	if (base_name_cnt[base_t->name_off] < 255)
+		base_name_cnt[base_t->name_off]++;
+
+Because the absolute name_off can span up to the total accumulated string
+length (up to millions of bytes for vmlinux), this index can far exceed
+the local string length and corrupt the heap.
+
+Additionally, in btf_relocate_rewrite_strs(), local string offsets are
+incremented using only the local string section length:
+
+	*str_off +=3D r->base_str_len - r->dist_str_len;
+
+Does this need to account for base_btf->start_str_off as well, to prevent
+the rewritten offsets from incorrectly pointing into the base BTF's bounds?
+
+[ ... ]
+
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 512b3962f75f8..d2ff6f5d6d5b6 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -6640,7 +6640,7 @@ void btf_set_base_btf(struct btf *btf, const struct=
+ btf *base_btf)
+> =20
+>  int btf__relocate(struct btf *btf, const struct btf *base_btf)
+>  {
+> -	int err =3D btf_relocate(btf, base_btf, NULL);
+> +	int err =3D btf_relocate(btf, base_btf, NULL, NULL);
+
+[Severity: Medium]
+If a user calls btf__relocate() with a root BTF (which has no base BTF),
+will this cause a NULL pointer dereference?
+
+Inside btf_relocate(), r.dist_base_btf is populated using btf__base_btf(btf=
+),
+which returns NULL for a root BTF. However, the function proceeds to
+dereference it without checking:
+
+	r.str_map =3D calloc(btf_header(r.dist_base_btf)->str_len,
+			   sizeof(*r.str_map));
+
+Since btf_header(NULL) returns a near-NULL pointer, accessing str_len will
+trigger a page fault and crash the caller.
+
+[ ... ]
+
+> diff --git a/tools/lib/bpf/btf_relocate.c b/tools/lib/bpf/btf_relocate.c
+> index df5fa4bd87d69..e55dd75f6c950 100644
+> --- a/tools/lib/bpf/btf_relocate.c
+> +++ b/tools/lib/bpf/btf_relocate.c
+> @@ -441,7 +441,8 @@ static int btf_relocate_rewrite_strs(struct btf_reloc=
+ate *r, __u32 i)
+>  /* If successful, output of relocation is updated BTF with base BTF poin=
+ting
+>   * at base_btf, and type ids, strings adjusted accordingly.
+>   */
+> -int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **id=
+_map)
+> +int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **id=
+_map,
+> +		 __u32 **str_map)
+>  {
+
+[Severity: Low]
+When strings fail to map in btf_relocate_rewrite_strs() during relocation,
+does the warning message print an empty string instead of the actual unmapp=
+ed
+string?
+
+	off =3D r->str_map[*str_off];
+	if (!off) {
+		pr_warn("string '%s' [offset %u] is not mapped to base BTF\n",
+			btf__str_by_offset(r->btf, off), *str_off);
+
+Since off is guaranteed to be 0 here, and offset 0 in BTF always corresponds
+to the empty string, the warning will always print "string '' [offset X]".
+
+Should this use *str_off to retrieve and print the correct unmapped string?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009112324.1442=
+319-1-alan.maguire@oracle.com?part=3D4
