@@ -1,162 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C824D7D37;
-	Fri,  9 Oct 2026 12:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A18C4CCDCA;
+	Fri,  9 Oct 2026 13:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791549238; cv=none; b=ofEMXPooWUdaxxy3pJqiKMWeBe/FoEVPnYlXObe4K09CPlxSb1vv2XyHUq4Dd1dePdjArx/o9Ff772FvG8aD9FijPRy3PybEUo1cScnrXTy46LdWf6jlrmwqF3MeDdFV+9geNF0Cay5BgIWK1IoquV4Z52zzANlin629LnCuy/I=
+	t=1791552711; cv=none; b=AK/I9YxLJlFW5W/wEX2NvrERyIZ5ur/yovoVcvMB+nheN/vceO+nXANJ30v9bQ7+5IYhj7ymjaJ6tfGHj+stCk66O2oerJWRcotJJ715K0pGDSuP1BRs5VTKCtNegU8Ah0g9Fqq/g/zr+2cdzqqao2xo0MhufB5n6ySupNW+h2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791549238; c=relaxed/simple;
-	bh=W4COJCSqVm3t3PuXOJ2Wby+X+kuGaXzXHl6bHXJTd2I=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=k2hkhsV8CKNCihGPF2aciMOemDLr2RV+Z4l1u5LMmCjeWzzOaG+1bgerltgC9JEj89v2I9yUK0WzzS7eEBen7CTw135G9KMTTCoSRUuOkr9oZ5xgx4ss1LN6pKtvgvCNh28JxzV91oEvo152EBOQofEqMgHRtvrJdslznFNoiug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OrAoFN/T; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791552711; c=relaxed/simple;
+	bh=BdiJOYdLzKCHYvSvFbBWDvMEF+sjWSrcNKa5ko8H9c4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q8nGp497unXq/iUMccb9ujcOAmwZEnKqlPcLNwWRt/3vn0nwHvs4kd9MBO4gmH3s5tWX6xN5VXeHCpkIM9X9dGLhXFkxsUg4427tja5shbVB3wKge8inOqZ5StLU7zL/p6jDsG8u+DuHRt4iIf/2kGWR2Nhrvnte57vBK31Vono=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NQBL1sAZ; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OrAoFN/T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A1C21F000FF;
-	Fri,  9 Oct 2026 12:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791549234;
-	bh=LOdUM7r3dR6O0OPTg3vzG72dTNl5T+oRoNk1NwDGyeA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OrAoFN/T9lZcwopurnEV953Gmo6TFhirx1OTQP253oKMnM2aiM/Ie8/mlX2TYGg1J
-	 p2EWX5ndTdlI46eWDJG3GBiCd0vWHkI06kWqtV4DxYL3Gp3JjyJ0yxgxJGZBA37BwW
-	 ylvJ4TeY2HzHekVVpGppza4cMZaehwCoO3xOqS+r8biU2mv8Kf0ZffdwErlwjdyUiy
-	 iDRVpxmBuGDcp2z5gFEhcDvOwK2HXUnQa2e2/nD6QLeusetGrzOo9ZTBc1fJC2tKSu
-	 bUBiZno9yWlKLX3vfiAFoVjHfagGcotCPSomiURX+2IDYeH+ALT+k4XbJHgQnU/oKl
-	 pbM3snHr67jpg==
-Message-ID: <sashiko-outbox-165544@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 bpf-next 7/7] selftests/bpf: Add a test verifying
- inline information
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alan Maguire" <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>
-In-Reply-To: <20261009112324.1442319-8-alan.maguire@oracle.com>
-References: <20261009112324.1442319-1-alan.maguire@oracle.com>
- <20261009112324.1442319-8-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 12:33:54 +0000
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NQBL1sAZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=39
+	EabSGtVupsqYhL3Iw65lJvIT9W9JCD3Z4Wyg9CYhc=; b=NQBL1sAZCCYNRACZCk
+	Qmwhhc635QgBTQCE8sDYsmwK5C5BHmg2DTuaWEFsh2d5M2B3Gir/ytaICA4CkXOI
+	XJCU3WVR1U/EuhDxEDKO7hC67e/HzttvaG35MVIkb8QklqzquH3RsW5BtHzSVq2o
+	FeTsWlRHHNuOMhnJEVm6IsqiI=
+Received: from colol4bi5.localdomain (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgCHtUSs7MhqF2KoDg--.49875S2;
+	Fri, 09 Oct 2026 21:31:26 +0800 (CST)
+From: Binbin Deng <18983559317@163.com>
+To: mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com
+Cc: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Binbin Deng <18983559317@163.com>
+Subject: [PATCH module v1] module: Fix uninitialized count read of unloaded taint tracking record
+Date: Fri,  9 Oct 2026 21:31:22 +0800
+Message-ID: <20261009133122.40664-1-18983559317@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgCHtUSs7MhqF2KoDg--.49875S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw17tF43Ar4rGr45Kw1rJFb_yoW8Zw43pr
+	W5JrW8Xrs8ArZ7Aa18Z3WUWry5G3y5AF4YgF98Gas3XrnFqrsF9ayFqF1Y9a4F9ryj93W5
+	tF4I9w13GFyDXF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UsZ2hUUUUU=
+X-CM-SenderInfo: jprymmytvvmjmrxbiqqrwthudrp/xtbC+w4zF2rI7K70mwAA3e
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: module_get_base_addr() desyncs on trailing /proc/=
-modules tokens
-- [Medium] bpf: btf_inline test incorrectly allows memory-spilled parameter
---
+try_add_tainted_module() allocates the tracking record without zeroing
+it and initializes the fields in this order:
 
-commit 4adb006744e35941ca2b357431675f3202d1100f
-Author: Alan Maguire <alan.maguire@oracle.com>
-Subject: selftests/bpf: Add a test verifying inline information
+	mod_taint = kmalloc_obj(*mod_taint);
+	strscpy(mod_taint->name, mod->name, MODULE_NAME_LEN);
+	mod_taint->taints = mod->taints;
+	list_add_rcu(&mod_taint->list, &unloaded_tainted_modules);
+	mod_taint->count = 1;
 
-This commit adds a selftest to verify inline information for bpf_testmod.
-It checks that an always-inlined function has a single location parameter
-encoded in a register, and that the LOCSEC descriptor offset is within the
-expected range.
+The record is published by list_add_rcu() before the count field is
+written.  The readers, unloaded_tainted_modules_seq_show() (debugfs,
+under rcu_read_lock()) and print_unloaded_tainted_modules() (panic
+path, under guard(rcu)), traverse the list under RCU and read
+mod_taint->count.  module_mutex, which the writer holds, does not
+exclude RCU readers.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_inline.c b/tools/=
-testing/selftests/bpf/prog_tests/btf_inline.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_inline.c
-[ ... ]
-> +	lp =3D btf_loc_param(t);
-> +	if (!ASSERT_TRUE(lp->flags & BTF_LOC_PARAM_REG, "param_has_reg"))
-> +		goto out;
+A reader that observes the new node between the list_add_rcu() and
+the count store reads an uninitialized u64 left over from previous
+slab use.  This is a data race and leaks kernel heap residue through
+the debugfs file and the panic message.
 
-[Severity: Medium]
-Because the variable in testmod_inline_len() below is forced into memory, i=
-ts
-BTF location is encoded as a register-relative memory offset, which sets bo=
-th
-BTF_LOC_PARAM_REG and BTF_LOC_PARAM_OFFSET.
+The race window is two adjacent instructions; it is reachable when a
+tainted module is unloaded (rmmod) concurrently with a read of
+/sys/kernel/debug/module/unloaded_tainted, or with the module list
+printout of an oops on another CPU.
 
-Does this bitwise AND accidentally pass for memory offsets since they have a
-base register? If so, this check might be masking the fact that the paramet=
-er
-was actually spilled to the stack instead of being purely encoded in a
-register as the commit message describes.
+Fix this by initializing count before the record is published.
 
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 93847ca6293b4..b4f0af2aeca45 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-[ ... ]
-> @@ -735,6 +735,13 @@ bpf_testmod_test_read(struct file *file, struct kobj=
-ect *kobj,
->  EXPORT_SYMBOL(bpf_testmod_test_read);
->  ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO);
-> =20
-> +static __always_inline size_t testmod_inline_len(size_t len)
-> +{
-> +	/* Keep an instruction in the inline site without changing len. */
-> +	asm volatile("" : "+m"(len));
+Fixes: 99bd9956551b ("module: Introduce module unload taint tracking")
+Signed-off-by: Binbin Deng <18983559317@163.com>
+---
+ kernel/module/tracking.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[Severity: Medium]
-Does the "+m" constraint here force the len variable into memory rather
-than a register? The commit message explicitly states the intent is to veri=
-fy
-a parameter "encoded in a register", but this constraint forces a stack spi=
-ll
-instead.
+diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
+index 9033ff54c4e2..9e8902600c32 100644
+--- a/kernel/module/tracking.c
++++ b/kernel/module/tracking.c
+@@ -38,8 +38,8 @@ int try_add_tainted_module(struct module *mod)
+ 		return -ENOMEM;
+ 	strscpy(mod_taint->name, mod->name, MODULE_NAME_LEN);
+ 	mod_taint->taints = mod->taints;
+-	list_add_rcu(&mod_taint->list, &unloaded_tainted_modules);
+ 	mod_taint->count = 1;
++	list_add_rcu(&mod_taint->list, &unloaded_tainted_modules);
+ out:
+ 	return 0;
+ }
+-- 
+2.43.0
 
-> +	return len;
-> +}
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
-selftests/bpf/trace_helpers.c
-> index 679008b310d9a..f3a1d627699da 100644
-> --- a/tools/testing/selftests/bpf/trace_helpers.c
-> +++ b/tools/testing/selftests/bpf/trace_helpers.c
-[ ... ]
-> +unsigned long long module_get_base_addr(const char *module)
-> +{
-> +	unsigned long long addr, base_addr =3D 0;
-> +	char name[500];
-> +	FILE *f;
-> +
-> +	f =3D fopen("/proc/modules", "r");
-> +	if (!f)
-> +		return 0;
-> +
-> +	while (fscanf(f, "%499s %*s %*s %*s %*s 0x%llx", name, &addr) =3D=3D 2)=
- {
-
-[Severity: Medium]
-Will this loop terminate prematurely if it encounters trailing data on a li=
-ne
-in /proc/modules?
-
-If a module (like an out-of-tree or unsigned module) has an optional traili=
-ng
-taint string such as "(O)", this fscanf format lacks a line consumer (like
-%*[^\n]\n) to read to the end of the line.
-
-On the next iteration, the %499s token will mistakenly consume the leftover
-taint string instead of the next module's name, shifting all subsequent fie=
-lds
-by one token. When the 0x%llx field then attempts to parse the state string
-(e.g., "Live"), it will fail to match the "0x" prefix and return 1, causing
-the loop to exit early and return 0 instead of the correct base address.
-
-> +		if (strcmp(module, name) =3D=3D 0) {
-> +			base_addr =3D addr;
-> +			break;
-> +		}
-> +	}
-> +	fclose(f);
-> +	return base_addr;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009112324.1442=
-319-1-alan.maguire@oracle.com?part=3D7
