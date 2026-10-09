@@ -1,323 +1,170 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1A945563C;
-	Fri,  9 Oct 2026 11:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DD54CE677
+	for <linux-modules@vger.kernel.org>; Fri,  9 Oct 2026 11:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545074; cv=none; b=U+VJKKX85txWO3u01tC9zfhNUmxlbm4a/mQclU+pdEO5gVe0bemsNyFntXHeLNRWfgbfQWBpPAsVjVMfnxmns6dD+lh4IGxl/ENwtjxUqzRIRU89ti8OM7JP42NEtUST1r213eTKUZpYfB8y85UXVdsZbCWj+Rfll1RO2hmcCNI=
+	t=1791545367; cv=none; b=hVIe3NeClRp0Hje9GtUQgwEeQxsafGxysY/YZu3NaUiYtg4DN3cMxszD7BVb9as4NsbCevV/uDbv25qpuI15T/YINvrul29IUYsX05SHj1tdbSH5lOWEQ1UVWfAbB4+Kft3CWG7VgJCuJ+04ipJBCpCymlRiJggha6VFZ/2wEcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545074; c=relaxed/simple;
-	bh=JTOAe0WMVeMIfFPb9biGr/1hyvAxGzlIzCkCUbkikqk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yb+WUv4eqRiiWYEzONv8GVdyVVZe2jUwD12RS16s1aNwEVgX+C/G61Wmok4a5gqytiEehxNHltgsEmwS7jj1L0grNucqfLvjUtwgo1f5v/2Ti9xMb1o0lD8LOpdEqBr0piB6KHbJ3YW2xFqX6AtSy+hPv2fHLruGyIdMBcBQYMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AOonaN69; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1791545367; c=relaxed/simple;
+	bh=9x2VgaCQqq1qe9Sd3mI+ji7pCRHxHu0WOqvf+sHVC10=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nzrZor5MouatyJQ9eCH8dmkU2wTGR51aE7GZ9vnFQiH9taK8fM2ewfdP/yNeo+sVnzKy8vtD21oHRca/HqUipZ4LeISKJ/ZXlqQlK1GD7JnwDuVvd3J0TllCsXNdYmXsg14aAoHOb4r1gwwmrtjjTKqdSyddua4KudH1/DMLx7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oIAtzHD+; arc=none smtp.client-ip=95.215.58.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AOonaN69"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 698K9hqt1377913;
-	Fri, 9 Oct 2026 11:23:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=y66z2
-	bLOwa85XnfgLXjz5KVIShSicVkgR4cQw0Jd7Oc=; b=AOonaN69m6l9D3yKS/eWz
-	YBRB63c/LpgkwV0pXfcgSVfAWn47hJxnoWCfNT7n8yskvdUWHxs189QRm2FTeIcG
-	jBkdfv4GcSnmm67XmKWyK5jCozDilihbKYDbmbjoRuBSI7RTx/qfLuSaysKedmIi
-	+LORfF1X3RQsptjYCfNmI7whAElGcuE7CokXzXN6sMx7lpLdmISX+Lea+99YBA++
-	ushNd5P0kN57xqbNPnE6fWB8Pisn3l+Znk5Avq9a9FmDL5eIB9JRQdTGgSYO2xwg
-	kGAFzRCk6Uy96DVV6FErdEEr+xExaUIeEjQcI2tt9/ZIvd0VmIf3qvQFKBs8ERd7
-	g==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4h5xeyb0jg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 09 Oct 2026 11:23:54 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 699BLjSX039833;
-	Fri, 9 Oct 2026 11:23:53 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4h5xfcsngy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 09 Oct 2026 11:23:53 +0000 (GMT)
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 699BNRke006543;
-	Fri, 9 Oct 2026 11:23:52 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-85-231.vpn.oracle.com [10.154.85.231])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4h5xfcsn8m-8;
-	Fri, 09 Oct 2026 11:23:52 +0000 (GMT)
-From: Alan Maguire <alan.maguire@oracle.com>
-To: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
-        jolsa@kernel.org
-Cc: ihor.solodrai@linux.dev, yonghong.song@linux.dev, song@kernel.org,
-        qmo@kernel.org, martin.lau@linux.dev, memxor@gmail.com,
-        emil@etsalapatis.com, mcgrof@kernel.org, petr.pavlu@suse.com,
-        tj@kernel.org, kees@kernel.org, nathan@kernel.org, arnd@arndb.de,
-        puranjay@kernel.org, yatsenko@meta.com, atenart@kernel.org,
-        ojeda@kernel.org, linux-modules@vger.kernel.org,
-        arnaldo.melo@gmail.com, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v4 bpf-next 7/7] selftests/bpf: Add a test verifying inline information
-Date: Fri,  9 Oct 2026 12:23:24 +0100
-Message-ID: <20261009112324.1442319-8-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20261009112324.1442319-1-alan.maguire@oracle.com>
-References: <20261009112324.1442319-1-alan.maguire@oracle.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oIAtzHD+"
+X-Envelope-To: linux-modules@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=9x2VgaCQqq1qe9Sd3mI+ji7pCRHxHu0WOqvf+sHVC10=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791545353; v=1; x=1792150153;
+ b=oIAtzHD+uyGDbZl2cSPP5H6EUsoC6yqhf1U++gKNvFIMGOyKEhJClrLnVuvCY793VrA007Y7
+ 5eas06fDn2HdlS0g6su4jxWsW63kqxYajDnrDpvqWf1nPUNL8H5v6V5Vf43MWNRIQPhU9aYyojF
+ tf6q36X2dohhfQoMuRkM9n0E=
+X-Envelope-To: linux-modules@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 13a9e522eed7582a;
+	Fri, 09 Oct 2026 11:29:13 +0000
+X-Mizu-Trace-ID: 13a9e522eed7582a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <839d13ef-8ca3-4e58-9bd0-84137f2d6866@linux.dev>
+Date: Fri, 9 Oct 2026 19:30:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 0/7] alloc_tag and module codetag section fixes
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Alexander Potapenko <glider@google.com>,
+ Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Brendan Jackman <brendan.jackman@linux.dev>,
+ Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+ Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ kasan-dev@googlegroups.com
+References: <20260929082014.160587-1-hao.ge@linux.dev>
+ <20260929134401.a1a385ff4369661f879b5d2f@linux-foundation.org>
+ <CAJuCfpFRW3uNUW_VrjpOfLwS1LBHqGEpqK3yBTPSpGOORY5jiQ@mail.gmail.com>
+ <fc4f3d08-393f-43ed-934b-e7e1ba6d0137@linux.dev>
+ <CAJuCfpGAZUcQnursYh=rvp+EzckvDmXX_KveJvEuyjzzG=9mww@mail.gmail.com>
+Content-Language: en-US
+From: Hao Ge <hao.ge@linux.dev>
+In-Reply-To: <CAJuCfpGAZUcQnursYh=rvp+EzckvDmXX_KveJvEuyjzzG=9mww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-09_03,2026-10-08_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- suspectscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
- phishscore=0 lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2610020000 definitions=main-2610090045
-X-Proofpoint-ORIG-GUID: pxBHudGmAU0hDe0in06RlnXT3Vid6ap-
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfX9h/94Vi3nobv
- Y4AtBOT/r7Og1z0sfpzt17ggS68svUPPTNoX4ofIOgydvH3hQmG+HuruAEVkaVLEOqhcFcdqTLk
- diEW/es5ws5OxoXZ0YD8Lj/oBvkdNlqT04Hdc9mmJtQteUXkd7HQ
-X-Proofpoint-GUID: pxBHudGmAU0hDe0in06RlnXT3Vid6ap-
-X-Authority-Analysis: v=2.4 cv=e6mT2qp/ c=1 sm=1 tr=0 ts=6ac8ceca b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=3OloApC0oWR4td_TvfEA:9
- a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12108
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfX/ejD/da9gQQL
- 8XSSNdnQ8SRMD21g5uOqrYHDBvgM4x6kMjFqzO8Wj4gbd/x3n/aNLG4tzAddWbIwcf4LnM3gjvX
- JGs42ZEsOY4SqIg7dFJjMWN0g0/DAJubQGYZVPE+CeAvq14epwket/w2Va8gts3x2jxqIo5FYMR
- reG/5WEKnFFXfYxKzvUqzhLkmxFgisxqklQNAjOyk/ZtoL4NqlU9poREy6k4DBGxDAykPwwJQud
- qEg02qSFoW6OaHk5LtzIEhPcXQPt5+FibRCr4fRmw3zLfONIIKc4Lw1FKukWmwpYiEmnOITSodT
- fg56MP2Mfd8HGz/e7mV6TpaGAfiWpdLfY2IKyxgfX6ln0VXWBh1yXHa0fzFyKAeJQs6saf1UneM
- WaLNgzb6l2W5R/6cwmkNFLSwUiOTLTah62AIJdA5W0cSgLDwkLOC2HOAH+szryaHfbwAa7aUw57
- rNckpRkWFWTplyhPEF4tBULaKikpGx/5T4QhtRCc=
 
-For bpf_testmod verify that we have inline info for an
-__always_inline'd function and it matches reasonable
-expectations (a single location parameter encoded in a
-register given that it cannot be compile-time optimized).
+Hi Suren
 
-Also verify that the offset of the LOCSEC descriptor makes
-sense, i.e. that it is in the range of the function where
-it was inlined.
+On 2026/10/5 02:37, Suren Baghdasaryan wrote:
+> On Wed, Sep 30, 2026 at 5:25 AM Hao Ge <hao.ge@linux.dev> wrote:
+>>
+>> Hi Suren and Andrew
+>>
+>>
+>> On 2026/9/30 10:39, Suren Baghdasaryan wrote:
+>>> On Tue, Sep 29, 2026 at 8:44 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>>>>
+>>>> On Tue, 29 Sep 2026 16:20:07 +0800 Hao Ge <hao.ge@linux.dev> wrote:
+>>>>
+>>>>> With profiling toggled off, the overflow check in
+>>>>> reserve_module_tags() did not run, a module could load with more
+>>>>> tags than the page flags can address, and re-enabling profiling
+>>>>> then silently corrupted /proc/allocinfo. On overflow the fix shuts
+>>>>> profiling down, releases the reservation and returns -EAGAIN, and
+>>>>> the codetag section lands as regular module data in the same load,
+>>>>> so the module loads without profiling.
+>>>>>
+>>>>> Review of the earlier series by Sashiko turned up more problems.
+>>>>>
+>>>>> One is a race. layout_sections() and move_module() both asked
+>>>>> codetag_needs_module_section() where a codetag section goes, and
+>>>>> mem_profiling_support can change between the two calls, for instance
+>>>>> when another module load overflows the tag index and shuts profiling
+>>>>> down. move_module() then copied the codetag section to offset 0 of
+>>>>> its regular destination and clobbered the first section placed in
+>>>>> that region.
+>>>>>
+>>>>> v7 reworks where codetag sections are allocated, on a prototype by
+>>>>> Petr Pavlu [1]. The allocation runs before layout_sections() and the
+>>>>> placement is decided in one step, so nothing re-asks the question
+>>>>> and the race is gone. The retry is gone too, on -EAGAIN the section
+>>>>> is laid out as regular module data right in the same load.
+>>>>
+>>>> Thanks.
+>>>>
+>>>> Seven patches, all cc:stable.  Why is a backport proposed?
+>>>> Documentation/process/stable-kernel-rules.rst gives guidelines - does
+>>>> this series meet them?  Does Suren have thoughts?
+>>
+>> Thanks, I've just gone through this carefully.
+>>
+>>>
+>>> I think vmalloc fix in patch#2 should be posted separately and clearly
+>>> quialifies for backporting as if fixes issues Hao found at [1].
+>>
+>> Agreed. Patch #2 was added to this patch series because vm_module_tags_populate
+>> suffers from the same issue. If we want to be more conservative, I'd prefer to keep
+>> vm_module_tags_populate as it was in V10:
+>> https://lore.kernel.org/all/20260915070001.113559-3-hao.ge@linux.dev/
+> 
+> I disagree with this approach. That means we are introducing an extra
+> code inside vm_module_tags_populate() only to clean it up later.
+> Instead please post Patch #2 separately. That posting should have your
+> current patch that changes vmap_pages_xxx() to clean up on failure,
+> followed by patch(es) which remove unnecessary cleanup that some
+> functions currently perform by themselves. This patchset should
+> definitely be tagged for stable.
 
-Because bpf_testmod is treated as an out-of-tree module,
-the inline information will be in btf_testmod.inline which
-is relocated using bpf_testmod.ko .BTF.base.
+You are right. Sorry for the confusion - my earlier deviation came
+from not fully understanding the rules for getting patches into the
+stable trees.
 
-Test is skipped if pahole does not encode inline info.
+> Once that patchset is accepted, the rest of your current patchset
+> fixing alloc_tags can be posted with correct assumption that
+> vmap_pages_range() cleans up its partial mapping when it fails.
+> 
+> I know this sequence will take longer to upstream but I think it's the
+> right way to go.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- .../selftests/bpf/prog_tests/btf_inline.c     | 113 ++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  11 +-
- tools/testing/selftests/bpf/trace_helpers.c   |  20 ++++
- tools/testing/selftests/bpf/trace_helpers.h   |   1 +
- 4 files changed, 143 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_inline.c
+Make sense. Thanks for your continued support.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_inline.c b/tools/testing/selftests/bpf/prog_tests/btf_inline.c
-new file mode 100644
-index 000000000000..d88fab6429b1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_inline.c
-@@ -0,0 +1,113 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026, Oracle and/or its affiliates. */
-+
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include <bpf/libbpf.h>
-+
-+#define BTF_SYSFS_DIR		"/sys/kernel/btf"
-+#define BTF_INLINE_SUFFIX	".inline"
-+
-+/*
-+ * For a specific inline site, verify we have the right function,
-+ * loc proto and loc param representation and that the offset is
-+ * reasonable given the caller where it was inlined.
-+ */
-+void test_btf_inline(void)
-+{
-+	struct btf *inline_btf = NULL, *btf = NULL, *vmlinux_btf = NULL;
-+	const char *inline_caller = "bpf_testmod_test_write";
-+	const char *inline_func = "testmod_inline_len";
-+	unsigned long long caller_addr, base_addr;
-+	bool skip = false, found_loc = false;
-+	const struct btf_loc_param *lp;
-+	int locsec_id, func_id, n, i;
-+	const struct btf_type *t;
-+	struct btf_loc *l;
-+	const __u32 *p;
-+	int err = 0;
-+
-+	if (!env.has_testmod) {
-+		test__skip();
-+		return;
-+	}
-+
-+	base_addr = module_get_base_addr("bpf_testmod");
-+	if (!ASSERT_NEQ(base_addr, 0, "base_addr_nonzero"))
-+		return;
-+
-+	if (!ASSERT_OK(kallsyms_find(inline_caller, &caller_addr),
-+		       "find_inline_caller"))
-+		return;
-+	if (!ASSERT_NEQ(caller_addr, 0, "caller_addr_nonzero"))
-+		return;
-+	if (!ASSERT_GT(caller_addr, base_addr, "caller_addr_gt_base_addr"))
-+		return;
-+	caller_addr -= base_addr;
-+
-+	vmlinux_btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(vmlinux_btf, "vmlinux_btf"))
-+		return;
-+
-+	btf = btf__parse_split(BTF_SYSFS_DIR "/bpf_testmod", vmlinux_btf);
-+	if (!ASSERT_OK_PTR(btf, "bpf_testmod_btf"))
-+		goto out;
-+
-+	inline_btf = btf__parse_split(BTF_SYSFS_DIR "/bpf_testmod" BTF_INLINE_SUFFIX,
-+				      btf);
-+	err = libbpf_get_error(inline_btf);
-+	/* pahole may not have inline BTF feature support. */
-+	if (err == -ENOENT) {
-+		skip = true;
-+		goto out;
-+	}
-+	if (!ASSERT_OK(err, "parse_inline_btf"))
-+		goto out;
-+	locsec_id = btf__find_by_name_kind(inline_btf, "inline.text", BTF_KIND_LOCSEC);
-+	if (locsec_id < 0) {
-+		skip = true;
-+		goto out;
-+	}
-+	func_id = btf__find_by_name_kind(inline_btf, inline_func, BTF_KIND_FUNC);
-+	if (!ASSERT_GT(func_id, 0, "inline_caller_func"))
-+		goto out;
-+	t = btf__type_by_id(inline_btf, locsec_id);
-+	n = btf_vlen(t);
-+	for (i = 0, l = btf_locsec_locs(t); i < n; i++, l++) {
-+		if (l->func == func_id) {
-+			found_loc = true;
-+			break;
-+		}
-+	}
-+	if (!ASSERT_TRUE(found_loc, "found_loc"))
-+		goto out;
-+	if (!ASSERT_GT(l->loc_proto, 0, "loc_proto_id"))
-+		goto out;
-+	if (!ASSERT_GT(l->offset, 0, "loc_offset"))
-+		goto out;
-+	t = btf__type_by_id(inline_btf, l->loc_proto);
-+	if (!ASSERT_OK_PTR(t, "loc_proto_ptr"))
-+		goto out;
-+	if (!ASSERT_EQ(btf_vlen(t), 1, "loc_proto_one_param"))
-+		goto out;
-+	p = btf_loc_proto_params(t);
-+	if (!ASSERT_GT(*p, 0, "loc_proto_has_loc_param"))
-+		goto out;
-+	t = btf__type_by_id(inline_btf, *p);
-+	if (!ASSERT_OK_PTR(t, "loc_param_ptr"))
-+		goto out;
-+	lp = btf_loc_param(t);
-+	if (!ASSERT_TRUE(lp->flags & BTF_LOC_PARAM_REG, "param_has_reg"))
-+		goto out;
-+	if (!ASSERT_GT(l->offset, caller_addr, "inline_gt_caller"))
-+		goto out;
-+	/* simple sanity test to roughly ensure inline site still in function */
-+	if (!ASSERT_LT(l->offset, caller_addr + 512, "inline_in_caller"))
-+		goto out;
-+out:
-+	btf__free(inline_btf);
-+	btf__free(btf);
-+	btf__free(vmlinux_btf);
-+	if (skip)
-+		test__skip();
-+}
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 93847ca6293b..b4f0af2aeca4 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -735,6 +735,13 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- EXPORT_SYMBOL(bpf_testmod_test_read);
- ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO);
- 
-+static __always_inline size_t testmod_inline_len(size_t len)
-+{
-+	/* Keep an instruction in the inline site without changing len. */
-+	asm volatile("" : "+m"(len));
-+	return len;
-+}
-+
- noinline ssize_t
- bpf_testmod_test_write(struct file *file, struct kobject *kobj,
- 		      const struct bin_attribute *bin_attr,
-@@ -743,7 +750,7 @@ bpf_testmod_test_write(struct file *file, struct kobject *kobj,
- 	struct bpf_testmod_test_write_ctx ctx = {
- 		.buf = buf,
- 		.off = off,
--		.len = len,
-+		.len = testmod_inline_len(len),
- 	};
- 
- 	trace_bpf_testmod_test_write_bare_tp(current, &ctx);
-@@ -802,7 +809,7 @@ static struct testmod_uprobe uprobe = {
- 	.consumer.ret_handler = uprobe_ret_handler,
- };
- 
--static int testmod_register_uprobe(loff_t offset)
-+static __always_inline int testmod_register_uprobe(loff_t offset)
- {
- 	int err = -EBUSY;
- 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 679008b310d9..f3a1d627699d 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -244,6 +244,26 @@ int kallsyms_find(const char *sym, unsigned long long *addr)
- 	return err;
- }
- 
-+unsigned long long module_get_base_addr(const char *module)
-+{
-+	unsigned long long addr, base_addr = 0;
-+	char name[500];
-+	FILE *f;
-+
-+	f = fopen("/proc/modules", "r");
-+	if (!f)
-+		return 0;
-+
-+	while (fscanf(f, "%499s %*s %*s %*s %*s 0x%llx", name, &addr) == 2) {
-+		if (strcmp(module, name) == 0) {
-+			base_addr = addr;
-+			break;
-+		}
-+	}
-+	fclose(f);
-+	return base_addr;
-+}
-+
- #ifdef PROCMAP_QUERY
- int env_verbosity __weak = 0;
- 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-index 01c8ecc45627..eb0d0d9804d6 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -38,6 +38,7 @@ typedef int (*ksym_search_cmp_t)(const void *p1, const struct ksym *p2);
- int load_kallsyms(void);
- struct ksym *ksym_search(long key);
- long ksym_get_addr(const char *name);
-+unsigned long long module_get_base_addr(const char *module);
- 
- struct ksyms *load_kallsyms_local(void);
- struct ksym *ksym_search_local(struct ksyms *ksyms, long key);
--- 
-2.43.5
+Best Regards
+Hao
 
+> 
+>>
+>> Then we can submit a fix for __GFP_NOFAIL retry loop in __vmalloc_area_node() as a hotfix together
+>> with our new patch #2. While at it, we can also check if there are any unnecessary calls to
+>> vunmap_range family functions that can be cleaned up now that patch #2 is applied.
+>>
+>>
+>>>
+>>> The rest are also bug fixes but their size is concerning. I'll review
+>>> them first before advising on which ones should be backported. Some
+>>> fixes address issues that happen very rarely and if a fix is too
+>>> complex it might make sense to leave it be or fix it some other way
+>>> with less churn. Please give me a couple of days to review them. With
+>>> the upcoming LPC I'm trying to multiplex between several projects.
+>>
+>> Thanks, sorry for all the hassle on you folks.
+>>
+>> Thanks
+>> Best Regards
+>> Hao
+>>
+>>>
+>>> [1] https://lore.kernel.org/all/b8005c24-ecac-45c4-840a-fd282f9693b5@linux.dev/
+>>>
+>>>>
+>>>> Also, Sashiko has been busy again:
+>>>>         https://sashiko.dev/#/patchset/20260929082014.160587-1-hao.ge@linux.dev
