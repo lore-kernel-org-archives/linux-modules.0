@@ -1,150 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8370444C4FA
-	for <linux-modules@vger.kernel.org>; Sun, 11 Oct 2026 13:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A3E42A165
+	for <linux-modules@vger.kernel.org>; Sun, 11 Oct 2026 13:01:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791723685; cv=none; b=VXrF9joBSaCfJe64M8df0uMIXHwISshFrv9iNRQOXs/umk5y4/f7aupr+TWpr7YX9zJMiEgxsYSnOdstS/gE6xBgsDf+ojpaDwdRFhhVOEgFRcnqlNEImncOW5wKK/tqJjKYXGFX1bKtdQ4G9vTDmgor6NtZlVrE/I9yiBYbSSo=
+	t=1791723691; cv=none; b=plebz0lsOxLobXhHv6oO7dvv3vcE2UXw/z/Xw3KKLeoJgOn42BYsXxzMoEOxB+32FbzKJE/s+xq63qTNYpnmttblz6AMpL+7w/JjZVQzSyzHDy+oCCYQAercftO3jlYZNzIYclCoIbi33F4hHeSvV1cMqC5XMUPQRJXuUCL9hxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791723685; c=relaxed/simple;
-	bh=mHMq/cxdf7xSS8tEqwkAucejcch2sqPrezATaxQBz9Y=;
+	s=arc-20240116; t=1791723691; c=relaxed/simple;
+	bh=Yro/87TlbesoA1taNYt8P1e60WdskwBwb0J277ZCQpc=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=AdrNQJTvgAGbUW13Ts/LSl6v4SL7M6jJZcotbjCO2cOnHrRC4HV6s88lsbnB8gUGT/eimhOyiksq/6J2XCc80mGxr8ZlctdzCa8D8jBUYLCJAk3+da1dtvP+5zkcVqd7T5h+p6kExMIie0StVvCKfQk62O0Rm2vZ74pGpXQ9tlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nV7hBwJt; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=FXS+rCyhF81XLwBUBq1tVC14K0iNhiK5Pai7N87NsW5f8g2QjrrRacUxe2SrdKoyT6qvagn+Vvt2GQzNbqpxyO+Cmf6jrInwiBElD/QgIgcatWsgIukU/t3F81oWHbL+3tA1HScv1syvg+ZZ/6PYA9S76m0x+5luE0SJb5G2E+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cugE82s9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nV7hBwJt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878BE1F0089B;
-	Sun, 11 Oct 2026 13:01:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cugE82s9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 610731F0089D;
+	Sun, 11 Oct 2026 13:01:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791723679;
-	bh=JSxTBrTy5fc3bjoMB/CuMsWn86+Rh7+1ABIrxsj0FIQ=;
+	s=k20260515; t=1791723685;
+	bh=H6eFBHkwtaFLF7W7Oiv1uJvzdHmTtHYGa4oyvlFrU64=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nV7hBwJtJdB8HBSj19qofzVCuvY1mC7uZyriR95j9IyZazIp6tVuLne1/d81OUyd1
-	 sSiGnWvexwcaLKAj2XxDDcKKsoukQQ3yZyeKCr0VKq37X+B8x11twHpWp2Ndgb/QcO
-	 5fEkTz78VScJRAn3uV4+jglz4nmjs+evA+yBqAcx0uPqEbFwWyH8TnrSmpSfWXjzMN
-	 8IlfW1WoW73PlPRHOdUKekSbDN4MeOfIT4PrhzU4Qmf0dVDc1rGn+bfFZZCJdf7MB8
-	 jJM/5WWJGuDoa9edUIUx5Dgaz+m0meSqT5K1jLebOQvme6kfkbyVfv78FewemTTMW2
-	 mZLbo02/OcLuA==
-Message-ID: <sashiko-outbox-167238@kernel.org>
+	b=cugE82s98N7KhK+lJGrnAGviGeC56DjWq/ACtEpcmd/kmPXa6oEAbxfgq/CmnhyU+
+	 k1FeS/IyhICGzBaw/4V4oMATIMofrwV7x9otNy6Jt0geVmjNGvQHbXZIiyufVaco6Y
+	 nrdhPWk4B2znDzFd0RA2Bm9omkBJFElj8kFHc37jK+tjGZvdCnSA/R3oU1yTE/Ox+R
+	 B2L6Co+Ytp8w0flWUIUgLmUPmBhwMZ4rQhNdeV98Ja9v5wyN5Qmsf/xssEv53ImZig
+	 eYGVSQCPZLqouZdG6gpJaLU4RQN1vzOZgk+uCdJupmyECetCyFvHh7AeFUB/eE68pk
+	 HATJC/y0iq63g==
+Message-ID: <sashiko-outbox-167239@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 09/11] rust: print: enable dynamic debug for
- pr_debug!()
+Subject: Re: [PATCH RFC 11/11] rust: device: enable dynamic debug for
+ dev_dbg!()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
-Cc: linux-modules@vger.kernel.org, gary@garyguo.net, "Petr Pavlu" <petr.pavlu@suse.com>, ojeda@kernel.org
-In-Reply-To: <20261011-rust-dyndbg-v1-9-832e4039b71f@weissschuh.net>
+Cc: "Petr Pavlu" <petr.pavlu@suse.com>, linux-modules@vger.kernel.org, ojeda@kernel.org, gary@garyguo.net
+In-Reply-To: <20261011-rust-dyndbg-v1-11-832e4039b71f@weissschuh.net>
 References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
- <20261011-rust-dyndbg-v1-9-832e4039b71f@weissschuh.net>
+ <20261011-rust-dyndbg-v1-11-832e4039b71f@weissschuh.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 11 Oct 2026 13:01:19 +0000
+Date: Sun, 11 Oct 2026 13:01:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] rust: print: pr_debug() expands to multiple statements without a b=
-lock
-- [High] rust: print: pr_debug() argument evaluation inside closure breaks =
-control flow
-- [Medium] rust: dynamic_debug: __format_string() rejects macro-generated f=
-ormat strings
+- [Medium] rust: dev_dbg!() unconditionally evaluates formatting arguments =
+and device expression
 --
 
-commit 0f009656f0da58d6ed039063d8a722503a6cbfbf
+commit 8da2aef728fa950b65c5e5a0eaa3ddd52cf5dbeb
 Author: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
-rust: print: enable dynamic debug for pr_debug!()
+rust: device: enable dynamic debug for dev_dbg!()
 
-This commit wires up dynamic debug support for the pr_debug!() macro.
+Wire up dynamic debug to also work for the dev_dbg!() macro.
 
-> diff --git a/rust/kernel/print.rs b/rust/kernel/print.rs
-> index 9ce52b9fa69f0..9a0870c2df940 100644
-> --- a/rust/kernel/print.rs
-> +++ b/rust/kernel/print.rs
+> diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+> index 2d49063f4f7c8..db2c9adc5410e 100644
+> --- a/rust/kernel/device.rs
+> +++ b/rust/kernel/device.rs
 
 [ ... ]
 
-> @@ -392,6 +391,13 @@ macro_rules! pr_info (
->  #[doc(alias =3D "print")]
->  macro_rules! pr_debug (
->      ($($arg:tt)*) =3D> (
-
-[Severity: High]
-Does this expansion cause syntax errors when pr_debug!() is used in an
-expression context?
-
-The pr_debug!() macro is documented to mimic std::print!(), which evaluates=
- to
-() and can be used in expression positions like match arms or tail expressi=
-ons.
-
-Because this macro expands using ( ... ) instead of a { ... } block, it
-exposes multiple #[cfg(...)] gated items and a trailing semicolon directly =
-to
-the call site's AST.
-
-If a driver calls let _ =3D pr_debug!(...);, won't the Rust parser fail
-expecting a single expression, returning an error about ignoring the semico=
-lon
-and following tokens?
-
-> +        // TODO: Switch to cfg_select!() when that is usable.
-> +        #[cfg(any(CONFIG_DYNAMIC_DEBUG, all(CONFIG_DYNAMIC_DEBUG_CORE, d=
-ebug_assertions)))]
-> +        $crate::dynamic_func_call!($crate::__format_string!($($arg)+), |=
-| {
+> @@ -918,6 +918,15 @@ macro_rules! dev_dbg {
+>      ($dev:expr, $($f:tt)*) =3D> {
+>          match (&$dev, $crate::prelude::fmt!($($f)*)) {
+>              (dev, args) =3D> {
+> +                // TODO: Switch to cfg_select!() when that is usable.
+> +                #[cfg(any(CONFIG_DYNAMIC_DEBUG, all(CONFIG_DYNAMIC_DEBUG=
+_CORE, debug_assertions)))]
+> +                $crate::dynamic_func_call!($crate::__format_string!($($f=
+)*), || {
+> +                    // SAFETY: klevel is null-terminated, uses one of th=
+e kernel constants.
+> +                    unsafe { $crate::dev_printk!($crate::bindings::KERN_=
+DEBUG, dev, args) }
+> +                });
 
 [Severity: Medium]
-Will this break if the format string is generated by another macro?
+Does this unconditionally evaluate the formatting arguments and device
+expression?
 
-The user-provided arguments are passed to __format_string!():
+Since the match (&$dev, $crate::prelude::fmt!($($f)*)) block is placed
+outside the dynamic debug conditional closure, the fmt! macro and $dev
+expressions are evaluated before the closure is called.
 
-rust/kernel/dynamic_debug.rs:
-macro_rules! __format_string {
-    ($fmt:literal) =3D> {
-        $fmt
-    };
-...
+This causes a performance regression by forcing runtime evaluation of all
+arguments even when the dynamic debug branch is disabled, defeating the
+zero-cost benefit of dynamic debug.
 
-Because __format_string!() strictly expects a literal token, if a driver
-calls pr_debug!(concat!("a", "b")), won't it fail to match the literal patt=
-ern
-and cause a compile error? Standard Rust formatting macros typically allow
-macro-generated format strings.
+Could the match block be placed inside the conditionally executed closure
+passed to dynamic_func_call!, and similarly placed inside the fallback
+if cfg!(debug_assertions) block to properly defer evaluation?
 
-[Severity: High]
-Can evaluating the arguments inside this closure silently break control flo=
-w?
-
-The user-provided arguments $($arg)* are expanded inside the || { ... }
-closure.
-
-If a caller uses a control-flow operator in their arguments, such as
-pr_debug!("Result: {}", do_something()?);, won't the ? operator attempt to
-return from the closure instead of the caller's function?
-
-This would either cause a type mismatch error because the closure returns (=
-),
-or silently return from the print closure while the outer function continues
-executing unexpectedly.
-
-> +            $crate::print_macro!($crate::print::format_strings::DEBUG, f=
-alse, $($arg)*)
-> +        });
 > +
-> +        #[cfg(not(any(CONFIG_DYNAMIC_DEBUG, all(CONFIG_DYNAMIC_DEBUG_COR=
-E, debug_assertions))))]
->          if cfg!(debug_assertions) {
->              $crate::print_macro!($crate::print::format_strings::DEBUG, f=
-alse, $($arg)*)
->          }
->      )
+> +                #[cfg(not(any(CONFIG_DYNAMIC_DEBUG,
+> +                          all(CONFIG_DYNAMIC_DEBUG_CORE, debug_assertion=
+s))))]
+>                  if cfg!(debug_assertions) {
+>                      // SAFETY: klevel is null-terminated, uses one of th=
+e kernel constants.
+>                      unsafe { $crate::dev_printk!($crate::bindings::KERN_=
+DEBUG, dev, args) }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261011-rust-dyndb=
-g-v1-0-832e4039b71f@weissschuh.net?part=3D9
+g-v1-0-832e4039b71f@weissschuh.net?part=3D11
