@@ -1,129 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4F22AD03
-	for <linux-modules@vger.kernel.org>; Sun, 11 Oct 2026 13:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8370444C4FA
+	for <linux-modules@vger.kernel.org>; Sun, 11 Oct 2026 13:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791723684; cv=none; b=q1GlOUOW4xnljRpZMec7D9T88hCldwWPNyvljsa4D028ivubDpC6DkfPJaHJyeFtNXgowuve1ZA7M91qn7O0pkCyw9JQOGYC0hplKQmppoKFXwcBpMcTghOuzJji6ymDjqPUUM5qmLjgyXqcWB/WArTZGClF3MtH+S16mNPCTEk=
+	t=1791723685; cv=none; b=VXrF9joBSaCfJe64M8df0uMIXHwISshFrv9iNRQOXs/umk5y4/f7aupr+TWpr7YX9zJMiEgxsYSnOdstS/gE6xBgsDf+ojpaDwdRFhhVOEgFRcnqlNEImncOW5wKK/tqJjKYXGFX1bKtdQ4G9vTDmgor6NtZlVrE/I9yiBYbSSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791723684; c=relaxed/simple;
-	bh=OEVBkLqYykcE/+jx4rbQHGQR1bljNkG4f/vxgOQMwG0=;
+	s=arc-20240116; t=1791723685; c=relaxed/simple;
+	bh=mHMq/cxdf7xSS8tEqwkAucejcch2sqPrezATaxQBz9Y=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=qqMv7IyTuCAJ68gfhQdB4VhbW7zOF6zoDF0O42q6Xh2n3b82CiBzdPjc09gbA9zi0wSEWJl07K56biVfySkfk9leSj8j8yTky+y3SjV9yNC3Ux+Uftxv3SccuQeG15fochjKmIGxO8tmtlh+ELStCAeOPa9Muazbta0Bc4wQOu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXBTcm2H; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=AdrNQJTvgAGbUW13Ts/LSl6v4SL7M6jJZcotbjCO2cOnHrRC4HV6s88lsbnB8gUGT/eimhOyiksq/6J2XCc80mGxr8ZlctdzCa8D8jBUYLCJAk3+da1dtvP+5zkcVqd7T5h+p6kExMIie0StVvCKfQk62O0Rm2vZ74pGpXQ9tlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nV7hBwJt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXBTcm2H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE0711F0089C;
-	Sun, 11 Oct 2026 13:01:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nV7hBwJt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878BE1F0089B;
+	Sun, 11 Oct 2026 13:01:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791723674;
-	bh=xJxHkzyMyiickXnDvtnhNNGQFzhvZOOCEwkYL8YuDfs=;
+	s=k20260515; t=1791723679;
+	bh=JSxTBrTy5fc3bjoMB/CuMsWn86+Rh7+1ABIrxsj0FIQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oXBTcm2HmZomKhx1I0YHG2XUzUY2a2SrYeY7jgqKuWN8OEXO+t14I5HOvETEI53/C
-	 5Dm/MUtSEo0bSHkl/usTRT7dmLYauqDAlPetHgUo3MHJs4TwY2/7XC3D0qvq2CVJWk
-	 GsH4+zZeiiVaqQKvU4QsXRh2MiPgIHaU+WulZkZf3O5lM1ExgHh+4kpdMpZdy27/Bx
-	 G54RXhULSCFYoyTGBE2YcfKLk0HX5+h4jSAdxibky3ygsmurcnXPFx83CDywVRwztY
-	 at58mFawxZIlYy2vkRRkPcc+4Zp5DmE9vvsygVEQ1n4EViSPQKamyCTaDUY8kw1fCt
-	 WOi18bU1DyQBw==
-Message-ID: <sashiko-outbox-167237@kernel.org>
+	b=nV7hBwJtJdB8HBSj19qofzVCuvY1mC7uZyriR95j9IyZazIp6tVuLne1/d81OUyd1
+	 sSiGnWvexwcaLKAj2XxDDcKKsoukQQ3yZyeKCr0VKq37X+B8x11twHpWp2Ndgb/QcO
+	 5fEkTz78VScJRAn3uV4+jglz4nmjs+evA+yBqAcx0uPqEbFwWyH8TnrSmpSfWXjzMN
+	 8IlfW1WoW73PlPRHOdUKekSbDN4MeOfIT4PrhzU4Qmf0dVDc1rGn+bfFZZCJdf7MB8
+	 jJM/5WWJGuDoa9edUIUx5Dgaz+m0meSqT5K1jLebOQvme6kfkbyVfv78FewemTTMW2
+	 mZLbo02/OcLuA==
+Message-ID: <sashiko-outbox-167238@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 10/11] rust: device: remove logging methods
+Subject: Re: [PATCH RFC 09/11] rust: print: enable dynamic debug for
+ pr_debug!()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
-Cc: ojeda@kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>, linux-modules@vger.kernel.org, gary@garyguo.net
-In-Reply-To: <20261011-rust-dyndbg-v1-10-832e4039b71f@weissschuh.net>
+Cc: linux-modules@vger.kernel.org, gary@garyguo.net, "Petr Pavlu" <petr.pavlu@suse.com>, ojeda@kernel.org
+In-Reply-To: <20261011-rust-dyndbg-v1-9-832e4039b71f@weissschuh.net>
 References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
- <20261011-rust-dyndbg-v1-10-832e4039b71f@weissschuh.net>
+ <20261011-rust-dyndbg-v1-9-832e4039b71f@weissschuh.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 11 Oct 2026 13:01:13 +0000
+Date: Sun, 11 Oct 2026 13:01:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] rust: dev_dbg!: unconditional evaluation of formatting arguments
-- [Low] rust: Device::printk missing #[inline] attribute
+- [High] rust: print: pr_debug() expands to multiple statements without a b=
+lock
+- [High] rust: print: pr_debug() argument evaluation inside closure breaks =
+control flow
+- [Medium] rust: dynamic_debug: __format_string() rejects macro-generated f=
+ormat strings
 --
 
-commit b813060ef1de2d7eca47689d919683f6792237c4
+commit 0f009656f0da58d6ed039063d8a722503a6cbfbf
 Author: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-Subject: rust: device: remove logging methods
 
-This commit removes the logging wrapper methods from the Device struct, mov=
-ing
-the logic into macros that directly call Device::printk. This change allows
-the dynamic debug core to statically allocate descriptors at the macro
-callsite.
+rust: print: enable dynamic debug for pr_debug!()
 
-> diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
-> index 2291d85b6849e..2d49063f4f7c8 100644
-> --- a/rust/kernel/device.rs
-> +++ b/rust/kernel/device.rs
+This commit wires up dynamic debug support for the pr_debug!() macro.
+
+> diff --git a/rust/kernel/print.rs b/rust/kernel/print.rs
+> index 9ce52b9fa69f0..9a0870c2df940 100644
+> --- a/rust/kernel/print.rs
+> +++ b/rust/kernel/print.rs
 
 [ ... ]
 
-> @@ -387,7 +305,7 @@ pub fn pr_dbg(&self, args: fmt::Arguments<'_>) {
->      /// Callers must ensure that `klevel` is null-terminated; in particu=
-lar, one of the
->      /// `KERN_*`constants, for example, `KERN_CRIT`, `KERN_ALERT`, etc.
->      #[cfg_attr(not(CONFIG_PRINTK), allow(unused_variables))]
-> -    unsafe fn printk(&self, klevel: &[u8], msg: fmt::Arguments<'_>) {
-> +    pub unsafe fn printk(&self, klevel: &[u8], msg: fmt::Arguments<'_>) {
+> @@ -392,6 +391,13 @@ macro_rules! pr_info (
+>  #[doc(alias =3D "print")]
+>  macro_rules! pr_debug (
+>      ($($arg:tt)*) =3D> (
 
-[Severity: Low]
-Is it intentional to omit the #[inline] attribute on this function? Accordi=
-ng
-to the Rust subsystem guidelines, small abstraction functions that forward =
-to C
-bindings should be annotated with #[inline] to ensure optimal inlining.
+[Severity: High]
+Does this expansion cause syntax errors when pr_debug!() is used in an
+expression context?
 
->          // SAFETY: `klevel` is null-terminated and one of the kernel con=
-stants. `self.as_raw`
->          // is valid because `self` is valid. The "%pA" format string exp=
-ects a pointer to
+The pr_debug!() macro is documented to mimic std::print!(), which evaluates=
+ to
+() and can be used in expression positions like match arms or tail expressi=
+ons.
 
-[ ... ]
+Because this macro expands using ( ... ) instead of a { ... } block, it
+exposes multiple #[cfg(...)] gated items and a trailing semicolon directly =
+to
+the call site's AST.
 
-> @@ -948,5 +915,14 @@ macro_rules! dev_info {
->  /// ```
->  #[macro_export]
->  macro_rules! dev_dbg {
-> -    ($($f:tt)*) =3D> { $crate::dev_printk!(pr_dbg, $($f)*) }
-> +    ($dev:expr, $($f:tt)*) =3D> {
-> +        match (&$dev, $crate::prelude::fmt!($($f)*)) {
-> +            (dev, args) =3D> {
-> +                if cfg!(debug_assertions) {
+If a driver calls let _ =3D pr_debug!(...);, won't the Rust parser fail
+expecting a single expression, returning an error about ignoring the semico=
+lon
+and following tokens?
+
+> +        // TODO: Switch to cfg_select!() when that is usable.
+> +        #[cfg(any(CONFIG_DYNAMIC_DEBUG, all(CONFIG_DYNAMIC_DEBUG_CORE, d=
+ebug_assertions)))]
+> +        $crate::dynamic_func_call!($crate::__format_string!($($arg)+), |=
+| {
 
 [Severity: Medium]
-Does this match block unconditionally evaluate the formatting arguments bef=
-ore
-the debug_assertions check is performed?
+Will this break if the format string is generated by another macro?
 
-Because the match scrutinee evaluates fmt!($($f)*) eagerly, any computation=
-ally
-expensive operations or side effects in the arguments might be executed eve=
-n in
-release builds.
+The user-provided arguments are passed to __format_string!():
 
-Could the if cfg!(debug_assertions) check wrap the entire match block inste=
-ad
-to ensure zero overhead when debugging is disabled?
+rust/kernel/dynamic_debug.rs:
+macro_rules! __format_string {
+    ($fmt:literal) =3D> {
+        $fmt
+    };
+...
 
-> +                    // SAFETY: `klevel` is null-terminated, uses one of =
-the kernel constants.
-> +                    unsafe { $crate::dev_printk!($crate::bindings::KERN_=
-DEBUG, dev, args) }
-> +                }
-> +            }
-> +        }
-> +    }
->  }
+Because __format_string!() strictly expects a literal token, if a driver
+calls pr_debug!(concat!("a", "b")), won't it fail to match the literal patt=
+ern
+and cause a compile error? Standard Rust formatting macros typically allow
+macro-generated format strings.
+
+[Severity: High]
+Can evaluating the arguments inside this closure silently break control flo=
+w?
+
+The user-provided arguments $($arg)* are expanded inside the || { ... }
+closure.
+
+If a caller uses a control-flow operator in their arguments, such as
+pr_debug!("Result: {}", do_something()?);, won't the ? operator attempt to
+return from the closure instead of the caller's function?
+
+This would either cause a type mismatch error because the closure returns (=
+),
+or silently return from the print closure while the outer function continues
+executing unexpectedly.
+
+> +            $crate::print_macro!($crate::print::format_strings::DEBUG, f=
+alse, $($arg)*)
+> +        });
+> +
+> +        #[cfg(not(any(CONFIG_DYNAMIC_DEBUG, all(CONFIG_DYNAMIC_DEBUG_COR=
+E, debug_assertions))))]
+>          if cfg!(debug_assertions) {
+>              $crate::print_macro!($crate::print::format_strings::DEBUG, f=
+alse, $($arg)*)
+>          }
+>      )
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261011-rust-dyndb=
-g-v1-0-832e4039b71f@weissschuh.net?part=3D10
+g-v1-0-832e4039b71f@weissschuh.net?part=3D9
