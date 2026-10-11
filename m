@@ -1,114 +1,136 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA4444F56A;
-	Sun, 11 Oct 2026 12:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E8C44A411
+	for <linux-modules@vger.kernel.org>; Sun, 11 Oct 2026 13:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791723194; cv=none; b=T2OJ4w0tfhJQO0dvQC0vMmeefDH5Nlil8QEJCrgs4r5pVPT9GCCCxQ2D1+5TiACwrft1hD/Bt1yib3S1Oda4BZiEUXWvPAuY4i59vKlJOquoaJt5thnn/HjmrR5DWgVT+FbYvE8JDNmtY+cF+opmAUWaVV7hUZTkYtgkNzUiWio=
+	t=1791723661; cv=none; b=ImtDafwpWPFX7pZpIu0Muf633ZwQz2bWEIGg76gvJqi86V2qXYrIeN3BGQIgmpwjxB8ook1Pps3ZPTgZa28IqetbSu0TQ7afKhD9ZCyouVQxJYXxAVXeq3Dm0fyn1ow4EtS3csh81X2NXVwpSu93hpiTREArBQaklL/wGpSQk/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791723194; c=relaxed/simple;
-	bh=0X6E8XbcoOuMWft5lPU/aoVPZzU+7VaqeA22p9C0ivc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=f/FID9mHQmDqmxbR4tlMKWc8TyrcLuwxkkMiKxl5VAMlgEDyzFr9kdpZspDWCbNibbyy6Q5jVeVh8EqPRpP4N8mN6/iJICqYTGxdNYdPpbYnKMw6jL9ejkAH5ySJntqId6bo1GiLL5LkAzzI9qlYADojtAn7RNywqcegoSO1t4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=KZ0B8tVe; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1791723661; c=relaxed/simple;
+	bh=WY1FYnWP8y5ybfNL1abpmvLYd0jVLf+Cna+ptCkyEi4=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=Kgfo9JpsgipnTYb1JrBufUo2TQ/nMUM7a9RPMgPkaEu86SBmrMhLarRW8u+iU91hJTsg4dROoo0AM11w2vPyl4EfHAJR4AyKe2ayhSyka5B9zZRvyCpZ8Cx8o7WLPXlGI+/kBUh86ln9/Z/Gqyx3PH/h3LVdl/Ecyd5+opupqoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a622NWlw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="KZ0B8tVe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1791723179;
-	bh=0X6E8XbcoOuMWft5lPU/aoVPZzU+7VaqeA22p9C0ivc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KZ0B8tVe5nRaNoscBVKhSixpsrR/GFM9rbqQMgGrvjnpxQ0PF7EBOemCP1yZ7rq5Y
-	 SywkaQ6HpZ/l1Ox/9WwT8h7U3OMcV+Ste1XKeQa6beGEyCOAYp1vzM3uzvUC3+5NJw
-	 FlakBqidpbBc42i7avRuLd49zs28mzjCdxbor+z0=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 11 Oct 2026 14:52:35 +0200
-Subject: [PATCH RFC 11/11] rust: device: enable dynamic debug for
- dev_dbg!()
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a622NWlw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E3B1F0089B;
+	Sun, 11 Oct 2026 13:00:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791723658;
+	bh=BrXteX7wUGBjdpCZ8B0QoQ10BhkLwgLIi5H9xjP+hgg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=a622NWlwxtcDG5GokItMHYBi9GQhKwHTDpfFXNq5j7IgQwZm82IGi2rfFI2MDgLDs
+	 KIA3RLOT5ZnPSbw3ssHfkLk8QW+673Z3NJtbx0/QpkZx23ojPbgVV4ftpQPLcG2wmf
+	 apfEz+E3BSVnHUvdFqXYvy483MMkEjhSRpgRsDTg/PWbnGVSxrwuUWQWbQ/sTFgD7o
+	 5KKsD2SjZxU9RYh/3NHo/06k1ejfpKyYv40mf7f5ZGb+jFvm0T6520pwPxh3LVrY01
+	 3bgbR1vAYAKHn4jaXtUTLdlIEPMbL113IrzzrplvXdAYBeSPYulpyeEL+hKjnpR/Nl
+	 LsssqMfOW1kwA==
+Message-ID: <sashiko-outbox-167236@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 02/11] rust: sync: atomic: Add Atomic<u{8,16}>
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
+Cc: gary@garyguo.net, linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>, ojeda@kernel.org
+In-Reply-To: <20261011-rust-dyndbg-v1-2-832e4039b71f@weissschuh.net>
+References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
+ <20261011-rust-dyndbg-v1-2-832e4039b71f@weissschuh.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 11 Oct 2026 13:00:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20261011-rust-dyndbg-v1-11-832e4039b71f@weissschuh.net>
-References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
-In-Reply-To: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
-To: Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Andrew Morton <akpm@linux-foundation.org>, Will Deacon <will@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
- Lyude Paul <lyude@redhat.com>, Yury Norov <yury.norov@gmail.com>, 
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- Aaron Tomlin <atomlin@atomlin.com>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, driver-core@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791723177; l=1810;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=0X6E8XbcoOuMWft5lPU/aoVPZzU+7VaqeA22p9C0ivc=;
- b=OUiFdtITI7Ghw4pQ9yWnt9E/xwQl0f2NIw3aLP7PqcCG62vQBU6RIPAb0iHmSKO4Ub5Xu41rt
- ywMaTT4pPzlBqUfknKMY5ExGrV+AD/58/4v+NA9DnnuKHuG2Buh/spJ
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Wire up dynamic debug to also work for the dev_dbg!() macro.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Low] rust: test coverage regression: u32 dropped from atomic_arithmetic_=
+tests
+- [Low] rust: dead code: unusable AtomicAdd implementations for u8 and u16
+--
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- rust/kernel/device.rs | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+commit bff46a0936305602d6b5e98e2a29f7e77f8ccefc
+Author: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
-diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
-index 2d49063f4f7c..db2c9adc5410 100644
---- a/rust/kernel/device.rs
-+++ b/rust/kernel/device.rs
-@@ -896,7 +896,7 @@ macro_rules! dev_info {
- ///
- /// This level should be used for debug messages.
- ///
--/// Equivalent to the kernel's `dev_dbg` macro, except that it doesn't support dynamic debug yet.
-+/// Equivalent to the kernel's `dev_dbg` macro.
- ///
- /// Mimics the interface of [`std::print!`]. More information about the syntax is available from
- /// [`core::fmt`] and [`std::format!`].
-@@ -918,6 +918,15 @@ macro_rules! dev_dbg {
-     ($dev:expr, $($f:tt)*) => {
-         match (&$dev, $crate::prelude::fmt!($($f)*)) {
-             (dev, args) => {
-+                // TODO: Switch to cfg_select!() when that is usable.
-+                #[cfg(any(CONFIG_DYNAMIC_DEBUG, all(CONFIG_DYNAMIC_DEBUG_CORE, debug_assertions)))]
-+                $crate::dynamic_func_call!($crate::__format_string!($($f)*), || {
-+                    // SAFETY: `klevel` is null-terminated, uses one of the kernel constants.
-+                    unsafe { $crate::dev_printk!($crate::bindings::KERN_DEBUG, dev, args) }
-+                });
-+
-+                #[cfg(not(any(CONFIG_DYNAMIC_DEBUG,
-+                          all(CONFIG_DYNAMIC_DEBUG_CORE, debug_assertions))))]
-                 if cfg!(debug_assertions) {
-                     // SAFETY: `klevel` is null-terminated, uses one of the kernel constants.
-                     unsafe { $crate::dev_printk!($crate::bindings::KERN_DEBUG, dev, args) }
+rust: sync: atomic: Add Atomic<u{8,16}>
+   =20
+Add generic atomic support for small unsigned integers that have an
+AtomicImpl with the same size and alignment. Also extend the unit tests.
 
--- 
-2.56.0
+> diff --git a/rust/kernel/sync/atomic/predefine.rs b/rust/kernel/sync/atom=
+ic/predefine.rs
+> index 3d63f40791fa2..4c1fb5e08dc26 100644
+> --- a/rust/kernel/sync/atomic/predefine.rs
+> +++ b/rust/kernel/sync/atomic/predefine.rs
+> @@ -113,6 +113,32 @@ fn rhs_into_delta(rhs: isize) -> isize_atomic_repr {
+>      }
+>  }
+> =20
+> +// SAFETY: `u8` and `i8` has the same size and alignment, and `u8` is ro=
+und-trip transmutable to
+> +// `i8`.
+> +unsafe impl super::AtomicType for u8 {
+> +    type Repr =3D i8;
+> +}
+> +
+> +// SAFETY: The wrapping add result of two `i8`s is a valid `u8`.
+> +unsafe impl super::AtomicAdd<u8> for u8 {
+> +    fn rhs_into_delta(rhs: u8) -> i8 {
+> +        rhs as i8
+> +    }
+> +}
 
+[Severity: Low]
+Does this implementation for u8 result in unusable dead code?
+
+Since the Repr type for u8 is i8, and i8 lacks an AtomicArithmeticOps
+implementation, it seems impossible to call arithmetic methods like fetch_a=
+dd
+or add on Atomic<u8>.
+
+> +// SAFETY: `u16` and `i16` has the same size and alignment, and `u16` is=
+ round-trip transmutable to
+> +// `i16`.
+> +unsafe impl super::AtomicType for u16 {
+> +    type Repr =3D i16;
+> +}
+> +
+> +// SAFETY: The wrapping add result of two `i16`s is a valid `u16`.
+> +unsafe impl super::AtomicAdd<u16> for u16 {
+> +    fn rhs_into_delta(rhs: u16) -> i16 {
+> +        rhs as i16
+> +    }
+> +}
+
+[Severity: Low]
+Does this implementation for u16 also result in unusable dead code?
+
+Similar to u8, the Repr type i16 lacks an AtomicArithmeticOps implementatio=
+n,
+preventing the use of atomic arithmetic methods on Atomic<u16>.
+
+[ ... ]
+
+> @@ -263,7 +289,7 @@ fn atomic_cmpxchg_tests() {
+> =20
+>      #[test]
+>      fn atomic_arithmetic_tests() {
+> -        for_each_type!(42 in [i32, i64, u32, u64, isize, usize] |v| {
+> +        for_each_type!(42 in [i32, i64, u64, isize, usize] |v| {
+
+[Severity: Low]
+Is u32 intentionally dropped from the list of types tested here?
+
+This appears to cause a regression in test coverage for 32-bit unsigned ato=
+mic
+arithmetic operations.
+
+>              let x =3D Atomic::new(v);
+> =20
+>              assert_eq!(v, x.fetch_add(12, Full));
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261011-rust-dyndb=
+g-v1-0-832e4039b71f@weissschuh.net?part=3D2
