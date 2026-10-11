@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E8C44A411
-	for <linux-modules@vger.kernel.org>; Sun, 11 Oct 2026 13:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4F22AD03
+	for <linux-modules@vger.kernel.org>; Sun, 11 Oct 2026 13:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791723661; cv=none; b=ImtDafwpWPFX7pZpIu0Muf633ZwQz2bWEIGg76gvJqi86V2qXYrIeN3BGQIgmpwjxB8ook1Pps3ZPTgZa28IqetbSu0TQ7afKhD9ZCyouVQxJYXxAVXeq3Dm0fyn1ow4EtS3csh81X2NXVwpSu93hpiTREArBQaklL/wGpSQk/g=
+	t=1791723684; cv=none; b=q1GlOUOW4xnljRpZMec7D9T88hCldwWPNyvljsa4D028ivubDpC6DkfPJaHJyeFtNXgowuve1ZA7M91qn7O0pkCyw9JQOGYC0hplKQmppoKFXwcBpMcTghOuzJji6ymDjqPUUM5qmLjgyXqcWB/WArTZGClF3MtH+S16mNPCTEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791723661; c=relaxed/simple;
-	bh=WY1FYnWP8y5ybfNL1abpmvLYd0jVLf+Cna+ptCkyEi4=;
+	s=arc-20240116; t=1791723684; c=relaxed/simple;
+	bh=OEVBkLqYykcE/+jx4rbQHGQR1bljNkG4f/vxgOQMwG0=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=Kgfo9JpsgipnTYb1JrBufUo2TQ/nMUM7a9RPMgPkaEu86SBmrMhLarRW8u+iU91hJTsg4dROoo0AM11w2vPyl4EfHAJR4AyKe2ayhSyka5B9zZRvyCpZ8Cx8o7WLPXlGI+/kBUh86ln9/Z/Gqyx3PH/h3LVdl/Ecyd5+opupqoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a622NWlw; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=qqMv7IyTuCAJ68gfhQdB4VhbW7zOF6zoDF0O42q6Xh2n3b82CiBzdPjc09gbA9zi0wSEWJl07K56biVfySkfk9leSj8j8yTky+y3SjV9yNC3Ux+Uftxv3SccuQeG15fochjKmIGxO8tmtlh+ELStCAeOPa9Muazbta0Bc4wQOu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXBTcm2H; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a622NWlw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E3B1F0089B;
-	Sun, 11 Oct 2026 13:00:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXBTcm2H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE0711F0089C;
+	Sun, 11 Oct 2026 13:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791723658;
-	bh=BrXteX7wUGBjdpCZ8B0QoQ10BhkLwgLIi5H9xjP+hgg=;
+	s=k20260515; t=1791723674;
+	bh=xJxHkzyMyiickXnDvtnhNNGQFzhvZOOCEwkYL8YuDfs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=a622NWlwxtcDG5GokItMHYBi9GQhKwHTDpfFXNq5j7IgQwZm82IGi2rfFI2MDgLDs
-	 KIA3RLOT5ZnPSbw3ssHfkLk8QW+673Z3NJtbx0/QpkZx23ojPbgVV4ftpQPLcG2wmf
-	 apfEz+E3BSVnHUvdFqXYvy483MMkEjhSRpgRsDTg/PWbnGVSxrwuUWQWbQ/sTFgD7o
-	 5KKsD2SjZxU9RYh/3NHo/06k1ejfpKyYv40mf7f5ZGb+jFvm0T6520pwPxh3LVrY01
-	 3bgbR1vAYAKHn4jaXtUTLdlIEPMbL113IrzzrplvXdAYBeSPYulpyeEL+hKjnpR/Nl
-	 LsssqMfOW1kwA==
-Message-ID: <sashiko-outbox-167236@kernel.org>
+	b=oXBTcm2HmZomKhx1I0YHG2XUzUY2a2SrYeY7jgqKuWN8OEXO+t14I5HOvETEI53/C
+	 5Dm/MUtSEo0bSHkl/usTRT7dmLYauqDAlPetHgUo3MHJs4TwY2/7XC3D0qvq2CVJWk
+	 GsH4+zZeiiVaqQKvU4QsXRh2MiPgIHaU+WulZkZf3O5lM1ExgHh+4kpdMpZdy27/Bx
+	 G54RXhULSCFYoyTGBE2YcfKLk0HX5+h4jSAdxibky3ygsmurcnXPFx83CDywVRwztY
+	 at58mFawxZIlYy2vkRRkPcc+4Zp5DmE9vvsygVEQ1n4EViSPQKamyCTaDUY8kw1fCt
+	 WOi18bU1DyQBw==
+Message-ID: <sashiko-outbox-167237@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 02/11] rust: sync: atomic: Add Atomic<u{8,16}>
+Subject: Re: [PATCH RFC 10/11] rust: device: remove logging methods
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
-Cc: gary@garyguo.net, linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>, ojeda@kernel.org
-In-Reply-To: <20261011-rust-dyndbg-v1-2-832e4039b71f@weissschuh.net>
+Cc: ojeda@kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>, linux-modules@vger.kernel.org, gary@garyguo.net
+In-Reply-To: <20261011-rust-dyndbg-v1-10-832e4039b71f@weissschuh.net>
 References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
- <20261011-rust-dyndbg-v1-2-832e4039b71f@weissschuh.net>
+ <20261011-rust-dyndbg-v1-10-832e4039b71f@weissschuh.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 11 Oct 2026 13:00:57 +0000
+Date: Sun, 11 Oct 2026 13:01:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -46,91 +46,84 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] rust: test coverage regression: u32 dropped from atomic_arithmetic_=
-tests
-- [Low] rust: dead code: unusable AtomicAdd implementations for u8 and u16
+- [Medium] rust: dev_dbg!: unconditional evaluation of formatting arguments
+- [Low] rust: Device::printk missing #[inline] attribute
 --
 
-commit bff46a0936305602d6b5e98e2a29f7e77f8ccefc
+commit b813060ef1de2d7eca47689d919683f6792237c4
 Author: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+Subject: rust: device: remove logging methods
 
-rust: sync: atomic: Add Atomic<u{8,16}>
-   =20
-Add generic atomic support for small unsigned integers that have an
-AtomicImpl with the same size and alignment. Also extend the unit tests.
+This commit removes the logging wrapper methods from the Device struct, mov=
+ing
+the logic into macros that directly call Device::printk. This change allows
+the dynamic debug core to statically allocate descriptors at the macro
+callsite.
 
-> diff --git a/rust/kernel/sync/atomic/predefine.rs b/rust/kernel/sync/atom=
-ic/predefine.rs
-> index 3d63f40791fa2..4c1fb5e08dc26 100644
-> --- a/rust/kernel/sync/atomic/predefine.rs
-> +++ b/rust/kernel/sync/atomic/predefine.rs
-> @@ -113,6 +113,32 @@ fn rhs_into_delta(rhs: isize) -> isize_atomic_repr {
->      }
->  }
-> =20
-> +// SAFETY: `u8` and `i8` has the same size and alignment, and `u8` is ro=
-und-trip transmutable to
-> +// `i8`.
-> +unsafe impl super::AtomicType for u8 {
-> +    type Repr =3D i8;
-> +}
-> +
-> +// SAFETY: The wrapping add result of two `i8`s is a valid `u8`.
-> +unsafe impl super::AtomicAdd<u8> for u8 {
-> +    fn rhs_into_delta(rhs: u8) -> i8 {
-> +        rhs as i8
-> +    }
-> +}
-
-[Severity: Low]
-Does this implementation for u8 result in unusable dead code?
-
-Since the Repr type for u8 is i8, and i8 lacks an AtomicArithmeticOps
-implementation, it seems impossible to call arithmetic methods like fetch_a=
-dd
-or add on Atomic<u8>.
-
-> +// SAFETY: `u16` and `i16` has the same size and alignment, and `u16` is=
- round-trip transmutable to
-> +// `i16`.
-> +unsafe impl super::AtomicType for u16 {
-> +    type Repr =3D i16;
-> +}
-> +
-> +// SAFETY: The wrapping add result of two `i16`s is a valid `u16`.
-> +unsafe impl super::AtomicAdd<u16> for u16 {
-> +    fn rhs_into_delta(rhs: u16) -> i16 {
-> +        rhs as i16
-> +    }
-> +}
-
-[Severity: Low]
-Does this implementation for u16 also result in unusable dead code?
-
-Similar to u8, the Repr type i16 lacks an AtomicArithmeticOps implementatio=
-n,
-preventing the use of atomic arithmetic methods on Atomic<u16>.
+> diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+> index 2291d85b6849e..2d49063f4f7c8 100644
+> --- a/rust/kernel/device.rs
+> +++ b/rust/kernel/device.rs
 
 [ ... ]
 
-> @@ -263,7 +289,7 @@ fn atomic_cmpxchg_tests() {
-> =20
->      #[test]
->      fn atomic_arithmetic_tests() {
-> -        for_each_type!(42 in [i32, i64, u32, u64, isize, usize] |v| {
-> +        for_each_type!(42 in [i32, i64, u64, isize, usize] |v| {
+> @@ -387,7 +305,7 @@ pub fn pr_dbg(&self, args: fmt::Arguments<'_>) {
+>      /// Callers must ensure that `klevel` is null-terminated; in particu=
+lar, one of the
+>      /// `KERN_*`constants, for example, `KERN_CRIT`, `KERN_ALERT`, etc.
+>      #[cfg_attr(not(CONFIG_PRINTK), allow(unused_variables))]
+> -    unsafe fn printk(&self, klevel: &[u8], msg: fmt::Arguments<'_>) {
+> +    pub unsafe fn printk(&self, klevel: &[u8], msg: fmt::Arguments<'_>) {
 
 [Severity: Low]
-Is u32 intentionally dropped from the list of types tested here?
+Is it intentional to omit the #[inline] attribute on this function? Accordi=
+ng
+to the Rust subsystem guidelines, small abstraction functions that forward =
+to C
+bindings should be annotated with #[inline] to ensure optimal inlining.
 
-This appears to cause a regression in test coverage for 32-bit unsigned ato=
-mic
-arithmetic operations.
+>          // SAFETY: `klevel` is null-terminated and one of the kernel con=
+stants. `self.as_raw`
+>          // is valid because `self` is valid. The "%pA" format string exp=
+ects a pointer to
 
->              let x =3D Atomic::new(v);
-> =20
->              assert_eq!(v, x.fetch_add(12, Full));
+[ ... ]
+
+> @@ -948,5 +915,14 @@ macro_rules! dev_info {
+>  /// ```
+>  #[macro_export]
+>  macro_rules! dev_dbg {
+> -    ($($f:tt)*) =3D> { $crate::dev_printk!(pr_dbg, $($f)*) }
+> +    ($dev:expr, $($f:tt)*) =3D> {
+> +        match (&$dev, $crate::prelude::fmt!($($f)*)) {
+> +            (dev, args) =3D> {
+> +                if cfg!(debug_assertions) {
+
+[Severity: Medium]
+Does this match block unconditionally evaluate the formatting arguments bef=
+ore
+the debug_assertions check is performed?
+
+Because the match scrutinee evaluates fmt!($($f)*) eagerly, any computation=
+ally
+expensive operations or side effects in the arguments might be executed eve=
+n in
+release builds.
+
+Could the if cfg!(debug_assertions) check wrap the entire match block inste=
+ad
+to ensure zero overhead when debugging is disabled?
+
+> +                    // SAFETY: `klevel` is null-terminated, uses one of =
+the kernel constants.
+> +                    unsafe { $crate::dev_printk!($crate::bindings::KERN_=
+DEBUG, dev, args) }
+> +                }
+> +            }
+> +        }
+> +    }
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261011-rust-dyndb=
-g-v1-0-832e4039b71f@weissschuh.net?part=3D2
+g-v1-0-832e4039b71f@weissschuh.net?part=3D10
