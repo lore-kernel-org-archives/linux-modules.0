@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACA947CC83;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCFC47D95E;
 	Tue, 13 Oct 2026 02:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791859000; cv=none; b=rnyBTUuF85cH+W0yzr+jpCGjMSPKCBwPwCBKmrcrYrmEvzVcQ/dcxjV6TIIZ0LsEINVPXZTgdOtMoli+69/iUnRHOsdeyt5zXN11bR+rgP7eZJkGohg1ifqeCakxxUHhacSi8eQnwlnJj1MqKPQKQGRihgc7F7WleX+lXWzCpNc=
+	t=1791859001; cv=none; b=MkCrk4SWG1E2pmZd+g+Q9PibTZauTD1urnqxjgt0CwAkmud4aK/+k9IcrbGcxccRN54To3XernWnC5OhJzp7RsN4dmGR9bHXyq+bSkiywfY7jYYWd7ZH0FLqhdIBUvyDDOg+Ueea945q+fBW5iZdQZVqp7sYUtvOFtVUAgG1Adw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791859000; c=relaxed/simple;
-	bh=5muHxlb6l4ccyKh5IYbVFyRHKwFuMH6cHyXeJuoLx2o=;
+	s=arc-20240116; t=1791859001; c=relaxed/simple;
+	bh=AU/DwvulqIXGLDe/+nTi2/ex4kbr3buY81VVuUnBnJA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=f0kJTFDcEeH7bYX49CffT9xoGIrAVkNRBYJQhdZYFhI2nhqfkWNlgMIl6RpioC2XzgGqzvz5polYshJ6hZgGWMsALCF8lL3y9ixhRDn7UzXLXltte9wwWimOypDv5EkpJGTKx4N+Ouk2PTGP+DF9P04p63R/XshQtOjAF4s+xEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lk8P4Q/d; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=LRMui03vMCATxDCT8jpFDeahNFaISV+pTxnX3J4kIQX+YRwrQ+DcPm1MleGS60nGw9a1NS5hZE3nlIYAPwbaladfKtp9jEwllsBvoCajTGdTmwXGlOWMoMPTCRTKBxRGpb6v/BXdzNiTeelvzUeVSNxFfbmZeZOEe11j2kQZf8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKQsjNj+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lk8P4Q/d"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 51971C2BCFB;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKQsjNj+"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B9A95C2BCFD;
 	Tue, 13 Oct 2026 02:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1791859000;
-	bh=5muHxlb6l4ccyKh5IYbVFyRHKwFuMH6cHyXeJuoLx2o=;
+	bh=AU/DwvulqIXGLDe/+nTi2/ex4kbr3buY81VVuUnBnJA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=lk8P4Q/d2k+yIgl0bIKsvxSEtvwXdswoBNQZCdgq6ypTGTewTUyQR8VmZl+jyAkwB
-	 oBP4wCXJj2b6X1jUxSbJHwnReMdjTChGsEfFg5fF7jFNQE2jSpBuVKOvNhVXcdIAb+
-	 cTMXk4erLtpIgP0BiD8aEOGLgBiEpWItkE1HIicOScjv+rhCTm+3OxBZlMakgcoLnh
-	 oLuipzEGWQ35YbrjyQjzImo8tU2roMIuzdcUgLKgA7aYomS+0N8rn4yi2YgqqlG78r
-	 BkYdOCU7aEBfRz/mCL1Rgr22BIsvNGx2bCY7m6MTP6kmr2xDtoCGkFkQG4DIBQhWN/
-	 BS9AS1+C506Fg==
+	b=sKQsjNj+Dob3pm3dSnkFzHizLFIHjMd4e8BWrRFSmYa7vqaCpYd1e6k69nXco5NVl
+	 SySfQi72U9xWrprnn88nwuKbMkJ7OemEgQmWxQf02IzA1PV3f9E7wNIKWSTeOp7B+S
+	 WZhbBohxsCyObi3NP5zVjMO5W9uVzy6onHXp4/Kn6Hsi9NmWQxnMk91B+4rbxSNgYz
+	 gt83utHj2JHye3aGNn06yf7J0aQ1gmu7FXh5vtnBH3Hplos4XyZ57Ws8GxQeumyrl/
+	 5NMBRSSAxYtyTeXeGzIJkupIJrpsQvOsPNx3Xl6dAfhWYxXuaVo3Q8trpRTdA48GZm
+	 5bqQFgfl/HRAg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E3BCCC6B08;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A70ABCC6B09;
 	Tue, 13 Oct 2026 02:36:40 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Mon, 12 Oct 2026 20:37:00 -0600
-Subject: [PATCH v12 29/40] selftests: enable comma-terminator tests
+Date: Mon, 12 Oct 2026 20:37:05 -0600
+Subject: [PATCH v12 34/40] dyndbg: add epilogue to dynamic_debug/control
+ file
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261012-dd-cmap-part2-clean-v12-29-3c8cc5725def@gmail.com>
+Message-Id: <20261012-dd-cmap-part2-clean-v12-34-3c8cc5725def@gmail.com>
 References: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
 In-Reply-To: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -68,11 +69,11 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
  Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791858995; l=3975;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791858995; l=2252;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=npR5HSMHTYMY5CDZ34RU+Pu3zwpuQZW+VL9BvRVmTBY=;
- b=DtdAdUqsmeagQLrQRj+qcBibmNQZ2rKLU23rvWbn8HJaaryURBHSggd6aqf/9JL/p5Ab/LhAR
- DYsOGr1S93mDSuFD3Wz490kvvVV8Hsz/zPCtqxgEC0Mwg3wi0HRRKsF
+ bh=V9XIK1iVmGPQhMBcQ7oh5zL/IVhph4cS5i0ugL5KcBY=;
+ b=8iP/LNq7zNltMSUZlq4aqfiX8bvTfNKdQ1A5FalGkdKfJM9MDW6ZED5BLfCa0R69M1ZVMVrVI
+ qj4fk+Ysfz4DJUCIOTrZXPBJfogswPhf43y7kkwAL3J5WjUafUJmgGB
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -82,95 +83,80 @@ Reply-To: jim.cromie@gmail.com
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-Enable the FT_comma_terminators test block in dyndbg_selftest.sh to
-verify control query parsing when queries are terminated by commas.
+Add an epilogue to the control-file, to allow display of statistics
+etc, without disturbing the header.
+
+NB: epilogue lines should start with "#: " to distinguish them from
+lines describing pr_debugs (and from the header line).  No new lines
+are added here, only the place to do so.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
-v11:
-. convert modprobe dyndbg parameters in FT_test_classes and
-  FT_classmap_inheritance to use comma separators
-  ("class,D2_CORE,+pf;...").
-  Sashiko review complaint (patch 24):
-  "Are these load-time parameters truncated during module load due to
-  how the shell handles quotes? When bash evaluates and strips the
-  double quotes before executing modprobe, modprobe constructs the
-  kernel options string without adding quotes around the parameters.
-  The kernel's parse_args() function (using next_arg() in lib/cmdline.c)
-  splits module parameters at unquoted spaces... treats D2_CORE and +pf
-  as separate unknown parameters."
+v9:
+. update ddebug_proc_start() to return EPILOGUE_TOKEN when seeking directly to epilogue.
 ---
- .../selftests/dynamic_debug/dyndbg_selftest.sh     | 29 ++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ lib/dynamic_debug.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index 88b56c807c42..eb508c804782 100755
---- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -340,6 +340,25 @@ function FT_basic_queries {
-     ddcmd "file $f =_" "$f"
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index f6e94a2ef346..efde85c7a9c1 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -1182,6 +1182,9 @@ static struct _ddebug *ddebug_iter_next(struct ddebug_iter *iter)
+  * read() call from userspace.  Takes the ddebug_lock and
+  * seeks the seq_file's iterator to the given position.
+  */
++static char ddebug_epilogue_token;
++#define EPILOGUE_TOKEN (&ddebug_epilogue_token)
++
+ static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
+ {
+ 	struct ddebug_iter *iter = m->private;
+@@ -1197,7 +1200,9 @@ static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
+ 	dp = ddebug_iter_first(iter);
+ 	while (dp != NULL && --n > 0)
+ 		dp = ddebug_iter_next(iter);
+-	return dp;
++	if (dp)
++		return dp;
++	return n <= 1 ? EPILOGUE_TOKEN : NULL;
  }
  
-+# test parsing on spaces, commas. testing against builtin file kernel/params.c
-+function FT_comma_terminators {
-+    v_echo "${GREEN}# COMMA_TERMINATOR_TESTS ${NC}"
-+    if [ $LACK_DD_BUILTIN -eq 1 ]; then
-+	echo "SKIP - test requires dynamic_debug built into kernel"
-+	return
-+    fi
-+    local f='kernel/params.c'
-+    ddcmd =_
-+    ddcmd "file $f +p" "$f"
+ /*
+@@ -1210,12 +1215,20 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
+ 	struct ddebug_iter *iter = m->private;
+ 	struct _ddebug *dp;
+ 
++	(*pos)++;
 +
-+    ddcmd "file,$f,=_" "$f"
-+    ddcmd "file,$f,+mf" "$f"
-+    # ignore empty tokens
-+    ddcmd ",file ,, ,  $f, -p" "$f"
-+    ddcmd " , file ,,, ,  $f, -m" "$f"
++	if (p == EPILOGUE_TOKEN)
++		return NULL;
 +
-+    ddcmd =_
-+}
- # testing classmap-based query enablers and class configurations
- function FT_test_classes {
-     v_echo "${GREEN}# TEST_CLASSES - classmap-based query enablers and class configs ${NC}"
-@@ -350,7 +369,7 @@ function FT_test_classes {
+ 	if (p == SEQ_START_TOKEN)
+ 		dp = ddebug_iter_first(iter);
+ 	else
+ 		dp = ddebug_iter_next(iter);
+-	++*pos;
+-	return dp;
++
++	if (dp)
++		return dp;
++
++	return EPILOGUE_TOKEN;
+ }
  
-     # 1. Verify initial multi-query enablement state via file slice
-     my_modprobe test_dynamic_debug \
--        dyndbg="class D2_CORE,+pf;class D2_KMS,+ps;class D2_ATOMIC +pm"
-+        dyndbg="class,D2_CORE,+pf;class,D2_KMS,+ps;class,D2_ATOMIC,+pm"
-     verify_control_slice '\[test_dynamic_debug\]'
+ static bool ddebug_class_map_in_range(const int class_id, const struct ddebug_class_map *map)
+@@ -1267,6 +1280,10 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
+ 			 "# filename:lineno [module]function flags format\n");
+ 		return 0;
+ 	}
++	if (p == EPILOGUE_TOKEN) {
++		/* use this soon */
++		return 0;
++	}
  
-     # 2. Verify state transition and live-printing end-to-end via ddcmd_load!
-@@ -368,7 +387,7 @@ function FT_classmap_inheritance {
- 
-     # 1. Load submod directly (which auto-loads supermod with default parameters)
-     my_modprobe test_dynamic_debug_submod \
--	"dyndbg=+p;class D2_CORE +pfs;class D2_KMS +pts;class D2_ATOMIC +pmf"
-+	"dyndbg=+p;class,D2_CORE,+pfs;class,D2_KMS,+pts;class,D2_ATOMIC,+pmf"
-     verify_control_slice 'test_dynamic_debug'
- 
-     # 2. Runtime parameter changes to supermod propagate to submod descriptors
-@@ -447,6 +466,7 @@ builtin_tests=(
-     FT_grammar_ok
-     FT_grammar_errs
-     FT_basic_queries
-+    FT_comma_terminators
- )
- 
- # Modular Feature Tests (Require CONFIG_MODULES=y and test_dynamic_debug*.ko available)
-@@ -537,6 +557,11 @@ function GOLDEN_RECORDS {
- #K= 02e4fd94602e108cb89bfc70d47a5dad FT_basic_queries.5
- #K= f03a7ca7316e8db4c0e16523dc41e75d FT_basic_queries.6
- #K= c518a50ba30ba8099d0dc874a27ecf16 FT_basic_queries.7
-+#K= c8bbbac639f244ed9088208ebb7d83a6 FT_comma_terminators.1
-+#K= bed6350f058f600910837dae83a12f56 FT_comma_terminators.2
-+#K= 6e8599556a312200fb6d484565b6c52f FT_comma_terminators.3
-+#K= 68b329da9893e34099c7d8ad5cb9c940 FT_comma_terminators.4
-+#K= adc1ef04304c861c87fe294a8ba4e402 FT_comma_terminators.5
- #K= 91838b4012c50a1dc1d9e210ba8d68f8 FT_test_classes.1
- #K= a15ec4843acd721fbdfddc0b512c8032 FT_test_classes.2
- #K= 2cee6842c9cdee5cb3bf50b2e3914813 FT_test_classes.3
+ 	seq_printf(m, "%s:%u [%s]%s =%s \"",
+ 		   trim_prefix(dp->filename), dp->lineno,
 
 -- 
 2.56.0
