@@ -1,147 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBD147F2EC;
-	Tue, 13 Oct 2026 02:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02F6456E19
+	for <linux-modules@vger.kernel.org>; Tue, 13 Oct 2026 11:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791859001; cv=none; b=qnVZSk2XSYhXib3R8Ncoi+tZWkhfhWKc5ahwQkJFZoYFlIYvJ29D65zxMa7rlvhJSjgnJc9J920/qUoXRnP9/ZkroNB+2VoaeEw5SmCGDmqbScasaBVjR4sA3DHOSl9a3qVpvakQ0JMsHsBCqpbD2fqdkhF1Zi4PRUueTzBtRmo=
+	t=1791891199; cv=none; b=dDW3Lt9JbgE1WPCTb9j31lfS+/ZiHEduLiByESanAZ0J5w1pChUByMvIMcDak8av0gvjFd4u6YzMI81iNjXrKM6OLl9Sn2C6BucDQRwGsCE5uPoQB3rFUZ0nX8ecJZaNJGV0nE/+eMvFaVJw2sek8wo8QtHR1SYct3qzz70wNMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791859001; c=relaxed/simple;
-	bh=DGJL1z64q5OpfI49SgGzWAOsK/0AzCAccuYpsC3tGj0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=emDIS/lNsfdXlyudJRSACSWN9900r/LUOjUjaFk0+cUTBNPmQbIhrtB06JdFamubVdjXXngzyyQRcVggPsJMLkMhMHHKVfW8/1GwaDVUqGiRhuUM7sXQUfOvT0fSoxp9CPmnnvJj5ukfOByqC5wL6Gy48JAi5FgkynlafZl1w6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sEb0eHHT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1791891199; c=relaxed/simple;
+	bh=SeTmFJlc7xESDzB6Iw10CIl8mg+WowrPSAr6+Ksx4bg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rDUGZaELu1FsEG2ce5zU88LBXZr2ZhFYzPMU6c7jRHZeHdXCGlUC6We27P73PUsORVBZt4rCnaznv+xl7k21PurJZJTd5Adk4syf04DQBY+NV+zTl8u36SSASGzY2/lN22pmVnimFd3N35o6BcZBZVvceK4Zx7mfvq0fHR+hiAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WEsD157k; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sEb0eHHT"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 02E4FC2BD04;
-	Tue, 13 Oct 2026 02:36:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1791859001;
-	bh=DGJL1z64q5OpfI49SgGzWAOsK/0AzCAccuYpsC3tGj0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=sEb0eHHTOMU92Bb6Km2urpuMwjlx52j3SxcrntK0iNTRRt5f2qwczrjBrPXNxBLeS
-	 i32o8fcyAcDwqTfuLX7Hp18CtOf8BNWJbRTK8UU8Ifl7OvycNURQh7xcPSsUoPZYH9
-	 yJF9yzIETCz+n15A1J3oe6IERJ/wRaVJDMGi7RGJMDA7uQeCzMFCuHiScZptK6vJ/X
-	 4mfz7kYNsdLXR9PSwLRhVhqp2Cvc1USOy6TD7QIRo4+8IvQBqnemgkCagIStk7Z3Bx
-	 RoDbpTKL9bSBDpMN0U+uoAewHSaM2B85WSYyFc06OijdxamSnUKnpkX9r11VtZ3GUB
-	 6vKGGwTpetvwg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E41ECCC6B08;
-	Tue, 13 Oct 2026 02:36:40 +0000 (UTC)
-From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Mon, 12 Oct 2026 20:37:08 -0600
-Subject: [PATCH v12 37/40] dyndbg: add DEBUG-biased fallback stubs for
- _dynamic_func_call_cls
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WEsD157k"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48c6f764f82so910527f8f.0
+        for <linux-modules@vger.kernel.org>; Tue, 13 Oct 2026 04:33:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1791891194; x=1792495994; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=anitmvt5QBwY9lobKzDJl69qsHc8ScLJ3DQrPkwQ6aE=;
+        b=WEsD157k7Qj/mlLooqinrQqIsxoUT5P+6SBfFm06g+BC9fjZmtKtIWcYq3PKYdBf/5
+         v1K5OV5hOvlHwKAho5ml7OmPQKjvCA63/ZqIhoV6ePuDIH+e9KemMJxS36tdnccc1g2z
+         VxxaZba9DSrAnS9Lg7LBR6ADj7EZigCj/8J8kHCdzSWIYjU4qR6FIDY1IKPGjB+T+11F
+         Ghc6KQnSkqnFRFGqPxIdMtKxDqEz7XyUhMbZ/FWQDNcTQsyInBbXRLkXr8EC9N2iMY+D
+         nNCK5idnsJwe2kwWwvY7RVuw00blLrla7USHD+aA/4Naues3LqC76sQpXrxz38lia2i7
+         lzSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791891194; x=1792495994;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=anitmvt5QBwY9lobKzDJl69qsHc8ScLJ3DQrPkwQ6aE=;
+        b=sg+WfO0MNk+e4dhepcn1OBS+e0oBcsp9oF9KEGLEzMvQjONzeaTzDIkYvYFa5A2zVy
+         JuWU1dIvZch7CvVSi8YPU6tkd28E4DcMSOtFfpaRdKT9eSVjTHUUDTbhb7m4kCHM6uMO
+         BXuqinYMqmmhmEEuDwojPmRPE/E/ZnLSHmK7Y8SA8PZgpmNPPIFfWiW4ROZ8U1XA5BtE
+         WocwxkPHsMZ5Hq8guB3w6Y5NLM/mv3/o+CIu1Fz6UEPzANneB6qDIjWc//aIJiKkQB+0
+         kghNyJLFBqdfz9OyusajwGcq2wa6/9C79lmioAGMiHEmXaBFNfep9WZYGw5Vf8htc1EH
+         Q/rQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzmAdDClBdJB+0XLmY2MYXOLYvninrZFgQDikbavEWGUjVxBgCmV0a5shjzonQwhtk9IyGR12xmYAr5LbFC@vger.kernel.org
+X-Gm-Message-State: AFq9FYJZ5NnoBY0H3IXsJ76pePfSbryTfLCuCazKYTGxVvaZ/1OFV1Rw
+	/EGlMJ/qOcQaNZt+PJe/quU8SncyXUaB0Tg8VEFmDymevh0M56p+VG9duSWUdZzIKAQ=
+X-Gm-Gg: AYBFou1tLcjQ2pUGzQBp8R6Q4zNNnS3wR5j0VwRgn86PoGEbseRLsb7dAOUGDBUxmAO
+	RRHcGWpNKDNHwDdbr956V3BEue1FH8qodisjzDGUqPa5Sk/9Ir/YaAx3Uw5QquVt3ZtSbSXIqfe
+	jblFLuoBh78IkDKLoO/os4kXvgl9JVSgl3j4oSHfVI37ScKdTahDCq8uXIVpi7bN8m6GFY/A3c2
+	CE5aOeQax4QGdU8CEAtCOkjtGVoVXzX5trcsXC8t0lrjkfWfv2t6C7hpgFun0vnzQeOAw+bS2Bw
+	v81jZ5zprjLtQGCMlNsxaCjgnPHMx2LZY28ISScollZDetyju+4hQsL3qWH9JuehPQtTM7sszRj
+	kfFm2mirz+nDO4y6VFqqOJUw9zxT13v6QSYJz0lCvBPM6mY/aU1yNaTI/9UpNMwn/k0kLEKz2kB
+	x7XWdiVVmiRS1CZ/gbSSjDBGysXT3OhjlrSTVWNjW9S5U+P0Y5+nwcmd3R19cteBnfXYESAy/s
+X-Received: by 2002:a05:600c:46c5:b0:4a0:eae0:769a with SMTP id 5b1f17b1804b1-4a18e4cd224mr244258165e9.28.1791891193452;
+        Tue, 13 Oct 2026 04:33:13 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0bc50e0sm5960955f8f.49.2026.10.13.04.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 04:33:13 -0700 (PDT)
+Date: Tue, 13 Oct 2026 13:33:10 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: jim.cromie@gmail.com
+Cc: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Jonathan Corbet <corbet@net.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org,
+	Philipp Hahn <phahn-oss@avm.de>
+Subject: Re: [PATCH v12 33/40] dyndbg: Ignore additional arguments from pr_fmt
+Message-ID: <as4W9hToBqAvbzJ-@pathway.suse.cz>
+References: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
+ <20261012-dd-cmap-part2-clean-v12-33-3c8cc5725def@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261012-dd-cmap-part2-clean-v12-37-3c8cc5725def@gmail.com>
-References: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
-In-Reply-To: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
-To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Jonathan Corbet <corbet@net.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
- Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
- John Ogness <john.ogness@linutronix.de>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jim Cromie <jim.cromie@gmail.com>, kernel test robot <lkp@intel.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791858995; l=2698;
- i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=gK9H6qdXFhLum5gK1CZ/NZb16/SKE4lxiU0/dKCwx/0=;
- b=JyeKj4+SPXFdpil8mY+g6SJ7WxquulAAIujPjFK/OUnIn1GWlCR/fhfP1nHqgGGp7OP8gtGaz
- 3uxQHSU+leMAPU+pnkMBFihTy9r0dUXZnGLS61evwcunHg42SMaNcC4
-X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
- pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
-X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
- auth_id=958
-X-Original-From: Jim Cromie <jim.cromie@gmail.com>
-Reply-To: jim.cromie@gmail.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261012-dd-cmap-part2-clean-v12-33-3c8cc5725def@gmail.com>
 
-From: Jim Cromie <jim.cromie@gmail.com>
+On Mon 2026-10-12 20:37:04, Jim Cromie via B4 Relay wrote:
+> From: Philipp Hahn <phahn-oss@avm.de>
+> 
+> pr_fmt can be used to add a common prefix to any output from a module:
+> 	#define pr_fmt(fmt) KBUILD_MODNAME ".%s " fmt, __func__
+> 
+> But adding additional arguments breaks dynamic debug:
+> > error: macro "DEFINE_DYNAMIC_DEBUG_METADATA_CLS" passed 4 arguments, but takes just 3
+> > |         pr_debug_ratelimited("%s", "Hello world!");
+> > |                                                  ^
+> > note: macro "DEFINE_DYNAMIC_DEBUG_METADATA_CLS" defined here
+> > | #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
+> > |
+> > error: ‘DEFINE_DYNAMIC_DEBUG_METADATA_CLS’ undeclared (first use in this function)
+> > |         DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt)
+> > |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When the dynamic debug core is enabled (CONFIG_DYNAMIC_DEBUG_CORE=y) but
-the global CONFIG_DYNAMIC_DEBUG is disabled, subsystems can opt-in to
-dynamic debug by defining DYNAMIC_DEBUG_MODULE.
+I wonder what this error about undeclared macro means.
 
-However, for built-in code (like DRM core) where DYNAMIC_DEBUG_MODULE
-is not defined, the macros fall back to the disabled #else block in
-include/linux/dynamic_debug.h.
+> > note: in expansion of macro ‘DEFINE_DYNAMIC_DEBUG_METADATA’
+> > |         DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));         \
+> > |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > note: in expansion of macro ‘pr_debug_ratelimited’
+> > |         pr_debug_ratelimited("%s", "Hello world!");
+> > |         ^~~~~~~~~~~~~~~~~~~~
+> 
+> Add an additional ', ...' to DEFINE_DYNAMIC_DEBUG_METADATA_CLS to slurp
+> any additional argument, which `pr_fmt` might add.
+> 
+> --- a/include/linux/dynamic_debug.h
+> +++ b/include/linux/dynamic_debug.h
+> @@ -351,7 +351,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+>  		dump_stack();					\
+>  }
+>  
+> -#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
+> +#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)	\
+>  	static struct _ddebug  __aligned(8)			\
+>  	__section("__dyndbg_descs") name = {			\
+>  		.modname = KBUILD_MODNAME,			\
+> diff --git a/include/linux/printk.h b/include/linux/printk.h
+> index f594c1266bfd..5d701952e739 100644
+> --- a/include/linux/printk.h
+> +++ b/include/linux/printk.h
+> @@ -742,7 +742,7 @@ do {									\
+>  	static DEFINE_RATELIMIT_STATE(_rs,				\
+>  				      DEFAULT_RATELIMIT_INTERVAL,	\
+>  				      DEFAULT_RATELIMIT_BURST);		\
+> -	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));		\
+> +	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, fmt);		\
 
-In this block, the family of _dynamic_func_call_cls macros were
-completely undefined. This caused build failures (implicit declarations)
-in subsystems (like DRM) that attempt to use these macros to wrap their
-own debug functions even when dynamic debug is disabled.
+IMHO, this changes the existing behavior. The prefix added by
+pr_fmt() will no longer be stored in DEFINE_DYNAMIC_DEBUG_METADATA().
+Is this intentional, please?
 
-Add stub definitions that mirror the enabled behavior and respect the
-DEBUG macro, similar to pr_debug. If DEBUG is defined, they inject NULL
-as the first argument (to satisfy the expected descriptor pointer) and
-pass the arguments through, allowing the wrapped function's own slow-path
-fallback logic to execute. If DEBUG is not defined, they use an if (0)
-statement-expression to compile out the call while returning 0, achieving
-zero overhead while maintaining compile-time argument checking.
+Anyway, if we do not longer pass pr_fmt(fmt) then we should not
+need to add "..." into DEFINE_DYNAMIC_DEBUG_METADATA_CLS().
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202605201408.x1sHT6fx-lkp@intel.com/
-Assisted-by: Gemini-CLI:gemini-2.5-pro
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- include/linux/dynamic_debug.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index d228b4a852c3..2bd464f1081d 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -535,6 +535,23 @@ void ddebug_increment_call_count(void);
- #define DYNAMIC_DEBUG_BRANCH(descriptor) false
- #define DECLARE_DYNDBG_CLASSMAP(...)
- 
-+#if defined(DEBUG)
-+#define _dynamic_func_call_cls(cls, fmt, func, ...)		\
-+	do { func(NULL, ##__VA_ARGS__); } while (0)
-+#define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)	\
-+	do { func(__VA_ARGS__); } while (0)
-+#else
-+#define _dynamic_func_call_cls(cls, fmt, func, ...)		\
-+	do { if (0) func(NULL, ##__VA_ARGS__); } while (0)
-+#define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)	\
-+	do { if (0) func(__VA_ARGS__); } while (0)
-+#endif
-+
-+#define _dynamic_func_call(fmt, func, ...)			\
-+	_dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-+#define _dynamic_func_call_no_desc(fmt, func, ...)		\
-+	_dynamic_func_call_cls_no_desc(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-+
- #define dynamic_pr_debug(fmt, ...)					\
- 	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
- #define dynamic_dev_dbg(dev, fmt, ...)					\
-
--- 
-2.56.0
+By other words, we newly pass just the format "fmt" without the parametes.
+The 4th parameter was added by pr_fmt().
 
 
+IMHO, the right solution is to keep pr_fmt(fmt) here and extend both
+BEFINE_DYNAMIC_DEBUG_METADATA() and
+DEFINE_DYNAMIC_DEBUG_METADATA_CLS()
+to accept var args. I would expect something like:
+
+#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)	\
+...
+
+#define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt, ...)		\
+	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt, ##__VA_ARGS__)
+
+
+or maybe, we could "eat" the extra parameters in
+DEFINE_DYNAMIC_DEBUG_METADATA. It would mean to keep
+DEFINE_DYNAMIC_DEBUG_METADATA_CLS() as is and just add the "..." into
+DEFINE_DYNAMIC_DEBUG_METADATA(), aka
+
+#define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt, ...)		\
+	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt)
+
+
+Or do I miss something, please?
+
+It is possible that the macros work another way. Or this depends
+on another change. I checked only this patch...
+
+Best Regards,
+Petr
+
+PS: I was curious what Sashiko says about this change and it seems
+    that it does not review this patchset from some reasons.
+
+>  	if (DYNAMIC_DEBUG_BRANCH(descriptor) &&				\
+>  	    __ratelimit(&_rs))						\
+>  		__dynamic_pr_debug(&descriptor, pr_fmt(fmt), ##__VA_ARGS__);	\
