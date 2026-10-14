@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A297331A63;
-	Wed, 14 Oct 2026 02:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6FE331A63;
+	Wed, 14 Oct 2026 02:37:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791945419; cv=none; b=FKxq6LPXf6vKAtCvgL9757cWszvzFexnrf57hGPrTpU+1azLl6W244YdUs/7v6VxGSnccg+bQZoy2n0s2qkF6qMicJP+RCi8Z5iErV9yP0vHE+Lpd/QDbGSk9vnWKU6sY8rNkGPrC8VCOnAix7ehIEs4zKAltC7qXOuwA4Z5S3Q=
+	t=1791945421; cv=none; b=CC/wLAL7PyPp+kHqlsMmt4BPZ0MyuvIcL9w6wIZ4INnf7OMklZ2s/d3cmPVsXAEPesDzt6YNnhjbCK5nGMMqVZRJ2cQ4f8856vqGEcPRmC+4QkDxW/2vbc5ZIrIOprtcsUypebCbbLiVUUMMb+8+4UNOxw5+3XrHi1nANDmGa2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791945419; c=relaxed/simple;
-	bh=DxZBashllWHkXbeu1sAa68bbPu/sKmLY0oxCRKcRuh8=;
+	s=arc-20240116; t=1791945421; c=relaxed/simple;
+	bh=c3P8Mm6gMhwiXtvfZcrutHrto1Y7xz0C4IZjE8250RE=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=Mxw/aOwb0cssA3Kvz/02AxT1E0JNc2dsRsWNjOkhb0ku1hcS7hwpJw0d2MXzszfzWwz402PIrfuTJLVPN8y00LhmrAiGAMSasFVsTpQJtNC3LR+sZVS91MmLW3Wd3RDyfjYjY5hkSS7o+Hbo9cN0CwYrKtc8jWa1xU8M+oExUKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLIkUzuE; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=Lw5p36heEK9mPOpoJSXxOUSekgSKCC3m7livGLteV9J+un9Zdv1/lar3KjFW5pkmaY44U5CfJGPAYkKuhCrU7DCOVRb3k32WkwHcBZ52MDNHQZ/gkGX10soNV/kGSvBnN1oyLpsT2b10bXosHukF6mOrFFWMep5P8BM5MvnG5JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gzrhRiMz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLIkUzuE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DEFA1F000FF;
-	Wed, 14 Oct 2026 02:36:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gzrhRiMz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BE521F00893;
+	Wed, 14 Oct 2026 02:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791945417;
-	bh=KAq2Bz7FaZcJL38Vo13nCjImfnA9ikGPoe2ZVW19bqk=;
+	s=k20260515; t=1791945420;
+	bh=AqjIfY996XPsKnsihvP7EBq+bmu8uA6D3MTZ98dlotQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HLIkUzuEA6HLyZVn4lXATs3F31nUhLBTQ6/IItGj+DOIadyu6neszJnPuRvDu3lIl
-	 8jToSYXvYg2WgEPwZDSbBEVJvwQOw44rg2kgaP4y9rgRJm1kfM9nQeumYzOQ3DcLGG
-	 q+3UsjY+2l2YPkxKzHhv8xABIqlLEagB732lu6fgbIADKDk0MADRMswqANeI/whka7
-	 IsCImJgU6vfxXT0xxk81OV7RADPfeCkdHvfvGxFaVtgFl1JVFUctrYtvwWmY+OrK4j
-	 sQGeGjM0i61WbOiEfw/OFARNbhrsJw2gjJkWzd/pLtOy5+ICSBt5aeRi0VJQgJD5VH
-	 Whnm9AnEtO7rA==
-Message-ID: <sashiko-outbox-170721@kernel.org>
+	b=gzrhRiMzH+3NgUnpEl+6+H0Is4bbTksHyhzYlRDPkD7wTzHU3E6Ot3UUuB5OqXAun
+	 /+wyGy7QWGvI51BFT/BX10k/uuqf15X517WudZaDUbWP4lbA2uOpFfWqYEc7NJDN3D
+	 pTuDX6LeBbgAxJMjvH4ogLsMIbtdB/+q5mmtazOwTRwNYPB2lyyDG2zzsL3YQrU/wu
+	 Oi3e+/dKflRlF73IU3Nz2VXK4fhB3HpChgrsP8Hg7cXeUgjmuP/RoEHqHJ4xmy/Q86
+	 Gclh4Mn2P2Dw5ikwQDWGwUpT5Z51RgTxzVpMsVBWXAo7cr6Y0/g72r2mMReWKgvxhJ
+	 DFEdhTXtmrs6A==
+Message-ID: <sashiko-outbox-170722@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v12 22/40] dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
+Subject: Re: [PATCH v12 23/40] selftests/dyndbg: Enable
+ FT_classmap_inheritance
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jim Cromie" <jim.cromie@gmail.com>, "Jason Baron" <jbaron@akamai.com>, "Shuah
  Khan" <shuah@kernel.org>, "Andrew Morton" <akpm@linux-foundation.org>, "Maarten
@@ -45,138 +46,90 @@ To: "Jim Cromie" <jim.cromie@gmail.com>, "Jason Baron" <jbaron@akamai.com>, "Shu
  Mladek" <pmladek@suse.com>, "Steven Rostedt" <rostedt@goodmis.org>, "John
  Ogness" <john.ogness@linutronix.de>, "Sergey Senozhatsky" <senozhatsky@chromium.org>,
  =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
-Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, "Louis
- Chauvet" <louis.chauvet@bootlin.com>
-In-Reply-To: <20261012-dd-cmap-part2-clean-v12-22-3c8cc5725def@gmail.com>
+Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org
+In-Reply-To: <20261012-dd-cmap-part2-clean-v12-23-3c8cc5725def@gmail.com>
 References: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
- <20261012-dd-cmap-part2-clean-v12-22-3c8cc5725def@gmail.com>
+ <20261012-dd-cmap-part2-clean-v12-23-3c8cc5725def@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 14 Oct 2026 02:36:55 +0000
+Date: Wed, 14 Oct 2026 02:36:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] dyndbg: TOCTOU race causes module debug state desynchronization
-- [Low] dyndbg: Missing ARRAY_SIZE include in DYNAMIC_DEBUG_CLASSMAP_DEFINE
-- [Low] dyndbg: Unreachable return statement in param_get_dyndbg_classes
+- [Medium] selftests: regex flaw silently excludes submodule from test asse=
+rtions
 --
 
-commit b545d297dc88b17fae1f9dd05bfa8c4854dc7fac
+commit d0e8e8cb940b9b06248942fb57c7a41c66ad8636
 Author: Jim Cromie <jim.cromie@gmail.com>
 
-dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
+selftests/dyndbg: Enable FT_classmap_inheritance
 
-This commit replaces DECLARE_DYNDBG_CLASSMAP with an explicit client-server
-model using DYNAMIC_DEBUG_CLASSMAP_DEFINE and DYNAMIC_DEBUG_CLASSMAP_USE.
-This allows resolving references to parent classmaps and automatically
-applying the initial bitmap to the loading module at load time.
+Exercise classmap state inheritance between supermod and submod, verifying
+that class settings and controlling parameter states propagate from parent
+classmap definitions to dependent class users upon module load and during
+runtime reconfiguration.
 
-> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-> --- a/include/linux/dynamic_debug.h
-> +++ b/include/linux/dynamic_debug.h
-> @@ -121,17 +138,86 @@ struct ddebug_class_param {
-> [ ... ]
-> + * DYNAMIC_DEBUG_CLASSMAP_DEFINE - define debug classes used by a module.
-> + * @_var:   name of the classmap, exported for other modules coordinated=
- use.
-> + * @_mapty: enum ddebug_class_map_type: 0:DISJOINT - independent, 1:LEVE=
-L - v2>v1
-> + * @_base:  reserve N classids starting at _base, to split 0..62 classid=
- space
-> + * @classes: names of the N classes.
-> + *
-> + * This tells dyndbg what class_ids the module is using: _base..+N, by
-> + * mapping names onto them.  This qualifies "class NAME" >controls on
-> + * the defining module, ignoring unknown names.
-> + */
-> +#define DYNAMIC_DEBUG_CLASSMAP_DEFINE(_var, _mapty, _base, ...)		\
-> +	static const char *_var##_classnames[] =3D { __VA_ARGS__ };	\
-> +	extern struct ddebug_class_map _var;				\
-> +	struct ddebug_class_map __aligned(8) __used			\
-> +		__section("__dyndbg_class_maps") _var =3D {		\
-> +		.mod =3D THIS_MODULE,					\
-> +		.mod_name =3D KBUILD_MODNAME,				\
-> +		.base =3D (_base),					\
-> +		.map_type =3D (_mapty),					\
-> +		.length =3D ARRAY_SIZE(_var##_classnames),		\
-
-[Severity: Low]
-Does this macro rely on ARRAY_SIZE without including <linux/array_size.h>
-or <linux/kernel.h> in <linux/dynamic_debug.h>?
-
-This can cause implicit declaration build errors for modules that use
-this macro without independently including the required headers.
-
-> +		.class_names =3D _var##_classnames,			\
-> +	};								\
-> +	EXPORT_SYMBOL(_var)
->
-> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> --- a/lib/dynamic_debug.c
-> +++ b/lib/dynamic_debug.c
-> @@ -773,6 +795,7 @@ int param_get_dyndbg_classes(char *buffer, const stru=
-ct kernel_param *kp)
->  	default:
->  		return -1;
->  	}
-> +	return 0;
-
-[Severity: Low]
-Is this return statement reachable?
-
-The switch statement on map->map_type exhaustively handles the valid cases
-and the default case, returning from all branches. This appears to make
-the subsequent return 0 dead code.
-
+> diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/t=
+ools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+> index c279c795867b6..d759243a4cbe7 100755
+> --- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+> +++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+[ ... ]
+> @@ -291,6 +292,78 @@ function FT_basic_queries {
+>      ddcmd "file $f =3D_" "$f"
 >  }
->  EXPORT_SYMBOL(param_get_dyndbg_classes);
-> [ ... ]
-> @@ -1210,163 +1404,163 @@ static const struct proc_ops proc_fops =3D {
-> [ ... ]
-> +static void ddebug_sync_classbits(const struct kernel_param *kp, const c=
-har *modname)
-> +{
-> +	const struct ddebug_class_param *dcp =3D kp->arg;
-> +	u32 val, new_bits;
-> +
-> +	if (!dcp || !dcp->map)
-> +		return;
-> +
-> +	switch (dcp->map->map_type) {
-> +	case DD_CLASS_TYPE_DISJOINT_BITS:
-> +		val =3D READ_ONCE(*dcp->bits);
-> +		new_bits =3D val;
-> +		v2pr_info("  %s: classbits: 0x%x\n", KP_NAME(kp), new_bits);
-> +		ddebug_apply_class_bitmap(dcp, &new_bits, 0, modname);
+> =20
+> +function FT_classmap_inheritance {
+[ ... ]
+> +    # Real-time mathematical proof that load-time (modprobe) parameter p=
+arsing
+> +    # and runtime (sysfs write) parameter configurations are perfectly e=
+quivalent!
+> +    local hash_modprobe=3D$(slice_and_hash_ddctrl '\[test_dynamic_debug*=
+\]')
 
 [Severity: Medium]
-Can this lockless read of the global parameter lead to a desynchronization
-of the module debug state?
+Does this regex fail to match the sub-module as intended?
 
-If a concurrent sysfs write to the parameter occurs via
-param_set_dyndbg_module_classes(), it reads the old value, applies the
-new state to all modules, and then updates the global parameter.
+Looking at FT_classmap_inheritance(), it calls slice_and_hash_ddctrl() which
+uses grep to filter output. In POSIX Basic Regular Expressions (BRE), the *
+quantifier matches zero or more occurrences of the preceding character (g).
 
-If the module load thread in ddebug_sync_classbits() reads the global
-parameter locklessly before the sysfs thread updates it, it will see the
-old value and apply it to the new module, overwriting the sysfs changes.
+This means the regex matches [test_dynamic_debug] but demands that the
+bracket ] immediately follows the g's. It completely fails to match
+[test_dynamic_debug_submod], silently excluding the sub-module from the
+load-time test assertions.
 
-The sysfs thread would then complete, leaving the global parameter updated
-but the new module stuck with the old state.
+> +
+> +    # Fresh load with default parameters, then configure them dynamicall=
+y at runtime
+> +    ifrmmod test_dynamic_debug_submod
+> +    ifrmmod test_dynamic_debug
+> +    my_modprobe test_dynamic_debug
+> +    my_modprobe test_dynamic_debug_submod
+> +    echo 0x16 > /sys/module/test_dynamic_debug/parameters/p_disjoint_bits
+> +    echo 5 > /sys/module/test_dynamic_debug/parameters/p_level_num
+> +
+> +    local hash_sysfs=3D$(slice_and_hash_ddctrl '\[test_dynamic_debug*\]')
 
-> +		break;
-> +	case DD_CLASS_TYPE_LEVEL_NUM:
-> +		val =3D READ_ONCE(*dcp->lvl);
-> +		new_bits =3D CLASSMAP_BITMASK(val);
-> +		v2pr_info("  %s: lvl:%d bits:0x%x\n", KP_NAME(kp), val, new_bits);
-> +		ddebug_apply_class_bitmap(dcp, &new_bits, 0, modname);
-> +		break;
+[Severity: Medium]
+Similar to the issue above, does this regex fail to capture the runtime
+state of the sub-module?
+
+This allows the equivalence check between hash_modprobe and hash_sysfs
+to pass without actually verifying the sub-module inheritance behavior.
+
+> +    if [ "$hash_modprobe" !=3D "$hash_sysfs" ]; then
+> +        echo -e "${RED}: Load-time vs runtime parameter equivalence chec=
+k failed!${NC}"
+> +        exit $ksft_fail
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012-dd-cmap-pa=
-rt2-clean-v12-0-3c8cc5725def@gmail.com?part=3D22
+rt2-clean-v12-0-3c8cc5725def@gmail.com?part=3D23
