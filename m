@@ -1,97 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792505247;
-	b=mDmWYKjP3g5xouIrSK2rQbHiZcW+r18l3sNv6Knw+awW/sXBPTIk2EFRXFjqgklyMcGQ
-	 nSAUMjVfI8pJlVPrpg5wAeGBdCJCK8Mtyujy/KwbLku8Lsj0xULfmB6mh/9ey1ODURMmL
-	 gFWbH0q6NXCFzScuePaC1kEsA3PnwY1/UgUEMgP3sN6nBwCrgXyjQzeKSRn0j6OMOrj+u
-	 p3v05S5c+c9gmfl0QXChH3qP7w/FQHXgV38e+nxtKtpzpJOJNRkI8D/Y34I1wZrQwi3ZI
-	 bk2eGTKmLIexLdbIYCifCmGmGR9gvlgXNt8Q4t5j+2Eh/WAOPb1oihWksmq9UMkf/Bg==
+	t=1792505622;
+	b=YVMU8PdIZwnTV+jBVj0wGYxKGJFBHwQrEq0GHGSDOYVWSDSacIUVJ4kSXQWI5L9PpNq2
+	 uWnmrcr+nDasNXpOUXiifRga3X3iyG++NctGHR+t2oZBq4xk86PZ10KZqty6Xu/VSW64w
+	 VszsYkmgJYh8bTDkkZTmyW+ZhxKvlSoFseBlAKlKCYQDIzjDlyFAsbppAP8Q8PzkiTKO0
+	 fNCriR70g01GT/SztvR+21TtzPlQ9vwe0gD8P05GXHV7Ced+fBNoiO8FUkR2/76O07AI+
+	 AKaRi8gUQc5gm4nFcVhwb1rtOUWr2FgqbgUIqixg6D2DgeMCABU+rAXfUrqlp7crIRg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792505247;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=0MP30nw0IIRx244dAjoQ+sXac7dSmGXhgCJfSLXreiw=;
-	b=4qZvB2I4jGXwbpp5w7O5NxxrzXF7T2lI8bjwJMhJ0iqr8Euz/EF4MBDHwJAYwepOeSqQ
-	 Lm8D7IdP2BtwLl+hisnL7TsSLehJuoCuUwU6DYPwhDKBVyHoz7c6YYXeBgG4AN7N4/oXC
-	 2zKE+AceWZ112x0+x69/D3bV8DO+2m76wLNV1suO1NDxtDPYaETN4geEs+C7AKZ4FIdmU
-	 /88iBVc8tUF4/yfdWctZ5LMCdAqWlRvdSk6FKZxwP76WvQV2IGxPMAHW7KpKcjiKoOUm6
-	 NDb8bK73E8aXRnOqFDE8f8uGOEX722F8ytjzZ34XYBVMsze05iYOUYfLz4oyAbgzQWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792505622;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=ICum0JAKfDirRcbtMAFqCyRh4kigsK9BGaaoW68KlyI=;
+	b=4IYrdowGNL6vAU2pWc5SsmzFHSalEgrY8XkEJyAR64ylJ2vNARal0U4I0yMTnXPq4OrG
+	 RebcUtXex5DLUTyg3rzlAAe+CgLdSuVE4l7mqA+ToyrWdtu4r+eZixyxOXjjL6uGp9l0Z
+	 jE0gBXJ+N/F25tfAI5eX4702HoOJI8/lY8fk45NVzu8koRz4+imCCwIBW0hUipPCwS9Az
+	 qCaxykp/NUii1Ogk+dchsjIFB+4R+v+h28OOAUL1pRbZzG5Zx25SlqSvl/v8vWkv4u0T9
+	 apZoZFe2sBdvjAsjfn1XylR3PUgv2Xsjef2n5iljL6OhcM5kHj3ATcbV/CBH20Q1dqw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=PiJ9AoaR;
-	arc=none smtp.remote-ip=209.85.128.54
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E11t66iS;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D6F60A261A
-	for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 14:07:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0D6F60A261A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE72606C22A
+	for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 14:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=PiJ9AoaR
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a1dede3c2cso38749585e9.2
-        for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 07:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1792505245; x=1793110045; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0MP30nw0IIRx244dAjoQ+sXac7dSmGXhgCJfSLXreiw=;
-        b=PiJ9AoaR0HMKHeEwK7TitYoY6Y56ApwuluhWcQFtkEo5nw6XDL21eZZN0/FDaSB6E+
-         12p+bA6tosrGoWErSa3cj61/lAhieh0fPU4o4SgBo/84qERPd8kaAPxL5knJ2fmZF3vQ
-         3rC58BdOSWB2KptW7YBKVVeEheZUH0FgVPL3Rg2Uq+etDWfwXl1bqXq9VmiheLezVAUQ
-         7VlohMz818x8uAWgJtuD4q8kgfP4ejcFmEpP+fDznL+JVlLUvdp9Zo3MCzjLltfie1ei
-         gYbUs1MWe27/bpOHuzTnw7yVPdJ9O28r3LS3CToTnwBmi+ahokdJo9Pu+F922jXfX1Oi
-         6yhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792505245; x=1793110045;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0MP30nw0IIRx244dAjoQ+sXac7dSmGXhgCJfSLXreiw=;
-        b=uKHWI3SM2xRMbUBZxgZFmZcA52kGgJFHj0uXehT2+Ase5LByjZwzcAhFAA+gx9Gvir
-         +R/Zwi+KjNf9MvCzvndAa2LJBXuRUFxPlEPY5JkBYIOkVcyM/5IdvPuaQJTJEE96BKWc
-         JHBBVmKoQsxfYTc2QapHOQrUBKVwqoNINqZqtWQ03aXwSJNXx5sst1EpLRI2vB1if8Lp
-         UhViPnKNjI+4K2LZ+sn4TWyRD2erzGo6jYrU0nmDZ3CE713bcD2YnsmOz11u4IAWJk4O
-         6PPZYvimYgB2le9NPloT3AQx3HueMfXQcAU3YOSem/qru+Wri534iHzMdGe5HAVTPJrJ
-         zQcA==
-X-Forwarded-Encrypted: i=1; AKwUvBxzdBjmK9KMxKcXxWe57MDT6LysBffJYOJ/m6eX93CqmV1jR8c1rdqZHHEG1uIfvRDagwtra1tiMdXbVuUG@vger.kernel.org
-X-Gm-Message-State: AFq9FYLhyPkeAS/iLxnSWf86EcUwQCClAwqui2+kfvRKoKWBzk8glehe
-	UPKpMhIJnoWV7FihdCANr59Y5PLr1y/a85hReVlZY5s1+NHd75KLCMnPK+xsi+jfrgk=
-X-Gm-Gg: AYBFou1+fWk7AEavz3vOCgmSRQeTadbtQUHVuoo9dxwS6zWc0R83qM87VVxmc4QDXtg
-	XlnZCMC37NQoTRvO1vmQaKvNtpc9r9jZbc3yQOYB444To5UO3uGj/PmOiKlP+Q4WuzAGf8CeZYe
-	c3CdpWm8VXrbB8/OHHL/JjtOeqQbhrwvtRc+44ymKsjPehLvFeMD75uNl8eIkX+EzEYgsNuTug3
-	wOMN3Zp5U6bxTNWwLHaQ7chj42+n6+y93pcOrdDvse5D04RF0u17aDJ1xZ60fXdoH86NRE0xpZo
-	dnopDUsYrYXFQdPGSGuzor+AvpB3ubpVUx1vXiSAAN9xsN3pjKXgIgI5B3DKKneNlJDcuneORQs
-	EsJtUZSyubP9AFvte1rtKl6P6hNk16V7xMcjro0RRoR64+2m/Av0Uc7t1d75GXo2NlnD8Yy7sR5
-	pdFtxAXO3Rfi57sUomLwlk5L64PXhSUtS7YK6Jr0ULLkX6Ifc/XCOERRl02mPVFtZmBu3W24Y1e
-	DaHaQ==
-X-Received: by 2002:a05:600c:c16f:b0:4a1:b29e:f72d with SMTP id 5b1f17b1804b1-4a1d7466674mr249825155e9.0.1792505244986;
-        Tue, 20 Oct 2026 07:07:24 -0700 (PDT)
-Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2ce1479sm75602805e9.14.2026.10.20.07.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 07:07:24 -0700 (PDT)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] module: Move mod_unload_taint to tracking.c
-Date: Tue, 20 Oct 2026 16:05:21 +0200
-Message-ID: <20261020-taint-unload-v1-3-d1c764889afc@suse.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261020-taint-unload-v1-0-d1c764889afc@suse.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E11t66iS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 600571F000C4;
+	Tue, 20 Oct 2026 14:13:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792505621;
+	bh=ICum0JAKfDirRcbtMAFqCyRh4kigsK9BGaaoW68KlyI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=E11t66iSpTjjQeZP7kLMxylH7DJQGcYr5lJKuxb8NLVkYq2OPL73B3jR8fL4tiMSp
+	 1UR4bHhi9KTM0MzjxdhgUZ2I7izhwR7LM/7FfisdBdyrDqkF/S0mEmcoUpgm8MQinG
+	 8V+Uf5YbtZJ1nFJZslWK8JvJsS8fVq5HDSdbLvyXTg7r8WJ5mqmETKMbHAvUaVMPpw
+	 cz+nHJ8XCULVE5xYZ5O1Gqp+pQZlRowQoppIbiwHs0bbjIqQSjavxd+48mCJ05MrMH
+	 Y0kOpyweMq22JGGk+ZLWx+M9wWRsn0aY5XzCGXLZ7i4iMG7fo3S2+dxpaHANqIlMq7
+	 Kf/gqNr1TVMzw==
+Message-ID: <sashiko-outbox-179099@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 2/3] module: Fix data race on mod_unload_taint::count
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Petr Pavlu" <petr.pavlu@suse.com>
+Cc: linux-modules@vger.kernel.org
+In-Reply-To: <20261020-taint-unload-v1-2-d1c764889afc@suse.com>
 References: <20261020-taint-unload-v1-0-d1c764889afc@suse.com>
+ <20261020-taint-unload-v1-2-d1c764889afc@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 20 Oct 2026 14:13:40 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -100,73 +59,87 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
-Move the definition of mod_unload_taint from internal.h to tracking.c, as
-it doesn't need to be exposed to other module code, and remove the
-redundant declaration of mod_debugfs_root from tracking.c, as it is already
-declared in internal.h.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] module: data race and uninitialized read of count in try_add_tai=
+nted_module()
+--
 
-This is a non-functional change.
+commit 742b3a34fee074246edb757213ccfc148f6e7300
+Author: Petr Pavlu <petr.pavlu@suse.com>
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- kernel/module/internal.h | 13 -------------
- kernel/module/tracking.c | 14 +++++++++++++-
- 2 files changed, 13 insertions(+), 14 deletions(-)
+module: Fix data race on mod_unload_taint::count
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 70ef20b97c84..3aca22253296 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -253,19 +253,6 @@ static inline void kmod_dup_request_announce(char *module_name, int ret)
- #endif
- 
- #ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
--struct mod_unload_taint {
--	struct list_head list;
--	char name[MODULE_NAME_LEN];
--	unsigned long taints;
--
--	/*
--	 * Number of times a module with this name and taint combination has
--	 * been unloaded. Updates are serialized by module_mutex and use
--	 * WRITE_ONCE(). Readers that may run concurrently use READ_ONCE().
--	 */
--	unsigned int count;
--};
--
- int try_add_tainted_module(struct module *mod);
- void print_unloaded_tainted_modules(void);
- #else /* !CONFIG_MODULE_UNLOAD_TAINT_TRACKING */
-diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
-index 873fceb30526..46840dc22dcb 100644
---- a/kernel/module/tracking.c
-+++ b/kernel/module/tracking.c
-@@ -14,8 +14,20 @@
- #include <linux/rculist.h>
- #include "internal.h"
- 
-+struct mod_unload_taint {
-+	struct list_head list;
-+	char name[MODULE_NAME_LEN];
-+	unsigned long taints;
-+
-+	/*
-+	 * Number of times a module with this name and taint combination has
-+	 * been unloaded. Updates are serialized by module_mutex and use
-+	 * WRITE_ONCE(). Readers that may run concurrently use READ_ONCE().
-+	 */
-+	unsigned int count;
-+};
-+
- static LIST_HEAD(unloaded_tainted_modules);
--extern struct dentry *mod_debugfs_root;
- 
- int try_add_tainted_module(struct module *mod)
- {
+This commit fixes a data race on mod_unload_taint::count between updates
+serialized by module_mutex and concurrent RCU readers by changing the
+field to unsigned int and using WRITE_ONCE()/READ_ONCE() accesses.
 
--- 
-2.55.0
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index 061161cc79d90..70ef20b97c84a 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -257,7 +257,13 @@ struct mod_unload_taint {
+>  	struct list_head list;
+>  	char name[MODULE_NAME_LEN];
+>  	unsigned long taints;
+> -	u64 count;
+> +
+> +	/*
+> +	 * Number of times a module with this name and taint combination has
+> +	 * been unloaded. Updates are serialized by module_mutex and use
+> +	 * WRITE_ONCE(). Readers that may run concurrently use READ_ONCE().
+> +	 */
+> +	unsigned int count;
+>  };
+> =20
+>  int try_add_tainted_module(struct module *mod);
+> diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
+> index 5bcd1c2701f07..873fceb305268 100644
+> --- a/kernel/module/tracking.c
+> +++ b/kernel/module/tracking.c
+> @@ -28,7 +28,10 @@ int try_add_tainted_module(struct module *mod)
+>  				lockdep_is_held(&module_mutex)) {
+>  		if (!strcmp(mod_taint->name, mod->name) &&
+>  		    mod_taint->taints =3D=3D mod->taints) {
+> -			mod_taint->count++;
+> +			unsigned int count =3D mod_taint->count;
+> +
+> +			if (count !=3D UINT_MAX)
+> +				WRITE_ONCE(mod_taint->count, count + 1);
+>  			goto out;
+>  		}
+>  	}
+
+[Severity: Medium]
+Does try_add_tainted_module() in kernel/module/tracking.c still have a
+data race and potential uninitialized read on mod_taint->count when
+allocating a new entry?
+
+Further down in try_add_tainted_module(), a newly allocated entry is
+published via list_add_rcu() before mod_taint->count is initialized:
+
+	mod_taint =3D kmalloc_obj(*mod_taint);
+	if (unlikely(!mod_taint))
+		return -ENOMEM;
+	strscpy(mod_taint->name, mod->name, MODULE_NAME_LEN);
+	mod_taint->taints =3D mod->taints;
+	list_add_rcu(&mod_taint->list, &unloaded_tainted_modules);
+	mod_taint->count =3D 1;
+
+Because kmalloc_obj() does not zero-initialize the allocation and
+list_add_rcu() publishes the entry to unloaded_tainted_modules first,
+concurrent RCU readers in print_unloaded_tainted_modules() or
+unloaded_tainted_modules_seq_show() can observe mod_taint and execute
+READ_ONCE(mod_taint->count) while mod_taint->count still contains
+uninitialized slab memory, or race with the plain store setting it to 1.
+
+Should mod_taint->count =3D 1 be initialized before calling list_add_rcu()?
+
+[ ... ]
+
+>
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020-taint-unlo=
+ad-v1-0-d1c764889afc@suse.com?part=3D2
