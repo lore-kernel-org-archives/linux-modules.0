@@ -1,130 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.57.67
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.177
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792520796;
-	b=dnGQl8tHDju3l919pupRSwFzYEKAvIEH0MA851uotnC/tH1deXwM970vUQWOCf+Bq5Lg
-	 te6gvRO2asUS1XHEaPVR4lYWXgXg1D8f4p7fEyC5A6MfTq17t5yjcq0EDRV+oLX9is4Rj
-	 sK61dV5XhRvopaEe5IFpe+N9F9xn0pJ4+w7oLZ2iNIKWfqFMQO30DZFqyppAXcOKAZVep
-	 Rzit8qJYcN5Abb6MbYahwHrXvZa1PjqLTHQvowCwl8dvOoBJ5x6VM1suuYut2lAdNRupF
-	 4xQhN2A6x+ZzVaCD13SXaTsd5/y86g3c8hXlO7S1IIm3MAaatyCjNmMSKX+d5tPkp5w==
+	t=1792524142;
+	b=MxSyFdwhxtnZTT08qmXwg6Ptx4OxpF0RL77cb3p7z1jBsqoioCRA01jvT3N8H1tjkNmV
+	 t4xDbn40hwFrVCB5QVDoDQp36k2fzsY0/Lh1oMwzkXTPIlVmdAZLS+NPQkQa3ywwCR5tQ
+	 mY3Pj43TQuiZZLKGqjsgvWzlwHpR3KfAzsX51VSPmKdUcHX93O9LyEb5+iRZIP1P44QT3
+	 PsbERAf8u0q8H6DFvu7oAPwRcCM+aPIkwPu0RC2kIYWAjAYcGzCBiiROIYSKo05SoMGa/
+	 xOsWSO5OyqC3n2x7flxWurMZruaAUBoZg3ILvOjKmob8YyO6YByFjGpOTBYIzWlpjyg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792520796;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
-	 Received:Received:Date:From:To:CC:Subject:Message-ID:In-Reply-To:
-	 References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-NV-OnPremToCloud:X-EOPAttributedMessage:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=SfM6Bgo1piRcZRi9hIh9huMp2WsCCYR2G1TXaLlsSec=;
-	b=3OvrmShXT0LqUUQ1ipb2n05JZNaq6TGbu+3Reh7O93VMLp9+HuF4Djnvmzz/mCMQg70q
-	 ltjK69pVmtFqCodLvDGPys4adtHQbOYSlKY76rq7lZbBHGJswaoPA6mvNbFRCjyuhEiYD
-	 U8n5Fo5u/OV0U4e1ENRA/g7bOj0FkoBHZAR1XKwHMupO66WPOk0vbAg9QYYZEoSFlZ64y
-	 vCAObjoVwWZTI0ssNicDBIrDMnlwPU9rkZOFQkS6VVWqFzuI5FauAeyVescFTNruO2yWh
-	 e3/6HsBWxKARnXkSRs9rACs6c4vcC5JO30Ko5ECly14bNkvb8BRGSYx2zAncnuN1GHA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792524142;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=y6pW1Np65YgMNQpZAz08cJlPZzgj3oRGZ7hLNsVmwfA=;
+	b=2KOZ2sxG2ZpC4C91PYlHd/qURZCVGS5y/wrCT0BFxzT70JSsY96XWZLIDiQpsx4mvxcE
+	 janMmeta8UNl5fYLsYxIBGKjyXcQ/KbiqPSBRq0VnY0GsNlTCHDUeLSipJLJRDsewtctZ
+	 JnrjB3gBYbKBQgdPwfg7wVin6k+LzBiHTJrXnrLupJFRxxufaRiOXfoj5FJle/th/ANyt
+	 iu5oOO+NUtbe+zBowU4N2sCYfCWn3eLpUcwNjD5jWjoihjyif40e1EgDH84hQmrb4CZEc
+	 pFCuED3xIKKeImU9yyqy4I3utJOrHX0jnI16OMYvWPpxXY7QF5UdsB9YaDfvAz6SaPg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=XCQ1DpdG;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.57.67
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011067.outbound.protection.outlook.com [52.101.57.67])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FdVLlQeb;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.177
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D444606A319;
-	Tue, 20 Oct 2026 18:26:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D444606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C8F606A31B
+	for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 19:22:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43C8F606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=XCQ1DpdG
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Z2Fj5m7+FMAcwuQQ/KhS1KgcbiQXZbBjrzuZKPa3KcNl9fmVXe8sPxCAzVaE9p95F7eJOjp639hgozHmu8MJEmvlHybH+I9Z7UFkIt3xJDmi343fXah+MXy2gUvqn2EqmQJ32e+HwNwkm+pi1ws+MnWLDPhXAdI0H1azI/Fzb1fTi8flR/HSsogdpeWcRCQvMLXsfYGqdbhnxDhpoV+L0bVhVrVEGbxGqit93dPUR6kY1XTRxKwEBo6uCPg8zntyFlOtBhYquckROR9+TAAPBUsBR2G835vmhzH5C0AFzD0/1hXBS238JaO/f3WZ+jYY5RWtUVATW0bXp4+SetuVhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SfM6Bgo1piRcZRi9hIh9huMp2WsCCYR2G1TXaLlsSec=;
- b=oNYntcrmkoXblgdf06LOgflHfnf13KaTc0b6u0fTJwTIz0smgCa3P6XOb6O+j3qHPzXCm3ipz2jZobbjmYZH7lsgFeJwT6Io0GQxBzx6xpH3TtyECFckLyNubGbLbMOiyXVIm1TZ9KdTntj7MQozxEzMpG6E4S+VAs6DcdyxrAo9/vjUqmvbGwOVqMau/KeE4DJ7c6RppwWFAbPKDoDCjRwQQFLbVzJw5la8jGy8UbQbNqbyjE7drSeszkVjn/9B3Boze/2qLuD5yPLJtyJoziZ+TJQFLb8MoOM1CrkA36+e2mjqc5Eo+Zr6+bN+SFgYqAvtQcL5UMV8ySQytKhmVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=weissschuh.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SfM6Bgo1piRcZRi9hIh9huMp2WsCCYR2G1TXaLlsSec=;
- b=XCQ1DpdGANj9gS2TIKOO3LrpDOJP4wEOkQL1QW9vVfB03E4Pac2Q8tdQbQAlGPZ6vbLtk7xPRvYNbWTqJt8QBgQKzDVZH12CrHLbEt2rLRuN8m1YsN1JuhNizy6F00zUqpCf6ppWLsaG3TBWJMk8XZ/HnOGwxwh4BoUWZHG/xSoIEBkjM2C7tnyqy1QNUBbCjUZOsLIkhbfddm5PbDxJ3dcAit+e0oa5qnz9+fGX6KA2rvaUaqK93aHGwm3dwMZXdHNT/X7Td+aZKgCpXuE2kYJb7FVuhEfUeHVrNdJsHXVrj2+pq3FXxhFE983iGSJxuElYZDGksCxjeOd6FvZRQA==
-Received: from CH0P223CA0014.NAMP223.PROD.OUTLOOK.COM (2603:10b6:610:116::18)
- by SJ2PR12MB7848.namprd12.prod.outlook.com (2603:10b6:a03:4ca::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.15; Tue, 20 Oct
- 2026 18:26:28 +0000
-Received: from DS4PEPF000001BF.namprd21.prod.outlook.com
- (2603:10b6:610:116:cafe::95) by CH0P223CA0014.outlook.office365.com
- (2603:10b6:610:116::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.522.20 via Frontend Transport; Tue,
- 20 Oct 2026 18:26:24 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 216.228.117.160) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS4PEPF000001BF.mail.protection.outlook.com (10.167.23.165) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.569.0 via Frontend Transport; Tue, 20 Oct 2026 18:26:23 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56; Tue, 20 Oct
- 2026 11:26:02 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49; Tue, 20 Oct
- 2026 11:26:01 -0700
-Received: from inno-dell (10.127.8.11) by mail.nvidia.com (10.129.68.8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49 via Frontend
- Transport; Tue, 20 Oct 2026 11:25:51 -0700
-Date: Tue, 20 Oct 2026 21:25:42 +0300
-From: Zhi Wang <zhiw@nvidia.com>
-To: Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>
-CC: Alexandre Courbot <acourbot@nvidia.com>, Jason Baron <jbaron@akamai.com>,
-	Jim Cromie <jim.cromie@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Boqun
- Feng" <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, "=?UTF-8?B?QmrDtnJu?=
- Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Daniel
- Almeida <daniel.almeida@collabora.com>, "Tamir Duberstein"
-	<tamird@kernel.org>, Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Andrew
- Morton <akpm@linux-foundation.org>, "Will Deacon" <will@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, "Mark Rutland" <mark.rutland@arm.com>, Lyude
- Paul <lyude@redhat.com>, Yury Norov <yury.norov@gmail.com>, Luis Chamberlain
-	<mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez
-	<da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin
-	<atomlin@atomlin.com>, "Brendan Higgins" <brendan.higgins@linux.dev>, David
- Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
-	<linux-modules@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<kunit-dev@googlegroups.com>, <driver-core@lists.linux.dev>
-Subject: Re: [PATCH RFC 00/11] rust: add support for dynamic debug
-Message-ID: <20261020212542.2e3331c4@inno-dell>
-In-Reply-To: <310ae622-20e8-42ac-b501-4315c4cd4d14@t-8ch.de>
-References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
-	<DM9OY2QIU84D.2T3QX6SJJI6VH@nvidia.com>
-	<310ae622-20e8-42ac-b501-4315c4cd4d14@t-8ch.de>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FdVLlQeb
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-3550dd02c9cso299492eec.0
+        for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 12:22:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792524141; cv=none;
+        d=google.com; s=arc-20260327;
+        b=c000/6HP4vuyz9zx7KzuSUWfqMBRuSMAwO1UvZh8F6QEmcElxv6xdp4uXczKLk2Hoc
+         FSEpAfC9wB5tYzYTv9eEr0sNc0GcGCZ4g849OPBCyeQzc+WzrROWSuCMner18AroKOOW
+         65ReKmIqzvRmIWLqL2li7J28aGKM4dIv6uonneXOqZWz1u2sShGcZP0WUJhclVhb3ceT
+         R5zBexknNlkDzXRd5LUhTm1T6/2sfMI1VO/hMGYAFBa1cWqfiYPBkjBNiGTYSe+t9muo
+         x8B9lETCZ/OmxfatREK69wfghy7bPO3j+No5hcdyUnxXY3CrKIM2SlPWuNUkaM9ZmpkZ
+         1oVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=y6pW1Np65YgMNQpZAz08cJlPZzgj3oRGZ7hLNsVmwfA=;
+        fh=IrOUSVcrshzmEeeN+tk5tDYkD1ir3o5z38jZw1KyXqE=;
+        b=osC68aOWMxHc5ERtQ2pOLZkh8d0K744jN2kc+42KKNKJoDwQwXren27pz3SGBEElP0
+         iMvZqyY5NA3Tt9zQNWolL/uNVclDWj1BdFeckytGfyDRr7jVlpqmnQYEuVW/Sb/FPRwP
+         3sXhOI4AqTPosGZ9tyz+MuDm1M7E84BKXIeWNVqyMHrdx4TFy5VdXfL7Gwzc7xm8mbxt
+         0jzy07ZrVH+8iZuueYk7O8xdjEu1+8nopQ3m0oGPXX+vnaqgsxSay+4xODn1ERmFeelM
+         f/J96hb31SqnYodLU1kGoFmsqBzSqjCgqhs2HG3iICU6E7lhY7Q9D/7mLyvZawxkKpT8
+         nzrg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792524141; x=1793128941; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=y6pW1Np65YgMNQpZAz08cJlPZzgj3oRGZ7hLNsVmwfA=;
+        b=FdVLlQebghmNvLxXgbuZKTIAmJvt9BwS3tERVySriRZ70dWkKvjz/xqm3oLrZ1R4Tg
+         O8rrr/uv1nqGHzILbHpKq8LWOBEV5kf3uCo5qJe7X28cVK3HWgvSw9V/OB2OtvLkJfG6
+         9tl4gHOQpGsRVZ6oSqH45edWhT25Mc59DqkqlieRw+lIJHE34/EkHbsdbeH4wBveiAXe
+         e4+UrZnlijmA4q52HAMGYu76l8gIxFJtavs1Dx0nf8u4Hq+8B5e7ZE0RZPRLyxRcc/cp
+         +Ac+3amZz/6YgnP9jCkx17SXnHq3AQaUCQF+BQHYpVbdzhqNbC0sffBk7J0H4zuW9+0a
+         ZICw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792524141; x=1793128941;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=y6pW1Np65YgMNQpZAz08cJlPZzgj3oRGZ7hLNsVmwfA=;
+        b=ba4eCOUaWIMg/2y6IUxiP0uRoceM8EuaxonUTg5aiTCQ2dj6XxK5BJw2pb8qU1ntJd
+         CviXxU3/EhvnJtmY8uVVrktXRPpE3J9lYABlDUqpH52So9k2wNqXkS3xJ6Tn1oWXoqL2
+         l/clYW27lfrBEa3vLKmQ8zuThjRDUbfTWGzN8UIO5/Dpjl6nMvc38SjoqH5Av9F0as9n
+         5UEu+Bs9JuIXIm8b6/7ebzb2fkhLu3wkI2wcQrpnV4JB5qTPxlAorjAJZr45+MWk85Zv
+         8nuFjYbYYwVhgoH4uhCmkOl3Wzj9M9lfLr62jOwT6E9rCbVIhYDN+1HS7jkBF4hPSt/t
+         5E/A==
+X-Forwarded-Encrypted: i=1; AKwUvBxMDRof3q1gGSDbo9E/JzKoQnYBl7YUqAILvW9f0k3FAaZGcUMUAh/yuWQY1+FAqQNHbvXZZQhi+vrmMPe3@vger.kernel.org
+X-Gm-Message-State: AFq9FYJkswOyBvUUX9rmSVVnUiJCUTCZDD/hemSoSNj0nY+wqdMuU5vO
+	LLTRZPoVaHAYj8zEsktGRNVloGrCcLq9+LDdRX2GxQayl7A6VeLW1s2x1W+Yuh2Ur4H8qPbcha+
+	ddCEYS+yor3J1N852n4g6DT4u27v736s=
+X-Gm-Gg: AYBFou0j3J8ul0l8+jEZ4+JmQW/GyjFq3wXarG+F7/15DPqIcBh6rf+3RUpenoxtL0S
+	TiaQNfkT+fT14NOYao3UGsN6iQM4pcP3mGdYGrnzMOo+MZszKsRfBQZOa4QfSZuQ0Imlx9vvOJp
+	jxBQ18EjTEaLp0khrSJ9xbDT3yZiuMqbznkkNlTEShfai4W0NAtpC97d3yQ4PpMqdjrh6yHEW25
+	gEWUYGLRMSCkSvNNMfR8qCd4xpPTM5CxZ63pS1dcNZF45DpClquFLxMi46hiGR5U1LlkpN7Z9u9
+	yBHsCOUIWOStYQZlNYPFHizaerzyD+fGqtkrIva7VCyma2qKx4O6uM8Os0ZtHgV8/IVWrwjg9nb
+	vcVCg/ac+4IyFIGoYF8Mj8yraHUPXFK8xfJF08SQS1basS8vqSc+mYKrV5QFPlEQkFuN0EGWj/7
+	aLs19MeE3iTtITdy+i03iA98iG6QQRhZHA8Zmi9+LdzeGxugeSSJG3aJzIp1Rz4ZoNxe7eDZwbY
+	xA48OwUWv7t32c40aYraOqoHLUu3/W1TDpY
+X-Received: by 2002:a05:7301:6196:10b0:367:2bed:e7a5 with SMTP id
+ 5a478bee46e88-3674d54de76mr374081eec.2.1792524140925; Tue, 20 Oct 2026
+ 12:22:20 -0700 (PDT)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -134,132 +106,54 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261019151243.1595858-1-gprocida@google.com>
+In-Reply-To: <20261019151243.1595858-1-gprocida@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 20 Oct 2026 21:22:07 +0200
+X-Gm-Features: AclHuK_Q4B91U235uOypRate9HJl6NJQSOf6P4vyvpd5ZbK3OTSCP3Lki8_RDRA
+Message-ID: <CANiq72nqq4oGBWVtSMBhXS6G4H7fYg07ysD7SjnOWWt7R9_ajw@mail.gmail.com>
+Subject: Re: [PATCH] rust: exports: emit ___EXPORT_SYMBOL without C declarations
+To: Giuliano Procida <gprocida@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org, 
+	Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS4PEPF000001BF:EE_|SJ2PR12MB7848:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9b985a24-c18a-4dc1-c025-08df2ed7a51e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|23010399003|36860700016|1800799024|7416014|376014|22082099003|18002099003|4143699003|11063799006|10067099003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	KP1W+pmv7eg/IzzRT/smeSM75g8n8dHits2NpwguEu0cqTl1t629K1eVMa5Y+8cnTTOo/fhs8ZHSpxDxEVSgl6S0KGT9P3V7MGtxkGb3EHIcR4Ro/ZfTUofCbXBT5zA2phOqiMqRflJMOBaRsQ4tzIOAcW4x37jotJEp9eNn0218qcSBfb1t6YBK3Q1UiZpcroHM5WHgECBWzR87fO2sTGDI+3X917Y0ffSwqqQdLDJw/ZsOVkZ3eXYCdH/8u1RM+deXdLeRSpeytPblmpNK5pUQpoRTXQuhGPto/YEwzKZkEHSlGXIyYBl/SnYkoBhphM6fkL3P3swwn1JW31eZ6Al2CGvNxYmofVaRah/So6UqRtuXhA4Wal/80O8PAZeECzPmZjktptMBengTbTBdfWtCe1+pv8ObzWi7iH5djNd7fKAqBdCgTlx/cg1JL4sUwYA3Mf7WLaLNenIS3RCoRfXh4vUXCTLZAQVZUxYSKsLlmuPzvKB54XbadHh4kgf9byfuWUfQiGCGXUPjv9eeMY3o3NBS39fSaHxj177Hes1vIE6Sziuq1sUeA33Ce7qtFRfcdLqat8x/iyZwySVvuMFnHsZ/oSeS5/IPTkQFna8v3/lMQ8BaD92STG24Karw3ai4sZbsKfBBvKs8xib/K4OrKGRamxSLYX3BFHyUsZijS4/HOOBg7XVRiEwjVFyoapcN3cd6ivyKyw+UFkaACQ==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(23010399003)(36860700016)(1800799024)(7416014)(376014)(22082099003)(18002099003)(4143699003)(11063799006)(10067099003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	RkWpumCQxpYML1raMcdXYG/8RmM6gwqEucVZzazom8XAzy8NGTFWrz3OotPLtjHda+l0l/dmRKVssVQc78fc2fphmEzuIee94Qf3OWY8UsG3lBOrDbTBeQQSAE+nrpnBGxzJ/twDbuMmAfr8p/yHElDjscWuW6CDbaz9gc5icEMhUJCYy8r0YCCUyZZmVHxV8x1iFGlf22ClHoOhdaxafLkYbE87lHe54CL3cFF5JNzXY/r38m24QEPLKikwmVNySLgZZMzx5eZPmzhk2p+Ztv12+P6qbt8kww4YlHOOuW3cA6CMwV7zfsBWXywQ91iQ4wxntskHhAn1LtKm4oewiknDEwhYVRrqpt7doX8Wg6vZqs2uvh3TJz9WhqXPqzBNCdGCBSXWEDl2vbwr7zHwzQY5SIheNB1EwwGNAYfnTcKGZhMUzMsyb4ivC814zAKe
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2026 18:26:23.1866
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b985a24-c18a-4dc1-c025-08df2ed7a51e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS4PEPF000001BF.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7848
 
-On Tue, 20 Oct 2026 19:30:33 +0200
-Thomas Wei=C3=9Fschuh <linux@weissschuh.net> wrote:
+On Mon, Oct 19, 2026 at 5:13=E2=80=AFPM Giuliano Procida <gprocida@google.c=
+om> wrote:
+>
+> This change defines `EXPORT_SYMBOL_RUST_GPL(sym)` using
+> `___EXPORT_SYMBOL` directly:
+>
+>         asm(__stringify(___EXPORT_SYMBOL(sym, "GPL", "")))
+>
+> matching the `__ASSEMBLY__` path in `include/linux/export.h`.
 
-> +To: Zhi Wang
->=20
+Hmm... It says it matches the `__ASSEMBLY__` path, but it matches the
+`#else` path, no?
 
-Thanks Alex for bridge the threads together!
+Cc'ing the `RUST` entry and modules too.
 
-Hey Thomas,
+In addition, I wonder if we should avoid hardcoding the particular
+form of that `asm(...` and instead expose it from the C header. That
+way we avoid repetition and getting it out-of-sync -- that was part of
+the original reasoning.
 
-Thanks for the comparison! As a user of this feature, I'm happy to
-combine the two series and see this making progress.
+By the way, I am right that you noticed this via GCC builds?
 
-The Bounded types, bitfield tests, and module_path!() fallback look
-like useful additions. One clarification: with CONFIG_JUMP_LABEL, our
-disabled path already has no FFI call. static_branch_unlikely!() is
-sufficient for our initially disabled callsites, including enabling
-them at runtime.
+(Nit: please write the commit message in the imperative form:
+https://docs.kernel.org/process/submitting-patches.html#describe-your-chang=
+es)
 
-For the combined series, I'd like to retain these behaviors:
+Thanks!
 
-- Debug logging is independent of debug_assertions, starts disabled,
-  and is controlled through dynamic debug. IMHO, fewer distro kernels
-  are compiled with CONFIG_RUST_DEBUG_ASSERTIONS=3Dy nowadays. (At least,
-  Arch and Fedora are compiled with N)
-
-- Disabled pr_debug!()/dev_dbg!() calls do not evaluate their
-  arguments. IMHO, it seems the current dev_dbg!() in your patch
-  evaluates the params before checking the switch on/off. (pr_debug()!
-  looks fine though)
-
-- The dynamic-debug prefix flags remain supported. (I use the C version
-  of dynamic debug to support e.g. +m, +l and _t)
-
-Could you share your pending encapsulation/Opaque and static-branch
-wip patches? We can then work out how they fit together, incorporate
-Alice's review feedback, and preserve attribution for Andrew's work.
-
-Thanks,
-Zhi.
-
-> Hi Alexandre,
->=20
-> On 2026-10-20 22:14:12+0900, Alexandre Courbot wrote:
-> > On Sun Oct 11, 2026 at 9:52 PM JST, Thomas Wei=C3=9Fschuh wrote: =20
-> > > Add the Rust infrastructure to integrate with the dynamic debug
-> > > infrastructure.
-> > >
-> > > Static keys are not used for now, as the full bindings are missing
-> > > for those. A follow-up series will add that.
-> > > Also custom classes are not supported yet, but could be added on
-> > > top.
-> > >
-> > > Patches 1-4: Generic Rust preparation patches.
-> > > Patches 5-7: C dynamic debug preparation patches.
-> > > Patches 8: Rust Dynamic debug infrastructure.
-> > > Patches 9-11: Rust Dynamic debug enablement. =20
-> >=20
-> > Were you aware of this series [1]? =20
->=20
-> I was was told about the original work from Andrew back at Kangrejos.
-> However I was unable to find it on LKML and it was not clear how far
-> along that series has come along. The posting of Zhi's v3 only
-> happened after I started on my variant, and I did not see it until
-> you mentioned it. So my development is completely independent from
-> Andrew's and Zhi's.
->=20
-> > There seems to be quite a bit of overlap. =20
->=20
-> Indeed. I see pros for both serieses:
->=20
-> Mine:
-> * No FFI in the fastpath.
-> * No need for RUST_MODNAME.
-> * Use of Bounded.
-> * Tests for the flag encoding.
-> * modname!() as function name.
->   (As discussed with Benno and Gary and LPC)
-> * Better encapsulation of 'struct Descriptor' (partially not yet
-> posted)
-> * Use of Opaque<> to wrap bindings::_ddebug (not yet posted).
-> * Use of !cv() (not yet posted).
->=20
-> Andrew/Zhi:
-> * Better docs.
-> * Static branch support.
->   * static_branch_likely!() support is missing however.
->   * I also have follow-up patches to enable static_branch_likely!().
-> * host doctest support.
->=20
-> I am perfectly fine with merging both serieses.
->=20
->=20
-> Thomas
->=20
-> > [1]
-> > https://lore.kernel.org/all/20261001145940.1077801-1-zhiw@nvidia.com/
-> > =20
-
+Cheers,
+Miguel
