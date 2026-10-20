@@ -1,85 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792485978;
-	b=aZNWYYNfJEK/lCbmEWO5Q0LtstkI38M7DGD01TJOND6twe4xZqrUeguwEUXm+utZgJb/
-	 NZOueuMTRlCgnBTPNSsF7QRcQLL3jZFU1CG3oxUgmKsRQyT6AHouGkCUQK3pzQKFl8xmE
-	 LZGkLgIBSIKXZCRHmdtA97zHxrKbx3jEqM08ALRUCwBe/q9legMZ+79BzEnSG7EtF99oh
-	 Jv7zpYmuC3MyxUUIJQE2tyMzlrvW9cuAI0NOOfvylym2+Cmoqo0zlqAlj7r7FKObVdSEc
-	 dZ0bdwl6LouhSBgthylA9EM/Qpb8W67McVmIvFidv0iRPh+Mi463LbQngVQcikgsTYg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792485978;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Content-Language:Cc:From:
-	 Subject:To:Content-Type:Content-Transfer-Encoding;
-	bh=58BbleitPsJoz6q3EjDgcPxgw/nmtVLy4GsoSeahJJs=;
-	b=Gc9qsJVtXGhr78jtV//NUgGu8eqGpp2g4qeaBH7rMtHU03FwRuRK9BZHk3l9164UHLYE
-	 XXwK3j1/JRyguUCYcWaMflm/qyi2qbkj66e9XJqiizzdxzCMofsBT9SsMv5RQaZBCdDtm
-	 AG5dw97dR8LWwo/xBm6c5SuP85zEHuSnoG84yXwJKtO9QkwFoH88cdMX3m8VT9bHsXkds
-	 141BsJB9N2Av12Ai0dPA2sxdqjzpGymmHWJWrztAKgs+ftJ7jbmBprX+f0zqVsmLWCvuH
-	 8actVEfS5xyJGD7GxM4INKohKRc9TyoksZiIdphYA2f82JLzTut8F3yTvPkA7tSQaUQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="JiGvJP/C";
-	arc=none smtp.remote-ip=209.85.221.54
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.200.48
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792502067;
+	b=4S1h3e4eiqTIIo9GL0nddHtMtqzYItp6N/ZtDXNQzogkcToVBmfW84owBRuxOj7s8P1U
+	 G0sm1UIzXn11+FZ++ixVrmvIisa7BlCzf2m6F97ZJYAKT5dZy2z+wKs74V2XcaBTE+Jxn
+	 egK7o9gn60GSI6psM6RDMKpQf0yjx+3mkfZj+9C0CGsQZexW2sADdMF8gArJVb+Vj/1D4
+	 XXtPb/UpDGLM8TdDV97kCQwJv6kPU4XbpQQrGI+E6PTQIF3LHIQHkaECnbYfNK+bzNLyX
+	 ejOqL0NqsjScEM1sXCOZ89P3QIk7ufaWYqvA7JOnSHdu3eClLzsO20VGFXBvbhk0M2A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792502067;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
+	 From:To:References:In-Reply-To:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:
+	 X-MS-Exchange-AntiSpam-MessageData-1:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=SSVYrQpQnaO/XPo/xpdJ1Ju/M/k3rJSQE3X6WGXXql0=;
+	b=l4MU7pSo0hXE5KqbCG3fV1jI77rvS+NLu9k8C4C4gDRRCN6EB98Y3JjZ7JiS6ifFnNio
+	 MOx9l3gxDaoTRL++nBAUcsKRXZki+0u5r+5q5ZLuEmn56q3c20VrNeFqIBQ23q+5FG+C4
+	 X8D9LW1N8LYYkRRPqG2seK+jbFcLUhhpvjSMH4VXjyKWY2Xruv0c7QumiQb4EUXWzyvWT
+	 1DBWAVZClAwGIFlSfamMIk5jfQ9WAzsb0rHtdPDvBL8t77JI/RlnDTrX1C8xVWC/nqn32
+	 vezxCu8ONQFrg4YZcSBEUa9UfbuMX37KiZLEM0SzBn12//lYEXmNk0Zmp9IZqQAOkwA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=BocoeYVs;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.200.48
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012048.outbound.protection.outlook.com [40.107.200.48])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FD160A2604
-	for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 08:46:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19FD160A2604
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE920606A319;
+	Tue, 20 Oct 2026 13:14:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE920606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=JiGvJP/C
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48c4d99c32bso2439336f8f.1
-        for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 01:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1792485975; x=1793090775; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:to:subject:from:cc
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=58BbleitPsJoz6q3EjDgcPxgw/nmtVLy4GsoSeahJJs=;
-        b=JiGvJP/CTmLewS8lxrgtQQ5NQaUIciYwuczcA53QItl548K2g6Y7UgdTm5ooanBjhK
-         Mgqf3ykoFYsIRgG94G0yIAxNS0Ay2laqRxMIOJwTJl17xtKGLPCLs1/6pBZg/eJrD57Y
-         8e6fxsZwxK0xZ5vnaFkcagd6jl8YuIFYArCI+Xunbj5dVzBr+UiuvGeSUDQcihetQgAC
-         PpGyi2F8X+EnyPpTAWtZVli/xS9nu45j2D99l6P9wxA+MVrhIWXpPn/p+q1LIe/e32My
-         t9V/yR02fbVy8qCANweqY7WVBBUVetFA6ikxogNXDsrZxcxn/JjEA1Cn8Yr5lB/NkcfS
-         fFZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792485975; x=1793090775;
-        h=content-transfer-encoding:content-type:to:subject:from:cc
-         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=58BbleitPsJoz6q3EjDgcPxgw/nmtVLy4GsoSeahJJs=;
-        b=nl4Eb+PlZUtt9sPBt9oGIedkcHzEMeqzZAFi9p8wFOwPCftoEUYRvM0qekCxC580r6
-         gGHZuxOlekMeDBcdk8hFbbtEeEIaLrFh7Wd58YkQFF6yfuRFJWICnWVKE/M1izZ8aTrf
-         NZsMHbVT0dBG9IipUfnrUPYRV5HmXRF9NTL9vo82HjAq4QKk/bgWQa6DEzR2x7kXj2wY
-         gr4ozoeR/TnPNNWXMjVXbIwDjxBfRRRIQhLXTYdPbjl3+gM6ORSB5advMTlMQY6Ib53C
-         4wAJ/9DnrKSJ1KtfUl1/LIsT9P1sFbVTinUvNwMqGGna6gDDKE6n2h8PdXlSKPSLjV0V
-         gBVA==
-X-Forwarded-Encrypted: i=1; AKwUvByS5iQ+Vw5+oEHhOHiqjnAorB+GvxHWc630f0XIQkXIEyhL5+2Znmsku87kEbUwq6zBPSIiReLwetoPR/Ns@vger.kernel.org
-X-Gm-Message-State: AFq9FYIIk5cQWr+MgRFlEqeFIc2DvBTvNB6obYuI1zt0qgACMtgF1YXU
-	SjmrtsK8Wth3p189aM6WGBuUY7B1AcyZMadhVYA/MpuzrfJLGwg5Au6JRISme7gdyJ4=
-X-Gm-Gg: AYBFou1I7Q4z3s9hq/+qdNqC93G56q41a0GWCtrsw+WqVTN9KqIAe+tiRh2+G+IuNj+
-	sKDR3PVwpECshHmyXb9aKgPTYPKFoz4iuw+8uwIexflcsIP9wIwM/q+8n5M0jw3/H1+1nCUN+UV
-	N4nAh6icGZZdfC8uER5Cy8H1Twp1pHahjAkuKwu+noZpnPv8IfB0s2TPkcHOpc5iY/jIzTjxnN/
-	wvJFFZWYEelwe75MPxnITwFSAgAG9dCyUh4cebFUZigxqkgyPZrMDYDoUNz1YWfUBaE06HuGwUe
-	Vo4QLmOkYl48lI5blyXMpW0GbkhMyldaR4wMsRUMko2efiMEJ0BUHVdC8fSIU+yS0akT0Z4lHPe
-	NL0pY0hf1RmZXMEyxayPfrBtW+NSDqBlvYH/ACnSeTSTOHDUqZ1VDPA1mJHD50abOzm55/+34yw
-	h26h8APcwAm+L24zxZye/ClSsEdFEfGm9gdgbP57TtjpNW/67LevN/LOB+FJEyJuh1dnSos+Xfd
-	SLmKKcO/QthEEdfgFXCZsbC87mEk0mg7vR3
-X-Received: by 2002:a5d:634c:0:b0:48d:eec6:308b with SMTP id ffacd0b85a97d-48e07bc6411mr13861381f8f.21.1792485975301;
-        Tue, 20 Oct 2026 01:46:15 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d80fafdsm4811846f8f.9.2026.10.20.01.46.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2026 01:46:14 -0700 (PDT)
-Message-ID: <71c66d25-389b-4d28-b031-1d7d5261decf@suse.com>
-Date: Tue, 20 Oct 2026 10:46:14 +0200
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=BocoeYVs
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FTsj7kdxRcg34rv9D6EmbSr8YoWvvDCJc00jk989QtOIox6lfdh6kXRCYGctxNgUYe2n2+lLSCP8PM2vMFfgMQ2iTbtccFMaG8zbfNiTegnNNGL6oovdbmPm4zkb8cNtCi3zl95I6pWQ9n8AGos0iSVeBzfvt43CWWwAqdhsa8600GeZkdxPccN7GjKvDIBPAM9CqIW9FaVlkLuLLZhkxYzNYJXLS29OshY4kqvHy8rNBYBV/IalvbwJsCHNOKpUn0zvJnZGhEBKIjAgLkngtgneRNrw4L4AsXgXHyUMV9J/r3R6mTFKuAgN5cxknuWTcyUCnIRE3N/Z3/vjum7LnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SSVYrQpQnaO/XPo/xpdJ1Ju/M/k3rJSQE3X6WGXXql0=;
+ b=bcN3A8UxLg/SVk63EF4okeqCHXtcdydHozj5EKEy6wt2vivputycqnKezOTg1z9Ug7nGSh0w6NUjh8VpqNymw0lbbolc3uDGExyv9uDjhPjU8Eul92fMo2FZM47Q7cF581aQwpWfCsV7Qohc5uwYc2ylMjL61xVuvmifsQbt517obBfpIL4tMwJ9UkYKDDYuxbx85pvHHJZERUnkvqo3EclLBDGYJ1bXYoJsuxN6EkovDnTxHvttsqTx6rYseOE51u1HtyoSZ5yC+KHoAuDNz6n3xWVvuKg70pMjf7SqJwZ4v/9PL8h8kBAQEO7VzNJTJKTI0/hJ9BKKI6Jzh2ujMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SSVYrQpQnaO/XPo/xpdJ1Ju/M/k3rJSQE3X6WGXXql0=;
+ b=BocoeYVscGpm3QB7NAMLQEPydfMyO0Pc7zLZx5KvANycQV/S25ONE0ApIktv+8I4XmYScXc66lSnIgSvFIqgIKqrVaIikEl8SFTRHFBVLAVItGqjLWrUjnbgglU2YRW26Vtsu7+4O35RK36/klNxZI1ayDwuJH19PvV69NbTP/XMUb5zSnF9Jcimo0WdREJcE/gY0BVUjZZuN1ZD7WgBUbvUH1qNPUI+urvN9ej8fr4dduoquz6kAazlJ/B++PWNTsbQJPeiT1kUlFUrMNtOTTr9w3BhvZ3Ad7QpQW5+Tk4BxolmQyfPiq4bOgE6qrnnYeN4pW1Le7426PDY8PPaVg==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MW4PR12MB6873.namprd12.prod.outlook.com (2603:10b6:303:20c::17)
+ by CH3PR12MB8282.namprd12.prod.outlook.com (2603:10b6:610:124::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.15; Tue, 20 Oct
+ 2026 13:14:16 +0000
+Received: from MW4PR12MB6873.namprd12.prod.outlook.com
+ ([fe80::a338:bd2c:3a38:ece1]) by MW4PR12MB6873.namprd12.prod.outlook.com
+ ([fe80::a338:bd2c:3a38:ece1%5]) with mapi id 15.21.0546.012; Tue, 20 Oct 2026
+ 13:14:15 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 20 Oct 2026 22:14:12 +0900
+Message-Id: <DM9OY2QIU84D.2T3QX6SJJI6VH@nvidia.com>
+Cc: "Jason Baron" <jbaron@akamai.com>, "Jim Cromie" <jim.cromie@gmail.com>,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Gary
+ Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
+ "Daniel Almeida" <daniel.almeida@collabora.com>, "Tamir Duberstein"
+ <tamird@kernel.org>, =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ "Andrew Morton" <akpm@linux-foundation.org>, "Will Deacon"
+ <will@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>, "Mark Rutland"
+ <mark.rutland@arm.com>, "Lyude Paul" <lyude@redhat.com>, "Yury Norov"
+ <yury.norov@gmail.com>, "Luis Chamberlain" <mcgrof@kernel.org>, "Petr
+ Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
+ Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>,
+ "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
+ <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <linux-modules@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+ <driver-core@lists.linux.dev>
+Subject: Re: [PATCH RFC 00/11] rust: add support for dynamic debug
+From: "Alexandre Courbot" <acourbot@nvidia.com>
+To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
+In-Reply-To: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
+X-ClientProxiedBy: OS0PR01CA0195.jpnprd01.prod.outlook.com
+ (2603:1096:604:1c5::14) To MW4PR12MB6873.namprd12.prod.outlook.com
+ (2603:10b6:303:20c::17)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -89,180 +115,88 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- Kees Cook <kees+treewide@kernel.org>,
- Priya Bala Govindasamy <pgovind2@uci.edu>, Binbin Deng
- <18983559317@163.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Petr Pavlu <petr.pavlu@suse.com>
-Subject: [GIT PULL] Modules changes for v7.4-rc1
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW4PR12MB6873:EE_|CH3PR12MB8282:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a85c524-c138-43fe-d67e-08df2eac0a5e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|1800799024|7416014|376014|10070799003|366016|10067099003|18002099003|22082099003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	ijSj5Ve2M60gqKg82f+FNbnAlO89Ozk4qFgdhrNNq3ZSimJcWAj2qfwUUA14M5SV5f0vXMpLGKi1tt/vTIdtUyF6A0G5Y5F1rTsEt8hwsnOZdNwb5fNyU439IffTSTlqaOkHH7WtM8GunS95YKpqFCKqWtqeB+mNprwVpbBRQ3sv6HhIkW+R2F2mnjpYzR39/a9HCR6/gDXKHwMyRELPrKSFMf/64YikzK/vZcuScPdZtuDvU5L7q4skCz7upcat4w4RITHxOaMskO5hFsBOjsa8qZJv3nXSiV/kKWg/isl755rvuee2MhEU2a9FUZg8gt9h0zXxxBYed4YS+9QQ0fbOZQruZCmIrx8DtQNgfusBoi5o1ZrhGoQZL0Vf5Mc/c74VPeVTJYbhTgdK/cPRED9ANoCRuwdChRnGzpMXF2Hn58gOg28BYknyoK172d+r8dQh95l/rjTfOhq+MpSShMPCC2SteSbIIBIYu66tAcknEhRQrFKHUBWIgVCoQB8dSQBaPwN/lTyAbhB31V4OGqj4eLAiamfA4syghdyyDyN/ttJsYjdXXqzR+HJZDZQog9AwU3W94dgRPjk0s9bEnBuwvhtZjutzM56jUuRrhDTCsNQAqTp3Xv0oTCjtBtjwP5rNcQbJyqCFzSflJBLP+KpNoojIqQQv7b1oscnTHNs=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB6873.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(7416014)(376014)(10070799003)(366016)(10067099003)(18002099003)(22082099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?a0ZlVjFnNEE3TmdUYXpSZ0RtT1VZeVhOOU9wdW05d1N0MWNyQmpoU01kTVk3?=
+ =?utf-8?B?cTBaRGE4K3FLcDBxY0R3NVpaQzhNTWh0RnhFdGJrZVpwemN0SE80ME9wOTRt?=
+ =?utf-8?B?ME5OSnc0OUdKSUVWY1RFUDV3cVljNlJOK3dObW9aWGFGcmhxYmwwQVZCN0Q5?=
+ =?utf-8?B?QkNINWhLTFFBSmVkTlZIM1pQWXE2QVFTWmhEY3JBYXQySjVjRmlTczNJUVk4?=
+ =?utf-8?B?a1E1VEtqVlUwWW9mSGZZejhHN1RoME5YTTBpTHFPellpWnpjUFd6K0YxMmZZ?=
+ =?utf-8?B?cHZueHBVRUhLVnNZeHBlUXc1THZ0MGtsZXhHTTZTYzFqQ01tR1Q2V2NITGNI?=
+ =?utf-8?B?d0VhcXcyTkxCV29lSTJPTm1HeHVxQ1BtTVAxNnQ5bS9CTGtQdzhmWGJUZ0ZI?=
+ =?utf-8?B?WWdvK0xBTGZ3TVFDV2F3cUVmcU1iZEVoalQ2SjAxN01aa21Vby9lUmNicThp?=
+ =?utf-8?B?R2xmMElwQ084K3dnZ29ib2xLMkZRWUtzbnBQbncvbDhGdFZibGs0anVhL0lP?=
+ =?utf-8?B?STRGcndIUzBXc3hSbGNPVllDZGUvZHovUENzNnJaWFhHZjI3K2Frd3BWS2tC?=
+ =?utf-8?B?ZWx0Z0xQbi92dlAxV0tVM1ZrRnpSbGtQbkd2cFovRDZrbUtNUlhKVFBqRVF6?=
+ =?utf-8?B?alBhWXRVMzdtZFd0dkl0bDk4ZFNYanA4R0VoUU9sOHBhV2hRa3QvVnEwWTFO?=
+ =?utf-8?B?OTNWQVNEaUx0Z0JnWjI1WGx5K3hJVWU0SFRNSGhFaDBIMVBZODRnT1lpblBv?=
+ =?utf-8?B?Yk1GQzc2TmZDNzhIbnlvRlV1MWliTE5Sd3VvWnE0djNYcTc2VjVDUjNnbVFH?=
+ =?utf-8?B?TEpYZDBmUVpsdXVnQjRneXdHS1hVUGp6aENNV1BqYWRlbHNWeHlNRU51WUhL?=
+ =?utf-8?B?VFlEbmFxb3R5NGpSeEdsdlZzdUZ0dmNqUU5XaVYwWVpVaTg0N0RoZk9zZ0hZ?=
+ =?utf-8?B?S1pBaTRYRms0YWpZVTJpR0RrZUp5UVVWL0hUcVNBLzM5eWVwR3RnL3dDNU85?=
+ =?utf-8?B?bTcwTzRSMTRqdnovbkwvT2t6RFNXUUI3M2w5MUhhei9OVDQvUGVCL2VaMUZI?=
+ =?utf-8?B?dlA2N3llanVHWFNuSS82MkRSTnJnWEMyZ0dVNUJpNVo1SHNuMFA2VWQ1RnBz?=
+ =?utf-8?B?dUZ2dzgwTDRGTkpjNk5ISEZpbVlwTWRPQ3dyVXkwRGNHalJpWDVNN2ZoRkc1?=
+ =?utf-8?B?OHRrTXkyN0tmRkl4bkU4eitjcWxRSGpsdjQ2SWZvY3h6c1pzVjhsdkw0ZVM4?=
+ =?utf-8?B?VDBVVjhWaTlEWTBrbVg2eStzZVA2VlJlR2JiZlpPcWRFZkgzL1FQNGpDL3M3?=
+ =?utf-8?B?Q0orcDljK2E2V0U4aWtHQUEvZ2NxaE1LMzh0Um5LczNPeFRuNXo4dm8xRWgr?=
+ =?utf-8?B?d2xveFF6YWtIb01td01UcGpUVVJvQXJNdHluTkdCRTN2N2l0bzhSVm5LalIw?=
+ =?utf-8?B?dStxQVp2TUJjWW54TWpmSHRhbjN2MDEzcmJLYS9kKzZRcFB6VTNvNUV4NzVl?=
+ =?utf-8?B?SElmd3N3TC9YejdJU1dUMEV5ZWR0Q3hmdnRMT0owQWtjY1BvcTFZYU9VcEZm?=
+ =?utf-8?B?cmxkVHNSWXpwN2dBWnFsRWw0VkR0VWNyZ0J2K24rREw5cjJGQmNZWVc2OWVq?=
+ =?utf-8?B?NEp4RlVQYWdKa2l3cXNLK0tKeFc3YlNnSFpKY3RsL3FoL2hSclpGTkhnUkdm?=
+ =?utf-8?B?dDVERzQ0THFISE0wKzc4VDZUZk1VVUtkbmJCT0dXZ0ZNS2JBdzlkZi8xclRU?=
+ =?utf-8?B?WHA0ekw4RkZyNUtOeDAySUhieXJEZG1Kb1ptZkRFMFpQWjBYQmwrTmRIc1ZR?=
+ =?utf-8?B?LzFSMU1uZ20zaFhyU2lGNjhjR2J3VEpSQ2lYMUVMNEtnZGhOK1NjMkhyVVFF?=
+ =?utf-8?B?VHUyaVhKbnpFMFpmMEpSRWJnRUErcnEybHFDbUs1THFFVE9Qci9LU1UwUkRj?=
+ =?utf-8?B?SmZHb3I5dHFMam9oRDBlblN1dW56NUZaZ2Q4c0x0REFOWDIreEF6RkwvcHlP?=
+ =?utf-8?B?dENQT2NhdURhQlhHYVZtRTFkRDlBeHV5eVdPL0tHcG1DMTNXVGkvUms5bmxK?=
+ =?utf-8?B?b09pdFZNVFhXaUZST254SHVqQlRyN014MVZOUVZGM2IxRTRPOHo3cTRvNThP?=
+ =?utf-8?B?MWEyd3hGS3V3QXlDZzdiQmgyemJYRjliRUJ6bGFpY0dHY3ppTFl5VWVBdzFL?=
+ =?utf-8?B?VEl5cDZjWmQ3c1RUMlhCMlp3N20zcm0rMEdGdUVYQklhQkFISXp5QU1zTlFN?=
+ =?utf-8?B?SlpEMHhZZVROd2FKR1RBdXlzUDZ2aFdOYlY5cHBES1B2a0QyWFg2azNsc1lj?=
+ =?utf-8?B?enlRUzN6YUd6Z1lMVkdaaSt0b0c4emw4Qm1MSXUxU3lZTzNja1ZTUnAxN3Ny?=
+ =?utf-8?Q?qZ7fiy6rA6Dib9VUAlBT5QyQEbkOQrVZ9BxgAAPKpbqwA?=
+X-MS-Exchange-AntiSpam-MessageData-1: 4PyVtvBYN+HKLQ==
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a85c524-c138-43fe-d67e-08df2eac0a5e
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB6873.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2026 13:14:15.4644
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VOeVQmqvRA3TjHpXpVZt0NrP1k9HNDTjDm9pQ5GrADClYbBSzh2HFAFK0U5vLPyKtkudrO/4IdWPEDR2UH4Ebw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8282
 
-The following changes since commit df2908090cda368b01ff43709f51890076c56157:
+Hi Thomas,
 
-  Linux 7.3-rc2 (2026-09-06 15:07:20 -0700)
+On Sun Oct 11, 2026 at 9:52 PM JST, Thomas Wei=C3=9Fschuh wrote:
+> Add the Rust infrastructure to integrate with the dynamic debug
+> infrastructure.
+>
+> Static keys are not used for now, as the full bindings are missing
+> for those. A follow-up series will add that.
+> Also custom classes are not supported yet, but could be added on top.
+>
+> Patches 1-4: Generic Rust preparation patches.
+> Patches 5-7: C dynamic debug preparation patches.
+> Patches 8: Rust Dynamic debug infrastructure.
+> Patches 9-11: Rust Dynamic debug enablement.
 
-are available in the Git repository at:
+Were you aware of this series [1]? There seems to be quite a bit of
+overlap.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-7.4-rc1
-
-for you to fetch changes up to 08abfa5a161e1b6e6244cb2090b0530bc0920798:
-
-  drivers: Replace __MODULE_STRING() with __stringify() (2026-10-14 10:51:18 +0200)
-
-----------------------------------------------------------------
-Modules changes for 7.4-rc1
-
-- Ignore local labels and mapping symbols during module load
-
-  These symbols were already ignored during kallsyms address-to-symbol
-  lookups. Filter them out earlier during module loading to reduce lookup
-  overhead and prevent them from appearing in /proc/kallsyms.
-
-- Fix potentially incorrect access of SetOnce<T> when setting Rust module
-  parameters.
-
-- Fix a potential read of an uninitialized count when printing taint
-  information for unloaded modules.
-
-- Allocate the kmod argument array using kmalloc_array() in preparation
-  for conversion to type-aware allocators.
-
-- Clean up includes in linux/kmod.h
-
-  Add explicit includes of linux/umh.h to files that use usermode helpers.
-  Then clean up the #include list in linux/kmod.h, notably removing the
-  compatibility linux/umh.h include.
-
-- Remove the error-injection.h include from linux/module.h
-
-  Add explicit includes of linux/error-injection.h to files that use the
-  ALLOW_ERROR_INJECTION() macro and currently rely on it being provided
-  indirectly via linux/module.h. Then remove the unnecessary
-  linux/error-injection.h include from linux/module.h.
-
-- Replace __MODULE_STRING() with __stringify() in various drivers in
-  preparation for removing the former macro.
-
-The changes to several #include lists have been reported to cause trivial
-conflicts in linux-next with the drm, drm-xe, and usb trees.
-
-----------------------------------------------------------------
-Binbin Deng (1):
-      module: Fix uninitialized count read of unloaded taint tracking record
-
-Kees Cook (1):
-      modules/kmod: Allocate argv with kmalloc_array()
-
-Petr Pavlu (10):
-      umh, treewide: Explicitly include linux/umh.h where needed
-      time/jiffies: Include linux/sysctl.h for proc_int_u2k_conv_uop(), ...
-      module: Bring includes in linux/kmod.h up to date
-      block: Include error-injection.h for ALLOW_ERROR_INJECTION()
-      net: Include error-injection.h for ALLOW_ERROR_INJECTION()
-      syscalls: Include error-injection.h for ALLOW_ERROR_INJECTION()
-      drm/i915: Include error-injection.h for ALLOW_ERROR_INJECTION()
-      drm/xe: Include error-injection.h for ALLOW_ERROR_INJECTION()
-      module: Remove the error-injection.h include from linux/module.h
-      drivers: Replace __MODULE_STRING() with __stringify()
-
-Priya Bala Govindasamy (1):
-      rust: module_param: Fix potentially incorrect access of `SetOnce<T>`
-
-Tiezhu Yang (3):
-      module/kallsyms: Rename is_mapping_symbol() to is_ignored_kernel_symbol()
-      module/kallsyms: Refactor current symbol filtering into is_core_symbol()
-      module/kallsyms: Ignore local labels and mapping symbols during module load
-
- arch/x86/kernel/cpu/mce/dev-mcelog.c               |  2 +-
- block/blk-core.c                                   |  1 +
- drivers/block/drbd/drbd_nl.c                       |  1 +
- drivers/comedi/comedi_fops.c                       |  5 +-
- drivers/gpu/drm/drm_fb_helper.c                    |  3 +-
- drivers/gpu/drm/i915/display/intel_connector.c     |  1 +
- .../gpu/drm/i915/display/intel_display_driver.c    |  1 +
- drivers/gpu/drm/i915/gt/intel_engine_cs.c          |  1 +
- drivers/gpu/drm/i915/gt/intel_gt.c                 |  2 +
- drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c          |  1 +
- drivers/gpu/drm/i915/gt/uc/intel_uc.c              |  1 +
- drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c           |  1 +
- drivers/gpu/drm/i915/i915_driver.c                 |  1 +
- drivers/gpu/drm/i915/i915_pci.c                    |  2 +
- drivers/gpu/drm/i915/intel_uncore.c                |  1 +
- drivers/gpu/drm/xe/xe_device.c                     |  2 +-
- drivers/gpu/drm/xe/xe_exec_queue.c                 |  1 +
- drivers/gpu/drm/xe/xe_ggtt.c                       |  2 +-
- drivers/gpu/drm/xe/xe_guc.c                        |  1 +
- drivers/gpu/drm/xe/xe_guc_ads.c                    |  2 +-
- drivers/gpu/drm/xe/xe_guc_ct.c                     |  2 +-
- drivers/gpu/drm/xe/xe_guc_log.c                    |  2 +-
- drivers/gpu/drm/xe/xe_guc_relay.c                  |  2 +-
- drivers/gpu/drm/xe/xe_hw_engine_class_sysfs.c      |  1 +
- drivers/gpu/drm/xe/xe_hw_engine_group.c            |  2 +
- drivers/gpu/drm/xe/xe_mmio.c                       |  1 +
- drivers/gpu/drm/xe/xe_oa.c                         |  1 +
- drivers/gpu/drm/xe/xe_pm.c                         |  2 +-
- drivers/gpu/drm/xe/xe_pt.c                         |  2 +
- drivers/gpu/drm/xe/xe_pxp.c                        |  2 +
- drivers/gpu/drm/xe/xe_sriov.c                      |  2 +-
- drivers/gpu/drm/xe/xe_sync.c                       |  1 +
- drivers/gpu/drm/xe/xe_tile.c                       |  2 +-
- drivers/gpu/drm/xe/xe_tuning.c                     |  2 +
- drivers/gpu/drm/xe/xe_uc_fw.c                      |  2 +-
- drivers/gpu/drm/xe/xe_vm.c                         |  1 +
- drivers/gpu/drm/xe/xe_wa.c                         |  2 +-
- drivers/gpu/drm/xe/xe_wopcm.c                      |  2 +-
- drivers/greybus/svc_watchdog.c                     |  1 +
- drivers/i2c/busses/i2c-kempld.c                    |  3 +-
- drivers/macintosh/windfarm_core.c                  |  1 +
- drivers/net/ethernet/atheros/atl1e/atl1e_param.c   |  9 ++--
- drivers/net/ethernet/atheros/atlx/atl1.c           |  3 +-
- drivers/net/ethernet/atheros/atlx/atl2.c           | 11 ++--
- drivers/net/ethernet/intel/e1000/e1000_param.c     | 15 +++---
- drivers/net/ethernet/intel/e1000e/param.c          | 16 +++---
- .../net/ethernet/oki-semi/pch_gbe/pch_gbe_param.c  |  7 +--
- drivers/net/netdevsim/tc.c                         |  1 +
- drivers/platform/cznic/turris-omnia-mcu-watchdog.c |  3 +-
- drivers/pnp/pnpbios/core.c                         |  2 +-
- drivers/rtc/rtc-ds1374.c                           |  3 +-
- drivers/thunderbolt/tb.c                           |  3 +-
- drivers/thunderbolt/tunnel.c                       |  5 +-
- drivers/tty/serial/8250/8250_platform.c            |  3 +-
- drivers/usb/atm/speedtch.c                         | 15 +++---
- drivers/usb/atm/usbatm.c                           | 17 ++++---
- drivers/video/fbdev/uvesafb.c                      |  1 +
- fs/coredump.c                                      |  2 +-
- fs/nfs/cache_lib.c                                 |  2 +-
- fs/nfsd/nfs4layouts.c                              |  2 +-
- fs/nfsd/nfs4recover.c                              |  1 +
- fs/ocfs2/stackglue.c                               |  1 +
- include/linux/compat.h                             |  1 +
- include/linux/kmod.h                               | 12 +----
- include/linux/module.h                             |  1 -
- include/linux/module_symbol.h                      |  7 ++-
- include/linux/syscalls.h                           |  1 +
- kernel/cgroup/cgroup-v1.c                          |  2 +-
- kernel/module/kallsyms.c                           | 59 ++++++++++++----------
- kernel/module/kmod.c                               |  3 +-
- kernel/module/main.c                               |  1 +
- kernel/module/tracking.c                           |  2 +-
- kernel/power/process.c                             |  2 +-
- kernel/reboot.c                                    |  2 +-
- kernel/time/jiffies.c                              |  1 +
- kernel/umh.c                                       |  2 +-
- lib/kobject_uevent.c                               |  2 +-
- net/bridge/br_stp_if.c                             |  2 +-
- net/core/skb_fault_injection.c                     |  1 +
- rust/kernel/module_param.rs                        |  9 +++-
- scripts/faddr2line                                 |  2 +-
- scripts/mod/modpost.h                              |  2 +-
- security/keys/request_key.c                        |  2 +-
- security/tomoyo/common.h                           |  2 +-
- tools/perf/util/symbol.h                           |  4 +-
- 85 files changed, 182 insertions(+), 130 deletions(-)
+[1] https://lore.kernel.org/all/20261001145940.1077801-1-zhiw@nvidia.com/
