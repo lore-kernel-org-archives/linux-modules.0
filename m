@@ -1,238 +1,268 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021133.outbound.protection.outlook.com [52.101.95.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792485978;
+	b=aZNWYYNfJEK/lCbmEWO5Q0LtstkI38M7DGD01TJOND6twe4xZqrUeguwEUXm+utZgJb/
+	 NZOueuMTRlCgnBTPNSsF7QRcQLL3jZFU1CG3oxUgmKsRQyT6AHouGkCUQK3pzQKFl8xmE
+	 LZGkLgIBSIKXZCRHmdtA97zHxrKbx3jEqM08ALRUCwBe/q9legMZ+79BzEnSG7EtF99oh
+	 Jv7zpYmuC3MyxUUIJQE2tyMzlrvW9cuAI0NOOfvylym2+Cmoqo0zlqAlj7r7FKObVdSEc
+	 dZ0bdwl6LouhSBgthylA9EM/Qpb8W67McVmIvFidv0iRPh+Mi463LbQngVQcikgsTYg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792485978;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Content-Language:Cc:From:
+	 Subject:To:Content-Type:Content-Transfer-Encoding;
+	bh=58BbleitPsJoz6q3EjDgcPxgw/nmtVLy4GsoSeahJJs=;
+	b=Gc9qsJVtXGhr78jtV//NUgGu8eqGpp2g4qeaBH7rMtHU03FwRuRK9BZHk3l9164UHLYE
+	 XXwK3j1/JRyguUCYcWaMflm/qyi2qbkj66e9XJqiizzdxzCMofsBT9SsMv5RQaZBCdDtm
+	 AG5dw97dR8LWwo/xBm6c5SuP85zEHuSnoG84yXwJKtO9QkwFoH88cdMX3m8VT9bHsXkds
+	 141BsJB9N2Av12Ai0dPA2sxdqjzpGymmHWJWrztAKgs+ftJ7jbmBprX+f0zqVsmLWCvuH
+	 8actVEfS5xyJGD7GxM4INKohKRc9TyoksZiIdphYA2f82JLzTut8F3yTvPkA7tSQaUQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="JiGvJP/C";
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB8B361952;
-	Mon, 19 Oct 2026 11:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.133
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792409277; cv=fail; b=HLFSj0k4YRWT96+RHW9KfIb/7XZ4gnmABLjdQoqW3J/aX8KpH0Y7F/EWF2cH+IuNgdSttLj3d54ArwShFm3D3ngFRuivOTRQ4ziw4SNFsZI6eqxmqlfJrM/CZDhjHLHxxytraIYiiyaJygyVoloSJYytvDtCX9nlyQpHziYr5s8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792409277; c=relaxed/simple;
-	bh=0CbQP3bEvBnQ74mkkNnB9s673z0Hgh48pz+hR3NV/Co=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=PYB6EMxhMocz65zUViIX2HF3WT0twOiZyV3v64Bab8lqmAzhs8EGsZDu9aePSK3HTxcHNsSUYzduRZbcBEVGjgLKl25JqSzBR/E/5sZZPNS32/VDvA5pknnV6upO81lPMqqH+NFhJQBq6SSZrWiNgw1ZW0OyIWO6SwZldVnNn2M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bf3CCFxJZ4QKD1f5Lb07G0uaCWR9WpPIV0C9Kf18O/fMXY5cvapjZz6X6LpE6sAQumXvj9sZHz0L2278ru3oIUkLBGVKiBEyUzRvFeua/UZO71YHhnK0ZdSUS6o0Zo19KarrjtwqiX/gMglwhVQAh/i0zNIZ0H/obwYD3nRqsqySJERvllM1wosXg6rSWxyGhuXgnKtbgqXY64sWSCT43ueBJauJlTcRfvy1FTPoFLUbVfULCX/it7YdbsMyHJxUviSor45+/xS6mFoaxXytM1liOvXFcTkoaQGL58Aa1tL0BEdTwdOKT15Nny2XzTI1llhPOqc89eFMB/2LTyLM1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=/mGqzHlMTNmYHMQVBuf17sl5BxH+fRky3OIO0uULf58=;
- b=TesVcmO225eBzEhwkVnR9t+joo5a4fJtr7s2/ClEZoxyfzZtcj0Cqp7c7ydwTvP0yfkghH27+AfWF1aHx6bFoypvJMs+17jkmxhH9pfDUywTuXBMGXv4qb3qtEFVTrrga6NVTkllG197mTi7AYw9HnkTfQepT2F6ZtHVQlDOngdKXBM0adnleCJvF54EKpOXcqL42SORXYirYjsNJAWyMkKq8J33CfsFQiMK27JTvDVVx3dGYlk2AVbTPtJadCLDU3DHNzSkH0jE/bSf4o5euTvSJKG7oGZeZyeNIPRkeBk11EbwQ5+o0Idr6q8qbeH7X9Yw7+FCKTqonP3MVI3aUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LO8P123MB7474.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:3af::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
- 2026 11:27:51 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%5]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
- 11:27:50 +0000
-Date: Mon, 19 Oct 2026 07:27:46 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: Fix use-after-free in module_put() tracepoint
-Message-ID: <4ex7fuogdtmtxil4i2bzx3yqnkqgb2x5wxysqpwapauohmcok7@jvaytjn5fo62>
-References: <20261019034857.654569-1-atomlin@atomlin.com>
- <a5e66dc8-155d-4eb1-add5-8c182879cefb@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a5e66dc8-155d-4eb1-add5-8c182879cefb@suse.com>
-X-ClientProxiedBy: BLAPR05CA0042.namprd05.prod.outlook.com
- (2603:10b6:208:335::22) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:183::5)
-Precedence: bulk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FD160A2604
+	for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 08:46:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19FD160A2604
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=JiGvJP/C
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48c4d99c32bso2439336f8f.1
+        for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 01:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1792485975; x=1793090775; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:to:subject:from:cc
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=58BbleitPsJoz6q3EjDgcPxgw/nmtVLy4GsoSeahJJs=;
+        b=JiGvJP/CTmLewS8lxrgtQQ5NQaUIciYwuczcA53QItl548K2g6Y7UgdTm5ooanBjhK
+         Mgqf3ykoFYsIRgG94G0yIAxNS0Ay2laqRxMIOJwTJl17xtKGLPCLs1/6pBZg/eJrD57Y
+         8e6fxsZwxK0xZ5vnaFkcagd6jl8YuIFYArCI+Xunbj5dVzBr+UiuvGeSUDQcihetQgAC
+         PpGyi2F8X+EnyPpTAWtZVli/xS9nu45j2D99l6P9wxA+MVrhIWXpPn/p+q1LIe/e32My
+         t9V/yR02fbVy8qCANweqY7WVBBUVetFA6ikxogNXDsrZxcxn/JjEA1Cn8Yr5lB/NkcfS
+         fFZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792485975; x=1793090775;
+        h=content-transfer-encoding:content-type:to:subject:from:cc
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=58BbleitPsJoz6q3EjDgcPxgw/nmtVLy4GsoSeahJJs=;
+        b=nl4Eb+PlZUtt9sPBt9oGIedkcHzEMeqzZAFi9p8wFOwPCftoEUYRvM0qekCxC580r6
+         gGHZuxOlekMeDBcdk8hFbbtEeEIaLrFh7Wd58YkQFF6yfuRFJWICnWVKE/M1izZ8aTrf
+         NZsMHbVT0dBG9IipUfnrUPYRV5HmXRF9NTL9vo82HjAq4QKk/bgWQa6DEzR2x7kXj2wY
+         gr4ozoeR/TnPNNWXMjVXbIwDjxBfRRRIQhLXTYdPbjl3+gM6ORSB5advMTlMQY6Ib53C
+         4wAJ/9DnrKSJ1KtfUl1/LIsT9P1sFbVTinUvNwMqGGna6gDDKE6n2h8PdXlSKPSLjV0V
+         gBVA==
+X-Forwarded-Encrypted: i=1; AKwUvByS5iQ+Vw5+oEHhOHiqjnAorB+GvxHWc630f0XIQkXIEyhL5+2Znmsku87kEbUwq6zBPSIiReLwetoPR/Ns@vger.kernel.org
+X-Gm-Message-State: AFq9FYIIk5cQWr+MgRFlEqeFIc2DvBTvNB6obYuI1zt0qgACMtgF1YXU
+	SjmrtsK8Wth3p189aM6WGBuUY7B1AcyZMadhVYA/MpuzrfJLGwg5Au6JRISme7gdyJ4=
+X-Gm-Gg: AYBFou1I7Q4z3s9hq/+qdNqC93G56q41a0GWCtrsw+WqVTN9KqIAe+tiRh2+G+IuNj+
+	sKDR3PVwpECshHmyXb9aKgPTYPKFoz4iuw+8uwIexflcsIP9wIwM/q+8n5M0jw3/H1+1nCUN+UV
+	N4nAh6icGZZdfC8uER5Cy8H1Twp1pHahjAkuKwu+noZpnPv8IfB0s2TPkcHOpc5iY/jIzTjxnN/
+	wvJFFZWYEelwe75MPxnITwFSAgAG9dCyUh4cebFUZigxqkgyPZrMDYDoUNz1YWfUBaE06HuGwUe
+	Vo4QLmOkYl48lI5blyXMpW0GbkhMyldaR4wMsRUMko2efiMEJ0BUHVdC8fSIU+yS0akT0Z4lHPe
+	NL0pY0hf1RmZXMEyxayPfrBtW+NSDqBlvYH/ACnSeTSTOHDUqZ1VDPA1mJHD50abOzm55/+34yw
+	h26h8APcwAm+L24zxZye/ClSsEdFEfGm9gdgbP57TtjpNW/67LevN/LOB+FJEyJuh1dnSos+Xfd
+	SLmKKcO/QthEEdfgFXCZsbC87mEk0mg7vR3
+X-Received: by 2002:a5d:634c:0:b0:48d:eec6:308b with SMTP id ffacd0b85a97d-48e07bc6411mr13861381f8f.21.1792485975301;
+        Tue, 20 Oct 2026 01:46:15 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d80fafdsm4811846f8f.9.2026.10.20.01.46.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 01:46:14 -0700 (PDT)
+Message-ID: <71c66d25-389b-4d28-b031-1d7d5261decf@suse.com>
+Date: Tue, 20 Oct 2026 10:46:14 +0200
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
+List-Post: <mailto:linux-modules@vger.kernel.org>
+List-Help: <mailto:linux-modules+help@vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
+Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO8P123MB7474:EE_
-X-MS-Office365-Filtering-Correlation-Id: ceda9bd1-67fb-4406-5567-08df2dd40242
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|6133799003|18002099003|22082099003|3023799007|5023799004|4143699003|10067099003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	hPaVD8265xStGYxRtjyEu7TNbadQmZRG8JOAVB76hyktmiWuOA8Uoo6/OuMJD/nfncS485Q6iUmYWGjjEPOvFWR8bCZefXSCo6C/1qcIyo1sokaKdo4SmPOKLJYtpdBVhhDF9AODBdXR6Inn2HRlVkvRT2h/FuY5a3GQbWuMCSOW60LCh1ysXX69jV5qTUfV2C2yvE6r5M9+8GDMwx1AadfCgcPg2YyAixUnLjmHsg4DaAGzBY6snLA1zwPpMs32X4YGs8PjlW4i2aRvX25pHVLghB4Kuy1z9Gx6ylf0uYv5/NnNI1c6HQveGvG1umu2/OT3KiTyx5IhZ/eRNtjGGAUdAIl7vhpWLM02kFiVbswPSMP5rLzjigTGHWYiAEan6cBAe7337/D0eNfThHaql7+b1GXF2si8L/KAt57c7nFWCJz/KYRFbV7SS1aMjvp4Uh5oFPv5qQUrpg1hek7f++uVeF2lLEUMWrK/GfFEeYEnSB7Z8CJxgIdlxtYWu3TlVyOq3bzoaS9WckN6GTFikD2Pbkk4cJd3Fcu9dP67QBCKqoEa27JbAOsEhUTExfYQ+IBz642tHGPjgUwDkcLzuPd6M9vjsqQ7KtGDIW2P4YRX3TSqh8vUd6fOw5QTGkij97CzJzURNyTRMvfIQUIs9x3U2CruTMh4fdh+HkeC2zY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(6133799003)(18002099003)(22082099003)(3023799007)(5023799004)(4143699003)(10067099003)(56012099006);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?c0o1d3NFMlBlRGNmQXU0WGRyUnMxNjZOamhFWG8yMjlZMW82UjN4T3JVVjcr?=
- =?utf-8?B?RmNVZTFDUDREWU9rYk1jeS85UHpzTFErUTFOSUtXNkYxNkxhbXNlb3pPZlFa?=
- =?utf-8?B?WEp3UldsRjZHUkI5ckJlRlY1UjVFdzgyUGFibEdBTmJ5VUlIeldERHI0T1RM?=
- =?utf-8?B?ZXMxZm1yK0M0QTBwQ0lTNmdGcFJXbWNSOEJpWnZaWmFjakJ3RGR6dTVUZW5D?=
- =?utf-8?B?YkFYMitMaG1GNVg3cGVUczl6ZzYyQVJ1TWlwMTN5TzExZWNicHBWNWduNW4v?=
- =?utf-8?B?NEZ6WWdwRFFsUTUwRzNBWHY2OXFSTWFiU2lqRnl0TjExVlE5WG42ZjRlZ0Ex?=
- =?utf-8?B?N0pTemp4S1grbnpLOElGcUtqNDJ6emNNRmdtTFl2MzNXajJKZUVJbUozamky?=
- =?utf-8?B?dkpCd2oyeHlUVUZLOURzZlBRQ3JJcGlKVDVXMUtXckhlVlZRWVlhbDcwczlj?=
- =?utf-8?B?Qm5SM05ONDZ4YWJ5NnNIc1RBTDBQUUplbUY2RnZvUzdLcjVza1l1dHY2bE5C?=
- =?utf-8?B?YXkzZytXU1d4Q2ZCRFgrcXRlbDZuOWxMVFNDZklnekUxU09rbVljL1B5eS91?=
- =?utf-8?B?TW1FRVhsR2hyNnZhVnVpZ0VhSm5PcUhSeDN4TmpPZ21aSGovNERKSEJKQ2dL?=
- =?utf-8?B?TG53bjdiUS9pdlVBelB6bE5JMTl3QkphaG8valdWS1FBcTVuVklUQi9VTDZO?=
- =?utf-8?B?U2VKYW9Ta1NRa0xmY2plYmNweXdoN014dGpTU016VEFDOGZFQ3JBVFE3SGxo?=
- =?utf-8?B?dzhhTFNBSVZoVjZDU21FU0F1bVFYOElGekdDcGorZlVpOGJjb0hsTUVUYjVC?=
- =?utf-8?B?WHBqclVDaUxseG9jY0xnbTZYZVR4TmRQYzBUVTBYM2JhSm8yemdJY1JFREVB?=
- =?utf-8?B?QTQ5T1Q3Y0REYXN0ZURxWFk5SXZVZyttUGhleHVPTnNKOHJRR0srTUV2NzFn?=
- =?utf-8?B?UWJMR2RWVGNZRDRBN3dSMUdCMnVkUnRTLzhONmJhcXhLZmRlcWhWNzd4NnhS?=
- =?utf-8?B?bSt0VFNUVmk5OHNObTFhVVF0dUx6UkdjZ2pRQTNpKytmcmVJMmhWNHYwak5o?=
- =?utf-8?B?VWJwYzZUekxyWjgxZkpLMi83d0FLUGYzMitYVlUva0RVNzBsSGI2eFNCNWpQ?=
- =?utf-8?B?ZVE5YTVEWjg0VmFIR0FaWXFPSldIdVhrRFVGOGNnVE9XOVRRS3pKbm5maS9k?=
- =?utf-8?B?ZWFPa1UvV0RycEdnejc1SDVkTWtzMDlENENDYWFmUEErZzA3OGN1YlliQjFX?=
- =?utf-8?B?WUs4RGMzc294MXg4bUoyNi9QQ3l1NHJqcmJ6TTB5T3Jmc3BqdnB2ZEx1dHpV?=
- =?utf-8?B?TUpaVE1NeVNVT1l6UzVtazRKM0lnTUV5MnlIbDEvOEhocmhZeHU4ZG5NOVJp?=
- =?utf-8?B?dHZIcjJaR3RTNS9vZUpzakFlc0tudm5LVmk4KzdNams3VFNzeXp6cURQVUhX?=
- =?utf-8?B?cWFzNDVnYXBZM2RaR2gvWFgwVEFBTFd4bEpWTXhXRGdwS0V2SGZvVWNKNk1a?=
- =?utf-8?B?ZHdsWGRlUmpTRnAzbkZlbklMcnZYbnhVandrb2VuaUNUR25lVVN3b2xPbTY4?=
- =?utf-8?B?enptcThSbGpHVURWcWh0WEZCTHFPWWx3YVNCOWlQMXlBNTQxMzE5Rk5BZDdz?=
- =?utf-8?B?cmlUd21lc2d2eGwySXBpdmRaTm95ZVdadTdqUlE5akxWN2pVeTF0RXRvM1FY?=
- =?utf-8?B?Q3cxd1RVVmFzUjgxbmN3eXZMcXA0L3NBcVJudlpOdkp1NVdialFKM0VTS0p3?=
- =?utf-8?B?YmRXSTdIZ3hDYlVFd1RVU0tXUld5TUMzQm1rTlI3OThFVGpMRnp3NzhGRTZY?=
- =?utf-8?B?WCsvRlJLSGh3TkNvNzM4N0VoNFNzalVTbm1qRkhOTExtaTZzTGNESVZKRjZ3?=
- =?utf-8?B?YTVtbmhjV2VWbmVPeU9WSnZPQmcxSEo3KzdDUGFpL1pZaGgrSTFPeDZ6a0Zy?=
- =?utf-8?B?M3lzTGZac2h0S1JnV25jdTNxckJzay9SYk9DNDV5T0hwYkFUYy9FRDByVWJO?=
- =?utf-8?B?VjZUeGdYMFZMRE01a1NFMjk1WDQvbXR0NVNaUm9EUnd1ZWtjY08xYnFWUEU0?=
- =?utf-8?B?Zjh4SmlrM1ZOYWJGdlAvVFp6WU9YQTI2YnV4Y3M0dmVNS2FMNlZjR0ZudVY4?=
- =?utf-8?B?Tmh0NnZ3Q2JjUWpEdVgyL2JITWx4MTU5TlRZVlQ3NVRCTWRnRkdNOThVUldi?=
- =?utf-8?B?MHA1MDRSTUhCdjBaeCtzSE5VWVRPQU5sNHJVbDFWUGM0RHNoSm5xWU15SmIx?=
- =?utf-8?B?bE51SUk0bS8yMG5LVDFhUTdEM2VxWGdjSXZvb1VMc3pvSVRGTTVSQ05seGsx?=
- =?utf-8?B?NGxjUDBnVHBMQ3JUL05naXIxR3BEaCtuVnBUZUR5WlptM1BSMjhHZz09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ceda9bd1-67fb-4406-5567-08df2dd40242
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 11:27:50.7034
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4/oPYKVY2MA3b/DnWyeFOSNVpXOJYlYB+0KTsUxG5/mwkJfrZtKW8QWhokVGuVVGs4PXc5j+m10TZjiguFWF7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO8P123MB7474
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Kees Cook <kees+treewide@kernel.org>,
+ Priya Bala Govindasamy <pgovind2@uci.edu>, Binbin Deng
+ <18983559317@163.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+From: Petr Pavlu <petr.pavlu@suse.com>
+Subject: [GIT PULL] Modules changes for v7.4-rc1
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 19, 2026 at 10:48:44AM +0200, Petr Pavlu wrote:
-> On 10/19/26 5:48 AM, Aaron Tomlin wrote:
-> > A use-after-free condition can arise in module_put() should a thread be
-> > preempted immediately after decrementing the module's reference count
-> > while the module is concurrently being unloaded.
-> > 
-> > In module_put(), the module's reference count is decremented via
-> > atomic_dec_if_positive() before the module pointer is passed to
-> > trace_module_put(). Consider a scenario where CPU 0 decrements the
-> > reference count without reaching the baseline MODULE_REF_BASE level and
-> > is immediately preempted: it relinquishes its reference while still
-> > retaining a local pointer to the module. If a concurrent CPU 1
-> > subsequently drops the final active reference, the module's reference
-> > count reaches MODULE_REF_BASE. This permits the module unload sequence
-> > (via delete_module() or the initialisation-failure tear-down path) to
-> > proceed and invoke free_module().
-> > 
-> > Function free_module() invokes synchronize_rcu() and subsequently
-> > releases the memory backing struct module via free_mod_mem(). Because
-> > CPU 0 was preempted outside an RCU read-side critical section,
-> > synchronize_rcu() does not await CPU 0. When CPU 0 eventually resumes
-> > execution, it passes the dangling module pointer to trace_module_put(),
-> > which dereferences mod->name and mod->refcnt, culminating in a
-> > use-after-free. This sequence of events is illustrated below:
-> > 
-> >     CPU 0                                       CPU 1
-> >     -----                                       -----
-> > 
-> >     module_put(module)
-> >       atomic_dec_if_positive()
-> >       [preempted]
-> >                                         module_put(module)
-> >                                           atomic_dec_if_positive()
-> >                                           // drops final reference
-> >                                         free_module(module)
-> >                                           synchronize_rcu()
-> >                                           free_mod_mem(module)
-> >       trace_module_put(module, ...)
-> >         mod->name
-> > 
-> > Resolve this by acquiring an RCU read-side critical section via
-> > guard(rcu)() in module_put(). This ensures that synchronize_rcu() in
-> > free_module() blocks until trace_module_put() has run to completion, even
-> > across preemption under PREEMPT_RCU configurations, while avoiding the need
-> > to disable preemption and preserving the post-decrement reference count
-> > tracing semantics.
-> > 
-> > Fixes: cb0b50b813f6 ("module: Remove preempt_disable() from module reference counting.")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
-> > ---
-> >  kernel/module/main.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index d0e1e0bd2ad0..8e2d0ab96e6e 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -953,6 +953,7 @@ void module_put(struct module *module)
-> >  	int ret;
-> >  
-> >  	if (module) {
-> > +		guard(rcu)();
-> >  		ret = atomic_dec_if_positive(&module->refcnt);
-> >  		WARN_ON(ret < 0);	/* Failed to put refcount */
-> >  		trace_module_put(module, _RET_IP_);
+The following changes since commit df2908090cda368b01ff43709f51890076c56157:
 
-Hi Petr,
+  Linux 7.3-rc2 (2026-09-06 15:07:20 -0700)
 
-Thank you for your feedback.
+are available in the Git repository at:
 
-Moving the tracepoint prior to the decrement is certainly a more concise
-delta and resolves the use-after-free, but I opted for guard(rcu)() for a
-couple of reasons.
+  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-7.4-rc1
 
-Firstly, symmetry in the tracepoints: trace_module_get() records the
-resulting reference count post-increment. Moving trace_module_put() would
-introduce an asymmetry where puts record the pre-decrement value. When
-relinquishing the final active reference, trace_module_put() would log
-refcnt=2 rather than refcnt=1 (MODULE_REF_BASE). For scripts or tooling
-monitoring reference transitions, this off-by-one difference can be
-confusing.
+for you to fetch changes up to 08abfa5a161e1b6e6244cb2090b0530bc0920798:
 
-Secondly, keeping the tracepoint after the atomic operation ensures we do
-not emit a trace event or dereference mod->name should an unbalanced or
-erroneous put occur when refcnt is already non-positive (which triggers
-WARN_ON(ret < 0)).
+  drivers: Replace __MODULE_STRING() with __stringify() (2026-10-14 10:51:18 +0200)
 
-> 
-> I think a simpler fix is to move the trace_module_put() call before
-> atomic_dec_if_positive(). It would change the refcnt recorded in the
-> trace from the post-decrement count to the pre-decrement value, but that
-> isn't particularly important. For instance, xfs_group_put() and
-> objagg_obj_put() take the same approach.
+----------------------------------------------------------------
+Modules changes for 7.4-rc1
 
-In the case of objagg_obj_put(), the caller invokes the destructor
-synchronously within that very same thread once the count hits zero
-(i.e. __objagg_obj_put() -> objagg_obj_destroy()), without an RCU grace
-period. Placing the tracepoint prior to the decrement is therefore
-mandatory there.
+- Ignore local labels and mapping symbols during module load
 
-As we know, with modules, destruction is asynchronous: module_put() never
-frees the module directly. Instead, free_module() already executes
-synchronize_rcu() specifically to ensure in-flight operations conclude
-before releasing module memory. Prior to commit cb0b50b813f6,
-preempt_disable() served as that RCU critical section; guard(rcu)() merely
-restores this intended synchronisation contract without disabling
-preemption, incurring negligible overhead and fitting naturally with
-existing patterns in kernel/module/main.c.
+  These symbols were already ignored during kallsyms address-to-symbol
+  lookups. Filter them out earlier during module loading to reduce lookup
+  overhead and prevent them from appearing in /proc/kallsyms.
 
-That said, if you feel strongly that avoiding guard(rcu)() and keeping the
-diff strictly to a reordering is preferable notwithstanding the tracepoint
-asymmetry, I am happy to adapt the patch accordingly.
+- Fix potentially incorrect access of SetOnce<T> when setting Rust module
+  parameters.
 
-Kind regards,
--- 
-Aaron Tomlin
+- Fix a potential read of an uninitialized count when printing taint
+  information for unloaded modules.
+
+- Allocate the kmod argument array using kmalloc_array() in preparation
+  for conversion to type-aware allocators.
+
+- Clean up includes in linux/kmod.h
+
+  Add explicit includes of linux/umh.h to files that use usermode helpers.
+  Then clean up the #include list in linux/kmod.h, notably removing the
+  compatibility linux/umh.h include.
+
+- Remove the error-injection.h include from linux/module.h
+
+  Add explicit includes of linux/error-injection.h to files that use the
+  ALLOW_ERROR_INJECTION() macro and currently rely on it being provided
+  indirectly via linux/module.h. Then remove the unnecessary
+  linux/error-injection.h include from linux/module.h.
+
+- Replace __MODULE_STRING() with __stringify() in various drivers in
+  preparation for removing the former macro.
+
+The changes to several #include lists have been reported to cause trivial
+conflicts in linux-next with the drm, drm-xe, and usb trees.
+
+----------------------------------------------------------------
+Binbin Deng (1):
+      module: Fix uninitialized count read of unloaded taint tracking record
+
+Kees Cook (1):
+      modules/kmod: Allocate argv with kmalloc_array()
+
+Petr Pavlu (10):
+      umh, treewide: Explicitly include linux/umh.h where needed
+      time/jiffies: Include linux/sysctl.h for proc_int_u2k_conv_uop(), ...
+      module: Bring includes in linux/kmod.h up to date
+      block: Include error-injection.h for ALLOW_ERROR_INJECTION()
+      net: Include error-injection.h for ALLOW_ERROR_INJECTION()
+      syscalls: Include error-injection.h for ALLOW_ERROR_INJECTION()
+      drm/i915: Include error-injection.h for ALLOW_ERROR_INJECTION()
+      drm/xe: Include error-injection.h for ALLOW_ERROR_INJECTION()
+      module: Remove the error-injection.h include from linux/module.h
+      drivers: Replace __MODULE_STRING() with __stringify()
+
+Priya Bala Govindasamy (1):
+      rust: module_param: Fix potentially incorrect access of `SetOnce<T>`
+
+Tiezhu Yang (3):
+      module/kallsyms: Rename is_mapping_symbol() to is_ignored_kernel_symbol()
+      module/kallsyms: Refactor current symbol filtering into is_core_symbol()
+      module/kallsyms: Ignore local labels and mapping symbols during module load
+
+ arch/x86/kernel/cpu/mce/dev-mcelog.c               |  2 +-
+ block/blk-core.c                                   |  1 +
+ drivers/block/drbd/drbd_nl.c                       |  1 +
+ drivers/comedi/comedi_fops.c                       |  5 +-
+ drivers/gpu/drm/drm_fb_helper.c                    |  3 +-
+ drivers/gpu/drm/i915/display/intel_connector.c     |  1 +
+ .../gpu/drm/i915/display/intel_display_driver.c    |  1 +
+ drivers/gpu/drm/i915/gt/intel_engine_cs.c          |  1 +
+ drivers/gpu/drm/i915/gt/intel_gt.c                 |  2 +
+ drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c          |  1 +
+ drivers/gpu/drm/i915/gt/uc/intel_uc.c              |  1 +
+ drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c           |  1 +
+ drivers/gpu/drm/i915/i915_driver.c                 |  1 +
+ drivers/gpu/drm/i915/i915_pci.c                    |  2 +
+ drivers/gpu/drm/i915/intel_uncore.c                |  1 +
+ drivers/gpu/drm/xe/xe_device.c                     |  2 +-
+ drivers/gpu/drm/xe/xe_exec_queue.c                 |  1 +
+ drivers/gpu/drm/xe/xe_ggtt.c                       |  2 +-
+ drivers/gpu/drm/xe/xe_guc.c                        |  1 +
+ drivers/gpu/drm/xe/xe_guc_ads.c                    |  2 +-
+ drivers/gpu/drm/xe/xe_guc_ct.c                     |  2 +-
+ drivers/gpu/drm/xe/xe_guc_log.c                    |  2 +-
+ drivers/gpu/drm/xe/xe_guc_relay.c                  |  2 +-
+ drivers/gpu/drm/xe/xe_hw_engine_class_sysfs.c      |  1 +
+ drivers/gpu/drm/xe/xe_hw_engine_group.c            |  2 +
+ drivers/gpu/drm/xe/xe_mmio.c                       |  1 +
+ drivers/gpu/drm/xe/xe_oa.c                         |  1 +
+ drivers/gpu/drm/xe/xe_pm.c                         |  2 +-
+ drivers/gpu/drm/xe/xe_pt.c                         |  2 +
+ drivers/gpu/drm/xe/xe_pxp.c                        |  2 +
+ drivers/gpu/drm/xe/xe_sriov.c                      |  2 +-
+ drivers/gpu/drm/xe/xe_sync.c                       |  1 +
+ drivers/gpu/drm/xe/xe_tile.c                       |  2 +-
+ drivers/gpu/drm/xe/xe_tuning.c                     |  2 +
+ drivers/gpu/drm/xe/xe_uc_fw.c                      |  2 +-
+ drivers/gpu/drm/xe/xe_vm.c                         |  1 +
+ drivers/gpu/drm/xe/xe_wa.c                         |  2 +-
+ drivers/gpu/drm/xe/xe_wopcm.c                      |  2 +-
+ drivers/greybus/svc_watchdog.c                     |  1 +
+ drivers/i2c/busses/i2c-kempld.c                    |  3 +-
+ drivers/macintosh/windfarm_core.c                  |  1 +
+ drivers/net/ethernet/atheros/atl1e/atl1e_param.c   |  9 ++--
+ drivers/net/ethernet/atheros/atlx/atl1.c           |  3 +-
+ drivers/net/ethernet/atheros/atlx/atl2.c           | 11 ++--
+ drivers/net/ethernet/intel/e1000/e1000_param.c     | 15 +++---
+ drivers/net/ethernet/intel/e1000e/param.c          | 16 +++---
+ .../net/ethernet/oki-semi/pch_gbe/pch_gbe_param.c  |  7 +--
+ drivers/net/netdevsim/tc.c                         |  1 +
+ drivers/platform/cznic/turris-omnia-mcu-watchdog.c |  3 +-
+ drivers/pnp/pnpbios/core.c                         |  2 +-
+ drivers/rtc/rtc-ds1374.c                           |  3 +-
+ drivers/thunderbolt/tb.c                           |  3 +-
+ drivers/thunderbolt/tunnel.c                       |  5 +-
+ drivers/tty/serial/8250/8250_platform.c            |  3 +-
+ drivers/usb/atm/speedtch.c                         | 15 +++---
+ drivers/usb/atm/usbatm.c                           | 17 ++++---
+ drivers/video/fbdev/uvesafb.c                      |  1 +
+ fs/coredump.c                                      |  2 +-
+ fs/nfs/cache_lib.c                                 |  2 +-
+ fs/nfsd/nfs4layouts.c                              |  2 +-
+ fs/nfsd/nfs4recover.c                              |  1 +
+ fs/ocfs2/stackglue.c                               |  1 +
+ include/linux/compat.h                             |  1 +
+ include/linux/kmod.h                               | 12 +----
+ include/linux/module.h                             |  1 -
+ include/linux/module_symbol.h                      |  7 ++-
+ include/linux/syscalls.h                           |  1 +
+ kernel/cgroup/cgroup-v1.c                          |  2 +-
+ kernel/module/kallsyms.c                           | 59 ++++++++++++----------
+ kernel/module/kmod.c                               |  3 +-
+ kernel/module/main.c                               |  1 +
+ kernel/module/tracking.c                           |  2 +-
+ kernel/power/process.c                             |  2 +-
+ kernel/reboot.c                                    |  2 +-
+ kernel/time/jiffies.c                              |  1 +
+ kernel/umh.c                                       |  2 +-
+ lib/kobject_uevent.c                               |  2 +-
+ net/bridge/br_stp_if.c                             |  2 +-
+ net/core/skb_fault_injection.c                     |  1 +
+ rust/kernel/module_param.rs                        |  9 +++-
+ scripts/faddr2line                                 |  2 +-
+ scripts/mod/modpost.h                              |  2 +-
+ security/keys/request_key.c                        |  2 +-
+ security/tomoyo/common.h                           |  2 +-
+ tools/perf/util/symbol.h                           |  4 +-
+ 85 files changed, 182 insertions(+), 130 deletions(-)
