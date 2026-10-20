@@ -1,56 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792505622;
-	b=YVMU8PdIZwnTV+jBVj0wGYxKGJFBHwQrEq0GHGSDOYVWSDSacIUVJ4kSXQWI5L9PpNq2
-	 uWnmrcr+nDasNXpOUXiifRga3X3iyG++NctGHR+t2oZBq4xk86PZ10KZqty6Xu/VSW64w
-	 VszsYkmgJYh8bTDkkZTmyW+ZhxKvlSoFseBlAKlKCYQDIzjDlyFAsbppAP8Q8PzkiTKO0
-	 fNCriR70g01GT/SztvR+21TtzPlQ9vwe0gD8P05GXHV7Ced+fBNoiO8FUkR2/76O07AI+
-	 AKaRi8gUQc5gm4nFcVhwb1rtOUWr2FgqbgUIqixg6D2DgeMCABU+rAXfUrqlp7crIRg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792505622;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=ICum0JAKfDirRcbtMAFqCyRh4kigsK9BGaaoW68KlyI=;
-	b=4IYrdowGNL6vAU2pWc5SsmzFHSalEgrY8XkEJyAR64ylJ2vNARal0U4I0yMTnXPq4OrG
-	 RebcUtXex5DLUTyg3rzlAAe+CgLdSuVE4l7mqA+ToyrWdtu4r+eZixyxOXjjL6uGp9l0Z
-	 jE0gBXJ+N/F25tfAI5eX4702HoOJI8/lY8fk45NVzu8koRz4+imCCwIBW0hUipPCwS9Az
-	 qCaxykp/NUii1Ogk+dchsjIFB+4R+v+h28OOAUL1pRbZzG5Zx25SlqSvl/v8vWkv4u0T9
-	 apZoZFe2sBdvjAsjfn1XylR3PUgv2Xsjef2n5iljL6OhcM5kHj3ATcbV/CBH20Q1dqw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E11t66iS;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.95.110
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792508972;
+	b=YSH7AIiVH98J828AR8gPHwqpyyPp70E/W5LE2/ztzCqZmzJLLRK4/BytKwBLpNPbMl5R
+	 Kws2AWCqHamWdW+n58u977u7ivzRqD90ICv4P47kQuQqBki4tHYV+CL4ZiGq4224xBSta
+	 MAPC/YLoTFzCUjhCwadoTwEtlxHQMcVFmlTmshLx2LF/fqXCHDqAnL2CvN5reRd4IMnXF
+	 pOhyv6Bo0KFmVycooWWGyuI5HGQDkbLVK28Qp2t7rAho6FDtKRim6wPhScCMZ5GJfBk2p
+	 XyXMWL/hB6INhOPFsJklRexE2W/oRDkLrhaoqmgu98i22KUS7WprUsTc7NHFHSeONcQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792508972;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:Content-Type:Content-Disposition:In-Reply-To:
+	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=+zLa6gZHrSnbd8FiB3pktwDNAZTIIeWvhkTrZk1wTkk=;
+	b=mqFMrnzPdeG1iv0Fc5lOdawMjzzPZAufs3dLUNSD0Gjwx0QqsZKxpAccldTEMSJPioX1
+	 h12Yin7hJKDQuEgY8kNV4I2t07uY2X4o8z7cNYKPg7r9tf7cbqfqM904+/pKkjycC9ypi
+	 Wdg73cFGo4jS2qa1tb0tPthiPGAOspMgxQ/VLTIUHCZsUfg6kSJ9QQE052HC8CiRNwLhS
+	 J+7vPdtco8u3Vvl0hxrv0YAbYdWBq5o05TygKclfOQXPAQ4wPDbIlCiiG7o1ajBkNqRoa
+	 y98j2lKfnjhqJ2KEi7RmMiJB0YV+RHGI9pX4OOzzzmIZwtNTrmXIyU/8hytVmKpGZ3g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=atomlin.com;
+	spf=pass smtp.mailfrom=atomlin.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.95.110
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021110.outbound.protection.outlook.com [52.101.95.110])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE72606C22A
-	for <linux-modules@vger.kernel.org>; Tue, 20 Oct 2026 14:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E11t66iS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 600571F000C4;
-	Tue, 20 Oct 2026 14:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792505621;
-	bh=ICum0JAKfDirRcbtMAFqCyRh4kigsK9BGaaoW68KlyI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=E11t66iSpTjjQeZP7kLMxylH7DJQGcYr5lJKuxb8NLVkYq2OPL73B3jR8fL4tiMSp
-	 1UR4bHhi9KTM0MzjxdhgUZ2I7izhwR7LM/7FfisdBdyrDqkF/S0mEmcoUpgm8MQinG
-	 8V+Uf5YbtZJ1nFJZslWK8JvJsS8fVq5HDSdbLvyXTg7r8WJ5mqmETKMbHAvUaVMPpw
-	 cz+nHJ8XCULVE5xYZ5O1Gqp+pQZlRowQoppIbiwHs0bbjIqQSjavxd+48mCJ05MrMH
-	 Y0kOpyweMq22JGGk+ZLWx+M9wWRsn0aY5XzCGXLZ7i4iMG7fo3S2+dxpaHANqIlMq7
-	 Kf/gqNr1TVMzw==
-Message-ID: <sashiko-outbox-179099@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] module: Fix data race on mod_unload_taint::count
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Petr Pavlu" <petr.pavlu@suse.com>
-Cc: linux-modules@vger.kernel.org
-In-Reply-To: <20261020-taint-unload-v1-2-d1c764889afc@suse.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A07B606A31D;
+	Tue, 20 Oct 2026 15:09:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A07B606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ab6NERkjwDT896qIXH2qYUI0kCxjJ+wDGzHP+TJpsXi7R5+9RGBzW7KobESc2bahZjo1phsLrA5sWHgTaOsfwMgO8az92rfkBATD0kSyTbikirOIe4qSREs81BZLOkZxJxswEV4888vWsTiFTPknnvCTqSFTsbx+d/Iruj5seaohSrs4v3i/2d61+e71rFTob3U3JXWv1l3iux4idJSy9r1Jtces4QXtWU4/iDvgWaRwPnABlR85XPW6E82s9bhY4p8HHmTSWaPVfHgPgP8r14oWqe/JrsqblZPD+WybhiVnox+L4YrjrwCDF/X9VXi7xvga5lmIul6/IKsVsloi9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
+ bh=+zLa6gZHrSnbd8FiB3pktwDNAZTIIeWvhkTrZk1wTkk=;
+ b=sGAUHu1+O8pnru3erDqtLvs5grScU3gvZko5oAm1AaoTdiUWxcMvm6I38LWgQX64wy3N8ywN2FRmky8MJ3KWI797qKaI23ZkAdD8vAgiQSP2KvrWJxcUOow4NaAZ99/x0EOg8VBn/vp09Qo65LMuh4ePQSOsXrnzj3/4xvcHTA6Z5Rvx7koml3zJRMFB3WeTQbybrE63dnpHSleudwg0jhD04UXtZhV7rwURb3vE/3yQaDFYkNmTF+/jhlFyrTqFengdjnXdTrxXlmVH6E9kqU1LnhAnxYzZI1GTawGAiTLaW8EF/vn83pe6tx0BcHcqidE0EV+xhVFJoDZMGEBqEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
+ by LOAP123MB8258.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:43a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Tue, 20 Oct
+ 2026 15:09:28 +0000
+Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::cec4:77ab:262e:d230%5]) with mapi id 15.21.0546.012; Tue, 20 Oct 2026
+ 15:09:28 +0000
+Date: Tue, 20 Oct 2026 11:09:24 -0400
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] module: Move mod_unload_taint to tracking.c
+Message-ID: <cdkh2bbie77upvj6qnklzsx2swdia3eg6loajkqgbz5heur57v@4qkhgtbec7ef>
 References: <20261020-taint-unload-v1-0-d1c764889afc@suse.com>
- <20261020-taint-unload-v1-2-d1c764889afc@suse.com>
+ <20261020-taint-unload-v1-3-d1c764889afc@suse.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 14:13:40 +0000
+Content-Disposition: inline
+In-Reply-To: <20261020-taint-unload-v1-3-d1c764889afc@suse.com>
+X-ClientProxiedBy: BL1PR13CA0327.namprd13.prod.outlook.com
+ (2603:10b6:208:2c1::32) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:183::5)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -59,31 +87,121 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LOAP123MB8258:EE_
+X-MS-Office365-Filtering-Correlation-Id: da4b9123-f69b-4065-4d56-08df2ebc22bd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|366016|376014|1800799024|6133799003|18002099003|22082099003|4143699003|10067099003|261009223027099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	uagB2DKb4/rziRYUMtd8Q+KZMQYEgPz/XguSrw/aQRl8BjNy/2P8tg4slIfMBBCcKiup7djBmM5ezFHJl+ZpMYrSfaFc/UCx+Mrge5avTCbKhDfZB6Is9VB2Il25a8wG1YrCbKF/+U2+WXDmrq9UcBkQkxYOSn3F8KBBtVIAh+9IVM6TP8KfIEafWcphDeE1qW54AhqvfwIc0QO1d67NvDl/vYGL9CrN/Fs8gXjC8HfUATeYdrdJq0I2f9Cz66hQzAXFF3sE8/0qFbX7H0UwyczKKPGGTqrP8Bjatp1GZjnw9aR5jI5iMk+csEaf/OFPGgLGR+wK9mSV5ugL4Zbye8CHlmqCEQYmqHPYpdGo39/gRfD4u0JqXNRO8tVGveOwNQmRlZb3GlDZI+LzJph9eD+YbuH9lVAGCvnyVeWRJqrgWVhKCy5dFuQSSHJKf2jsa2npD1UyS4M2+WPWbzFVXBbObxf0YmX4mwj3I+8Z/QNFErSkYeDeqS/xLONySeI9rjvoEpFk5uQhJStFCFFA+YgkjHgqsJckv0G55ALJvdwncRm01AqCm4r7Ouw3lypLeAvwgeiQ/isjNeCpy367D/NFnTxCUAlll97j3x0S6i5ALCPJw6HJW9216Ql20YcRtc0uJWGKp86KQTN+nZ7hgZE9Y0Oyq0DUB3z92eiFAzs=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(376014)(1800799024)(6133799003)(18002099003)(22082099003)(4143699003)(10067099003)(261009223027099003)(56012099006);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NnQ1RFE0Z3BLS0NPS1pnY09DZGxxWkt3eGN0NDgvaXpnVUpaUE9jc29rZS9k?=
+ =?utf-8?B?SVcyZDR6TDhMVFkwdDRLb2RINWdFZDRpZmFnK3VYTWxIbERQMGtyeDVzZ3cv?=
+ =?utf-8?B?elVydmIvQWltdnFqNU1rdWpKTXE2enVFRU1IMk5tMnZNUy9DMVd6MlRtMUwx?=
+ =?utf-8?B?UllJNzZGdDR6VzNhQmJBdXh0TnhKWjIybXlmM3ZocGlpVTllbFRndlFadUo0?=
+ =?utf-8?B?cXFlaklZd1h2UUpDcmplSExaTGprcUhjTkFKcG1vUitISE1wMS8veTJOQmtt?=
+ =?utf-8?B?bndoejJLNmFWY1NtUG5NMWhlR3l5WDlzdCtFckJmNEg5QVJPdmh4T2dBSHpT?=
+ =?utf-8?B?ZkdHRndzektxTDRWbVJLREZpK1QrMEtRcWM0OEpENjNyWE1paHdRREtockxt?=
+ =?utf-8?B?YlplcUY4ZDYvL2F2UnBWbmEwM3dzekxteGF1OUU2WWM4Z05rUFZLZktQaFlz?=
+ =?utf-8?B?VDZUNDY3OUpLemlQTUN4VVlLT0lFSkw0VkhaSDdFUnlqZDk0S2FrQ2FYWGV1?=
+ =?utf-8?B?Yk0vL1QrbnVqYkg2YzVMdEJWdXc1RDMvOGdMRldUeFFucnZyVTd3Wk5uYWs4?=
+ =?utf-8?B?dlNnKzVXeS9vcklkbG1XTldJNnl0QVpQUWFNVXhOL1FwSmtBc00vdGRCenk2?=
+ =?utf-8?B?aDF4UlN1SzJFNFg1bnVnL3Q3d3ZMcjQ3Y05Xb2l1WVFRRnNaZGNxR1paSlJE?=
+ =?utf-8?B?eFdsWHdUU1d5YVRIWGZsdHBzbTNtUFJHeXZvWHZWbXNBSVNzTnY2ZkdTVHVI?=
+ =?utf-8?B?UU02Nm0vVUE0aktiOWdYYjNWem5zQ3hMU25UYUZteG1GZk5hNmMrTHZCalAy?=
+ =?utf-8?B?Ty9QZ2JjbHNJOXNwd1c4dGt0ekFaVVhVSm1lY1ZqNlpvS3VHMkltY2ZBNnFJ?=
+ =?utf-8?B?WllKalZmYWVDZ2VmN3pDWDhDV1RySm9QeitLU0kvZGp2WjhXZ0F4L2xRTTZa?=
+ =?utf-8?B?ZFNOVmFHUitkamJ6aUt4aENPa2krTS96MW02dEhoeGswbWx5eEQyVmpaYStm?=
+ =?utf-8?B?OGVLeXR2YTZiaDRiU2NISTVKRGNCNE1WdVA1T1VwcHo1cmMyQk1KVFZrZGsr?=
+ =?utf-8?B?UnJ2cjdHbklSYkxuMEtiVnlUSVU1ZjR6RFFnRnJsM2l1RmlGOHBId0R2bG5M?=
+ =?utf-8?B?KzFNOXlKS3U0V3FCVU0weW03SjRHT21iQ1MraEhsOVZFS3VOY09mNWVvd2sy?=
+ =?utf-8?B?T3o5bTgwbEVmTDBMdjI1NUhuRUZZb0Q5cUcxZ2dXMHZXdVFGVHZyUHd6cVly?=
+ =?utf-8?B?bEF2TEJvbXkxQ09UTG5tM1grVWVTdTg3Y3QyRXdwdldsSy84dmlsOUI2eUVW?=
+ =?utf-8?B?aTBJVjgwb1Q2Z3I2RlZoMGU5MWpoNndyeW8ycjhNbG9JSjNteG5LK0dVUlI2?=
+ =?utf-8?B?Y2Z4K0d2NDZaNWplcFJ4N1FNcWpqT1hRdG94VkFVRmV1S1hKOUk2WDdsVFdt?=
+ =?utf-8?B?K2x0c3VpdVF6d3BkbENqSnlUR1NpMllXdCtJV2htbHludXg5M2YwR0xsZWl6?=
+ =?utf-8?B?NWpWd1ZuakFYVWxIdG9sNzV5ZFEzOG4yNkkwdTdocWQ5dFNGVEszRnVFVEhr?=
+ =?utf-8?B?NVBxWUdHWjB2M1Rwa0VnbHljRWJEdTZFMkN1SkQwTXBEWmZXQWcrSlNlZmNV?=
+ =?utf-8?B?R05RanVwQUhoczAxZk91NDJYUm9IOFY4b0w1WGhoTnlLcTUvR3BMckRPYVg5?=
+ =?utf-8?B?ckNqWnRqcVp3RG1qWkdibFFNMk96NVA4TndwcjgvbGpkdmMwejRYTHJUVlg1?=
+ =?utf-8?B?TDQvVUE2WWRaY0pCTDR0aW1PZFY2S2I5UkFDQllVc0ltQURxWGFRL1RueUly?=
+ =?utf-8?B?alloMjRQRDhMZDJ6SUVHV1NtS2tCRU9CUjFuVjJLWVIxMHA3a0Q5UEYzcVlK?=
+ =?utf-8?B?SDB3MU5wVU9KY0FxTFQrNFp1WnBvdFh3L01KNjdiSFlwVU40UU15c2w5bkNP?=
+ =?utf-8?B?TmVPSXZnUDY0UG9YRUZIankzaW12RWh4Z0NiUDFDUFJPZU9BNzBCQStITFZD?=
+ =?utf-8?B?cklleGI0bzZFRUVGRFVxV0kwOEkwY01DMm1Yd3RGS2tOanhoN3FoMUJyQzBX?=
+ =?utf-8?B?OG1hYkpJQmMzL3UzL0lmWjhrZU02UWdOb1F6Q3JjdlpyaWRSVmliOWhqbk1D?=
+ =?utf-8?B?cEd6cWticVpDb05taGVRTU8vby8zWWhMdG9id1h3VWJoVWNuRVFIRzY3ZmZ0?=
+ =?utf-8?B?clV5NVFtV1VWNEVYZFVyaGwwNm1qSjRHUXprQzdqL1FrOE0vR3N2WWRuQmhs?=
+ =?utf-8?B?ckVSVlBUSnd6MlZLTm1HUFNsVUUrd01TRWZuQXdOb3kzVjh2dEo2MHFuZmp2?=
+ =?utf-8?B?NVZRMWJORzVTMUFBZDJ0WWYyVjlNQ0lvOFNFZUNmdUliK1l6aXc1QT09?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da4b9123-f69b-4065-4d56-08df2ebc22bd
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2026 15:09:28.3096
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UHcJB6WJGnKk+bHRgZIPvkxP08JrFvl2C0fNMCokKfNOb+VWgtqku7H3SOw32P+uQfIUKOJqiOplwdxlzsBpDA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LOAP123MB8258
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] module: data race and uninitialized read of count in try_add_tai=
-nted_module()
---
-
-commit 742b3a34fee074246edb757213ccfc148f6e7300
-Author: Petr Pavlu <petr.pavlu@suse.com>
-
-module: Fix data race on mod_unload_taint::count
-
-This commit fixes a data race on mod_unload_taint::count between updates
-serialized by module_mutex and concurrent RCU readers by changing the
-field to unsigned int and using WRITE_ONCE()/READ_ONCE() accesses.
-
+On Tue, Oct 20, 2026 at 04:05:21PM +0200, Petr Pavlu wrote:
+> Move the definition of mod_unload_taint from internal.h to tracking.c, as
+> it doesn't need to be exposed to other module code, and remove the
+> redundant declaration of mod_debugfs_root from tracking.c, as it is already
+> declared in internal.h.
+> 
+> This is a non-functional change.
+> 
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>  kernel/module/internal.h | 13 -------------
+>  kernel/module/tracking.c | 14 +++++++++++++-
+>  2 files changed, 13 insertions(+), 14 deletions(-)
+> 
 > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index 061161cc79d90..70ef20b97c84a 100644
+> index 70ef20b97c84..3aca22253296 100644
 > --- a/kernel/module/internal.h
 > +++ b/kernel/module/internal.h
-> @@ -257,7 +257,13 @@ struct mod_unload_taint {
->  	struct list_head list;
->  	char name[MODULE_NAME_LEN];
->  	unsigned long taints;
-> -	u64 count;
+> @@ -253,19 +253,6 @@ static inline void kmod_dup_request_announce(char *module_name, int ret)
+>  #endif
+>  
+>  #ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
+> -struct mod_unload_taint {
+> -	struct list_head list;
+> -	char name[MODULE_NAME_LEN];
+> -	unsigned long taints;
+> -
+> -	/*
+> -	 * Number of times a module with this name and taint combination has
+> -	 * been unloaded. Updates are serialized by module_mutex and use
+> -	 * WRITE_ONCE(). Readers that may run concurrently use READ_ONCE().
+> -	 */
+> -	unsigned int count;
+> -};
+> -
+>  int try_add_tainted_module(struct module *mod);
+>  void print_unloaded_tainted_modules(void);
+>  #else /* !CONFIG_MODULE_UNLOAD_TAINT_TRACKING */
+> diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
+> index 873fceb30526..46840dc22dcb 100644
+> --- a/kernel/module/tracking.c
+> +++ b/kernel/module/tracking.c
+> @@ -14,8 +14,20 @@
+>  #include <linux/rculist.h>
+>  #include "internal.h"
+>  
+> +struct mod_unload_taint {
+> +	struct list_head list;
+> +	char name[MODULE_NAME_LEN];
+> +	unsigned long taints;
 > +
 > +	/*
 > +	 * Number of times a module with this name and taint combination has
@@ -91,55 +209,18 @@ field to unsigned int and using WRITE_ONCE()/READ_ONCE() accesses.
 > +	 * WRITE_ONCE(). Readers that may run concurrently use READ_ONCE().
 > +	 */
 > +	unsigned int count;
->  };
-> =20
->  int try_add_tainted_module(struct module *mod);
-> diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
-> index 5bcd1c2701f07..873fceb305268 100644
-> --- a/kernel/module/tracking.c
-> +++ b/kernel/module/tracking.c
-> @@ -28,7 +28,10 @@ int try_add_tainted_module(struct module *mod)
->  				lockdep_is_held(&module_mutex)) {
->  		if (!strcmp(mod_taint->name, mod->name) &&
->  		    mod_taint->taints =3D=3D mod->taints) {
-> -			mod_taint->count++;
-> +			unsigned int count =3D mod_taint->count;
+> +};
 > +
-> +			if (count !=3D UINT_MAX)
-> +				WRITE_ONCE(mod_taint->count, count + 1);
->  			goto out;
->  		}
->  	}
+>  static LIST_HEAD(unloaded_tainted_modules);
+> -extern struct dentry *mod_debugfs_root;
+>  
+>  int try_add_tainted_module(struct module *mod)
+>  {
+> 
+> -- 
+> 2.55.0
 
-[Severity: Medium]
-Does try_add_tainted_module() in kernel/module/tracking.c still have a
-data race and potential uninitialized read on mod_taint->count when
-allocating a new entry?
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
 
-Further down in try_add_tainted_module(), a newly allocated entry is
-published via list_add_rcu() before mod_taint->count is initialized:
-
-	mod_taint =3D kmalloc_obj(*mod_taint);
-	if (unlikely(!mod_taint))
-		return -ENOMEM;
-	strscpy(mod_taint->name, mod->name, MODULE_NAME_LEN);
-	mod_taint->taints =3D mod->taints;
-	list_add_rcu(&mod_taint->list, &unloaded_tainted_modules);
-	mod_taint->count =3D 1;
-
-Because kmalloc_obj() does not zero-initialize the allocation and
-list_add_rcu() publishes the entry to unloaded_tainted_modules first,
-concurrent RCU readers in print_unloaded_tainted_modules() or
-unloaded_tainted_modules_seq_show() can observe mod_taint and execute
-READ_ONCE(mod_taint->count) while mod_taint->count still contains
-uninitialized slab memory, or race with the plain store setting it to 1.
-
-Should mod_taint->count =3D 1 be initialized before calling list_add_rcu()?
-
-[ ... ]
-
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020-taint-unlo=
-ad-v1-0-d1c764889afc@suse.com?part=3D2
+-- 
+Aaron Tomlin
