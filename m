@@ -1,146 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792859722;
-	b=IX9rURT1DRnMwuzvDoO8YE28RJKtD1AxwV8z5yfSBnt/+lohUEHdtjKiMcPSl58kXiwV
-	 YgFBpu2UXd9Fp5AWdNFvLYW3rGPaiSoAzbEip/UO1oETT0mGByqMLa2puSPFgII2lTU6N
-	 oFo1xMMJ3RbODgWfeS68PoScAYlb8l3/cnv4nLMCmvCO4iTdUZ1ct5kKhj8M1qRQu7FHJ
-	 1TYHtLtEOZ9U18MBPLBftCHTdOTruG9Dl4Nr74DPPpkQXcn/YWkhOjg3aNPZjvPK7seLf
-	 VkpEcRwHBVuCCKt7mf+XtjJhUZEKHl5IZBtJW4Z3vV3oOPobEjdgR3Qo8F1KoNm4lCA==
+	t=1792932496;
+	b=F96Ako69Jt4dlSl5hvSV3Y6lYk96+7T6nZniZ44GR5RNZsULwW7KigvKXTkjavaYiorw
+	 1Sw8KKh5O7UFh3C+6JH0Mxl4lYL0R070TY0MgesouNjQr77OSGLceYdqUmSwBv7Q9TsJv
+	 fHcha3tOqWMLjtPnZjMJuwdXGacyZKe3B8JcflidXcmF9MRFafHneJmBbEKpUV+pNuzEQ
+	 lv8vzjv3psPtbDx8z9rRmK2dnRiS/A+G0Sbp0CMPe2ApAUranXGDLUUGpDuANayZ36oOL
+	 f9Xx9MXzqRhQrbWRrTUE9SvlMWXqG2CLDhiQx3xGeOHaLVD5n1IagKYcmyIBZz0JBoQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792859722;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=Q3hza6gfFdynstbaNLuNyAqlUowt1fWQwFZR5teeLxg=;
-	b=z5VzNv0xpCONAB+bSjFwB4R8vV/2h6ga/XeHYrJ5OMgxf34YpDYBrRRUnNub6/9DRfpp
-	 yxsAgLWpF+D4SvUp4ue8PiD/a2bCF2C5hnQDv50jNtvNegaZtNQhWaAm8rjBNkvHcFvmg
-	 o52vF55ewnV/g+hyL/qBLwDzpB9eT6I5rnmNl0irWB9Lfm4KN4qMt7ll1EdN/wkL76vhA
-	 brUG50AmGTFQQ9lYWPEOpwdMzHNhpZsKxJq/exs+btolLvb1jYe3KcQDJ6m8l6mA9WTWE
-	 HEmv4+GTrOFB3vSQlAXvDIDM1fynqYalhUGlvKbl019HNyk/arrg4F5VUz0A5VNpV1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792932496;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=GFk493A56cYfyK4uM8/JlxklDpnCWTgb/zmDZtIoFro=;
+	b=XOB8B9ZomKti2Vw3v66Rm3fpl4U5BRxbMfBFsZPfqzPIKBNBKMTP4n/Qxxd3UvJn9oBa
+	 8X7FArGOKfNJGLBv1GN6ndiJDNyp4H5oPllmlXOJRl7CInzpSBzQ95roJZWFjnofmFVl7
+	 H12bKyaHettDu/RrTrJIA91nFZM/xC3PCDt1DmT5UhyJbvLvggO6XvEEl/KIfwP/tKqwK
+	 n2weM6cUWz20rhzU0uyv+AWYng1iI5BaawSyIh3HfaQ0mJ/GelsW4XzcgI4+tvlQ/3SnM
+	 zTTQz8JQk7u+0dQdYbxpiacES5155/sIRddyRrokmJFDN3jjHmgqTzv583NhA/VwqGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=shazbot.org;
-	spf=pass smtp.mailfrom=shazbot.org;
-	dkim=pass header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm1 header.b=E9TTTyuV;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=HSLmwBuR;
-	arc=none smtp.remote-ip=202.12.124.146
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=baylibre.com;
+	spf=pass smtp.mailfrom=baylibre.com;
+	dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=pg8FDG9O;
+	arc=none smtp.remote-ip=209.85.128.53
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBAA606A31A
-	for <linux-modules@vger.kernel.org>; Sat, 24 Oct 2026 16:35:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BBBAA606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1BE606A320
+	for <linux-modules@vger.kernel.org>; Sun, 25 Oct 2026 12:48:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C1BE606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm1 header.b=E9TTTyuV;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=HSLmwBuR
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfout.stl.internal (Postfix) with ESMTP id E030A1D0016B
-	for <linux-modules@vger.kernel.org>; Sat, 24 Oct 2026 12:35:20 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Sat, 24 Oct 2026 12:35:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1792859717;
-	 x=1792946117; bh=Q3hza6gfFdynstbaNLuNyAqlUowt1fWQwFZR5teeLxg=; b=
-	E9TTTyuVq5dqLfibvKAUPgIg5tosgfal3gshY7YFVMEvMYBiRtsE/hVOZz+s9E/s
-	Vp2Mw+33W+xC5axSUv6LiW6jYatqKOB5v9I05nc0ybaBcpLWshDYhkElOb63LJQa
-	5mpWbHmgXLqi/jfi5yzFs5tqgdAcKZZ33LufqE1y0ccmAd5Q2UO75ZaoYMrWplpS
-	bz4023BNvDLPHdfxR8em3XXyTd/MJhW0w0KkQGIlAQRC5iVlx9GKHe0E7Fq0NizZ
-	iZMYZ9oVMwNQai85YBxlmJidCy+s/9t0+LGErr2goPyIoRxsbsUbppJam9TWjcLF
-	oebVumhwCwCnko/ixXCeTQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1792859717; x=
-	1792946117; bh=Q3hza6gfFdynstbaNLuNyAqlUowt1fWQwFZR5teeLxg=; b=H
-	SLmwBuRRP2v647BWrpPT4ump0Bi3DOHEEVDkCvC1Z+khtGlflWopAywI1565MjwV
-	dfRCBs0WVYow5r3uTm+/ImdcNdW0LshiNslhvGKamfXyDXu2wGqF6VjWmSfEnfi/
-	JNfA4N0+/x9qTqCtpiA1OhE2k2y6SKDSKtg477VkRWWVZKjJbH2m6GKQheurdynM
-	dySzra7q/jN+o9xrvg4bexh4ur6/psywQSDB+6zccVPfMb6ihmrBh9sHM1+0I3xn
-	SCm5yidr3P9G14p9kd5/ZLvLiVM8wpyanAwrKXZW2/Gk/QIHnShXe8LT1It9minP
-	abx4p5iwwEwtRMGlPRkNw==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=sign d=shazbot.org a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1792859717; d=shazbot.org;
-	mf=PGFsZXhAc2hhemJvdC5vcmc+;
-	rt=PGxpbnV4LW1vZHVsZXNAdmdlci5rZXJuZWwub3JnPg==;
-	s=fm1:rsa-sha256:qB38Lr1Dbk64esph/SUrleL55jDZSC5FXXni+HDs5F9xO8T
-	f5auT1sFofXAQ3lWvXk2cx5cdVlculYox4Qv509O9nDuTtIJuayHYtlHRpTRBMkG
-	6bl7F5NiDA0R5g44KCaqZC03vLPtCat/cmkmJscDkxxvTab1B4Hpx7XetYG4sB4r
-	zdv3SAYp8759BA6c/uWCtPnZAC/dCPOwFdykuQxQkkGM0cfndCDwLGhcP2SDVe9k
-	LrFUq4PqLhAF5Z4QvC7NBwsOQnCuqrqTToekpMyk5//xDaF6wHMMlswzOyZh8Wd7
-	SmeOopG38lulldWx++VjpNYwkPsWY+PRCscG+2w==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:JnbRzMatNOWh6VYk3BtMyVistKV9n98HRh1lJrMuiyI=:s7RKaOxqLU8WzgWaRyrCiYLjCHz0idVdL2rlY3c6L5w=;
-X-ME-Sender: <xms:Q97carmA3_xGeqSlgVk8faN9acf8fxLirifsX3U9VTRqL8U5BKfszw>
-    <xme:Q97cavkNz9L4po1mV2XOeF5DcVEndKPwyd413O8HaE-Au3TPJY6jd4bkNa7yut72N
-    97rywkUVO3ReW-HI3kJIXje6Q7zWYfLxtcwtvQvJfY9JA3gINcE>
-X-ME-Received: <xmr:Q97caqjYB8YGnVQGqpVwONajta7tJM0SiEkEfbanOZY2GQp6SYfr3KgNGIfRFQ>
-X-ME-Proxy-Cause: dmFkZTF9g0HInb6yy90yfs+ss2zLTr6q9s2zMqnyVsBip2hj18csqpDRvrtfuwSbKKJdKA
-    psdh8APLESm8UW8KW01iTqR/S/iRc1Cr4qo4b5Xvo1no8IwYaEMVHtNNjO+pv3ub7J5k4n
-    szfnLzyxBxdMpJ70bAXPu417N3F0afseT87ZW2VZCtJeqMVXl3L9yeaBEZmUVots99yNm7
-    fErISCP5VUjfv2eP10lfqk0j76TstgnE+aocUeQ5nhqqoe7/7PSyPHEZtYRK9uIa37tQGz
-    daj0FHGFjc2S8vyptHVdBTYLfKS0jbo0wjNsNJchNiZajaKm6mcEi63hGrqETG70q6Q7iY
-    2aDtOSpItAChdWXVXgRsecuefI3YGiNy/5tzR+n94CkkrgWuYrfga0EBN2TZhjMAla6DB7
-    08mXSwJMEpvrbzfNCbuIDYpjIUrJSpfs4YYhH2Zk6LM4fgA0VlbnrxlpUIInldNvCwCwwi
-    nyDGoI5RTkojCyZKpoAKEA5LEZjHAv4esvgzLWW9LUsXv2W1pal6pcX0grJnNh+ICAdr3X
-    1sMnr+bWuARbAQ0lzpoLGz8HL+VysK7EfCg+SQyz8j4CTYwPdLl0USuckBMLT1ONgPXxgI
-    sblheuKLPQHtfON71CR2+i3cC7syWwmzs8IqhBPh/STaXERhx43fa5rVoGGA
-X-ME-Proxy: <xmx:Q97carfFfA4SXJtQiRgFajU4VapE3uPl5gkpqu0fLCYli2F0957kqA>
-    <xmx:RN7cao_bSBYz6_AU4G_ivQhzgNK86Q5bEAi8UShmqhP2zTqObGxUCg>
-    <xmx:RN7caphlL7Mlc8KWfZbl2GPnu19Sl2Vw9qG1uReehdpmDTVj-d9zvg>
-    <xmx:RN7cak-MaVrw-X_KHEiKfZbm9VsstGzvp_XMLnPmZEjeLXaiQ2p0gQ>
-    <xmx:Rd7canhIppUmJGzskxC_Ni_y7PxhQy9T-N5ARTumtHQB2GalI6fGR1z4>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 24 Oct 2026 12:35:13 -0400 (EDT)
-Date: Sat, 24 Oct 2026 10:35:12 -0600
-From: Alex Williamson <alex@shazbot.org>
+	dkim=pass (2048-bit key, unprotected) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=pg8FDG9O
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a2d6d01ecbso8492875e9.0
+        for <linux-modules@vger.kernel.org>; Sun, 25 Oct 2026 05:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1792932488; x=1793537288; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GFk493A56cYfyK4uM8/JlxklDpnCWTgb/zmDZtIoFro=;
+        b=pg8FDG9OpzKln8+QRdvhMAtMVp0WQ1NMYaLASyxAEYJWLNST/WK5rNIhMJud+ol1qL
+         fnBQe5FIbncQ9e7Yf2jY5Avm2y32XlQwi8zLdEdscaiuJNlhCMoPO1s4R86eAMZm65+N
+         4wN667A/guovDHJDdgGvxXS+E40NfJnWTsV/VNIYrlv42LuwoD8jhjPqOl8WFcqIB9pB
+         a1e9nczTgOPdUb4RwVqkaM30MzLLvdbX8vRjHV0JGK6vlZjszCVuRfZPWEEEj2bVwOtS
+         Onb1sPkJ2qFK+BNjMAVgcE1OO2VGj/K5/NoSG134pZJDNd8mh6bvz+WE17qQMRc8Utq5
+         4GBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792932488; x=1793537288;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GFk493A56cYfyK4uM8/JlxklDpnCWTgb/zmDZtIoFro=;
+        b=NbY0Bld+TjC4cKQVP8nRyo+8+XcKcfSwwLPZZqORegSstyjXWrJeW2wmQ1/dMIY742
+         OuktsQq5Uh9NSdpuybt8kywYh0fLVuQ5vIhIke9oGQkZjKAiyL9wT19vV3QbEB5xlWwK
+         ks43noMh8hVePi/rfGhCLjy6fcVNS6lsgMqvHzL/xZ2rFroVh+FbR+YNf3HsTrKvIkAI
+         ZZCKDIqyB/f7nLkYTvhKWyqUVqdbhWRfSqYQXx8z10t5xiYc8XEoCS4wQA0m3pZo4xVK
+         cMxygbo4l4riRD3+dES6B0DZ80uZzLB3xIvhrlPanUb1x/uyZw0x1Z3QJoKxjhohxd+K
+         /gyg==
+X-Forwarded-Encrypted: i=1; AKwUvBwdl2uX9LXUTtypFdmA3VsbstBlwNPnsT1Rp+e0uNIAWtt6q3ERDh/55d8a8VAx3Gs9rBEUqBCO6kue7bQ8@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ0KC4b6RApb6FgM/usRYB7ZysuBMGlNxjHUXvE4joTNUJx8qbH
+	gyZOqWZgnvSSvandus9kDprBNWUtX/gqmPYe5elx5lsvccFIyDv855DIbgiiISArFzA=
+X-Gm-Gg: AYBFou0qEHTgU3f1YBupEfSUeChTYy5ciPlO3PbUyoWVW29wt4ugswGH0ggtEp+LAiC
+	7jT1AwhaI9ZStadWi/UW29zSPC4yISa+lifgsLcfLqvD22fuxaNNPTH+Grcp+LTJUZsfJ7QamM3
+	tTTA3eCWmGJgodp/slDWvUD4mMdSchellvhsmDcLCOCs9zSVCEs5DcKKRIl5mlPKpNmajGgROJT
+	1bCYKKHhoFnI5EiNWJyHSXFBJs0NQC+H6Sz2bJZXAGKQHZtVoJQgG+UD9rXvpH7ybqxFDcNtcZu
+	6sBLVuo9j8GPLJG2TerzPBgM5H0wLY1NyFSTEmh/m/mucFz4Z/Ys7R5kwiaKkfW/yzcmUP+x+gQ
+	FwB06+kcdSXISXfXwUuV2ai6RZkC5TFQ4Y0bwjFsnnsKfBYo4v5rVsXbtkMtQ/+MVK+4a1U3MRR
+	MJ1EMOAkdUiGdgtvyxkPkshX3WYPmWyAA4NDt7afyt+sNIzPLnwAdgnpQInojN8O6g8JNKX6n9x
+	K4bcxgaGS4VVETvvRhVs8mofBCZmcoGRWdfhOqYEoa0+jsJAFOnZYo0Qf3X9b69hwgJDJ5eeTRx
+	R3IcKQ==
+X-Received: by 2002:a05:600c:3b19:b0:4a1:d087:f6ab with SMTP id 5b1f17b1804b1-4a35acc7696mr71714575e9.18.1792932488137;
+        Sun, 25 Oct 2026 05:48:08 -0700 (PDT)
+Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4a35a04ad39sm326937255e9.1.2026.10.25.05.48.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 05:48:06 -0700 (PDT)
+Date: Sun, 25 Oct 2026 13:48:04 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@baylibre.com>,
- Armin Wolf <W_Armin@gmx.de>, David Lechner <dlechner@baylibre.com>, Danilo
- Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr
- Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami
- Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh
- <nogikh@google.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
- linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
- Richard Weinberger <richard@nod.at>, Thierry Reding
- <thierry.reding@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- alex@shazbot.org
+Cc: Alex Williamson <alex@shazbot.org>, Armin Wolf <W_Armin@gmx.de>, 
+	David Lechner <dlechner@baylibre.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Bradley Morgan <brads@mainlining.org>, Aleksandr Nogikh <nogikh@google.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, driver-core@lists.linux.dev, linux-trace-kernel@vger.kernel.org, 
+	Johan Hovold <johan@kernel.org>, Richard Weinberger <richard@nod.at>, 
+	Thierry Reding <thierry.reding@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>
 Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
  userspace manually messes with devices and drivers
-Message-ID: <20261024103512.4601ee4f@shazbot.org>
-In-Reply-To: <2026102437-vista-unsoiled-b089@gregkh>
+Message-ID: <at34UOuYv3NtX36R@monoceros>
 References: <20260914-bind_taint-v4-0-eadf8a090903@linuxfoundation.org>
-	<DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
-	<arIvG0nx4LXG9nlW@monoceros>
-	<defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
-	<9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
-	<2026092321-province-yearly-44aa@gregkh>
-	<arOfHEsGGglNse7T@monoceros>
-	<2026092348-victory-erased-0e5a@gregkh>
-	<20261023181326.0dc2f7ed@shazbot.org>
-	<2026102437-vista-unsoiled-b089@gregkh>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+ <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
+ <arIvG0nx4LXG9nlW@monoceros>
+ <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
+ <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
+ <2026092321-province-yearly-44aa@gregkh>
+ <arOfHEsGGglNse7T@monoceros>
+ <2026092348-victory-erased-0e5a@gregkh>
+ <20261023181326.0dc2f7ed@shazbot.org>
+ <2026102437-vista-unsoiled-b089@gregkh>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -150,180 +117,57 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hexcezj4rledtjd3"
+Content-Disposition: inline
+In-Reply-To: <2026102437-vista-unsoiled-b089@gregkh>
 
-On Sat, 24 Oct 2026 06:56:34 +0200
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-> On Fri, Oct 23, 2026 at 06:13:26PM -0600, Alex Williamson wrote:
-> > On Wed, 23 Sep 2026 12:29:56 +0200
-> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> >  =20
-> > > On Wed, Sep 23, 2026 at 11:54:50AM +0200, Uwe Kleine-K=C3=B6nig wrote=
-: =20
-> > > > > No, drivers should NOT have to do that in their .probe() function,
-> > > > > that's what we moved away from decades ago!  The match function s=
-hould
-> > > > > handle all of that for you, otherwise it's contant duplication
-> > > > > everywhere that is unneeded.   =20
-> > > >=20
-> > > > Well then you have to accept that root can provoke a null pointer
-> > > > exception (e.g. by forcing the pwm-tegra driver on a device) becaus=
-e at
-> > > > least with today's platform bus match function such a match is ok. =
-  =20
-> > >=20
-> > > Agreed, yes, root can cause a crash and can do tons of horrible things
-> > > much worse than this, that's not the issue.
-> > >=20
-> > > That's why this taint is there, to make it obvious that this is not a
-> > > "real" bug at all.
-> > >  =20
-> > > > > Please, learn from our history, don't make the same mistakes.
-> > > > >=20
-> > > > > Now I might be convinced that driver_override is the way to go he=
-re, but
-> > > > > it still feels really odd as again, bind/unbind was created as a =
-driver
-> > > > > debugging option only, it should NOT be a normal operation that a=
-ny user
-> > > > > should rely on.  The driver should "just work" properly instead, =
-without
-> > > > > requiring manual bind work, as that's not a good model at all.   =
-=20
-> > > >=20
-> > > > I agree in principle, but (in my case wifi) drivers are buggy somet=
-imes
-> > > > (due to missing documentation and/or engineering effort) and being =
-able
-> > > > to rebind the driver instead of rebooting to get a working device a=
-gain
-> > > > is very useful.   =20
-> > >=20
-> > > Fine, use it!  Just don't expect that to be "normal".
-> > >  =20
-> > > > So yes, theoretically bind/unbind isn't needed, but theory and prac=
-tise
-> > > > differ in practise.   =20
-> > >=20
-> > > Agreed, but again, don't rely on this as a "real" solution fo ranythi=
-ng. =20
-> >=20
-> > Sorry, late to the party, but this isn't a few user scripts that rely
-> > on this behavior.  Effectively every use case of vfio relies on this
-> > behavior.  We rely on unbinding the default driver from the device
-> > before using driver_override and drivers_probe.  That means every
-> > hypervisor with device assignment and every userspace driver use case
-> > now experiences a tainted kernel. That seems like a significant
-> > regression. =20
->=20
-> Or finally, a real bugfix :)
->=20
-> > There is currently no alternative for this process.  It's not a matter
-> > of upgrading to a newer kernel where the drivers claim the device IDs.
-> > We can't claim the device ID, vfio drivers represent a secondary use
-> > case for the device. =20
->=20
-> How can vfio know that it can properly talk to any device like this?
-> Surely you have a list of real device ids that you know will work,
-> otherwise all bets are off.
+--hexcezj4rledtjd3
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
+MIME-Version: 1.0
 
-There's not a list of real device IDs.  PCI, in particular, is a
-self-describing bus.  Devices are discovered via bus walk, their
-resources are probed via standard mechanisms, they support interrupts
-and resets as described by capabilities defined in a specification.
-The vfio-pci driver just provides a generic way to represent a device
-as resources mapped to file offsets with ioctls to discover those
-offsets and interact with things like resets and interrupts.  For
-example, PCI config space and BAR regions are just defined indexes into
-the table of file offsets.  This works with any endpoint device, where
-even that distinction is based on the discoverable PCI header type
-rather than a table of device IDs.
+Hello,
 
-Even if we could come up with a set of device IDs, it's a policy
-decision whether a given device is intended by the admin to be used by
-the default in-kernel driver or a userspace driver.  This policy
-changes over time, within the same host session.  That means that at
-one point we want the default driver bound and at another we want a
-vfio driver bound.  Coordinating this is exactly why we have
-driver_override and, building on that, match IDs that require
-driver_override.  This allows drivers to describe themselves as vfio-pci
-compatible drivers via modules.alias while requiring userspace to
-enable the match via driver_override.
-
-This is how vfio-pci variant drivers work.  These drivers contain
-device specific knowledge, for instance the ability to serialize and
-expose device state for migration, but they're still a secondary use
-case to the in-kernel drivers.  This is effort and coordination with
-subsystems and driver-core over many years and relied on by every
-hypervisor, now deemed unsupported through a kernel taint before we can
-even bind the driver.
-=20
-> > A production use case of panic_on_taint now results in a hard failure
-> > for a scenario that has been allowed and documented as best practice
-> > for many years. =20
->=20
-> It was never "best practice", you took a debugging option and somehow
-> thought it was a valid use case.  Yes, I'm being harsh but I am sure I
-> complained about this in the past and obviously never followed up on it,
-> so that's on me.
-
-I won't doubt that you know more about the history and intent of these
-interfaces than nearly anyone, but I don't find any documentation or
-comments that specifically declare these as debug interfaces.  In fact,
-Documentation/ABI/testing/sysfs-bus-pci has documented the bind and
-unbind ABI for over 20 years.
-
-You've certainly expressed more than once that users get to keep all
-the broken pieces if they bind devices to drivers that don't support
-the hardware.  This is the first that it's been formalized in a
-taint without warning or an escape hatch for drivers like vfio-pci that
-do in fact intend to work with all hardware.  It affects the industries
-that depend on this usage model.  It's a regression.
-
-> > What's the solution we can pursue for the scenario where devices have
-> > dual use cases between in-kernel drivers and userspace drivers?  Thanks=
-, =20
->=20
+On Sat, Oct 24, 2026 at 06:56:34AM +0200, Greg Kroah-Hartman wrote:
 > So what is the real use case here, taking any type of any device and
 > thinking you can bind a random kernel driver to it and it will work ok?
 > You all have specific platform and pci vfio drivers, why not use the
 > proper device ids there instead, or better yet, bake-in this type of
 > functionality into the bus-specific logic so that you can have generic
 > userspace control of a device (like usbfs and uio does today)?
->=20
-> We have real problems with random "bind/unbind" attempts that this taint
-> is here to help resolve as it was creating hundreds of false-positive
-> bug reports on developers all across the tree now that the fuzzers
-> decided to think this was a valid action to take.  Without this taint,
-> people were being forced to add hacks to all drivers for this which is
-> not an acceptable solution.
 
-At its core, vfio is describing the fundamental aspects of a device,
-regions and interrupts, without purporting to know anything about the
-specific programming model of the hardware.  In the case of PCI, the
-vfio-pci driver effectively decomposes the PCI representation of the
-device into a set of ioctls and a file descriptor.  A userspace driver,
-for example QEMU, recomposes that representation back into a virtual
-PCI device to the VM with virtualization, emulation, and direct access
-wired through to the physical device.
+Also note that even if the platform and pci busses implement
+bus-specific code to pass a given device to userspace and/or a VM, you
+need proper unbind support in the driver currently managing the device
+(or cripple the mechanism to only work for devices that were not bound
+to a host driver before).
 
-There are no devices deemed only for vfio use by default.  Often we're
-unbinding a device from the host, exporting it to a userspace driver
-through vfio, exposing it to a VM, only to bind the same driver to it
-in the guest that it was previously using in the host.  Binding to a
-vfio driver is always a secondary use case governed by the policy of
-the system.  We cannot create scenarios where there are competing
-drivers for a device.  The vfio driver is always brought into the
-picture via driver_override, and except in the rare case where no host
-driver exists, unbind must be used to release the device for
-drivers_probe.
+The more I think about this taint, the more I believe the commit should
+be reverted and replaced by a some stop gaps for driver_override. (Be it
+a taint or better yet
+https://lore.kernel.org/all/0f7446324f6a0c8f0153d6532d92a6eeecd6a308.1790612298.git.u.kleine-koenig@baylibre.com/
+.)
 
-Is there some way instead that we can resolve the string written to
-driver_override and only taint for non-vfio drivers?  It's a much more
-confined problem if vfio drivers filter hardware outside their scope of
-support in their .probe function, and I think we largely do that
-already.  Thanks,
+Best regards
+Uwe
 
-Alex
+--hexcezj4rledtjd3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmrd+oIACgkQj4D7WH0S
+/k6aewf/a1J79AfBUwvrOd6Ba/0Y7Snc6nW1R3bcrJe5+V181tlQ+NubUnz+DJdu
+l8Jqw1xcQaALmyYYZ+CaEenSacHj9TFNREGi92ZjNkN8m6+iH5soIV1vTHPZaevX
+R9oV4vf5RnsRXugZv92lNktCGbzbu2ceTDhJU4IoX5FyuqL95AVajJ4awrTw+nol
+Y+gyqcgb8mzONrS7D52rBINMIjpn9/nmcPs4bVkXCZjAvPg+MFRZTpjwZ7hB3Guo
+GM19dH/Q7rfMakDFZ/TJqgDbxuKHrPdU/EFkrRXiolTo+VEKvUOmiiW/JK6zrFH9
+WNnJHHFnJdcfBwsazk9IIqGimnpBHQ==
+=zFX2
+-----END PGP SIGNATURE-----
+
+--hexcezj4rledtjd3--
