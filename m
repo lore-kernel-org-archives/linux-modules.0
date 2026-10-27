@@ -1,101 +1,117 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793060806;
-	b=DiBbC+1zACIXXsbWXUAtudYttMGfUDHYR3uL1l++mhmNuUrpRKHYFKJ0Jpo2al8+/mBz
-	 mHXTxqPwNGvqLTGp/37G4RB6AYrGlD7/WoJBCQTymAfu4EdYHNGDQUtNh9ngYM/0YcaJd
-	 qPyowTSq/ASutQ0lGLTgVxVV8twcqRNSJD3GNpTCJyQZFZjfImNXYUoi4ulPyezKVPWQC
-	 1e9L6BHftwCvJ9A3GwrQEukfcAQ5AEJqhUfsgbjhlQvflstAW9bicaxCN+qohA2CjJ3hK
-	 4QfahMzgwcQXIAD2X61WvorU4h5lhtwexh8aIHK8fNIZ2MyCLV3dtIr7QwUmXburQzA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793060806;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793080993;
+	b=qpCG1+LguDS3SjSl8Q6YVMhNKpoW/LuL6cK8GVlZ8p+yn8lQzOzxkvB0OP80v7p/Ou5S
+	 AAyhmaeaOZA5iQdIvsKD7M6k9c7ecicHEVLSqWVnYeqVntBXvscMCexPEYhSfEe+Twnh4
+	 vdMZXFu9REtwHK+oVZu7GQShlYKmOocQH+DQA8IaaP3TM+FOS1MLU1GnRsD9B7xIM7hxM
+	 dfr5D6p4oe7WMhAfo4Mkx4Hinv+9T6CRqZOzIMPgu2fmjoQBLFX/txnScqY2ar4d0/WtV
+	 3DkpvbV+5VpTy2uqF5XTYZkqwJzxztfRnarzmkgUSElngkxFYDk47gydBWXgF/E4fHg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793080993;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=eybqDydWM/qmE6WTUncvgQt2QyS6Zq7ps/uXBzvWlWc=;
-	b=yAOfcVZpi7VaeeMZoNqP+Ke+Y+u3MLaDau69UDvO++TIqIwiXeAQCLpQUY9AREB0aozY
-	 nDa+5bEZ2kIv1ZrwoxBi+2vkvOfJoL8V+Imcn5wOpHERwaRFhMY8CeRjThPya4jvlN3x3
-	 00uwNIUwlUuFoLS3FYlIk9gYW7eLorsDd+V3kT8s9bUnfYYydsYmTtR69lPUg6cyA4DbC
-	 HySFI8jxIKI6+1dbuqNxUaoxInqMX0p2/pd+1Z8UcbQl3fNC+0RkDTUGwuivUbdNTxDnY
-	 LhtDEZO8IfdtoNacREF6RiyBf5AaImKt8TUVdGZ5FSs8jLwr4FFFjOcz7fhjfNle77Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=KtHkcu0sQsAK751caVzJBQDY0o4i7F/zlOnjMPPeE5I=;
+	b=CnnIBv5HDxqCeOdBZvqv0lguwDV43eU6AUCneMy9atFHUXo6H+49n3fi4kVn/LKs9zLA
+	 pwxjnNNQeSyVE3q+9ipmYeJT1Ze55Rjg2YdLHO9CCnhWuSN/g0sC/wwZwECvkxTgujgPg
+	 TGzESbRUhYP0UvIILkVMBpyNfJU5FP0MFagL5Ps2znLTnSgMrL8f4r3XY0PkboFfTWk6i
+	 H7EJ4HPmw7NNeo8NVOM/q7MQ3Mg1zeAKwD0J4ymGuQh2Hy8Pg+DE0lsIB9fMDwuyx9huA
+	 0fvn+kL71a++ZaxlFtEhpBEmpN1ZiF4ePs35K1cYzSpcpOvFUStoa+6IqKcfBdMcDDA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QM9gFSMu;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.45
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Fd+rVQCT;
+	arc=none smtp.remote-ip=209.85.128.53
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C86B606A31A
-	for <linux-modules@vger.kernel.org>; Tue, 27 Oct 2026 00:26:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C86B606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE0E606A31E
+	for <linux-modules@vger.kernel.org>; Tue, 27 Oct 2026 06:03:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BE0E606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QM9gFSMu
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-676804a3a22so3568822d50.1
-        for <linux-modules@vger.kernel.org>; Mon, 26 Oct 2026 17:26:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793060804; cv=none;
-        d=google.com; s=arc-20260327;
-        b=gpDzDfUjNKlwGSLKk9AtOssF+j+D+X0QdfGAM9ut1wBSU+pX0KWO5oSM5e+EwjKNKz
-         BH1zm+A9y8ZtEtnXLxxQhGWWkDlup+lIPEpJ4hn+Rx0P8KnPR2a8NecUzgmAM73ur1bh
-         KyxZ/Bz0FLx9CWZYq8066LCCLEfJIDfnLnDOqE4tg3u1AGwxWNXgyJGCBx7eFYNRuUmm
-         FB50aYW4Uh2Uo33QTrxfWoTxTXieqB91+tpIiYtT5rvi6btuAiZ2hN2lgTQIGselRmHb
-         IJ2hHUU17GGEG8OVFXUZyUi82Y0U2+49M2nwtOyrAGKlMPkqb3iDvcnn0ejAlcyliTTP
-         L6QQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eybqDydWM/qmE6WTUncvgQt2QyS6Zq7ps/uXBzvWlWc=;
-        fh=HXxW+M6ys02Zp78Am/pec6BZxf3hEgiTTGI3mQrayCA=;
-        b=ATInsIRrMkvtywgIhAIE2rDzQUYZ1zaEtVrtNFgagPkMFU2RIhq7o1ZqVPDp/0GsAY
-         iht3KiQkvUXyhViINk9u1yoLXoOEBuJh7l2MKI4ZEKW7lutQwED1OM3mApdKp5zZ2cph
-         mVcs5K4qiHmekRjUEwEjGTrPdtDzRuFE4DfqJFyBCafo4HeaAyuUKyEQgCMC2tuMACk0
-         i796IIx7rKzLovybZyUWFs4i2sU2RtUJ6CsCE+THfblglauAoc3XpoNKFbi+E8yZVxRx
-         QAUJ8+THsit0NJPgHGaNMsPw/SYcUTNEXzjC1kvI9XlzgWBs4pG8Nlag3nS1rPXQJfSL
-         hsxw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Fd+rVQCT
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a210470b49so30311105e9.2
+        for <linux-modules@vger.kernel.org>; Mon, 26 Oct 2026 23:03:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793060804; x=1793665604; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1793080991; x=1793685791; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=eybqDydWM/qmE6WTUncvgQt2QyS6Zq7ps/uXBzvWlWc=;
-        b=QM9gFSMuY14PSarLpBthEE5PSTtYJ5iQwfgHQXQxXdgyxSiGBeDMvvVy2F16VP31j3
-         ZaD0gTSPQ7tBhZ8ywZEs4Mm32UcUHxBy8wqngXv0QxgVX4bM5zngRoe9iRD86veEOOAa
-         AIQ4D2vzgjQ7WStKg+WIRR7tSxPvc4jva8g1Yn2WwYrlnrKElf+xegqOTHz7oitichVP
-         dnws6dF3IsUeHfMvlUNqB7rY7WfWfR9B958oJT0/dYdusZ4FBwZLq19JmVbiO9PglY1J
-         mtt7Cszp0e/J70gkbUSLxEG2XPWXTagQQgdGm5KtjXRmuQR1c/V8ld1q7G07yquEPoCy
-         GREQ==
+        bh=KtHkcu0sQsAK751caVzJBQDY0o4i7F/zlOnjMPPeE5I=;
+        b=Fd+rVQCT6h6iWDR02V4pfE6w4B9VB1S0lffsv2IDdIHHIRdyK3jUEt2FmHBfZxMBXo
+         /6CAn9UDjbhCtzDFEAD5X9jRnzYGPQcAkOmikfnG13ul8dm2gAbZsM9KyfdVDLAcz/Ay
+         UiOYwyOaUeF+/xVxB9iMXFcDyDlueTVmMgBFt8QsaC3JgphcNjaakCDKqO2hcesvrHWK
+         9oqTpTZC6ExZY6JzDB3EJe6w45YuoOXY55hHfzjgqADewKP+nXACtXCBTHV/WG0pE4Ke
+         YqA7i+Nq+iwiszDPQZGl2GpPWw21M4pwSa8W/8EODi1AZRQE76335KaE1hQ2D2r+gA/7
+         74bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793060804; x=1793665604;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793080991; x=1793685791;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=eybqDydWM/qmE6WTUncvgQt2QyS6Zq7ps/uXBzvWlWc=;
-        b=dho6BPpepP1MJk3bvgpduYvHBrXeHHjATMXSfZdqz6ijgqg70FIPq0WtU0MTQ/rlQm
-         471h+u8/isxjMmiRq7wnDeYeYnFEhsiTOkLY2EVGAFoJnyBODFCX1BXCsTbdFqoHGVRV
-         1ppZaVhUGMV8seTzREXaCuaJh1tdYnkxg42kyFFc9Xh92pD+mA1NcnIkCoq0Cb5Q0P6t
-         Are1tjS5P0CmkvTk7MHsimqDEEeTThRLLKpiaPhoPPKFH9o6MInlQwLrYAHVgJdArNoy
-         hxVssyCkZ6LVh4nCt0qvxME5ORiV9NIoboLW1olbDjKmlP2TFW9hZuxLKZaINErhM2qo
-         x3Ew==
-X-Forwarded-Encrypted: i=1; AKwUvBwu/tNdwQuJvlnjhQuTpE/ddIG6MZPd97J1JIOZ2tOuE3dZ1sPOZNAFUO3h/0SVwZXQGVfx2Gqdgc5xyx68@vger.kernel.org
-X-Gm-Message-State: AFq9FYJIm36bqq68G6fVj0LIiYcjt1+rfGKns8AX0BY37Bl00TkuwW/6
-	uSiZopl+RhboarB/gWAevsrV/eDIzgK/NF1Nueq0YasRBWag5y7tuj1E0WpIyYt3nSM66PbqWF8
-	KgUrXz5naNXJIv8GaNwcs/lyVsQjDwL4=
-X-Gm-Gg: AYBFou2INDIm645tNmq8GGlhL7hddT7kNxn98GjjE9KYxanFf53X0EAld+nXY5yvhZ6
-	eqbshtp4jSNyKF7xZYH1l2Chu8trlHQwdJsepTSWIcgKxGhbNX0WUN9oVuKazWY1C7zubkLsPf3
-	+QS3sNRjvbuZxuCfZ9QH53WSBTA9SUfolVj+oaTSIJ2D+ocm+rlXspluy8E9R0LHoIIJTGKo+O0
-	LSqYCyC3pprhTFsDm9TfuxmaMUxj/s6BZlMZpbD0dvWkeYeiBK3eXlqNX7gDAszXjFtzflG73oy
-	oNY9hgoXhDMO9D/t9oZLBBThErMCtgTansOiN4V91iaI4MNgc0gzp0vlAFE7w3Lkt7ILchTYYzA
-	1Vnl+hFiUUelZaR9L7rL9IUHKK5n+YKR7unDgULIVIVxObOTS4XkpHkSRsHncvMyRNXKtrUM7h/
-	namjebjkN6MtKy1DU=
-X-Received: by 2002:a05:690e:450e:10b0:677:ca67:98f4 with SMTP id
- 956f58d0204a3-67a453de253mr3907194d50.45.1793060804234; Mon, 26 Oct 2026
- 17:26:44 -0700 (PDT)
+        bh=KtHkcu0sQsAK751caVzJBQDY0o4i7F/zlOnjMPPeE5I=;
+        b=VsKFFlujT+It/hZgQKRcaTOtufieIGvY+ky7kauCAi7WHc2+0rNqMYzkyTiXuSOCap
+         8TQ/HIAGF8pVsK1hNabmw7gtWSgSbuKbK1IFNcllu/+83gSrmwRnQchkOYsPvL3xh5ow
+         wRAMYRDCnkuXbPa6CJMTLL51sEKBbU0tKcC7YaJmqmWcuFChC7UIUC4cbExI7II7fv4F
+         bYPIuEhBRLiCRoVmGetDyxJoMX5t1YTr+WmIQd9sSEdbxodUbrEW/0zV/xKmQQ+Fj0es
+         cJDc2LOfRqNnE9fbXcIuZN34A/aHBl2wxLl1hmdt3OAlg1d/C1Bj9YFU6eQ+yeN2MnJs
+         SbRw==
+X-Forwarded-Encrypted: i=1; AKwUvBz6XzBCo/80FmShv7m4UsycRrHqjcdanpnceqS4xWQrpi3qEVxSSUvBvNVHFXfU0FSqOEsS7xDH0iHzBwBN@vger.kernel.org
+X-Gm-Message-State: AFq9FYLtycjbndHbCP47mGH4a1CfFtIBkoj5niBLY5g7A+REElApAS8b
+	MX8S1eWlhJCS/6XLoQoflKBFiij5BHtl+4rXrJLo48mjzJnuKKIV/HTV
+X-Gm-Gg: AYBFou2uOmLGd0KIAowqEiiFUmYb4gWPAWrIsSDzqsV2CKEwYpeccTr8I0USVgK0Oew
+	ofI4YqMzSgBT4ZZGqnN2s80lmQR2OqDKQwB/F4TAOWt/4cWkODyhDfaovqeN65NkzsM3k3hMK4R
+	iqcWbJL0SEP+hC8qBNAF2/K8pw8shuoCU6mM85kMuRQVuyjOzThbInb8jSgCeweklrI2RCxHYsJ
+	zG7Di2XxrOqHDoiajOmmE04bmoov2UYHE4XYZhNq+JQUZjixJqdTdEAU1mTFXE2XGAHgZKdyse3
+	Xpy3seootSCwGFbi5q/lB48L+ofXXyMiJlipM2SBOE8FTv7wLiYo7DIIyJsqORQvzT6Z0LBjoQ3
+	l26yBeRjTSgRmRBLAZhasWxTg+Ohg9zJAa5SnCUMcuLTAzrOS3UDP+EDDqAPNvMEGiH7sjD7Dky
+	euzALiS951MRgNqrfKr8vileKSTzp1gfk7Vy4sY2kIq0xWQqMNobVtUoXrYdL6nlVkoQiNW/6ae
+	F7jKd1jevfTvFrTYNiiiTLoAsuq4U5XyipFS/gNPY6Nk15DsF4F/9KeeAu9p7Sm
+X-Received: by 2002:a05:600c:3acb:b0:4a1:992f:d0e7 with SMTP id 5b1f17b1804b1-4a35aca4fe1mr159192175e9.16.1793080991458;
+        Mon, 26 Oct 2026 23:03:11 -0700 (PDT)
+Received: from foxbook (bgu81.neoplus.adsl.tpnet.pl. [83.28.84.81])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35a5698f1sm240600745e9.8.2026.10.26.23.03.08
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 26 Oct 2026 23:03:11 -0700 (PDT)
+Date: Tue, 27 Oct 2026 07:03:00 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alex Williamson <alex@shazbot.org>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
+ <u.kleine-koenig@baylibre.com>, Armin Wolf <W_Armin@gmx.de>, David Lechner
+ <dlechner@baylibre.com>, Danilo Krummrich <dakr@kernel.org>, Luis
+ Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel
+ Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
+ Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, "Rafael
+ J. Wysocki" <rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Bradley Morgan <brads@mainlining.org>,
+ Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
+ linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+ Richard Weinberger <richard@nod.at>, Thierry Reding
+ <thierry.reding@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
+ userspace manually messes with devices and drivers
+Message-ID: <20261027070300.4c45616a.michal.pecio@gmail.com>
+In-Reply-To: <2026102637-buggy-mothball-2a08@gregkh>
+References: <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
+	<arIvG0nx4LXG9nlW@monoceros>
+	<defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
+	<9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
+	<2026092321-province-yearly-44aa@gregkh>
+	<arOfHEsGGglNse7T@monoceros>
+	<2026092348-victory-erased-0e5a@gregkh>
+	<20261023181326.0dc2f7ed@shazbot.org>
+	<2026102437-vista-unsoiled-b089@gregkh>
+	<20261024103512.4601ee4f@shazbot.org>
+	<2026102637-buggy-mothball-2a08@gregkh>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -105,89 +121,76 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
- <20261012-dd-cmap-part2-clean-v12-10-3c8cc5725def@gmail.com> <sashiko-outbox-170703@kernel.org>
-In-Reply-To: <sashiko-outbox-170703@kernel.org>
-From: jim.cromie@gmail.com
-Date: Mon, 26 Oct 2026 18:26:18 -0600
-X-Gm-Features: AclHuK_jv-lTnu6VYS2062o39f_E507yFRpnLLpthRIG1YaVwpNMuyVZmZdMW28
-Message-ID: <CAJfuBxwNEG2ukJbPyVqdu0jKN4_CGh_ZR1pYj1z6AJTErfLakg@mail.gmail.com>
-Subject: Re: [PATCH v12 10/40] dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES
- and code
-To: sashiko-reviews@lists.linux.dev
-Cc: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@net.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	John Ogness <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Louis Chauvet <louis.chauvet@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 13, 2026 at 8:36=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Low] dyndbg: documentation references future struct _ddebug_class_map
-> --
->
-> commit 4edbf52dcd2e7bd06805f06e89c8d2ce8672c81b
-> Author: Jim Cromie <jim.cromie@gmail.com>
->
-> dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
->
-> This commit removes the unused DD_CLASS_TYPE_DISJOINT_NAMES and
-> DD_CLASS_TYPE_LEVEL_NAMES classmap types and their corresponding code.
-> It also renames enum class_map_type to enum ddebug_class_map_type.
->
-> > diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debu=
-g.h
-> > index a10adac8e8f00..9607121c3072e 100644
-> > --- a/include/linux/dynamic_debug.h
-> > +++ b/include/linux/dynamic_debug.h
->
-> [ ... ]
->
-> > @@ -119,8 +109,8 @@ struct ddebug_class_param {
-> >
-> >  /**
-> >   * DECLARE_DYNDBG_CLASSMAP - declare classnames known by a module
-> > - * @_var:   a struct ddebug_class_map, passed to module_param_cb
-> > - * @_type:  enum class_map_type, chooses bits/verbose, numeric/symboli=
-c
-> > + * @_var:   a struct _ddebug_class_map, passed to module_param_cb
->
-> [Severity: Low]
-> This isn't a bug, but does this documentation reference a struct that doe=
-sn't
-> exist yet?
->
-> The comment here refers to struct _ddebug_class_map (with an underscore),
-> but the macro DECLARE_DYNDBG_CLASSMAP currently instantiates struct
-> ddebug_class_map. Is it intentional to document the future name before th=
-e
-> actual struct rename occurs in a later patch?
+On Mon, 26 Oct 2026 21:34:57 +0100, Greg Kroah-Hartman wrote:
+> > Even if we could come up with a set of device IDs, it's a policy
+> > decision whether a given device is intended by the admin to be used
+> > by the default in-kernel driver or a userspace driver.  
+> 
+> Great, then have the admin never allow the in-kernel driver to be on
+> the system, or be loaded (modprobe has deny lists) and all is fine.
 
-yes, intentional.
-using future-name avoids having to fix it later.
+As some maintainers like to say, it's not the '90s anymore :)
 
+Users don't reboot systems to kick a kernel driver off a PCI device to
+try something in a disposable VM on a whim.
 
->
-> > + * @_maptype: enum ddebug_class_map_type, chooses bits/verbose
-> >   * @_base:  offset of 1st class-name. splits .class_id space
-> >   * @classes: class-names used to control class'd prdbgs
-> >   */
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012-dd-cmap-=
-part2-clean-v12-0-3c8cc5725def@gmail.com?part=3D10
+Even if they did, it's completely normal for desktop users to have two
+GPUs from the same vendor or two xHCI controllers and pass only one of
+them to Windows/macOS while using the other on the host.
+
+bind/unbind feature prominently on every distribution wiki and forum,
+this cat is absolutely out of the bag at this point.
+
+> > That means that at one point we want the default driver bound and at
+> > another we want a vfio driver bound.  Coordinating this is exactly
+> > why we have driver_override and, building on that, match IDs that
+> > require driver_override.  This allows drivers to describe
+> > themselves as vfio-pci compatible drivers via modules.alias while
+> > requiring userspace to enable the match via driver_override.  
+> 
+> And as said before, that's a horrid hack and one that is breaking
+> things today in all sorts of ways, which is why the taint was added.
+
+Are you aware of bind/unbind breaking things for PCI specifically?
+
+Without also involving 'driver_override' or 'new_id'? Everyone agrees
+that these APIs used for anything other than pci-stub or vfio are foot
+guns. But your patch targets something different.
+
+We can even bind PCI drivers to wrong devices *without* using bind and
+hence, I presume but don't care to test, without tripping this taint.
+
+> If you wish to override the kernel, then great, a taint flag is added
+> and all is fine.  All this means is that now developers know what you
+> did and can decide to ignore your bug report or not.  No functionality
+> changed at all.
+
+I believe people pointed out that it's a functional change for users of
+panic_on_taint who also use bind without being idiots.
+
+Does this taint even solve a "real" problem? Those bug reports weren't
+coming from users, they were coming from "abusers" like syzbot looking
+for trouble. They were quite obvious even without a taint message.
+
+And at least on linux-usb, they seem to have stopped after Google and
+one other copycat were told to stop sending them, and before this taint
+reaches released kernels.
+
+I even told them to block not only bind but also new_id, so there will
+be no second wave of reports caused by syzbot discovering that it can
+bypass the taint by using new_id intsead of driver_override.
+
+> Why are you worried about a taint flag?  So many servers run with
+> taint flags enabled due to out-of-tree or questionable licenses with
+> no problems, what's one more informational bit here?
+
+And what's the point of a flag which is always set on countless normal
+systems in the wild? If this feature survives to April 1st, I will send
+a patch to rename it to "VM passthrough taint" because everybody (or at
+least those dealing with desktop users) knows what it *really* means.
+
+Regards,
+Michal
