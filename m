@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793132540;
-	b=uw8dzmsSBvwv16N6CzYctMkFXbkbB0W2XpPXlJ/Fkg+Pb1lW5JP7WARf9TLd+x18sjT5
-	 cjD+iENdmcro/ihETjRFHMhYHXaZxbdBLQNbIW5DfMbm+OO8aG+PjWzXLrrhYHAtYC5Zy
-	 7S6/glGrGzJ5XEY4YpNYuuII8X5LcVmOpDTeQeM0+lLY+TpQ9OY6si7l0Yc4xA+CMGORx
-	 n2Dbj9Xm+SPXk+qIWd4ubigPXwzoM5TF1sv9y5mXwko/fW5wFXban9ewbpoRpCORzjOIi
-	 NYQZEEEcFobWvMjzU84JHW5r0OYiI7GLtSwIa0GyS+sHndVD2nrbQ3aADzEuvKQivWQ==
+	t=1793132547;
+	b=LKUScnWqMyr/b1pFNFnU9oXnIba3NzhT8CuVqBveLk8cZs20Dy77SI2pRKAWqVbWQvX7
+	 JJMusepniPPuixYpkfbcFl4jqLh3z/ct/ozbMVknGLifZchGPXhKkTdn0vXHKqrYOPaco
+	 YkhRmTmrXJp2eD3XsJUMipLs+Y1dFtbtpJItacf8uMaEIDLOmU+b/lwqTfy4FqI+BdmfR
+	 0F1nUZ9dzow+u7bf9eE8ROUb51a7cLaU7eHuDXbzEKdlYvy81DW108dETQozmoadBKSQp
+	 +pgwL4TDT5hd6xHVyUaBS/E5wvLu5kDrO6/QNlrqpO7y/58URigvY7ip48WO9t7hseA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793132540;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793132547;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=SiRDDQbSFKecHeqs5M4sWJpuVW3XhZpV6pnWJJyKwXU=;
-	b=5EmLUmHissx81uAcLf/CIImkRvT5CcTRdfNR8koaVCqpAJPZsDRig2gMFXewcn4JY+0m
-	 BR3H2eSP5/EKqSM40+Y7Ogx1x6+lkhGEZLjsqwgA0SefNSTpcxHQ9pDWyFGkaqTm7osHn
-	 YGBqBttpRNPJaWmPF2SY5IyuNZWOZc8hzImvH3LrrVjMI74Cz20FqmLWseMHT8/gLZes/
-	 9z+2JwPz4umJ4Beb7Ah0B6/ksebeeS7Sm+urz7WR5zoXa8SQ3cnWcN+qJDlKnf7sxqi2e
-	 4bYYifIoo1dLz7jD0KaoGDCSfG5JLcJpedwKLLyntqPVYjThAwMDUC0Kzt9CmPpSE8w==
+	bh=MD3WemlNx8wDWgzNhjIwPFawd5UT5lSpHnkAmq2nUNY=;
+	b=B34weIgg8YCXuF9UKP6AEVaLGW0vu2cg4VO4a8V4RQ6NUlGUehinNrKibKf29O3LZEV2
+	 2isYoNKCwa0b+9h4RdN2nlxiJgbwc0DZ/R9ar7hGHrmt2QK/9RsioLfxHN4TxG2MtyckQ
+	 S86m37c8+W6sbZEM7COwOx1Rpi9s/MSTkWcmR4DS+TykFjIPtg9xHWf2JI9X2ZY2zNZZz
+	 LtJlgjnV1atihg2et1Z5pxeBDQjmCoMgPnGCwhjFpdcxgKk9eVWj0e6ILxBmM16eMc3JM
+	 58/mzyjWfdU15UC+qBMqD0ygXi3HihsU5tC7+Fxo3akpew21qUKeBo6dAwLW1rwHbxQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="h/dqxJuX";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LkhFz+xo;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A8D60A382D;
-	Tue, 27 Oct 2026 20:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA23560A6F4A;
+	Tue, 27 Oct 2026 20:22:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h/dqxJuX
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LkhFz+xo
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793132540;
-	b=H4Mx0EicxVfnkCHKzlSIXp9tWQnrddkPW6pwS3SmbfedWVYYsJa4bEoS20C85DyTPe65
-	 siAHBTmg2Br0p+ongRMB0nnctVUykZM3z8T/CpxT0mZpJqC/eeWmglWgGkZC+NKTsmBZJ
-	 btcqvtf/zMpUomQ0MNIjRi1zFKbLHKVijwEnAYfvvAjN2s03b1ljMx4cPV7H6hLyXkWF6
-	 q3cDxPSjeuNULVv4RkO9nb/LeNtJkI/Jy3N+T7S0CTN1dGekqTKT+lq06VsL2HCU1c8l1
-	 LucP0sAl2SU8BIrrghQFFApsoWLdwO0B0sMO0Y4R65TpFrnWBsTHB6SjKBZScEpeNKQ==
+	t=1793132546;
+	b=IJKmio8d3wJMowlymUCcRPk57oEfXXnsgFllh0dd9tzHX/NorZGHAq2mLuKm9vuEnj3p
+	 C3UfTj6zYzb37paBvCE1deQbNrweqtGvYUg+y+YheD90OiVuJHyEj+7r2+7cpb9FMbHMU
+	 EVr2m9ia+cEjI9euj9jWRfYVTEbfoUa9nGX+X8WCZQ88yJ2zEaYCfcuVnBRgddIZKbDvJ
+	 KDcskNdj37qweBuHhMf+0npu9RAqT0N+AmSYnLBN/qrMqStHeJPuLOVjlLazRnx5TSRMq
+	 5c3lmc+SZRtPSS1vPY6nYjTt53JV/5QIBY2BCTxMB5Q2Ryov1UqepwSZecHy0gq2n2w==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793132540;
+	c=relaxed/relaxed; t=1793132546;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=SiRDDQbSFKecHeqs5M4sWJpuVW3XhZpV6pnWJJyKwXU=;
-	b=tw6lDsWSzrbzZhBMxhiZjl/sT6EoiuE6Vul6/4MtJL8c3SRzbfkNVMUXdd8/MsMWxtl/
-	 MzmhN/sJZagYdr89oljYUb9O744+SQCW7Phz0F+JFEx9KivoS6Ue3zUeG6NpSRQXBQlB4
-	 ZesKGQhO0BIBqhZjsENtJvBfTLFf+1NpEjLCT5o3/GnpGi5MSViRfBbOtyKV+6h3rmGmU
-	 kQ6xtgLTEq7B+iP9v6Gdm2Fow/BYP1kzdnkDAa38QbhXJPk2LOa1VduX4d7N2V8dtpl0+
-	 dcU94VxUTl1Y4SWErWuEot5CpOiHwJqynl4WGb/Ltklbkx5c9OE6PwrXyTYfvxa/zpg==
+	bh=MD3WemlNx8wDWgzNhjIwPFawd5UT5lSpHnkAmq2nUNY=;
+	b=KP2uLkTL5Mn1FPr8r9IiKn0SRyM4E0b5/OAQA7y30lheE+NNYm6yKNFfZgpoYp6YNTI3
+	 Y36SYrqzqQK44ssR5mD2naNAdFhjw8WjwwhP4D7qiacrGSLV7dYIZ4YFVsvHWtW/modOZ
+	 5ANLE7i9iv7u1ZAbhXFCQfEOWOIj+sJcoq/NzKJljfkNSxb9scsKe3aDApifJQwZ5iAtW
+	 EIXerTLqcZpan6MDKb8jGYa0Eaj6C5TbF48wvOthL5w858EJCruX081L8izh1TLRUE8ez
+	 EMTpHLCa8ld6RdPX70BjK81htQCOnZ3LLths3yqS1KAjcmkudLUDrhZl3czw1RxTg9A==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 58AD61F031E7;
-	Tue, 27 Oct 2026 20:22:13 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id E0C121F0136A;
+	Tue, 27 Oct 2026 20:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793132539;
-	bh=SiRDDQbSFKecHeqs5M4sWJpuVW3XhZpV6pnWJJyKwXU=;
+	s=k20260515; t=1793132546;
+	bh=MD3WemlNx8wDWgzNhjIwPFawd5UT5lSpHnkAmq2nUNY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=h/dqxJuXfpgrNLE5nq2ZW+9RH9/nDZIfPwJMsafeAVVCTuo5TLikoiJt1tS0gvIvQ
-	 UsLJzahUyyfrVntYsXzsnR/47BAKWW27nRPOGAis/t7OyjcQ9j0rW4tvbEOSD/QGCB
-	 W8aR8mFZc5Fw+BgJJEMToz4iyYiUW96V1UWRuQ1bv1xKVi0vPkM9l2qjkxK5KnPUUi
-	 sNonpyxvPLwQhf+Q0ryE7fu2oHBXTSRf97Ku4HwdplTDtfTFiTOxVYIopKRAQYMohf
-	 AHHDYEvYnVIp2ttAvyzgIu9C+Dq74ZyjfmQT+uIwpZFflR0TdK/3Goq6GPiXnmiZBz
-	 o5c1d53k9fOlQ==
+	b=LkhFz+xoly7mxPoFNYiEVs8Ske78Jx6jlzfQ/WNRTwbuzmu0VmplQDEwVbIvOTwbo
+	 H4cYbn93vGekHQxWdRTBtwkvJE1ekDqwykRjYlr9p6JPPz3FEb0+x7YF6WiOgyVKOW
+	 c9TjdqNtgkhNKQQeDsu8JwGiBw8jTrTEM3qpCdONegzNVrs0jljO0ctsgD5oCSWlsB
+	 +ghGvkWA//E1yqFrhXuOnBYwZzEecxknKgpM+FS1OnoVCUOOFmpR5y9YUDbyESE667
+	 jRMQWpx70udqrsJ99JT9DRywBkBGBXlGYNyrCXOOXMrCEn4MCgafHjLX+Ddr+i9JHb
+	 RSAZxy8EHhzpw==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 28C2745221;
-	Tue, 27 Oct 2026 20:22:10 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 38EDE45274;
+	Tue, 27 Oct 2026 20:22:11 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Tue, 27 Oct 2026 14:22:12 -0600
-Subject: [PATCH v13 12/39] dyndbg: bump num-tokens in a query-cmd from 9 to
- 15
+Date: Tue, 27 Oct 2026 14:22:33 -0600
+Subject: [PATCH v13 33/39] dyndbg: add epilogue to dynamic_debug/control
+ file
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261027-dd-cmap-part2-clean-v13-12-9267923be612@gmail.com>
+Message-Id: <20261027-dd-cmap-part2-clean-v13-33-9267923be612@gmail.com>
 References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 In-Reply-To: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -113,11 +113,11 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
  Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=3086;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=2252;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=2qWyi6+YSKFFZjxBlAqzRhGNiwVTqFgEdchNvFaIvH0=;
- b=BC2GesekFZXLHrTHTPw1Y6gMtxIIayR435lkYJPtxWrjcCGVKmhB/ROJB49r8wTCFCv8e4WUw
- PwWcdo+OZ0RAOrpgFsJpRCLCr3Y5di5G0b6qimpQfGUcdK/SklT48H2
+ bh=GnB4si52gXR6L2+aPCSO9dyvxPaeMcaUtlggi3ubNhU=;
+ b=ETZPNmW0juGHsMdzAOFLnSr7VbeUa75JKUrCV/Qur61K0h8bUwUfPHiNgNEn3UR6DK9B9RLs0
+ VlVhImNeNy7CH7IjOWn2G2damVla20PPgJrl8ck+SdnE1y2IVVswcFj
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -128,67 +128,80 @@ Content-Transfer-Encoding: 7bit
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-Current MAXWORDS in ddebug_exec_query() is too small to accept a legal
-query-command using all 6 keywords.  We *need* 13, but this adds a few
-extra to allow certain errors to fail on subsequent, more meaningful
-grammar checks.
+Add an epilogue to the control-file, to allow display of statistics
+etc, without disturbing the header.
+
+NB: epilogue lines should start with "#: " to distinguish them from
+lines describing pr_debugs (and from the header line).  No new lines
+are added here, only the place to do so.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- lib/dynamic_debug.c                                      |  2 +-
- tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+v9:
+. update ddebug_proc_start() to return EPILOGUE_TOKEN when seeking directly to epilogue.
+---
+ lib/dynamic_debug.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index a39144fd7c8c..a0723343e2a7 100644
+index 82edec19c67e..5c87e92bbcdb 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -558,7 +558,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
+@@ -1185,6 +1185,9 @@ static struct _ddebug *ddebug_iter_next(struct ddebug_iter *iter)
+  * read() call from userspace.  Takes the ddebug_lock and
+  * seeks the seq_file's iterator to the given position.
+  */
++static char ddebug_epilogue_token;
++#define EPILOGUE_TOKEN (&ddebug_epilogue_token)
++
+ static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
  {
- 	struct flag_settings modifiers = {};
- 	struct ddebug_query query = {};
--#define MAXWORDS 9
-+#define MAXWORDS 15
- 	int nwords, nfound;
- 	char *words[MAXWORDS];
+ 	struct ddebug_iter *iter = m->private;
+@@ -1200,7 +1203,9 @@ static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
+ 	dp = ddebug_iter_first(iter);
+ 	while (dp != NULL && --n > 0)
+ 		dp = ddebug_iter_next(iter);
+-	return dp;
++	if (dp)
++		return dp;
++	return n <= 1 ? EPILOGUE_TOKEN : NULL;
+ }
  
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index c1475c755542..5e52d957e2fd 100755
---- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -320,8 +320,8 @@ function GOLDEN_RECORDS {
- #K= b9a397e807148d13ba07da7db7e69817 FT_grammar_errs.2
- #K= 5abefa504937a329f974504f1896e368 FT_grammar_errs.3
- #K= 1d94d0f239bf40bf51280caeab499de0 FT_grammar_errs.4
--#K= 135035c8a17ae100cc4ec954c4d75b2f FT_grammar_errs.5
--#K= a9cc14244f91a12d3174ad1314144a8e FT_grammar_errs.6
-+#K= 9a5e1c1856f1ebbe57a4afdfc4c9703a FT_grammar_errs.5
-+#K= b3809a6f9f643f049f1ef30827d4b001 FT_grammar_errs.6
- #K= 5d400aad1a7d71f548b6b81274d00a55 FT_grammar_errs.7
- #K= 61cd359b10f9051862d3745eda07a295 FT_grammar_errs.8
- #K= 567379f4f4d099f00f37d1469d9370bd FT_grammar_errs.9
-@@ -340,8 +340,8 @@ function GOLDEN_RECORDS {
- #K= 1f6fedfe222af475211b3bfc6d08bc63 FT_grammar_errs.22
- #K= c67dfeca97697b707acdd70672816dff FT_grammar_errs.23
- #K= 9574dbfdac063409b41a44e6251fbcd9 FT_grammar_errs.24
--#K= 644b81753949ac1285e38ac995eeba46 FT_grammar_errs.25
--#K= 1bf2a93a39961f40e0c2dd4c5e2edc6d FT_grammar_errs.26
-+#K= 3c694a0ee2cf3a1d39f2ca8a9f3b9094 FT_grammar_errs.25
-+#K= c23be05426c8727be833ff055944aa96 FT_grammar_errs.26
- #K= cdddf4ffd7fde3c12eb0c73770b872bf FT_grammar_errs.27
- #K= cdf7a2e2740ec007efbd29feda478420 FT_grammar_errs.28
- #K= f6650d69963cef433c50e1f2acb899fc FT_grammar_errs.29
-@@ -360,8 +360,8 @@ function GOLDEN_RECORDS {
- #K= 1a402ada248d0d50cec13a1af150ea33 FT_grammar_errs.42
- #K= 5b46a8eb0d74009462f74cf7553e3228 FT_grammar_errs.43
- #K= 546e440044828d86135dd63f1eb9ed17 FT_grammar_errs.44
--#K= 644b81753949ac1285e38ac995eeba46 FT_grammar_errs.45
--#K= 1bf2a93a39961f40e0c2dd4c5e2edc6d FT_grammar_errs.46
-+#K= 3c694a0ee2cf3a1d39f2ca8a9f3b9094 FT_grammar_errs.45
-+#K= 37b7ab754e579683a28ce086c470cdc9 FT_grammar_errs.46
- #K= 3e3acfb800cfb1bcb0cc07f33b75830a FT_grammar_errs.47
- #K= 42dc6cb4fe938bb82b64c82924ef28d8 FT_grammar_errs.48
- #K= cf9320d2188f5b48d508d610d95298b2 FT_grammar_errs.49
+ /*
+@@ -1213,12 +1218,20 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
+ 	struct ddebug_iter *iter = m->private;
+ 	struct _ddebug *dp;
+ 
++	(*pos)++;
++
++	if (p == EPILOGUE_TOKEN)
++		return NULL;
++
+ 	if (p == SEQ_START_TOKEN)
+ 		dp = ddebug_iter_first(iter);
+ 	else
+ 		dp = ddebug_iter_next(iter);
+-	++*pos;
+-	return dp;
++
++	if (dp)
++		return dp;
++
++	return EPILOGUE_TOKEN;
+ }
+ 
+ static bool ddebug_class_map_in_range(const int class_id, const struct ddebug_class_map *map)
+@@ -1270,6 +1283,10 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
+ 			 "# filename:lineno [module]function flags format\n");
+ 		return 0;
+ 	}
++	if (p == EPILOGUE_TOKEN) {
++		/* use this soon */
++		return 0;
++	}
+ 
+ 	seq_printf(m, "%s:%u [%s]%s =%s \"",
+ 		   trim_prefix(dp->filename), dp->lineno,
 
 -- 
 2.56.0
