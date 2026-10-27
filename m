@@ -1,81 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793088350;
-	b=R+TDp80aukaH5/1VpSPfzzCqIXQKCPaZtz1ew3WsW2lA2V/HEuDKKLGR8iQIIwajNhW9
-	 NcLi/DcqfcJEje4jhS3Q1cK58BIJxlc+A9/Lp0Kof4IIWqPEqXdMbSrwv/oqHvGFKKmXu
-	 WjTiScPV5V41q7x87OAjzs9dKP1kKT+tDUYsKuzcf1+jPvtuQj14WggCSIPA9Q2rTO7Cs
-	 JyZxezm4bpOpvQ7bQnh2P8DifnJu9caMpVDIUu1cav9cTWRv7dcfU0cSwA2U1+2icodbG
-	 uB+z/kY/nfALPQTLwDuGKCRxG3XoFeEhIv9dwDmj+WnU5JBHeSI5ipnwSqtY24yhaAQ==
+	t=1793091630;
+	b=Y0Ukd+//dIqhqoHj8KnKJhx7wyeFJ2xnjHTTfaXmb1qCG3XduXRb4FXeq1dfpnX3InWx
+	 RvgYQWsyycVWx+39oW2mI5AoEdr0khIHDIqsU5FgQPCoEZ7N02Ebco7dVCo7uCzzvFqJh
+	 5SfhkvszV5M0U3BJr3a1VYh7vdjTQSbIGY25AvmJm537oLy3ZpPkQtbuay2NLsM3UIJKD
+	 eZDQzdY7PA60niut434uPx+NKiT5TXy71rKHOhWw0H9MMz3wZjm5cv+sZ/8VVLYPK0jDE
+	 xmmiEJFJjiotZBOnG6Efc07hqXi4sM0XCckyTYmF0aoJlMavAeAKGgrx4g/r4uizMvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793088350;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=BPrJ7zSdgkFlPfR666dcGKV7qJo/SNuXml2HNin/vAo=;
-	b=X+7ui+paETDSIiv2knxsefGwAyqZpA8PQEXU+xMgCDqcuFknDY1xH0KDwPXBRHHEjrcu
-	 fdzmbLu6C0aSFw3Go/C+gm75msBZDn+QPtYv17b+OkjyT3bJXFdHqfl5Fw0Mcp3dBuy5z
-	 4bsO2fdPdCZHUSeKGCnmvnbYtRJaucNw7vIaiIZ7U7U5+A7ulUBjkwqsQpqOA0EdJxutR
-	 kur14Tsr8snHdEZsJa2NubKydJW2hKFGQg2EAufVaG+ntGjhVzIlSNl25RMn9h6S9Uk41
-	 jF9mL5urqOO5beV48WQpJAsvHWC2MCJUuN4Ri6261fC+erC0eRRcahoEJfXt91PY5Zg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793091630;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=9WCkf6QzTLTdkFQ4qPzTcHJh7ncWmxtj0NsBOYpx7Cs=;
+	b=c0+NfrDyM5ShMjWIr1aeOLYiADJuSD8ZDvYIFbUQEFQj9SuJr1M+nEHPOadzEyxr77Zi
+	 OZ0lO+gKEZApSOwgSqfDLiHFq2ESjBvXlQej0Ri8V8bJt9yoAIxqULwW2MbTdL1rjcL1T
+	 v38pMhuEKwZ7CTKJbk6MFM5ZpJ1FFUCbPBFE0MYihL1UAph6KNelSxdpSb8We0tNsEOtw
+	 kwP4s1inaXW6c0qquvxeXBLSdRnpLpVRqqtIUEP85IWy5pQVSq/pWvAW5PzRlUvKGnVbW
+	 cDvpS0GU2ZYUTARTi4/bcIqNVcyl11OMzJH19uOKoSKzd3uWyMEYLrP3EWUtuHVTe2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=E9Rt7+fy;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Q00wVZLo;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAB2606A31B;
-	Tue, 27 Oct 2026 08:05:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E066606A31D
+	for <linux-modules@vger.kernel.org>; Tue, 27 Oct 2026 09:00:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E066606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=E9Rt7+fy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BAF71F01825;
-	Tue, 27 Oct 2026 08:05:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1793088348;
-	bh=BPrJ7zSdgkFlPfR666dcGKV7qJo/SNuXml2HNin/vAo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=E9Rt7+fybzwSR2JXSEMbcSS2YSEXxhtSq/QjU3jgLpkUV+fklU2NxK+HrJcEoXOUu
-	 dllpoob+VAQlCfum2hsbbvZhGAN5hsXW3v33jsFtpHlGyzisj8rZcalg6TGHAXmfRo
-	 UQE7gkIncVP0CkPNUOXzbTknZZOlhrvtULldMSDI=
-Date: Tue, 27 Oct 2026 09:05:47 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Alex Williamson <alex@shazbot.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Armin Wolf <W_Armin@gmx.de>, David Lechner <dlechner@baylibre.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Bradley Morgan <brads@mainlining.org>,
-	Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
-	linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-	Richard Weinberger <richard@nod.at>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
- userspace manually messes with devices and drivers
-Message-ID: <2026102711-spectator-courier-13d5@gregkh>
-References: <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
- <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
- <2026092321-province-yearly-44aa@gregkh>
- <arOfHEsGGglNse7T@monoceros>
- <2026092348-victory-erased-0e5a@gregkh>
- <20261023181326.0dc2f7ed@shazbot.org>
- <2026102437-vista-unsoiled-b089@gregkh>
- <20261024103512.4601ee4f@shazbot.org>
- <2026102637-buggy-mothball-2a08@gregkh>
- <20261027070300.4c45616a.michal.pecio@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Q00wVZLo
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a2072b9832so4105595e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 27 Oct 2026 02:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1793091628; x=1793696428; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9WCkf6QzTLTdkFQ4qPzTcHJh7ncWmxtj0NsBOYpx7Cs=;
+        b=Q00wVZLocYy126NOMQG7qq9WVmZmohO8+rtmzwAThGXgqrwxgbH4bTmWPDWx6dcxGR
+         cd3CXr6LLPvEAr4u8b+qwWWK6gFh0pGs9etBJfXOt1hEZ1uGK3Y4YcBCXkBaW34LDUVD
+         8jN143vhuaJ66M/PLHmbOsfJ/JY5AeKtG6dEP/JPtfeqJnkK5LPyvbxFFSqBNs5W711J
+         62NEmRsAJY6jJgdFsOpf/emt218T1qM8oNzhcwsGb/1LHYi68ZMF96vWZFYP+5kb+iOj
+         hI1ROUwAcT2tIsKXbpXhwWWVJrQo+XxV3oNQuO1zdrWYs2hYany0znrIPgyb7hZl13vm
+         u/5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793091628; x=1793696428;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9WCkf6QzTLTdkFQ4qPzTcHJh7ncWmxtj0NsBOYpx7Cs=;
+        b=TelQDLzg3VEtvnRA20e+h0l6XAQML8S4IhJ8QTETSQtERv6GpZYnUBYwQFSSG2ovBO
+         y2qtMrp9zizCZ/PAS/ioKCtsq+J21S9qoU19pCbMZalxij13vMzc3dhHzmIy7nKtwZIg
+         G7QoLFe42eEdDOAfj4oMFIurwVJgCbcxQeKhQOPyAYcVIE/VcIaOTY060Kb9VkG/k66k
+         oHHmZOVdGzM0dW7QG+lkbflJHDCg7XxPMyB/DrIaN6+7nYf0mv3LdMpY8Y5rPTazWQ5d
+         g6/TgOxjqkTXo12G5d+AeOJQ3ClK71fZwC/guweWdMi5U8aJhHQSOix4cZcya85HobSS
+         nCPQ==
+X-Forwarded-Encrypted: i=1; AKwUvBy83/cxEdqY9xjdGbwxeAhHHV8kWQpZl1sPeb+VsNuJ2Ulu5EJULMc5VE0Bdo0pSGbZ1sudoizKpSFeuCyi@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ16x9V39tuJteAi7mQ449ZKJfS7/9YWgKvzS0iOjpe/tRRf1/H
+	zdKJdisaLeAvpe5FvY5OMD8vv6CqDe2LhyN1sLKimhQiOSBjZYRWD0Fny2Uhw3jFnUs=
+X-Gm-Gg: AYBFou1WEhfq2UIeUspsMv1uYIkgL/11OpWf8IubeDREhFYynKbQ4QYqdw0enbb+dVK
+	KfZnaKOaDoOGVj8rtJ6DFpLNlW9hkVsZRyW0VFwh5DLZXK40qvQSyj3FMJgfpTxJ4KYQXVmn2Pl
+	pntJOkSZATP/5KFln11r7Lxzy46RY7BOsKxRJncFIowrFErCvXCybY1wt6rEfj1EJO+jPQxn5UB
+	OwSTlFFDmvX5ln2CUnAjRov+n9FBFQNCQho18nowqpYZBbiRRfeONiOcNUTC5fkoHB2X6APUQZ6
+	XxZHOxiIQWcWch8v4TgodUBomQtbzhR/a9CwK9GFMD3pSiq3bzYo6XviFHw2XgKPvc63O2A5IVL
+	BVvWOK0Hxe9xDkvSv6b+8ybM4nmUPHG8MV4Z0QHUJkN64qsEAuzllpc9nxU21WqwmyFPQQi/VWk
+	sUckKeYxkhNc0kU2nRoZ/4jI7xlEJbxqbybQISEyoqGUWcL5CDPuzmIpvNWpp+sUZuGdxzpgq4V
+	XpbkrDhMUPXdahp2VBO4KA8Gd93J2iuz8ErtkNUqruZhjAjcs1hUekojxxIMTqC0/xey+hD0aIK
+	Rw==
+X-Received: by 2002:a05:600c:34cb:b0:4a8:a341:2377 with SMTP id 5b1f17b1804b1-4a8a34123eemr7244685e9.3.1793091628213;
+        Tue, 27 Oct 2026 02:00:28 -0700 (PDT)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a359fbb725sm251375205e9.0.2026.10.27.02.00.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2026 02:00:27 -0700 (PDT)
+Message-ID: <3e3b9652-7de5-4391-8b5d-122f00c4b585@suse.com>
+Date: Tue, 27 Oct 2026 10:00:25 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -85,53 +92,60 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261027070300.4c45616a.michal.pecio@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/fbdev: Replace __MODULE_STRING() with __stringify()
+To: Thomas Zimmermann <tzimmermann@suse.de>, Sasha Levin <sashal@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, dri-devel@lists.freedesktop.org,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261022175543.1831620-1-sashal@kernel.org>
+ <2a9b1325-386b-4460-8651-13fc43dca6c6@suse.de>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <2a9b1325-386b-4460-8651-13fc43dca6c6@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 27, 2026 at 07:03:00AM +0100, Michal Pecio wrote:
-> > And as said before, that's a horrid hack and one that is breaking
-> > things today in all sorts of ways, which is why the taint was added.
+On 10/23/26 10:51 AM, Thomas Zimmermann wrote:
+> Hi
 > 
-> Are you aware of bind/unbind breaking things for PCI specifically?
-
-Yes, we had reports of this happening for many PCI drivers where unbind
-would be triggered and a random pci device would then be "bound" to the
-driver and the kernel would crash.  See the zillion syzbot reports of a
-few months ago, which caused all of this to happen.
-
-> Without also involving 'driver_override' or 'new_id'? Everyone agrees
-> that these APIs used for anything other than pci-stub or vfio are foot
-> guns. But your patch targets something different.
-
-Yes, driver_override and/or new_id was being used for most of these, BUT
-unbind for other busses was also causing problems (specifically many
-platform drivers.)
-
-> We can even bind PCI drivers to wrong devices *without* using bind and
-> hence, I presume but don't care to test, without tripping this taint.
+> Am 22.10.26 um 19:55 schrieb Sasha Levin:
+>> Commit 08abfa5a161e ("drivers: Replace __MODULE_STRING() with
+>> __stringify()") converted the drm_fbdev_overalloc parameter description
+>> in drm_fb_helper.c ahead of the removal of __MODULE_STRING().
+>>
+>> Commit 6b5a66fd9f21 ("drm/fbdev: Move fbdev module parameters next to
+>> module init") moved that parameter into drm_kms_helper_common.c while it
+>> still used __MODULE_STRING(), so the conversion never reached the moved
+>> code. drm_kms_helper_common.c is now the last user of the macro, and
+>> removing the macro breaks the build with CONFIG_DRM_FBDEV_EMULATION=y:
+>>
+>>    drivers/gpu/drm/drm_kms_helper_common.c:46:18: error: expected ')' before '__MODULE_STRING'
+>>
+>> Use __stringify() instead. The parameter description is unchanged.
+>>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > 
-> > If you wish to override the kernel, then great, a taint flag is added
-> > and all is fine.  All this means is that now developers know what you
-> > did and can decide to ignore your bug report or not.  No functionality
-> > changed at all.
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
 > 
-> I believe people pointed out that it's a functional change for users of
-> panic_on_taint who also use bind without being idiots.
+>> ---
+>> This depends on 6b5a66fd9f21 in drm-next and 08abfa5a161e in
+>> modules-next, both queued for 7.4. Petr plans to remove
+>> __MODULE_STRING() once his conversions are in mainline, so this needs to
+>> land first, either through drm-misc after 7.4-rc1 or together with the
+>> removal patch.
 > 
-> Does this taint even solve a "real" problem? Those bug reports weren't
-> coming from users, they were coming from "abusers" like syzbot looking
-> for trouble. They were quite obvious even without a taint message.
+> Dave, could we put this patch directly into drm-next? It seems like this fixes a broken merge commit.
+It looks like Linus took care of this. Merge commit 5b0764a53235 ("Merge
+tag 'drm-next-2026-10-21' of https://gitlab.freedesktop.org/drm/kernel")
+updated drivers/gpu/drm/drm_kms_helper_common.c to use __stringify()
+instead of __MODULE_STRING(). The current mainline has no remaining uses of
+__MODULE_STRING().
 
-They were not obvious at all, see the patches that many maintainers
-"accidentally" took to fix a bug that really wasn't a bug at all.  This
-was forcing additional code into all drivers for no good reason, hence
-the taint flag.
+-- 
+Thanks,
+Petr
 
-Let me reconsider this and think about just doing it for the additional
-id and allowing busses to trip it when their unbind is hit for busses
-that should not be normally handling unbind (i.e. platform devices.)
-
-thanks,
-
-greg k-h
