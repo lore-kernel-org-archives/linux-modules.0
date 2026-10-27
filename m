@@ -1,104 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793096964;
-	b=32TxTxUeUZ2tXplS6aBBMsnpmd/mhhy07lywxzgEv3ItttJ75w50uLDWNDdg21qNLDQc
-	 azca1QBXrXUJ8sdrvN/jqvKyBfRY0UN5d8oky7D8axs1EzdmaPuCSmx2gAtL0HNVtSZny
-	 3lNhclPujRllDprmaxeX8qB76lpKObtHeLaPJm9prHeYmHZY9hfz77cgjNO6Lq0cujpVq
-	 ZCZC5b7LL7w+UuRT7fpWMWglIpkdyz4SdANDgHby7niV/9rrAA8AF4V/3ivpadjrSy6PQ
-	 FPg1WcUDjltM8Dn8eoToDwCMnbR4HprQwOW69KG99sgvLHioL2filfIysfwxfl4ruzw==
+	t=1793107380;
+	b=cAnL8wZEyR4t8mG/w37G7WW4oRb7gENH5F7EW0/0s6TwL8s/LzRaRJgnZqnLhSEwaRL5
+	 XZkgDFtvXVkW1NtunjJl+ZVnqIG+3UN7alcDLBwZ/qCF0QurtCPDD+0lPxjW9bR/d1wCF
+	 xLJzHozW+Y2RzHJxvsnwj2rv/19ixdhwcI65oCNImCncKW8ac95GNrdzcNSgUa8VIsdiq
+	 GLpdhS+/cMhgx/xoN+6VOR/LO2RBBEATl5ohiDzuycmuRb2eZMvt1wzEYWqJ3phAzivUp
+	 zTclliVGI5aF7UK5dXEQGzsVq4jrFvcAbxLlmQ2hrGeZVd7tqIr0OgoXU1F1BaqVoGw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793096964;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:Autocrypt:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Rspamd-Queue-Id:
-	 X-Spam-Level:X-Rspamd-Server:X-Rspamd-Action:X-Spam-Flag:
-	 X-Spamd-Result:X-Spam-Score;
-	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
-	b=zAUWZOXu+LI6+kgMRVgy8aWbVHgj1zJgoB42pk+rOsuFDgzBk09GAgpwwWxBv1vOqQ4H
-	 XvXnAixasJVVHrEZIV81/KkMdFOQxeqrVxaRolSFcLp9JssM0KXcJ0XcXpAhEzA2SqkJK
-	 gO/a77G6QgUk10c6o5rPg36A0252jQPcxbZF4hSe/5MTcFaAncD16Po725mmWsxbgBJp0
-	 Mk8uDiM1i1Q+AAuI2t9aMgn3ZL1icL8pRD/Lkf2fUySBSkoS03hxm+RIvr38Uo2Rg7uS1
-	 VapX/CIrzGWc1voUH5K6xm2nuplH+uKM+nZpMbAniaQ/bQHckDJT0/lOy/yPX53s9QQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793107380;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=bt8+RMZDmd6s3sr6pjCs6SFKWlDJZBaHmutX4rG7P/I=;
+	b=Zz1HOvPmI3DeB90C6u7wVraGUzEnnH9qcJeeu6Z8cGargd3lCgpts40hpCdrxPJJBalr
+	 +WBMrPBeJ0rKeuY30XgPWO2xynKsOIV10G4EyLPWol36g3u8HJUlVU9jDs5W6bO4l+khh
+	 sJs/0+r8IKTZcRE12CJWUL0jJ4DEW+UBPu/m3WTapExdKeOyOjpJNQRegApJL0uHWzar1
+	 RnqIRn4ZBSWm1gJaTVSZXV+q55LmGrf7gFK+CLvmidk5iC5Opm+3EsUT6OhraTVJtw9rV
+	 4qDMZXUOESzashwyVlQRqGbeAcuOqgUnz/PkZA5l/eCk7m9IWuHTDHzMHa21iOxWSiA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.de;
-	spf=pass smtp.mailfrom=suse.de;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=w7xS2WIf;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=FXsKVxQj;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=w7xS2WIf;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=FXsKVxQj;
-	arc=none smtp.remote-ip=195.135.223.130
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=D9I2Gz1I;
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA20606A31A;
-	Tue, 27 Oct 2026 10:29:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EA20606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61731606A335
+	for <linux-modules@vger.kernel.org>; Tue, 27 Oct 2026 13:23:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 61731606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=w7xS2WIf;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=FXsKVxQj;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=w7xS2WIf;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=FXsKVxQj
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 14A7721EFB;
-	Tue, 27 Oct 2026 10:29:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1793096962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
-	b=w7xS2WIfqvYVe+u1Qpz1jHNUwZZzVgzUF3bzX727ThRcKwI/avRF28rd2EJhzu4K/ayug7
-	yqm8/W/s/WxoQj+jouF1GdWvJySXo+a8HqSHkWXSNzeO8/0FWq6lFRL4OVDt9ATcP0Xx4a
-	YXu4bdBQ16/R4vxLR/FfrLAKED2UPrc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1793096962;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
-	b=FXsKVxQjm6fxnsPOig2H1Z0dXxsgFd6QbI+lbQlM6OQg7OVxwpkssuaIW6nwSBKfC1mtKq
-	2gj7cnLwZOU1NWAg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=w7xS2WIf;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=FXsKVxQj
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1793096962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
-	b=w7xS2WIfqvYVe+u1Qpz1jHNUwZZzVgzUF3bzX727ThRcKwI/avRF28rd2EJhzu4K/ayug7
-	yqm8/W/s/WxoQj+jouF1GdWvJySXo+a8HqSHkWXSNzeO8/0FWq6lFRL4OVDt9ATcP0Xx4a
-	YXu4bdBQ16/R4vxLR/FfrLAKED2UPrc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1793096962;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
-	b=FXsKVxQjm6fxnsPOig2H1Z0dXxsgFd6QbI+lbQlM6OQg7OVxwpkssuaIW6nwSBKfC1mtKq
-	2gj7cnLwZOU1NWAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8A18F1321C;
-	Tue, 27 Oct 2026 10:29:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Qv97CwF94GoTEAAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Tue, 27 Oct 2026 10:29:21 +0000
-Message-ID: <eaaa4b5a-9de9-41ed-a77b-aa2c6531eed6@suse.de>
-Date: Tue, 27 Oct 2026 11:29:20 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=D9I2Gz1I
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48e00eee27dso2677139f8f.0
+        for <linux-modules@vger.kernel.org>; Tue, 27 Oct 2026 06:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793107379; x=1793712179; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=bt8+RMZDmd6s3sr6pjCs6SFKWlDJZBaHmutX4rG7P/I=;
+        b=D9I2Gz1I6TohXPedOvNnB4ot89+HPLVnTkGptL1nmvPR4Ebd0vQn2mx7tGT4eB0wit
+         W+dL+ixtQthAPpXmXGw+in0Ctz2kcsbC7kvOahclFSp3KfkjUGqV3ABxYzaD+KwrlTD4
+         BeGIYXqQXlyJOjpqkE4+SfEnC7QOcgIF3nBUyOkghRDfERqmQA81j0Cf9h1GY+YVjcQT
+         pmi0J//7BiN8/L+QE6jbor1n6tDO9QgrBax8oRoYgFG5p1K5OAkUDsAmLXxsJOJH/haN
+         VJR4dII5YeaaxYhDUvgLePp4t+Vaoq38Df1PdbOvbABf7w3llPt9EfabyodDQesC4ZgT
+         wM5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793107379; x=1793712179;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bt8+RMZDmd6s3sr6pjCs6SFKWlDJZBaHmutX4rG7P/I=;
+        b=DekD38dW/hFGqkXBsXFH+d9KszDe/5RB4gansEBdJz1+S2RJooz4CPf6q1ufZmZgFH
+         rl2cYC+AINUEERUbFS6H5VgP0er0gPd8wJD9tHBQy2Ixh7Gy6HcZBrwlvI3XsMpbMXax
+         H4nYvAmORjoX9L8xWSn2LWWt2NYt7t5AzX36ytURlQ4l48C2v3ft9wCJFs8pb28cxURp
+         akFhzlSdzu8OXjCYQO7g49dRxvooeKgUepni/4dxow7GHkINlAavpm0nbKxFuYHGHryO
+         ESBqFJX3twSbiPAjBtBWo9JjRGzxTb4mmm0MP5dFhozYFjn543iGoGoXFeQN6tmPSecP
+         vo+Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwgmDC4wprUARZ2hMNraf2nsYU6EDEC7afHfMfxsQC+GI1Kgt9drOMa+wbiG6HnwrwY1NHBpqtG1vZOLLJ7@vger.kernel.org
+X-Gm-Message-State: AFq9FYJVd32FdSDBojZDxmYCnR/phwT5RGNg7aVIFi/i4G/w8Caxf0qC
+	yOjrr0y3aMRAM5wfDcXze7uddUAz5QYguaPIcsWwAjkRrWS5z3l/U3GJ
+X-Gm-Gg: AYBFou2QVtLmmP5e/NiYlKhcUtzv+4cN06eO6VlJjvjZdGb8GPZmdqzURqLmnvtqa19
+	g3Py6H8i5SGYtVPramJ83VolJxZA82Vm+AT3TKIHctgIo+VrXcKSDEKsBpVW5/BpmR0sAEcvpXl
+	t+WEvbya52QxT4miepzHgx75piGMwOpVMvk+mU0abo2U93cUiYJ2DomJPjPJzCIJZwFdCZaC610
+	oC9t/z+5wkFBltApduF+7BeOuh4g29mpGggpMqAJ7EfZxnH17Jms95tvre88/AYnl+GGCD362qY
+	Cq3Fpy1cIQ1EHpLCdxkuyx5CrTjWNxjryfBUreoNSr4fE8KDL3dl/lTgnPFId+gARgsj98fWqOr
+	9kN5hp5lGrxH/UgLDJOE7+/KrlMRike0TVqxaRrekTHFzD+LSB94zOr6dGa2HsHf0pCdS7K7aJP
+	UnPNqDCi/26x1wWcI0soLN9TMtW1n4o6ZcDHicjO/mxjPSd/7oVwhLg80gAbxhNfYQYsvP3vfQS
+	6ZPOv6eEuhiHCacgJ86u1Ji5Wj/x2hxEYbOahoQmd38abeMQFzkzBz/Dv3f+3qabchxPGxMtN1k
+	xLqzqIk8Ttwgk26K4fh31lMvPVJ+KRSZTiPcWQ==
+X-Received: by 2002:a05:6000:2388:b0:48c:7386:af18 with SMTP id ffacd0b85a97d-48e3eb2cf0fmr19717600f8f.8.1793107378393;
+        Tue, 27 Oct 2026 06:22:58 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ebc39a8sm23819954f8f.11.2026.10.27.06.22.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 06:22:56 -0700 (PDT)
+Date: Tue, 27 Oct 2026 13:22:53 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Petr Mladek <pmladek@suse.com>
+Cc: jim.cromie@gmail.com, Jason Baron <jbaron@akamai.com>, Shuah Khan
+ <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+ <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+ <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Arnd Bergmann
+ <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
+ <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Jonathan
+ Corbet <corbet@net.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel
+ Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Steven Rostedt <rostedt@goodmis.org>, John Ogness
+ <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, Philipp Hahn
+ <phahn-oss@avm.de>
+Subject: Re: [PATCH v12 33/40] dyndbg: Ignore additional arguments from
+ pr_fmt
+Message-ID: <20261027132253.5f3a461d@pumpkin>
+In-Reply-To: <as4W9hToBqAvbzJ-@pathway.suse.cz>
+References: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
+	<20261012-dd-cmap-part2-clean-v12-33-3c8cc5725def@gmail.com>
+	<as4W9hToBqAvbzJ-@pathway.suse.cz>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -108,132 +120,124 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/fbdev: Replace __MODULE_STRING() with __stringify()
-To: Petr Pavlu <petr.pavlu@suse.com>, Sasha Levin <sashal@kernel.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, dri-devel@lists.freedesktop.org,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261022175543.1831620-1-sashal@kernel.org>
- <2a9b1325-386b-4460-8651-13fc43dca6c6@suse.de>
- <3e3b9652-7de5-4391-8b5d-122f00c4b585@suse.com>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <3e3b9652-7de5-4391-8b5d-122f00c4b585@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 14A7721EFB
-X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-13.50 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	XM_UA_NO_VERSION(0.01)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	URIBL_BLOCKED(0.00)[suse.com:url,suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,gitlab.freedesktop.org:url];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,kernel.org,gmail.com,ffwll.ch,google.com,atomlin.com,lists.freedesktop.org,vger.kernel.org];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_TRACE(0.00)[suse.de:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -13.50
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi
+On Tue, 13 Oct 2026 13:33:10 +0200
+Petr Mladek <pmladek@suse.com> wrote:
 
-Am 27.10.26 um 10:00 schrieb Petr Pavlu:
-> On 10/23/26 10:51 AM, Thomas Zimmermann wrote:
->> Hi
->>
->> Am 22.10.26 um 19:55 schrieb Sasha Levin:
->>> Commit 08abfa5a161e ("drivers: Replace __MODULE_STRING() with
->>> __stringify()") converted the drm_fbdev_overalloc parameter description
->>> in drm_fb_helper.c ahead of the removal of __MODULE_STRING().
->>>
->>> Commit 6b5a66fd9f21 ("drm/fbdev: Move fbdev module parameters next to
->>> module init") moved that parameter into drm_kms_helper_common.c while it
->>> still used __MODULE_STRING(), so the conversion never reached the moved
->>> code. drm_kms_helper_common.c is now the last user of the macro, and
->>> removing the macro breaks the build with CONFIG_DRM_FBDEV_EMULATION=y:
->>>
->>>     drivers/gpu/drm/drm_kms_helper_common.c:46:18: error: expected ')' before '__MODULE_STRING'
->>>
->>> Use __stringify() instead. The parameter description is unchanged.
->>>
->>> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
->>
->>> ---
->>> This depends on 6b5a66fd9f21 in drm-next and 08abfa5a161e in
->>> modules-next, both queued for 7.4. Petr plans to remove
->>> __MODULE_STRING() once his conversions are in mainline, so this needs to
->>> land first, either through drm-misc after 7.4-rc1 or together with the
->>> removal patch.
->> Dave, could we put this patch directly into drm-next? It seems like this fixes a broken merge commit.
-> It looks like Linus took care of this. Merge commit 5b0764a53235 ("Merge
-> tag 'drm-next-2026-10-21' of https://gitlab.freedesktop.org/drm/kernel")
-> updated drivers/gpu/drm/drm_kms_helper_common.c to use __stringify()
-> instead of __MODULE_STRING(). The current mainline has no remaining uses of
-> __MODULE_STRING().
+> On Mon 2026-10-12 20:37:04, Jim Cromie via B4 Relay wrote:
+> > From: Philipp Hahn <phahn-oss@avm.de>
+> >=20
+> > pr_fmt can be used to add a common prefix to any output from a module:
+> > 	#define pr_fmt(fmt) KBUILD_MODNAME ".%s " fmt, __func__
+> >=20
+> > But adding additional arguments breaks dynamic debug: =20
+> > > error: macro "DEFINE_DYNAMIC_DEBUG_METADATA_CLS" passed 4 arguments, =
+but takes just 3
+> > > |         pr_debug_ratelimited("%s", "Hello world!");
+> > > |                                                  ^
+> > > note: macro "DEFINE_DYNAMIC_DEBUG_METADATA_CLS" defined here
+> > > | #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
+> > > |
+> > > error: =E2=80=98DEFINE_DYNAMIC_DEBUG_METADATA_CLS=E2=80=99 undeclared=
+ (first use in this function)
+> > > |         DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT=
+, fmt)
+> > > |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ =20
+>=20
+> I wonder what this error about undeclared macro means.
+>=20
+> > > note: in expansion of macro =E2=80=98DEFINE_DYNAMIC_DEBUG_METADATA=E2=
+=80=99
+> > > |         DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));    =
+     \
+> > > |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > note: in expansion of macro =E2=80=98pr_debug_ratelimited=E2=80=99
+> > > |         pr_debug_ratelimited("%s", "Hello world!");
+> > > |         ^~~~~~~~~~~~~~~~~~~~ =20
+> >=20
+> > Add an additional ', ...' to DEFINE_DYNAMIC_DEBUG_METADATA_CLS to slurp
+> > any additional argument, which `pr_fmt` might add.
+> >=20
+> > --- a/include/linux/dynamic_debug.h
+> > +++ b/include/linux/dynamic_debug.h
+> > @@ -351,7 +351,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+> >  		dump_stack();					\
+> >  }
+> > =20
+> > -#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
+> > +#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)	\
+> >  	static struct _ddebug  __aligned(8)			\
+> >  	__section("__dyndbg_descs") name =3D {			\
+> >  		.modname =3D KBUILD_MODNAME,			\
+> > diff --git a/include/linux/printk.h b/include/linux/printk.h
+> > index f594c1266bfd..5d701952e739 100644
+> > --- a/include/linux/printk.h
+> > +++ b/include/linux/printk.h
+> > @@ -742,7 +742,7 @@ do {									\
+> >  	static DEFINE_RATELIMIT_STATE(_rs,				\
+> >  				      DEFAULT_RATELIMIT_INTERVAL,	\
+> >  				      DEFAULT_RATELIMIT_BURST);		\
+> > -	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));		\
+> > +	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, fmt);		\ =20
+>=20
+> IMHO, this changes the existing behavior. The prefix added by
+> pr_fmt() will no longer be stored in DEFINE_DYNAMIC_DEBUG_METADATA().
+> Is this intentional, please?
+>=20
+> Anyway, if we do not longer pass pr_fmt(fmt) then we should not
+> need to add "..." into DEFINE_DYNAMIC_DEBUG_METADATA_CLS().
+>=20
+> By other words, we newly pass just the format "fmt" without the parametes.
+> The 4th parameter was added by pr_fmt().
+>=20
+>=20
+> IMHO, the right solution is to keep pr_fmt(fmt) here and extend both
+> BEFINE_DYNAMIC_DEBUG_METADATA() and
+> DEFINE_DYNAMIC_DEBUG_METADATA_CLS()
+> to accept var args. I would expect something like:
+>=20
+> #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)	\
+> ...
+>=20
+> #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt, ...)		\
+> 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt, ##__VA=
+_ARGS__)
+>=20
+>=20
+> or maybe, we could "eat" the extra parameters in
+> DEFINE_DYNAMIC_DEBUG_METADATA. It would mean to keep
+> DEFINE_DYNAMIC_DEBUG_METADATA_CLS() as is and just add the "..." into
+> DEFINE_DYNAMIC_DEBUG_METADATA(), aka
+>=20
+> #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt, ...)		\
+> 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt)
+>=20
+>=20
+> Or do I miss something, please?
 
-Great, thanks for the info.  I'll drop this patch then.
+Don't think that will work.
+Won't you end up with ".%s" fmt as the string without the extra argument.
+So you need to keep the expansion of pr_fmt() together until is is finally
+substituted into a printf-like call.
+It is possible to enclose it in () so it is passed as one parameter and
+remove them on the final expansion.
 
-Best regards
-Thomas
+David
 
->
-
--- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstr. 146, 90461 Nürnberg, Germany, www.suse.com
-GF: Stefan Gaiser, Jochen Jaser, Abhinav Puri, (HRB 36809, AG Nürnberg)
-
+>=20
+> It is possible that the macros work another way. Or this depends
+> on another change. I checked only this patch...
+>=20
+> Best Regards,
+> Petr
+>=20
+> PS: I was curious what Sashiko says about this change and it seems
+>     that it does not review this patchset from some reasons.
+>=20
+> >  	if (DYNAMIC_DEBUG_BRANCH(descriptor) &&				\
+> >  	    __ratelimit(&_rs))						\
+> >  		__dynamic_pr_debug(&descriptor, pr_fmt(fmt), ##__VA_ARGS__);	\ =20
+>=20
 
