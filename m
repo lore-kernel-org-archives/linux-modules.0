@@ -1,86 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793091723;
-	b=4oUKEryDnvUfcaJUGV+KgvCXYvAXpMj7/KEbMeu44Xu0+8PN9llrl6Z1jTQz7y7NOLfX
-	 R0DDhlkuj4C0gffzgadQ5sOBLMtQWlLXs7Hl5N4T7FBer6xAWHInGhvUDqK06pxIx0XFA
-	 q/GzfsAmPZ+XlSuW+dLiEZtZHYXrqilH0NJnNgVhpxYNYrO6ySeJzjbWutztd/t67btp6
-	 uZrzKTrkTGTLzTY3ccYi4vj9/aogse8oDhdObS9odaKLgsGhum3OsIGGS1OcIgfevccaQ
-	 AChZNlttrE78wNP4/lQRKidH+vmv4yHM0lby+9hzCwmvFua88Js/yA9LFdEDbLks7pQ==
+	t=1793096964;
+	b=32TxTxUeUZ2tXplS6aBBMsnpmd/mhhy07lywxzgEv3ItttJ75w50uLDWNDdg21qNLDQc
+	 azca1QBXrXUJ8sdrvN/jqvKyBfRY0UN5d8oky7D8axs1EzdmaPuCSmx2gAtL0HNVtSZny
+	 3lNhclPujRllDprmaxeX8qB76lpKObtHeLaPJm9prHeYmHZY9hfz77cgjNO6Lq0cujpVq
+	 ZCZC5b7LL7w+UuRT7fpWMWglIpkdyz4SdANDgHby7niV/9rrAA8AF4V/3ivpadjrSy6PQ
+	 FPg1WcUDjltM8Dn8eoToDwCMnbR4HprQwOW69KG99sgvLHioL2filfIysfwxfl4ruzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793091723;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=5nq/yW3E6nSzBhQE//dTYvgfzBHRxLsoSrzMo34ZjSs=;
-	b=hSaOs+4NYwLMO+cyqaWyHBDnMZOOHPdZ64HJvCazT+MhIqlro9N6oJDzz1EV7o8yrBHL
-	 LRakrWXeYq2cRrkKkIlI1tmmynsWiGZcDHN1XPTCgZvThCaamD01Bq9LFSlg1AgFXMRsZ
-	 /l6f8ujsCEDVEAoSb8UWMkcMShBFJMGNGJplq7QXzSUPDDZfzZzCfbeu5HgCE7tHmCJds
-	 rBXP4H0UvVdd2KFAgb9+BrBdOnrMjPkcM9SAwd21AvBiKqB8MFm1bsrpOxvAfSf5OCbFW
-	 dBwvxLvgiGFgMhNnQsdy6u1OiTgY9XDVKu6k1wQ0PuBNcolSTTDO+uf4Sq709yCJLvQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793096964;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:Autocrypt:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Rspamd-Queue-Id:
+	 X-Spam-Level:X-Rspamd-Server:X-Rspamd-Action:X-Spam-Flag:
+	 X-Spamd-Result:X-Spam-Score;
+	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
+	b=zAUWZOXu+LI6+kgMRVgy8aWbVHgj1zJgoB42pk+rOsuFDgzBk09GAgpwwWxBv1vOqQ4H
+	 XvXnAixasJVVHrEZIV81/KkMdFOQxeqrVxaRolSFcLp9JssM0KXcJ0XcXpAhEzA2SqkJK
+	 gO/a77G6QgUk10c6o5rPg36A0252jQPcxbZF4hSe/5MTcFaAncD16Po725mmWsxbgBJp0
+	 Mk8uDiM1i1Q+AAuI2t9aMgn3ZL1icL8pRD/Lkf2fUySBSkoS03hxm+RIvr38Uo2Rg7uS1
+	 VapX/CIrzGWc1voUH5K6xm2nuplH+uKM+nZpMbAniaQ/bQHckDJT0/lOy/yPX53s9QQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ulj9p7Jn;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=w7xS2WIf;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=FXsKVxQj;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=w7xS2WIf;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=FXsKVxQj;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA4D606A324;
-	Tue, 27 Oct 2026 09:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA20606A31A;
+	Tue, 27 Oct 2026 10:29:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EA20606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ulj9p7Jn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4501F01828;
-	Tue, 27 Oct 2026 09:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793091723;
-	bh=5nq/yW3E6nSzBhQE//dTYvgfzBHRxLsoSrzMo34ZjSs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Ulj9p7JneLFV1/XhjlgoB/eMNIqEQ4GJO5bi6UfrrD8HhsEGzbsJWw9Fh7Bbk2Zmy
-	 dXTv3coxEQCqyoRT50cWG5/xQfcfb+bKo538FX9mXlQkzg7LNrBHXKUlF7evcHRIO6
-	 xIHd3fw+SGUx7bY9O/A9rtGBRK1urm4D01a3/mQ8Uyvzumxm0hJJShV2f9I5rF/M4r
-	 sHH4Vy0ixTOveeMxJf8ojt1F8pBQYGgoJSXpbxuaFNN8Zg6jEbemlo5+aeWEl6Iyj4
-	 KXqOqZUDrUkhuzR+lhyki8q6UFZaHEsvSvX/e6qq2/E2VBr3h2VRD8uZlsfRHZGFUQ
-	 aEL9J2u5dvy5Q==
-Date: Tue, 27 Oct 2026 11:01:57 +0200
-From: Leon Romanovsky <leon@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alex Williamson <alex@shazbot.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Armin Wolf <W_Armin@gmx.de>, David Lechner <dlechner@baylibre.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Bradley Morgan <brads@mainlining.org>,
-	Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
-	linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-	Richard Weinberger <richard@nod.at>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Bjorn Helgaas <helgaas@kernel.org>,
-	linux-pci@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
- userspace manually messes with devices and drivers
-Message-ID: <20261027090157.GB28851@unreal>
-References: <DLIL9H50MALI.3JROXYEEUM3KU@kernel.org>
- <arIvG0nx4LXG9nlW@monoceros>
- <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
- <9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
- <2026092321-province-yearly-44aa@gregkh>
- <arOfHEsGGglNse7T@monoceros>
- <2026092348-victory-erased-0e5a@gregkh>
- <20261023181326.0dc2f7ed@shazbot.org>
- <20261026122243.GA28851@unreal>
- <2026102654-enlighten-perkiness-193c@gregkh>
+	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=w7xS2WIf;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=FXsKVxQj;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=w7xS2WIf;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=FXsKVxQj
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 14A7721EFB;
+	Tue, 27 Oct 2026 10:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1793096962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
+	b=w7xS2WIfqvYVe+u1Qpz1jHNUwZZzVgzUF3bzX727ThRcKwI/avRF28rd2EJhzu4K/ayug7
+	yqm8/W/s/WxoQj+jouF1GdWvJySXo+a8HqSHkWXSNzeO8/0FWq6lFRL4OVDt9ATcP0Xx4a
+	YXu4bdBQ16/R4vxLR/FfrLAKED2UPrc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1793096962;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
+	b=FXsKVxQjm6fxnsPOig2H1Z0dXxsgFd6QbI+lbQlM6OQg7OVxwpkssuaIW6nwSBKfC1mtKq
+	2gj7cnLwZOU1NWAg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=w7xS2WIf;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=FXsKVxQj
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1793096962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
+	b=w7xS2WIfqvYVe+u1Qpz1jHNUwZZzVgzUF3bzX727ThRcKwI/avRF28rd2EJhzu4K/ayug7
+	yqm8/W/s/WxoQj+jouF1GdWvJySXo+a8HqSHkWXSNzeO8/0FWq6lFRL4OVDt9ATcP0Xx4a
+	YXu4bdBQ16/R4vxLR/FfrLAKED2UPrc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1793096962;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=k444X39/YaQ8vvcb2TO5d3th3eGpgXn1bRiIQ7v217w=;
+	b=FXsKVxQjm6fxnsPOig2H1Z0dXxsgFd6QbI+lbQlM6OQg7OVxwpkssuaIW6nwSBKfC1mtKq
+	2gj7cnLwZOU1NWAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8A18F1321C;
+	Tue, 27 Oct 2026 10:29:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Qv97CwF94GoTEAAAD6G6ig
+	(envelope-from <tzimmermann@suse.de>); Tue, 27 Oct 2026 10:29:21 +0000
+Message-ID: <eaaa4b5a-9de9-41ed-a77b-aa2c6531eed6@suse.de>
+Date: Tue, 27 Oct 2026 11:29:20 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -90,121 +108,132 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/fbdev: Replace __MODULE_STRING() with __stringify()
+To: Petr Pavlu <petr.pavlu@suse.com>, Sasha Levin <sashal@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, dri-devel@lists.freedesktop.org,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261022175543.1831620-1-sashal@kernel.org>
+ <2a9b1325-386b-4460-8651-13fc43dca6c6@suse.de>
+ <3e3b9652-7de5-4391-8b5d-122f00c4b585@suse.com>
+Content-Language: en-US
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <3e3b9652-7de5-4391-8b5d-122f00c4b585@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2026102654-enlighten-perkiness-193c@gregkh>
+X-Rspamd-Queue-Id: 14A7721EFB
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-13.50 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	XM_UA_NO_VERSION(0.01)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	URIBL_BLOCKED(0.00)[suse.com:url,suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,gitlab.freedesktop.org:url];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_CC(0.00)[linux.intel.com,kernel.org,gmail.com,ffwll.ch,google.com,atomlin.com,lists.freedesktop.org,vger.kernel.org];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -13.50
 
-On Mon, Oct 26, 2026 at 09:27:25PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Oct 26, 2026 at 02:22:43PM +0200, Leon Romanovsky wrote:
-> > On Fri, Oct 23, 2026 at 06:13:26PM -0600, Alex Williamson wrote:
-> > > On Wed, 23 Sep 2026 12:29:56 +0200
-> > > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > 
-> > > > On Wed, Sep 23, 2026 at 11:54:50AM +0200, Uwe Kleine-König wrote:
-> > > > > > No, drivers should NOT have to do that in their .probe() function,
-> > > > > > that's what we moved away from decades ago!  The match function should
-> > > > > > handle all of that for you, otherwise it's contant duplication
-> > > > > > everywhere that is unneeded.  
-> > > > > 
-> > > > > Well then you have to accept that root can provoke a null pointer
-> > > > > exception (e.g. by forcing the pwm-tegra driver on a device) because at
-> > > > > least with today's platform bus match function such a match is ok.  
-> > > > 
-> > > > Agreed, yes, root can cause a crash and can do tons of horrible things
-> > > > much worse than this, that's not the issue.
-> > > > 
-> > > > That's why this taint is there, to make it obvious that this is not a
-> > > > "real" bug at all.
-> > > > 
-> > > > > > Please, learn from our history, don't make the same mistakes.
-> > > > > > 
-> > > > > > Now I might be convinced that driver_override is the way to go here, but
-> > > > > > it still feels really odd as again, bind/unbind was created as a driver
-> > > > > > debugging option only, it should NOT be a normal operation that any user
-> > > > > > should rely on.  The driver should "just work" properly instead, without
-> > > > > > requiring manual bind work, as that's not a good model at all.  
-> > > > > 
-> > > > > I agree in principle, but (in my case wifi) drivers are buggy sometimes
-> > > > > (due to missing documentation and/or engineering effort) and being able
-> > > > > to rebind the driver instead of rebooting to get a working device again
-> > > > > is very useful.  
-> > > > 
-> > > > Fine, use it!  Just don't expect that to be "normal".
-> > > > 
-> > > > > So yes, theoretically bind/unbind isn't needed, but theory and practise
-> > > > > differ in practise.  
-> > > > 
-> > > > Agreed, but again, don't rely on this as a "real" solution fo ranything.
-> > > 
-> > > Sorry, late to the party, but this isn't a few user scripts that rely
-> > > on this behavior.  Effectively every use case of vfio relies on this
-> > > behavior.  We rely on unbinding the default driver from the device
-> > > before using driver_override and drivers_probe.  That means every
-> > > hypervisor with device assignment and every userspace driver use case
-> > > now experiences a tainted kernel. That seems like a significant
-> > > regression.
-> > 
-> > Sorry, I was on vacation and missed this change earlier. This change will
-> > affect SR-IOV deployments around the world, which *rely* on being able to
-> > bind a driver manually *after* virtual functions are created but before
-> > they are used.
-> 
-> Why can't a real driver bind to those virtual functions?  Like is
-> happening in the rust apis?
+Hi
 
-The actual driver is also bound, but at a later stage. I'm not sure what you
-mean by “Rust APIs.”
+Am 27.10.26 um 10:00 schrieb Petr Pavlu:
+> On 10/23/26 10:51 AM, Thomas Zimmermann wrote:
+>> Hi
+>>
+>> Am 22.10.26 um 19:55 schrieb Sasha Levin:
+>>> Commit 08abfa5a161e ("drivers: Replace __MODULE_STRING() with
+>>> __stringify()") converted the drm_fbdev_overalloc parameter description
+>>> in drm_fb_helper.c ahead of the removal of __MODULE_STRING().
+>>>
+>>> Commit 6b5a66fd9f21 ("drm/fbdev: Move fbdev module parameters next to
+>>> module init") moved that parameter into drm_kms_helper_common.c while it
+>>> still used __MODULE_STRING(), so the conversion never reached the moved
+>>> code. drm_kms_helper_common.c is now the last user of the macro, and
+>>> removing the macro breaks the build with CONFIG_DRM_FBDEV_EMULATION=y:
+>>>
+>>>     drivers/gpu/drm/drm_kms_helper_common.c:46:18: error: expected ')' before '__MODULE_STRING'
+>>>
+>>> Use __stringify() instead. The parameter description is unchanged.
+>>>
+>>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>>
+>>> ---
+>>> This depends on 6b5a66fd9f21 in drm-next and 08abfa5a161e in
+>>> modules-next, both queued for 7.4. Petr plans to remove
+>>> __MODULE_STRING() once his conversions are in mainline, so this needs to
+>>> land first, either through drm-misc after 7.4-rc1 or together with the
+>>> removal patch.
+>> Dave, could we put this patch directly into drm-next? It seems like this fixes a broken merge commit.
+> It looks like Linus took care of this. Merge commit 5b0764a53235 ("Merge
+> tag 'drm-next-2026-10-21' of https://gitlab.freedesktop.org/drm/kernel")
+> updated drivers/gpu/drm/drm_kms_helper_common.c to use __stringify()
+> instead of __MODULE_STRING(). The current mainline has no remaining uses of
+> __MODULE_STRING().
 
-> 
-> > This is needed for two reasons: to save hardware and software resources
-> > when creating a large number of VFs, and to allow the PCI config space to
-> > be configured *before* the driver starts using it.
-> 
-> How is hardware and software resources an issue here at all?  And you
-> can write to PCI config space from userspace today, no driver needed
-> anywhere at all, that's always been allowed.
+Great, thanks for the info.  I'll drop this patch then.
 
-According to the PCI spec—or, at least, the common interpretation of it—
-newly created VFs should have equivalent hardware-resource partitions.
-For most hardware resources, this is not an issue. One resource, however,
-is critical to partition correctly: the number of MSI-X vectors per VF.
-These vectors are backed by physical resources and directly affect
-performance and utilization.
+Best regards
+Thomas
 
-In a correctly configured system, the number of MSI-X vectors should
-match the number of CPUs assigned to the VM. More vectors can leave
-hardware underutilized; fewer can degrade performance.
+>
 
-The workflow for cloud operators is therefore:
+-- 
+--
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Frankenstr. 146, 90461 Nürnberg, Germany, www.suse.com
+GF: Stefan Gaiser, Jochen Jaser, Abhinav Puri, (HRB 36809, AG Nürnberg)
 
-1. Create a large number of VFs, but do not assign them yet.
-2. Lease a VM to a user and determine how many CPUs they requested.
-3. Repartition the internal MSI-X table allocation.
-4. Assign the VF to the user.
-5. Check how many MSI-X vectors remain available, then return to step 2.
 
-The MSI-X table size is read near the beginning of driver initialization
-and cannot be changed afterward.
-
-So, no—you cannot change those PCI values without breaking the driver
-and OS that are already running.
-
-> 
-> > There is no in-kernel alternative.
-> 
-> Then just don't have a in-kernel driver for the device and all is good?
-
-In addition to Jason's comments, the PF and VF share the same driver because
-they are nearly identical, apart from a few differences in PCI
-configuration space.
-
-Please revert the series ASAP, you are clearly breaking existing deployments.
-
-Thanks
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
