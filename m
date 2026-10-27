@@ -1,130 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.130.4
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793118906;
-	b=FvjoU9pkKp93Z0CUFU5EgzgGxqlS/ITEKhOn8YUJeB2r0JDY1I6n4dcoSY3HLzV+2L0h
-	 lIsMmp9rKSLTNnknGVHEHdp1XKG6WGw1ZNYf/JOSM3h5wJbKv3PhfBbCnwTVisNLoQNNA
-	 2w/3CETpDkz5fYrhufErZ8dBpKSkNjM01lFt9C4VdY8GGefs/wm0+WFQ6N7rL0KW5yQcs
-	 IciDbUK0MCRJzWkwjxfnuEXkZuxbJcuUVAQuwPym+uIc/fypVlKscDLOcpE3V+x/4F+hi
-	 LhKGEB8Q0rnR9E8Qo4W83yLVSKwDybAH6h4wsF2BcHtMwau8uhFZm5FFZrBCEHATknA==
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793132533;
+	b=VDuM+1T8dIIqILGsATQgB8HlalDQjBqy02irW8L38vhk9hz5zYc939YY+ihPirhrVifg
+	 kxBioJ4uXcnX+244aVi31ADoAV4tzoTfcJzfJsnPTt92BT1gNOFpWozXneM91auCOXrFV
+	 K7cg59H8MsAuJgWSGe90OyabscHWMCzDqaKYh68/Ie8erqsSKyIV8+m+CE8vFHGPBQYLA
+	 T/o+dQSeh47IhspPLoQ0Tfp9QELV6LDCRJPlaU8WqK7cFRVq3EcghlqWekV2kmXyIHIgh
+	 e6jdPveBSMZTS8fUT0dCbjavhlpJf0zNk+qqqzm4a05EDnzlRyPE704tfHcNx1bSBzA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118906;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:Date:Subject:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=jZAvvvHun6aalGq5kU3xbJGdnoWrIc1LoWTmjMlrfpA=;
-	b=QJWT2/Ea2V7D6qzJ6h0g2lZkTni5gLvTJ/PtyrqJvV3VHCeYUzDS4vSkv3nO/bPk5vaZ
-	 1CZRK06sb9pyvNsQPiz6O73nMv69X0z8pjmDOXMqjlZoc9Ywf/aQfpVo4KjzvMZvxMlZL
-	 c2p/LWAXsVOKlo1tKCnKcnyhrkLiEYwDDatXnsjv2JcRaW9IDYnBBwXkV1qx+lotogOqz
-	 poZTGrrLWmnDELbRQzgbjkVjmLxx4cp3F1v7ZRyahkNvyRPUJldaJZT7nFy1ylv+AWhZB
-	 2SP8pOZLKqNuzBeyrMFCFUJNoybIcRaZGnI0G0ta83L1Nl5xAr+Yh99MMW8c4Tp7nUA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793132533;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=NC9qvcyyabYBeEaWH7GJHJeHZrorUabfraI24jDZ6iY=;
+	b=4Stj9hsqiHjcL+WMER3WwP/28XaBOB6MkhE7LE2ZohQzg2tt1wkDD8zxAe1+OuBpNqqP
+	 eqBu2FYNY5ABj1wy8xCCf79E89N1WxIg0kusY7pPTwrQu8frYwVux/eTVXxfGwZw1irXX
+	 LyiguRGPFiARGcjXV+rz6Vdoi2inggf9sdcE6z6PxFo8G0ZBm+sujadZC7pAZD42TqEG7
+	 7NBeQSX0HEce52dUNfIQPYAqpdwwyz52nv2UE7qcAJcRgg9drtdGsNd5FGPxbgCGRYGVV
+	 3uFzL54yU9gHGzmqUx33ZSNz/7Mu7j1bWVcYdieSAW84jzAmxs/U70gSsu3NMy5wTgw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=est.tech;
-	spf=pass smtp.mailfrom=est.tech;
-	dkim=pass header.d=est.tech header.i=@est.tech header.a=rsa-sha256 header.s=selector1 header.b=S78x6J7p;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.130.4
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011004.outbound.protection.outlook.com [40.107.130.4])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MmdUdjye;
+	arc=fail smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A34F606A320;
-	Tue, 27 Oct 2026 16:35:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A34F606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBBC606A327;
+	Tue, 27 Oct 2026 20:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=est.tech header.i=@est.tech header.a=rsa-sha256 header.s=selector1 header.b=S78x6J7p
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dqq1wciStRazrrVS3ROLro2uA6yVZBlJQtVZmogVHeGWiYuPHaETSAnQn2MoFC1HmloFXEH/xX2Znn/bCK/jFFd2JdDt7uHtKIa0M+Mey13TEYbuVe/ghAkGp8Fhb9du+p4ytz6MfsFKw3XFuLzkS+oGkQCPtTEUIIHz0CEX0/qhn3r4UVN7/VE9IMHiGx4kW+sZebo9PuNBxMlxO2SFIZ6pqbmHu2qaCNZGyF6klP1d+urzQUwdUX1DfBMtNpDKBYB7IQW6IVbJQLbjISWVPBEz43EgieLyzs63I8Xgl+x2Fn+iNXHaZ5rtPPdacqqK6YE4zqM3vnjHkcb8x8vwRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jZAvvvHun6aalGq5kU3xbJGdnoWrIc1LoWTmjMlrfpA=;
- b=EPVbDM0/WTu7nNI/0GLrxaQ1SqoZnjU/TDXYSgx4Z15oNMgp1nG/++wbGUjUACmdqF15sIMh8RSPUcN8po3Li3DmTzGAudE/epaA30JUeqCX5HsipwJMvRs4Sux1NeckY6B+fI3xfLNYTOOoUGWPV73Daao5CsqI8xU7VRWogIgU7z/hzTxCi3bc+KZ/q5izeatDSZo2vb7rO/Ch2kHHukHRUEAeerpRJHnsmVUuorHaurCKlCkKHbwVJMXp+O0JTsWQBlQyPd/bYO0V0IKbQGw/HA/uGD//lalW354hi1DiWzCyRNopeFeueAa9pVwIvLH16cEPITuYt9lWsfCtXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jZAvvvHun6aalGq5kU3xbJGdnoWrIc1LoWTmjMlrfpA=;
- b=S78x6J7pzZK+Grs+p2XwhAVoM273emPqJVXRuFB+Wl8cRvW6+EuP++U15O1KuvEf10OJ1JFlq/GQufmTUKdY4srrBHoLmey4lXjxYnLTej7E2wEZJi2xQ0WVM/kknSwLihyIv3BEqYDwb2w6rpyAvmumpitNMPmMxYWVpkXW7pmACfaaPw7Mt2siKH4u15CM7KyCX/aK5F+R/v4VIr/N46aLGw2feObgBJR/U4jp+Poo+45Pvv+6//BGV2DZYqNFnRvfatnDeM9lVbNZ0pSjIrP9me63cQOvm/G9/WP59aYmqOicQb4SH9FCZN7Jfb5jVlxJd5TL4lmn83+ml49FJQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from FRWP189MB3398.EURP189.PROD.OUTLOOK.COM (2603:10a6:d10:1a3::22)
- by VE1P189MB1135.EURP189.PROD.OUTLOOK.COM (2603:10a6:800:148::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Tue, 27 Oct
- 2026 16:35:02 +0000
-Received: from FRWP189MB3398.EURP189.PROD.OUTLOOK.COM
- ([fe80::4658:dbd6:d572:896a]) by FRWP189MB3398.EURP189.PROD.OUTLOOK.COM
- ([fe80::4658:dbd6:d572:896a%4]) with mapi id 15.21.0546.021; Tue, 27 Oct 2026
- 16:35:02 +0000
-From: Yunseong Kim <yunseong.kim@est.tech>
-Date: Tue, 27 Oct 2026 17:34:09 +0100
-Subject: [PATCH RFC 2/2] x86/kcov: allow instrumenting noisy objects for
- early boot coverage
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261027-early-kcov-v1-2-6f2f053255ad@est.tech>
-References: <20261027-early-kcov-v1-0-6f2f053255ad@est.tech>
-In-Reply-To: <20261027-early-kcov-v1-0-6f2f053255ad@est.tech>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, James Morris <jmorris@namei.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Andrey Konovalov <andreyknvl@gmail.com>, 
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Waiman Long <longman@redhat.com>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- "Paul E. McKenney" <paulmck@kernel.org>, 
- Frederic Weisbecker <frederic@kernel.org>, 
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
- Joel Fernandes <joelagnelf@nvidia.com>, 
- Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
- Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kasan-dev@googlegroups.com, workflows@vger.kernel.org, 
- linux-modules@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org, 
- linux-kbuild@vger.kernel.org, Yunseong Kim <yunseong.kim@est.tech>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793118887; l=3249;
- i=yunseong.kim@est.tech; s=20260824; h=from:subject:message-id;
- bh=XFup3h7UWloVBflNudxisL9cA+gOhcl+s7k8IxtKVKQ=;
- b=21InQGEVzGa/xXsjiaQcAKIzvWuhynLYuI5/cWIYRBiNPwLmEGn/X2vBrjeMyDVkYE3/ErMMk
- OB3Wg8bZZk0D/b1kYnHii2X+SjhEDjib8INCLs9Yn6hsXkxGtJ7ZXpv
-X-Developer-Key: i=yunseong.kim@est.tech; a=ed25519;
- pk=nfdmjNawkxBHo9UNdzLNBEht8sYmXp0MYUsa/hwC7vw=
-X-ClientProxiedBy: LO4P123CA0017.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:150::22) To FRWP189MB3398.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:d10:1a3::22)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MmdUdjye
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793132532;
+	b=N4iEXoynLsDIVGtAn2cw7rr+ypTMJfINLRq+tSF43GnAuiftQB26M9gRqKrq/U09bJWH
+	 TrWqQ+qh1IBr3zuTpOZIfzd+oVdFOH5AihWAIsn5tGn8LNUTuy+jqAYGGkvoUB243+HBB
+	 UJ06B3mxNPlJzal/Pem0WYdtOyy43ASPLYhEwNXsvs+sZA8iLkKhHLh3kDS9500UmNH23
+	 io4BSFr/7sOZ2/QRAp2EHSXFheaSFdfd8hGGlBrRATwFwEjjaUw5jcpI5Yk7vadUBNz4a
+	 0/ej6CQ+FXNS5rc4SEJkuL9BBO1lhYVsKUhTHZXBuf3/ca1KL7ARigd4wVT1jXTxCjg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793132532;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=NC9qvcyyabYBeEaWH7GJHJeHZrorUabfraI24jDZ6iY=;
+	b=i7E9/fqTH/6gCBCjiBgWbcMHbhaZhWYG8IujCH2VMha9ueEVjuPB1gNP6aJoIwGUGCMa
+	 RcGECtQu9rnzAZXVKVcy+n0xivsKLadXI1Xf4OwksQLkcxzGyIJMIoQFwuFbUCPiWI0p6
+	 17lnqy+HapT5L/1aRge1M9bgP8MU9MR0d3xgn5OrQ8YZv6gzwNNMaQiQzQFkebPlToGFH
+	 khVlBSoVeNXxEzgUmugJlGgO6NbbApT1TsQe14ZG63Ymfx1a2kNRj3fgcVxclyQ5ld+xK
+	 AjAnq8XZZQn4bJ/1umj289HBwYGT6zCNxttC0lurTbISsF5VoeKgkeIASW79ktr1Ovw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 691541F031E3;
+	Tue, 27 Oct 2026 20:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793132532;
+	bh=NC9qvcyyabYBeEaWH7GJHJeHZrorUabfraI24jDZ6iY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=MmdUdjyeKMle6Lr+ZR8Yay6rEpvrPf+VYi9XHckuwvyoL4ZAct3+TrIqKcHR56g9K
+	 u4QPYrUgjCuDlbM8KwPRcO4nBJBaJFWguvUGUdL1KIuW7axhhp+uejLzvSyxhXqZn3
+	 OoT/NH9ZUA8wlX9rFtkPp8Eq3NrsFDl+dUeM7T1/K3L8fiTtiqvdnnZzA645LINM0K
+	 /yxn6uZWEADgrrdlVa2SX8I8UD9Vz7moa1QKgzV9Ynnt02zqd1aaqHC134W8CSL/A6
+	 QiAY54mS4LPdn768VltI83yWWDN/lUwlAc2/HZdR0M7Oivwk1ctb2M6Ve+N08o3xlD
+	 8iPibG+rwGEIg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id CFC0C45209;
+	Tue, 27 Oct 2026 20:22:09 +0000 (UTC)
+From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
+Date: Tue, 27 Oct 2026 14:22:06 -0600
+Subject: [PATCH v13 06/39] dyndbg.lds.S: fix lost dyndbg sections in
+ modules
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -134,146 +83,195 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: FRWP189MB3398:EE_|VE1P189MB1135:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd0c8e78-ddfc-4148-774b-08df34483fa4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|921020|261026121527099003|5023799004|56012099006|11063799006|261009223027099003|261021123027099003|261022075727099003|261022105027099003|261021121427099003|22082099003|18002099003|6133799003|10067099003|261026140227099003;
-X-Microsoft-Antispam-Message-Info:
-	QTu7N3PHQb36IBbIPETx1Bfo2DSurdJHbifEnc6xTyDtDxHpAsWzVlaqs862Do/GOoti+BPm9zuCrNN8caBIEN7InRM4iDXszD7vwITPKphMq++TTTOKOrdCuegExqrP7GsGoCoo4NpQm689r2j9iHbebUNpp4MzYzQ4AzJYa+UTUBErd0jvnYTfSeteNp46iVdFqgcetx6E17uk2tGuAszQE+ciVgWLXxP/uBq3hliHLwj4Bd8zur1N/59xsZGXR8Vzs2XW0d4RqzOej7XaBUykQXMmBYjhA8PIMT3qtUyNWvMBTmAj5bDjkZcnhCNYggE/6xUG4MDSFixnif4IS2SfKTvnnkeRIH1jhNBI3gf80BglW1+9dKa0T49OLJ2C25G2/i/LAYa9CIwBfOKprzqEylXds7d+hTNKlBLw6bmd5+8STtOrxjO7cwyBXgwsGCyWQwta2v5nppYulH67HJlefvJcCoDqEkU1eXIK7+UTAjIFOkRONk05X+xwPNU+W8O7p2xprMkxhSTCWApiHd4P6ZnGk2Hm6yc5P0DepJTO222Iw90JJAT+KxOqCJ5NnMmExSEWdWVgs/pOs85JmqGAiJ/1M5HARIqq0+GYOcuba2YBw+pQ8j3R2Yvi6Rf/mdZeExFvGmeDIGp7YjuX8bSt6zY+7fuBUGJyiO3UDER3+inEeAypq2A03AgkViJ43Lvedmwn371bjjl56JuIsg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FRWP189MB3398.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(921020)(261026121527099003)(5023799004)(56012099006)(11063799006)(261009223027099003)(261021123027099003)(261022075727099003)(261022105027099003)(261021121427099003)(22082099003)(18002099003)(6133799003)(10067099003)(261026140227099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eTNCZEo1cm9JK2ZsckVjSFV4dXNXejJTLzJ6YzFFZjRzMkIxd1JMMkdDR2ty?=
- =?utf-8?B?aXkzQ2d1WGRnb2grWlI2Nkt5Y0k0T2pvUTFiOWdPV2crOWNTc2JqeGcwSzEx?=
- =?utf-8?B?TFRjeUhjTXdLalZEL0xETitmeHUvTFZxTVp0TlAyai9tQnpVaFgvYko2M0xO?=
- =?utf-8?B?VnNwYVJLSWwvdVNrdjc1NU1VRkg0WUd6REtHZEpHQ2ZFNk9aUnpESFdpc1pU?=
- =?utf-8?B?SjBHYkJBUGZLaGM5Qy9RZnFWNnlLWUpzeTBZbjQvUklwcDlKVW9tdWxXL253?=
- =?utf-8?B?d3BjeGExeHA2YlhHenNpNWdocVMrNHdWaFZuS3Y0a3pSWE0yOTFYaXc4L0NL?=
- =?utf-8?B?bE9YQTZSbXlEd3dVbHg4ODhQYUtPTVRJbERObU9tczJPTnptV1lYU09ManJH?=
- =?utf-8?B?VE9tNFdlL2QrMUZaOHZ3c1BOR1lpTFpXU0kxUXdhSUpsZ0xibDlSWTFnSUZl?=
- =?utf-8?B?anNWck9VRWRYby9EcytIWGc2UjZNeWVyN2UxR2tBY1RJQ0Z3V2JSUlhoc3Jk?=
- =?utf-8?B?SDIzUFJyVEMrWnkvMytxUm1ySWZtckh5Tm5Hd1NFK1NFcjlUcnphZU91dzJY?=
- =?utf-8?B?SngxK3VNaGNmdGc0aHJFanpNV3FIRGEvVzlZTUF1bHdMamV3emV4RGhCT254?=
- =?utf-8?B?dlZlMlVTTVROL09wMCtlUENDZEhOWjdCREp0cGx1bWVnWTNFSldQdVdvVmVn?=
- =?utf-8?B?M2tMWU53OEpodWtrUGtNQXBxWno1N2NpMFhpSi8zNTA2SXJObE1tbHYvZVo0?=
- =?utf-8?B?bmlMeng2dmQrNklqN2FRQ05Hc240VGkxbFRqNmFXNDIxdENNMXBsc2RVVWRU?=
- =?utf-8?B?UFBhSS9hT2VYaTl5OFJzamxPSWJscG9IZkNLUDdwMmRQUmU1Uk1FdUhqTitI?=
- =?utf-8?B?V0N4Zk9RakRGdHdweGl2K3o1eFZCQlk3QVg1clZVb3QvY1RtVmRwS3RLVVZQ?=
- =?utf-8?B?VHZxUjkzK1FoVmhhNnlQNVZQVGcwWCtERldHK2pOclNRczNNNE5LRVZ5aEc2?=
- =?utf-8?B?bk1FaFFwVjk2SktWd1dwLy9EL3pDNGtkak1UZ01DNEJXZjJrc1U5SEJKbzho?=
- =?utf-8?B?ZFZTaDA0N0d2VDhLZFNQVlpQQU53WUJ4WVBHOVFUTjBFS0NSVEpuQnY3SDFF?=
- =?utf-8?B?cUFPc1ZGMjRxRytwOUlDYnFROTV5UERpVVg0U1JGRlpvcmZLMFVEWkl4aVhr?=
- =?utf-8?B?b3pVY1RSNmpMZ3VuVjZDcUYzV0czWDg0SHJqVEZJeFA1YmVteDRWekpIdEUz?=
- =?utf-8?B?TUxFNHptK3J2cGJNY0VTc1lkZU80VEQ3ZmpsOUZDN29WYXZZMXhOZDl3dUpH?=
- =?utf-8?B?TXBmT2tqdEVIZURBbTZISWlMQVFLeTlCSzNVM2wxYlZhdmd2L3p6VnhZRVZh?=
- =?utf-8?B?UjU5RW56SnlteUY2N29Rb0NUZDNoUnNZTTVVYnBZNTk3eVN1TTNwenovWms2?=
- =?utf-8?B?R2loNGZzRmpUZVF1NFpPbHZ3VlNzVDNFMExhR0pDTE9EYk95aC9pN1FVUlhV?=
- =?utf-8?B?RkFBODMvS1NWeHA4cDd0VTZTT0hYS2ZKdEsrQzFWMnFVOHFXbDJ4a25sbFBS?=
- =?utf-8?B?OUpPVUNCOFBOOUplM1VpVmlvN1gvbGNmbCtGY0EyTitMOTZ6S25xNm5DTW9V?=
- =?utf-8?B?aE81a01hc0lpZmhyMHFIcUNqZGY0RHBtSXh2L1hPVEppNnFkQkdNcmFQYjRR?=
- =?utf-8?B?c2d0UThUN3EwdVc1OE9XS1Q5REx3Tk9TRGppcUVobDFOcGpFaUg0NVY2WXpu?=
- =?utf-8?B?MFRvYUpwWnIrWVlPYm1mMjhabE9kNmV2eFVBNjU0c2VoUUhVL2VBRk9zVnlZ?=
- =?utf-8?B?UTluNFpoWHdBZVFtRzJzKzFoZmkvcHplYTRLb0ZId29LbEdiSkdqaEVCMHlq?=
- =?utf-8?B?SGtoN3NhWmdmdWQ4Y0Jzb1EwTFJVVlFSNVplYkMvWnNKSnR4d0lmcW45RmVn?=
- =?utf-8?B?RHY3NjZUUzZ0bWYrRnlSb2RHQjZaVmtSc3I1MVgwTGlEeGVaTnYwSkwrbTA0?=
- =?utf-8?B?TnQ3SEJFUlNyZTQ0dG5QRU5IaTRETElnMVNmVkphWGg5MDdJTnFpenV2WDZz?=
- =?utf-8?B?UmtHaXhRWDc2QU1sMlZ5RW5GQTAzcHdyVmdaQktCT3BYU2RpUmFMNkdsczJV?=
- =?utf-8?B?WUJESFEwYWhxTjRmL1ZkTVoxSmlJeU94VTNKejRMaTJDVHU3b0RlaElIazNa?=
- =?utf-8?B?bkhQWDE0d21PZ1lIVmUyQkhrV0kyaGNiZm1sRkhGejFZcURYZWk2bUg5UkZQ?=
- =?utf-8?B?ZWsyN042NjhqbEdmTFlvY1RFSGk4WHVGbFNXMno3QVhkR3hrTUV3WTBDeUVK?=
- =?utf-8?B?bExhclZsZ3pDNWtKZEw3RzF4SjlzSW5Rck9jdFNqZmR3S1MrckxrZz09?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd0c8e78-ddfc-4148-774b-08df34483fa4
-X-MS-Exchange-CrossTenant-AuthSource: FRWP189MB3398.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2026 16:35:02.0795
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9UoDXaGbTsjbnfmeD6lNiwRCbDlR7PmmTmUWoB8oAvL47/P+Ce3r05M/oqitw3YZwj3Ncbxk/Hhp1WmYRzlIhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1P189MB1135
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261027-dd-cmap-part2-clean-v13-6-9267923be612@gmail.com>
+References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
+In-Reply-To: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
+To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Jonathan Corbet <corbet@net.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+ Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ John Ogness <john.ogness@linutronix.de>, 
+ Sergey Senozhatsky <senozhatsky@chromium.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=5098;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=eZWQ3goXmct9svzcYam5cB2wbeXp5w4fDAcHi11IsRs=;
+ b=rr9GdMdGpAwS7pPzsye5nsxCNnBuN4B9La/NcNeJke1xHgp7JBr4sUh4Iqk4O54hSCcy09Nnz
+ hFNDd7f3vkuC0tWXMUaeZvy3FcVMpPXxpXVPGKcdCdPl66f9Ilajy2s
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
+X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
+ auth_id=958
+X-Original-From: Jim Cromie <jim.cromie@gmail.com>
+Reply-To: jim.cromie@gmail.com
+Content-Transfer-Encoding: 7bit
 
-A few x86 objects are excluded from KCOV only because their coverage
-is noise for syscall fuzzing: the APIC code (interrupts land in random
-places), delay.o, and the stack trace, dumpstack and unwinder objects.
+From: Jim Cromie <jim.cromie@gmail.com>
 
-Use $(kcov-noisy) for them, so that CONFIG_KCOV_INSTRUMENT_NOISY=y
-includes them in early boot coverage. With the option off nothing
-changes.
+With CONFIG_DRM_USE_DYNAMIC_DEBUG=y, several build configs had
+problems with __dyndbg* sections getting lost in drm drivers.  Fix
+this by following the model demonstrated in codetag.lds.h.
 
-The objects excluded because the kernel does not boot or hangs when
-they are instrumented (head64.o, cpu/common.o, perf_event.o, tlb.c,
-mem_encrypt*.c, pgprot.c) stay excluded, as do machine_kexec_64.o and
-physaddr.o, which must not use KCOV during kexec once load_segments()
-has invalidated the GS base.
+Introduce include/asm-generic/dyndbg.lds.h, to bundle dynamic-debug's
+multiple sections together, into 2 macros:
 
-With FRED, the system vector wrappers in apic.c are not noinstr and run
-before the hardirq count is raised, so with this change interrupt PCs
-such as the LAPIC timer can be recorded as if init_task executed them.
-The same already happens for the wrappers in irq.c, smp.c and others.
+vmlinux.lds.h DATA_DATA: move the 2 BOUNDED_SECTION_BY(__dyndbg*)
+calls into dyndbg.lds.h DYNDBG_SECTIONS(). vmlinux.lds.h now includes
+the new file and calls the new macro.
 
-Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
+MOD_DYNDBG_SECTIONS keeps the 2 sections by name, aligns them and sets
+the output address to 0 when the sections are empty.
+
+dyndbg.lds.h includes (reuses) bounded-section.lds.h
+
+scripts/module.lds.S: now calls MOD_DYNDBG_SECTIONS right before the
+CODETAG macro (consistent with their placements in vmlinux.lds.h), and
+also includes dyndbg.lds.h
+
+This isolates vmlinux.lds.h from further __dyndbg section additions.
+
+CC: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- arch/x86/kernel/Makefile      | 12 ++++++------
- arch/x86/kernel/apic/Makefile |  2 +-
- arch/x86/lib/Makefile         |  2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+v3: move #includes to top, drop extra ALIGN(8) in DYNDBG_SECTIONS, add RvBy
 
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 31f46fd005278..44cfd3781c30a 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -37,12 +37,12 @@ KMSAN_SANITIZE_nmi.o					:= n
- KCOV_INSTRUMENT_head$(BITS).o				:= n
- # These are called from save_stack_trace() on debug paths,
- # and produce large amounts of uninteresting coverage.
--KCOV_INSTRUMENT_stacktrace.o				:= n
--KCOV_INSTRUMENT_dumpstack.o				:= n
--KCOV_INSTRUMENT_dumpstack_$(BITS).o			:= n
--KCOV_INSTRUMENT_unwind_orc.o				:= n
--KCOV_INSTRUMENT_unwind_frame.o				:= n
--KCOV_INSTRUMENT_unwind_guess.o				:= n
-+KCOV_INSTRUMENT_stacktrace.o				:= $(kcov-noisy)
-+KCOV_INSTRUMENT_dumpstack.o				:= $(kcov-noisy)
-+KCOV_INSTRUMENT_dumpstack_$(BITS).o			:= $(kcov-noisy)
-+KCOV_INSTRUMENT_unwind_orc.o				:= $(kcov-noisy)
-+KCOV_INSTRUMENT_unwind_frame.o				:= $(kcov-noisy)
-+KCOV_INSTRUMENT_unwind_guess.o				:= $(kcov-noisy)
+v2: Address linker script review feedback for relocatable modules.
+
+MOD_DYNDBG_SECTIONS() used the BOUNDED_SECTION_BY() macro, which
+proved problematic for kernel modules for two reasons:
+
+1. Unwanted Empty Sections:
+   BOUNDED_SECTION_BY() automatically generates `__start` and `__stop`
+   symbols. When applied to `MOD_DYNDBG_SECTIONS()`, the linker assumes
+   the sections are populated due to the symbol definitions, forcing an
+   empty `__dyndbg` and `__dyndbg_classes` output section in every
+   compiled module, even those without dynamic debug configuration.
+   Since the module loader uses `section_objs()` to locate data via
+   ELF headers instead of relying on `__start`/`__stop` symbols, these
+   assignments are completely unnecessary.
+
+2. Non-zero Output Addresses:
+   During relocatable linking (e.g., `ld.bfd -r`), omitting an explicit
+   base address causes the section to inherit the current location
+   counter. This results in non-zero sh_addr values in `.ko` files,
+   which is confusing, degrades compressibility, and can cause issues
+   with external tools parsing the ELF.
+
+Fix both issues by dropping `BOUNDED_SECTION_BY()` in favor of a simple
+`KEEP(*(...))` constraint and explicitly defining the sections with a `0`
+base address: `__dyndbg 0 : ALIGN(8) { ... }`.
+
+fixup-inc-vml
+---
+ MAINTAINERS                       |  1 +
+ include/asm-generic/dyndbg.lds.h  | 18 ++++++++++++++++++
+ include/asm-generic/vmlinux.lds.h |  6 ++----
+ scripts/module.lds.S              |  2 ++
+ 4 files changed, 23 insertions(+), 4 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 942a93e21d75..9fee1d699164 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9259,6 +9259,7 @@ DYNAMIC DEBUG
+ M:	Jason Baron <jbaron@akamai.com>
+ M:	Jim Cromie <jim.cromie@gmail.com>
+ S:	Maintained
++F:	include/asm-generic/dyndbg.lds.h
+ F:	include/linux/dynamic_debug.h
+ F:	lib/dynamic_debug.c
+ F:	lib/test_dynamic_debug.c
+diff --git a/include/asm-generic/dyndbg.lds.h b/include/asm-generic/dyndbg.lds.h
+new file mode 100644
+index 000000000000..9d8951bef688
+--- /dev/null
++++ b/include/asm-generic/dyndbg.lds.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __ASM_GENERIC_DYNDBG_LDS_H
++#define __ASM_GENERIC_DYNDBG_LDS_H
++
++#include <asm-generic/bounded_sections.lds.h>
++#define DYNDBG_SECTIONS()					\
++	BOUNDED_SECTION_BY(__dyndbg, ___dyndbg)			\
++	BOUNDED_SECTION_BY(__dyndbg_classes, ___dyndbg_classes)
++
++#define MOD_DYNDBG_SECTIONS()						\
++	__dyndbg 0 : ALIGN(8) {						\
++		KEEP(*(__dyndbg))					\
++	}								\
++	__dyndbg_classes 0 : ALIGN(8) {					\
++		KEEP(*(__dyndbg_classes))				\
++	}
++
++#endif /* __ASM_GENERIC_DYNDBG_LDS_H */
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index c3376665d027..48f00c5e8762 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -52,6 +52,7 @@
  
- # Disable KCOV to prevent crashes during kexec: load_segments() invalidates
- # the GS base, which KCOV relies on for per-CPU data.
-diff --git a/arch/x86/kernel/apic/Makefile b/arch/x86/kernel/apic/Makefile
-index 581db89477f92..146cbd766c924 100644
---- a/arch/x86/kernel/apic/Makefile
-+++ b/arch/x86/kernel/apic/Makefile
-@@ -5,7 +5,7 @@
+ #include <asm-generic/bounded_sections.lds.h>
+ #include <asm-generic/codetag.lds.h>
++#include <asm-generic/dyndbg.lds.h>
  
- # Leads to non-deterministic coverage that is not a function of syscall inputs.
- # In particular, smp_apic_timer_interrupt() is called in random places.
--KCOV_INSTRUMENT		:= n
-+KCOV_INSTRUMENT		:= $(kcov-noisy)
+ #ifndef LOAD_OFFSET
+ #define LOAD_OFFSET 0
+@@ -344,10 +345,7 @@
+ 	*(.data..do_once)						\
+ 	STRUCT_ALIGN();							\
+ 	*(__tracepoints)						\
+-	/* implement dynamic printk debug */				\
+-	. = ALIGN(8);							\
+-	BOUNDED_SECTION_BY(__dyndbg_classes, ___dyndbg_classes)		\
+-	BOUNDED_SECTION_BY(__dyndbg, ___dyndbg)				\
++	DYNDBG_SECTIONS()						\
+ 	CODETAG_SECTIONS()						\
+ 	LIKELY_PROFILE()		       				\
+ 	BRANCH_PROFILE()						\
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index d0f200428957..5950ff8edc31 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -5,6 +5,7 @@
+  */
  
- obj-$(CONFIG_X86_LOCAL_APIC)	+= apic.o apic_common.o apic_noop.o ipi.o vector.o init.o
- obj-y				+= hw_nmi.o
-diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
-index 2dba7f83ef97c..151ecee2229f3 100644
---- a/arch/x86/lib/Makefile
-+++ b/arch/x86/lib/Makefile
-@@ -4,7 +4,7 @@
- #
+ #include <asm-generic/codetag.lds.h>
++#include <asm-generic/dyndbg.lds.h>
  
- # Produces uninteresting flaky coverage.
--KCOV_INSTRUMENT_delay.o	:= n
-+KCOV_INSTRUMENT_delay.o	:= $(kcov-noisy)
+ SECTIONS {
+ 	/DISCARD/ : {
+@@ -56,6 +57,7 @@ SECTIONS {
+ 		*(.rodata..L*)
+ 	}
  
- # KCSAN uses udelay for introducing watchpoint delay; avoid recursion.
- KCSAN_SANITIZE_delay.o := n
++	MOD_DYNDBG_SECTIONS()
+ 	MOD_SEPARATE_CODETAG_SECTIONS()
+ }
+ 
 
 -- 
-2.47.3
+2.56.0
+
 
