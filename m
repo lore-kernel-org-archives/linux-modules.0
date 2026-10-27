@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1793132548;
-	b=y+A4wzryfdvUzAPbfMhHJCCutlWKcPpd/cuO3d9Xx8jIiZJt3zHP/tm8bFZki5HnK892
-	 8e0d66VGAT2fxWtNW/AwR5n9/HSmRLeExJVoPVbNdrs9ALveZc9kHnMGyyevl/USoq17C
-	 MDfcFupdCrZu3EG8tC6jBqK9qovilXMCICl967pXN1tFzeJbyUkYsrroLyvm/X1wo7cOo
-	 EpJyMNTa4W5bBLdxShkk/R7UqhMCKARLP9bDjTFcVtvGxSSpuWIr0dIQEsMODYa+7AQbI
-	 OydjQ3nEsAedE9thTWEKD0CxGolMgPIPQ32h7iYGbow1UO3pvq+QFN0Zi4lFSNnPGWg==
+	b=RGhvB6PLPP5wVik0kdqbEq6VKRqU8Ug1VzGbmacwWAsMoQYOcbuumPPN20Vb6Au3xI9e
+	 MP8fgpmlR4aPZ8U7yUL3h0CYaNjcbLKu1JfqVZpSGeul+RFgWknTioxyb2sAzC4BgLIMd
+	 /MynHxQcztNySH+BZzkb17B4bEW7D9WJdxCagNPGFvrM3oBionGx9S+wnhSuUSW1OpRg1
+	 jDcHzoG8qxgAvrKoWrZDtVc8nWQgT/TnE+EgBtpzrcwFhoRFntSzYeNrrOPqulMZVDLli
+	 QXrt/BSNSMKhx0K9WuptpCHTTBtSCqI4BgqsB9Kxfo9fbOgbjaAfUo7UcD9Y5EmFwgQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793132548;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=mbgXUtUWmTSiJZyJkQcY2cIx2a5rGoJ+tnR0HxZtgHw=;
-	b=079Q4qQpRQqAuUSa7eS1Qe5dW9SNAOiFTVSlVqauQicHIUMMWyagRMGvuyh3z8j+scS3
-	 ovzXfJdbIukTUJADCNoc0TCpP8lb+kQt6T047XDpkRFw1VVfSV/yPXxuEWjHPycoE4IJw
-	 PTCohGrEumm80f3R9psv8bgKvKPcdQiW0ylzPcd5q2f/RJzcfq+JXzDoSnpYfzK1/1BtS
-	 yXpcxE8DnEgJO+98IwDx6JFXWq1WMyOPxihqN6RDXqZRLwpQSabddhlDd3GqRBwJmkzQ2
-	 hgB2qkLbSwAVxtUezHo/bEdFWdvV8b14nHcQa/GtXrdwq4d285nuGJ/OZHqe/DQV2YQ==
+	bh=GAtSvjcpZ9pOohaazGK5LkkUDxyiYLY9xl3tZPPUGyU=;
+	b=J4YGW9V+T6YuGoK5n1iPyXUi23YF5r/8MsKqBV1p3bFDKwUjzIVNLUZHF+4/Uf0I7d8M
+	 J+8TnUS4QAIerej8lyT12Dj6wxTx3Ya/GrJ7Ol7x9DiC2fIh6TnXgsPoQW5XynaFlfk0R
+	 OBSSQbuZ5LxZEkd/mfBB150CfvCmEmTYMIWU0VrW+Arxd/n7VgG37ppBRJMyLv1zUU+Mx
+	 LAM7XU9xzQRQgtytr8udNIoUUmf3AuT/jNqgj4DLUjPp3F3VBykxDeQmzvdgLYhOJQjka
+	 vbDqyzal7y1DBbVa22y8XotqwBYP9N1mbMmdSp/kvGKA8P6BXa2IM5t3VFlGG1bbRig==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=leZrct6V;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PdGHfBPm;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5A560A6F64;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0A960A6F6E;
 	Tue, 27 Oct 2026 20:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=leZrct6V
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PdGHfBPm
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1793132547;
-	b=lgrdv95qJ9qJjcE7UiZzdIRHVU5t5eSJFhCExR90eYlYSrCvZ9YoAEmn43R2J1A1D2hY
-	 rYPavboPzvJM5rfPtXwMzPGG+0LncK9eucaXD8/qQjf79nBBKNnMU26UxXSNWm4vASzMj
-	 +Hl6NjgTwHpB7W6q3aWIzsShs2oEsofQAGLnaYGOcpOhfaLy4yzni92CDzTemvGkVUjjj
-	 L38SP2FESuad8Ey2d8BOahma+bcdktuXWaU8a2j+XCaaz5fsoR60qEIrdiq/lvBbDmxuA
-	 rnW3DoqhBKJMkjCzrUqvbxPTU7IphlZHzCoh1zsQU5szGE+ggZQkFXeVTb5MXjjO2DA==
+	b=BNC/5nRe3nR3Ew9TaDFI9LJQ4mvNkS2wWOXJ2GSiaNjs0mSGGwUjReHOZAIBzyaTFEt/
+	 lalK9WZNrUhLz9NV7tNa9SG/VrVDFQ1noxLwVt1OQ+GiFFa1+UzWo3jhdTjUFE4tsjopY
+	 MA0wRwblyD+NJmAc5Yz8eICku7KkO4X3zezQUBROwvEa43BabfMaICqIrR4SJHxy1Ccb0
+	 T5rHOVUGwFUo7pD7c319WzenxaV2VrsP1K3Kox80NvTKDkurK9whPVCDkJvKPbmwbhRI5
+	 1lUnIMbdclPpc+X4d23FxwE3+Ew8ckGkrr4JWFg4KNuSdPFsjeqojq3sy7SV61ZhHnQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1793132547;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=mbgXUtUWmTSiJZyJkQcY2cIx2a5rGoJ+tnR0HxZtgHw=;
-	b=1m1jMpYjYLkzSDV7+JEHDsuHwj5hCctmD83sxL15OgWED0S0gEMpOVbiySHsVX6sC2x9
-	 n1BzIxz6sGVcG9kPdoBm3QeftYpzb2x8MkVvVVrdqnu2U13TZgQMtECVf1ujKsK0TqAoQ
-	 V9FaDuD5CMDFRCAFotvXqPwL1pV6zxNXSSCxP7gc08eNra22+L2ohdrhRUIHkREOWxoX9
-	 cEYdTs6E6zmknnFxwbn5LIG1Y2c5JyguzdLEG0FsdL9HYqFoLAnofkBwOXBjbLCHuBgAF
-	 vWni+JC+6tt3/LfqkqN1kcWlbULMM+QwMFAKBDfCO46/KjFcPdzRZqzdpyaIqtl234A==
+	bh=GAtSvjcpZ9pOohaazGK5LkkUDxyiYLY9xl3tZPPUGyU=;
+	b=PJYgFhsSk86TOHbDOkMOl1SLogyYAIrd7TwpCsza1mHxe5RdKjY9viyt2jvZfJzjXplB
+	 NLJJ8frsviujMzM/VHvd5xitXzEzv3J7J1TSaWaDQ40ulR37eRYMsyg0r5hM3Ko2hypVc
+	 Y9/fsN7FjjXC4Yn1uku0UfPbGcWPxQixw0UVW8AQ5BRkZqdvHSf1UBZhVTuEBjACgY1GF
+	 jDi7RQsIAAJRRtv5gfwcDB9AkMk6CRtyZXWaxP6Qx/UDrmjYLXZx1UPTq4abiEGMBZAyd
+	 ewrp80nevf04B1yfSoM5w0RvO53JmOo/t/Q+DfNf+6J64nlUqFllCjFOlQl1vXp3KCA==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 93BE61F01149;
-	Tue, 27 Oct 2026 20:22:24 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 217A51F01353;
+	Tue, 27 Oct 2026 20:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1793132547;
-	bh=mbgXUtUWmTSiJZyJkQcY2cIx2a5rGoJ+tnR0HxZtgHw=;
+	bh=GAtSvjcpZ9pOohaazGK5LkkUDxyiYLY9xl3tZPPUGyU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=leZrct6V7e5WTADM/HcjlP6vpCaSBlXmee09G3Mka8UG1bMitTuWOEr53PrQU5hPf
-	 QqwmvOU3bTnhHfxZ0w4qO9yghIjnYgm/IFdLMQ+gnU9yB2bgENv6g3hSriKqsasOFz
-	 4ovCLtrRzd/0smr+u+4+856tcdNAbxwbiSknU+eYZr/0DU6zXZU5xD68EV611iEJBe
-	 LKAgJvLgVNNX+2/dYRCB+Sv/j4UIj96Pp96WAyNHdlyqtccnxRYouzGxgBeA4xt0Fm
-	 Nbwu8i0Ap0I+x+QhC6za/kaVjxwZDjI8DkhJkNxUtKxMBZtsmjI4avczURkK0ZYsc/
-	 dhUXPF1erMkmA==
+	b=PdGHfBPmeI3BCvF4iCKj3BVXbZkSFO6XcMItAn200FaX3aCxB2HTioYo/6/ypYLER
+	 DzI0tt9GpSqrzqqDbxsikwjq2mRaTDGz/qGXl0TLZaBjKbJSSpLjj98oTYzOn9FJTM
+	 p/ecG59UHNY2rzrshlHBTiSrfGfLtCeFDqjmBD3T2MJdu9HJsXPvrirM0KRIyCtv6H
+	 jbEWOWedAuquzcAE8N2OZKTmqggQnB9btaQZQW/193LrrYu8rI/W4E5lLKevsaCsXk
+	 uZjUODw23f0aDZWQyYHeKtfr1XKf8JwuGvyMdjx+ohUqnyukCZmnZgdmaZG2j3Hz8V
+	 2MwOCz0O8+s9Q==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 6C82545288;
-	Tue, 27 Oct 2026 20:22:11 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id ED96C4525D;
+	Tue, 27 Oct 2026 20:22:10 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Tue, 27 Oct 2026 14:22:38 -0600
-Subject: [PATCH v13 38/39] printk.h: fix overzealous pr_fmt in
- pr_debug_ratelimited
+Date: Tue, 27 Oct 2026 14:22:27 -0600
+Subject: [PATCH v13 27/39] dyndbg-API: promote DYNAMIC_DEBUG_CLASSMAP_PARAM
+ to API
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261027-dd-cmap-part2-clean-v13-38-9267923be612@gmail.com>
+Message-Id: <20261027-dd-cmap-part2-clean-v13-27-9267923be612@gmail.com>
 References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 In-Reply-To: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -112,13 +112,13 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
  Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>, 
- Philipp Hahn <phahn-oss@avm.de>
+ Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=7602;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=15321;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=L1ZQsCml84TMv32tD7Co0b90YBd4ZKq5Kk8fMEuL190=;
- b=7MqGWkleUEPFEncJRaFlgtjDnOC+vla19bdvsXx31RA7UxFf42FNui/Y4iMY9mhftVavcxnio
- GnoGlPNeSafCnCM5Jz//ZrfCULLfJKvUTDSdE+u/kb+I7jyE5H7CpvF
+ bh=UUyKPVrmEOHjGAVeZd259mOE1FSapue8P1NKjEe8AM8=;
+ b=sugdNKFwNO+VnO2aDCst2GP3BS/sSLlHABYobttz/JRz58GFqcofUm/UNsOXqxSxvYV8YniIV
+ AfDVtRGFKoIAjMGkXVjO+1ckxjxtk3LMYx018KkzlXzq3Qapoi7xyFV
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -129,164 +129,380 @@ Content-Transfer-Encoding: 7bit
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-Historically, the CONFIG_DYNAMIC_DEBUG implementation of
-pr_debug_ratelimited() passed raw fmt to both metadata and runtime:
+move the DYNAMIC_DEBUG_CLASSMAP_PARAM macro from test-dynamic-debug.c into
+the header, and refine it, by distinguishing the 2 use cases:
 
-  DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, fmt);
-  if (unlikely(...) && __ratelimit(&_rs))
-     __dynamic_pr_debug(&descriptor, fmt, ##__VA_ARGS__);
+1.DYNAMIC_DEBUG_CLASSMAP_PARAM_REF
+    for DRM, to pass in extern __drm_debug by name.
+    dyndbg keeps bits in it, so drm can still use it as before
 
-While descriptor metadata was clean, emitted dmesg records lacked the
-pr_fmt prefix present in the !CONFIG_DYNAMIC_DEBUG fallbacks.
+2.DYNAMIC_DEBUG_CLASSMAP_PARAM
+    new user (test_dynamic_debug) doesn't need to share state,
+    declares a u32 to store the bitvec.
 
-In 2015, commit 515a9adce0f0 ("include/linux/printk.h: include pr_fmt
-in pr_debug_ratelimited") fixed the missing prefix by wrapping the fmt
-arg in __dynamic_pr_debug() with pr_fmt().  However, it also wrapped
-the fmt arg in the METADATA macro:
+__DYNAMIC_DEBUG_CLASSMAP_PARAM
+   bottom layer - allocate,init a ddebug-class-param, module-param-cb.
 
-  DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));
+Also add stub macros, clean up and improve comments in test-code, and
+add MODULE_DESCRIPTIONs.
 
-This would break if the following were true:
-
-  0. CONFIG_DYNAMIC_DEBUG=y
-  1. #define pr_fmt(fmt) KBUILD_MODNAME ".%s " fmt, __func__
-  2. a pr_debug_ratelimited() call.
-
-Philipp Hahn recently encountered this, reported the build failure,
-added a test case to test_dynamic_debug.c, and proposed adding
-variadic arguments (", ...") to DEFINE_DYNAMIC_DEBUG_METADATA_CLS to
-slurp the trailing arguments.  This approach had 2 flaws:
-
-  1. the __func__ is not a preprocessor macro
-  2. adding the prefix to the .format would break anchored queries:
-     echo format "^foo" > /proc/dynamic_debug/control
-
-So modify the DEFINE_DYNAMIC_DEBUG_METADATA() call in
-pr_debug_ratelimited, dropping the pr_fmt() wrapper on the fmt arg.
-This restores consistency with all the other dyndbg callers:
-dynamic_pr_debug, dev_dbg_ratelimited, net_dbg_ratelimited.
-
-Reported-by: Philipp Hahn <phahn-oss@avm.de>
-Fixes: 515a9adce0f0 ("include/linux/printk.h: include pr_fmt in pr_debug_ratelimited")
-cc: Jason A. Donenfeld <Jason@zx2c4.com>
-cc: Petr Mladek <pmladek@suse.com>
+cc: linux-doc@vger.kernel.org
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v13:
-. pass raw fmt to DEFINE_DYNAMIC_DEBUG_METADATA in pr_debug_ratelimited(),
-  restoring pre-515a9adce0f0 behavior.
-
-. drop vestigial '...' from DEFINE_DYNAMIC_DEBUG_METADATA_CLS as noted by
-  Petr Mladek, leaving include/linux/dynamic_debug.h untouched.
-
-. rewrite commit description chronologically and attribute Philipp Hahn
-  with Reported-by.
-
 v11:
-. update golden record hashes for FT_modprobe_w_param tests after
-  comma-token and native classmap attachment fixes.
+. drop redundant _DPRINTK_CLASSBITS_INIT redefinition in #else block,
+  fixing -Wmacro-redefined warning.
+  Sashiko review complaint (patch 28):
+  "Does this redefine _DPRINTK_CLASSBITS_INIT when CONFIG_DYNAMIC_DEBUG
+  is disabled? The macro is already defined unconditionally earlier in
+  this file (just before the flags field of struct _ddebug), which
+  causes a -Wmacro-redefined compiler warning."
 
 v10:
-. pass raw fmt to DEFINE_DYNAMIC_DEBUG_METADATA in pr_debug_ratelimited().
----
- include/linux/printk.h                             |  2 +-
- lib/test_dynamic_debug.c                           |  4 ++--
- .../selftests/dynamic_debug/dyndbg_selftest.sh     | 26 +++++++++++-----------
- 3 files changed, 16 insertions(+), 16 deletions(-)
+. define _DPRINTK_CLASSBITS_INIT and initialize static state bitvector.
+. add module_param_named fallback for DYNAMIC_DEBUG_CLASSMAP_PARAM* in !CONFIG_DYNAMIC_DEBUG.
 
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index f594c1266bfd..5d701952e739 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -742,7 +742,7 @@ do {									\
- 	static DEFINE_RATELIMIT_STATE(_rs,				\
- 				      DEFAULT_RATELIMIT_INTERVAL,	\
- 				      DEFAULT_RATELIMIT_BURST);		\
--	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));		\
-+	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, fmt);		\
- 	if (DYNAMIC_DEBUG_BRANCH(descriptor) &&				\
- 	    __ratelimit(&_rs))						\
- 		__dynamic_pr_debug(&descriptor, pr_fmt(fmt), ##__VA_ARGS__);	\
-diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
-index 2f19ecb1f295..965f3a6919c0 100644
---- a/lib/test_dynamic_debug.c
-+++ b/lib/test_dynamic_debug.c
-@@ -23,7 +23,7 @@
-  * the usage clearer.
-  */
- #if defined(TEST_DYNAMIC_DEBUG_SUBMOD)
--  #define pr_fmt(fmt) "test_dd_submod: " fmt
-+  #define pr_fmt(fmt) "test_dd_submod: %s " fmt, __func__
+v9:
+. fix 4-argument signature for DYNAMIC_DEBUG_CLASSMAP_PARAM_REF fallback macro stub.
+. update format specifier from %d to %u for inrep in ddebug_class_param_clamp_input().
+. drop duplicate v2pr_info() line in param_set_dyndbg_module_classes().
+. drop unused CLASSMAP_BITMASK(width, base) define in test_dynamic_debug.c.
+---
+ include/linux/dynamic_debug.h                      | 45 +++++++++++++
+ lib/dynamic_debug.c                                | 75 +++++++++++-----------
+ lib/test_dynamic_debug.c                           | 55 ++++++----------
+ lib/test_dynamic_debug_submod.c                    |  9 ++-
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     |  2 +-
+ 5 files changed, 111 insertions(+), 75 deletions(-)
+
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index c786b589c87e..83ea42f25e06 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -53,6 +53,8 @@ struct _ddebug {
  #else
-   #define pr_fmt(fmt) "test_dd: " fmt
+ #define _DPRINTK_FLAGS_DEFAULT 0
  #endif
-@@ -326,7 +326,7 @@ static int __init test_dynamic_debug_init(void)
++#define _DPRINTK_CLASSBITS_INIT ((_DPRINTK_FLAGS_DEFAULT & _DPRINTK_FLAGS_PRINT) ? ~0U : 0U)
++
+ 	unsigned int flags:8;
+ #ifdef CONFIG_JUMP_LABEL
+ 	union {
+@@ -279,6 +281,44 @@ struct ddebug_class_param {
+ 		.offset = _offset					\
+ 	}
  
- static void __exit test_dynamic_debug_exit(void)
- {
--	pr_debug("exited\n");
-+	pr_debug_ratelimited("exited\n");
++/**
++ * DYNAMIC_DEBUG_CLASSMAP_PARAM - control a ddebug-classmap from a sys-param
++ * @_name:  sysfs node name
++ * @_var:   name of the classmap var defining the controlled classes/bits
++ * @_flags: flags to be toggled, typically just 'p'
++ *
++ * Creates a sysfs-param to control the classes defined by the
++ * exported classmap, with bits 0..N-1 mapped to the classes named.
++ * This version keeps class-state in a private long int.
++ */
++#define DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _var, _flags)		\
++	static u32 _name##_bvec = _DPRINTK_CLASSBITS_INIT;		\
++	__DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _name##_bvec, _var, _flags)
++
++/**
++ * DYNAMIC_DEBUG_CLASSMAP_PARAM_REF - wrap a classmap with a controlling sys-param
++ * @_name:  sysfs node name
++ * @_bits:  name of the module's u32 bit-vector, ex: __drm_debug
++ * @_var:   name of the (exported) classmap var defining the classes/bits
++ * @_flags: flags to be toggled, typically just 'p'
++ *
++ * Creates a sysfs-param to control the classes defined by the
++ * exported clasmap, with bits 0..N-1 mapped to the classes named.
++ * This version keeps class-state in user @_bits.  This lets drm check
++ * __drm_debug elsewhere too.
++ */
++#define DYNAMIC_DEBUG_CLASSMAP_PARAM_REF(_name, _bits, _var, _flags)	\
++	__DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _bits, _var, _flags)
++
++#define __DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _bits, _var, _flags)	\
++	static struct ddebug_class_param _name##_##_flags = {		\
++		.bits = &(_bits),					\
++		.flags = #_flags,					\
++		.map = &(_var),						\
++	};								\
++	module_param_cb(_name, &param_ops_dyndbg_classes,		\
++			&_name##_##_flags, 0600)
++
+ extern __printf(2, 3)
+ void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...);
+ 
+@@ -463,6 +503,11 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ #define DYNAMIC_DEBUG_CLASSMAP_DEFINE(_var, _mapty, _base, ...)
+ #define DYNAMIC_DEBUG_CLASSMAP_USE(_var)
+ #define DYNAMIC_DEBUG_CLASSMAP_USE_(_var, _offset)
++#define DYNAMIC_DEBUG_CLASSMAP_PARAM(_name, _var, _flags)		\
++	static u32 _name##_bvec = _DPRINTK_CLASSBITS_INIT;		\
++	module_param_named(_name, _name##_bvec, uint, 0600)
++#define DYNAMIC_DEBUG_CLASSMAP_PARAM_REF(_name, _bits, _var, _flags)	\
++	module_param_named(_name, _bits, uint, 0600)
+ #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
+ #define DYNAMIC_DEBUG_BRANCH(descriptor) false
+ #define DECLARE_DYNDBG_CLASSMAP(...)
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index 1983f672dcfb..8d9eb7dc0999 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -698,9 +698,42 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+ 
+ #define CLASSMAP_BITMASK(width) ((width) >= 32 ? ~0U : (1U << (width)) - 1)
+ 
+-/*
+- * param-setter helper to validate numeric input, clamp its value by
+- * the classmap type and size, and apply the bits.
++static void __maybe_unused ddebug_class_param_clamp_input(u32 *inrep, const struct kernel_param *kp)
++{
++	const struct ddebug_class_param *dcp = kp->arg;
++	const struct ddebug_class_map *map = dcp->map;
++
++	switch (map->map_type) {
++	case DD_CLASS_TYPE_DISJOINT_BITS:
++		/* expect bits. mask and warn if too many */
++		if (*inrep & ~CLASSMAP_BITMASK(map->length)) {
++			pr_warn("%s: input: 0x%x exceeds mask: 0x%x, masking\n",
++				KP_NAME(kp), *inrep, CLASSMAP_BITMASK(map->length));
++			*inrep &= CLASSMAP_BITMASK(map->length);
++		}
++		break;
++	case DD_CLASS_TYPE_LEVEL_NUM:
++		/* input is bitpos, of highest verbosity to be enabled */
++		if (*inrep > map->length) {
++			pr_warn("%s: level:%u exceeds max:%d, clamping\n",
++				KP_NAME(kp), *inrep, map->length);
++			*inrep = map->length;
++		}
++		break;
++	}
++}
++
++/**
++ * param_set_dyndbg_classes - class FOO >control
++ * @instr: string echo>d to sysfs, input depends on map_type
++ * @kp:    kp->arg has state: bits/lvl, map, map_type
++ * @mod_name: module name or null for all modules with the classes
++ *
++ * Enable/disable prdbgs by their class, as given in the arguments to
++ * DECLARE_DYNDBG_CLASSMAP.  For LEVEL map-types, enforce relative
++ * levels by bitpos.
++ *
++ * Returns: 0 or <0 if error.
+  */
+ static int param_set_dyndbg_module_classes(const char *instr,
+ 					   const struct kernel_param *kp,
+@@ -719,6 +752,7 @@ static int param_set_dyndbg_module_classes(const char *instr,
+ 		       len, instr, KP_NAME(kp));
+ 		return -EINVAL;
+ 	}
++	ddebug_class_param_clamp_input(&inrep, kp);
+ 
+ 	/*
+ 	 * Writers are serialized by sysfs param_lock. Publish new state
+@@ -726,24 +760,12 @@ static int param_set_dyndbg_module_classes(const char *instr,
+ 	 */
+ 	switch (map->map_type) {
+ 	case DD_CLASS_TYPE_DISJOINT_BITS:
+-		/* expect bits. mask and warn if too many */
+-		if (inrep & ~CLASSMAP_BITMASK(map->length)) {
+-			pr_warn("%s: input: 0x%x exceeds mask: 0x%x, masking\n",
+-				KP_NAME(kp), inrep, CLASSMAP_BITMASK(map->length));
+-			inrep &= CLASSMAP_BITMASK(map->length);
+-		}
+ 		old_val = READ_ONCE(*dcp->bits);
+ 		WRITE_ONCE(*dcp->bits, inrep);
+ 		v2pr_info("bits:0x%x > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp));
+ 		totct += ddebug_apply_class_bitmap(dcp, &inrep, old_val, mod_name);
+ 		break;
+ 	case DD_CLASS_TYPE_LEVEL_NUM:
+-		/* input is bitpos, of highest verbosity to be enabled */
+-		if (inrep > map->length) {
+-			pr_warn("%s: level:%u exceeds max:%d, clamping\n",
+-				KP_NAME(kp), inrep, map->length);
+-			inrep = map->length;
+-		}
+ 		old_val = READ_ONCE(*dcp->lvl);
+ 		old_bits = CLASSMAP_BITMASK(old_val);
+ 		new_bits = CLASSMAP_BITMASK(inrep);
+@@ -1240,30 +1262,7 @@ static inline u32 ddebug_class_param_to_bits(const struct ddebug_class_param *dc
+ 	}
  }
  
- module_init(test_dynamic_debug_init);
+-static void __maybe_unused ddebug_class_param_clamp_input(u32 *inrep, const struct kernel_param *kp)
+-{
+-	const struct ddebug_class_param *dcp = kp->arg;
+-	const struct ddebug_class_map *map = dcp->map;
+ 
+-	switch (map->map_type) {
+-	case DD_CLASS_TYPE_DISJOINT_BITS:
+-		/* expect bits. mask and warn if too many */
+-		if (*inrep & ~CLASSMAP_BITMASK(map->length)) {
+-			pr_warn("%s: input: 0x%x exceeds mask: 0x%x, masking\n",
+-				KP_NAME(kp), *inrep, CLASSMAP_BITMASK(map->length));
+-			*inrep &= CLASSMAP_BITMASK(map->length);
+-		}
+-		break;
+-	case DD_CLASS_TYPE_LEVEL_NUM:
+-		/* input is bitpos, of highest verbosity to be enabled */
+-		if (*inrep > map->length) {
+-			pr_warn("%s: level:%d exceeds max:%d, clamping\n",
+-				KP_NAME(kp), *inrep, map->length);
+-			*inrep = map->length;
+-		}
+-		break;
+-	}
+-}
+ 
+ /*
+  * Called for class-users and native classmaps during module load.
+diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
+index f78764025c44..71cba798621c 100644
+--- a/lib/test_dynamic_debug.c
++++ b/lib/test_dynamic_debug.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Kernel module for testing dynamic_debug
++ * Kernel module to test/demonstrate dynamic_debug features,
++ * particularly classmaps and their support for subsystems like DRM.
+  *
+  * Authors:
+  *      Jim Cromie	<jim.cromie@gmail.com>
+@@ -80,33 +81,6 @@ static const struct kernel_param_ops param_ops_do_repeats = {
+ module_param_cb(do_classes, &param_ops_do_repeats, do_classes, 0600);
+ module_param_cb(do_bulk, &param_ops_do_repeats, do_bulk, 0600);
+ 
+-/*
+- * Using the CLASSMAP api:
+- * - classmaps must have corresponding enum
+- * - enum symbols must match/correlate with class-name strings in the map.
+- * - base must equal enum's 1st value
+- * - multiple maps must set their base to share the 0-30 class_id space !!
+- *   (build-bug-on tips welcome)
+- * Additionally, here:
+- * - tie together sysname, mapname, bitsname, flagsname
+- */
+-#define DYNAMIC_DEBUG_CLASSMAP_PARAM_(_model, _flags, _init)		\
+-	static u32 bits_##_model = _init;				\
+-	static struct ddebug_class_param _flags##_##_model = {		\
+-		.bits = &bits_##_model,					\
+-		.flags = #_flags,					\
+-		.map = &map_##_model,					\
+-	};								\
+-	module_param_cb(_flags##_##_model, &param_ops_dyndbg_classes,	\
+-			&_flags##_##_model, 0600)
+-#ifdef DEBUG
+-#define DYNAMIC_DEBUG_CLASSMAP_PARAM(_model, _flags)		\
+-	DYNAMIC_DEBUG_CLASSMAP_PARAM_(_model, _flags, ~0)
+-#else
+-#define DYNAMIC_DEBUG_CLASSMAP_PARAM(_model, _flags)		\
+-	DYNAMIC_DEBUG_CLASSMAP_PARAM_(_model, _flags, 0)
+-#endif
+-
+ /*
+  * Demonstrate/test DISJOINT & LEVEL typed classmaps with a sys-param.
+  *
+@@ -140,12 +114,15 @@ enum cat_level_num { V1 = 16, V2, V3, V4, V5, V6, V7, V8 };
+ /* test _USE_ w offset */
+ enum cat_level_offset { Vu1 = V1 + 8, Vu2, Vu3, Vu4, Vu5, Vu6, Vu7, Vu8 };
+ 
+-/* recapitulate DRM's multi-classmap setup */
++/*
++ * use/demonstrate multi-module-group classmaps, as for DRM
++ */
+ #if !defined(TEST_DYNAMIC_DEBUG_SUBMOD)
+ /*
+- * In single user, or parent / coordinator (drm.ko) modules, define
+- * classmaps on the client enums above, and then declares the PARAMS
+- * ref'g the classmaps.  Each is exported.
++ * For module-groups of 1+, define classmaps with names (stringified
++ * enum-symbols) copied from above. 1-to-1 mapping is recommended.
++ * The classmap is exported, so that other modules in the group can
++ * link to it and control their prdbgs.
+  */
+ DYNAMIC_DEBUG_CLASSMAP_DEFINE(map_disjoint_bits, DD_CLASS_TYPE_DISJOINT_BITS,
+ 			      D2_CORE,
+@@ -163,6 +140,15 @@ DYNAMIC_DEBUG_CLASSMAP_DEFINE(map_disjoint_bits, DD_CLASS_TYPE_DISJOINT_BITS,
+ DYNAMIC_DEBUG_CLASSMAP_DEFINE(map_level_num, DD_CLASS_TYPE_LEVEL_NUM,
+ 			      V1, "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8");
+ 
++/*
++ * for use-cases that want it, provide a sysfs-param to set the
++ * classes in the classmap.  It is at this interface where the
++ * "v3>v2" property is applied to DD_CLASS_TYPE_LEVEL_NUM inputs.
++ */
++
++DYNAMIC_DEBUG_CLASSMAP_PARAM(p_disjoint_bits,	map_disjoint_bits, p);
++DYNAMIC_DEBUG_CLASSMAP_PARAM(p_level_num,	map_level_num, p);
++
+ #ifdef FORCE_CLASSID_CONFLICT
+ /*
+  * Enable with -Dflag on compile to test overlapping class-id range
+@@ -171,6 +157,7 @@ DYNAMIC_DEBUG_CLASSMAP_DEFINE(map_level_num, DD_CLASS_TYPE_LEVEL_NUM,
+ DYNAMIC_DEBUG_CLASSMAP_DEFINE(classid_range_conflict, 0, D2_CORE + 1, "D3_CORE");
+ #endif
+ 
++
+ #if defined(DD_MACRO_ARGCHECK)
+ /*
+  * Exersize compile-time arg-checks in DYNAMIC_DEBUG_CLASSMAP_DEFINE.
+@@ -204,8 +191,6 @@ DYNAMIC_DEBUG_CLASSMAP_USE_(fail_offset_big, 100);
+ /*
+  * now add the sysfs-params to both sub/super-mods
+  */
+-DYNAMIC_DEBUG_CLASSMAP_PARAM(disjoint_bits, p);
+-DYNAMIC_DEBUG_CLASSMAP_PARAM(level_num, p);
+ 
+ /* stand-in for all pr_debug etc */
+ #define prdbg(SYM) __pr_debug_cls(SYM, #SYM " msg\n")
+@@ -339,5 +324,5 @@ module_init(test_dynamic_debug_init);
+ module_exit(test_dynamic_debug_exit);
+ 
+ MODULE_AUTHOR("Jim Cromie <jim.cromie@gmail.com>");
+-MODULE_DESCRIPTION("Kernel module for testing dynamic_debug");
++MODULE_DESCRIPTION("test/demonstrate dynamic-debug features");
+ MODULE_LICENSE("GPL");
+diff --git a/lib/test_dynamic_debug_submod.c b/lib/test_dynamic_debug_submod.c
+index 672aabf40160..3adf3925fb86 100644
+--- a/lib/test_dynamic_debug_submod.c
++++ b/lib/test_dynamic_debug_submod.c
+@@ -1,6 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Kernel module for testing dynamic_debug
++ * Kernel module to test/demonstrate dynamic_debug features,
++ * particularly classmaps and their support for subsystems, like DRM,
++ * which defines its drm_debug classmap in drm module, and uses it in
++ * helpers & drivers.
+  *
+  * Authors:
+  *      Jim Cromie	<jim.cromie@gmail.com>
+@@ -12,3 +15,7 @@
+  */
+ #define TEST_DYNAMIC_DEBUG_SUBMOD
+ #include "test_dynamic_debug.c"
++
++MODULE_DESCRIPTION("test/demonstrate dynamic-debug subsystem support");
++MODULE_AUTHOR("Jim Cromie <jim.cromie@gmail.com>");
++MODULE_LICENSE("GPL");
 diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index fd9a3dff4099..2bdfdb3876ee 100755
+index b9e380899b29..6d8b4784880e 100755
 --- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
 +++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -724,40 +724,40 @@ function GOLDEN_RECORDS {
+@@ -539,7 +539,7 @@ function GOLDEN_RECORDS {
+ #K= c518a50ba30ba8099d0dc874a27ecf16 FT_basic_queries.7
+ #K= 2b4b152bdb82e6e4a5be18ca26025895 FT_test_classes.1
+ #K= 5516e3d13cba7ea4197a7fb6c033887a FT_test_classes.2
+-#K= 37dc0919cb1c0ee8ba00ad2ad77ba7c3 FT_test_classes.3
++#K= 2cee6842c9cdee5cb3bf50b2e3914813 FT_test_classes.3
+ #K= 1489b3b72dbdfdb553cc0c6594c4face FT_classmap_inheritance.1
  #K= e11c22649735cedb6c30321378100e11 FT_classmap_inheritance.2
  #K= 5d0f3701517aa3a461c8887c332bdb42 FT_classmap_inheritance.3
- #K= d39188ded831453d90d77390546b314d FT_classmap_inheritance.4
--#K= f43e0aff8a4b38435b73d90ed8100d1b FT_classmap_inheritance.5
-+#K= 62b6803edf43519186d6185bebf34352 FT_classmap_inheritance.5
- #K= d2e8b8c5a5b4e7b9bbe1a29460a3c07d FT_modprobe_w_param.1
- #K= d2e8b8c5a5b4e7b9bbe1a29460a3c07d FT_modprobe_w_param.2
--#K= 11032ef17569bd151c3806527a2428be FT_modprobe_w_param.3
-+#K= 20d8a1fac0330f1b5cc582ce93792d58 FT_modprobe_w_param.3
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.4
--#K= 942e62ca24809cad666c5725aeb14376 FT_modprobe_w_param.5
-+#K= 3c19dd83b330a9d59901281aaa3bacf8 FT_modprobe_w_param.5
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.6
--#K= fe1aadca4b2b4165d8d5c98e973f9e4b FT_modprobe_w_param.7
-+#K= 86b7a18d7a692187aa0b7cc0b6886e77 FT_modprobe_w_param.7
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.8
- #K= 535ab526b24a7214de41d92e94bbd52c FT_modprobe_w_param.9
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.10
--#K= 7c02282dcfb73eb5ffb9629ce63360e5 FT_modprobe_w_param.11
-+#K= 64f91218760ca86d28a4b9b2d23849fb FT_modprobe_w_param.11
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.12
--#K= b0942decc84dae237019bc2877ff02e7 FT_modprobe_w_param.13
-+#K= 03bad8f76b3587c2e8bdb9df43110a5e FT_modprobe_w_param.13
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.14
--#K= efe8e3b8080c3310708b7505d60f7703 FT_modprobe_w_param.15
-+#K= 04b59fe2db45bc6bb314e9102b92dd64 FT_modprobe_w_param.15
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.16
- #K= d682c98ced7d31f1555ab474a9ebe253 FT_modprobe_w_param.17
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.18
- #K= c468e49e8ce1f1aa25a3c6684f221fe5 FT_modprobe_w_param.19
- #K= c468e49e8ce1f1aa25a3c6684f221fe5 FT_modprobe_w_param.20
--#K= ef2408a036206c895d95061521f67906 FT_modprobe_w_param.21
-+#K= 2b31c44bc2eb5b5d666dc1887c38b8dd FT_modprobe_w_param.21
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.22
--#K= 92c0174d5de412de82e3d5837b0690d0 FT_modprobe_w_param.23
-+#K= 3bba1f526e669807407d9be380117564 FT_modprobe_w_param.23
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.24
--#K= a563a79aeffbf3d8cf2e37ab93898ae9 FT_modprobe_w_param.25
-+#K= 1dc9fbf8e7ce91929308a441e3707915 FT_modprobe_w_param.25
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.26
- #K= 8d2f4db3b7885064a56594e1d81deb26 FT_modprobe_w_param.27
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.28
--#K= 05e8884875609af295ec71a7acf33c60 FT_modprobe_w_param.29
-+#K= 0658c273db527fb4fcaadbb142bf0565 FT_modprobe_w_param.29
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.30
--#K= c70f769b4c9cc905d23d6b3e5ac432c8 FT_modprobe_w_param.31
-+#K= 20cac1fd02b4615b337e84aa87892afc FT_modprobe_w_param.31
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.32
--#K= 72bf5368385d19e7843cf268d1bac7f9 FT_modprobe_w_param.33
-+#K= 8eb7924c66978d844e97bee9f91b981e FT_modprobe_w_param.33
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.34
- #K= 28ace93a95da7aaea5b9b54a8656a2cf FT_modprobe_w_param.35
- #K= 0239d8c0808eef396782362613f675b0 FT_modprobe_w_param.36
 
 -- 
 2.56.0
