@@ -1,101 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.42
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793211814;
-	b=SsFyT8hqIFi+mFYieXjaET4R/FJNJNnPCF1fDOArAD/H/32yLQY73MPEDuP2zDx3SdZU
-	 dMNtXRPuHhizmYxiJ3wmeeHmRU8/Q/H+V6Tl+/g8s6ELVa3vSJsOIath/IykQXouoJBzd
-	 kdHHQSkEocgHY+/xx8x/2EBxNOQfxlIYt9FHk1L8jstTzENRulyQ+FCb3VpOB3ROmvKf/
-	 RCz29BDnmPEaEjcwsKhm7Ty1Zt5yI5ZbwwbhlvsEgkRExY9DpsVeId7dqW4eghpWffi0b
-	 hqeRsm83Nf4LhGbffyzzIAyAxaS8XXrjNObzFZlvEUffftYzpet97hsuEUcKDc32ZjA==
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.160.170
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793217966;
+	b=Yte4q3WE//BcGTgsyNV4F59ObntxOPgR7hnz03saJYFqf0Od5Bt6rXMHnYH1UEJca7G1
+	 L2mTNHhx0auw9qn5hnJJv7FhSpEIuQG6a7/1b6+XmSmotft2l1wd1qntX9EOw3oy3FbQ8
+	 akoc6YxSJMCs0s3DWXiKf8zzRU/MV/w04pbEBdMtuPmQkWjQcv9K2JQPyVaVzvv01nU0O
+	 6ALKoUzo/nUE2WEgIjqyu3KVGgtk+jfh/lQ77mhQPCMXU4cimm0hgD2E0P5WbQTnFMvJ2
+	 ym3JpYtlCJqhwvK5nyqF0eL0ueAsuS1oaYWUuqr5DsIEhZa8AVII2HTYAW6kb1Lzo/A==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793211814;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793217966;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=cFWfkIkWfjhOSUFJOJXQEhmE0QtvF6eBs0tDviPyGsc=;
-	b=JhCaJlhmgPoscix6jMrbCu1XwoGbI7A0X6TWrBE4uExZ0AcY5/ZSdbXx6rwvVJpRCRB9
-	 Pm/r0hZggt4VP43RO7U8KsccqZyn7mxJW32C7Z3Iu/VLOhSp7U5/7Zp2P+UL+8/jgSiBX
-	 xdiEQQLChZGZkQcZjhysq5eq1JE+WG1V3rE2lTnO9z/ZhdnwFPqTtoO9Ffz1sBfCNywYb
-	 g1frBFTe1h0ZFTr8CF4NEM5OIbB2oDVSwUmuVWdqWb9QMAmrEfFTOhjl++wf8M/L3DYpv
-	 02Q5xLKDUlcVtL9K9RnL8Dx5Jtqmxlt3zJYM4rt0cbWGqqJQmPmiePCe51YKXm7atVA==
+	bh=E7ixOB69ERI62LQAi2qp7f/jJpNcrGT6jByhhOIKXrg=;
+	b=KX3JY4iRFGL/C4Qawly45Yli5PG4x1t5ieafM62B5Kxt9mUYs/4niiAgHddwAJXz/I9+
+	 sKDyno1QKTvt1icsBzcLF+5B31AWzLHSYI4gPl6LgcE7c5lk5fsDLG9rPuGT3QA7BBfiP
+	 L7c/lvlMunq5Oc1URy4IZYRPfepYktGTd7rHcwxsbv86BxKF+Ts8/VHTdK8Vwj8g2Q0gu
+	 Z+zgzVd+J1tV5gcAdZjzII+HH/TQmdEBFWlrJVriAvCVlJAJSyIHnYiD2HqxBoE+WQ7Yh
+	 x9zjs4GvyJOkJbtO7OcMTpaDyJXfIA5GoWyF2lm0QL0icodrKf22s0MI3kSXOzwocHg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cmCVmz5E;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.42
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dXlutysd;
+	arc=fail smtp.remote-ip=209.85.160.170
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAA160A2600
-	for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 18:23:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5AAA160A2600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EE1606A31D
+	for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 20:06:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43EE1606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cmCVmz5E
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-67999045530so1187551d50.1
-        for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 11:23:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793211813; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dXlutysd
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-53512cd2f85so18571691cf.1
+        for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 13:06:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793217965; cv=none;
         d=google.com; s=arc-20260327;
-        b=pTf193gDVXUIJXxTDVLakhwyyC9Ig278GWfu1s74FDl7GFAqfgVu2A3XauzGFpmovd
-         iTVAQSYEebyM2958HX4DC+nw5St+yWsWXMRWUy8fLWz98vxfY2mCc/vEZRgMugIf+B7n
-         l2V8v1LwEVEJd+U8FLwScTzN8FaA340POXRNaTmswn7zeipGr/zpPjB5MjWAomb3FwE2
-         CC+jqhrVrdQzw+qD+hXlxSrUgwOwDOJEeGJFPOJkgBHJqlEaOJQjv6ot4bal4fX6+USG
-         2hWDLZKN/MO35bhJ6h0djVz51JS7R3MY+S6vrxMqzuEh/D7dOk7yVELdcCsqC2eV+kS7
-         8Jww==
+        b=r56iL/qQRF5M3rEulGbhjmSw7rcUTzOC5Cc0UIw85mJAjzPfpzBvHEk+piBVcAreJn
+         GKkxTUuMhoooUUJdKuXJg186afXCCnLIGidkRsNGKAm60GGoIEpSX1OPx2yOl0Fkd3da
+         WTFWB13WTify68FqM6pyasgm5jNu4o5BDZ3+GrEot+zbsjUaoyqRvrSUWVMdFuyf9G2m
+         hqkkq2JnGDHhVhswpidSX//9O0q4kyL2nav11GzsHduO2F1JgLzZ8/5VzIuZfGMOzz/4
+         hjHuiLIf0hdMFRiaOV4MMCzE0Y52beSWHP8UxlyDVG+hoIMfCMjvLjNpQlp6nAUloFDR
+         1weQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=cFWfkIkWfjhOSUFJOJXQEhmE0QtvF6eBs0tDviPyGsc=;
-        fh=Ov63A53Ymjn4uOfFYGwEJD7l5bjMHgv5yFcnTQam7Bs=;
-        b=NdImYDnIkvcfIz/mUhUOKpgWWF5hNZ6WyOBO/NBDV5e1FwzttyPgK4RCOTsK0r6s47
-         Xvx3Z3aft062hd54HzaCtwr6lF5Ne9h7FyfnCNuC5ABa0s0kgc8FI1NFcFkEDv9FC20H
-         DozEXl0TceMQwZl2w1LTjT9MRTdpMDnWaQ5NMcZVgywV1TYGpAHS83RuF+4QaSx7CHwR
-         u0T20ge3Dn5Fn9nyF9XX8IjtY4u3C94TN4ixI+1wsJtup/NV+leBlsSjIRY3zbWsEKDS
-         Lyw6HVx0m2nEZr9dg5lGbJcbkzEyIaYm01Eoo8ynLEXrQ2ZGB3wjH2ZsvmodPMx+IL+u
-         M9XQ==;
+        bh=E7ixOB69ERI62LQAi2qp7f/jJpNcrGT6jByhhOIKXrg=;
+        fh=ut+9FlpVQDV3L+NC1y+xRDsEj0WGIz80O213VdYe3xQ=;
+        b=nHtYUIabcbQlMHO8wYy1C7ON7lVR4GP0WQP9/7Ffcav4Vn6Nxul6ZXrxAsPYmLGo9F
+         pdFJ3SHSLxQlKhK0HBw8qmj594aCmMtrpzdU+MT+XX6ZRAlauJDOPmJY9FEWzhlr30CU
+         CVkhPZXT6ne8SPugDrqY3HaXo3zAg7FlI3ADgdQekM7muCO1QGFGHz/dJmyHvR5bFiHU
+         thjwtylzTWgJskTKBLjC1nIn7g54xpWjOTtGJXMUN9m3CDL3CcVllidOV83Ohy3OwXAu
+         FfWyDwXlnyhfpHSX83u3+18kve9XAtr+5fXkFvXV/FE/Kv2fjD1UNucq8d99B+tVxuVZ
+         nQtw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793211813; x=1793816613; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793217965; x=1793822765; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=cFWfkIkWfjhOSUFJOJXQEhmE0QtvF6eBs0tDviPyGsc=;
-        b=cmCVmz5EDlPgGpt7D48i7zZLLkqYO+wKOQEJCFw+CPT1V0HsVdAOe24mkft9RXoEkD
-         jPI3A5deGmYs3Q1PF3kw8R4dQ23CEIy4/U1S9qF9Ar1JXrXInpunTdMqBudL8okCjjoy
-         5f2IcaSQ8wAY9ju3+/m0NYTjPTu/ueX6EsDmnX2FcC4QUPjx2/QEKkvGtV3J6mBSoLn1
-         c3+DohN62m7thFQFl0j2MU+ok2Gf6av/sgv+lltqY/+2wDnHn7XYq7irZX+hCgsbB0iP
-         CA/YnvHkM7rIJBNzGlEN4RTUyMUBRGWhDff6qMJm3GQt/BHtf5zQNMIcn/yy9/Oe26Hk
-         1FOA==
+        bh=E7ixOB69ERI62LQAi2qp7f/jJpNcrGT6jByhhOIKXrg=;
+        b=dXlutysdDhscdJmeRbPa7EM1sLb4yD199vkD1Ud5wNXNla2GnfyQapJff2WzczuP0y
+         ZoScjWnXZShxVmWz9NPieu6mPwchuubNN4y7UAizgNwTD5dSTLPO7oagVoLQhXgFwI7R
+         0ax81qAMbxaGvmxEDaZrIPclJ3y8sA4VvsKl/tdlP8Xza6OaZoMCzoeQ6mJK7dbuP0Dh
+         n6EEY8267H2Ahnai+uaOOBePk7JCxf7O1jC7P83jtze93Mn/OFhfTe77V/idFSexTZVg
+         PjpmHlYWxCb/SMBZbZRok6C4ExF/hzy3pfjJ2pGP1SCnuqw86uG5L8xj2e4geQGqcLCP
+         v20A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793211813; x=1793816613;
+        d=1e100.net; s=20260707; t=1793217965; x=1793822765;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cFWfkIkWfjhOSUFJOJXQEhmE0QtvF6eBs0tDviPyGsc=;
-        b=rrbmlKvgnmkS9qufrRe2cnOM57RQRIWi/Ld4D0rdTp51Qessqq8VSz0/qARgVxMtfb
-         DEftQUjZoNBOjCWtJ9NoQAKWHHd/ozCvInS9qYQrNQMCOVBE7+IkGGejvQm0bkYbkBEt
-         kkq/U0Zl7FHYwj5hWaYtVir/C9iS9cC3SIgP9ePqwnXbUyKV8u+J22Ac1BtCMu+VuYdR
-         yOvjDPF2PiVNYoMd7MpGeFi44mi0SttPZLSt0SeiBh6fzIufSuIiZ1OkcEe4pkddn2rj
-         A1So/MIe83j8Pa88ykZQsrl87BYFmJn3pUgVwy4Y5UN0C2CkjkdIdEK+85DXO5k0Mevx
-         3Vcg==
-X-Forwarded-Encrypted: i=1; AKwUvBxa0XOcaO1DpsBTyUB/afPk8JDWv0JLLxNK44ARl//W+/SzoSInN4GlubdIviXTnfMVW9ymbaKwgYBg64or@vger.kernel.org
-X-Gm-Message-State: AFq9FYKza54cc25sX1uqXnJhYjGFh5jJX/EfeJzTSor4dSygp8nTGY7i
-	dFlGFgyKBtSqR/2wLYwdIFy6213Pr5Vzx3F4TrLXuQL5JU8mMa65dC6zTHoWyZCJMpe9GgyWb0q
-	worgb2fC9tXgleiy8Okv4sutb7MMO1nQ=
-X-Gm-Gg: AYBFou0ZwsfPtsb4kpi7USzj5sdoCVfpowOmMtmo1DfV12Ew5THbbKR3HcMncLAvjTB
-	I5wMF/JEV9iR137FG5C7F2l1o0gs/1iyT8//AlWFxb6HTAFjsb5Zf/4gJfg7DmKvBKWJXxAue+v
-	ZCBhHeftgKLbMBy5JxT/xpSf3H+ZbneKpjngQptbkQPBWFRmeQLQBul/RtE6yDq8Lnm9Gp2wXFi
-	iKECt5X4I4h+u2bNG+FPrxfE+N/LhKspQkeyAzmtr/xHkM2bXy7L613HnX1xhmKV9NFGnkZnU+O
-	iw4IDP4WvFxh6ydyApcKtMg6kEdcVM7biRlsTDc8b40564XhPrsA8E408BKsFw1YUVi+E+rkmie
-	XLFQYrTUxGNqf7YvPy9rh8hlBt9TGf516RcrCqlZV7WjltQyKTMtukPVxo8uX9Cyqg6pwznQSn+
-	VOA8FLUSFTqwkUbHQ=
-X-Received: by 2002:a05:690e:d0d:b0:679:9e60:346c with SMTP id
- 956f58d0204a3-67a7baef0a5mr2432293d50.4.1793211813004; Wed, 28 Oct 2026
- 11:23:33 -0700 (PDT)
+        bh=E7ixOB69ERI62LQAi2qp7f/jJpNcrGT6jByhhOIKXrg=;
+        b=NcK3lnY3YM1gJFGYRLBko0c5VfYIJ3lYMV/w65mglVydfmghFUZ9/OEk+XArYPZ5Ds
+         A+63MM3+PV8QxE6FURTI4QbJFommWkg0JgBdYIbav8J2VsCZemQ4zC25fxbaX6Bi8mel
+         FrcyscLxD8O7P+MRRLlJkgULAQQwznG3Ph78YcERRIpQFSg7FcysivqEwS+sOAjZ/6hf
+         w5lNiijxEL146yn1wnWTUnqXrS56xw0ugiGSiU/d7FjKuBeMGdLy5m5e4VptMSs9l+p6
+         TyWahJDp6+c8VLvaz7OlNFu//nX+CYcU9tIUDw9acKiBUpwME0jhDkA3KZCFk1aK+bSr
+         tjKQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxrzExL13usonKHy9YGyn8CefLSX9PnL4wvEhmjtyIKpgJxxIpykU1sENR37uvNCvKe+fIrIDgf0idvv5ov@vger.kernel.org
+X-Gm-Message-State: AFq9FYLoEDyfHXvS5yL0uvgdi9/92p61l4L40JI+NUOy1gRthu3DSbRX
+	gCD4xK6SVV0cLyrSkXG/osHj1Ls0N74YX7wINvkn9+E1qpKolUmKXCpk5eboY4qaGseYVEitWqB
+	NVDR/ULX9SuGdNizLeKkHdrHbdDboynE=
+X-Gm-Gg: AYBFou0X+V383Cr+17JxKH+77Qa+tm1+NPvI4Zirucnz6v10bGCQfxdKILj5R5FksV8
+	gQDdh0TNKGfSuPaHUe+KD9JO13eOxS/Zv2/IYPt21GT2v+YSHIcsb9mZK9sYFxo5T9QO+x6DmYh
+	nCchWZlyIhzcJfZYMIdEp7/LjnmXeKasvNZ8g0hNZODeemGrLM1DhQ3FAEGABjkX6960KIHjmuY
+	51Ue5vesrZopCBdgcrdkWsRGhZE5xnamWiPsocQVGJX5GSLSfTdxMPnLFUMkBX0xJFo4A2LVZcE
+	UALAqMsK0HclN1yfEFcSf1ZzVPqyjMRtMhEd7gxWhT+UJePGhFZOTegNOacppoLL33LdQ5Xvqz2
+	ujzOlCmAmdORvsiVxMdEOKe0aeFX4LDpFYFKM
+X-Received: by 2002:a05:622a:1b06:b0:535:11e7:fdb3 with SMTP id
+ d75a77b69052e-53fcc4cc979mr53158021cf.34.1793217964993; Wed, 28 Oct 2026
+ 13:06:04 -0700 (PDT)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -105,247 +104,74 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
- <20261012-dd-cmap-part2-clean-v12-33-3c8cc5725def@gmail.com>
- <as4W9hToBqAvbzJ-@pathway.suse.cz> <20261027132253.5f3a461d@pumpkin>
-In-Reply-To: <20261027132253.5f3a461d@pumpkin>
-From: jim.cromie@gmail.com
-Date: Wed, 28 Oct 2026 12:23:06 -0600
-X-Gm-Features: AclHuK-4voxmbnvtymBlAumJXr1uxieHMHufYdWUINblBauYdwThefAV8akW3iU
-Message-ID: <CAJfuBxxgn8AOv_1rrAWb1xgJiPyU0faD08RuTz4kGY9RS_-v1g@mail.gmail.com>
-Subject: Re: [PATCH v12 33/40] dyndbg: Ignore additional arguments from pr_fmt
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Petr Mladek <pmladek@suse.com>, Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@net.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Steven Rostedt <rostedt@goodmis.org>, John Ogness <john.ogness@linutronix.de>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Philipp Hahn <phahn-oss@avm.de>
+References: <20261028155005.174417-1-mbkchelofficialdev@gmail.com> <CA+YDrKA1hTM-Yh+qsCz7Q_O9f4m_JWqyxkm4izaz4uAao_Jz5Q@mail.gmail.com>
+In-Reply-To: <CA+YDrKA1hTM-Yh+qsCz7Q_O9f4m_JWqyxkm4izaz4uAao_Jz5Q@mail.gmail.com>
+From: MBKCHEL <mbkchelofficialdev@gmail.com>
+Date: Wed, 28 Oct 2026 22:05:52 +0200
+X-Gm-Features: AclHuK-gwnM5a3gchHzfHJ4Fbkh10NoTzJM4qf8pmkxYyLfJG-2YoMNVzSxHgK8
+Message-ID: <CA+YDrKAjSO7SVOE+odJ4zYEphfJtytjteSvQgGwmz_rD4tsx5g@mail.gmail.com>
+Subject: Re: [PATCH] rust: macros: document emit_base in ModInfoBuilder
+To: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 27, 2026 at 7:22=E2=80=AFAM David Laight
-<david.laight.linux@gmail.com> wrote:
+=D1=81=D1=80, 28 =D0=BE=D0=BA=D1=82. 2026=E2=80=AF=D0=B3. =D0=B2 21:57, MBK=
+CHEL <mbkchelofficialdev@gmail.com>:
 >
-> On Tue, 13 Oct 2026 13:33:10 +0200
-> Petr Mladek <pmladek@suse.com> wrote:
+> Hi,
+> Please note that I made a typo in my last name in the "From" and "Signed-=
+off-by" lines. My correct name is "Ivan Tverdokhleb".
+> If the patch is accepted, could you please apply it with the corrected na=
+me?
+> Thanks,
+> Ivan
 >
-> > On Mon 2026-10-12 20:37:04, Jim Cromie via B4 Relay wrote:
-> > > From: Philipp Hahn <phahn-oss@avm.de>
-> > >
-> > > pr_fmt can be used to add a common prefix to any output from a module=
-:
-> > >     #define pr_fmt(fmt) KBUILD_MODNAME ".%s " fmt, __func__
-> > >
-> > > But adding additional arguments breaks dynamic debug:
-> > > > error: macro "DEFINE_DYNAMIC_DEBUG_METADATA_CLS" passed 4 arguments=
-, but takes just 3
-> > > > |         pr_debug_ratelimited("%s", "Hello world!");
-> > > > |                                                  ^
-> > > > note: macro "DEFINE_DYNAMIC_DEBUG_METADATA_CLS" defined here
-> > > > | #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
-> > > > |
-> > > > error: =E2=80=98DEFINE_DYNAMIC_DEBUG_METADATA_CLS=E2=80=99 undeclar=
-ed (first use in this function)
-> > > > |         DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DF=
-LT, fmt)
-> > > > |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > I wonder what this error about undeclared macro means.
-> >
-> > > > note: in expansion of macro =E2=80=98DEFINE_DYNAMIC_DEBUG_METADATA=
-=E2=80=99
-> > > > |         DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));  =
-       \
-> > > > |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > note: in expansion of macro =E2=80=98pr_debug_ratelimited=E2=80=99
-> > > > |         pr_debug_ratelimited("%s", "Hello world!");
-> > > > |         ^~~~~~~~~~~~~~~~~~~~
-> > >
-> > > Add an additional ', ...' to DEFINE_DYNAMIC_DEBUG_METADATA_CLS to slu=
-rp
-> > > any additional argument, which `pr_fmt` might add.
-> > >
-> > > --- a/include/linux/dynamic_debug.h
-> > > +++ b/include/linux/dynamic_debug.h
-> > > @@ -351,7 +351,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descript=
-or,
-> > >             dump_stack();                                   \
-> > >  }
-> > >
-> > > -#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)  \
-> > > +#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)     \
-> > >     static struct _ddebug  __aligned(8)                     \
-> > >     __section("__dyndbg_descs") name =3D {                    \
-> > >             .modname =3D KBUILD_MODNAME,                      \
-> > > diff --git a/include/linux/printk.h b/include/linux/printk.h
-> > > index f594c1266bfd..5d701952e739 100644
-> > > --- a/include/linux/printk.h
-> > > +++ b/include/linux/printk.h
-> > > @@ -742,7 +742,7 @@ do {                                             =
-                       \
-> > >     static DEFINE_RATELIMIT_STATE(_rs,                              \
-> > >                                   DEFAULT_RATELIMIT_INTERVAL,       \
-> > >                                   DEFAULT_RATELIMIT_BURST);         \
-> > > -   DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));         \
-> > > +   DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, fmt);         \
-> >
-> > IMHO, this changes the existing behavior. The prefix added by
-> > pr_fmt() will no longer be stored in DEFINE_DYNAMIC_DEBUG_METADATA().
-> > Is this intentional, please?
-> >
-> > Anyway, if we do not longer pass pr_fmt(fmt) then we should not
-> > need to add "..." into DEFINE_DYNAMIC_DEBUG_METADATA_CLS().
-> >
-> > By other words, we newly pass just the format "fmt" without the paramet=
-es.
-> > The 4th parameter was added by pr_fmt().
-> >
-> >
-> > IMHO, the right solution is to keep pr_fmt(fmt) here and extend both
-> > BEFINE_DYNAMIC_DEBUG_METADATA() and
-> > DEFINE_DYNAMIC_DEBUG_METADATA_CLS()
-> > to accept var args. I would expect something like:
-> >
-> > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)        \
-> > ...
-> >
-> > #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt, ...)         \
-> >       DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt,=
- ##__VA_ARGS__)
-> >
-> >
-> > or maybe, we could "eat" the extra parameters in
-> > DEFINE_DYNAMIC_DEBUG_METADATA. It would mean to keep
-> > DEFINE_DYNAMIC_DEBUG_METADATA_CLS() as is and just add the "..." into
-> > DEFINE_DYNAMIC_DEBUG_METADATA(), aka
-> >
-> > #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt, ...)         \
-> >       DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt)
-> >
-> >
-> > Or do I miss something, please?
 >
-> Don't think that will work.
-
-Im not sure who youre responding to here,
-in any case I sent v13, with adjustments based on Petr's observations.
-
-here it is, in action
-
-bash-5.3# history
-    1  modprobe test_dynamic_debug dyndbg=3D+p
-    2  dmesg
-    3  modprobe test_dynamic_debug_submod dyndbg=3D+pmf
-    4  dmesg
-    5  history
-
-[    0.707538] virtme-ng-init: initialization done
-[    1.060923] clocksource: Marking clocksource tsc unstable due to
-inter CPU skew
-[    1.060929] clocksource: CPU0       4136478715 < CPU1
-4136478900 (cycles)
-[    1.060932] tsc: Marking TSC unstable due to clocksource watchdog
-[    4.703188] (udev-worker) (78) used greatest stack depth: 12376 bytes le=
-ft
-[   44.598698] dyndbg:  47 debug prints in module test_dynamic_debug
-[   44.598706] dyndbg: module: test_dynamic_debug dyndbg=3D"+p"
-[   44.599208] test_dd: init start
-[   44.599210] test_dd: do_classes 1 times:
-[   44.599212] test_dd: doing categories
-[   44.599213] test_dd: doing levels
-[   44.599214] test_dd: do_bulk 1 times:
-[   44.599215] test_dd: bulk msg 1.0
-[   44.599216] test_dd: bulk msg 1.1
-[   44.599217] test_dd: bulk msg 1.2
-[   44.599219] test_dd: bulk msg 1.3
-[   44.599220] test_dd: bulk msg 1.4
-[   44.599221] test_dd: bulk msg 1.5
-[   44.599222] test_dd: bulk msg 1.6
-[   44.599223] test_dd: bulk msg 1.7
-[   44.599224] test_dd: bulk msg 1.8
-[   44.599225] test_dd: bulk msg 1.9
-[   44.599226] test_dd: init done
-[  527.233033] dyndbg:  47 debug prints in module test_dynamic_debug_submod
-[  527.233039] dyndbg: module: test_dynamic_debug_submod dyndbg=3D"+pmf"
-[  527.233458] test_dynamic_debug_submod:test_dynamic_debug_init:
-test_dd_submod: test_dynamic_debug_init init start
-[  527.233460] test_dynamic_debug_submod:do_classes: test_dd_submod:
-do_classes do_classes 1 times:
-[  527.233461] test_dynamic_debug_submod:do_cats: test_dd_submod:
-do_cats doing categories
-[  527.233463] test_dynamic_debug_submod:do_levels: test_dd_submod:
-do_levels doing levels
-[  527.233464] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk do_bulk 1 times:
-[  527.233465] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.0
-[  527.233467] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.1
-[  527.233468] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.2
-[  527.233469] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.3
-[  527.233471] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.4
-[  527.233472] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.5
-[  527.233473] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.6
-[  527.233475] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.7
-[  527.233476] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.8
-[  527.233477] test_dynamic_debug_submod:do_bulk: test_dd_submod:
-do_bulk bulk msg 1.9
-[  527.233478] test_dynamic_debug_submod:test_dynamic_debug_init:
-test_dd_submod: test_dynamic_debug_init init done
-bash-5.3#
-
-NOTE that  the dynamic-prefix precedes the one added by pr_fmt,
-(the parent and submod differ, latter adds __func__,
-in both the dynamic-prefix, and the one from pr_fmt())
-This is perhaps vaguely sub-optimal, but it has been this way for ages.
-
-> Won't you end up with ".%s" fmt as the string without the extra argument.
-> So you need to keep the expansion of pr_fmt() together until is is finall=
-y
-> substituted into a printf-like call.
-> It is possible to enclose it in () so it is passed as one parameter and
-> remove them on the final expansion.
->
-> David
->
-
-hi David,
-
-Im not sure what / who youre responding to with "
-
-> >
-> > It is possible that the macros work another way. Or this depends
-> > on another change. I checked only this patch...
-> >
-> > Best Regards,
-> > Petr
-> >
-> > PS: I was curious what Sashiko says about this change and it seems
-> >     that it does not review this patchset from some reasons.
-> >
-> > >     if (DYNAMIC_DEBUG_BRANCH(descriptor) &&                         \
-> > >         __ratelimit(&_rs))                                          \
-> > >             __dynamic_pr_debug(&descriptor, pr_fmt(fmt), ##__VA_ARGS_=
-_);    \
-> >
->
+> =D1=81=D1=80, 28 =D0=BE=D0=BA=D1=82. 2026=E2=80=AF=D0=B3. =D0=B2 17:50, I=
+van Tverdohleb <mbkchelofficialdev@gmail.com>:
+>>
+>> Add documentation for the emit_base method within the ModInfoBuilder
+>> struct. Explain its role in formatting metadata strings, handling the
+>> differentiation between built-in and loadable modules, and managing
+>> linker sections and conditional compilation.
+>>
+>> Signed-off-by: Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
+>> ---
+>>  rust/macros/module.rs | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+>> index 0a7b9e24c..6f361013f 100644
+>> --- a/rust/macros/module.rs
+>> +++ b/rust/macros/module.rs
+>> @@ -49,6 +49,16 @@ fn new(module: &'a str) -> Self {
+>>          }
+>>      }
+>>
+>> +    /// Emits a single metadata entry into the module information table=
+.
+>> +    ///
+>> +    /// This method formats a `field=3Dcontent\0` byte string and place=
+s it into the
+>> +    /// `.modinfo` linker section. For built-in modules (`builtin =3D=
+=3D true`), the string
+>> +    /// is prefixed with the module name (`module.field=3Dcontent\0`) t=
+o avoid naming
+>> +    /// collisions in the final monolithic kernel binary.
+>> +    ///
+>> +    /// It automatically generates a unique static identifier using an =
+internal counter
+>> +    /// and applies appropriate conditional compilation attributes (`#[=
+cfg(MODULE)]` or
+>> +    /// `#[cfg(not(MODULE))]`) based on the target type.
+>>      fn emit_base(&mut self, field: &str, content: &str, builtin: bool, =
+param: bool) {
+>>          let string =3D if builtin {
+>>              // Built-in modules prefix their modinfo strings by `module=
+.`.
+>> --
+>> 2.56.0
+>>
