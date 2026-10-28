@@ -1,100 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793218452;
-	b=vMPX7/mYwdnO+QlnkOsHFG06ftWD49znfDp7B88FhKtLyMPc4hH77eXGqnTFt4sb/lnB
-	 CzUte34aj4/77o6lGvB7oVpx9XALJ6s0LOLTPIjGKV7lgHA2sEmQKxIh3PjVSHezkRBap
-	 8AA4LlcckyVAcNQPuZSWprty7J1KTCtmgWcjcbtV60ZzgFliEBBL0scO4Me4RY18BkrAG
-	 LTrPKXYcrY0pseSU2iOP9szYwz1qtL+7qjLUJ0kXmRfjIZG5FEMvyJg6O81Qgj2TTFhEQ
-	 bXROipd516TXTWkbRL0O3mF9+GxnHoWceMUcU/teztjwOQCmdfc2zzbTgU/xNbtaGqg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793218452;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=csQ/box973kWuUGXHjUHnb+JSV/cr2As/2S3bZoGtKw=;
-	b=cWF+cFBy68vNUTnrPiO9XJkxU3iRzfX69w8O07+BEynjKx5x56Ww1LkFPvzYBFSRuLvr
-	 sja0Yd9Q8pWXSK7QZW22PE6Kkw2i6c0pa9pNaqlOTVsGuXThsKFwZt9w8o2D68xXPnIzy
-	 5tYVALPCFvVNYsSNfJyLy91tXNf4/SWaApw1NM1ayZk6R3iZZNkWBXnAwyFzt5902UvWk
-	 CWnysHLjsK8JMwPbhUceDwQm5tESaBT9lI5oySk5qLzOcnkRTRqqXhwh5mw2C3EHHMdSS
-	 rQ5eUTeidRA8DNtvfYY/pXPWfTuj83+JR7seHICPP15I5Qwm3sbbbIYiHXj/VaeILDA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GrkbgZj8;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793219112;
+	b=KGe+Gc0XAQha0VM2xx3/8B4/6qlDwpYx3D6CS4jrRTAHGz6jMRcv2zqqMV4YNViVcRB5
+	 rmmC3u87KOT5Vr7KwbIslXQt2wA557EFrnDNj1NJRl3BB/G6SOzjx7k+2D/HnwfYanjRk
+	 Bnv00b4cnIIRpHzlxRHtm/93aNf/nALUvWZn8/A9FjCLtTyrtmyP59chWg+Jqb7sVX0mU
+	 m9Fnej0/YOs0xCN9kifJbEfoT8jK7lB3d9Ek0q9WofF87oGMOg40QF/9C3IGlXhvQfwbP
+	 4Rhkan9rfn32eHlXFfUQHqxBlzqzYAwkteoc4F+/YIGyeaFOMupunptH9OLRyTxhyPw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793219112;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=X8aM/+q4ttnDqMjxK4uqoHXh+l7bqTKFX/qauRNTst8=;
+	b=Qsv/lDt7ZOnNdBhazGC0pOPZaS1xCaPsDcW5M22WBdf0J66IL/2VZgT54gdSP4fQ7sjt
+	 UzukKxl9Tb23K544yEgGjWsAOo1K0eXviDnT/CvWGgfYKzlx0KO8XngRxie4mmi+2QkFK
+	 Yzz6OfeiGVVTBbPv+SamfvT9sCsth/M8J2DvWv/DTuk1m7eYv1zc00t7Zor8GzaaCYBlo
+	 dGxPfS/Msuv82DKNRKxCZYRhQd3aInnyx9GOErasNKdtXa8UzbiHcPnPuLe6ZQGLjoyX6
+	 ZCVUD+R0vUa+yhyeAZ/9kd1fmPV3owmBgMKNvLehaPscsih3GCmcZ1QgmYxjkTFh23A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BgbALNzD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334B6606A31F
-	for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 20:14:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 334B6606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A76606A31D;
+	Wed, 28 Oct 2026 20:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GrkbgZj8
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-5361e313e63so16293001cf.3
-        for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 13:14:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793218451; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GtoznA4I52VBf8O3G+pQvBnqUIlkJu95qfazozvrgRBJjCjPrDUl+drUEID3jzLJXG
-         298dbBB0KD1nJ+vTsukPkAZf9jRdR62t/DjisK94GnV1q1hFzUx+RlNPARS5HTmX0wyZ
-         gewD/xDuPzv6tZd7/xqiNYaw4z4dBvPSgxbnUZFWgu+KLU/JVnJ6V5nOMTwgIHB1xWoX
-         aDmWNxlDUOzX+LRCuqAOARhpv5AWpZkMOi7KVUZq7yQi4FEQGqhaP4c8+ypxWd1seBcU
-         mS5fzuXmOJxdkR8uA89lw7gVYZs85F7VcLvVnGC+ftBzwbJluccdB+8Ce2InNeGgSiTa
-         tPHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=csQ/box973kWuUGXHjUHnb+JSV/cr2As/2S3bZoGtKw=;
-        fh=b4JgTPrblJm8jihi3mkqd6rhaKGZ3A0bkEjMsTKJMC8=;
-        b=kG6WA96Kyt/Nh5IWptHzq05D/lyx1tUu2C+5/Nj+GX/Z4M/I2X6tni3YwCJDfAAwnR
-         c4JFsRDOiCHjO0tXZJP0xr2Th/O7/R4tE+SIdTzPadrdVxu4ifcj4jEjtequEuh9Adxi
-         KFe2LIas6a0HYlV2IXFaU4szPCLKf4mU5xt19xYYL2rjovXlbZ3hHJXFZCy1+Aox7QuM
-         EV3YTY4YgtipYQ+GrxJu9lnZw1m3brVlz+xcIkgvuLD5VtjuJ7mNT9GykiLEHBLIf3j4
-         ryGTNJkiV7zlnq6u/LwpJmIVl9t3se2pHPfKySnru5UEFy+W8VR9N/FJbdDME+01AUqF
-         u7jQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793218451; x=1793823251; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=csQ/box973kWuUGXHjUHnb+JSV/cr2As/2S3bZoGtKw=;
-        b=GrkbgZj8YBEsBwIO1OQTS2rh7snbAH21CTecRXJlz60RQzoxkzBiqwCplXDuMntJnY
-         OMyClbsk/Ai2Qx2glN4KJTcPlWQWqCw1v113QTDp/ioJ6hLLy19gDuqDMpdf6ZXHElVf
-         4AHWl2McaG4h5wW4WJrovav4XFIbirEZw8urzto5qjM6OZ+5C7PvMXScrXF2PBgsRMcT
-         SyyN+8XNSgEq1bSxuIMeOyUPHTGlqhxBPG+XsATLbHaDEi7lMr7YJc5xb/XKGH7lR/Sg
-         tEoFudP/e1M2GvReYGX3jNqb8ou+i28WftcaHDKMd46o+kg7m3WVtndlX+ZYIsHtBZwc
-         khfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793218451; x=1793823251;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=csQ/box973kWuUGXHjUHnb+JSV/cr2As/2S3bZoGtKw=;
-        b=WQrDakiPI1wmkCbe7tVP7/5NNn+sbXQWS9GQN9Jn/jNlUrZf7lWbrFRLwZndFDiayw
-         cis+y9MMU6GyHx76luJE03qrACwAfsNdRLML1dMVfpYWNg/MeWmAD1vLJKYMAOge8BJh
-         zP9jK+0eyww4yKVVRWrlvxGGfWyj213DyB08lKin0MNidLvykCNtIoDdNzSfwa4j1HNZ
-         SZrtXkxehFQeLP8d7h1E+byfj8E74MJyJbjkQvHnIPU9pTI9b+sUuSk8BgNKDKwfyELD
-         u8VWd9HlAMDlGV6g7M8ZzV1tU/b6f2q2v1x5zdnbOI/LwIwsK9qrGJNHhtodULufxeFO
-         I85w==
-X-Forwarded-Encrypted: i=1; AKwUvByKod8IezXXiPcdhAwwOuM/aF/GB+kDMh4/eysXlt62MdWaZfK+gwjDnRVr3EUGtXMNGSi049umQePN4QPg@vger.kernel.org
-X-Gm-Message-State: AFq9FYKk6KlYOhaYtYrq46JOTEVnzfVFGw4QS3zfkurLZ1GcrUwwSqW/
-	XaUXHEqfOs6MoioKJHwQ0zf/dgM5DncPEC+1YdxmJdAQZsdxQl6owUBDIOr617nWl5FFOx6YQu9
-	hYEgHdnz2/SNL6TkJHeodXYiAGZvvcqs=
-X-Gm-Gg: AYBFou2wZ21ANJQMEhIZnQSVU2aByt5X3w8yq2T6lSP/ri34jjmMPT4m03dGgsBEpx2
-	jTxiq6z3OROCwC518wy6GoyOzga7bpw0rXqmo2qi0zK2pbmjChXeOw5z5VJeDAxlwsCxhZ3/ZhV
-	kJ2Dwa04FB7P+P/A4hplAXxsnLQ7FJZGgJBze/Kbc3dyNo6aD4bSnZz/T4ztd89CCrGaqxI4r/h
-	zrm/o69+6YthneOXgRgCX5MEo8b29pJP9XZz9+/1IAdiggY/UqTodHHbk5mV5IpvoA/jrW18XmX
-	5KYszpJOWHu1R12hKPDFJYm3HGaszM2S8Fwh0xjs+Y8JgLp92jIsjfg1WvKecWPWBig2OePrJIg
-	KERtOoWERHeqlCJMJwXiShnoSo+bEUYxt3Ott
-X-Received: by 2002:ac8:5d8b:0:b0:536:64a3:aaca with SMTP id
- d75a77b69052e-53fcc6caf38mr60121161cf.62.1793218451089; Wed, 28 Oct 2026
- 13:14:11 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BgbALNzD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009691F01825;
+	Wed, 28 Oct 2026 20:25:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793219111;
+	bh=X8aM/+q4ttnDqMjxK4uqoHXh+l7bqTKFX/qauRNTst8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=BgbALNzDlp4YeIp3hhEbkg+zaIHvap8iL4KJZC9knFF7UKdLNGqWiKyNxotG2FKW1
+	 SF77oG0uMrhwSy6uh0xUVjF6HL4JAUal9Ano6A/eRZjN1JekW6Wj8kUOTI8bTxhpFG
+	 L/agS3nt6S1n+kWP0vhF11yRyq6ZNi/S/nZ7RjcnKTnwJFX9EYOpluDUsmkD/EWuYo
+	 8lyHYAZ7uLCuWPp3yTdo7658RGciL4Co9QwWdbORDDAFFK2sDl8/pgDvqZJbKqTH76
+	 A/57GTADZmUNiy7EgF4ZzK2IcTScDJnxpGp4tAv2dv0CSxVWOz/xntvvdNXNKRblMR
+	 HOfTnbNvSM7+w==
+Message-ID: <sashiko-outbox-188377@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v13 01/39] selftests/dyndbg: Add kselftest script to
+ verify dynamic-debug
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jim Cromie" <jim.cromie@gmail.com>, "Jason Baron" <jbaron@akamai.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Andrew Morton" <akpm@linux-foundation.org>, "Maarten
+ Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>, "Thomas
+ Zimmermann" <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>, "Arnd Bergmann" <arnd@arndb.de>, "Luis
+ Chamberlain" <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel
+ Gomez" <da.gomez@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>, "Aaron
+ Tomlin" <atomlin@atomlin.com>, "Jonathan Corbet" <corbet@net.net>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
+ Schier" <nsc@kernel.org>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Pavel
+ Machek" <pavel@kernel.org>, "Len Brown" <lenb@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Petr
+ Mladek" <pmladek@suse.com>, "Steven Rostedt" <rostedt@goodmis.org>, "John
+ Ogness" <john.ogness@linutronix.de>, "Sergey Senozhatsky" <senozhatsky@chromium.org>,
+ =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>, "Jason A.
+ Donenfeld" <Jason@zx2c4.com>
+Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, "Jason
+ Baron" <jbaron@redhat.com>
+In-Reply-To: <20261027-dd-cmap-part2-clean-v13-1-9267923be612@gmail.com>
+References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
+ <20261027-dd-cmap-part2-clean-v13-1-9267923be612@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Oct 2026 20:25:09 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -103,74 +76,237 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261028155005.174417-1-mbkchelofficialdev@gmail.com>
-In-Reply-To: <20261028155005.174417-1-mbkchelofficialdev@gmail.com>
-From: MBKCHEL <mbkchelofficialdev@gmail.com>
-Date: Wed, 28 Oct 2026 22:13:59 +0200
-X-Gm-Features: AclHuK9QKQWnwAVDv7GI9zgwHXTw8N_TI4_-PW1Dq0nQhME1r2ltFbMpbGG5jvQ
-Message-ID: <CA+YDrKBeYvS99gpg+3knSXRuNj1a3_YQjX84xfQzQgNyrSpUAw@mail.gmail.com>
-Subject: Re: [PATCH] rust: macros: document emit_base in ModInfoBuilder
-To: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] selftests/dyndbg: stale record check in audit_golden_records() n=
+ever fails
+- [Medium] selftests/dyndbg: broken LACK_DD_BUILTIN fallback and missing ro=
+ot check
+--
 
-Please note that I made a typo in my last name in the "From" and
-"Signed-off-by" lines. My correct name is "Ivan Tverdokhleb".
+commit d24db61e852431796c45358b620c1c921638c8b3
+Author: Jim Cromie <jim.cromie@gmail.com>
 
-If the patch is accepted, could you please apply it with the corrected name=
-?
+selftests/dyndbg: Add kselftest script to verify dynamic-debug
 
-Thanks,
-Ivan
+This commit introduces a kselftest script and a syslog/control-file hash
+validation helper library to test dynamic_debug grammar and query execution
+against a database of golden MD5 fingerprints.
 
+> diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/t=
+ools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+> new file mode 100755
+> index 0000000000000..c1475c7555429
+> --- /dev/null
+> +++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+[ ... ]
+> +[ -e /proc/dynamic_debug/control ] || {
+> +    echo -e "${RED}: this test requires CONFIG_DYNAMIC_DEBUG=3Dy ${NC}"
+> +    exit $ksft_skip # nothing to test here, no good reason to fail.
+> +}
+> +
+> +lsmod >/dev/null 2>&1 || {
+> +    echo -e "${RED}: lsmod requires /proc/modules ${NC}"
+> +    # exit $ksft_skip # maybe later we can do more
+> +}
+> +
+> +# need info to avoid failures due to untestable configs
+> +
+> +[ -f "$KCONFIG_CONFIG" ] || KCONFIG_CONFIG=3D".config"
+> +if [ -f "$KCONFIG_CONFIG" ]; then
+> +    v_echo "# consulting KCONFIG_CONFIG: $KCONFIG_CONFIG"
+> +    grep -q "CONFIG_DYNAMIC_DEBUG=3Dy" $KCONFIG_CONFIG ; LACK_DD_BUILTIN=
+=3D$?
+> +    grep -q "CONFIG_TEST_DYNAMIC_DEBUG=3Dm" $KCONFIG_CONFIG ; LACK_TMOD=
+=3D$?
+> +else
+> +    # if no config, try runtime probes
+> +    modprobe -n test_dynamic_debug 2>/dev/null ; LACK_TMOD=3D$?
+> +    # assume builtin dyndbg if control exists (checked above)
+> +    LACK_DD_BUILTIN=3D0
+> +fi
 
-=D1=81=D1=80, 28 =D0=BE=D0=BA=D1=82. 2026=E2=80=AF=D0=B3. =D0=B2 17:50, Iva=
-n Tverdohleb <mbkchelofficialdev@gmail.com>:
->
-> Add documentation for the emit_base method within the ModInfoBuilder
-> struct. Explain its role in formatting metadata strings, handling the
-> differentiation between built-in and loadable modules, and managing
-> linker sections and conditional compilation.
->
-> Signed-off-by: Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
-> ---
->  rust/macros/module.rs | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index 0a7b9e24c..6f361013f 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -49,6 +49,16 @@ fn new(module: &'a str) -> Self {
->          }
->      }
->
-> +    /// Emits a single metadata entry into the module information table.
-> +    ///
-> +    /// This method formats a `field=3Dcontent\0` byte string and places=
- it into the
-> +    /// `.modinfo` linker section. For built-in modules (`builtin =3D=3D=
- true`), the string
-> +    /// is prefixed with the module name (`module.field=3Dcontent\0`) to=
- avoid naming
-> +    /// collisions in the final monolithic kernel binary.
-> +    ///
-> +    /// It automatically generates a unique static identifier using an i=
-nternal counter
-> +    /// and applies appropriate conditional compilation attributes (`#[c=
-fg(MODULE)]` or
-> +    /// `#[cfg(not(MODULE))]`) based on the target type.
->      fn emit_base(&mut self, field: &str, content: &str, builtin: bool, p=
-aram: bool) {
->          let string =3D if builtin {
->              // Built-in modules prefix their modinfo strings by `module.=
-`.
-> --
-> 2.56.0
->
+[Severity: Medium]
+When kselftest runs dyndbg_selftest.sh via runner.sh, it first changes the
+working directory into tools/testing/selftests/dynamic_debug/ (or the
+installed selftest directory), where .config is not present unless
+KCONFIG_CONFIG is set to an absolute path.
+
+In that case, the fallback branch unconditionally sets LACK_DD_BUILTIN=3D0.
+However, on a kernel built with CONFIG_DYNAMIC_DEBUG_CORE=3Dy and
+CONFIG_DYNAMIC_DEBUG=3Dn, /proc/dynamic_debug/control still exists, while
+built-in files such as kernel/params.c have no dynamic debug descriptors.
+Will FT_basic_queries() then fail to skip and report false DRIFTED failures
+on empty diffs? Could the runtime fallback instead probe
+/proc/dynamic_debug/control for ^kernel/params.c: to set LACK_DD_BUILTIN?
+
+Also, /proc/dynamic_debug/control is created with mode 0644, so the
+[ -e /proc/dynamic_debug/control ] check succeeds for unprivileged users,
+causing the script to fail with $ksft_fail on the first write in ddcmd()
+or /dev/kmsg instead of skipping. Should this check for write permission
+(-w /proc/dynamic_debug/control) or root privileges before running the
+tests?
+
+[ ... ]
+> +audit_golden_records
+> +
+> +# Output consolidated blocks of unregistered and drifted fingerprints
+> +failed=3D0
+> +
+> +if [ -s "$UNREG_HASHES_FILE" ]; then
+> +    if [ "$K" -ne 2 ]; then
+> +        echo -e "${YELLOW}\n# --- Unregistered Baselines ---"
+> +        cat "$UNREG_HASHES_FILE"
+> +        echo -e "# ------------------------------${NC}"
+> +    fi
+> +    : > "$UNREG_HASHES_FILE"
+> +    failed=3D1
+> +fi
+> +
+> +if [ -s "$DRIFT_HASHES_FILE" ]; then
+> +    if [ "$K" -ne 2 ]; then
+> +        echo -e "${RED}\n# --- Drifted Baselines ---"
+> +        cat "$DRIFT_HASHES_FILE"
+> +        echo -e "# -------------------------${NC}"
+> +    fi
+> +    : > "$DRIFT_HASHES_FILE"
+> +    failed=3D1
+> +fi
+> +
+> +if [ $failed -eq 1 ]; then
+> +    [ "$K" -eq 1 ] && echo "fake success" && exit $ksft_pass
+> +    [ "$K" -eq 2 ] && exit $ksft_pass
+> +    exit $ksft_fail
+> +fi
+> +
+> +exit $ksft_pass
+> +
+> diff --git a/tools/testing/selftests/dynamic_debug/syslog_hash_validation=
+.sh b/tools/testing/selftests/dynamic_debug/syslog_hash_validation.sh
+> new file mode 100644
+> index 0000000000000..8c6e91f5d9c27
+> --- /dev/null
+> +++ b/tools/testing/selftests/dynamic_debug/syslog_hash_validation.sh
+[ ... ]
+> +    # Strictly verify that the computed fingerprint matches any
+> +    # expected hash for this label
+> +    if [ -n "$expected_hash_field" ] && [ $matched -eq 1 ]; then
+> +        local short_hash=3D"${fingerprint:0:12}"
+> +        [ "$V" -ge 1 ] && echo -e "${GREEN}=E2=9C=94 Verified '${label}'=
+ " \
+> +            "(${short_hash}) [via: '${DDCMD_LOG}']${NC}"
+> +
+> +        if [ "$V" -ge 2 ]; then
+> +            echo -e "${CYAN}--- Captured Invariant ${capture_desc} Outpu=
+t ($label) ---"
+> +	    printf "#K=3D %-32s %-24s\n" "${fingerprint}" "${label}"
+> +            echo "$raw_capture"
+> +            echo -e "-----------------------------------${NC}"
+> +        fi
+> +        echo "$fingerprint" >> "$SEEN_HASHES_FILE"
+> +    else
+[ ... ]
+> +function audit_golden_records {
+> +    local seen_file=3D"$SEEN_HASHES_FILE"
+> +
+> +    if [ ! -f "$seen_file" ]; then
+> +        return
+> +    fi
+> +
+> +    # Require GOLDEN_RECORDS to be defined in the caller script
+> +    if ! declare -f GOLDEN_RECORDS >/dev/null; then
+> +        return
+> +    fi
+> +
+> +    [ "${V:-0}" -ge 1 ] && echo -e "${YELLOW}# --- GOLDEN_RECORDS Audit =
+---${NC}"
+> +    local stale_found=3D0
+> +    local total_records=3D$(GOLDEN_RECORDS | grep -c "^#K=3D")
+> +
+> +    # Read each active record line from GOLDEN_RECORDS
+> +    while read -r line; do
+> +        # Extract the hash/hashes (second word) from the #K=3D line
+> +        local hash_field=3D$(echo "$line" | awk '{print $2}')
+> +
+> +        # Check if at least one of the comma-separated hashes was seen
+> +        local hash_seen=3D0
+> +        local h
+> +        local OLD_IFS=3D"$IFS"
+> +        IFS=3D","
+> +        for h in $hash_field; do
+> +            if grep -q "$h" "$seen_file" 2>/dev/null; then
+> +                hash_seen=3D1
+> +                break
+> +            fi
+> +        done
+> +        IFS=3D"$OLD_IFS"
+> +
+> +        # Check if this hash field was seen during the run
+> +        if [ $hash_seen -eq 0 ]; then
+> +            if [ "${K:-0}" -ne 2 ]; then
+> +                if [ $stale_found -eq 0 ]; then
+> +                    # On first failure, print header if not already prin=
+ted
+> +                    [ "${V:-0}" -eq 0 ] && \
+> +                        echo -e "${YELLOW}# --- GOLDEN_RECORDS Audit ---=
+${NC}"
+> +                    echo -e "${YELLOW}# The following GOLDEN_RECORDS ent=
+ries " \
+> +                        "were never hit and may be stale:${NC}"
+> +                fi
+> +                echo -e "${YELLOW}#K_STALE=3D $line${NC}"
+> +            fi
+> +            stale_found=3D1
+> +        fi
+> +    done < <(GOLDEN_RECORDS | grep "^#K=3D" | grep -v "<md5_hash>")
+> +
+> +    if [ $stale_found -eq 0 ] && [ "${V:-0}" -ge 1 ]; then
+> +        echo -e "${GREEN}# All $total_records GOLDEN_RECORDS entries " \
+> +            "were successfully hit!${NC}"
+> +    fi
+> +
+> +    # Detect duplicate labels in the database
+> +    local dupes=3D$(GOLDEN_RECORDS | grep "^#K=3D" | awk '{print $3}' | =
+sort | uniq -d)
+> +    if [ -n "$dupes" ]; then
+> +        echo -e "\n${RED}# WARNING: Duplicate labels detected in GOLDEN_=
+RECORDS():${NC}"
+> +        echo "$dupes" | sed 's/^/#   /'
+> +    fi
+> +
+> +    # Clean up
+> +    rm -f "$seen_file"
+> +}
+
+[Severity: Medium]
+The header comment in dyndbg_selftest.sh documents that K=3D0 fails with ex=
+it 1
+on checksum drift or stale records, and K=3D1 exits 0 with "fake success".
+
+In audit_golden_records(), stale_found and dupes are local variables and the
+function ends with rm -f "$seen_file", returning 0 without propagating the
+failure to the caller in dyndbg_selftest.sh (which only sets failed=3D1 when
+UNREG_HASHES_FILE or DRIFT_HASHES_FILE is non-empty). Doesn't this mean sta=
+le
+records or duplicate labels in GOLDEN_RECORDS() will never cause K=3D0 to e=
+xit
+with $ksft_fail or K=3D1 to report "fake success"?
+
+In addition, verify_fingerprint() writes only "$fingerprint" to
+SEEN_HASHES_FILE without the test label, and audit_golden_records() checks
+only whether the hash appears in "$seen_file". When multiple test cases in
+GOLDEN_RECORDS() share the same MD5 hash (for example, FT_grammar_errs.21 a=
+nd
+FT_grammar_errs.41 both have 94cdf3b32afa4f12a00a704208aa2e53, and
+FT_grammar_errs.25 and FT_grammar_errs.45 both have
+644b81753949ac1285e38ac995eeba46), won't running just one of those tests ma=
+rk
+the hash as seen for all of them and hide unexecuted labels? Should
+SEEN_HASHES_FILE record both the fingerprint and label (and be truncated wi=
+th
+: > "$seen_file" instead of removed with rm -f)?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027-dd-cmap-pa=
+rt2-clean-v13-0-9267923be612@gmail.com?part=3D1
