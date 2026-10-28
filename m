@@ -1,47 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793205309;
-	b=Nhy8OrR80DHV5yHuk9kq9sXmlk9dTZlPPR+O6rOnquuFMeT/x1AK1KzUBy2zahumY1Db
-	 RPQYKbC4H3QQYkI2QC0Ddsrrj+V9Q24UFnbDXLs2emTLr+zUhPO2Fy+yLHnLdGROw2sqY
-	 qGkNlD/CgDdeCl3BU6I9ttEo0guY4xp0fSysGPIQ5uTFA3H2sCfAPbgtrOEz0o7rM0ZTy
-	 zK3hqHwNrjCDqQjdHS1rOyzywk8zBO0+IW9klkIDQzcHyDwHsBBegj4VV6UHluTzQ00+b
-	 6kMM53AeQlPLjJAthq1shnq+kOSxbDU6yu7J2zNRCDRsMSlvnqaRQxfcGPG9ZockM1g==
+	t=1793205312;
+	b=h/mG43asrShB5VNbRVOy3jvXPbWWdqwFbiLXFC62RiH4kV0WdCCRS96cjZRUy/U4DU6V
+	 BwfwkLc179sJso76NQpHGW5obZbUK/EDNAWgdoILEDCmvq4PZDGWzatzm5YofV2yzXjjJ
+	 Kp8V4nU0g5t3cAWjVP7VXvxi4iqhSleg+wErmfT20cAVp0bFFHFWGd+1Jca9A/azF6hNp
+	 2UUAOoXOdnaFXx5AvG4JZUvYYFDzWuWLkdFGgcnvqUOzgW54oQ2aqQzcVfeS3Yyc9PRYU
+	 m6JPRKqgmeCS8oS0GqqArttWqQm3CkjKlOp84Baxt5M/wpDHo9k+ppnKA4ARmKLpZPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793205309;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793205312;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=b6pcBVxdMQUwjf02KaU8qkuRRIgCQzwBtXV/ZrkSdNU=;
-	b=ZAJeKRrUiFrSrxRsx40kniVP8FeKzSr0WbpXXgu6cbvjTd331YYVIC6F6KUb/GldDbb1
-	 g+z/jg6vTlKdJyLf5P6WHwtNOWuS/GbQrijui5f0GQakSLiL/kVCVxyOIb2t/+GK7r3Kq
-	 k0wZ1s5YvLzjv3TyK0BHLr5Ok0vbrs+77loys6ILXgDRU2MiGjDu/mOFzuPHFaSyIf9fJ
-	 TOdDdAG53T0l/7Sxn1tzGM740u9jBcPQRtiqm2d3uFxXFaip38DOnY3Q8XQ0gZkwe8fTu
-	 W1qR/mA2HuBlKxixqWH9DBjOo70zzSr4FHa99LGC54KL6KxalhHyS+i9oPPxg5fCVag==
+	bh=LsxY8Y0pmbaFpLJ9PntFjRMT7awe6GsgDxXoVZC163Q=;
+	b=1SnmgzEgktrV4DD/siNhnBbaKCFJHF8rr+gZJBJDKH6xzr0xZQtqKA5u/eGePO9zQ6ec
+	 b9WSooFwHdQE/dETfBNEL+bD2CMxho3q4rw+dB4DdJB+JSJ3f+u7oJzG5zQz4h/sU6H6X
+	 jdOpMWxguveix7PtL4aQKbg2iDZIeZLXtSRXFrCpIBRHUF8wU4kxhkqs9sqFCVbhLx0EQ
+	 GQL0Z65dae7ARSQdSimybleSaTumLrLRMnKoUSBDLJ04/xtHGtJZQjnEgS70My0SO5Mco
+	 ec4gp9v19EjEJIrzZdcb5RCDsMA6pIrcFdvxkes0TQi1Lxqp6PXpM0oF5Ndx6SKJDmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="JYqPx/9P";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zcmrdaow;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D9C606A31A;
-	Wed, 28 Oct 2026 16:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA1E606A322;
+	Wed, 28 Oct 2026 16:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JYqPx/9P
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7081F01825;
-	Wed, 28 Oct 2026 16:35:07 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zcmrdaow
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A71901F031E0;
+	Wed, 28 Oct 2026 16:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793205309;
-	bh=b6pcBVxdMQUwjf02KaU8qkuRRIgCQzwBtXV/ZrkSdNU=;
+	s=k20260515; t=1793205311;
+	bh=LsxY8Y0pmbaFpLJ9PntFjRMT7awe6GsgDxXoVZC163Q=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JYqPx/9PiWeGlzQLparH1mu72uexdOw6wZ7nbGw7qYqnQMS3ETSwIEk3w2TSKHjVP
-	 BB/pzOw3/U82yOTB4H6G98SRIqIWXctRa0LL3MB/aC+N6Ujj8DrXnRI/H6cSIbqUPa
-	 svHrpGyMmfba0sqKuiok9nWHOM0TFeoXNECKAOBUj6ZdyjgUgNd/o8oiuDBfQspV8s
-	 BIlnVhzh51YMQqTwuDTzcUhTrGblROynC5JqngMW0B1DG2i4OAkgCs8QKuNTjGZahw
-	 N2wfyTCtrNl01p4c6YGiCHfDgVH+xiXoqw1QY+N3q6vRQAuZsoQk9ubW9ett5TR210
-	 9RUizdCTc+X1w==
-Message-ID: <sashiko-outbox-188167@kernel.org>
+	b=ZcmrdaowSfrUee9ovwE8wL1mbXPhKkGcHAJ/sNA6Q+l9Okfg0Pk4rSfrPV/KS+OM4
+	 iq3fJYxFmFMEPtlhwZ8oKXdO6JWDOGj1tWgs/5vksMcQsxjBSri2Ko6jZ1c8AZ1pbw
+	 hYaofSf9KnPRREbyW99xWOa8oXMPog7YkskU6bN4m5tUvmQWw2z1DlzaE0JGLAL1vH
+	 83EM3VlCZUgKFA8cLPfGghSF1XrUzF2KqKFisW2stpfX3DU2XGB1HzqK1Vd1MWzzYu
+	 +H4cAztvEk5BFBrJOMDsUQ24cBprZ/AXvBupnESAhaDK1IpTKUNfYwQrn1Qrbaf2WS
+	 75wO0EJ2FVteg==
+Message-ID: <sashiko-outbox-188168@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 1/2] kcov: collect early boot coverage of init_task
+Subject: Re: [PATCH RFC 2/2] x86/kcov: allow instrumenting noisy objects for
+ early boot coverage
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yunseong Kim" <yunseong.kim@est.tech>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
  Khan" <skhan@linuxfoundation.org>, "James Morris" <jmorris@namei.org>, "Randy
@@ -64,12 +65,12 @@ To: "Yunseong Kim" <yunseong.kim@est.tech>, "Jonathan Corbet" <corbet@lwn.net>, 
  Gleixner" <tglx@kernel.org>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org, "H.
  Peter Anvin" <hpa@zytor.com>
 Cc: kasan-dev@googlegroups.com, linux-modules@vger.kernel.org, linux-mm@kvack.org, linux-kbuild@vger.kernel.org
-In-Reply-To: <20261027-early-kcov-v1-1-6f2f053255ad@est.tech>
+In-Reply-To: <20261027-early-kcov-v1-2-6f2f053255ad@est.tech>
 References: <20261027-early-kcov-v1-0-6f2f053255ad@est.tech>
- <20261027-early-kcov-v1-1-6f2f053255ad@est.tech>
+ <20261027-early-kcov-v1-2-6f2f053255ad@est.tech>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 28 Oct 2026 16:35:06 +0000
+Date: Wed, 28 Oct 2026 16:35:09 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -81,171 +82,84 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] kcov: NULL deref in __sanitizer_cov_trace_pc() during selftest()
+- [High] x86/kcov: instrumenting apic/ crashes selftest() on FRED timer ent=
+ry
 --
 
-commit 2f2cd36073f62980c1305efe82a4239b11c076f5
+commit c1145245b36a2aa7f3b165ab0f5b126b2c810470
 Author: Yunseong Kim <yunseong.kim@est.tech>
 
-kcov: collect early boot coverage of init_task
+x86/kcov: allow instrumenting noisy objects for early boot coverage
 
-This commit adds CONFIG_EARLY_KCOV to record code coverage of init_task
-from right after early parameter parsing in start_kernel() until the start
-of rest_init(), and exposes the collected PCs via
-/sys/kernel/debug/early_kcov. It also introduces CONFIG_KCOV_INSTRUMENT_NOI=
-SY
-and a kcov-noisy kbuild helper to instrument core subsystems normally
-excluded due to coverage noise.
+This commit switches several x86 Makefile exclusions from hardcoded n to
+$(kcov-noisy) so that CONFIG_KCOV_INSTRUMENT_NOISY=3Dy can collect early bo=
+ot
+coverage from arch/x86/kernel/, arch/x86/kernel/apic/, and arch/x86/lib/.
 
-> diff --git a/kernel/Makefile b/kernel/Makefile
-> index 4ff92e24680c5..b9e4f06e02ad0 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-> @@ -27,14 +27,14 @@ endif
+> diff --git a/arch/x86/kernel/apic/Makefile b/arch/x86/kernel/apic/Makefile
+> index 581db89477f92..146cbd766c924 100644
+> --- a/arch/x86/kernel/apic/Makefile
+> +++ b/arch/x86/kernel/apic/Makefile
+> @@ -5,7 +5,7 @@
 > =20
->  # Prevents flicker of uninteresting __do_softirq()/__local_bh_disable_ip=
-()
->  # in coverage traces.
-> -KCOV_INSTRUMENT_softirq.o :=3D n
-> +KCOV_INSTRUMENT_softirq.o :=3D $(kcov-noisy)
-
-[ ... ]
-
-> diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
-> index cee1901d4cff8..9041cbbec9aae 100644
-> --- a/kernel/locking/Makefile
-> +++ b/kernel/locking/Makefile
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # Any varying coverage in these files is non-deterministic
->  # and is generally not a function of system call inputs.
+>  # Leads to non-deterministic coverage that is not a function of syscall =
+inputs.
+>  # In particular, smp_apic_timer_interrupt() is called in random places.
 > -KCOV_INSTRUMENT		:=3D n
 > +KCOV_INSTRUMENT		:=3D $(kcov-noisy)
 
-[ ... ]
-
-> diff --git a/kernel/rcu/Makefile b/kernel/rcu/Makefile
-> index 0cfb009a99b9f..fd23c1dad641b 100644
-> --- a/kernel/rcu/Makefile
-> +++ b/kernel/rcu/Makefile
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # Any varying coverage in these files is non-deterministic
->  # and is generally not a function of system call inputs.
-> -KCOV_INSTRUMENT :=3D n
-> +KCOV_INSTRUMENT :=3D $(kcov-noisy)
-
-[ ... ]
-
-> diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
-> index b1f1a367034ff..4b4db5cca9b08 100644
-> --- a/kernel/sched/Makefile
-> +++ b/kernel/sched/Makefile
-> @@ -9,7 +9,7 @@ ccflags-y +=3D $(call cc-disable-warning, unused-but-set-=
-variable)
-> =20
->  # These files are disabled because they produce non-interesting flaky co=
-verage
->  # that is not a function of syscall inputs. E.g. involuntary context swi=
-tches.
-> -KCOV_INSTRUMENT :=3D n
-> +KCOV_INSTRUMENT :=3D $(kcov-noisy)
-
-[ ... ]
-
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 6759087154edd..40bf654ec7515 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2233,6 +2233,51 @@ config KCOV_INSTRUMENT_ALL
->  	  filesystem fuzzing with AFL) then you will want to enable coverage
->  	  for more specific subsets of files, and should say n here.
-> =20
-
-[ ... ]
-
-> +config KCOV_INSTRUMENT_NOISY
-> +	bool "Also instrument code excluded only for noisy coverage"
-> +	depends on EARLY_KCOV && KCOV_INSTRUMENT_ALL
-> +	help
-> +	  Some code (scheduler, RCU, locking, page and slab allocators,
-> +	  rbtree, stack unwinding, ...) is excluded from KCOV instrumentation
-> +	  because its coverage is not a function of system call inputs and
-> +	  only adds noise to coverage-guided fuzzing. Code that is excluded
-> +	  because it cannot be instrumented safely is not affected.
-> +
-> +	  Say y to instrument the noisy code as well, so that the early boot
-> +	  coverage shows the complete execution path. This degrades the
-> +	  coverage signal for syscall fuzzing, so say n for fuzzing kernels.
-
 [Severity: High]
-Can enabling CONFIG_KCOV_INSTRUMENT_NOISY trigger a NULL pointer dereference
-in __sanitizer_cov_trace_pc() during kcov_init() -> selftest(), as well as
-record interrupt entry and exit PCs into task coverage buffers?
+Does instrumenting arch/x86/kernel/apic/apic.o cause a NULL pointer
+dereference during boot when CONFIG_KCOV_INSTRUMENT_NOISY=3Dy and
+CONFIG_KCOV_SELFTEST=3Dy on FRED-enabled x86_64 systems?
 
-In kernel/kcov.c, check_kcov_mode() filters out interrupt context using
-in_task(), which relies on HARDIRQ_OFFSET being set in preempt_count().
-However, several functions in kernel/softirq.c, kernel/sched/core.c,
-kernel/locking/lockdep.c, and kernel/rcu/ run on every hardware interrupt
-either before HARDIRQ_OFFSET is added or after it is subtracted, while
-in_task() is still true:
+In arch/x86/kernel/apic/apic.c, DEFINE_IDTENTRY_SYSVEC(sysvec_apic_timer_in=
+terrupt)
+expands via arch/x86/include/asm/idtentry.h:
 
-- In kernel/softirq.c, irq_enter_rcu() and irq_enter() are not marked
-  noinstr or __no_sanitize_coverage, so the compiler inserts a call to
-  __sanitizer_cov_trace_pc() at function entry before __irq_enter_raw()
-  adds HARDIRQ_OFFSET to preempt_count(). Likewise, __irq_exit_rcu()
-  (inlined into irq_exit_rcu() and irq_exit()) calls
-  preempt_count_sub(HARDIRQ_OFFSET) before finishing execution.
+    void fred_##func(struct pt_regs *regs)
+    {
+        instr_##func (regs);
+    }
 
-- When CONFIG_DEBUG_PREEMPT=3Dy or CONFIG_TRACE_PREEMPT_TOGGLE=3Dy,
-  __irq_enter_raw() calls preempt_count_add(HARDIRQ_OFFSET) in
-  kernel/sched/core.c, which is instrumented at entry before
-  __preempt_count_add() updates preempt_count().
+Unlike the IDT entry wrapper sysvec_apic_timer_interrupt(),
+fred_sysvec_apic_timer_interrupt() is not marked noinstr or
+__no_sanitize_coverage. When apic.o is instrumented with KCOV,
+fred_sysvec_apic_timer_interrupt() and the inlined
+instr_sysvec_apic_timer_interrupt() -> run_sysvec_on_irqstack_cond() ->
+call_on_irqstack_cond() call into __sanitizer_cov_trace_pc() before
+irq_enter_rcu() adds HARDIRQ_OFFSET to preempt_count (and again after
+irq_exit_rcu() removes HARDIRQ_OFFSET).
 
-- On interrupt exit after HARDIRQ_OFFSET is cleared,
-  irqentry_exit_to_kernel_mode() / irqentry_exit_cond_resched() can call
-  trace_hardirqs_on() -> lockdep_hardirqs_on_prepare() in
-  kernel/locking/lockdep.c, rcu_irq_exit_check_preempt() in kernel/rcu/,
-  and preempt_schedule_irq() -> __schedule() in kernel/sched/core.c
-  (before prepare_task_switch() sets KCOV_IN_CTXSW and after
-  kcov_finish_switch() clears it).
+During boot, after rest_init() -> early_kcov_stop() clears
+init_task.kcov_area to NULL, device_initcall(kcov_init) invokes selftest()
+in kernel/kcov.c:
 
-When CONFIG_KCOV_SELFTEST=3Dy is also enabled (for example in allyesconfig
-builds), kcov_init() calls selftest() at device_initcall time with
-current->kcov_area =3D=3D NULL and current->kcov_size =3D=3D 0:
+    start =3D jiffies;
+    WRITE_ONCE(current->kcov_mode, KCOV_MODE_TRACE_PC);
+    while ((jiffies - start) * MSEC_PER_SEC / HZ < 300)
+        ;
+    WRITE_ONCE(current->kcov_mode, 0);
 
-kernel/kcov.c:selftest() {
-	...
-	start =3D jiffies;
-	WRITE_ONCE(current->kcov_mode, KCOV_MODE_TRACE_PC);
-	while ((jiffies - start) * MSEC_PER_SEC / HZ < 300)
-		;
-	WRITE_ONCE(current->kcov_mode, 0);
-}
+While selftest() spins waiting for timer interrupts to advance jiffies with
+current->kcov_area =3D=3D NULL, the first LAPIC timer interrupt under FRED
+enters fred_sysvec_apic_timer_interrupt() while in_task() in
+check_kcov_mode() is still true, reaching __sanitizer_cov_trace_pc() in
+kernel/kcov.c:
 
-When a timer interrupt fires during that loop, the instrumented interrupt
-entry/exit path invokes __sanitizer_cov_trace_pc() while in_task() is true:
+    area =3D t->kcov_area;
+    /* The first 64-bit word is the number of subsequent PCs. */
+    pos =3D READ_ONCE(area[0]) + 1;
 
-kernel/kcov.c:__sanitizer_cov_trace_pc() {
-	...
-	t =3D current;
-	if (!check_kcov_mode(KCOV_MODE_TRACE_PC, t))
-		return;
+and dereferencing NULL.
 
-	area =3D t->kcov_area;
-	/* The first 64-bit word is the number of subsequent PCs. */
-	pos =3D READ_ONCE(area[0]) + 1;
-	if (likely(pos < t->kcov_size)) {
-	...
-}
-
-Because area[0] is read before checking t->kcov_size, dereferencing area
-when t->kcov_area is NULL crashes the kernel on boot.
-
-Should these interrupt entry/exit helpers be marked __no_sanitize_coverage
-(or noinstr), or should CONFIG_KCOV_SELFTEST depend on
-!KCOV_INSTRUMENT_NOISY?
+In addition, during normal task KCOV tracing on FRED systems, if a LAPIC
+timer interrupt preempts a traced task inside __sanitizer_cov_trace_pc() or
+write_comp_data() between reading area[0] and writing back the updated
+count, can the nested KCOV calls in fred_sysvec_apic_timer_interrupt() have
+their area[0] updates overwritten when the interrupted context resumes and
+stores its stale index?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027-early-kcov=
--v1-0-6f2f053255ad@est.tech?part=3D1
+-v1-0-6f2f053255ad@est.tech?part=3D2
