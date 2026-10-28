@@ -1,48 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793219125;
-	b=XToMYohTvTTdMksqq6pH9E5gLgH4ntFPF4QdzMqx+AakM2pHcIcBgPDzjqPvNWlZHo5u
-	 74ogzxiiQTonhhqKDy2VksjBCZpMjlXkyGXqm9oMp7SFJ3R0szbjMn18c7ZAvbBtKBhu2
-	 o8gzcuqX+LLJwt37S6XuGb4IjU1CW95SQ/lioOykSnk6KeE0SsAVtG/hkZQJHpRAH3RFP
-	 hZALRzV3xshsjFarcwVe2mvfQy/d+kP9US/fms/stenY5nD6xvh1mIXzMx+pk3iJ2Sk9f
-	 xYHH4EU47imPrOFipB4avLXLal2RyQWs8Pc91qJ8wRgokcCpTjUcGEbRg6vVJj1lvxQ==
+	t=1793219123;
+	b=3+/Iyx70D+2DP6cWBuoCvJH5jd7QSsGWMhxrAHEVMGKYREWQI4Sc0n5e1BeO+1vqw5Ur
+	 ixwVRAgbOFFPAeS5+emieDURDxY+1TgDIoTpmBrcDxttlBF2VXTE1MC64AgDS93OMHzwG
+	 7ZZmpk1rxojX5y4CzDDq/U0QsAhCpsyunlk+8hUhDqvlZbTkdFeqEu0sc4eUZpMpKkp9l
+	 kZv+is+uYh8Yjo6mhwbN6ZJgEkSz7x3LLZrJGMMOdZC/fqfy/Iqd1RUaTwHgiu8VcdTSe
+	 8bR29YdA+pG7QnOoF4iKbNVi20F7hOSCkYXvm5dAT6aQE2phy6RAsFjf6tx8qGDszhQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793219125;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793219123;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Vx4OFLZ3cUnJed2hLZJBc40d75gcy68pG+DU+7R4ubY=;
-	b=F1Mk8xPAOySNBdSw9Mun0K6oROIP/JWd7tiD40iWS53OvbmgBKlfY2Bk+uL1MMe4L67x
-	 5QZZ5FYwILSm6tI916HtlS7l8PCI/gE4rP2xh1J+IhUlZ/vBhkz+H9SXLiGpkjjbXNG7h
-	 jK3jj87/PoDEFeUqD2YQTqPfufRdoY6/CjkGkjA7pvW76AYWqq/ht8AkBbvz2YxCjNTZ/
-	 0RufMsbhBwlphWfZq8PcVismW3qzpGW+2LmggOXs7+5wi9LA5Qx+3r4y20bCRiccO99yp
-	 QjagQih8TOVCJHXgODhsMyXKzRQVzqkxi/7rW3QX4f9iMPiMq+iNyQBAJ+3P17zJUlQ==
+	bh=im4vE6T4fp0TQnYmj1ZMGNvailJ73yGfxGWlNlyM8gQ=;
+	b=Bku3N3kQ3pKPClipUbiz2Y/0hgvnrYfeyX4suJn+9Z+73EN/r2+hfq5mYmCbpo7UDPJz
+	 byHiGn3ibpw4dhDowLx8fy+WCoKtxsgG7ZtEwICsv5fjZ0WK4bi+f3IwSAa2Elj5N0x/p
+	 kck56T4jqdwxJXC9X+7vIf3GvCEW1w3TGs+lUHd3zHW35rnaXsWCPehr7FrkMJyCvzvf+
+	 OSClBRVPIwY/w5m7TDF8vKv1TopaJdPYS4EnQzscdoAeJhTnuFQ/pV5TiUggmhFGgb/S5
+	 kg0/XsieLu5J8FxUo87yiu7c2zdiOxr5PhsDoQfgnWnpdLM6LmvQVGeV5U6GpcgLW0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MkRAs3N+;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lLdN5zpT;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25011606A31A;
-	Wed, 28 Oct 2026 20:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06B4606A31C;
+	Wed, 28 Oct 2026 20:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MkRAs3N+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227DF1F01825;
-	Wed, 28 Oct 2026 20:25:23 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lLdN5zpT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10DE31F01828;
+	Wed, 28 Oct 2026 20:25:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793219124;
-	bh=Vx4OFLZ3cUnJed2hLZJBc40d75gcy68pG+DU+7R4ubY=;
+	s=k20260515; t=1793219122;
+	bh=im4vE6T4fp0TQnYmj1ZMGNvailJ73yGfxGWlNlyM8gQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MkRAs3N+b6aKi30KqRhXhuT6HfiOXlpaDXck4iFAQyztV8bEiwTkrz2Xq+ZK6bhjs
-	 1BiCiCRoqH5/zfpRWSCRQ9uYv02gMiEZUs/wdNrOx8vylDa6WTUSZQXLJeSNG8kIgI
-	 JSYWKHin0ikXPqnHolCmLZ4MrCdG8NF4/CCRHQFNktdouJNOzFZoqAC8U7VEQ+ACsm
-	 7c6SXHBo3hqEjYyFYdTiKf0QxkA/QbfQ3byzPORasy3GT9ps5l1bIDf5XyED5fFBZM
-	 KZgZ7T8Gv2zmiH4dsUjEBIpys8+56ltXhlPrukK3kO13cOyxUemYCNXc+lXGsjxFS1
-	 6A5soN/J8YNTA==
-Message-ID: <sashiko-outbox-188411@kernel.org>
+	b=lLdN5zpTayZ91G5Q2JOPwWdEPVUEMIBkIlvdCgeUS9H8WpFFRSblhI6MwwEwTGrHw
+	 3xVuMG4Col7k/SPmVxSdWe3ypT0RGPWMaeBhYGvtrUxOqZcWL/B0nz0cPY7PuuocBv
+	 GlSFLeCXElrnlW9mkOzdWBCknepotJfS8grmgc1xNXZu6gLyy9ljfsnucPTnw87hFw
+	 Yur74tRxqx0wMTr+hLGs3Oeir7lljNFWl4vuWNbn2Hz7x91iWFYs7zIcpNEONcs7PM
+	 QmgWLMSxglZEKsruJiX5HCHlbRrNpq538Xn7D9Hw6xwE6zAp2i7RU2nbzhIQx7c4pj
+	 Kl+ZJYD8kUGjQ==
+Message-ID: <sashiko-outbox-188406@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v13 35/39] dyndbg: add +c flag to count pr_debug calls
- without printing
+Subject: Re: [PATCH v13 30/39] dyndbg: split multi-query strings with @
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jim Cromie" <jim.cromie@gmail.com>, "Jason Baron" <jbaron@akamai.com>, "Shuah
  Khan" <shuah@kernel.org>, "Andrew Morton" <akpm@linux-foundation.org>, "Maarten
@@ -62,12 +61,12 @@ To: "Jim Cromie" <jim.cromie@gmail.com>, "Jason Baron" <jbaron@akamai.com>, "Shu
  Donenfeld" <Jason@zx2c4.com>
 Cc: dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, "Jason
  Baron" <jbaron@redhat.com>
-In-Reply-To: <20261027-dd-cmap-part2-clean-v13-35-9267923be612@gmail.com>
+In-Reply-To: <20261027-dd-cmap-part2-clean-v13-30-9267923be612@gmail.com>
 References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
- <20261027-dd-cmap-part2-clean-v13-35-9267923be612@gmail.com>
+ <20261027-dd-cmap-part2-clean-v13-30-9267923be612@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 28 Oct 2026 20:25:22 +0000
+Date: Wed, 28 Oct 2026 20:25:20 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -79,65 +78,130 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] dyndbg: race between reset_ddebug_call_count() and ddebug_increm=
-ent_call_count()
+- [Medium] dyndbg: ddebug_find_delimiter() tracks quotes across comments an=
+d newlines
 --
 
-commit 9bd6a53ec548939d0c4d27704bc80cf4e68b28ef
+commit 0c538c4aea6cd34ef1fce80f637f8815b5c63761
 Author: Jim Cromie <jim.cromie@gmail.com>
 
-dyndbg: add +c flag to count pr_debug calls without printing
+dyndbg: split multi-query strings with @
 
-This commit adds a +c flag to dynamic debug to count enabled pr_debug()
-invocations via a per-CPU counter without printing messages to the syslog.
-It also supports resetting the counter via the reset_stats command and
-reports the total in the /proc/dynamic_debug/control epilogue.
+This commit adds '@' as a multi-command delimiter alongside ';' and '\n' in
+dynamic debug queries, using a quote-aware helper ddebug_find_delimiter() to
+avoid splitting on delimiters inside quoted strings. It also updates the
+dynamic debug documentation and selftests accordingly.
 
 > diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> index efc7a741008ed..027f7c31fe226 100644
+> index 5d99c3aef5a16..11f7350f35907 100644
 > --- a/lib/dynamic_debug.c
 > +++ b/lib/dynamic_debug.c
-
-[ ... ]
-
-> @@ -71,6 +73,21 @@ struct flag_settings {
->  	unsigned int mask;
->  };
+> @@ -622,6 +622,30 @@ static int ddebug_exec_query(char *query_string, con=
+st char *modname)
+>  	return nfound;
+>  }
 > =20
-> +static DEFINE_PER_CPU(unsigned long, ddebug_call_count);
-> +void ddebug_increment_call_count(void)
+> +/*
+> + * Split multi-query string on delimiters (@, ;, \n), ignoring delimiters
+> + * that appear inside single or double quoted strings.
+> + */
+> +static char *ddebug_find_delimiter(char *str, const char *delims)
 > +{
-> +	this_cpu_inc(ddebug_call_count);
-> +}
-> +EXPORT_SYMBOL(ddebug_increment_call_count);
+> +	bool in_quote =3D false;
+> +	char quote_char =3D 0;
 > +
-> +static void reset_ddebug_call_count(void)
-> +{
-> +	int cpu;
-> +
-> +	for_each_possible_cpu(cpu)
-> +		per_cpu(ddebug_call_count, cpu) =3D 0;
+> +	for (; *str; str++) {
+> +		if (*str =3D=3D '"' || *str =3D=3D '\'') {
+> +			if (!in_quote) {
+> +				in_quote =3D true;
+> +				quote_char =3D *str;
+> +			} else if (*str =3D=3D quote_char) {
+> +				in_quote =3D false;
+> +			}
+> +		} else if (!in_quote && strchr(delims, *str)) {
+> +			return str;
+> +		}
+> +	}
+> +	return NULL;
 > +}
+> +
+>  /* handle multiple queries in query string, continue on error, return
+>     last error or number of matching callsites.  Module name is either
+>     in the modname arg (for boot args) or perhaps in query string.
+> @@ -632,7 +656,7 @@ static int ddebug_exec_queries(char *query, const cha=
+r *modname)
+>  	int i, errs =3D 0, exitcode =3D 0, rc, nfound =3D 0;
+> =20
+>  	for (i =3D 0; query; query =3D split) {
+> -		split =3D strpbrk(query, ";\n");
+> +		split =3D ddebug_find_delimiter(query, "@;\n");
+>  		if (split)
+>  			*split++ =3D '\0';
 
 [Severity: Medium]
-Can reset_ddebug_call_count() race with concurrent calls to
-ddebug_increment_call_count() on remote CPUs and lose the reset?
+Can ddebug_find_delimiter() drop or merge subsequent lines in a multi-line
+query when a '#' comment contains an apostrophe or when a line has an
+unclosed quote?
 
-When userspace writes reset_stats to /proc/dynamic_debug/control,
-ddebug_proc_write() -> ddebug_exec_queries() -> reset_ddebug_call_count()
-directly stores 0 into each CPU's ddebug_call_count from the resetting
-CPU. Meanwhile, other CPUs executing +c callsites invoke
-DYNAMIC_DEBUG_BRANCH() -> DYNAMIC_DEBUG_COUNT() ->
-ddebug_increment_call_count(), which uses this_cpu_inc(ddebug_call_count).
+Previously, ddebug_exec_queries() called strpbrk(query, ";\n"), which
+unconditionally split the input buffer on '\n' before comment handling in
+ddebug_exec_queries() and ddebug_tokenize():
 
-Because this_cpu_inc() only guarantees atomicity with respect to the local
-CPU rather than cross-CPU stores, a remote CPU performing a read-modify-wri=
-te
-can load its old counter value N just before reset_ddebug_call_count() writ=
-es
-0, and then store N + 1 afterward. That causes a data race and leaves the
-remote CPU's entire previous count intact instead of resetting it to zero.
+lib/dynamic_debug.c:ddebug_exec_queries() {
+	...
+	query =3D skip_spaces_and_commas(query);
+
+	if (!query || !*query || *query =3D=3D '#')
+		continue;
+	...
+}
+
+lib/dynamic_debug.c:ddebug_tokenize() {
+	...
+	while (*buf) {
+		...
+		if (*buf =3D=3D '#')
+			break;	/* token starts comment, skip rest of line */
+	...
+}
+
+With ddebug_find_delimiter(query, "@;\n"), quote state is tracked across '#'
+comments and across '\n'. If a multi-line write to
+/proc/dynamic_debug/control contains an apostrophe inside a comment, such a=
+s:
+
+  # don't enable foo
+  func bar +p
+
+or an inline comment:
+
+  func foo +p # module's debug
+  func bar +p
+
+ddebug_find_delimiter() sets in_quote =3D true on the '\'' and ignores the =
+'\n'
+at the end of the comment line. As a result, "func bar +p" is merged into t=
+he
+commented line and silently discarded when ddebug_exec_queries() or
+ddebug_tokenize() skips the comment.
+
+Similarly, if a line has an unclosed quote, ddebug_find_delimiter() no long=
+er
+splits at '\n'. On a multi-line buffer, subsequent lines are concatenated
+into the broken line instead of failing that line and continuing. On a
+single-line write via echo, the trailing '\n' is left attached to the query
+string and emitted in the v2pr_info() and pr_err("unclosed quote: %s\n", bu=
+f)
+messages, which also appears to be why the golden hashes for the unclosed
+quote tests (FT_grammar_errs.1, FT_grammar_errs.21, and FT_grammar_errs.41)
+changed in GOLDEN_RECORDS in
+tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh.
+
+Should '\n' always terminate a query (and reset quote state, or be split
+before scanning for ';' and '@'), and should '#' comments outside quotes sk=
+ip
+to the end of the line?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027-dd-cmap-pa=
-rt2-clean-v13-0-9267923be612@gmail.com?part=3D35
+rt2-clean-v13-0-9267923be612@gmail.com?part=3D30
