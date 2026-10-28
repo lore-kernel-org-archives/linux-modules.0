@@ -1,96 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793202620;
-	b=whjPk2FXw3Hjyfwdt4HTlhZYrS2e9G5q3S8Ps4UzNeg3eZKR23M4bCMQ+3Z9fg0Ds8Lx
-	 SfP5vQYN5qRXUC9tR4K84djUqM1idDvnH7fBa9yMPp2xDMt0T+8qqglSVSluXDq3q8hyk
-	 jRQf3dNh8NZgM0NpSUSoHhzUTwYY2v0esB4rNGBzaotzDbVx0k0eCW5ncnvrItkuCIShc
-	 dk3CBvdfwhiFOXoOiiWK4m238AMb9XKFVH5UNvXg64nlTTUX7EXOeVI38q9qbn/mND1y8
-	 q2tbTRP9ihfiJeTkNa+yXN6YeQM4XNO0YkjAGtdybl5sMvMORtaCvaXBkuXnI6OD45g==
+	t=1793205309;
+	b=Nhy8OrR80DHV5yHuk9kq9sXmlk9dTZlPPR+O6rOnquuFMeT/x1AK1KzUBy2zahumY1Db
+	 RPQYKbC4H3QQYkI2QC0Ddsrrj+V9Q24UFnbDXLs2emTLr+zUhPO2Fy+yLHnLdGROw2sqY
+	 qGkNlD/CgDdeCl3BU6I9ttEo0guY4xp0fSysGPIQ5uTFA3H2sCfAPbgtrOEz0o7rM0ZTy
+	 zK3hqHwNrjCDqQjdHS1rOyzywk8zBO0+IW9klkIDQzcHyDwHsBBegj4VV6UHluTzQ00+b
+	 6kMM53AeQlPLjJAthq1shnq+kOSxbDU6yu7J2zNRCDRsMSlvnqaRQxfcGPG9ZockM1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793202620;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Wj4LX9xOsHpuGRygOr/nDK8i03h77TPrsXBsHHo2CzE=;
-	b=kNNXuPD9rPQsDy6Z7W7pr68nPRkHcfD7AlpthJTr1eyklDVt6BTtfHppobwZdeL+MCq6
-	 tW6oqzLcWp6M0HL3lHuQ0DzZWy0kFZThO9dY0CNwsC4+CBREsAylq5Oan/a03r1DoBKRC
-	 gtowUCawZ2dx6PK08YlLZz2hmWzYX/kfCRw7C7ptD0Jom7eZ7e6pLiRmO0j6cyaYquSKH
-	 jaAI8H17Sp5tE5RbToOQrSdDsL8uRB5j84laJ0aHn+tjQOdF6GH3eOvwGo5lVQv5t9V7j
-	 puEaHpU8FPIXxCxyLSPGH1BLLygkPLaDW50o4yPVFZpxHylLYgl+ZrBrgKdKszeRC2w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793205309;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=b6pcBVxdMQUwjf02KaU8qkuRRIgCQzwBtXV/ZrkSdNU=;
+	b=ZAJeKRrUiFrSrxRsx40kniVP8FeKzSr0WbpXXgu6cbvjTd331YYVIC6F6KUb/GldDbb1
+	 g+z/jg6vTlKdJyLf5P6WHwtNOWuS/GbQrijui5f0GQakSLiL/kVCVxyOIb2t/+GK7r3Kq
+	 k0wZ1s5YvLzjv3TyK0BHLr5Ok0vbrs+77loys6ILXgDRU2MiGjDu/mOFzuPHFaSyIf9fJ
+	 TOdDdAG53T0l/7Sxn1tzGM740u9jBcPQRtiqm2d3uFxXFaip38DOnY3Q8XQ0gZkwe8fTu
+	 W1qR/mA2HuBlKxixqWH9DBjOo70zzSr4FHa99LGC54KL6KxalhHyS+i9oPPxg5fCVag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L3gP8nyH;
-	arc=none smtp.remote-ip=209.85.167.52
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="JYqPx/9P";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036B6606A31A
-	for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 15:50:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 036B6606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D9C606A31A;
+	Wed, 28 Oct 2026 16:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L3gP8nyH
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5ba3ac592faso1374827e87.0
-        for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 08:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793202618; x=1793807418; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Wj4LX9xOsHpuGRygOr/nDK8i03h77TPrsXBsHHo2CzE=;
-        b=L3gP8nyHEpt7c0+mIxQ4RE0XFyRCO1UWhX6RArQV5e67OLxg471Fdc/XET1Yu1ILQT
-         Q6iKZ1OgUaRmQtlh4i2mKr7l/f2l602LAkSGYOvjK9vDRVLOmbqZLS3xOij4o2srjPFq
-         PU/wglL8p4fQxbbWhbxRERoDprueyz0T4yBdcAgG7VUDSie4QeGTlyqISmaB3bUix0eJ
-         4yE7ohInOuyfj8YnxkW4OaOd7FaZiI/tl/oLRnw2uLfNbrHYfSsEaphe5v+017JWijzi
-         TNtEUKG2nCH39y44cB5F5TZ/M2K8TvBGllYGJVjWSUxD9D8GsPoDOUMAVX8JYgpKiP9g
-         V7gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793202618; x=1793807418;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Wj4LX9xOsHpuGRygOr/nDK8i03h77TPrsXBsHHo2CzE=;
-        b=u57KUTPp6PZ+/RPSsjzEO4zF2pMOU7RfUVDnrS2FPAvyrKtB90BfaceojS9CQ/3C89
-         /z1chdeOD9nEdmLE+e/HOJFZJmOtXjwTl+eXAEcbNE2/ZeAqeyOauWdy9gzrKrzR55Uo
-         OnA1WMN2nBNJoEGDto7LnfOJ56sFPBKTxx0Dh8ZwJsGQQm4UtQZGKtGiDAMyIIHtx1l9
-         x653LZE+u5wO6G8w094FjznYXLKSD+FFFzuUyC3GroXlXcwGOGw4jlXn+DOhyq5xhj04
-         D3BFOcRmVEDzULABCSt9vyT2byltuk0JgtU59Ojhx86qOuWIaNulZdudCI3CAqztv6kv
-         Hs4w==
-X-Forwarded-Encrypted: i=1; AKwUvBxVK3sigw+iQm4o1H2OZK1oPRAPMjp1pZ3Kj5y9QUsxBm3v0cLAXi3j43WT5MWg2Gf1E2KB0KJ0S4p/oHJv@vger.kernel.org
-X-Gm-Message-State: AFq9FYIT+nXXG1xIkvEWjuv+wjuvgYr48XMSc3Wf2hch3r5iS54OWzHU
-	+/yrhAN7rWgF4tWcKUmLi6oqOzx2/D01EOfnOEcz3TIbYZ48q/PJsjNg
-X-Gm-Gg: AYBFou30wpt3PxMCf9SiJ6SFD6nplkDGMe5F7ALvXrTxLeLhtS4B4GzBQRMpoB+xXGr
-	jHTNj6Ude+XP4yw0DVQw9jkFb9+fSJhncEsdQ/OAWIXqSTUpoDQ+woa8vZAfXShRVhDl4VL1cLz
-	7OkcjVPQxcWI/PM+axQudBBrh71jqjLusu+fqTiGImftsI/cg0NXjNScTK7VEaIWrCLwHqUS2E2
-	4qkRwgcUV3TPfu6zcNjfbgFfTH1Y5FMkbXKulh/JuFIiLyzQxJ7Q+FoebywIwZ3FxhX7xt337FE
-	WrZ3DOqQ3bV40qINJcjEZRkYKxLHY+WA+1mbyMfVx3dQipFWEpoR96E6D0+kj+w2wKZmKZxrJJh
-	YVEDUP/kUZll2/E99ca0gB3xnE/jOhFC8W44O0yacBxX6gtDZ1N3p6TTp79A5wTDHBHyLcWbOtQ
-	Z/atwXDGd03bKtp8OQcXfUmjNH2/keBMUVWAEKX/NZd4Q0OvLMVn/KMj5fskO1iBPqRELTKq4Iw
-	jO498F16ifMksF5CmP7t/fi8uifFipNw6hTz+fiANyf4OzRB5MD8XvFHuTWm89FvrsJID7q0vmz
-	QMUxwronx1GLSZb0CqNyQW0907TGSBcAk30Cew==
-X-Received: by 2002:a05:6512:a83:b0:5bf:b93d:a85b with SMTP id 2adb3069b0e04-5bfcad893eamr1077228e87.25.1793202618007;
-        Wed, 28 Oct 2026 08:50:18 -0700 (PDT)
-Received: from archlinux ([194.28.181.64])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bfca5c6ffasm694002e87.80.2026.10.28.08.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 08:50:17 -0700 (PDT)
-From: Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	rust-for-linux@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
-Subject: [PATCH] rust: macros: document emit_base in ModInfoBuilder
-Date: Wed, 28 Oct 2026 17:50:05 +0200
-Message-ID: <20261028155005.174417-1-mbkchelofficialdev@gmail.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JYqPx/9P
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7081F01825;
+	Wed, 28 Oct 2026 16:35:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793205309;
+	bh=b6pcBVxdMQUwjf02KaU8qkuRRIgCQzwBtXV/ZrkSdNU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=JYqPx/9PiWeGlzQLparH1mu72uexdOw6wZ7nbGw7qYqnQMS3ETSwIEk3w2TSKHjVP
+	 BB/pzOw3/U82yOTB4H6G98SRIqIWXctRa0LL3MB/aC+N6Ujj8DrXnRI/H6cSIbqUPa
+	 svHrpGyMmfba0sqKuiok9nWHOM0TFeoXNECKAOBUj6ZdyjgUgNd/o8oiuDBfQspV8s
+	 BIlnVhzh51YMQqTwuDTzcUhTrGblROynC5JqngMW0B1DG2i4OAkgCs8QKuNTjGZahw
+	 N2wfyTCtrNl01p4c6YGiCHfDgVH+xiXoqw1QY+N3q6vRQAuZsoQk9ubW9ett5TR210
+	 9RUizdCTc+X1w==
+Message-ID: <sashiko-outbox-188167@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 1/2] kcov: collect early boot coverage of init_task
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yunseong Kim" <yunseong.kim@est.tech>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "James Morris" <jmorris@namei.org>, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexander
+ Potapenko" <glider@google.com>, "Dmitry Vyukov" <dvyukov@google.com>, "Peter
+ Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Will
+ Deacon" <will@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Waiman Long" <longman@redhat.com>, "Luis
+ Chamberlain" <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel
+ Gomez" <da.gomez@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>, "Aaron
+ Tomlin" <atomlin@atomlin.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Frederic
+ Weisbecker" <frederic@kernel.org>, "Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>, "Joel
+ Fernandes" <joelagnelf@nvidia.com>, "Josh Triplett" <josh@joshtriplett.org>, "Uladzislau
+ Rezki" <urezki@gmail.com>, "Steven Rostedt" <rostedt@goodmis.org>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, "Lai Jiangshan" <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, "Juri
+ Lelli" <juri.lelli@redhat.com>, "Vincent Guittot" <vincent.guittot@linaro.org>, "Dietmar
+ Eggemann" <dietmar.eggemann@arm.com>, "Ben Segall" <bsegall@google.com>, "Mel
+ Gorman" <mgorman@suse.de>, "Valentin Schneider" <vschneid@redhat.com>, "K
+ Prateek Nayak" <kprateek.nayak@amd.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Thomas
+ Gleixner" <tglx@kernel.org>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org, "H.
+ Peter Anvin" <hpa@zytor.com>
+Cc: kasan-dev@googlegroups.com, linux-modules@vger.kernel.org, linux-mm@kvack.org, linux-kbuild@vger.kernel.org
+In-Reply-To: <20261027-early-kcov-v1-1-6f2f053255ad@est.tech>
+References: <20261027-early-kcov-v1-0-6f2f053255ad@est.tech>
+ <20261027-early-kcov-v1-1-6f2f053255ad@est.tech>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Oct 2026 16:35:06 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -99,40 +78,174 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add documentation for the emit_base method within the ModInfoBuilder
-struct. Explain its role in formatting metadata strings, handling the
-differentiation between built-in and loadable modules, and managing
-linker sections and conditional compilation.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] kcov: NULL deref in __sanitizer_cov_trace_pc() during selftest()
+--
 
-Signed-off-by: Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
----
- rust/macros/module.rs | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+commit 2f2cd36073f62980c1305efe82a4239b11c076f5
+Author: Yunseong Kim <yunseong.kim@est.tech>
 
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 0a7b9e24c..6f361013f 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -49,6 +49,16 @@ fn new(module: &'a str) -> Self {
-         }
-     }
- 
-+    /// Emits a single metadata entry into the module information table.
-+    ///
-+    /// This method formats a `field=content\0` byte string and places it into the
-+    /// `.modinfo` linker section. For built-in modules (`builtin == true`), the string
-+    /// is prefixed with the module name (`module.field=content\0`) to avoid naming
-+    /// collisions in the final monolithic kernel binary.
-+    ///
-+    /// It automatically generates a unique static identifier using an internal counter
-+    /// and applies appropriate conditional compilation attributes (`#[cfg(MODULE)]` or
-+    /// `#[cfg(not(MODULE))]`) based on the target type.
-     fn emit_base(&mut self, field: &str, content: &str, builtin: bool, param: bool) {
-         let string = if builtin {
-             // Built-in modules prefix their modinfo strings by `module.`.
--- 
-2.56.0
+kcov: collect early boot coverage of init_task
 
+This commit adds CONFIG_EARLY_KCOV to record code coverage of init_task
+from right after early parameter parsing in start_kernel() until the start
+of rest_init(), and exposes the collected PCs via
+/sys/kernel/debug/early_kcov. It also introduces CONFIG_KCOV_INSTRUMENT_NOI=
+SY
+and a kcov-noisy kbuild helper to instrument core subsystems normally
+excluded due to coverage noise.
+
+> diff --git a/kernel/Makefile b/kernel/Makefile
+> index 4ff92e24680c5..b9e4f06e02ad0 100644
+> --- a/kernel/Makefile
+> +++ b/kernel/Makefile
+> @@ -27,14 +27,14 @@ endif
+> =20
+>  # Prevents flicker of uninteresting __do_softirq()/__local_bh_disable_ip=
+()
+>  # in coverage traces.
+> -KCOV_INSTRUMENT_softirq.o :=3D n
+> +KCOV_INSTRUMENT_softirq.o :=3D $(kcov-noisy)
+
+[ ... ]
+
+> diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+> index cee1901d4cff8..9041cbbec9aae 100644
+> --- a/kernel/locking/Makefile
+> +++ b/kernel/locking/Makefile
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # Any varying coverage in these files is non-deterministic
+>  # and is generally not a function of system call inputs.
+> -KCOV_INSTRUMENT		:=3D n
+> +KCOV_INSTRUMENT		:=3D $(kcov-noisy)
+
+[ ... ]
+
+> diff --git a/kernel/rcu/Makefile b/kernel/rcu/Makefile
+> index 0cfb009a99b9f..fd23c1dad641b 100644
+> --- a/kernel/rcu/Makefile
+> +++ b/kernel/rcu/Makefile
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # Any varying coverage in these files is non-deterministic
+>  # and is generally not a function of system call inputs.
+> -KCOV_INSTRUMENT :=3D n
+> +KCOV_INSTRUMENT :=3D $(kcov-noisy)
+
+[ ... ]
+
+> diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
+> index b1f1a367034ff..4b4db5cca9b08 100644
+> --- a/kernel/sched/Makefile
+> +++ b/kernel/sched/Makefile
+> @@ -9,7 +9,7 @@ ccflags-y +=3D $(call cc-disable-warning, unused-but-set-=
+variable)
+> =20
+>  # These files are disabled because they produce non-interesting flaky co=
+verage
+>  # that is not a function of syscall inputs. E.g. involuntary context swi=
+tches.
+> -KCOV_INSTRUMENT :=3D n
+> +KCOV_INSTRUMENT :=3D $(kcov-noisy)
+
+[ ... ]
+
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 6759087154edd..40bf654ec7515 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2233,6 +2233,51 @@ config KCOV_INSTRUMENT_ALL
+>  	  filesystem fuzzing with AFL) then you will want to enable coverage
+>  	  for more specific subsets of files, and should say n here.
+> =20
+
+[ ... ]
+
+> +config KCOV_INSTRUMENT_NOISY
+> +	bool "Also instrument code excluded only for noisy coverage"
+> +	depends on EARLY_KCOV && KCOV_INSTRUMENT_ALL
+> +	help
+> +	  Some code (scheduler, RCU, locking, page and slab allocators,
+> +	  rbtree, stack unwinding, ...) is excluded from KCOV instrumentation
+> +	  because its coverage is not a function of system call inputs and
+> +	  only adds noise to coverage-guided fuzzing. Code that is excluded
+> +	  because it cannot be instrumented safely is not affected.
+> +
+> +	  Say y to instrument the noisy code as well, so that the early boot
+> +	  coverage shows the complete execution path. This degrades the
+> +	  coverage signal for syscall fuzzing, so say n for fuzzing kernels.
+
+[Severity: High]
+Can enabling CONFIG_KCOV_INSTRUMENT_NOISY trigger a NULL pointer dereference
+in __sanitizer_cov_trace_pc() during kcov_init() -> selftest(), as well as
+record interrupt entry and exit PCs into task coverage buffers?
+
+In kernel/kcov.c, check_kcov_mode() filters out interrupt context using
+in_task(), which relies on HARDIRQ_OFFSET being set in preempt_count().
+However, several functions in kernel/softirq.c, kernel/sched/core.c,
+kernel/locking/lockdep.c, and kernel/rcu/ run on every hardware interrupt
+either before HARDIRQ_OFFSET is added or after it is subtracted, while
+in_task() is still true:
+
+- In kernel/softirq.c, irq_enter_rcu() and irq_enter() are not marked
+  noinstr or __no_sanitize_coverage, so the compiler inserts a call to
+  __sanitizer_cov_trace_pc() at function entry before __irq_enter_raw()
+  adds HARDIRQ_OFFSET to preempt_count(). Likewise, __irq_exit_rcu()
+  (inlined into irq_exit_rcu() and irq_exit()) calls
+  preempt_count_sub(HARDIRQ_OFFSET) before finishing execution.
+
+- When CONFIG_DEBUG_PREEMPT=3Dy or CONFIG_TRACE_PREEMPT_TOGGLE=3Dy,
+  __irq_enter_raw() calls preempt_count_add(HARDIRQ_OFFSET) in
+  kernel/sched/core.c, which is instrumented at entry before
+  __preempt_count_add() updates preempt_count().
+
+- On interrupt exit after HARDIRQ_OFFSET is cleared,
+  irqentry_exit_to_kernel_mode() / irqentry_exit_cond_resched() can call
+  trace_hardirqs_on() -> lockdep_hardirqs_on_prepare() in
+  kernel/locking/lockdep.c, rcu_irq_exit_check_preempt() in kernel/rcu/,
+  and preempt_schedule_irq() -> __schedule() in kernel/sched/core.c
+  (before prepare_task_switch() sets KCOV_IN_CTXSW and after
+  kcov_finish_switch() clears it).
+
+When CONFIG_KCOV_SELFTEST=3Dy is also enabled (for example in allyesconfig
+builds), kcov_init() calls selftest() at device_initcall time with
+current->kcov_area =3D=3D NULL and current->kcov_size =3D=3D 0:
+
+kernel/kcov.c:selftest() {
+	...
+	start =3D jiffies;
+	WRITE_ONCE(current->kcov_mode, KCOV_MODE_TRACE_PC);
+	while ((jiffies - start) * MSEC_PER_SEC / HZ < 300)
+		;
+	WRITE_ONCE(current->kcov_mode, 0);
+}
+
+When a timer interrupt fires during that loop, the instrumented interrupt
+entry/exit path invokes __sanitizer_cov_trace_pc() while in_task() is true:
+
+kernel/kcov.c:__sanitizer_cov_trace_pc() {
+	...
+	t =3D current;
+	if (!check_kcov_mode(KCOV_MODE_TRACE_PC, t))
+		return;
+
+	area =3D t->kcov_area;
+	/* The first 64-bit word is the number of subsequent PCs. */
+	pos =3D READ_ONCE(area[0]) + 1;
+	if (likely(pos < t->kcov_size)) {
+	...
+}
+
+Because area[0] is read before checking t->kcov_size, dereferencing area
+when t->kcov_area is NULL crashes the kernel on boot.
+
+Should these interrupt entry/exit helpers be marked __no_sanitize_coverage
+(or noinstr), or should CONFIG_KCOV_SELFTEST depend on
+!KCOV_INSTRUMENT_NOISY?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027-early-kcov=
+-v1-0-6f2f053255ad@est.tech?part=3D1
