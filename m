@@ -1,141 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793202106;
-	b=k+OimrPrxnMJ4uB3BZZ4I2GMCk1Zw4tOxrIEdgfEDvUQ9rSAy1hCNJsdjh4R8xgdLrL/
-	 elC18SAa4RWBhbeAL2B7b3FWqboEIv2v6fv2pvcciBK0nA7fMrDlXScpopRMMf7MGVUaZ
-	 x5WFs/orNwg5sfKTmvdkTy8blaU58puB+brlO3z4wb/mdVDBHz5ndYo9w5ltTQrZhaPE2
-	 WHewy73xvf5Pe7JNqfRwpz+dNoSfL3AnJHH4qZ92szhPWvknHZWN+URYdKOWWlwd8BJvl
-	 WZL1RLXPrEFzOyzH7RGUKT/0wVwLcJD0/SJOjmbRtYEU7guQ9MWCaGUddmTAlNVQPtg==
+	t=1793202620;
+	b=whjPk2FXw3Hjyfwdt4HTlhZYrS2e9G5q3S8Ps4UzNeg3eZKR23M4bCMQ+3Z9fg0Ds8Lx
+	 SfP5vQYN5qRXUC9tR4K84djUqM1idDvnH7fBa9yMPp2xDMt0T+8qqglSVSluXDq3q8hyk
+	 jRQf3dNh8NZgM0NpSUSoHhzUTwYY2v0esB4rNGBzaotzDbVx0k0eCW5ncnvrItkuCIShc
+	 dk3CBvdfwhiFOXoOiiWK4m238AMb9XKFVH5UNvXg64nlTTUX7EXOeVI38q9qbn/mND1y8
+	 q2tbTRP9ihfiJeTkNa+yXN6YeQM4XNO0YkjAGtdybl5sMvMORtaCvaXBkuXnI6OD45g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793202106;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=nBjRxj9zvpUWBYieU8XuvaoHIUe7KPpEifpHAoXCHno=;
-	b=5Nvr1dLWTagYnVrH7CKqYZN+Ve1918DYH7H6IqnXeLKpOvMCVBCF9UznSJC9seRX5R9v
-	 zAM/tNtI7VABv8OL/Z7dgiXfUs5enIA1AJXuupxfbinyRbGTQ3yYwXKsv0LK0K4Nf2kZr
-	 DXdE+cpBHOrhfWFuXahAROKDyHQodBEJTeilkfgJ42S04fAEPFfHTH7jzKV57rvNVPly/
-	 pEPgcfG3+3xIrrtRxZtX9L0b7Nr226/eENK+6/zzbkclh/pX1qp/FAj7auAfXJm83aYPu
-	 B/QrX6k23d0tJitKBiDkziNDevgDVHqJnMeSSGtrXMHfu8ZLTmY7HpKLbp/FFoPRijQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793202620;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Wj4LX9xOsHpuGRygOr/nDK8i03h77TPrsXBsHHo2CzE=;
+	b=kNNXuPD9rPQsDy6Z7W7pr68nPRkHcfD7AlpthJTr1eyklDVt6BTtfHppobwZdeL+MCq6
+	 tW6oqzLcWp6M0HL3lHuQ0DzZWy0kFZThO9dY0CNwsC4+CBREsAylq5Oan/a03r1DoBKRC
+	 gtowUCawZ2dx6PK08YlLZz2hmWzYX/kfCRw7C7ptD0Jom7eZ7e6pLiRmO0j6cyaYquSKH
+	 jaAI8H17Sp5tE5RbToOQrSdDsL8uRB5j84laJ0aHn+tjQOdF6GH3eOvwGo5lVQv5t9V7j
+	 puEaHpU8FPIXxCxyLSPGH1BLLygkPLaDW50o4yPVFZpxHylLYgl+ZrBrgKdKszeRC2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=shazbot.org;
-	spf=pass smtp.mailfrom=shazbot.org;
-	arc=none smtp.remote-ip=103.168.172.145
-Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L3gP8nyH;
+	arc=none smtp.remote-ip=209.85.167.52
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B9960A2608
-	for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 15:41:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B9B9960A2608
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id DDC9FEC0307
-	for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 11:41:43 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Wed, 28 Oct 2026 11:41:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1793202103;
-	 x=1793288503; bh=nBjRxj9zvpUWBYieU8XuvaoHIUe7KPpEifpHAoXCHno=; b=
-	FVpzlnASFLIgMhSAokz5WxVtPsXYnzyL9VnakQ8d785I6sUIh7B0i9rGgfOl3zgb
-	M9jrNUXFhfDxhrEQue4mWL9J+3weVIsSZKD2AGScxN5owyVbl1DZpO85rvel7/I1
-	BrCf7L/aLiNX412JCoddPsLufqWg3OMixQuGeRzZyBWjClhmqJnoCzaYeWflH51U
-	J6sXRjylQK7nL5GuERS71vGqHQNJ+Yqamnzd+oSarhdumxuQi+rbbT0F732Ua9pU
-	qj0PnA57KvJR1l/yHwfFl42HmXtRB8xA0o7xfHrF9K/1w2LTGFk3th4uvLF2NRoI
-	6OvRTENrsvHfV/fOaq6IZA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793202103; x=
-	1793288503; bh=nBjRxj9zvpUWBYieU8XuvaoHIUe7KPpEifpHAoXCHno=; b=w
-	lvapL51zA89BkW/sxkEZw9DFwV94KnZk/BZ0+s+RpDfinhDwGrIxfgTjm84TXUq0
-	sWkRA+oMDT31Ri/WVn8qQaI1ww+DXqgMR6OWYUWgY6Bj76QpG9xPyU5MgoUfQrLk
-	5i+DpSuunDtFApEt15d4BHepQ1+ktFsQVrq94aIDqx9l720XFlp35pDOcjHBUKzG
-	vYsn/VbyHB6YA4+WufAjQ3At7PXrs+VbzrTKSuq9gmZAOI1+P4zqW324+H4X1Qd7
-	qJM1SHpXZXECNI2OEPRPpw7IIwLuXqkbxtWruqtBC0DTPV7dxjJLcUh2XuV7Hdp1
-	KbJC/IRzA6C0BvQy7zukQ==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=sign d=shazbot.org a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793202103; d=shazbot.org;
-	mf=PGFsZXhAc2hhemJvdC5vcmc+;
-	rt=PGxpbnV4LW1vZHVsZXNAdmdlci5rZXJuZWwub3JnPg==;
-	s=fm1:rsa-sha256:XZmS7w49XVjfZut0LEcXN0GDBmqXC2BBPAXUAEESU1dBUs1
-	iDFNQzGXNbku1ZXIP3QyVCV31HYpvKlfFGNXkTONiwVC3xnLsDY/eNuW5pl/0577
-	c4sgzjYvjZIPWvbGxR5J2zlU3/ZXLIoL8iQVxKWeopYA/Q7AakU1bPWZeTRdrZ5P
-	K8hcqMVXo1QvLjNLxh/ByEX8WSX50Jcbf0o+eKsf4g7S6fY2R3MCWQmdW0pQ3BmY
-	VZ7g0JEb0sX4ay1li5wf1vH8sl3xePdLMS6XGou/mqe6V685gWWluPOb1s7AgQMN
-	Q+4btxCKuhTsRk/5HM5h48L2D5eh4x+2xH2jVOg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:LbaJFfvktga4aPohWhLRqD5XDHeLFbrHeHEX9cs/bjY=:Ao+SYeV4Fwst0FguSJhVXFa1iUPte2lvw40dXbYdsA4=;
-X-ME-Sender: <xms:thfiaihfluVol6rg-FGWHMORXsY4fsgyeqW5UIQf30ztzcl-5MrAyw>
-    <xme:thfiajx914QKVKWi3mzbHIFcfGf3figU7XmgBTJBHcIdX99RRnSo789w9MaRXjYot
-    xJZzZlGL92cnyOwa2gstAKHtKiSDtTO_R9KDhdHH3Fa2LiB3rjdIUw>
-X-ME-Received: <xmr:thfiai9qWdMYuGf8NueSZAhPm39FP8IZ9nuMGulKASzToUqclmalSPRg73aZYA>
-X-ME-Proxy-Cause: dmFkZTGpkGeIHBa7luaXBdHEkLteeYnKFNz5z7xJ/WgARwQ/bjfzIr6g9EFyMFBeIIt/3H
-    dae+QqGnTr2u2vKK2rCOBCOcBLdyoqXayi6/RfPxoNfJSSMj6iuaGmWTBooZlKMbL6o6Hu
-    dPpxxoi5wXr3tlAqnVWkvTk/5lsu0ZkbhnRYCNCpQNIpMTa8ycE7RedAyqJvgXv1BwuwFP
-    D/qnUhITaiyi1RMk4C49tPO38F4cpfnoREJ/bR3Kl4ysaGYlAj2skuA2XPgiueCFEIQamF
-    D5+QtLIcs27z8qWkd6OVDwEm8bue7gaDNmrCJAAIcdOt/A42TK64KNVVzmQG35jP6W0Ob2
-    9tMrsRBiApamE6nyVJld0CmaDkJduyQtAIM6HvPcMYKsbYiBwREblVe203pddCh3RV1ECf
-    D1RKRCgPAuSey2qObDDuJeW/VCh4Ma/I2TwGczA1C6XUtLgLQb8Go3gj0T3zOic9pP97lX
-    d9i/mIPFZ+Whm2zjUbM7nGMS3bNpBYwDrsg/nzD6ORrtn34d6482FloFrVjBqMAY2cSYya
-    t/I0FSQbvE6/bRSMozKwuLnpEdoD0U9FFDDEQmE+gvCxDv9LQuBywaajkqHrhUnYcEklc3
-    oDaKdXAkZTDVzzh10hEb9ghYD72MwkCLEzhs6E96QiKhhjg/KbBDhQRsPxpg
-X-ME-Proxy: <xmx:thfiajIGaz02nZq9ogfRr7EslNQisxspDEtEpply8CYGFCtG5LkFxw>
-    <xmx:thfiau7RDDvJT57OJPQn2HyP4je_8qFPdv-lyJ_t0ZgmOD5QhHJsxw>
-    <xmx:thfiagumjOsbvnn57Q0RPFk_Fio4VF5ZYBfD__Le5uT9m-ctfLTeYw>
-    <xmx:thfiakZPCUYo1I8CgmGMJbZiVr2ckMXPWSvv6P36oqJrKS32uCkelQ>
-    <xmx:txfial_gUUZpbUA7gcB8NhEWr_8iNpjXDJtLY4_FEa73WN0qEBiwKIVP>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 28 Oct 2026 11:41:40 -0400 (EDT)
-Date: Wed, 28 Oct 2026 09:41:39 -0600
-From: Alex Williamson <alex@shazbot.org>
-To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@baylibre.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jason Gunthorpe
- <jgg@ziepe.ca>, Armin Wolf <W_Armin@gmx.de>, David Lechner
- <dlechner@baylibre.com>, Danilo Krummrich <dakr@kernel.org>, Luis
- Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
- Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, "Rafael
- J. Wysocki" <rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Bradley Morgan <brads@mainlining.org>,
- Aleksandr Nogikh <nogikh@google.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-usb@vger.kernel.org, driver-core@lists.linux.dev,
- linux-trace-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
- Richard Weinberger <richard@nod.at>, Thierry Reding
- <thierry.reding@kernel.org>, alex@shazbot.org
-Subject: Re: [PATCH v4 0/3] driver core: add TAINT_FORCED_BIND for when
- userspace manually messes with devices and drivers
-Message-ID: <20261028094139.12ea7c16@shazbot.org>
-In-Reply-To: <auILBqh9Ccv7ztid@monoceros>
-References: <defb3953-7516-437e-b70b-d57de55b91bf@baylibre.com>
-	<9bd3a34b-5e98-4038-80d6-da2c3b1948dd@gmx.de>
-	<2026092321-province-yearly-44aa@gregkh>
-	<arOfHEsGGglNse7T@monoceros>
-	<2026092348-victory-erased-0e5a@gregkh>
-	<20261023181326.0dc2f7ed@shazbot.org>
-	<2026102437-vista-unsoiled-b089@gregkh>
-	<at34UOuYv3NtX36R@monoceros>
-	<20261026225950.GD1685504@ziepe.ca>
-	<2026102849-turkey-series-ac07@gregkh>
-	<auILBqh9Ccv7ztid@monoceros>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036B6606A31A
+	for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 15:50:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 036B6606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L3gP8nyH
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5ba3ac592faso1374827e87.0
+        for <linux-modules@vger.kernel.org>; Wed, 28 Oct 2026 08:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793202618; x=1793807418; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Wj4LX9xOsHpuGRygOr/nDK8i03h77TPrsXBsHHo2CzE=;
+        b=L3gP8nyHEpt7c0+mIxQ4RE0XFyRCO1UWhX6RArQV5e67OLxg471Fdc/XET1Yu1ILQT
+         Q6iKZ1OgUaRmQtlh4i2mKr7l/f2l602LAkSGYOvjK9vDRVLOmbqZLS3xOij4o2srjPFq
+         PU/wglL8p4fQxbbWhbxRERoDprueyz0T4yBdcAgG7VUDSie4QeGTlyqISmaB3bUix0eJ
+         4yE7ohInOuyfj8YnxkW4OaOd7FaZiI/tl/oLRnw2uLfNbrHYfSsEaphe5v+017JWijzi
+         TNtEUKG2nCH39y44cB5F5TZ/M2K8TvBGllYGJVjWSUxD9D8GsPoDOUMAVX8JYgpKiP9g
+         V7gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793202618; x=1793807418;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Wj4LX9xOsHpuGRygOr/nDK8i03h77TPrsXBsHHo2CzE=;
+        b=u57KUTPp6PZ+/RPSsjzEO4zF2pMOU7RfUVDnrS2FPAvyrKtB90BfaceojS9CQ/3C89
+         /z1chdeOD9nEdmLE+e/HOJFZJmOtXjwTl+eXAEcbNE2/ZeAqeyOauWdy9gzrKrzR55Uo
+         OnA1WMN2nBNJoEGDto7LnfOJ56sFPBKTxx0Dh8ZwJsGQQm4UtQZGKtGiDAMyIIHtx1l9
+         x653LZE+u5wO6G8w094FjznYXLKSD+FFFzuUyC3GroXlXcwGOGw4jlXn+DOhyq5xhj04
+         D3BFOcRmVEDzULABCSt9vyT2byltuk0JgtU59Ojhx86qOuWIaNulZdudCI3CAqztv6kv
+         Hs4w==
+X-Forwarded-Encrypted: i=1; AKwUvBxVK3sigw+iQm4o1H2OZK1oPRAPMjp1pZ3Kj5y9QUsxBm3v0cLAXi3j43WT5MWg2Gf1E2KB0KJ0S4p/oHJv@vger.kernel.org
+X-Gm-Message-State: AFq9FYIT+nXXG1xIkvEWjuv+wjuvgYr48XMSc3Wf2hch3r5iS54OWzHU
+	+/yrhAN7rWgF4tWcKUmLi6oqOzx2/D01EOfnOEcz3TIbYZ48q/PJsjNg
+X-Gm-Gg: AYBFou30wpt3PxMCf9SiJ6SFD6nplkDGMe5F7ALvXrTxLeLhtS4B4GzBQRMpoB+xXGr
+	jHTNj6Ude+XP4yw0DVQw9jkFb9+fSJhncEsdQ/OAWIXqSTUpoDQ+woa8vZAfXShRVhDl4VL1cLz
+	7OkcjVPQxcWI/PM+axQudBBrh71jqjLusu+fqTiGImftsI/cg0NXjNScTK7VEaIWrCLwHqUS2E2
+	4qkRwgcUV3TPfu6zcNjfbgFfTH1Y5FMkbXKulh/JuFIiLyzQxJ7Q+FoebywIwZ3FxhX7xt337FE
+	WrZ3DOqQ3bV40qINJcjEZRkYKxLHY+WA+1mbyMfVx3dQipFWEpoR96E6D0+kj+w2wKZmKZxrJJh
+	YVEDUP/kUZll2/E99ca0gB3xnE/jOhFC8W44O0yacBxX6gtDZ1N3p6TTp79A5wTDHBHyLcWbOtQ
+	Z/atwXDGd03bKtp8OQcXfUmjNH2/keBMUVWAEKX/NZd4Q0OvLMVn/KMj5fskO1iBPqRELTKq4Iw
+	jO498F16ifMksF5CmP7t/fi8uifFipNw6hTz+fiANyf4OzRB5MD8XvFHuTWm89FvrsJID7q0vmz
+	QMUxwronx1GLSZb0CqNyQW0907TGSBcAk30Cew==
+X-Received: by 2002:a05:6512:a83:b0:5bf:b93d:a85b with SMTP id 2adb3069b0e04-5bfcad893eamr1077228e87.25.1793202618007;
+        Wed, 28 Oct 2026 08:50:18 -0700 (PDT)
+Received: from archlinux ([194.28.181.64])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bfca5c6ffasm694002e87.80.2026.10.28.08.50.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2026 08:50:17 -0700 (PDT)
+From: Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	rust-for-linux@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
+Subject: [PATCH] rust: macros: document emit_base in ModInfoBuilder
+Date: Wed, 28 Oct 2026 17:50:05 +0200
+Message-ID: <20261028155005.174417-1-mbkchelofficialdev@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -145,68 +100,39 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, 28 Oct 2026 15:50:44 +0100
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com> wrote:
+Add documentation for the emit_base method within the ModInfoBuilder
+struct. Explain its role in formatting metadata strings, handling the
+differentiation between built-in and loadable modules, and managing
+linker sections and conditional compilation.
 
-> On Wed, Oct 28, 2026 at 02:45:18PM +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Oct 26, 2026 at 07:59:50PM -0300, Jason Gunthorpe wrote: =20
-> > > On Sun, Oct 25, 2026 at 01:48:04PM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> > >  =20
-> > > > The more I think about this taint, the more I believe the commit sh=
-ould
-> > > > be reverted and replaced by a some stop gaps for driver_override. (=
-Be it
-> > > > a taint or better yet
-> > > > https://lore.kernel.org/all/0f7446324f6a0c8f0153d6532d92a6eeecd6a30=
-8.1790612298.git.u.kleine-koenig@baylibre.com/
-> > > > .) =20
-> > >=20
-> > > I also think this patch is way too broad and should be reverted until
-> > > something better is designed. =20
-> >=20
-> > Fair enough, I've sent a revert for now, will get it merged before -rc1
-> > is out. =20
->=20
-> \o/, thanks
->=20
-> > I'll rework this for a later release, thanks. =20
->=20
-> Please look at the series behind the link above before investing time
-> here. I think most of the ideas are already implemented there. If you
-> voice your preferences there, I can rework accordingly and rebase on top
-> of your revert.
+Signed-off-by: Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
+---
+ rust/macros/module.rs | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-=46rom a vfio perspective, the concern with the linked series is that
-driver_override always taints.  That's the same regression we have
-here; vfio use cases rely on driver_override.  Introducing a driver
-flag that allows a driver to opt-in to declare support for
-driver_override, but then taints if it actually generates a match is
-contradictory.
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 0a7b9e24c..6f361013f 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -49,6 +49,16 @@ fn new(module: &'a str) -> Self {
+         }
+     }
+ 
++    /// Emits a single metadata entry into the module information table.
++    ///
++    /// This method formats a `field=content\0` byte string and places it into the
++    /// `.modinfo` linker section. For built-in modules (`builtin == true`), the string
++    /// is prefixed with the module name (`module.field=content\0`) to avoid naming
++    /// collisions in the final monolithic kernel binary.
++    ///
++    /// It automatically generates a unique static identifier using an internal counter
++    /// and applies appropriate conditional compilation attributes (`#[cfg(MODULE)]` or
++    /// `#[cfg(not(MODULE))]`) based on the target type.
+     fn emit_base(&mut self, field: &str, content: &str, builtin: bool, param: bool) {
+         let string = if builtin {
+             // Built-in modules prefix their modinfo strings by `module.`.
+-- 
+2.56.0
 
-I had been working on a series that allowed match to return a match
-type classification, for example 1 as a static match (for
-compatibility), 2 for a dynamic match, and 3 for a driver_override
-match.  Anything other than a static match that reaches driver probe
-generates a taint.  Also note that generating a match doesn't
-necessarily result in a driver probe callback, in at least one flow we
-haven't even tested that the device isn't already bound to a driver.
-
-The bus level match function can filter and downgrade the
-classification, for example PCI has an override_only flag in its match
-ID.  vfio-pci and variant drivers thereof make use of this to avoid
-becoming the default driver for devices.  A driver_override that
-matches the override_only match ID in the driver table can be demoted
-to a static match and avoid tainting.
-
-I'm not sure I understand the rationale for focusing only on
-driver_override though, new_id has just as much ability to generate
-bogus driver matches.  It's also racy to use new_id if you're trying to
-get a specific device bound to a driver, which is why driver_override
-was invented.  So we end up placing barriers to the use of the
-interface that we've now long recommended as the better alternative to
-new_id, while leaving the gaps in new_id wide open.  Thanks,
-
-Alex
