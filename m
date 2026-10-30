@@ -1,59 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793337366;
-	b=FSnale1fefh6WfnguzcTRcY6ZxIXPqCmVCIYzyClkDmH7FByz21l5PEMa0XctOU+qcP/
-	 SUoc2qqOpdvtC/otrNfaCGQaYHYVymZAXMLdyxjMGp+BAJPTS3g93h8dNu/bLyvzCYtXC
-	 1DK0+ivyO47l3/6pXbHLmfwjJ/vviOhu1FHO0HRI8ab/SALQkYGGYVBw2bI+oudEcpEgx
-	 HJHmEChqAYaowuydDFHKYrCGiyu43iCU1gEk2nBTxEA61BoLeTDk0uFuoM6RMR6IMZyhl
-	 GYMkyAKEl474IhbnuMWCK0Gkq8iJC8HXV0qyNkfIFDCwNZWBi0MS/r//uGAYMfdwVXQ==
+	t=1793371625;
+	b=bS4U2yzrz0Ud1XTobZZeXUiYPfw1R+kkmwgtiumxCB5vz3OZ4gpv6GkePQbmnL+lHjOI
+	 gnmbzjcWMeO7F5d3TaHuUYfCxt3Sbm/9/hGY5OOdnCNDAdGOGlHYAoJ3djygl6qWrxp+a
+	 ARwOEWMYlLldUxU/AuP43hC9xcdhQbByDFhYaftls1+ZSC+cm91PI5qa9l+h4q9w1Fjab
+	 4K+vbrvgIPwKDImZVZEf1iwx7NBIhkYAQTvW2q8jpthuzXUMU1gn0IDmlUjaesmJNdz4W
+	 auAF6OQoUI7EHWrPz/iclimNZDxGXge9DSKyxOlC9PZPVsUhTBVA5/MekstsT9o5VXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793337366;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=avuF1Y9mBOLiqs6rbP6YfufHWxWws6rCLMAuFNQeB0I=;
-	b=KFtbD5K954BJZg3stWOLFZnYaJa2DZfxN554KsZd3iZqydS3ZQYxSo68Um9V02QCI49L
-	 GWM5xq/1JvBvCcFnyJXBI8OH/eIWz13TXLCpixB/6uA5Cxl61IbW8XDe/aKFCDInuGBhT
-	 79ysmB1nFmejzUU//2230nyp9gmiW0ZNgYt+f0W/wJgYSOimMoidsYb+vw5AuZm09gZSA
-	 dXei5KUrXYyd+4GQwh8d60myip93KABEiVDMAZZbjGPWmdbb1npY8GNrbuqhZUH4BtJ6F
-	 DbjbqobyDj5T3tBl2rBCvy6Jp/rQj+9cXOLTv219ircMZPQh2XyNG7zWjjJVXM1R7oQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793371625;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=FNz3jT4CLcKBWPI7M4VnpA4Y1xwsbgEdgjaTG5V52hA=;
+	b=B8yXT43Vi7xleAbfD29tCG9uoA3DC4QNZTMDhXNI9Q0JjRCPWRxVPuos62NP59CYwzDK
+	 z4QN1SJDoUl2jNdExMyqWjeWIB/hzBh2j9XnPpvS3qVR8kvdrBw8N4zeIAtWEyvQ2Qr6g
+	 62YewhjjOV8LcFSLjHFpKp8WVEf1seQuALJFL9GOseHkREKau6znBG18eIks3UrPTdpzL
+	 vu4qbNzzFwfnoINqNmjzk1bKs/YQI8RSoaoFS+vq91La4v/YfHL7uGkbNe9zXjCuARMnK
+	 IK0XP+Kiw4z1F9RMugMrM3sM5zVNkLwEZG2unsmabz0ovEbV0KX4soGmpr33SwC5O2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nWLYRQf+;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G+PJz56i;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA73606A31A
-	for <linux-modules@vger.kernel.org>; Fri, 30 Oct 2026 05:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5944606A327;
+	Fri, 30 Oct 2026 14:47:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nWLYRQf+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF771F000C1;
-	Fri, 30 Oct 2026 05:16:05 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G+PJz56i
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7CD1F000C1;
+	Fri, 30 Oct 2026 14:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793337365;
-	bh=avuF1Y9mBOLiqs6rbP6YfufHWxWws6rCLMAuFNQeB0I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nWLYRQf+BtN6+4SA0BwUPj9QN9KycMnXsRAUVS8bCVPQQu/fXNBIQyfWRHsAV3U27
-	 emUT/+HMh/g9j04qP2MPlL23zy6eb1RUGvaXJI1NqnLPgreZsw900DJniF8LniNkrZ
-	 ICwQl++MMxYZIndAW/j/+gJIFRINJMGoaibpscpeCMEL4yfMcuafQlIPjM3YZVWhmr
-	 yBBaJycRpbeEZbLaxFZHcf7R3zn/sgLT5RJ78EFsLaIMoQik7c6ki59IrsZVrMmCuB
-	 NrbkDzUZ+Q4kCB1j4EqVATK6xWBG8kERPUb0P3zJlJwEUYJ0bRfoOlsAg+syaSSA3C
-	 RnqR3mS10h6TQ==
-Message-ID: <sashiko-outbox-190549@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] module: Fix use-after-free in module_put() tracepoint
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Aaron Tomlin" <atomlin@atomlin.com>
-Cc: linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>
-In-Reply-To: <an3o4dzjwt6p3wt45twtqsv2t3x527srauhcqv6u7uxtt7zz3k@22ye3vb5tf4e>
-References: <20261019034857.654569-1-atomlin@atomlin.com>
- <a5e66dc8-155d-4eb1-add5-8c182879cefb@suse.com>
- <4ex7fuogdtmtxil4i2bzx3yqnkqgb2x5wxysqpwapauohmcok7@jvaytjn5fo62>
- <f7fe0439-d123-416d-b6fa-27a6dcf25d39@suse.com>
- <an3o4dzjwt6p3wt45twtqsv2t3x527srauhcqv6u7uxtt7zz3k@22ye3vb5tf4e>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 30 Oct 2026 05:16:05 +0000
+	s=k20260515; t=1793371625;
+	bh=FNz3jT4CLcKBWPI7M4VnpA4Y1xwsbgEdgjaTG5V52hA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=G+PJz56izIh6pQmZqspvYOmjdWZ3E88eDisXW8Cs2tdMSq2TSME28XvHlx3+EAw+p
+	 GP04tc4cYACm9CwH7bhLuHxZHn2ffNxHxSH/FRMwijqqN4MazvOQJHFyxXQpRl6Oah
+	 H4zOs9Vkuc6QgIdGJsKM2B2w+/H08y/Q9W8bvEUAeN2JPtospAjkkB5xvg2PgeJuWE
+	 5p3IK4uEheA63kg/GT+bZ00q6PPx7f7AgQevlBEG4UJRlaIcc7AAW0u7icGj7Duv0/
+	 wZYib7I20AW5GCS5NsFEFaA71sd28YSkwVFsgcldgEquRNnSyC0O/fiS5dC4dxpi9r
+	 NkDa6b5wDCLPw==
+Date: Fri, 30 Oct 2026 09:47:03 -0500
+From: Lucas De Marchi <demarchi@kernel.org>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Emil Velikov <emil.l.velikov@gmail.com>, Tobias Stoeckmann <tobias@stoeckmann.org>, 
+	Lucas De Marchi <lucas.de.marchi@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Anton Moryakov <ant.v.moryakov@gmail.com>, 
+	Dawid Osuchowski <linux@osuchow.ski>, Rudi Heitbaum <rudi@heitbaum.com>, 
+	Syed Labeeq Sajid Bukhari <syedlabeeq@gmail.com>, Wentao Guan <guanwentao@uniontech.com>, 
+	Yannick Le Pennec <yannick.lepennec@live.fr>, Yuntao Wang <yuntao.wang@linux.dev>
+Subject: [ANNOUNCE] kmod 34.3
+Message-ID: <auSsJsiiuE97DA_M@rpl>
+References: <hzjr4s6bp35apkmeyqaafsbhfrnetfzsarw34o5c5fvnuppfmz@n4yy43fdkpwx>
+ <un4amoqszsfdngir4skk3rpztouptrxfxrd5riiwof4ba6gt63@hrzi233bjuyh>
+ <nbfzghf5ol2unxajqj2fumagq25leri3dtnlu47rsxyr63g2ul@g5zgumnoxpps>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -62,77 +63,52 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <nbfzghf5ol2unxajqj2fumagq25leri3dtnlu47rsxyr63g2ul@g5zgumnoxpps>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] module: commit message in module_put() fix is a raw email reply wit=
-hout Signed-off-by
---
+kmod 34.3 is out:
 
-commit 37bb54444936a36339279161bf4d23fea92a7c7a
-Author: Aaron Tomlin <atomlin@atomlin.com>
+	https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-34.3.tar.xz
+	https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-34.3.tar.sign
 
-module: Fix use-after-free in module_put() tracepoint
+Misc bag of fixes.
 
-This commit updates module_put() in kernel/module/main.c to wrap
-__module_put() and trace_module_put() in an RCU read-side critical section
-when trace_module_put_enabled() is true.
+Shortlog is below:
 
->     module: Fix use-after-free in module_put() tracepoint
->    =20
->     On Tue, Oct 20, 2026 at 05:22:18PM +0200, Petr Pavlu wrote:
->     > The trace_module_put() tracepoint is used only for debugging. What
->     > tooling are you referring to that could be confused by changing the
->     > recorded refcnt value?
->    =20
->     Fair point. Please ignore. I have another idea to avoid a reference c=
-ount
->     that is off by one.
->    =20
->     > Normally, module_put() is not invoked concurrently with free_module=
-()
->     > and doesn't need to synchronize with it, so an RCU read-side critic=
-al
->     > section only adds overhead.
->     >
->     > The preempt_disable() call in module_put() was previously needed be=
-cause
->     > of the complex module_ref scheme, but that was replaced in commit
->     > 2f35c41f58a9 ("module: Replace module_ref with atomic_t refcnt"). C=
-ommit
->     > cb0b50b813f6 ("module: Remove preempt_disable() from module referen=
-ce
->     > counting.") subsequently removed the no longer needed synchronizati=
-on.
->    =20
->     Agreed.
->    =20
->     > The fix is valid, but I don't see a strong argument to introduce an=
- RCU
->     > read-side critical section in module_put(), especially just for
->     > a tracepoint that will be disabled 99% of the time.
->    =20
->     How about the following to ensure the fast path incurs zero RCU overh=
-ead
->     when tracing is disabled, gate the RCU critical section behind
->     trace_module_put_enabled():
+Anton Moryakov (1):
+       shared: util.c: fix buffer overflow in alias_normalize()
 
-[Severity: Low]
-This isn't a runtime bug, but the commit message body consists entirely of =
-an
-inline mailing-list reply rather than a self-contained changelog, and it is
-missing a Signed-off-by tag.
+Dawid Osuchowski (1):
+       testsuite: fix dirty rootfs error message
 
-Could the commit message be replaced with a standalone explanation of the
-use-after-free race in module_put() (where atomic_dec_if_positive() drops t=
-he
-final reference on module->refcnt, allowing a concurrent delete_module() ->
-free_module() path to free struct module before trace_module_put() reads
-module->refcnt and module->name, exposed after commit cb0b50b813f6 removed
-preempt_disable()) and how gating guard(rcu)() behind
-trace_module_put_enabled() pairs with synchronize_rcu() in free_module(),
-along with a Signed-off-by tag?
+Emil Velikov (5):
+       libkmod: return ENOMEM when strbuf_pushchar(s) fails
+       man/modprobe.8: use MODULE_DIRECTORY as applicable
+       scripts/sanitizer-env.sh: remove incorrect $CC quotes
+       man/modprobe.8: document --remove-holders
+       man/modprobe.8: document --show-exports
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/an3o4dzjwt6p3wt45tw=
-tqsv2t3x527srauhcqv6u7uxtt7zz3k@22ye3vb5tf4e?part=3D1
+Lucas De Marchi (3):
+       tools/modprobe: Fix odd --remove-holders behavior
+       ci: Fix alpine setup
+       kmod 34.3
+
+Rudi Heitbaum (1):
+       util: Use const variable type in mkdir_parents
+
+Syed Labeeq Sajid Bukhari (1):
+       libkmod: fix type confusion in kmod_module_get_sections() error path
+
+Wentao Guan (1):
+       libkmod: Fix open file which some char device
+
+Yannick Le Pennec (1):
+       tools/rmmod: fix garbled error message
+
+Yuntao Wang (1):
+       libkmod: Fix dependency count in kmod_module_parse_depline()
+
+thanks
+Lucas De Marchi
