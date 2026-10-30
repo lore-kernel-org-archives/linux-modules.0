@@ -1,60 +1,118 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793371625;
-	b=bS4U2yzrz0Ud1XTobZZeXUiYPfw1R+kkmwgtiumxCB5vz3OZ4gpv6GkePQbmnL+lHjOI
-	 gnmbzjcWMeO7F5d3TaHuUYfCxt3Sbm/9/hGY5OOdnCNDAdGOGlHYAoJ3djygl6qWrxp+a
-	 ARwOEWMYlLldUxU/AuP43hC9xcdhQbByDFhYaftls1+ZSC+cm91PI5qa9l+h4q9w1Fjab
-	 4K+vbrvgIPwKDImZVZEf1iwx7NBIhkYAQTvW2q8jpthuzXUMU1gn0IDmlUjaesmJNdz4W
-	 auAF6OQoUI7EHWrPz/iclimNZDxGXge9DSKyxOlC9PZPVsUhTBVA5/MekstsT9o5VXg==
+	t=1793372843;
+	b=Se5bHU33wruH8a2+o0Cs1rI2p71VEz9QLUic1SpjfjMpuhWRlabZB/0FohYk6K+nvSps
+	 rEpg81Y0C8nCEtu0JAsqQpqGbpZYVuxnc5bjIaZJV2kivOoJc3cHiyWgPPtSqq9iSP6VI
+	 SXqA9J1C9hj5y8VXeJbO32lMXJOq2DcM+EcbJnFiwNp0lVye/2rPN2tgCcKMyFh0oaU5t
+	 bdkhxxV+vWpUrj9yUjiLx945j0xh1xbok4N9qRM/gMmtPT4AffPUaZev0tSKoCUkajJzx
+	 RRlHtnsvGhNWpxgTVE5du4zILRJhOY+5B7aQFyTEnGQUuroEpNTbCYYPtb8GZporpwQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793371625;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=FNz3jT4CLcKBWPI7M4VnpA4Y1xwsbgEdgjaTG5V52hA=;
-	b=B8yXT43Vi7xleAbfD29tCG9uoA3DC4QNZTMDhXNI9Q0JjRCPWRxVPuos62NP59CYwzDK
-	 z4QN1SJDoUl2jNdExMyqWjeWIB/hzBh2j9XnPpvS3qVR8kvdrBw8N4zeIAtWEyvQ2Qr6g
-	 62YewhjjOV8LcFSLjHFpKp8WVEf1seQuALJFL9GOseHkREKau6znBG18eIks3UrPTdpzL
-	 vu4qbNzzFwfnoINqNmjzk1bKs/YQI8RSoaoFS+vq91La4v/YfHL7uGkbNe9zXjCuARMnK
-	 IK0XP+Kiw4z1F9RMugMrM3sM5zVNkLwEZG2unsmabz0ovEbV0KX4soGmpr33SwC5O2w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793372843;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=YNL5gTzoS0SNcKXI362OG6Cyagd0/f8y/Be+hIpJbPg=;
+	b=eKq1IpZgdMVMwRisA7oAHlFgPNXwgdvARG64Ru4aBPTl2lLLrSNGey7dh1WF4Op9S3HN
+	 Cp09kr6ldeudlIKGYmg/uljZEsKC1LhLO8Ev/OZWV7dCko5iMwk9K6CQRQUNmy2G/3Myg
+	 tbSaD8/JWQqmlxSqMxivmy46yqCnmdAsaDxV8hmdc4mG8rqGS89FaaQi9n4j8jmQ3ZpFl
+	 4sV+QusI9u0ZHJJ9S7XaFp0OFQ3WVlB9m8dL/ywteCMpF3IZr8szDRtdWZiMJuqdJJs/L
+	 L0EO1Bu4USQovQdmVrA3BO1mTKeMHuAGZhkTjgAzsf7m7l+3DIiZBNErqXYUV6jbwpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G+PJz56i;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uWnnIDaF;
+	arc=none smtp.remote-ip=209.85.128.47
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5944606A327;
-	Fri, 30 Oct 2026 14:47:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94512606A327
+	for <linux-modules@vger.kernel.org>; Fri, 30 Oct 2026 15:07:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94512606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G+PJz56i
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7CD1F000C1;
-	Fri, 30 Oct 2026 14:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793371625;
-	bh=FNz3jT4CLcKBWPI7M4VnpA4Y1xwsbgEdgjaTG5V52hA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=G+PJz56izIh6pQmZqspvYOmjdWZ3E88eDisXW8Cs2tdMSq2TSME28XvHlx3+EAw+p
-	 GP04tc4cYACm9CwH7bhLuHxZHn2ffNxHxSH/FRMwijqqN4MazvOQJHFyxXQpRl6Oah
-	 H4zOs9Vkuc6QgIdGJsKM2B2w+/H08y/Q9W8bvEUAeN2JPtospAjkkB5xvg2PgeJuWE
-	 5p3IK4uEheA63kg/GT+bZ00q6PPx7f7AgQevlBEG4UJRlaIcc7AAW0u7icGj7Duv0/
-	 wZYib7I20AW5GCS5NsFEFaA71sd28YSkwVFsgcldgEquRNnSyC0O/fiS5dC4dxpi9r
-	 NkDa6b5wDCLPw==
-Date: Fri, 30 Oct 2026 09:47:03 -0500
-From: Lucas De Marchi <demarchi@kernel.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Emil Velikov <emil.l.velikov@gmail.com>, Tobias Stoeckmann <tobias@stoeckmann.org>, 
-	Lucas De Marchi <lucas.de.marchi@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Anton Moryakov <ant.v.moryakov@gmail.com>, 
-	Dawid Osuchowski <linux@osuchow.ski>, Rudi Heitbaum <rudi@heitbaum.com>, 
-	Syed Labeeq Sajid Bukhari <syedlabeeq@gmail.com>, Wentao Guan <guanwentao@uniontech.com>, 
-	Yannick Le Pennec <yannick.lepennec@live.fr>, Yuntao Wang <yuntao.wang@linux.dev>
-Subject: [ANNOUNCE] kmod 34.3
-Message-ID: <auSsJsiiuE97DA_M@rpl>
-References: <hzjr4s6bp35apkmeyqaafsbhfrnetfzsarw34o5c5fvnuppfmz@n4yy43fdkpwx>
- <un4amoqszsfdngir4skk3rpztouptrxfxrd5riiwof4ba6gt63@hrzi233bjuyh>
- <nbfzghf5ol2unxajqj2fumagq25leri3dtnlu47rsxyr63g2ul@g5zgumnoxpps>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uWnnIDaF
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a35d5d4a20so8639295e9.2
+        for <linux-modules@vger.kernel.org>; Fri, 30 Oct 2026 08:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793372841; x=1793977641; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=YNL5gTzoS0SNcKXI362OG6Cyagd0/f8y/Be+hIpJbPg=;
+        b=uWnnIDaFZDr4pqzEYcHVHDAqr85/92Q2My9fXNCJD+rkJgIdgpI1tq1Nsu/ad8rMv1
+         +RWezfm2jh3eMuFkIfsmUhO1gyAqms4M0rNFpMVk2SIZgx66VY2GDIayj0MDbNPZoCQj
+         P0CxcqVstEmDxE8O16N5QIJkpPdcPsFJ/MGp6i3sqw15OksJS9Ox2+geN8KZJuvA53ed
+         NhD+8PloOM+6WV43JiFyt+cdUB8pC1HWVKszqyu7EQ+Dw+hClQ9Jtnh8sho7HITeY2Mv
+         GPTARz0x64NBro0lE7klgoIWeExmR78Ni5nKXKZLufumNznEsjPgq9U1YNuLr5BhMcDv
+         gHbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793372841; x=1793977641;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YNL5gTzoS0SNcKXI362OG6Cyagd0/f8y/Be+hIpJbPg=;
+        b=q6fcM5hDPneLyR83d89TF70h+7Quu0k2jNYzrfRpzUFvJEh+Da7hkGaTKa2DcszNRs
+         o10LCHNdhRFj7OoR4Ou88IEqWHh5jjw6znS24pSSsbxAhjLiuE4mNUFKyQersL92q7nw
+         sr6Btx6IVHq1q2XcEKNjpz2rPHvZnE7rjWMVV/5/7bfOZWuvrCtumQ+BMNSWqs6Qs7pv
+         Usd/ciU7qSHNW9FHOyU7dRS5mj5ajEskc+NCTDysiGloyZ8cqbsn0Ne/Avp16hAj7kGh
+         v2vO1owW4Zb1KllgG+ZHnvxaCmmyyf00b3SAGCVX7UJ0tH4oZK0D5ceUZ0jUdtizNTKQ
+         2eBA==
+X-Forwarded-Encrypted: i=1; AKwUvByNh92ev5XqJHjd5T+dOpGB7yDMirLkPhJxu1wehIVbzjjY13k+DlwKn/fVJDygU8kvO9eFSPO18up98ogt@vger.kernel.org
+X-Gm-Message-State: AFq9FYKXRv1KfJBqbA+S/v5GLnZ2L3R1Qozo4T0fOVqx85bObp1OVOgy
+	ZLfjFZl8myVCWvhaQzZCcaO3tpYkxjWwf4w28ckcaC6BJt7zDZBtSqaJ
+X-Gm-Gg: AYBFou292b7B2IC/Xn+dNASmTdDMuse+OKn9SjzHIIuVVzMD6zvJ6nQDgYF4nGtTodR
+	WI2gI3QjVPyPxiy1zGxn4kQ7Ga5a5YSzxckKG5SIv/OwRqomwqqjUb8kLKNllDenOl7mtrqcVvZ
+	9VXyhSiNlgzgHmAF2jBa3f+AFt0Ll5WzyPOmE7rOKzDcUlobHKyylJEB8Iav9t7dP1cAK1wFBc2
+	AhLSMz7Ux/Fp83SU0OMlxSToEEiEDqSLnwAWgMdIX38Ww2Tnusotnalp6NbM9b/Wr2NzrIu+Cp6
+	SptFSj1kVq/JiQnnVsVHeVjUVIpSpLhO9LRb6uHTnhPl5oi5LidmR60h2oPuvH02Mn/Ji4seSx1
+	wAbWwNAWi/DEX17PmLdpOoWrpbyvoC2AjGxL+yxewkCZig3WzK/RCgs8576aHZVuskyjQ+hlE0W
+	g2NevmU6JObywhG6FuqLIpvV1VMy0kH6Hs2ndUl27u5oqkrBFz9ElCRJRW8tgSVXGvffo4FTdDt
+	gw0gfoes2M+wXKmKuFojLUkM8yqHRyHeAWqOE7QIKYIeNybq2rw0QZep3sEC4YPUK8YIeTbN682
+	zwMC3EX/Jl8KGXALeQdn9HeocIIpWsgJLF7lSWe19soJwUUZ8b8SflhhhgddVDtg/A==
+X-Received: by 2002:a05:600c:4e8c:b0:4a1:dade:f049 with SMTP id 5b1f17b1804b1-4ac1793ff26mr57275105e9.15.1793372840727;
+        Fri, 30 Oct 2026 08:07:20 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf67aab10sm64599465e9.9.2026.10.30.08.07.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 08:07:18 -0700 (PDT)
+Date: Fri, 30 Oct 2026 15:07:17 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Petr Mladek <pmladek@suse.com>
+Cc: jim.cromie@gmail.com, Jason Baron <jbaron@akamai.com>, Shuah Khan
+ <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+ <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+ <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Arnd Bergmann
+ <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
+ <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Jonathan
+ Corbet <corbet@net.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel
+ Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Steven Rostedt <rostedt@goodmis.org>, John Ogness
+ <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, Philipp Hahn
+ <phahn-oss@avm.de>
+Subject: Re: [PATCH v12 33/40] dyndbg: Ignore additional arguments from
+ pr_fmt
+Message-ID: <20261030150717.094d8a35@pumpkin>
+In-Reply-To: <auNes2b11NqUey3C@pathway>
+References: <20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com>
+	<20261012-dd-cmap-part2-clean-v12-33-3c8cc5725def@gmail.com>
+	<as4W9hToBqAvbzJ-@pathway.suse.cz>
+	<20261027132253.5f3a461d@pumpkin>
+	<auNes2b11NqUey3C@pathway>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -64,51 +122,145 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <nbfzghf5ol2unxajqj2fumagq25leri3dtnlu47rsxyr63g2ul@g5zgumnoxpps>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-kmod 34.3 is out:
+On Thu, 29 Oct 2026 15:56:51 +0100
+Petr Mladek <pmladek@suse.com> wrote:
 
-	https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-34.3.tar.xz
-	https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-34.3.tar.sign
+> On Tue 2026-10-27 13:22:53, David Laight wrote:
+> > On Tue, 13 Oct 2026 13:33:10 +0200
+> > Petr Mladek <pmladek@suse.com> wrote:
+> >  =20
+> > > On Mon 2026-10-12 20:37:04, Jim Cromie via B4 Relay wrote: =20
+> > > > From: Philipp Hahn <phahn-oss@avm.de>
+> > > >=20
+> > > > pr_fmt can be used to add a common prefix to any output from a modu=
+le:
+> > > > 	#define pr_fmt(fmt) KBUILD_MODNAME ".%s " fmt, __func__
+> > > >=20
+> > > > But adding additional arguments breaks dynamic debug:   =20
+> > > > > error: macro "DEFINE_DYNAMIC_DEBUG_METADATA_CLS" passed 4 argumen=
+ts, but takes just 3
+> > > > > |         pr_debug_ratelimited("%s", "Hello world!");
+> > > > > |                                                  ^
+> > > > > note: macro "DEFINE_DYNAMIC_DEBUG_METADATA_CLS" defined here
+> > > > > | #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)      =
+ \
+> > > > > |
+> > > > > error: =E2=80=98DEFINE_DYNAMIC_DEBUG_METADATA_CLS=E2=80=99 undecl=
+ared (first use in this function)
+> > > > > |         DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_=
+DFLT, fmt)
+> > > > > |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   =20
+> > >=20
+> > > I wonder what this error about undeclared macro means.
+> > >  =20
+> > > > > note: in expansion of macro =E2=80=98DEFINE_DYNAMIC_DEBUG_METADAT=
+A=E2=80=99
+> > > > > |         DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));=
+         \
+> > > > > |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > note: in expansion of macro =E2=80=98pr_debug_ratelimited=E2=80=99
+> > > > > |         pr_debug_ratelimited("%s", "Hello world!");
+> > > > > |         ^~~~~~~~~~~~~~~~~~~~   =20
+> > > >=20
+> > > > Add an additional ', ...' to DEFINE_DYNAMIC_DEBUG_METADATA_CLS to s=
+lurp
+> > > > any additional argument, which `pr_fmt` might add.
+> > > >=20
+> > > > --- a/include/linux/dynamic_debug.h
+> > > > +++ b/include/linux/dynamic_debug.h
+> > > > @@ -351,7 +351,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descri=
+ptor,
+> > > >  		dump_stack();					\
+> > > >  }
+> > > > =20
+> > > > -#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
+> > > > +#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)	\
+> > > >  	static struct _ddebug  __aligned(8)			\
+> > > >  	__section("__dyndbg_descs") name =3D {			\
+> > > >  		.modname =3D KBUILD_MODNAME,			\
+> > > > diff --git a/include/linux/printk.h b/include/linux/printk.h
+> > > > index f594c1266bfd..5d701952e739 100644
+> > > > --- a/include/linux/printk.h
+> > > > +++ b/include/linux/printk.h
+> > > > @@ -742,7 +742,7 @@ do {									\
+> > > >  	static DEFINE_RATELIMIT_STATE(_rs,				\
+> > > >  				      DEFAULT_RATELIMIT_INTERVAL,	\
+> > > >  				      DEFAULT_RATELIMIT_BURST);		\
+> > > > -	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));		\
+> > > > +	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, fmt);		\   =20
+> > >=20
+> > > IMHO, this changes the existing behavior. The prefix added by
+> > > pr_fmt() will no longer be stored in DEFINE_DYNAMIC_DEBUG_METADATA().
+> > > Is this intentional, please?
+> > >=20
+> > > Anyway, if we do not longer pass pr_fmt(fmt) then we should not
+> > > need to add "..." into DEFINE_DYNAMIC_DEBUG_METADATA_CLS().
+> > >=20
+> > > By other words, we newly pass just the format "fmt" without the param=
+etes.
+> > > The 4th parameter was added by pr_fmt().
+> > >=20
+> > >=20
+> > > IMHO, the right solution is to keep pr_fmt(fmt) here and extend both
+> > > BEFINE_DYNAMIC_DEBUG_METADATA() and
+> > > DEFINE_DYNAMIC_DEBUG_METADATA_CLS()
+> > > to accept var args. I would expect something like:
+> > >=20
+> > > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt, ...)	\
+> > > ...
+> > >=20
+> > > #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt, ...)		\
+> > > 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt, ##=
+__VA_ARGS__)
+> > >=20
+> > >=20
+> > > or maybe, we could "eat" the extra parameters in
+> > > DEFINE_DYNAMIC_DEBUG_METADATA. It would mean to keep
+> > > DEFINE_DYNAMIC_DEBUG_METADATA_CLS() as is and just add the "..." into
+> > > DEFINE_DYNAMIC_DEBUG_METADATA(), aka
+> > >=20
+> > > #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt, ...)		\
+> > > 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt)
+> > >=20
+> > >=20
+> > > Or do I miss something, please? =20
+> >=20
+> > Don't think that will work.
+> > Won't you end up with ".%s" fmt as the string without the extra argumen=
+t.
+> > So you need to keep the expansion of pr_fmt() together until is is fina=
+lly
+> > substituted into a printf-like call.
+> > It is possible to enclose it in () so it is passed as one parameter and
+> > remove them on the final expansion. =20
+>=20
+> My understanding was that the format is stored in the metadata as is.
+> I mean that the string is not formatted in this code path. So that
+> the parameter values are or can be ignored. We just need to make
+> the compiler happy.
+>=20
+> But I might miss something.
 
-Misc bag of fixes.
+If it is formatted in any code path you need any argument added by pr_fmt()
+otherwise the values printed wont match the format.
+Indeed, in some cases, the format has to be formatted in the same code path
+(or at least scanned for anything passed by reference) to avoid accessing
+stale data.
 
-Shortlog is below:
+I've definitely used:
+#define pt_fmt(fmt) "driver serial %s:" fmt, foo->serial
+which relies on all call sites having a local variable foo of the correct
+type. There may be some in the main kernel tree.
 
-Anton Moryakov (1):
-       shared: util.c: fix buffer overflow in alias_normalize()
+Maybe I'm missing something.
 
-Dawid Osuchowski (1):
-       testsuite: fix dirty rootfs error message
+David
 
-Emil Velikov (5):
-       libkmod: return ENOMEM when strbuf_pushchar(s) fails
-       man/modprobe.8: use MODULE_DIRECTORY as applicable
-       scripts/sanitizer-env.sh: remove incorrect $CC quotes
-       man/modprobe.8: document --remove-holders
-       man/modprobe.8: document --show-exports
+>=20
+> Best Regards,
+> Petr
+>=20
 
-Lucas De Marchi (3):
-       tools/modprobe: Fix odd --remove-holders behavior
-       ci: Fix alpine setup
-       kmod 34.3
-
-Rudi Heitbaum (1):
-       util: Use const variable type in mkdir_parents
-
-Syed Labeeq Sajid Bukhari (1):
-       libkmod: fix type confusion in kmod_module_get_sections() error path
-
-Wentao Guan (1):
-       libkmod: Fix open file which some char device
-
-Yannick Le Pennec (1):
-       tools/rmmod: fix garbled error message
-
-Yuntao Wang (1):
-       libkmod: Fix dependency count in kmod_module_parse_depline()
-
-thanks
-Lucas De Marchi
