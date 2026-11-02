@@ -1,49 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793631127;
-	b=wixn1Ngf6mfA7ImPrdA0Xxlze+nOAKuy/n3N1iGCzQXlf+22yE6sxAHJgfL8gQa5Rtpm
-	 A8duKrl+6zqpJNUgpGXlkq5X1VBZKYj78g/EjXBwIWVg9rxvHcooddFJHfl2tbNxmr7Di
-	 IlPDzYkfVmsX6jkqBe1P9eVsiQ25mVZUsjooQ7MUz8mPmKDq7VV0gLFyvk6QlrqXMwYE9
-	 gKOsh3T+XpGHOj3T8EvRz2UqFoJDRxeZkH0ki5eYxzFGVIgyOEEs0E/Xtqf4pRszYhXgB
-	 JNVHrOYnaBqFJy+T5tQK90ILhQGjvk5JcUl2k1zULrW5Xo5XtiIiVfrBKHkm4/1wuhg==
+	t=1793631170;
+	b=uPhbS/E/ggnMh1vpnKt5G42bRFoKMqalUWugKFSBYDJfEUCN6ruz/QgmOJI6SlAqUm9u
+	 islb4Y58aBQSX0R08K3KnX51HWcnOy625PUNF/OcKUvu1T7UO9xI8xXPrnzGIBD+Q3DMj
+	 EaPe8wJMdNfZ1e9Lye+5AsYL2y2ZgGHTO2qFjVgEcalBo/kDveVpbmoSHpAC20eA2xYai
+	 qhEoq4hDteRkFLdgSuSRO+irH8NF4hEOzv+tY4ZVi9pv+zpMfdJVfz/gCGlEjg5yZiDnm
+	 vuhJLz0UKA39cdjAazErT8DAoOZDchUl99kGiG6e/ndNZKldLvmkTlTA2EOGRVUKXJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793631127;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer;
-	bh=iJ84nEP4YY4K28kLfEZAA/6j0sLXVTf/aEe1LCZ8e14=;
-	b=20hci1IwC9KOOhXLoLmFEzmVaLvIiUfKxToBHPDqMQhMGOXzDvQz5ot22hB7N+/kiGbK
-	 wkFll8l2EUSkUVQIOIIituG4jADJoFbWeGbEMRItc/ArgatVQFTqTvE3F/mMSV5bviyE6
-	 VpFHyWCuPoJu3f5qfajmSfCMpD+nXvRyOfHp6Q/uarZi/+lgHSi1js2nwhfMfsIeCgfsC
-	 gknE5un0JvYiHm7DLUaIwCSog8TTqj0zwMkVxgxgu0i6jITxHQinfcHw0qCZxRYDOlFtY
-	 FITfRDHLAjQhUJgpHLmF+24b0/G+cRGSctTfJ0KZU6mPzZHBm7iin+g6jc30FJouxfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793631170;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=DnZiEBAI8KR9amAjTpP9uVPbbO7v77L7Fo7uDbqMnxs=;
+	b=Evs40FlO07ecxYhlICsMFpDUjlzlF3xyDd+D209GLFq0k0LnZxT92vaWsoUQDYXPqqRe
+	 Tp+ghhjxPXUtAXVlmdQdFADfH4G0O0rdLuT+Sc7L5cuvBpYjkejHEGCScmYw/78waUoLN
+	 E+xnbWkAweyJqmdi0NDCgV+Wu/4PuThhhOT8v3V7HSC9nrtL8oi7qLdWXjzdA1A66hwqZ
+	 1oNkTuADFDXjbiCO4dYhq6OfPCGp/EIC/t6NYrciFe1L9aA+pSEc4JQBqvDy6Vx75E3+H
+	 Af6zzCJoYVHnVue6oaG2ed0FxMqE+C/XD3pvbNWYwHXjweUn614YVgUv111SnPa/PqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PR4eStJu;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="Co/5Vhq/";
+	arc=none smtp.remote-ip=209.85.221.41
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A71606D830;
-	Mon,  2 Nov 2026 14:52:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62801606E01B
+	for <linux-modules@vger.kernel.org>; Mon,  2 Nov 2026 14:52:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62801606E01B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PR4eStJu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FECC1F00A1B;
-	Mon,  2 Nov 2026 14:51:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793631126;
-	bh=iJ84nEP4YY4K28kLfEZAA/6j0sLXVTf/aEe1LCZ8e14=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=PR4eStJuCoR+mECGMaIVXtQASozW+a7AOmyTO4iG4xy4nIzb4PWW2BKxvYmoNRuHs
-	 x2Lm2Rfp+v90UcW719VC0BYV4O8DTyukQ9z+uecUIg7pY28G7drnWgQgVWiNUS+/ck
-	 xxhSirH9ZyCaYNU7/1qRcYlti7eFvPDGGsReRJYcEPKXsJ5iSGH7SZJURK2R0hC4aT
-	 hXX/7O0Tf8cPki+pg2H6SZ7pXnNxkptKTlJYs8cIZrx/PHwXHyzeBPMp/y/AzKyvOE
-	 N8mqzLmWmEBFNIMmXqg5H4OevB0bDwM2UM7fMf6GDHFGBq7FkN5sBI9EBYQrhUrLbY
-	 N6tJxPjUYmLBA==
-From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 02 Nov 2026 15:48:48 +0100
-Subject: [PATCH RFC 08/16] selftests/proc: check that a faulting reader
- doesn't hold up removal
+	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Co/5Vhq/
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48e00eee27dso1531398f8f.0
+        for <linux-modules@vger.kernel.org>; Mon, 02 Nov 2026 06:52:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1793631169; x=1794235969; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DnZiEBAI8KR9amAjTpP9uVPbbO7v77L7Fo7uDbqMnxs=;
+        b=Co/5Vhq/L8JGGMRN8JLdcMJBKEF/RQ/Lhi9x+AnQwA6LyrEfV25iJj/fXIjEYgpLpQ
+         iipaN/pRR+jXeHb19XI8ny1xA+FnMA18B6ZBXoMTzhs0wH1LFqxJI6UpjlYKszLe8PLd
+         VxnnbYspqt379w0JGGojHDTAiOskyLIpVh7iTvbFs/wxgDa4Rrx27SwjIYnLMHjSQFOS
+         8J7CRDUAtLNHo/d06OZ8EfLlzFtBpM2NVxVo4x83RXyZfzq8bfBHK7SCDhBE95peArhQ
+         f7Udn00wyKgRw9eBcbE3WEAz6rFTMDHDcXZlCCHCtVKqvGj6riTMEmJ5UbVVaRcK246Y
+         L7Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793631169; x=1794235969;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=DnZiEBAI8KR9amAjTpP9uVPbbO7v77L7Fo7uDbqMnxs=;
+        b=vGdhp9HXAoR6yuXrGCj94oJvSEaxU5XA0/YL1D6t/FZ0r62RPYeCxjJyHO2zWnUCln
+         16+UBRt88JcgK5RSlE8qONiWnV72IhO/RrxfzYDcXxI4BLjfm3q8NT7ycThiHEQTGjC1
+         awC0buRwmxB/TfGeieu6IkUrxVkcO+g4luCTg9z2JuKvRpHQk8/wzEFDFee0Ejuq26tn
+         XKYefZI1K6cIyVcDmW7NH67L0n/Z/0ucno9SW0EpImaZsyLilFLvnQhuByhAlT1Tbbu/
+         IXKUK6YldnElumBMjJilDQqz31U2Kcty8l75bxgpH2y0WYnkeHJfGiUn5JcsstEKZ1na
+         yUbQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxL0Pnm65l0cvx6HZKmJb9OUIbCHwv7tKVF+TaXn1eFaefYLbZJNF/yeXiS+iJ7dl7xXzxtEbGsqbHQlKeH@vger.kernel.org
+X-Gm-Message-State: APuU4Z/eSIGPDsgvLlZHj89fyLeoPqi5itlowgjRtOiS3YgZMTRlcXxr
+	y1K1abvDyaVN3qmdBfOXzi74yYSvG89J5q5u+JOT7VN5xcpV+c173lMAMfruP4hVVEI=
+X-Gm-Gg: AYBFou0klqAXEgnQgpfa1IW2uKnKpHj2ifMtXGg8gdSw7jofZYS6DyCaC+U7/mZ3vhW
+	PMexkXmq6CFI2kwrDS2scsZoYoesNC6KNj1/58WJdTysm4+KewKDI6FsPnIQzeJrDv8frsCpGLX
+	QGTrXLBMldMMDni1v4X4oQYszosKTrU7dP0Y3tvJS+EX3Y85+Ujm6KkLt8pDS8QiYzpfUh+v/ZF
+	ZtzWv2OJAPu7mLnYX6bxZMpao9iu283wDNoSHBEneTv2ie1Knp3eb8Rfrd79v/X/g8n4PdtHHkQ
+	tyVnxCq9R1A4DcG3jnfHqtkZViZxzpoBSO4swn2VDByr4C4Ph2FxxU5MMwcqol9HcNr8nD2A1NZ
+	yJLkPxWTjM0otsO0V6tz/5AX5iJ2LtyeVuxmZnKPfIrcoLdVvu4h+7o4M3HXFTvkM25qURmSmI7
+	Ud50xhEmkj/alMecL9OBRD6cMRiuRNQPdFI5O0RucsaoW1BH71YAkEtL582GJBzoA+I+puWhsBM
+	1jndib6TV5Tb5LbjYGk+POgTPa4ar14N/6fSgb1jmC2sh03mBkg5DDSjQsRvhxU+Enw5XU6yIIH
+	PiLybp32rN/Fpp8dhmxwkfiyN2JoVmzY6y7M0BlKu0YJJV+Suej8h1Dveg5wC5AjNFPjOeYPN5K
+	Z7XK56BtuXg==
+X-Received: by 2002:a05:6000:40dc:b0:48d:e61d:68da with SMTP id ffacd0b85a97d-48e6e2fa50dmr24136852f8f.20.1793631168401;
+        Mon, 02 Nov 2026 06:52:48 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b78a4csm20266085f8f.23.2026.11.02.06.52.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 06:52:48 -0800 (PST)
+Message-ID: <cbf60391-ebd5-4e3d-b38d-45b8d86d1574@suse.com>
+Date: Mon, 2 Nov 2026 15:52:47 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -53,203 +93,153 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module: drain external refs before freeing a failed-init
+ module
+To: Mahanta Jambigi <mjambigi@linux.ibm.com>
+Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
+ atomlin@atomlin.com, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+ pasic@linux.ibm.com, =wintera@linux.ibm.com
+References: <20261007083956.2488796-1-mjambigi@linux.ibm.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261007083956.2488796-1-mjambigi@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-work-procfs-core-v1-8-75df35e4f8b8@kernel.org>
-References: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
-In-Reply-To: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
- Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
- NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
- Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
- Greg Kroah-Hartman <gregkh@suse.de>, 
- Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
- Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
- linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
- linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
- ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
- coreteam@netfilter.org, kexec@lists.infradead.org, 
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
- netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
- linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
- sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
- linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
- linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
- linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-debuggers@vger.kernel.org, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>, 
- Chuck Lever <cel@kernel.org>
-X-Mailer: b4 0.17-dev
 
-Read /proc/net/dev_snmp6/<dev> of a tun device into a buffer whose first
-page is backed by userfaultfd and remove the device while the reader
-sleeps in its copy to userspace:
+On 10/7/26 10:39 AM, Mahanta Jambigi wrote:
+> When a module's __init makes it externally reachable (e.g. by registering a
+> protocol family or a bus driver) and a later __init step fails, do_init_module()
+> frees the module while callers that entered through that interface and called
+> try_module_get() may still be executing module text.
+> 
+> The normal unload path in try_stop_module() refuses to proceed while
+> module_refcount() is non-zero. The init-failure path has no such check and races
+> to free_module() immediately after synchronize_rcu().
+> 
+> Fix it by waiting for all external references to drain before calling
+> free_module(). Add a per-module struct completion refs_gone inside the existing
+> CONFIG_MODULE_UNLOAD block that is initialised in module_unload_init() and
+> completed from module_put() when refcnt drops back to MODULE_REF_BASE and the
+> module state is MODULE_STATE_GOING. The fail: path calls wait_for_completion()
+> (guarded by the same #ifdef) after dropping the loader's own reference,
+> replacing the previous implicit assumption that no external refs exist at that
+> point.
+> 
+> Also move wake_up_all(&module_wq) to before the drain so that concurrent loaders
+> blocked in module_patient_check_exists() are unblocked immediately once
+> MODULE_STATE_GOING is visible, rather than after the drain completes.
+> 
+> Fixes: 1fb9341ac348 ("module: put modules in list much earlier.")
+> Signed-off-by: Mahanta Jambigi <mjambigi@linux.ibm.com>
+> ---
+> Link: https://lore.kernel.org/all/5dc1fe2b-289e-4786-b9e9-e181dda8d4e9@linux.ibm.com/
+>       [RFC] module: init-failure path can free a module with live
+>       try_module_get() users
+> 
+>  include/linux/module.h |  2 ++
+>  kernel/module/main.c   | 33 +++++++++++++++++++++++++++-----
+>  2 files changed, 33 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 96cc98568eea..0dee2ed02a2d 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -562,6 +562,8 @@ struct module {
+>  	void (*exit)(void);
+> 
+>  	atomic_t refcnt;
+> +	/* Completed when refcnt drops to MODULE_REF_BASE on init failure. */
+> +	struct completion refs_gone;
 
-- removing the entry doesn't wait for the reader
+Having a per-module completion that is needed only during module loading
+is a bit wasteful. I think a global waitqueue, similar to module_wq,
+should be sufficient. This would also avoid the use-after-free condition
+described in my next comment.
 
-- the reader still gets what was printed before the removal
+>  #endif
+> 
+>  #ifdef CONFIG_CONSTRUCTORS
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index c1b34dc1e89a..655c693bd8e2 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -655,6 +655,7 @@ static int module_unload_init(struct module *mod)
+>  	 * refcnt == 0 means module is going.
+>  	 */
+>  	atomic_set(&mod->refcnt, MODULE_REF_BASE);
+> +	init_completion(&mod->refs_gone);
+> 
+>  	INIT_LIST_HEAD(&mod->source_list);
+>  	INIT_LIST_HEAD(&mod->target_list);
+> @@ -956,6 +957,14 @@ void module_put(struct module *module)
+>  		ret = atomic_dec_if_positive(&module->refcnt);
+>  		WARN_ON(ret < 0);	/* Failed to put refcount */
+>  		trace_module_put(module, _RET_IP_);
+> +		/*
+> +		 * If refcnt just dropped to MODULE_REF_BASE and the module is going
+> +		 * away due to an init failure, all external references are gone. Wake
+> +		 * any thread waiting in the init-failure drain path.
+> +		 */
+> +		if (ret == MODULE_REF_BASE &&
+> +		    module->state == MODULE_STATE_GOING)
+> +			complete(&module->refs_gone);
 
-- and the next read fails with -EIO
+module_put() can run concurrently with delete_module(). The module might
+be gone after the atomic_dec_if_positive() call so this logic could lead
+to a use-after-free.
 
-The entry is removed under RTNL, so a regression stalls the test for
-five seconds before it fails.
+>  	}
+>  }
+>  EXPORT_SYMBOL(module_put);
+> @@ -3206,16 +3214,36 @@ static noinline int do_init_module(struct module *mod)
+>  fail_free_freeinit:
+>  	kfree(freeinit);
+>  fail:
+> -	/* Try to protect us from buggy refcounters. */
+>  	mod->state = MODULE_STATE_GOING;
+>  	synchronize_rcu();
+> +
+> +	/*
+> +	 * Unblock concurrent loaders waiting in module_patient_check_exists() on
+> +	 * module_wq. finished_loading() returns true once state is GOING, so they
+> +	 * can now proceed. Do this before the drain below so a failed init delays
+> +	 * only this task, not every other loader that raced to load the same
+> +	 * module.
+> +	 */
+> +	wake_up_all(&module_wq);
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- .../selftests/proc/proc-remove-slow-reader.c       | 133 +++++++++++++++++++++
- 1 file changed, 133 insertions(+)
+This wakes up only modules waiting in module_patient_check_exists().
+However, most duplicate loads using the newer finit_module() syscall
+wait in idempotent_wait_for_completion(). They should be woken up as
+well, so at worst only the current load gets stuck waiting on its
+references to drain.
 
-diff --git a/tools/testing/selftests/proc/proc-remove-slow-reader.c b/tools/testing/selftests/proc/proc-remove-slow-reader.c
-new file mode 100644
-index 000000000000..a201645beca9
---- /dev/null
-+++ b/tools/testing/selftests/proc/proc-remove-slow-reader.c
-@@ -0,0 +1,133 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A read that faults while copying to userspace must not hold up removal of
-+ * the /proc entry. /proc/net/dev_snmp6/<dev> of a tun device is removed under
-+ * RTNL when the device's file is closed.
-+ */
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/if.h>
-+#include <linux/if_tun.h>
-+#include <linux/userfaultfd.h>
-+#include <poll.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define TUN_NAME	"procslow0"
-+#define SNMP6_PATH	"/proc/net/dev_snmp6/" TUN_NAME
-+#define READ_PAGES	16
-+#define TIMEOUT_MS	5000
-+
-+struct reader {
-+	int fd;
-+	char *buf;
-+	size_t len;
-+	ssize_t ret;
-+};
-+
-+struct closer {
-+	int tun;
-+	int done;
-+};
-+
-+static void *read_thread(void *arg)
-+{
-+	struct reader *r = arg;
-+
-+	r->ret = read(r->fd, r->buf, r->len);
-+	return NULL;
-+}
-+
-+static void *close_thread(void *arg)
-+{
-+	struct closer *c = arg;
-+	ssize_t ret;
-+
-+	close(c->tun);
-+	ret = write(c->done, "x", 1);
-+	return (void *)ret;
-+}
-+
-+TEST(remove_while_reader_faults)
-+{
-+	struct uffdio_api api = { .api = UFFD_API };
-+	struct uffdio_register reg = {};
-+	struct uffdio_zeropage zero = {};
-+	long psz = sysconf(_SC_PAGESIZE);
-+	struct ifreq ifr = {};
-+	struct reader r = {};
-+	struct closer c = {};
-+	struct uffd_msg msg;
-+	struct pollfd pfd;
-+	pthread_t rt, ct;
-+	int uffd, done[2];
-+	char *buf;
-+
-+	if (unshare(CLONE_NEWNET))
-+		SKIP(return, "unshare(CLONE_NEWNET): %s", strerror(errno));
-+
-+	c.tun = open("/dev/net/tun", O_RDWR | O_CLOEXEC);
-+	if (c.tun < 0)
-+		SKIP(return, "/dev/net/tun: %s", strerror(errno));
-+	strncpy(ifr.ifr_name, TUN_NAME, IFNAMSIZ - 1);
-+	ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
-+	ASSERT_EQ(ioctl(c.tun, TUNSETIFF, &ifr), 0);
-+
-+	r.fd = open(SNMP6_PATH, O_RDONLY | O_CLOEXEC);
-+	if (r.fd < 0)
-+		SKIP(return, SNMP6_PATH ": %s", strerror(errno));
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-+	if (uffd < 0)
-+		SKIP(return, "userfaultfd: %s", strerror(errno));
-+	ASSERT_EQ(ioctl(uffd, UFFDIO_API, &api), 0);
-+
-+	/* Only the first page of the buffer goes through userfaultfd. */
-+	buf = mmap(NULL, READ_PAGES * psz, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(buf, MAP_FAILED);
-+	reg.range.start = (unsigned long)buf;
-+	reg.range.len = psz;
-+	reg.mode = UFFDIO_REGISTER_MODE_MISSING;
-+	ASSERT_EQ(ioctl(uffd, UFFDIO_REGISTER, &reg), 0);
-+
-+	r.buf = buf;
-+	r.len = READ_PAGES * psz;
-+	ASSERT_EQ(pthread_create(&rt, NULL, read_thread, &r), 0);
-+
-+	/* The reader now sleeps in its copy to userspace. */
-+	pfd = (struct pollfd){ .fd = uffd, .events = POLLIN };
-+	ASSERT_EQ(poll(&pfd, 1, TIMEOUT_MS), 1);
-+	ASSERT_EQ(read(uffd, &msg, sizeof(msg)), sizeof(msg));
-+	ASSERT_EQ(msg.event, UFFD_EVENT_PAGEFAULT);
-+
-+	/* Closing the device removes the file that is being read. */
-+	ASSERT_EQ(pipe2(done, O_CLOEXEC), 0);
-+	c.done = done[1];
-+	ASSERT_EQ(pthread_create(&ct, NULL, close_thread, &c), 0);
-+	pfd = (struct pollfd){ .fd = done[0], .events = POLLIN };
-+	EXPECT_EQ(poll(&pfd, 1, TIMEOUT_MS), 1) {
-+		TH_LOG("removing " SNMP6_PATH " waited for the reader");
-+	}
-+
-+	zero.range.start = (unsigned long)buf;
-+	zero.range.len = psz;
-+	ASSERT_EQ(ioctl(uffd, UFFDIO_ZEROPAGE, &zero), 0);
-+	ASSERT_EQ(pthread_join(rt, NULL), 0);
-+	ASSERT_EQ(pthread_join(ct, NULL), 0);
-+
-+	/* What was printed before the removal still arrives, then nothing. */
-+	EXPECT_GT(r.ret, 0);
-+	EXPECT_EQ(read(r.fd, buf, psz), -1);
-+	EXPECT_EQ(errno, EIO);
-+}
-+
-+TEST_HARNESS_MAIN
+> +
+> +	/* Drop the loader's own reference taken in module_unload_init(). */
+>  	module_put(mod);
+> +
+> +#ifdef CONFIG_MODULE_UNLOAD
+> +	/*
+> +	 * Wait for all external references taken before MODULE_STATE_GOING became
+> +	 * visible to be released. module_put() completes refs_gone when refcnt
+> +	 * drops to MODULE_REF_BASE. The hung-task detector will catch any module
+> +	 * whose error path leaks a reference.
+> +	 */
+> +	wait_for_completion(&mod->refs_gone);
+> +#endif
+> +
+>  	blocking_notifier_call_chain(&module_notify_list,
+>  				     MODULE_STATE_GOING, mod);
+>  	klp_module_going(mod);
+>  	ftrace_release_mod(mod);
+>  	free_module(mod);
+> -	wake_up_all(&module_wq);
+> 
+>  	return ret;
+>  }
 
 -- 
-2.53.0
-
+Thanks,
+Petr
