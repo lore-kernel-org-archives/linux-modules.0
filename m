@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793704528;
-	b=HKyP97VafpvBtKhm80ByJ8DhCSOR6JBriMwryPbDaWX5Z/s1++1ExVU4Z9+e4rKivkrC
-	 ufyO8/CERASV2PbWPSJSytX8Q5rlNKWK5nIY/ewvY7DI0388siQD58xFFRIo5J5SWVf0Y
-	 uKGN/NIdLAY3BCuHbB0wLyDtqz9tNaMYwvTKpjXHVaXgi0H2By6vDqD1CkRtiFf1rep1t
-	 9bw7lw0hUucxiDr2cmzZKtKTiH7nAnbDRc7KcekeEYjSG8eQUf5Zi5/YuJkHFdNrvzYQZ
-	 EX7XTUDr8DIiJuDJJWnTOPDJusteTQ4iumJKvVUD0DUC3VumFtP+zGFAe9hZVvf0f8Q==
+	t=1793704530;
+	b=3qGulSMgBd1PpKan8WvkH/Z81Obx2Jir70DGBlMkeW0euRUr05gjPlAGq7qCKPHxCKEc
+	 m1/CnPPVd8PRmgSMblmO5ImbNAl7IyZBWOMxUJwW8XQRZcl5n5rcIzl8KFTwU1YpQ//Tr
+	 xuWVWCMhY7dtQuYvN+M28kO/HIsY9mXJtr7PSs0N0z8Xeaj3Fmy1PtRpryYTD230c8w38
+	 rKWsMhWV3AteH/7IRNfeJJLygbcrkG1lrFiN5fLZhieymsCeXVKeecEBPe1q5XBb+gfDO
+	 PuVxkI4j3DQWuSwe2rVNMLpVfIZnn9jAtfCtQpJhnXQOzCmP+VrllY2ARnyH8QiVSNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793704528;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793704530;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=XiV3jMg1YBKexs9QhvAYguLuKhpGqkbYswYYFBFmFp4=;
-	b=IvEtl5abxmrXedqRTkx7W0XPXnmBzw6uvwdYJrp5mVec73fyC4SS1vdVlEz+5JNE89FB
-	 hBpK+6wtu3uDC4pnppkHsJ+gfTTzisf79VdV18ypZ7w+TcB+uGcyYyberO2ngQ+9tTSNl
-	 dFZEv63Ov4qi/Yh1l4tk8iAZhRqehi4AMiQFZ9KAfmR8f5ufeF3scA3OemuU2qVG/7EBG
-	 aMeiISRaCLLCdJLJIxvuV1+HEiT8+QZHV6tmr4S0uPK5GLUvGIw0hGK1ebHKUs8rIgp9L
-	 Jbnm6NYFULaiFZApZfrudTCGl2+KqiquD4hEMCUooiTij84zIanMMU3BIpmHH9e79YQ==
+	bh=nnP+EqYBk6lYiUKwenpEHCdDCJhLnMC1MO+64rkVOHo=;
+	b=g7w+AeKC3eQdVKYOtrjNpjJC+Rr88qRZfWSRrQ7KKE4HP4SF2uXGl+f8kuSKlkDZMiX7
+	 AKLwT/Orl8Eg6Q4JTCQtAVvCVKHFlKR2S7Y5TDKC1jym8WYgccYrFR00IsYaBZCUo0RaQ
+	 8WbC7unA/cydBe+bd3rir+iTyvdyrZplcyW15SFCFO8p1TrvkHNL5or+BwcEaq4Rj6nGF
+	 LFDhCdmK9AHGPyObHKcp/902m1MIq7TDncyA7oGVRLPHEvx9mUbeCriX4Id3rzneoqbhn
+	 QvmSouhWTNp9jqfpN/HboWo1JuyEpeHHD3EihUZWXVZalTi3CVcjEznDM9UOaRq2MJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lPNKOgnT;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CYryrmHK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B06C606BA69;
-	Tue,  3 Nov 2026 11:15:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D90A606B13C;
+	Tue,  3 Nov 2026 11:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lPNKOgnT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE931F00919;
-	Tue,  3 Nov 2026 11:15:26 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CYryrmHK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8123D1F0093A;
+	Tue,  3 Nov 2026 11:15:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793704528;
-	bh=XiV3jMg1YBKexs9QhvAYguLuKhpGqkbYswYYFBFmFp4=;
+	s=k20260515; t=1793704529;
+	bh=nnP+EqYBk6lYiUKwenpEHCdDCJhLnMC1MO+64rkVOHo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lPNKOgnTAqCCNOJ2WAX7Rs3S4v6hLnFP6fkgpDJei+s12aUNi/iFpPpNG14W7wi/s
-	 /gh5CSOdp3w17EFLf3ZBnMOWJkmikXHLFJt5FKrXKFIs1TmML1Rhx169WuRaXU3Yoh
-	 0oP307MhSZnr62iPYNQrjq9BOcTpuQnLr0zMdMot190Nrr88BUjOXXaKFv4vOitPHK
-	 3ZqXYyU3HacWreiLmyTraNZjVn1qUcLIdLsMA/mEkiAu/UNt6BYCzmYSXF9CVWcdaG
-	 NF8pf566Bt+LbQiRVZ0oO09PCeVB4kTcJo/Xkxeb7DCm6etnP+HYvSzSlG9RtQi+/C
-	 G/IjKbmE5IAQQ==
-Message-ID: <sashiko-outbox-195131@kernel.org>
+	b=CYryrmHK7Qu36kCLEvVc4oulo5dqWCJQUhvsy0Xi15KoVlO5aLmvQCh7eewg0vhi+
+	 oMk8jWCpcXtXx9xmyy2qp6b2oYBJC1EBkqPMG1yvsxaRTumUPToPwgKpMG+BcMQpuf
+	 TiaI8gMK8uVRIypCyZ7liiNHmlxMLnn7cdWpqHOQUhoScT9aiRGdf6nMpdIZosOw53
+	 19Ca0x/tJuGiuNiW2TMjA4Z9DpM4kgi9b4U+4yub2lTSACwTvIAW4j7Dv4oveGG5+h
+	 IrZ4urdULMtlAA2QQv5EygpbIAr55hRffAn0mjgTmDxaJYWQLCPI2Vp7imUdJGr33M
+	 kIvGIoUw0sbsA==
+Message-ID: <sashiko-outbox-195133@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v10 2/4] kallsyms: extend lineinfo to loadable modules
+Subject: Re: [PATCH v10 4/4] kallsyms: add KUnit tests for lineinfo feature
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Sasha Levin" <sashal@kernel.org>, "Andrew Morton" <akpm@linux-foundation.org>, "Masahiro
  Yamada" <masahiroy@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Linus
@@ -57,12 +57,12 @@ Cc: "Jonathan Corbet" <corbet@lwn.net>, "Nathan Chancellor" <nathan@kernel.org>,
  Deller" <deller@gmx.de>, "Randy Dunlap" <rdunlap@infradead.org>, "Laurent
  Pinchart" <laurent.pinchart@ideasonboard.com>, "Vivian Wang" <wangruikang@iscas.ac.cn>, "Zhen
  Lei" <thunder.leizhen@huawei.com>, "Sami Tolvanen" <samitolvanen@google.com>, linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
-In-Reply-To: <20261102111455.919102-3-sashal@kernel.org>
+In-Reply-To: <20261102111455.919102-5-sashal@kernel.org>
 References: <20261102111455.919102-1-sashal@kernel.org>
- <20261102111455.919102-3-sashal@kernel.org>
+ <20261102111455.919102-5-sashal@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 11:15:26 +0000
+Date: Tue, 03 Nov 2026 11:15:28 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -72,232 +72,261 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [Critical] kbuild: running module.lds twice in cmd_ld_ko_o breaks alloc_t=
-ags and arm64
-- [Medium] scripts/gen_lineinfo: early return in deduplicate() leaves stale=
- n_entries
-- [Medium] scripts/gen_lineinfo: zero bias in resolve_covered_sections() al=
-iases .text
-- [Medium] scripts/gen_lineinfo: resolve_covered_sections() leaves zero bia=
-s gap
+- [Medium] kallsyms: identical bodies in lineinfo_kunit targets allow IPA-I=
+CF folding
+- [Low] kallsyms: unreachable failure path in test_assembly_no_lineinfo()
+- [Low] kallsyms: missing has_lineinfo() assertion in test_many_lines_mid_f=
+unction()
+- [Low] kallsyms: inaccurate lineinfo comments in sprint_with_lineinfo() an=
+d test
+- [Low] kallsyms: test_static_function() duplicates test_short_function()
 --
 
-commit 576d6bd5b277b6e1ee712d143954da5c356b15a1
+commit fbb509d58818b09aeb1b086d5f710841ca770e58
 Author: Sasha Levin <sashal@kernel.org>
 
-kallsyms: extend lineinfo to loadable modules
+kallsyms: add KUnit tests for lineinfo feature
 
-This commit adds CONFIG_KALLSYMS_LINEINFO_MODULES to embed source file and
-line number lookup tables (.mod_lineinfo and .init.mod_lineinfo) into
-loadable kernel modules via a two-stage partial link in Makefile.modfinal
-and a new --module mode in scripts/gen_lineinfo.
+This commit adds a KUnit test module (CONFIG_LINEINFO_KUNIT_TEST) to verify
+kallsyms source file and line annotations in stack traces, and exports
+sprint_backtrace() and sprint_backtrace_build_id() for KUnit testing.
 
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index 01a37ec872b90..2f19dc184ffe7 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -46,8 +46,47 @@ quiet_cmd_btf_ko =3D BTF [M] $@
->  		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vm=
-linux $@; \
->  	fi;
-> =20
+> diff --git a/lib/tests/lineinfo_kunit.c b/lib/tests/lineinfo_kunit.c
+> new file mode 100644
+> index 0000000000000..066f342bd78ae
+> --- /dev/null
+> +++ b/lib/tests/lineinfo_kunit.c
+> @@ -0,0 +1,1110 @@
 [ ... ]
-> +ifdef CONFIG_KALLSYMS_LINEINFO_MODULES
-> +lineinfo_ldflags_all =3D $(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)
-> +lineinfo_ldflags_last =3D $(filter --be8 --build-id --build-id=3D%,		\
-> +			       $(lineinfo_ldflags_all))
-> +
-> +      cmd_ld_ko_o =3D							\
-> +	rm -f $@.lineinfo_pre $@.lineinfo.o;				\
-> +	$(LD) -r $(KBUILD_LDFLAGS)					\
-> +		$(filter-out $(lineinfo_ldflags_last),			\
-> +			     $(lineinfo_ldflags_all))			\
-> +		-T $(objtree)/scripts/module.lds			\
-> +		-o $@.lineinfo_pre $(filter %.o, $^);			\
-> +	$(CONFIG_SHELL) $(srctree)/scripts/gen-mod-lineinfo.sh		\
-> +		$@.lineinfo_pre $@.lineinfo.o;				\
-> +	$(LD) -r $(KBUILD_LDFLAGS) $(lineinfo_ldflags_last)		\
-> +		-T $(objtree)/scripts/module.lds -o $@			\
-> +		$$(test -f $@.lineinfo.o && echo $@.lineinfo.o)		\
-> +		$@.lineinfo_pre;					\
-
-[Severity: Critical]
-Does passing -T $(objtree)/scripts/module.lds to both ld -r passes in
-cmd_ld_ko_o break CONFIG_MEM_ALLOC_PROFILING and arm64 module loading?
-
-Under CONFIG_MEM_ALLOC_PROFILING, scripts/module.lds.S expands
-MOD_SEPARATE_CODETAG_SECTIONS() from include/asm-generic/codetag.lds.h into:
-
-	.codetag.alloc_tags 0 : {
-		. =3D ALIGN(8);
-		__start_alloc_tags =3D .;
-		KEEP(*(alloc_tags))
-		__stop_alloc_tags =3D .;
-	}
-
-In the first ld -r pass, input alloc_tags sections from the module's .o fil=
-es
-are renamed into the output section .codetag.alloc_tags in $@.lineinfo_pre.
-When the second ld -r pass runs with -T scripts/module.lds on
-$@.lineinfo_pre, there are no longer any input sections named alloc_tags, so
-KEEP(*(alloc_tags)) matches nothing and resets both __start_alloc_tags and
-__stop_alloc_tags to offset 0 before orphan placement appends
-.codetag.alloc_tags.
-
-At module load time, move_module() allocates .codetag.alloc_tags with each
-struct alloc_tag.counters initialized to NULL, while codetag_module_init() =
-in
-lib/codetag.c sees:
-
-	/* Ignore empty ranges */
-	if (range.start =3D=3D range.stop)
-		return 0;
-
-and skips calling mm/alloc_tag.c:load_module() to allocate per-CPU counters.
-The first instrumented allocation in the module then dereferences
-tag->counters =3D=3D NULL in alloc_tag_ref_set().
-
-In addition, on arm64, arch/arm64/include/asm/module.lds.h defines:
-
-	.text.ftrace_trampoline 0 : {
-		BYTE(0)
-	}
-
-which creates a 1-byte writable (SHF_ALLOC | SHF_WRITE) section in
-$@.lineinfo_pre during the first link. In the second link with
--T scripts/module.lds, the earlier rule in scripts/module.lds.S:
-
-	.text 0 : {
-		*(.text .text.[0-9a-zA-Z_]*)
-	}
-
-matches .text.ftrace_trampoline from $@.lineinfo_pre and merges it into
-.text. That gives .text SHF_WRITE | SHF_EXECINSTR flags (and grows .text by=
- 1
-byte), causing module_enforce_rwx_sections() in kernel/module/strict_rwx.c =
-to
-reject every module load with -ENOEXEC when CONFIG_STRICT_MODULE_RWX is
-enabled.
-
-> diff --git a/scripts/gen_lineinfo.c b/scripts/gen_lineinfo.c
-> index 7562ac81acca5..d9cc213e65735 100644
-> --- a/scripts/gen_lineinfo.c
-> +++ b/scripts/gen_lineinfo.c
-[ ... ]
-> @@ -635,12 +732,728 @@ static void collect_symbol_starts(Elf *elf, unsign=
-ed long long text_addr)
-[ ... ]
-> +static void resolve_covered_sections(Elf *elf,
-> +				     struct covered_section *sections,
-> +				     unsigned int num_sections)
+> +/*
+> + * Format a symbol with lineinfo annotation.  Lineinfo is appended only
+> + * via the sprint_backtrace*() entry points (kernel/kallsyms.c only adds
+> + * the "(file:line)" suffix in stack-trace context =E2=80=94 sprint_symb=
+ol() is
+> + * used by %ps and many existing format strings tack literal "()" after
+> + * %ps, where the annotation would render as "foo (file:line)()").
+> + *
+> + * sprint_backtrace() subtracts 1 from the address to handle tail-call
+> + * return-address corrections; pass @addr + 1 to recover the original.
+> + */
+> +static int sprint_with_lineinfo(char *buf, unsigned long addr)
 > +{
-> +	Elf_Scn *scn =3D NULL;
-> +	GElf_Shdr shdr;
-> +	size_t shstrndx;
-> +	unsigned long long cursor =3D 0;
+> +	return sprint_backtrace(buf, addr + 1);
+> +}
 
-[Severity: Medium]
-When cursor starts at 0 in resolve_covered_sections(), the first present
-covered section in all_sections[] (normally .text) gets sections[0].bias =
-=3D 0,
-giving it the synthetic range [0, size).
+[Severity: Low]
+Is the comment above sprint_with_lineinfo() still accurate?
 
-In an ET_REL module object produced by ld -r -T scripts/module.lds, functio=
-ns
-in sections discarded by /DISCARD/ (such as .discard.*) or discarded COMDAT
-groups have their .debug_line DW_LNE_set_address relocations zeroed or
-pointed at STN_UNDEF (st_shndx =3D=3D SHN_UNDEF, st_value =3D=3D 0). In
-apply_one_debug_reloc(), section_by_index() returns NULL for SHN_UNDEF, so =
-no
-bias is added and those discarded sequences remain at [0, seq_len).
-
-Won't classify_address() in process_dwarf() then match those [0, seq_len)
-addresses against sections[0] and merge discarded line entries into .text?
+In kernel/kallsyms.c, sprint_symbol() and sprint_symbol_build_id() also pass
+add_lineinfo =3D 1 (backing %pS and %pSb), while sprint_symbol_no_offset() =
+backs
+lowercase %ps and passes add_lineinfo =3D 0.  Later in this file,
+test_sprint_symbol_format() and test_pS_format() also assert that
+sprint_symbol() and %pS include lineinfo.
 
 [ ... ]
-> +	/* Pack present sections into non-overlapping bias ranges. */
-> +	for (unsigned int i =3D 0; i < num_sections; i++) {
-> +		if (!sections[i].present)
-> +			continue;
-> +		sections[i].bias =3D cursor;
-> +		cursor +=3D sections[i].size;
-> +		cursor =3D (cursor + 15) & ~15ULL;	/* pad for separation */
-> +	}
-> +	for (unsigned int i =3D 0; i < num_extra_sections; i++) {
-> +		extra_sections[i].bias =3D cursor;
-> +		cursor +=3D extra_sections[i].size;
-> +		cursor =3D (cursor + 15) & ~15ULL;
-> +	}
+> +static noinline int lineinfo_target_with_arg(int x)
+> +{
+> +	barrier();
+> +	return x + 1;
+> +}
+[ ... ]
+> +static noinline int lineinfo_cross_file_caller(int x)
+> +{
+> +	return lineinfo_header_helper(x);
 > +}
 
 [Severity: Medium]
-Does (cursor + 15) & ~15ULL in resolve_covered_sections() actually provide a
-separation gap when a section's size is 0 or a multiple of 16 bytes?
+Can GCC's identical-code folding (IPA-ICF) merge lineinfo_cross_file_caller=
+()
+into lineinfo_target_with_arg() and cause test_cross_file_inline() to fail?
 
-Because text sections on architectures such as x86_64, arm64, riscv, s390,
-and loongarch are commonly 16-byte aligned in size (or 0 bytes when empty,
-since covered sections do not require shdr.sh_size !=3D 0 to set present =3D
-true), cursor + sections[i].size is already a multiple of 16. In that case,
-(cursor + 15) & ~15ULL adds 0 bytes of padding and leaves
-sections[next].bias =3D=3D sections[i].bias + sections[i].size.
+Unlike the 0-argument target functions which return distinct constants (42,=
+ 1,
+99, 10), lineinfo_target_with_arg(), lineinfo_header_helper() in
+lib/tests/lineinfo_kunit.h (inlined into lineinfo_cross_file_caller()), and
+lineinfo_target_second_file() in lib/tests/lineinfo_kunit_second.c all share
+the exact same signature and body:
 
-If an empty DWARF sequence starts at offset 0 of sections[next] (with an
-end_sequence row at addr =3D=3D sections[next].bias), process_dwarf() and
-classify_seq_end() query classify_address() at addr - 1, which lands at
-sections[i].bias + sections[i].size - 1 and misclassifies the row into
-sections[i]. Likewise, any non-end_sequence address at offset =3D=3D
-sections[i].size lands on sections[next].bias and is classified as offset 0
-of sections[next].
+	barrier();
+	return x + 1;
+
+After __always_inline expansion of lineinfo_header_helper() into
+lineinfo_cross_file_caller(), lineinfo_target_with_arg() and
+lineinfo_cross_file_caller() are two static noinline functions in the same
+translation unit with identical GIMPLE bodies.  When built with GCC at -O2 =
+or
+-Os without -fno-optimize-sibling-calls (for example when
+CONFIG_FRAME_POINTER=3Dn), -fipa-icf-functions merges
+lineinfo_cross_file_caller() into lineinfo_target_with_arg() and replaces
+lineinfo_cross_file_caller() with a tail-call thunk whose DWARF .debug_line
+entry only references lib/tests/lineinfo_kunit.c.
+
+When that happens, test_cross_file_inline() finds no address in
+lineinfo_cross_file_caller() resolving to lineinfo_kunit.h and fails.  Would
+giving each function a distinct return expression (such as x + 1, x + 2,
+x + 3) or marking them __noipa prevent the compiler from folding them?
 
 [ ... ]
-> @@ -1049,16 +1919,19 @@ static void synthesize_symbol_starts(void)
+> +static void test_static_function(struct kunit *test)
+> +{
+> +	char *buf =3D alloc_sym_buf(test);
+> +	unsigned long addr =3D target_addr(lineinfo_target_short);
+> +
+> +	skip_without_module_lineinfo(test);
+> +
+> +	sprint_with_lineinfo(buf, addr);
+> +	KUNIT_EXPECT_TRUE_MSG(test, has_lineinfo(buf),
+> +			      "No lineinfo in: %s", buf);
+> +}
 [ ... ]
-> -static void deduplicate(void)
-> +static void deduplicate(struct covered_section *sections,
-> +			unsigned int num_sections)
->  {
->  	unsigned int sym_cursor =3D 0;
->  	unsigned int i, j;
-> =20
->  	if (num_entries < 2)
->  		return;
+> +static void test_short_function(struct kunit *test)
+> +{
+> +	char *buf =3D alloc_sym_buf(test);
+> +	unsigned long addr =3D target_addr(lineinfo_target_short);
+> +
+> +	skip_without_module_lineinfo(test);
+> +
+> +	sprint_with_lineinfo(buf, addr);
+> +	KUNIT_EXPECT_TRUE_MSG(test, has_lineinfo(buf),
+> +			      "No lineinfo for short function in: %s", buf);
+> +}
 
-[Severity: Medium]
-What happens in module mode if resolve_cu_row_groups() collapses a compile
-unit's rows down to num_entries =3D=3D 1 before deduplicate() is called?
+[Severity: Low]
+Does test_static_function() duplicate test_short_function()?  Both functions
+resolve target_addr(lineinfo_target_short) with sprint_with_lineinfo(buf, a=
+ddr)
+and check has_lineinfo(buf), and all of the local target functions in
+lib/tests/lineinfo_kunit.c are already static.
 
-In process_dwarf(), sections[sec_id].n_entries is incremented for every raw
-DWARF line row before add_entry():
+[ ... ]
+> +static void test_symbol_start_addr(struct kunit *test)
+> +{
+> +	char *buf =3D alloc_sym_buf(test);
+> +	unsigned long addr =3D target_addr(lineinfo_target_normal);
+> +
+> +	skip_without_module_lineinfo(test);
+> +
+> +	/*
+> +	 * sprint_backtrace() subtracts 1 from the input and reports offset
+> +	 * relative to the (decremented) address, so an exact "+0x0/" can't
+> +	 * be expected here.  Verify the symbol resolves and carries lineinfo.
+> +	 */
+> +	sprint_with_lineinfo(buf, addr);
+> +	KUNIT_EXPECT_TRUE_MSG(test,
+> +			      strnstr(buf, "lineinfo_target_normal",
+> +				      KSYM_SYMBOL_LEN) !=3D NULL,
+> +			      "Didn't resolve to expected function: %s", buf);
+> +	KUNIT_EXPECT_TRUE_MSG(test, has_lineinfo(buf),
+> +			      "No lineinfo at function start: %s", buf);
+> +}
 
-	loffset =3D (unsigned int)sec_off;
-	sections[sec_id].n_entries++;
+[Severity: Low]
+In test_symbol_start_addr(), is the comment about how sprint_backtrace()
+computes the offset accurate?
 
-At the end of the compile unit, resolve_cu_row_groups() collapses rows shar=
-ing
-the same (section_id, offset) and shrinks num_entries =3D j without adjusti=
-ng
-sections[sec_id].n_entries.
+In __sprint_symbol(), symbol_offset (-1) is added to address for the lookup
+and then subtracted back from offset:
 
-If num_entries is 1 when deduplicate(all_sections, ALL_SECTIONS) is called,
-this early return skips both synthesize_symbol_starts() and the loop at the
-end of deduplicate() that resets and recomputes sections[k].n_entries from
-entries[0 .. num_entries - 1]:
+	address +=3D symbol_offset;
+	len =3D kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildi=
+d,
+				       buffer);
+	...
+	sym_start =3D address - offset;
+	offset -=3D symbol_offset;
 
-	if (sections) {
-		for (unsigned int k =3D 0; k < num_sections; k++)
-			sections[k].n_entries =3D 0;
-		for (i =3D 0; i < num_entries; i++)
-			sections[entries[i].section_id].n_entries++;
-	}
+Because sprint_with_lineinfo() passes addr + 1 to sprint_backtrace(),
+__sprint_symbol() looks up addr (offset 0) and then adjusts offset to +0x1/
+(the undecremented input offset), whereas calling sprint_symbol(buf, addr)
+directly would report +0x0/ with lineinfo.
 
-When emit_blob() -> emit_section_table() then iterates count =3D
-all_sections[i].n_entries (>=3D 2) times, won't it read past num_entries in=
-to
-stale entries[1 .. count - 1] that were discarded by resolve_cu_row_groups(=
-)?
+[ ... ]
+> +static void test_assembly_no_lineinfo(struct kunit *test)
+> +{
+> +#if IS_BUILTIN(CONFIG_LINEINFO_KUNIT_TEST)
+> +	char *buf =3D alloc_sym_buf(test);
+> +	unsigned long addr =3D (unsigned long)_text;
+> +
+> +	sprint_with_lineinfo(buf, addr);
+> +	/*
+> +	 * _text is typically an asm entry point with no DWARF line info.
+> +	 * If it has lineinfo, it's a C-based entry =E2=80=94 skip in that case.
+> +	 */
+> +	if (has_lineinfo(buf))
+> +		kunit_skip(test, "_text has lineinfo (C entry?): %s", buf);
+> +
+> +	KUNIT_EXPECT_FALSE_MSG(test, has_lineinfo(buf),
+> +			       "Unexpected lineinfo for asm symbol: %s", buf);
+> +#else
+> +	kunit_skip(test, "_text not accessible from modules");
+> +#endif
+> +}
+
+[Severity: Low]
+Can the KUNIT_EXPECT_FALSE_MSG(test, has_lineinfo(buf), ...) assertion in
+test_assembly_no_lineinfo() ever fail?
+
+If has_lineinfo(buf) is true, the preceding if (has_lineinfo(buf)) check ca=
+lls
+kunit_skip(), which aborts the test via kunit_try_catch_throw(), so
+has_lineinfo(buf) is always false when KUNIT_EXPECT_FALSE_MSG() is reached.
+Also, since CONFIG_KALLSYMS_LINEINFO depends on CONFIG_DEBUG_INFO (which pa=
+sses
+-g in KBUILD_AFLAGS), assembler .S entry points at _text normally have DWARF
+line info as well, causing this test to always skip.
+
+[ ... ]
+> +static void test_many_lines_mid_function(struct kunit *test)
+> +{
+> +	char *buf =3D alloc_sym_buf(test);
+> +	unsigned long addr =3D target_addr(lineinfo_target_many_lines);
+> +	unsigned int line;
+> +	unsigned long mid_addr;
+> +
+> +	skip_without_module_lineinfo(test);
+> +
+> +	/* Get function size from sprint_with_lineinfo output */
+> +	sprint_with_lineinfo(buf, addr);
+> +	KUNIT_ASSERT_TRUE(test, has_lineinfo(buf));
+> +
+> +	/*
+> +	 * Try an address 8 bytes into the function (past prologue).  Hide
+> +	 * the base from the compiler so this does not become a static
+> +	 * mid-function relocation (sym+8), which objtool flags as a
+> +	 * relocation to !ENDBR with CONFIG_X86_KERNEL_IBT.
+> +	 */
+> +	OPTIMIZER_HIDE_VAR(addr);
+> +	mid_addr =3D addr + 8;
+> +	sprint_with_lineinfo(buf, mid_addr);
+> +
+> +	/*
+> +	 * Should still resolve to lineinfo_target_many_lines.
+> +	 * Lineinfo should be present with a plausible line number.
+> +	 */
+> +	KUNIT_EXPECT_TRUE_MSG(test,
+> +			      strnstr(buf, "lineinfo_target_many_lines",
+> +				      KSYM_SYMBOL_LEN) !=3D NULL,
+> +			      "Mid-function addr resolved to wrong symbol: %s",
+> +			      buf);
+> +	if (has_lineinfo(buf)) {
+> +		line =3D extract_line(buf);
+> +		KUNIT_EXPECT_GE_MSG(test, line, (unsigned int)50,
+> +				    "Line %u too low for mid-function", line);
+> +		KUNIT_EXPECT_LE_MSG(test, line, (unsigned int)700,
+> +				    "Line %u too high for mid-function", line);
+> +	}
+> +}
+
+[Severity: Low]
+In test_many_lines_mid_function(), if sprint_with_lineinfo(buf, mid_addr) f=
+ails
+to produce lineinfo, won't the test silently pass because the line-number
+checks are guarded by if (has_lineinfo(buf)) instead of asserting
+KUNIT_ASSERT_TRUE(test, has_lineinfo(buf))?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102111455.9191=
-02-1-sashal@kernel.org?part=3D2
+02-1-sashal@kernel.org?part=3D4
