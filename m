@@ -1,75 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793710780;
-	b=BRYXeG0QbDWhChqzsxBNQPloXyfQXCq8MnsfdgfUvf5YXyYqFUn3XUvnVyo9ZwAFgyPA
-	 6co5pQHumfxpm3kMt8ekl4pli02OU3eROyD0AjSSgZAHb06L5V8vtKWd5SJmO/OwCprAF
-	 fEDHqL/aqwIGXehQv0ZqPtw63OHpKJKFTtefko4tRV2kaD+ihQeM28d9c8+6gPoHBDf50
-	 hov4KoenMq/HbonB07e9L7iaDyGaZ0Ob7FucghcAh5qGANVkTnKWRTKTK1x/qnMQj5Dmc
-	 DCi1x1BrLec2I18EXzHxTEFw7kFMgw5r61KCJFA49M4PgBUsgOWe9pJYJYqWjOEgnUQ==
+	t=1793717305;
+	b=ohwrqtzX/ZP1ZbrOE6EW0w1Z4HhXLeb+1w0W5ML84XsyCIDjpqvbheWSwE2mp4Ekb73r
+	 65SXAfV1OAF+4g5ok90BbvkgmZ/S6jfWAn+SEhsTCTnx+X1Y9aJWxd3+gRL1aTMf9Vido
+	 z/jREXMeTN5524ECTnuOHYGlvRDRoIvlQFvVKo5cZb4Q5pwpZoaxhEW73rx4L8RjlZIak
+	 wkPL0uPsQQrH8FqR+TUE4STQRFGq3kmKlaXkg47Lly6qxuLD/tGlTe5jdGp2CEci+yTMJ
+	 fXdXT9UISAjTp8TvGw5L1Cr95q0rRHouRk+Mg9bLKKm0eDMqwWZezyDZlabDmDSsajw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793710780;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=0OkAwpoj4XmAbnVdDSiPSvHVbykMeAdNYanRrxDZkIg=;
-	b=fXjCPQ/KukGxuKDZQ9ERMB/iQHwO6Oct8xxl2PoLZq/ovwZ2VfS+V/qxdgXH9ygnCbwU
-	 2L3v2ZYwMjottiq2beXs81icxalmwTX9cNxvq+Topn2RUz03qpLZAMkal/F1CsS5K3H85
-	 +Xe4fc2gHB7+tnmCW64an14NZTrztWhgm/YWpqi8vTD8xWYnkGd9CzIbxDwkZxxdtAPR6
-	 TEbwqNpv0z3+ZMfZ7FHCuQMIhnIJYJU/gfalY5uD/oVSK8RjyfkoCrC+n9Tb/m2EP41il
-	 chQlzW3QZmQreu0U99QfJp2Ql4m+Q17kWK8ZhvfbRCWK+yaBt8nCmK13aeM07ILyHxA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793717305;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=c0x/bwvUTy91TeSNlshE2x6EC5UWF1SAOxo9ylrayLg=;
+	b=5mPQym73+iKZn6w2LBq2+N3PywUVFCYBiyWcqAsRMVAhtudsa60NDRWaqq16d2U/vLAa
+	 SFxjqT6a3/RpuCcZTGtv9uEqyHmeTayqb9Ng7+vfd7nZnt3buk1tICkQZ0522vatsA3n6
+	 WRqob25JFY/7fn8UEZmVofXRCSbX9B+RZTUZhig5kgzxwpEWEAUsPEfyQjN/RZMGp49W1
+	 jT8xX4OB+YopWFRx6QVFmMWixQWD4Xsd+R39zuvdRO/wWZHv3jb0QNWY8NTO+gpIPRP38
+	 ewkhtuQSHS6EnxQirZSAnvqPb/+C+W/cecPBzi5UlWneg3xEQx9yA2u3j7V1dFC50fw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fpWT0hvR;
-	arc=none smtp.remote-ip=209.85.128.72
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bqxUBmmI;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F0F606A327
-	for <linux-modules@vger.kernel.org>; Tue,  3 Nov 2026 12:59:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14F0F606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1179606B250;
+	Tue,  3 Nov 2026 14:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fpWT0hvR
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a77c1cbd15so41730195e9.0
-        for <linux-modules@vger.kernel.org>; Tue, 03 Nov 2026 04:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793710778; x=1794315578; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0OkAwpoj4XmAbnVdDSiPSvHVbykMeAdNYanRrxDZkIg=;
-        b=fpWT0hvRjhrWm7hy0bKmezROdCag/pslbIGva1h4yEn6LacCRQEi/Q9+Z2LfN4AZvi
-         3HMTnXNQYNHw5oND3qAeJWTgDWnrE4DuckpqksSwft44lAPIHKTkz14K/NBCrj14XQqC
-         zv6+gUM2lF2COfFIkm7dAsnrLmk22+cjdN1iSLtj9fWNsEj8OFqknZFGCq4f3YWa1lIv
-         8eCQ78NlMnkATqGvz3zeDA1KW6Tn4nXBcTKwER+tumsvTVoXhVhy555CShgV1km0KiDw
-         Dq5StVr/3xU4qHrBBiYUtvrgX/6qYEVgBGMG1QtcctTl1YfNGxcr4Xi4FTC1YV6QDu6x
-         l18Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793710778; x=1794315578;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0OkAwpoj4XmAbnVdDSiPSvHVbykMeAdNYanRrxDZkIg=;
-        b=CFVntdSQXvvRDwJIHSQxVK6G2cLq/YRghWUmGiHvQRLEBQ0WYwj5takzzFusQKC1Yf
-         9R9JTMpwUu/nvxCclyH9gRkgeMrXmz5sWWKJbLrMf0QyFrWYmivWcoDl9aBEHaiAeBJn
-         9GtcbxmKerhNZ2z6jX4DEX7ilGCPnyTc6s+WXNw3aV1k5T5i/4CfjBqtEocFSiZ8f/6H
-         1cq0CCNvsYK6dAX4XOUxHvkKxfp6pqwI2NsHmL80xh7dUlLT9GWrbo9rUyLswKKk1OY5
-         3yrh7+XnDOOukv+yUa1r3/3L/nl68/dC6KqtzyutIwUyKNBBuespQ86BtcGQn22pFR4t
-         PW1A==
-X-Forwarded-Encrypted: i=1; AKwUvByp4OIpDFcS2O22MeQz887J5lBlzqa8e/xsO9SWcJTcROmcIiUZgNBCuQIJGjXNHOqbdoBCQK0/bvgACztj@vger.kernel.org
-X-Gm-Message-State: APuU4Z/9u2OUGzpn2nDN0Mkpzvzeeud4X8DQXXaKBEP0bJJU0O4L3kzR
-	ITmFA8PmYhry2MLTzKnTnMC23JhHg6tqEf8OWJbVdUVYY1aF5GZ8fI2zNZCk+ZVzANh9G0MTBq1
-	n7rCtuvCRDXMyiw==
-X-Received: from wmep9.prod.google.com ([2002:a05:600c:4309:b0:4a2:15e9:5ef1])
- (user=gprocida job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:c107:b0:4b1:2026:6b41 with SMTP id 5b1f17b1804b1-4b1202673f8mr93884535e9.30.1793710777894;
- Tue, 03 Nov 2026 04:59:37 -0800 (PST)
-Date: Tue,  3 Nov 2026 12:58:13 +0000
-In-Reply-To: <20261022134617.228229-1-gprocida@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bqxUBmmI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29171F000C1;
+	Tue,  3 Nov 2026 14:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793717304;
+	bh=c0x/bwvUTy91TeSNlshE2x6EC5UWF1SAOxo9ylrayLg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=bqxUBmmIruc8WVpdDnTaZKZMybp6tbdqSNtX5Vxb8SbRLH8Zr2JWwBPY98aQ3hFcO
+	 mF4KERe0Pl6zVdX7ZTe2YfvSwUDpjVOk0tXjo8nokMnupOaJWZpwf9x3s1jjDqLc7o
+	 D8x2o27+nwq7964W+Sy/E0e8KLqKLtVO62ftCwu5g7mpOe3sE4UYTyU1eKEd9wvkG6
+	 9ziGsoyYsjc+8FEQzGARNtSKo/GIQynC+oiEc7kqzm/+yyy218WWaRIIGwPjaGFK1d
+	 0aiHWvAjGKyvLg2SLb3ZdKLVkElsDVk3YwkpAFqEpwcF1NBvaDa6WRGXNTZsB/rjMv
+	 m/ZkDBbjhFEUA==
+Message-ID: <sashiko-outbox-195500@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 28/38] scsi: esas2r: bound the lengths of the HBA,
+ SMP and firmware ioctls
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
+ Bacik" <josef@toxicpanda.com>, "Chris Mason" <mason@kernel.org>, "Jeff
+ Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>, "Eric Dumazet" <edumazet@kernel.org>, "Thomas
+ Gleixner" <tglx@kernel.org>, "Al Viro" <viro@zeniv.linux.org.uk>, "Jonathan
+ Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>, "Greg
+ Kroah-Hartman" <gregkh@suse.de>, "Joel Granados" <joel.granados@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
+ Iwai" <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, "Chuck
+ Lever" <cel@kernel.org>, tytso@mit.edu, dmitry.torokhov@gmail.com, "Petr
+ Pavlu" <petr.pavlu@suse.com>, "Anna Schumaker" <anna@kernel.org>, yukuai@fygo.io, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
+ Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
+In-Reply-To: <20261102-work-procfs-bugfixes-v1-28-59422ed3e465@kernel.org>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+ <20261102-work-procfs-bugfixes-v1-28-59422ed3e465@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 03 Nov 2026 14:48:22 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -78,136 +71,95 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261022134617.228229-1-gprocida@google.com>
-X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
-Message-ID: <20261103125814.258105-2-gprocida@google.com>
-Subject: [PATCH v3 1/2] rust: move EXPORT_SYMBOL_RUST_GPL to include/linux/export.h
-From: Giuliano Procida <gprocida@google.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org, 
-	Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	"=?UTF-8?q?Onur=20=C3=96zkan?=" <work@onurozkan.dev>, linux-modules@vger.kernel.org, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Giuliano Procida <gprocida@google.com>
-Content-Type: text/plain; charset="UTF-8"
 
-Move identical definitions of `EXPORT_SYMBOL_RUST_GPL` to
-`include/linux/export.h` from:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] scsi: esas2r: TOCTOU race on data_length in handle_hba_ioctl() via=
+ read_hw()
+--
 
-- `rust/exports.c`
-- `drivers/gpu/nova-core/nova_core_exports.c`
+commit 8af21917bc01e9991b2ab872e7a4c38c91a6e388
+Author: Christian Brauner <brauner@kernel.org>
 
-Both files already include `<linux/export.h>`.
+scsi: esas2r: bound the lengths of the HBA, SMP and firmware ioctls
 
-Update `scripts/misc-check` to recognize `EXPORT_SYMBOL_RUST_GPL()` and
-reference it in `nova_core_exports.c`'s header comment so `W=2` builds
-do not warn about an unused `<linux/export.h>` include.
+This commit adds bounds checks on user-supplied lengths for the HBA, SMP,
+and firmware ioctls in esas2r to prevent out-of-bounds reads and writes past
+the end of struct atto_express_ioctl and a->local_atto_ioctl.
 
-Signed-off-by: Giuliano Procida <gprocida@google.com>
----
- drivers/gpu/nova-core/nova_core_exports.c |  5 ++---
- include/linux/export.h                    | 13 +++++++++++++
- rust/exports.c                            | 12 +-----------
- scripts/misc-check                        |  4 ++--
- 4 files changed, 18 insertions(+), 16 deletions(-)
+> diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esa=
+s2r_ioctl.c
+> index 3f7c1d131ec34..f99318f61c934 100644
+> --- a/drivers/scsi/esas2r/esas2r_ioctl.c
+> +++ b/drivers/scsi/esas2r/esas2r_ioctl.c
 
-diff --git a/drivers/gpu/nova-core/nova_core_exports.c b/drivers/gpu/nova-core/nova_core_exports.c
-index 6e80ca9792ee..51858f376c7b 100644
---- a/drivers/gpu/nova-core/nova_core_exports.c
-+++ b/drivers/gpu/nova-core/nova_core_exports.c
-@@ -2,7 +2,8 @@
- // SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- 
- /*
-- * Exports Rust symbols from the `nova_core` crate for use by dependent modules.
-+ * Exports Rust symbols from the `nova_core` crate for use by dependent modules
-+ * via `EXPORT_SYMBOL_RUST_GPL()`.
-  *
-  * This is a workaround until the build system supports Rust cross-module
-  * dependencies natively.
-@@ -10,6 +11,4 @@
- 
- #include <linux/export.h>
- 
--#define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
--
- #include "exports_nova_core_generated.h"
-diff --git a/include/linux/export.h b/include/linux/export.h
-index a686fd0ba406..4aeb422d86af 100644
---- a/include/linux/export.h
-+++ b/include/linux/export.h
-@@ -93,4 +93,17 @@
- 
- #define EXPORT_SYMBOL_FOR_MODULES(sym, mods) __EXPORT_SYMBOL(sym, "GPL", "module:" mods)
- 
-+/*
-+ * A hack to export Rust symbols for loadable modules without having to redo
-+ * the entire `EXPORT_SYMBOL_GPL` logic in Rust.
-+ *
-+ * This requires Rust's new/future `v0` mangling scheme because the default one
-+ * ("legacy") uses invalid characters for C identifiers (thus we cannot use the
-+ * `EXPORT_SYMBOL_*` macros).
-+ *
-+ * All symbols are exported as GPL-only to guarantee no GPL-only feature is
-+ * accidentally exposed.
-+ */
-+#define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
-+
- #endif /* _LINUX_EXPORT_H */
-diff --git a/rust/exports.c b/rust/exports.c
-index 1b52460b0f4e..8b2dd4aa1f92 100644
---- a/rust/exports.c
-+++ b/rust/exports.c
-@@ -1,20 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * A hack to export Rust symbols for loadable modules without having to redo
-- * the entire `include/linux/export.h` logic in Rust.
-- *
-- * This requires Rust's new/future `v0` mangling scheme because the default one
-- * ("legacy") uses invalid characters for C identifiers (thus we cannot use the
-- * `EXPORT_SYMBOL_*` macros).
-- *
-- * All symbols are exported as GPL-only to guarantee no GPL-only feature is
-- * accidentally exposed.
-+ * Export symbols from the `rust/` crates and C helpers for loadable modules.
-  */
- 
- #include <linux/export.h>
- 
--#define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
--
- #include "exports_core_generated.h"
- #include "exports_bindings_generated.h"
- #include "exports_kernel_generated.h"
-diff --git a/scripts/misc-check b/scripts/misc-check
-index 40e5a4b01ff4..b39d731cb413 100755
---- a/scripts/misc-check
-+++ b/scripts/misc-check
-@@ -45,7 +45,7 @@ check_tracked_ignored_files () {
- # does not automatically fix it.
- check_missing_include_linux_export_h () {
- 
--	git -C "${srctree:-.}" grep --files-with-matches -E 'EXPORT_SYMBOL((_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' \
-+	git -C "${srctree:-.}" grep --files-with-matches -E 'EXPORT_SYMBOL((_RUST)?(_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' \
- 	    -- '*.[ch]' :^tools/ :^include/linux/export.h |
- 	xargs -r git -C "${srctree:-.}" grep --files-without-match '#include[[:space:]]*<linux/export\.h>' |
- 	xargs -r printf "%s: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing\n" >&2
-@@ -58,7 +58,7 @@ check_unnecessary_include_linux_export_h () {
- 
- 	git -C "${srctree:-.}" grep --files-with-matches '#include[[:space:]]*<linux/export\.h>' \
- 	    -- '*.[c]' :^tools/ |
--	xargs -r git -C "${srctree:-.}" grep --files-without-match -E 'EXPORT_SYMBOL((_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' |
-+	xargs -r git -C "${srctree:-.}" grep --files-without-match -E 'EXPORT_SYMBOL((_RUST)?(_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' |
- 	xargs -r printf "%s: warning: EXPORT_SYMBOL() is not used, but #include <linux/export.h> is present\n" >&2
- }
- 
--- 
-2.56.0.385.gac671c819a-goog
+[ ... ]
 
+> @@ -1221,11 +1231,16 @@ static void hba_ioctl_done_callback(struct esas2r=
+_adapter *a,
+>  	}
+>  }
+> =20
+> +/* @room is the size of the buffer that starts with @ioctl_hba. */
+>  u8 handle_hba_ioctl(struct esas2r_adapter *a,
+> -		    struct atto_ioctl *ioctl_hba)
+> +		    struct atto_ioctl *ioctl_hba, size_t room)
+>  {
+>  	struct esas2r_buffered_ioctl bi;
+> =20
+> +	/* The data follows @ioctl_hba in the same buffer. */
+> +	if (ioctl_hba->data_length > room - sizeof(struct atto_ioctl))
+> +		return IOCTL_INVALID_PARAM;
+> +
+>  	memset(&bi, 0, sizeof(bi));
+> =20
+>  	bi.a =3D a;
+
+[Severity: High]
+Can a concurrent write_hw() bypass this bounds check when handle_hba_ioctl()
+is called from read_hw()?
+
+In drivers/scsi/esas2r/esas2r_main.c, read_hw() and write_hw() both operate
+on the shared a->local_atto_ioctl buffer without holding a driver lock (and
+kernfs only serializes per open file description via of->mutex, not across
+separate file descriptors):
+
+drivers/scsi/esas2r/esas2r_main.c:read_hw() {
+	...
+	if (handle_hba_ioctl(a, a->local_atto_ioctl,
+			     sizeof(struct atto_ioctl)) !=3D IOCTL_SUCCESS)
+		return -ENOMEM;
+	...
+}
+
+drivers/scsi/esas2r/esas2r_main.c:write_hw() {
+	...
+	memset(a->local_atto_ioctl, 0, sizeof(struct atto_ioctl));
+	memcpy(a->local_atto_ioctl, buf, length);
+	...
+}
+
+Inside handle_hba_ioctl(), ioctl_hba->data_length is read twice without
+synchronization:
+
+drivers/scsi/esas2r/esas2r_ioctl.c:handle_hba_ioctl() {
+	if (ioctl_hba->data_length > room - sizeof(struct atto_ioctl))
+		return IOCTL_INVALID_PARAM;
+
+	memset(&bi, 0, sizeof(bi));
+
+	bi.a =3D a;
+	bi.ioctl =3D ioctl_hba;
+	bi.length =3D sizeof(struct atto_ioctl) + ioctl_hba->data_length;
+	...
+	return handle_buffered_ioctl(&bi);
+}
+
+If write_hw() overwrites a->local_atto_ioctl->data_length with a non-zero
+value between the bounds check and the assignment to bi.length, wouldn't
+handle_buffered_ioctl() still read and write bi.length bytes past the end of
+a->local_atto_ioctl?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-work-procf=
+s-bugfixes-v1-0-59422ed3e465@kernel.org?part=3D28
