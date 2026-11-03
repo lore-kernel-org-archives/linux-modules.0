@@ -1,99 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793723142;
-	b=xnwrBDrEQ86uMTXhuI/fIn9w9RO2LNajlLcVLKTWF53H/lW+mW23oWzzNv2L8VRYYYT8
-	 CF64GD7N1Nvdw/BTW84CodTxF32PnbRN5mHQ+kvM7I0VKubgUY4buHnyuDlWIL59yK4Sh
-	 azvDu+BDLyv7tUOAExu36kw5SOBUqEAj7bByOoG36EQsXIbH8/RJhVBHoY9eMVoS7OD6g
-	 bQbm5ghMAsxjmwv3wVpvyjevxYokvNFUYMTsLEst1ZOwJ2G+Y5DEVOAqVKQ0U42+2L4iU
-	 ZyXMDr96hrh4vFuWeOZDJ5piTzVhTVqOkU+A0QbjDoQZMkMPfADStPgrvUD+sV3UtHQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793723142;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=ucTwJsfrEI4hG4ToLcJXFo+0eiVcR5dBAvRyAcGuUSQ=;
-	b=R6B5pnxBqwJdYJEixuUTMSNfpAKpt2838fggsiuyKkUa6kIGrJbS8urOIDJPgeSg22Zm
-	 WbPzsPcFK0dg8VSLKtfDJZ6PenKBcsAWc9HKNkjeUhq4broeBD5061zPlWWAjPyZLxPps
-	 8PM4v7QD35ouCKHf81mjXsxAxcDFwkPRE+3jqJH/UVBsh9uLrYO0S+ZWOy9e6ObDnPEiN
-	 U/fIjLpMwgQZ3Ggy3jaZ1CIyIh6SQxY46mBNY3IlmDBRF00eqFxkuMZwTVCBU+jEPRggM
-	 hKfyoBVXP805MhbIu9CXR1ZhihGvGpPC6xCManBe+9AvyaLSAY76LUB5YMPyd3+z1gw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cUIIDOwS;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793723196;
+	b=de0t5tAyrnyXAbkQbiTZ2C+cbAYfDQs2cTyl/SqxKfDJG3XHdMeMj3022Ufe+mERdVAT
+	 +ZzygmdJOITO18ZCTcF6Hze1dneVPtjYSJLLNNOZ4bq4JZQoTyhfB2H4OWGAlSDtbAp8X
+	 lMw+lQb0HBhfuqekU6sPU6XOcgN62V2BzWtztyYNkR5lDMcxukdlo1ZJ+1pazOpZmQLfn
+	 yWXqCMjxYFEfYAIrmYqyKPh7vya7mLyXWm99lwJ3Yunl0DlePoZ15H46ZKsOVXA5XjajR
+	 amsBuX0CyCvpY0OOus2YL65Do0Uox5LMAGQG9R6+YMBItQrG2k2yVSvVPsokIp2mzZA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793723196;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=88x5nWCU4/5DUnm5J75+/44oJREtwTCj+m3lJcaJoNE=;
+	b=tdawQlYfgDrb3alGEDfr439O5Cw+xIZMzgxuDQTvu1eq98R7olpfgWnXNElxe+6RNneW
+	 +WtM6uldUVExM54iZpuquygLBgV4ss9v1DdlPrhBRgjlpJsdA9htasb5VqBuKI9xdRRZQ
+	 mXNqPuVznzoA01sj3DERKYaelKX3fIa36NpOutkvXGqh8Mxsj0eSKWhsIaJedFVEQIxti
+	 n7X9odVx6mncFTtIw7BeW8JUrJIaRC0dbILM11QFF47/8afyZkTDuml9E/fnFFfGtarJY
+	 +ME6FErInGL9MCUfBY7Ykc5Ds6s17BJZSRUQzGoG5BB1MPpvwHhtpkwzrDzTAt0asVQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HyDteQG2;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2B9606A32C
-	for <linux-modules@vger.kernel.org>; Tue,  3 Nov 2026 16:25:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D2B9606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259F4606A327;
+	Tue,  3 Nov 2026 16:26:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cUIIDOwS
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-535f598d126so288101cf.1
-        for <linux-modules@vger.kernel.org>; Tue, 03 Nov 2026 08:25:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793723141; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NcFdevV5LzsXoZlSqCZNFvRSsG/sSuZlDD6UF9OFhUP0gyMOPQQNM4to+sI6kPI825
-         CwQDwsO6cSWVdBO1kRo6NBT35om6SabQBTNISr4RN57wi7oKvauQ3ZgCqOKl9w34vHUr
-         o+TFvuwYtdv9ZgZexEX6xk0IqSwaptu2uIsgtunMRH/1N91icqhFkAPYBU7is1r/XbV4
-         5aFV4SGoTKwhz4UhUHnVakC+bTEoR3p4Oj4CpUp6PNP/wkeAeI3e4J3YfeUq6YC+XZpt
-         uaSTcVIv4wPSdoTcC4aHPMudnvSlMr2NHggoq5IdNxcBl0dg0fUfy+GKbQacfbTQJZ0U
-         XaeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ucTwJsfrEI4hG4ToLcJXFo+0eiVcR5dBAvRyAcGuUSQ=;
-        fh=k5DkINjLkt6Pa1i+ZwlVdf/KlWxbQqgKZQ8qfzsKfiI=;
-        b=fPW3CfIWxT4/HCm5jaEHmbR6fe6z96PjTkR7QY/wl0l1DaMJxceR4ZfMqJ6sPmVNPx
-         DlwVAW5qwQ7Q7jwqxBupLSPN3jgb/8jfZh1o7ZY6NSLn0CCElRFuloAiex6vjq3hcH3B
-         iPQBKcoyHwYsmFrcG7ZV5JMBJtEjuVYFKRrB1FIPxG1+HJ6PYMpWISxC7fjcTYZ7/+dZ
-         4QwyiO2gVYSB4/XKJTMnb3M8cY6rB+OJX9r46ms8bYajR7gm3KchQXXBtg27uHjLur/T
-         51cPZemKzs1YwFg6HNqQZSTUDgiN3GD3V6H26CA8zcwOAuZBiD1W1H162w4NKfp8qz4c
-         t3Aw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793723141; x=1794327941; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ucTwJsfrEI4hG4ToLcJXFo+0eiVcR5dBAvRyAcGuUSQ=;
-        b=cUIIDOwSgEY4sB/0Tg2p1iGB8ZqP+oT+zRWYbpJ5HDp4fFkm+00ZhLSRbuR1w60LEW
-         v/5VgDjhNdTrk7C+It+m9RQlpHOPBKKJ8MIFzOSFtB8x1OyuG4X2s3u4rRoZu/ZfFV5H
-         Kazq+csKerHRwdWninAXLvUt+3O5h/nVEi5AXCOF9iT+3xZCeU/uPt7XR77RdCWH5NRW
-         TLTC2oJxRgwsHEhfTzkjustTzb6f8S34Z27msGHq4tfZ24CS8qYD+kcafFVm7P7Bd23S
-         at6fseXnLSYGGN2I2uY6DnwYEb7hDJvQTMUDsN2LGq54ItEStcbdIx6aQJO2F6al54hU
-         E0YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793723141; x=1794327941;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ucTwJsfrEI4hG4ToLcJXFo+0eiVcR5dBAvRyAcGuUSQ=;
-        b=OT7WtPbtJ7nxE+8urS0k7i8s1T33oaU4q6s5mEe0LS3emRpSjYVFxWvprMa7QfgQoi
-         hINXnliliqPwbYxRS7Ls8GAK8bJrS6OQ2s2F/LR90okBKVYSYH4dskYoHtzNv328mxIe
-         BNvlP4h9Jh5B8A2wD5cedn7nLmzHb4O7+RlZlni38NB+lQ7+C3AlchIHf9q+Cdn/yfp9
-         2GKSHUNnoyC+ncs/PZi2DvaVUSPbf4qAnjHJCjYEAf/40+H8RvPMe4gcMSOGjycyahKZ
-         abUMC9Wri7iOili2g8lJlFBr+C2JzjY0WsgMIx3/SJO4eU+XUeACyThis2+jMP8o2lFk
-         EFXA==
-X-Forwarded-Encrypted: i=1; AKwUvBx4ZOPeJpsXHzrSGDIy9DONYBtXDQ1SJQe1tUECUUDXB/cjkq5a3lyl35CTYVMiWPbtAsFDUwOPTLJujnAG@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Lwa+dAZMX3+cldNj3NytAaPXxhZLhXkJA8WVszi/mv4K2/4q8
-	Zos7TSZXJFAYWfxm75Die5xclgGdth5ucHwGbyqK815xSun0UJflA6V6PGmdeA07oDT6aao3Ww8
-	oBJHe8byE6WvMVEGkce9tv6um1MfvWUT8XPIvqIrN
-X-Gm-Gg: AYBFou3qgLfu9OtHRKdQNFKgUXJRD38ItqUHwmjlEGIClGl6f/P5Za8/4trvbUs4E55
-	lt0w/hAvKN5P2orJso/92OMPgQnNN9YWX74EiP37Ri+09peXA+Vp8bhIpLv664abeg04MPIS1zc
-	WS6lbQnvdwwjy60SERhVhxJq9buTIn8icZOIE+Xq57RH+0p1POI5kNKQS6HMSvhcucTDQw+plbu
-	6QM2GT4FKnz9N56I1ZtpTXpAAhS8wtXA8mN8Y0pRsno5JDrVKi1qwemsaqIBmQihuOC3w6AL3hK
-	bpQFHgTMQPox+dtoQulowq77SqRat3Vi5ZoyNM5eEliHb7gTSDy55z7aRYc52GEOH2eIxkZjUey
-	4VrjpjDth1jNnQ9GS/1lmaG88/qgbjMoes517hrzy9CvHvd7b4x0R/0srnZz3dLJckgE=
-X-Received: by 2002:ac8:5cca:0:b0:536:934f:7da2 with SMTP id
- d75a77b69052e-549ba517bd1mr23041891cf.2.1793723140630; Tue, 03 Nov 2026
- 08:25:40 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HyDteQG2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A721F000C1;
+	Tue,  3 Nov 2026 16:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793723195;
+	bh=88x5nWCU4/5DUnm5J75+/44oJREtwTCj+m3lJcaJoNE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=HyDteQG2VBDz2pwudxJvRFZ3NzuhMM1n/qoJyRpSIEa+4sIo8qfNjCKCMkx9fqPnu
+	 PTXEB3HB8c+csEYJbUqrD18YNji+Wb3P0nPR4rCDriU41qd0d35Q951xfxtaew6zqD
+	 xTRV7HQa/evoV4YEWVb3yEGxlVh8/pDAOnR650sPVOaA2QtXNMiUjYtFVGzVyuFmxJ
+	 cuqSFcaDMPcPNDAwdq/HarCHKLW8nQ/TcudxBJnTO/IQN1HpQ6LTm2xHx92xHn7YRV
+	 9GYQVIg2n29fkajQrtiWC1hueIuFYRrAfwMXbzDr3+UFxfeou5MMiBIFbN+ZYhp4th
+	 RFlMkVbcaKQDw==
+Date: Tue, 3 Nov 2026 17:26:21 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Chuck Lever <cel@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, 
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>, linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+	Linuxppc Dev <linuxppc-dev@lists.ozlabs.org>, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
+	platform-driver-x86@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net, 
+	jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
+	linux-usb@vger.kernel.org, samba-technical@lists.samba.org, sparclinux@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, 
+	linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH RFC 27/38] sunrpc: make queue_wait a global wait queue
+ again
+Message-ID: <20261103-lufttemperatur-absondern-zweifach-31d272ad55ab@brauner>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+ <20261102-work-procfs-bugfixes-v1-27-59422ed3e465@kernel.org>
+ <16f91f93-16b4-49b1-b7fa-cec69759c349@app.fastmail.com>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -103,78 +79,72 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261022134617.228229-1-gprocida@google.com> <20261103125814.258105-2-gprocida@google.com>
- <0ddac462-b4b3-4844-8a00-fbe5f043885c@suse.com>
-In-Reply-To: <0ddac462-b4b3-4844-8a00-fbe5f043885c@suse.com>
-From: Giuliano Procida <gprocida@google.com>
-Date: Tue, 3 Nov 2026 16:25:02 +0000
-X-Gm-Features: AclHuK-6CCPIkFp5_oqua3MDBxS7jekauX_rpV7FSKbhPTEfW6LwwMQZwtaQ9bA
-Message-ID: <CAGvU0Hm04LXTywU0eL6KN4=SoOAC+LU3BKqENnLR-WV-sHsuNA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] rust: move EXPORT_SYMBOL_RUST_GPL to include/linux/export.h
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	rust-for-linux@vger.kernel.org, Alice Ryhl <aliceryhl@google.com>, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <16f91f93-16b4-49b1-b7fa-cec69759c349@app.fastmail.com>
 
-On Tue, 3 Nov 2026 at 15:57, Petr Pavlu <petr.pavlu@suse.com> wrote:
->
-> On 11/3/26 1:58 PM, Giuliano Procida wrote:
-> > diff --git a/scripts/misc-check b/scripts/misc-check
-> > index 40e5a4b01ff4..b39d731cb413 100755
-> > --- a/scripts/misc-check
-> > +++ b/scripts/misc-check
-> > @@ -45,7 +45,7 @@ check_tracked_ignored_files () {
-> >  # does not automatically fix it.
-> >  check_missing_include_linux_export_h () {
+On Mon, Nov 02, 2026 at 10:12:12AM -0500, Chuck Lever wrote:
+> 
+> 
+> On Mon, Nov 2, 2026, at 9:21 AM, Christian Brauner wrote:
+> > Since commit 552d0e17ea04 ("sunrpc: convert queue_wait from global to
+> > per-cache-detail waitqueue") poll() and epoll queue their waiters for a
+> > channel file on the queue_wait head in struct cache_detail. But the
+> > cache_detail can be freed while its channel file is still open and
+> > waited on.
 > >
-> > -     git -C "${srctree:-.}" grep --files-with-matches -E 'EXPORT_SYMBOL((_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' \
-> > +     git -C "${srctree:-.}" grep --files-with-matches -E 'EXPORT_SYMBOL((_RUST)?(_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' \
-> >           -- '*.[ch]' :^tools/ :^include/linux/export.h |
-> >       xargs -r git -C "${srctree:-.}" grep --files-without-match '#include[[:space:]]*<linux/export\.h>' |
-> >       xargs -r printf "%s: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing\n" >&2
-> > @@ -58,7 +58,7 @@ check_unnecessary_include_linux_export_h () {
+> > The procfs channel files of a network namespace are removed when the
+> > namespace goes away. Removing a procfs file waits for the callers that
+> > are in one of its methods right now and then calls ->release on every
+> > file that is still open (cf. close_pdeo()). The waiters that poll() and
+> > epoll left on the head stay queued until their file is really closed.
+> > So:
 > >
-> >       git -C "${srctree:-.}" grep --files-with-matches '#include[[:space:]]*<linux/export\.h>' \
-> >           -- '*.[c]' :^tools/ |
-> > -     xargs -r git -C "${srctree:-.}" grep --files-without-match -E 'EXPORT_SYMBOL((_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' |
-> > +     xargs -r git -C "${srctree:-.}" grep --files-without-match -E 'EXPORT_SYMBOL((_RUST)?(_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' |
-> >       xargs -r printf "%s: warning: EXPORT_SYMBOL() is not used, but #include <linux/export.h> is present\n" >&2
-> >  }
+> >   sunrpc_exit_net()
+> >   -> ip_map_cache_destroy()
+> >      -> cache_unregister_net()
+> >         -> remove_cache_proc_entries()
+> >            -> proc_remove()      // ->release, the waiters stay queued
+> >      -> cache_destroy_net()      // kfree(cd)
 > >
->
-> This is minor, but the updated pattern matches non-existent
-> EXPORT_SYMBOL() variants. To preserve the current strict matching, it
-> should instead be changed to:
->
-> EXPORT_SYMBOL((_NS)?(_GPL)?|_FOR_MODULES|_RUST_GPL)\(.*\)
+> > and when poll() returns remove_wait_queue() writes to the freed
+> > cache_detail:
+> >
+> >   BUG: KASAN: slab-use-after-free in _raw_spin_lock_irqsave+0x4b/0xa0
+> >   Read of size 1 at addr ff110001131bb570 by task sunrpc-poll-uaf/242
+> >   Call Trace:
+> >    remove_wait_queue+0x22/0x1c0
+> >    poll_freewait+0xc2/0x230
+> >    do_sys_poll+0x9ba/0xd50
+> >    __x64_sys_poll+0x165/0x470
+> >   Freed by task 12:
+> >    kfree+0x267/0x620
+> >    sunrpc_exit_net+0x34/0x80
+> >    ops_undo_list+0x271/0x8d0
+> >    cleanup_net+0x3f3/0x860
+> >
+> > Closing an epoll instance that watches the file gets there through
+> > ep_unregister_pollwait() instead.
+> >
+> > The channel files of a network namespace belong to the root of its
+> > user namespace and cache_open() doesn't check for a capability. So an
+> > unprivileged user can open the channel file of a namespace of its own
+> > from the outside, poll it and let the namespace die.
+> >
+> > Go back to a single static wait queue that never goes away. A wakeup
+> > for one cache wakes the waiters of all caches again but cache_poll()
+> > reports per cache_detail so that's just a spurious wakeup. procfs
+> > should really own the wait queue of its files like kernfs does but
+> > that's nothing for stable.
+> >
+> > Reported-by: Chris Mason <mason@kernel.org>
+> > Fixes: 552d0e17ea04 ("sunrpc: convert queue_wait from global to 
+> > per-cache-detail waitqueue")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> 
+> Acked-by: Chuck Lever <cel@kernel.org>
 
-I'll take this suggestion which was also my initial thought.
-
-My second thought was that if Linux were ever going to allow non-GPL
-or namespaced
-Rust symbols, the syntax I came up with would be the best future-proofing.
-
-> Alternatively, I think the pattern could be made more permissive in
-> general, something like:
->
-> EXPORT_SYMBOL(_[A-Z_]+)?\(.*\)
->
-> This has the advantage of not requiring changes when a variant of
-> EXPORT_SYMBOL() is added/removed and shouldn't sacrifice any of the
-> desired functionality.
-
-AI analysis: Using a permissive regex in check_missing_include_linux_export_h
-introduces 81 to 84 false-positive warnings across the kernel.
-
-Things like: EXPORT_SYMBOL_IF_KUNIT, EXPORT_SYMBOL_ACPI_LIB.
-
-> -- Petr
+Fwiw, I have a patch series on top of this that makes procfs own the
+waitqueue and then this whole UAF issues goes away structurally and you
+get to elide that global thing here.
