@@ -1,68 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793719138;
-	b=wfiYz7NMOp+OtBffRsiV6XEtUlPhtGjEtriBF4pmcnCtLBQu+c2x/b71C6m6YHmv76Ox
-	 czygbAAuMwXIzkI0QxedagoHm8cp0DRFD7w7hgwUmN/7sVHHAWlCy+ty7zYOonuiZkXIj
-	 gV4oUXjxYsnXVNzSQ7wYrYN+d4AyuEexU5lmCx6r6aUnGuQRKdmKCnTm0msAUFs8UWUii
-	 2M6MmFUPjGM40ro9DA5ym1yPdHoPPXS8Q/g8KVuVSa1mSTwhOGsTVQ39WmFC8JGaEkA+U
-	 KPUxnT9yREUDaxO0iEBlfjUt7kzTm3UAp4L4npqUL0Lr+dCcu7ggGMaPmI2wMzzZX5Q==
+	t=1793721424;
+	b=HSMTq6/oUBPQzHpqAqcydbmzoN39l6H3On1oVeBAONl19i8p8hOY9Q5hV95UpL+sl7Le
+	 djpD5djOq+08rjxJoFLyuUk3Zm3OAjn7M+/Dr7wCSnUTDhJMhtmJwfbVzxkUWVu7FGRMv
+	 FK3vQH72FWiN/Wyh0sOnlec7bCPV0WRdvoaSKIFeY/32DQVL3uf7wZvN6kECq5cVPiRII
+	 FnxDidSwKCsJ+6AINmODZPYq+Z2awXFiMQrpDtv72pSbwAOSIbYCA/MSs7aZpxeBohG7P
+	 ox27U581ToG+0BQUIJX0zxuzzWqZHM5XZyqbGM1ZW8HbWXZjsKr238GOrVnbvZHuumg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793719138;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=pXYmXnE4YnSZAwVsghhJ8qwzD8WHMLT3acK3fEE1c5w=;
-	b=VRVzrOzKHjuke7e/KwRA7aIJ0pYm/yiqZHO3k6XSPmnKTcpReF1kk4SR0/o6y9X39NFZ
-	 7336z3pxLK2WKSQM9SvRc1iOwsDjNR9lEkBU/0OdOshY0EL5+ZeIU6Qpmx/f3ghtOfCMx
-	 MQ82En/FnxNNdnwReTczJ6UAfmjmLhvNTfviE2WV2D79SlmTAEbhp9TLyFrMrjjv0FOE6
-	 mQuqf1Gu7vdyV9v8gfzY3SuGQMajzqEO+aTqqibQHGJ+HKqO2OQmOEGKbfQ/Ti1yF9awy
-	 +vJfXhOUmmLLlYjIztkJSQt+XVdcrC+b7n+/JzlrAjseUKDHsszd4++fLHdXEhKPNNw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793721424;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Ds1cm/r+J5ogP0Oi85siueuJoBsjSaeimvYRj3GfO3Y=;
+	b=XWMbVGdTiZoa45dgRB1U8b79lgfTRRxvEMJLTnpxDN6UxkHik8O9rukWZKtwwIaO3Dxl
+	 7Pr79qniCebvqygRqe0P9D/B+iLXGqOkEnYIem3JJejdwn0qhwZyOajtxvFsoJVoCeYa9
+	 ckAdAubKpFh3jWjgUpM0+yrxZ/nA6opmWX5Aa0zILXHmqO1ThL+Mo+YrCIwTCDikePoXu
+	 GFTV4vX6Wyma8tTeu9DDzRRupKjl1BT5RUzIDDVqbOCTwDq+ERH9pbMQlYVmG2F8LBtzO
+	 oDJHcu5zvPQSFPgnH+Zyj5EzyMX4e25lcCm6NoVk3QyjBC0+SFroB+ZBUtQrMwGYsLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lt7kWY0w;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="OQyd9tD/";
+	arc=none smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E5C6082BFE;
-	Tue,  3 Nov 2026 15:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21287606D839
+	for <linux-modules@vger.kernel.org>; Tue,  3 Nov 2026 15:57:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 21287606D839
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lt7kWY0w
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224A01F00A2C;
-	Tue,  3 Nov 2026 15:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793719137;
-	bh=pXYmXnE4YnSZAwVsghhJ8qwzD8WHMLT3acK3fEE1c5w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lt7kWY0w9ieExJiXhsRbswLZTk4I62Ut15H6kMqjEztfFu4VGWWEAsyq1h1RunGi7
-	 quYJ9gon1XZinTxL/vkjGOaRSh41+Spy89HkKrIkDLVlyQ2DPkr57UTA8uNv7ZJQPX
-	 Gkb+9Ork4a09lK3yz7JxXHSWqFcBarBUl6xpojcbcZ6LCj9+K0W6f0I8igzSlL1ee7
-	 HOzooULSEPo6yfs5dQxOzgo+Ck2+yelQJNljZ0d/RFz7CfzGvoYCRRMJGyc+UGPBSP
-	 xmtleTQuYNol2touf60/WN8WAXQ5Y7pfGj4AOYhP5EA7RtetswDsaHw6Wd78ymD48r
-	 5m+hEjoe7SkUg==
-Message-ID: <sashiko-outbox-195594@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 14/23] scsi: esas2r: let procfs copy the ioctl
- argument of the ATTONode file
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Brauner" <brauner@kernel.org>
-Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
- Bacik" <josef@toxicpanda.com>, "Chris Mason" <mason@kernel.org>, "Jeff
- Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>, "Eric Dumazet" <edumazet@kernel.org>, "Thomas
- Gleixner" <tglx@kernel.org>, "Al Viro" <viro@zeniv.linux.org.uk>, "Jonathan
- Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>, "Greg
- Kroah-Hartman" <gregkh@suse.de>, "Joel Granados" <joel.granados@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
- Iwai" <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, "Chuck
- Lever" <cel@kernel.org>, tytso@mit.edu, dmitry.torokhov@gmail.com, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Anna Schumaker" <anna@kernel.org>, yukuai@fygo.io, "Heiko
- Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
- Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261102-work-procfs-drivers-v1-14-a994bd4d3b1a@kernel.org>
-References: <20261102-work-procfs-drivers-v1-0-a994bd4d3b1a@kernel.org>
- <20261102-work-procfs-drivers-v1-14-a994bd4d3b1a@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 15:18:54 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=OQyd9tD/
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a5087a5348so35293345e9.0
+        for <linux-modules@vger.kernel.org>; Tue, 03 Nov 2026 07:57:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1793721422; x=1794326222; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Ds1cm/r+J5ogP0Oi85siueuJoBsjSaeimvYRj3GfO3Y=;
+        b=OQyd9tD/8TQOt52lQsWFnhzNzYJd8rgIeATGn0HbW5YbJ0qOm+aUzz0gKTIlMS6Ux4
+         8uXXHnbExRiP5Huc8SqpAIpjf/AXk42hAjhNh9I2I6b8OqBuxh/3LSRu1Jn3j43FBHqJ
+         S+XkV8xg48nTjJ88cEsHAmkY7hhB8I+9GD72G3LFAmt7QH04WMg0Vvjswb3glBMJDVq7
+         3JwXc+h9z0GFb05Uu8k/fl/T8MH8whVD05s5kNu/lcbwdaa6H5eQ9hjAak1unQMOgBNd
+         +QWzAdibssaKAE3bpR3DOmkPcVDpdmMp4YtT6qELztOUIfqWNP8wqKYlhRielrP122BQ
+         9k5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793721422; x=1794326222;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Ds1cm/r+J5ogP0Oi85siueuJoBsjSaeimvYRj3GfO3Y=;
+        b=nkrn1fFhZsQjAAZOZUuikYacAsXe+fKLdYRUaqIaEHX2tuHmmOhzE2BjcOtp3WRxfu
+         ULVkvdk1DTBvlUNkAH5AgGz4EgZCpyCJUjxZSx/kA6oXkEPlpQeLX5dtn3Ns2xqAn0Kc
+         pB0UzUr9U3orx0FjIxJxPmpnRBrhPIe997Z2rxrakbv+YDE+mCstFhJmTkjDhJx6Cilx
+         0Kk9u3luOgXJqyTEj+wUWCybXwhmklx0QSSYVzM/pmy2dPvHgHEeT0rKZfgdns2vqGRx
+         47HBYW8nR2gMKOdXLflWvtYYcVlHRrsmPKr08nKY3yMV9TRBH5ubTLtrYIrOZ081FCbn
+         2f7g==
+X-Forwarded-Encrypted: i=1; AKwUvByiCdxtnqIL+nAZ6qXWkawJMcxYqpVt8Z8FKxwNIbCppdvulCQElJvg5yf3B253dL10J0lDTt7nBuf7jZ8/@vger.kernel.org
+X-Gm-Message-State: APuU4Z/9Px//G3BxXB6Kw5TPAMSMIP1Dt2p11g865vV8ClsJzWf5ZFEB
+	hyRC7NiYt/kEzotq1WZ+tfyQcLMD/0EbF+BsED0eF3j3dyTqBfFPpDuwKoijxDZu09g=
+X-Gm-Gg: AYBFou1vaUz54Yw8GUhb7xirHWRSc2SntZyyaOsCUHCMaYtxfvM75856ZBp/bvJ8ueQ
+	wUypr7QfmqQCoPVQBzFm0MHc+tb4zGC5rQYGY28kxf4RHLHjTyzPeeNUE42EC5bZ+BNXioEhco9
+	MkFYomhk9+7DRlDx8S8EZn6Z+R4OCntdupb+sBTmvaVGf2nfCki8iKPKBivPMBqHMjmwCI+F0A9
+	JJ0BslDh+oxZlMj79DL0Ck8aA3ukIgeZ0FU4mKo0bFmcdBbpNFADxppjzOiTqUb1SnobIBh6W3w
+	5mD+J67L5f2BZO9FFWR9U3z2UFST3QF53hMbM8TV+r/m9H2tHjmGKWGCiyHZ6DYGP3c8Ptinkbw
+	b9aEQ7T3QXBfWrn1iS9PQQwtZaU1WUPgmAVr0zzfdoVNd/RtgIg3/uTP677jdRnmLS4g952ky+G
+	IwCe8nn2znNqxnJrgE2gigvjPPztRi2d5XXxvhWUTE63Jnoh+kx19At0OL5SPhKN/Ur6UandJdl
+	d9R4Mrp/VCXBV4Sm6ZsOuFLSTHIgdwDETMveQqlzaWiqd5aOkokF7+LuPzEBBWSbBxQzxuofsbm
+	c1vUBU90/o7jTMmYxnq+fBQATmusiHBd0t/qeVbvWhQ1XG1qS2I8vCpP2ZkHdEL+nw==
+X-Received: by 2002:a05:600c:e555:10b0:4b2:61e5:b2f4 with SMTP id 5b1f17b1804b1-4b261e5b38bmr58131845e9.11.1793721422629;
+        Tue, 03 Nov 2026 07:57:02 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b78a4csm25946508f8f.23.2026.11.03.07.57.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Nov 2026 07:57:02 -0800 (PST)
+Message-ID: <0ddac462-b4b3-4844-8a00-fbe5f043885c@suse.com>
+Date: Tue, 3 Nov 2026 16:57:01 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -71,69 +91,69 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] rust: move EXPORT_SYMBOL_RUST_GPL to
+ include/linux/export.h
+To: Giuliano Procida <gprocida@google.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
+ Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun@kernel.org>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
+ <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>
+References: <20261022134617.228229-1-gprocida@google.com>
+ <20261103125814.258105-2-gprocida@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261103125814.258105-2-gprocida@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] scsi: esas2r: split declaration and initialization of __free() vari=
-able in esas2r_ioctl_handler()
---
+On 11/3/26 1:58 PM, Giuliano Procida wrote:
+> diff --git a/scripts/misc-check b/scripts/misc-check
+> index 40e5a4b01ff4..b39d731cb413 100755
+> --- a/scripts/misc-check
+> +++ b/scripts/misc-check
+> @@ -45,7 +45,7 @@ check_tracked_ignored_files () {
+>  # does not automatically fix it.
+>  check_missing_include_linux_export_h () {
+>  
+> -	git -C "${srctree:-.}" grep --files-with-matches -E 'EXPORT_SYMBOL((_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' \
+> +	git -C "${srctree:-.}" grep --files-with-matches -E 'EXPORT_SYMBOL((_RUST)?(_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' \
+>  	    -- '*.[ch]' :^tools/ :^include/linux/export.h |
+>  	xargs -r git -C "${srctree:-.}" grep --files-without-match '#include[[:space:]]*<linux/export\.h>' |
+>  	xargs -r printf "%s: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing\n" >&2
+> @@ -58,7 +58,7 @@ check_unnecessary_include_linux_export_h () {
+>  
+>  	git -C "${srctree:-.}" grep --files-with-matches '#include[[:space:]]*<linux/export\.h>' \
+>  	    -- '*.[c]' :^tools/ |
+> -	xargs -r git -C "${srctree:-.}" grep --files-without-match -E 'EXPORT_SYMBOL((_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' |
+> +	xargs -r git -C "${srctree:-.}" grep --files-without-match -E 'EXPORT_SYMBOL((_RUST)?(_NS)?(_GPL)?|_FOR_MODULES)\(.*\)' |
+>  	xargs -r printf "%s: warning: EXPORT_SYMBOL() is not used, but #include <linux/export.h> is present\n" >&2
+>  }
+>  
 
-commit 0fd79b7040b09fc840e0499afbc88e68b34a3e18
-Author: Christian Brauner <brauner@kernel.org>
+This is minor, but the updated pattern matches non-existent
+EXPORT_SYMBOL() variants. To preserve the current strict matching, it
+should instead be changed to:
 
-scsi: esas2r: let procfs copy the ioctl argument of the ATTONode file
+EXPORT_SYMBOL((_NS)?(_GPL)?|_FOR_MODULES|_RUST_GPL)\(.*\)
 
-This commit factors the core logic of esas2r_ioctl_handler() into
-esas2r_ioctl_buf() operating on a kernel copy of struct atto_express_ioctl,
-and converts the procfs ATTONode file to use .proc_ioctl_buf and
-.proc_ioctl_args so procfs handles copying the ioctl buffer in and out.
+Alternatively, I think the pattern could be made more permissive in
+general, something like:
 
-> diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esa=
-s2r_ioctl.c
-> index f99318f61c934..eb39ba8263b31 100644
-> --- a/drivers/scsi/esas2r/esas2r_ioctl.c
-> +++ b/drivers/scsi/esas2r/esas2r_ioctl.c
+EXPORT_SYMBOL(_[A-Z_]+)?\(.*\)
 
-[ ... ]
+This has the advantage of not requiring changes when a variant of
+EXPORT_SYMBOL() is added/removed and shouldn't sacrifice any of the
+desired functionality.
 
-> @@ -1515,19 +1501,43 @@ int esas2r_ioctl_handler(void *hostdata, unsigned=
- int cmd, void __user *arg)
-> =20
->  	}
-> =20
-> +	return 0;
-> +}
-> +
-> +int esas2r_ioctl_handler(void *hostdata, unsigned int cmd, void __user *=
-arg)
-> +{
-> +	struct atto_express_ioctl *ioctl __free(kfree) =3D NULL;
-> +	int err;
-> +
-> +	esas2r_log(ESAS2R_LOG_DEBG, "ioctl (%p, %x, %p)", hostdata, cmd, arg);
-> +
-> +	if ((arg =3D=3D NULL)
-> +	    || (cmd < EXPRESS_IOCTL_MIN)
-> +	    || (cmd > EXPRESS_IOCTL_MAX))
-> +		return -ENOTSUPP;
-> +
-> +	ioctl =3D memdup_user(arg, sizeof(struct atto_express_ioctl));
-
-[Severity: Low]
-This isn't a bug, but in esas2r_ioctl_handler() in
-drivers/scsi/esas2r/esas2r_ioctl.c, ioctl is declared with __free(kfree) =3D
-NULL at the top of the function before the argument validation check and
-assigned later via memdup_user().
-
-Per the Cleanup API conventions, could the __free(kfree) variable definition
-and initialization be combined into a single statement at the point of
-allocation:
-
-	struct atto_express_ioctl *ioctl __free(kfree) =3D
-		memdup_user(arg, sizeof(struct atto_express_ioctl));
-
-after the early return check?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-work-procf=
-s-drivers-v1-0-a994bd4d3b1a@kernel.org?part=3D14
+-- Petr
