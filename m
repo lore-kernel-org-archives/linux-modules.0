@@ -1,109 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793755131;
-	b=mnhObAIgv3uRVAds+YcQB7zLTj6jNLvGOCLvnH/nJkcSOW8z54UTh0cKwxO6C0z3e9vH
-	 CUjph9pSGi+gzeEX6IbIhrbv7qs7tZA7wEDseZqn7E2EP9DXLqTJkyltM4i/4sChsZmZX
-	 iAs45FFsRRXyDsXM4f7zDJ0V3OGHKzp5/BBTQmNv4BF8bBh+c81Ji5EGFrv6N6C5nvzwg
-	 j7kW1M2x/c8S3Z8A5Cn4UYwNvhA/XWntk/2OvrdCIAkFzsrx0skYFESn/fMCXo//ZZSbg
-	 ehraI0BqMvNk1vxLKOQW1HkpBUhxuV5cLU2fKGmXwB9Eg5MH4v5m9oB3mHVjkZ6TUOQ==
+	t=1793783736;
+	b=heY8DZfjs596eoeBD5Z2sDOUU9B1ozsiyIw9Ub5j5NN18cL3ACo/mUb+8fdUQxz5eknT
+	 AGHLKCBcM82NzD0fuSMaukcw6smbGvzmBLwxSSuq5fKTgnyFK3wIgZtHAwOfjsyOLGNUl
+	 EiCrjnO3XhFFGMySJ3xCOCLWogk3C1BrrMYba4ksBCT8888DurqYn6Vt6hFNjwvkESbOU
+	 /ilzQS+Bmzpgc8XaQVtUdl3qH0LHiLromofkdHAcDZgzYez5ObWIz+6D+m3kF3Mt6fzkT
+	 kzuU+alJ51HWmnUBCnfr72czmjbMxJZizh+ZFsMPXlAwFP7C4rrf0/Ct+Mu9O4f6a7Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793755131;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=Tofk4DAa89+ADIAKHIR2Vai/+L2kQBAdRyCdNLpk7aw=;
-	b=Mzqb0vTWKEztc7WXvlsG9XLRVsqqliAU1ngneibXvwyvEjWitSO5pntc+JCP0WhaS1tw
-	 jiVFat37So1ye5YVMzblNTSnRJET+CnzKiirxm7o5KNH3LXxtDOf+GhV80OzCsICwwzqU
-	 CRfeH3cNWHdOeLzDOIGB2FJQ2DniSrQ5AyzJyEFiMq8oy5owFEyMJINgEE+Vxv6p5Y9Qe
-	 gGRrbD51ez4C1JI28mPQvtCZaLpo3jHEuaIdqXAhxpmt5ToRb5XVOvJTypimAOCh5rwom
-	 EzxC6afucWe51RPE61Lg/93gJWOin8zG56sq+eFOSwg5SC9PZ20ypQWqp/1/uUdRjyA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793783736;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=tun3DxnivT6n8ykyvHDle1jgjloMyn9wMMyaVwUBJtE=;
+	b=xmcr7yec+WPhYpeNieSszKshZJXr/3jZlrcW8PLnr+8Zh4T2kyeXJvf1i/aGPlwa+qVS
+	 R6xPzgd1Ro2Z+SaMXtkyN6ZxEdLAAtVN6DqR2QjzGXvdlwahqdhv6qUOiaQl1kLdUMPPo
+	 svBQYusftCZ8mNsJ9Le9tpJsm1Jf6NSf+sX3zXiHp5gTlqJVORtB3x1oNI6PIm6r1kdGV
+	 PolVhj4xUkvFWlKwY7Lk1oM+acc8YBO0v7qi0n7xFCNGfHNKesXbXw7JqXVKcphP3VWel
+	 PHCWI5ukpuhM5nNOHoVBztxqRAXPCZbK895HWGrw28um8DVKOXnYgI8YqQOODf7vdeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=i3jOzUb8;
-	arc=none smtp.remote-ip=209.85.214.177
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QF98rpjB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7F5606A326
-	for <linux-modules@vger.kernel.org>; Wed,  4 Nov 2026 01:18:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB7F5606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1070606A31B;
+	Wed,  4 Nov 2026 09:15:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=i3jOzUb8
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2e9f6a16afcso15885ad.1
-        for <linux-modules@vger.kernel.org>; Tue, 03 Nov 2026 17:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793755130; x=1794359930; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Tofk4DAa89+ADIAKHIR2Vai/+L2kQBAdRyCdNLpk7aw=;
-        b=i3jOzUb8ds4zFfDftO7lYb+6CfK6KPgDxXwk6C0I//DyWLHtEGU+9uze/n9FRRuoCa
-         83KfNuIU3ifdtd33KmgRN+j0U2eeGobnP5+3bVMIu83OAvrH1gOnUJz2nt24+6XkIfAe
-         dxYCxXrXI1nZFt8uvo1FEQEiZZ/LfbFOaJG4quxKoQbKp+F2u9Hsk2DdZ81hOh8He+VO
-         Iv+Ts1EL7D10ncd/x3DX2B1Um94xsmsYRpAQS4XPzwH5efqXwmLlejq7fMKHKCVwGsXg
-         MnLa+C5cUGvyBGXOmcn8XNlj3u1BZVVAzPYWslzXUQWKrtwkqUKikPGkvP4RgGCf23E/
-         Ovbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793755130; x=1794359930;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Tofk4DAa89+ADIAKHIR2Vai/+L2kQBAdRyCdNLpk7aw=;
-        b=egglbXaiCytDj9LJ/8vQPeFNvn4vu0tRkFlgKb+7iXs6NiAbBWzVXJ6t6L64VnaeOQ
-         zvkb0BvxPZeMWIKOv9/SGh6eyOPLyWoTE00EKNRVdnFiRlICN6Pc9dghnjJGjEchxxLb
-         3u6Q/w3O13bPBaECJusOT1OzAbDl60VHeuNDe6XWoDg0/bOhapeXiTHXrEdH7GzbIJDn
-         LwCLUeds29ybi2cFR1O0EJlb1odBYj0tuN0LOaDlLajTVxpva+4s6p8aFLCxK6KC/QDm
-         8iK/Pzwy81Pl9NqiFi7d5ylai6vlX2+Z27JhAp6Tp+fVz3SeluFu+UiEuke1w7nGJ6e/
-         8HcQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx/i+qC/GRE5IyOstZtF2LOismD9ZTyjLNhKz3Ho1rv0vUEPpVdheYqcHxaAVXGPmO2koLi7Obekf1/RBtI@vger.kernel.org
-X-Gm-Message-State: APuU4Z9t78DkrlIG2yuQuraVUfE06J5taw9b9uEoOxWouwb+9USpH+fk
-	Mhyn9GYuXPUkCxN3dSXWAulIcIsk2G8qHn0+bWTc6TPdtSCuqfW/R03gmYTj9z1u/A==
-X-Gm-Gg: AYBFou3Sn6xEgxeZXw/4PBHNX9RsT3Xy+r96aw/8BG87bYyntfp3rtBZNV5r8m1nEO1
-	0vNPWZ+jeLQizkvNnzTACmeVwNhvX2xmLrF4vCUjaxfBJl0xgHkSnw22eKWOyDfP3wcgWtySqhv
-	pACpDmpDcK8/BdseSEOXLhroMhvVerakRzbQ+NpdL4miaqMhh5QHXAsjbuYQVsIINJeQXMPDZ2J
-	BuyYqGxwny83fKH7jmqPsoEMOY1Xk1aDJZl7I+YHvEDFtOqn2bnQStPzFW2/2pqJwxjYH9ZhZUy
-	O28FqVWvbW9Sqwm1tdPIzqYBF83kXNgQNFeUJT6ZVxjBdZC8q4oPF/ext+I6gUyvx/cVUJ250Zj
-	isL0e71E4wsb5Ph9I046tPwc80vRm24Y4apl7RLIkZeKJtlnkILayGkllnKuAhWqt/LYyDKuJtE
-	/+2zKCo7KdYTe2E92PBtceZ6k1yR8Fh8E5MmBrO43dFlG/82nSvtPSPNw4mDymZn78I2Cfa5zNZ
-	49cKi16xNW0tiWCHF0ZzSqneqF+aSOhxwBZHRiphcfV9TpFqBr5gILjhRkQKefZ5JAmX8D1l5r/
-	iqakq1qFyHuzPH43QShedbX26/XN4Q6z4G1KzMG11w0JmJdiRMb/MBOs77ZF2Yz5bndrZxMcfQo
-	=
-X-Received: by 2002:a17:903:3888:b0:2df:96ca:d7c7 with SMTP id d9443c01a7336-2ed07aee78fmr1533795ad.10.1793755129511;
-        Tue, 03 Nov 2026 17:18:49 -0800 (PST)
-Received: from google.com (210.109.125.34.bc.googleusercontent.com. [34.125.109.210])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b08759344dsm4468133a91.13.2026.11.03.17.18.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 17:18:48 -0800 (PST)
-Date: Wed, 4 Nov 2026 01:18:43 +0000
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Giuliano Procida <gprocida@google.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
-	Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>
-Subject: Re: [PATCH v4 0/2] clean up EXPORT_SYMBOL_RUST_GPL
-Message-ID: <20261104011843.GB1247794@google.com>
-References: <CAGvU0Hm04LXTywU0eL6KN4=SoOAC+LU3BKqENnLR-WV-sHsuNA@mail.gmail.com>
- <20261103165833.418845-1-gprocida@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QF98rpjB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 786C51F000C1;
+	Wed,  4 Nov 2026 09:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793783735;
+	bh=tun3DxnivT6n8ykyvHDle1jgjloMyn9wMMyaVwUBJtE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=QF98rpjBzH7nX1jmz4Zo8ykeu0WPbxz0HGt6XxCXrOQ4V4PB3P/wbn5sluIzZ3bgP
+	 woOpkCVq06Ek6V7bKkHEP2phdvrGGARxXAl1OBE0IhgkRUa/IQ935AFbXxh1YUY5bJ
+	 utfjbIjp7LtybAhtZNGHqFcIoDw2mhpfxaUaUe5IHuBCvHt5tgYAPu/YfrtEAf4jWd
+	 v5zbJS1rE1Hby/io2vM2SNwmccLVR3w7pjdFYCtf7rR4Wu4skeBeZ5GH0Q1ajKmHHR
+	 yetiYqpJqieJOdcKUSYdWCjNW5p22mqd+bHsoVYbOTO4y8Ft2ybe6f5kRc5h/hiSzc
+	 /PiiXfUYZ7Gcw==
+Date: Wed, 4 Nov 2026 10:15:18 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Florian Westphal <fw@strlen.de>
+Cc: linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
+	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH RFC 03/38] netfilter: xt_recent: don't remove the proc
+ entries under a spinlock
+Message-ID: <20261104-entgangen-nettigkeiten-intuitiv-f39521735261@brauner>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+ <20261102-work-procfs-bugfixes-v1-3-59422ed3e465@kernel.org>
+ <auig_zhd3L0HEis3@strlen.de>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -113,37 +79,12 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261103165833.418845-1-gprocida@google.com>
+In-Reply-To: <auig_zhd3L0HEis3@strlen.de>
 
-Hi Giuliano,
+On Mon, Nov 02, 2026 at 03:41:03PM +0100, Florian Westphal wrote:
+> Yes, but note that this change is already part of a pending nf -> net
+> merge request.
 
-On Tue, Nov 03, 2026 at 04:58:31PM +0000, Giuliano Procida wrote:
-> Move EXPORT_SYMBOL_RUST_GPL definitions into linux/export.h and
-> prevent the emission of bogus type information for Rust symbols.
-> 
-> Addressing review comments, the first commit now ensures the moves do
-> not trigger warnings from scripts/misc-check about missing symbol
-> exports by extending regexes to match EXPORT_SYMBOL_RUST_GPL as well.
-> 
-> Giuliano Procida (2):
->   rust: move EXPORT_SYMBOL_RUST_GPL to include/linux/export.h
->   rust: exports: emit ___EXPORT_SYMBOL without C declarations
-> 
->  drivers/gpu/Makefile                      |  4 ++--
->  drivers/gpu/nova-core/nova_core_exports.c |  5 ++---
->  include/linux/export.h                    | 14 ++++++++++++++
->  rust/exports.c                            | 12 +-----------
->  scripts/misc-check                        |  4 ++--
->  5 files changed, 21 insertions(+), 18 deletions(-)
-
-For the series:
-
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-
-As a side note, starting a new thread for each version would make it
-easier to navigate the patches in email clients and lore:
-https://docs.kernel.org/process/submitting-patches.html#explicit-in-reply-to-headers
-
-Sami
+Dropped.
