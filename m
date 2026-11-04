@@ -1,49 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793816499;
-	b=n5ejACTQnfhJCYut1eu3CWyqVbeuYuXs22sK0lAI4+0kMDJh2br6rp+cxAdRf/jh8xlw
-	 h9G5v7E0Y7IYF+LS4x1tkdY1qBUxBcJRPC6Zb39ZgmLFM/SrWMeG5IMMCl6qUp/ppkrlF
-	 wwGRdmr6pYfk+ghPUxflk9elxVJZN+iLbcDdBFy5i+8t7+8Lq2nNmnbAF4OkvCxeEJR9p
-	 ZJZkjEDioDgOgwBtIkrdnFrmpxJPHPONjj80mdJMR8gW7y0arentTl0zbZOhUO1HbIYBF
-	 yLJESH8ajrEavE3DsLFJQDQAmVyz28GoeSNhXr4mPgMSvIHO/C3cgxV62F+81cKDLEw==
+	t=1793816516;
+	b=qVNTjm0Z7Q4V91h6zTT/WrC1c3sDZrX1vMq6c+f/BjFhjcKKZ/7KGoIog9jZyboDcckv
+	 JWw4Wijjhy0wpNQ6wuK55UliAKLNDfhLxmqobnH99yTJeNAK7BFggmWBQwiKXlMAxPtB+
+	 QdHeXTEKyt6L0ZjLG2Uyr1zsLh91ylpcCjITZwq774PsaI3JweQJqwSVPVLlkrR1OjUdQ
+	 x9oxu1c+zVJqTRwR9gYOpmsU1GYYrO8/301o3ocziXiiaOwZ4nFP6xrL4qcglZAIls9M+
+	 zzwCYOSgWf1icRAwxbIHOJcPw2/853oPyWvQ90dbVCwDYDfxutyohEbigtATmz9z0AA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793816499;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793816516;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=CM4gwMdxZlYgGsSUl0RsbvLHliJnK+Q/M3nlTsRIEQw=;
-	b=RxAbeC3dqt8OzSRIpPDnjJvy+TX0atYGqowhzYxX/diP90E5JvHeAVp/CCu1dKHSTX8H
-	 g2Xh5bYTQ+2N5Vtn6mTTn1QgrFoNLDkcVOBVAtT/c2FSc/KQNLqi5JctBZsexT3w2VDlV
-	 ihqYosF/LM3Z7uruBx2XWyAiV1Auqi6fVrLi/GM6XTqKfyGrdE2JNmCPjYIxoEc3Eehh8
-	 2EUMaSo3FzkhVz7pD4kA5SW5s6oZ/aW/1Arou1uLCXKrUkFFL+fctMki9j5K3UOZCiYqO
-	 v72QO1xv1pZfQrAExEcHIajJjp5vJzr5k9hmGaxV4c9w+Gt/zGgiSrQaOijkAK/Olog==
+	bh=Z+C9m9wxNREnuTZuVnDaV7dUF04tID/wQt0duLy45bg=;
+	b=YW9KBfmNAs5gCmtBUft3DT9ryGYlNXe7URVUfDqFJ0QTLOYPaXUZUXrkg0JMDjJRJuIw
+	 SaFnPjeqiLwuLDNU7aiIBr4MjMPMp1YwP7Z66Vt5ISHGaD6jc7j+D8tvr+hnim+b/0J0n
+	 UowSoA5voZevO90kAt5uGapu7rByfiLbXPL9yPLJqROGuV67ZFQoPDYvd0/9iN+WJUFr5
+	 cOMu4sy7/3B2PCxscsftJfkAkD/+NSGn4YereP8qXr5iTi3q36yJQS/67KBvqTenh4PnL
+	 JnXZ14DahEPqjkbf0+LDInnzbHuAbyEPh+tVSsHQZrr8TuzKXijJMagDVJK/eTYXxOA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dChGoWYf;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EE33rmOH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5BD606A8FC;
-	Wed,  4 Nov 2026 18:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E9A606C445;
+	Wed,  4 Nov 2026 18:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dChGoWYf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75571F00919;
-	Wed,  4 Nov 2026 18:21:30 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EE33rmOH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EE81F00A02;
+	Wed,  4 Nov 2026 18:21:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793816498;
-	bh=CM4gwMdxZlYgGsSUl0RsbvLHliJnK+Q/M3nlTsRIEQw=;
+	s=k20260515; t=1793816515;
+	bh=Z+C9m9wxNREnuTZuVnDaV7dUF04tID/wQt0duLy45bg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=dChGoWYfGsjl1UeA7R0Fromsfxfmd3GfHNkY+ncLIbdQx/0WJAOhNYdJ+MiNUOHvO
-	 F/Pk660DbLd341wKj1EgwDPw1fr6rvo9SV4Yqn90qevJgNVLWMSg5mwVND1/blefw/
-	 TWY/kGKZhWc8bUUcEAQcEnJ4CD2XZzH6u+S4n5ZGvZqX4znmApkaw3ndKa3IivSW75
-	 GY1z4YHdlTTwapkjYxz428JrFDYXCyMxaX5Wickxoie36Se7XBumA8R7k41Gr3E4zE
-	 DJgasaO95PWY1jGhDUC6Wdy5Yef8UCdiuyF5kK3fTLzcXRIsBVOyj00xqnmO8eCgW/
-	 0WHp2ifwLqt/Q==
+	b=EE33rmOHdUId45JajwVPMHlyyzjGyg4Tfdsdp+wl1agd4NO6PmBKLz73qAjlP1wkf
+	 dsrNsaKClp4YqiHZyx/mrnDE1tYLrmAW/eIv2wzMHPTt91Cx6qOBUuiyUrjGegVQvp
+	 lM/kKCKS6KP7LvY7DD+imIBZ/WZ9jlpdq27YMmLrm0tJpvc83uOkmM92Bf9POeIdwM
+	 3n+MdkRPrIjjJlcukxF8Ay2/uJhd4Tap1scWMu4Yq9ruRO7mnUxINNDCmAtG8SdOtJ
+	 Am67wnrb8BIodX5WcsGGx7SWqy2qVZfjSokNT30Ef7ktu5/YJ/HAAghLfBOXp5YP09
+	 lJ+LZIuVDqlLw==
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Wed, 04 Nov 2026 18:20:25 +0000
-Subject: [PATCH v5 07/11] objtool: cache relocations, do less work,
- eliminate relocation hash
+Date: Wed, 04 Nov 2026 18:20:27 +0000
+Subject: [PATCH v5 09/11] objtool: decode instructions and resolve branch
+ targets in parallel
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -55,7 +55,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261104-build-speedup-v5-7-0f6018be8dae@kernel.org>
+Message-Id: <20261104-build-speedup-v5-9-0f6018be8dae@kernel.org>
 References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
 In-Reply-To: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
 To: Linus Torvalds <torvalds@linux-foundation.org>, 
@@ -81,48 +81,52 @@ Cc: ljs@kernel.org, linux-kbuild@vger.kernel.org,
  linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, 
  rust-for-linux@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=14469; i=ljs@kernel.org;
- h=from:subject:message-id; bh=PJHj3nulYv1Yc9CmOuSxqGVQjo1JlgVzbt/GHTD8fns=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJel+faR5Zovxa+fu/zDadI12ubI1fvnKT+50X09uDTs
- 2atb9n0oKOUhUGMi0FWTJHl+Rfx/UEiYfM6L/i7wcxhZQIZwsDFKQAT+RDMyDBD3CHQoWi7tmHS
- q7cWOhE7s2cFfDTV1tDhvZv7PWSz/mFGhp8iQWxVt8QUTXj/KB13v/U7vG0Zg+f+fT9vXP1X+uW
- YMxcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=29082; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=pou/5BU40hNoU4TnJINLou1PZ/CHRjD9lrvuqW/e6zo=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJel+fuf3PT/lpu0ZeF/KGf6wvPR/GYKPG8XXBCt+W0+
+ 8yYfJ4/HaUsDGJcDLJiiizPv4jvDxIJm9d5wd8NZg4rE8gQBi5OAZiIOhvDPxXVewfv12exGT8Q
+ 6Lj/+7DEu90vXeZlLiywn1F77fU3zv8M/5TXZQRK3Uu8rLJLaK7bgt83YsPFazr/9tTK29aFVNv
+ v5wIA
 X-Developer-Key: i=ljs@kernel.org; a=openpgp;
  fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-Instruction relocations are looked up by destination in objtool via a hash
-which is keyed on a 16-byte (OFFSET_STRIDE) window within the section being
-walked.
+During a kernel build objtool is used to decode vmlinux.o's instructions
+and resolve every jump and call destination.
 
-It iterates through each 16-byte window, looking up relocations over
-several passes, before moving on to the next 16-byte window, caching only
-when a relocation is not found saving further lookups in this case.
+This forms a large part of the work objtool does during the build process,
+and it is all done in serial.
 
-Improve upon this by introducing a per-section relocation cache storing the
-first relocation at or after each 64-byte window of data (an empirically
-determined index range), indexed by chunk.
+Decode these in parallel at a function granularity to speed things up, but
+limit this to invocations that pass --link, and only where the there is 8
+MiB or more text to justify it.
 
-The lookup is implemented an array lookup and touches no shared state, so
-can be used from multiple threads.
+In practice this limits this to processing vmlinux.o in the kernel build
+and modules are processed as they were before.
 
-The index runs over the relocations in offset order. Usually this is how
-they are input, however if not, each section is sorted once, storing
-their offsets in reloc_order[].
+Only the instruction hash is shared between the threads and nothing is ever
+removed from it, so an insertion is a compare-and-swap on the bucket head.
 
-This is done lazily on lookup, so nothing pays the cost that doesn't have
-to, and if everything is sorted nothing does.
+Threading is limited to decoding and the jump pass, so the gain flattens
+out at 16 threads and any further threads were found to only add overhead.
+
+When performing an allmodconfig build, the clang invocation of objtool when
+processing vmlinux.o took 5.93s on 1 thread, 4.56s on 8, 4.51s on
+16 and 4.63s on 128.
+
+Therefore cap the thread count at 16 or the number of CPUs, whichever is
+fewer.
+
+Also add the reloc_cache_lock mutex so find_reloc_by_dest_range() sorts
+relocations without a risk of a race. In practice no contention should be
+possible, but keep the lock as a guarantee of this.
 
 The output of objtool before and after this change was confirmed to be
-byte-for-byte identical both for x86_64 defconfig and allmodconfig with
-gcc and clang.
+byte-for-byte identical for x86_64 defconfig and allmodconfig with gcc and
+clang, and for a loongarch defconfig, where objtool runs on every object.
 
-objtool on the gcc allmodconfig vmlinux.o goes from 10.5s to 9.0s, clang
-from 9.8s to 8.3s and gcc defconfig from 2.08s to 1.79s, with peak memory
-down ~90 MiB on allmodconfig.
-
-Similar performance was also noted on a worst case scenario for unsorted
-input (gcc but lld for linking), which confirms that the sorting mechanism
-works correctly with little overhead.
+On a 128-thread machine, objtool on the clang allmodconfig vmlinux.o goes
+from 5.2s to 4.4s (6.5s to 4.4s together with the previous two patches),
+and on defconfig from 1.99s to 1.38s.
 
 objtool on vmlinux.o is on the serial tail of every build that links
 vmlinux, no-op builds are unchanged.
@@ -131,436 +135,958 @@ Whole build, 128-thread Threadripper 9980X, best of N runs:
 
                                          before   after     delta
                                          -------------------------------
-  x86 defconfig, touch mm/vma.c, gcc        8.3s     8.2s    -0.14s (-2%)
-  x86 defconfig, touch mm/vma.c, clang      7.6s     7.3s    -0.25s (-3%)
-  x86 defconfig, clean, gcc                28.9s    28.6s    -0.22s (-1%)
-  x86 defconfig, clean, clang              29.4s    29.1s    -0.28s (-1%)
-  x86 allmodconfig, touch mm/vma.c, gcc    29.4s    28.0s     -1.4s (-5%)
-  x86 allmodconfig, touch mm/vma.c, clang  27.9s    26.2s     -1.7s (-6%)
+  x86 defconfig, touch mm/vma.c, gcc        8.2s     7.7s    -0.55s (-7%)
+  x86 defconfig, touch mm/vma.c, clang      7.3s     6.9s    -0.44s (-6%)
+  x86 defconfig, clean, gcc                28.6s    28.2s    -0.47s (-2%)
+  x86 defconfig, clean, clang              29.1s    28.7s    -0.45s (-2%)
+  x86 allmodconfig, touch mm/vma.c, gcc    25.7s    23.7s     -2.0s (-8%)
+  x86 allmodconfig, touch mm/vma.c, clang  24.1s    22.5s     -1.6s (-7%)
 
 Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 ---
- tools/objtool/elf.c                 | 280 ++++++++++++++++++++++++++++--------
- tools/objtool/include/objtool/elf.h |  10 +-
- 2 files changed, 221 insertions(+), 69 deletions(-)
+ tools/objtool/Makefile  |   2 +-
+ tools/objtool/check.c   | 717 ++++++++++++++++++++++++++++++++++++------------
+ tools/objtool/elf.c     |  15 +-
+ tools/objtool/objtool.c |  14 +-
+ 4 files changed, 559 insertions(+), 189 deletions(-)
 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 98a110e3e8f5..bd463b5df38c 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -316,35 +316,220 @@ struct symbol *find_global_symbol_by_name(const struct elf *elf, const char *nam
- 	return NULL;
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index db99c4759b2c..3ccb1cdc9239 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -63,7 +63,7 @@ INCLUDES := -I$(srctree)/tools/include \
+ OBJTOOL_CFLAGS  := -std=gnu11 -fomit-frame-pointer -O2 -g $(WARNINGS)	\
+ 		   $(INCLUDES) $(LIBELF_FLAGS) $(LIBXXHASH_CFLAGS) $(HOSTCFLAGS)
+ 
+-OBJTOOL_LDFLAGS := $(LIBSUBCMD) $(LIBELF_LIBS) $(LIBXXHASH_LIBS) $(HOSTLDFLAGS)
++OBJTOOL_LDFLAGS := $(LIBSUBCMD) $(LIBELF_LIBS) $(LIBXXHASH_LIBS) -lpthread $(HOSTLDFLAGS)
+ 
+ # Allow old libelf to be used:
+ elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(HOSTCC) $(OBJTOOL_CFLAGS) -x c -E - 2>/dev/null | grep elf_getshdr)
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 97250aa36100..9a56e24eb1e6 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -7,6 +7,9 @@
+ #include <fnmatch.h>
+ #include <string.h>
+ #include <stdlib.h>
++#include <pthread.h>
++#include <stddef.h>
++#include <unistd.h>
+ #include <inttypes.h>
+ #include <sys/mman.h>
+ 
+@@ -24,6 +27,7 @@
+ #include <linux/objtool_types.h>
+ #include <linux/hashtable.h>
+ #include <linux/kernel.h>
++#include <linux/sizes.h>
+ #include <linux/static_call_types.h>
+ #include <linux/string.h>
+ 
+@@ -64,14 +68,13 @@ struct instruction *find_insn(struct objtool_file *file,
+ struct instruction *next_insn_same_sec(struct objtool_file *file,
+ 				       struct instruction *insn)
+ {
+-	if (insn->idx == INSN_CHUNK_MAX)
+-		return find_insn(file, insn->sec, insn->offset + insn->len);
++	const unsigned long next_offset = insn->offset + insn->len;
+ 
+-	insn++;
+-	if (!insn->len)
+-		return NULL;
++	/* A chunk ends at its last slot or an empty one, so look the next up. */
++	if (insn->idx == INSN_CHUNK_MAX || !insn[1].len)
++		return find_insn(file, insn->sec, next_offset);
+ 
+-	return insn;
++	return insn + 1;
  }
  
--/* If there are multiple matches, return the first one in the range */
-+static bool is_dwarf_section(struct section *sec)
+ struct instruction *next_insn_same_func(struct objtool_file *file,
+@@ -414,6 +417,12 @@ static void *cfi_hash_alloc(unsigned long size)
+ static unsigned long nr_insns;
+ static unsigned long nr_insns_visited;
+ 
++/* Only the vmlinux.o link, and only if it is this large, runs on several threads. */
++#define DECODE_THREADED_MIN_TEXT	SZ_8M
++/* Only decoding and the branch passes are threaded, so more gains nothing. */
++#define DECODE_MAX_THREADS		16
++#define DECODE_RANGES_PER_THREAD	4
++
+ /*
+  * sec_offset_hash() keys on OFFSET_STRIDE windows, so the instructions of a
+  * window share a chain and buckets beyond one per window would sit empty.
+@@ -452,24 +461,350 @@ static int alloc_insn_hash(struct objtool_file *file, unsigned long text_size)
+ 	return 0;
+ }
+ 
++/* Per-thread state, only instruction hash is shared. */
++struct insn_range {
++	struct section *sec;
++	unsigned long start, end;
++	struct instruction *first, *last;
++	unsigned long nr_insns;
++	int ret;
++
++	/*
++	 * Each thread writes to its own copy of an objtool file, which are
++	 * combined upon completion.
++	 */
++	struct objtool_file shadow;
++};
++
++#define range_for_each_insn(file, range, insn)				\
++	for (insn = (range)->first;					\
++	     insn && insn->offset < (range)->end;			\
++	     insn = next_insn_same_sec(file, insn))
++
++typedef int (*range_fn_t)(struct objtool_file *file, struct insn_range *range);
++
++struct range_work {
++	range_fn_t fn;
++};
++
++static struct insn_range *decode_ranges;
++static unsigned int nr_decode_ranges, next_decode_range, nr_decode_threads;
++
++/* The kernel's try_cmpxchg(); the tools' cmpxchg() is host-arch only. */
++static bool hlist_try_cmpxchg(struct hlist_node **ptr, struct hlist_node **old,
++			      struct hlist_node *new)
 +{
-+	return !strncmp(sec->name, ".debug_", 7);
++	struct hlist_node *seen = __sync_val_compare_and_swap(ptr, *old, new);
++
++	if (seen == *old)
++		return true;
++
++	*old = seen;
++	return false;
 +}
 +
-+/* Index the first relocation at or after each 64 byte window of the base. */
-+#define RELOC_CACHE_INDEX_SHIFT	6
-+
-+static unsigned long reloc_cache_index(unsigned long offset)
++/* Nothing is ever removed, so push onto the bucket as llist_add() does. */
++static void insn_hash_add(struct objtool_file *file, struct instruction *insn)
 +{
-+	return offset >> RELOC_CACHE_INDEX_SHIFT;
++	struct hlist_head *head = insn_hash_head(file, insn->sec, insn->offset);
++	struct hlist_node *first = READ_ONCE(head->first);
++
++	insn->hash.pprev = &head->first;
++	do {
++		insn->hash.next = first;
++	} while (!hlist_try_cmpxchg(&head->first, &first, &insn->hash));
 +}
 +
-+static void reloc_cache_free(struct section *rsec)
++/* The slot after prev in its chunk, or the first of a new chunk. */
++static struct instruction *next_insn_slot(struct instruction *prev)
 +{
-+	free(rsec->reloc_cache);
-+	free(rsec->reloc_order);
-+	rsec->reloc_cache = NULL;
-+	rsec->reloc_order = NULL;
-+	rsec->nr_cache_windows = 0;
-+	rsec->nr_indexed = 0;
-+	rsec->sorted = false;
-+}
++	struct instruction *insn;
 +
-+/* The relocation at a position of the section's offset order. */
-+static struct reloc *reloc_at(struct section *rsec, unsigned int pos)
-+{
-+	unsigned int reloc_idx = pos;
-+
-+	if (rsec->reloc_order)
-+		reloc_idx = rsec->reloc_order[pos];
-+
-+	return &rsec->relocs[reloc_idx];
-+}
-+
-+static bool relocs_in_order(struct section *rsec)
-+{
-+	const unsigned int nr_relocs = sec_num_entries(rsec);
-+	unsigned int i;
-+
-+	for (i = 1; i < nr_relocs; i++) {
-+		struct reloc *prev = &rsec->relocs[i - 1];
-+		struct reloc *reloc = &rsec->relocs[i];
-+
-+		if (reloc_offset(reloc) < reloc_offset(prev))
-+			return false;
++	if (prev && prev->idx < INSN_CHUNK_MAX) {
++		insn = prev + 1;
++		insn->idx = prev->idx + 1;
++		return insn;
 +	}
 +
-+	return true;
++	insn = calloc(INSN_CHUNK_SIZE, sizeof(*insn));
++	if (!insn)
++		ERROR_GLIBC("calloc");
++
++	return insn;
 +}
 +
-+/* qsort() passes no context, so the relocations being sorted live here. */
-+static struct reloc *sort_relocs;
-+
-+static int compare_reloc_order(const void *a, const void *b)
++static int decode_range(struct objtool_file *file, struct insn_range *range)
 +{
-+	const unsigned int *idx_a = a;
-+	const unsigned int *idx_b = b;
-+	const unsigned long offset_a = reloc_offset(&sort_relocs[*idx_a]);
-+	const unsigned long offset_b = reloc_offset(&sort_relocs[*idx_b]);
++	struct instruction *insn = NULL;
++	struct section *sec = range->sec;
++	unsigned long offset;
++	u8 prev_len = 0;
 +
-+	if (offset_a < offset_b)
-+		return -1;
-+	if (offset_a > offset_b)
-+		return 1;
++	for (offset = range->start; offset < range->end; offset += insn->len) {
++		const unsigned long remaining = sec_size(sec) - offset;
 +
-+	/* Equal offsets stay in file order. */
-+	if (*idx_a < *idx_b)
-+		return -1;
-+	return 1;
-+}
++		insn = next_insn_slot(insn);
++		if (!insn)
++			return -1;
 +
-+/*
-+ * gcc emits the relocations of its jumps in a second pass, so its objects,
-+ * and a vmlinux.o lld links from them, are out of order: sort them once.
-+ */
-+static int reloc_order_build(struct section *rsec)
-+{
-+	const unsigned int nr_relocs = sec_num_entries(rsec);
-+	unsigned int i;
++		INIT_LIST_HEAD(&insn->call_node);
++		insn->sec = sec;
++		insn->offset = offset;
++		insn->prev_len = prev_len;
 +
-+	rsec->reloc_order = malloc(nr_relocs * sizeof(*rsec->reloc_order));
-+	if (!rsec->reloc_order) {
-+		ERROR_GLIBC("malloc");
++		if (arch_decode_instruction(file, sec, offset, remaining, insn))
++			return -1;
++
++		prev_len = insn->len;
++
++		if (insn->type == INSN_BUG)
++			insn->dead_end = true;
++
++		insn_hash_add(file, insn);
++		if (!range->first)
++			range->first = insn;
++		range->nr_insns++;
++	}
++	range->last = insn;
++
++	/* The range ends at a function symbol, so decoding must land on it. */
++	if (offset != range->end) {
++		ERROR("%s: no instruction boundary at %s", sec->name,
++		      offstr(sec, range->end));
 +		return -1;
 +	}
-+
-+	for (i = 0; i < nr_relocs; i++)
-+		rsec->reloc_order[i] = i;
-+
-+	sort_relocs = rsec->relocs;
-+	qsort(rsec->reloc_order, nr_relocs, sizeof(*rsec->reloc_order),
-+	      compare_reloc_order);
 +
 +	return 0;
 +}
 +
-+/* Grow the index to cover the base section, new windows start past the end. */
-+static int reloc_cache_resize(struct section *rsec)
++static int run_threads(void *(*fn)(void *), void *arg, unsigned int nr_threads)
 +{
-+	const unsigned int nr_windows = reloc_cache_index(sec_size(rsec->base)) + 1;
-+	unsigned int *cache;
++	unsigned int nr_started, i;
++	pthread_t *threads;
++	int ret = 0;
 +
-+	if (nr_windows <= rsec->nr_cache_windows)
++	if (nr_threads <= 1) {
++		fn(arg);
 +		return 0;
++	}
 +
-+	cache = realloc(rsec->reloc_cache, nr_windows * sizeof(*cache));
-+	if (!cache) {
++	threads = calloc(nr_threads, sizeof(*threads));
++	if (!threads) {
++		ERROR_GLIBC("calloc");
++		return -1;
++	}
++
++	for (nr_started = 0; nr_started < nr_threads; nr_started++) {
++		if (pthread_create(&threads[nr_started], NULL, fn, arg)) {
++			ERROR_GLIBC("pthread_create");
++			ret = -1;
++			break;
++		}
++	}
++
++	for (i = 0; i < nr_started; i++)
++		pthread_join(threads[i], NULL);
++
++	free(threads);
++	return ret;
++}
++
++/* Hand out the ranges one at a time, or NULL once they are all taken. */
++static struct insn_range *claim_decode_range(void)
++{
++	const unsigned int idx = __sync_fetch_and_add(&next_decode_range, 1);
++
++	return idx < nr_decode_ranges ? &decode_ranges[idx] : NULL;
++}
++
++static void *range_worker(void *arg)
++{
++	const struct range_work *work = arg;
++	struct insn_range *range;
++
++	while ((range = claim_decode_range()))
++		range->ret = work->fn(&range->shadow, range);
++
++	return NULL;
++}
++
++/* The lists in the objtool_file that the passes add instructions to. */
++static const size_t shadow_list_offsets[] = {
++	offsetof(struct objtool_file, retpoline_call_list),
++	offsetof(struct objtool_file, return_thunk_list),
++	offsetof(struct objtool_file, static_call_list),
++	offsetof(struct objtool_file, mcount_loc_list),
++	offsetof(struct objtool_file, endbr_list),
++	offsetof(struct objtool_file, call_list),
++};
++
++static struct list_head *shadow_list(struct objtool_file *file,
++				     unsigned int idx)
++{
++	return (void *)file + shadow_list_offsets[idx];
++}
++
++static void init_range_shadow(struct objtool_file *file,
++			      struct insn_range *range)
++{
++	unsigned int i;
++
++	range->shadow = *file;
++	range->ret = 0;
++	for (i = 0; i < ARRAY_SIZE(shadow_list_offsets); i++)
++		INIT_LIST_HEAD(shadow_list(&range->shadow, i));
++}
++
++/* Joined in range order, which is the order a single walk would produce. */
++static int join_range_shadow(struct objtool_file *file,
++			     struct insn_range *range)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(shadow_list_offsets); i++)
++		list_splice_tail(shadow_list(&range->shadow, i),
++				 shadow_list(file, i));
++
++	return range->ret;
++}
++
++/* Run a pass over the instructions, one range per thread at a time. */
++static int run_insn_ranges(struct objtool_file *file, range_fn_t fn)
++{
++	struct range_work work = { .fn = fn };
++	unsigned int i;
++	int ret = 0;
++
++	for (i = 0; i < nr_decode_ranges; i++)
++		init_range_shadow(file, &decode_ranges[i]);
++	next_decode_range = 0;
++
++	if (run_threads(range_worker, &work, nr_decode_threads))
++		return -1;
++
++	for (i = 0; i < nr_decode_ranges; i++) {
++		if (join_range_shadow(file, &decode_ranges[i]))
++			ret = -1;
++	}
++
++	return ret;
++}
++
++static int add_decode_range(struct section *sec, unsigned long start,
++			    unsigned long end)
++{
++	const size_t size = (nr_decode_ranges + 1) * sizeof(*decode_ranges);
++	struct insn_range *range;
++
++	decode_ranges = realloc(decode_ranges, size);
++	if (!decode_ranges) {
 +		ERROR_GLIBC("realloc");
 +		return -1;
 +	}
 +
-+	while (rsec->nr_cache_windows < nr_windows)
-+		cache[rsec->nr_cache_windows++] = rsec->nr_indexed;
-+	rsec->reloc_cache = cache;
++	range = &decode_ranges[nr_decode_ranges++];
++	memset(range, 0, sizeof(*range));
++	range->sec = sec;
++	range->start = start;
++	range->end = end;
 +
 +	return 0;
 +}
 +
-+/*
-+ * Index the next relocation. It must follow the previous one in position and
-+ * offset, otherwise the index is dropped and the next lookup rebuilds it.
-+ */
-+static int reloc_cache_add(struct section *rsec, unsigned int pos)
++/* Split a section into ranges of roughly range_size, at function starts. */
++static int add_decode_ranges(struct section *sec, unsigned long range_size)
 +{
-+	struct reloc *reloc = reloc_at(rsec, pos);
-+	const unsigned long offset = reloc_offset(reloc);
-+	const unsigned long window = reloc_cache_index(offset);
-+	unsigned long first_window = 0;
++	const unsigned long size = sec_size(sec);
++	unsigned long start = 0;
++	struct symbol *sym;
 +
-+	if (pos != rsec->nr_indexed)
-+		goto unsorted;
++	if (!range_size)
++		return add_decode_range(sec, 0, size);
 +
-+	if (pos) {
-+		struct reloc *prev = reloc_at(rsec, pos - 1);
-+		const unsigned long prev_offset = reloc_offset(prev);
++	sec_for_each_sym(sec, sym) {
++		if (!is_func_sym(sym) || sym->offset <= start ||
++		    sym->offset >= size)
++			continue;
++		if (sym->offset - start < range_size)
++			continue;
 +
-+		if (offset < prev_offset)
-+			goto unsorted;
-+		first_window = reloc_cache_index(prev_offset) + 1;
-+	}
-+
-+	if (reloc_cache_resize(rsec))
-+		return -1;
-+	if (window >= rsec->nr_cache_windows)
-+		goto unsorted;
-+
-+	while (first_window <= window)
-+		rsec->reloc_cache[first_window++] = pos;
-+	rsec->nr_indexed = pos + 1;
-+
-+	return 0;
-+
-+unsorted:
-+	reloc_cache_free(rsec);
-+	return 0;
-+}
-+
-+static unsigned long num_relocs_sorted;
-+
-+static int init_reloc_cache(struct section *rsec)
-+{
-+	const unsigned int nr_relocs = sec_num_entries(rsec);
-+	unsigned int pos;
-+
-+	reloc_cache_free(rsec);
-+	if (!relocs_in_order(rsec)) {
-+		if (reloc_order_build(rsec))
++		if (add_decode_range(sec, start, sym->offset))
 +			return -1;
-+		num_relocs_sorted += nr_relocs;
++		start = sym->offset;
 +	}
 +
-+	rsec->sorted = true;
-+	for (pos = 0; pos < nr_relocs; pos++) {
-+		if (reloc_cache_add(rsec, pos))
-+			return -1;
-+	}
-+
-+	return 0;
++	return add_decode_range(sec, start, size);
 +}
 +
-+static bool reloc_in_range(struct reloc *reloc, unsigned long offset,
-+			   unsigned int len)
++static void free_decode_ranges(void)
 +{
-+	return reloc_offset(reloc) >= offset && reloc_offset(reloc) < offset + len;
++	free(decode_ranges);
++	decode_ranges = NULL;
++	nr_decode_ranges = 0;
++	next_decode_range = 0;
 +}
 +
-+/* If there are multiple matches, return the first one in the range. */
- struct reloc *find_reloc_by_dest_range(const struct elf *elf, struct section *sec,
- 				       unsigned long offset, unsigned int len)
++/* A range's first instruction follows the last of the range before it. */
++static void link_decode_ranges(void)
++{
++	unsigned int i;
++
++	for (i = 1; i < nr_decode_ranges; i++) {
++		const struct insn_range *prev = &decode_ranges[i - 1];
++		struct insn_range *range = &decode_ranges[i];
++
++		if (prev->sec != range->sec || !prev->last || !range->first)
++			continue;
++
++		range->first->prev_len = prev->last->len;
++	}
++}
++
++static unsigned int decode_threads(unsigned long text_size)
++{
++	const long nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
++
++	/* Modules are processed inside the parallel build, on one thread. */
++	if (!opts.link || opts.module)
++		return 1;
++	if (text_size < DECODE_THREADED_MIN_TEXT || nr_cpus < 2)
++		return 1;
++
++	return min_t(unsigned int, nr_cpus, DECODE_MAX_THREADS);
++}
++
++/* Several ranges per thread so uneven ones balance out; 0 means per section. */
++static unsigned long decode_range_size(unsigned long text_size,
++				       unsigned int nr_threads)
++{
++	const unsigned int nr_ranges = nr_threads * DECODE_RANGES_PER_THREAD;
++
++	if (nr_threads <= 1)
++		return 0;
++
++	return text_size / nr_ranges;
++}
++
+ /*
+  * Call the arch-specific instruction decoder for all the instructions and add
+  * them to the global instruction list.
+  */
+ static int decode_instructions(struct objtool_file *file)
  {
--	struct reloc *reloc, *r = NULL;
--	struct section *rsec;
--	unsigned long o;
-+	struct section *rsec = sec->rsec;
-+	unsigned long cache_idx;
-+	unsigned int pos;
++	const unsigned long text_size = total_text_size(file);
++	unsigned long range_size;
++	struct instruction *insn;
+ 	struct section *sec;
+ 	struct symbol *func;
+-	unsigned long offset;
+-	struct instruction *insn;
++	unsigned int i;
  
--	rsec = sec->rsec;
- 	if (!rsec)
- 		return NULL;
+-	if (alloc_insn_hash(file, total_text_size(file)))
++	if (alloc_insn_hash(file, text_size))
+ 		return -1;
  
--	for_offset_range(o, offset, offset + len) {
--		elf_hash_for_each_possible(elf, reloc, reloc, hash,
--					   sec_offset_hash(rsec, o)) {
--			if (reloc->sec != rsec)
--				continue;
-+	if (!rsec->sorted && init_reloc_cache(rsec))
-+		exit(1);
++	nr_decode_threads = decode_threads(text_size);
++	range_size = decode_range_size(text_size, nr_decode_threads);
++
+ 	for_each_sec(file->elf, sec) {
+-		struct instruction *insns = NULL;
+-		u8 prev_len = 0;
+-		u8 idx = 0;
  
--			if (reloc_offset(reloc) >= offset &&
--			    reloc_offset(reloc) < offset + len) {
--				if (!r || reloc_offset(reloc) < reloc_offset(r))
--					r = reloc;
+ 		if (!is_text_sec(sec))
+ 			continue;
+@@ -494,41 +829,20 @@ static int decode_instructions(struct objtool_file *file)
+ 		if (!strcmp(sec->name, ".init.text") && !opts.module)
+ 			sec->init = true;
+ 
+-		for (offset = 0; offset < sec_size(sec); offset += insn->len) {
+-			if (!insns || idx == INSN_CHUNK_MAX) {
+-				insns = calloc(INSN_CHUNK_SIZE, sizeof(*insn));
+-				if (!insns) {
+-					ERROR_GLIBC("calloc");
+-					return -1;
+-				}
+-				idx = 0;
+-			} else {
+-				idx++;
 -			}
--		}
--		if (r && (reloc_offset(r) & OFFSET_STRIDE_MASK) == o)
--			return r;
-+	cache_idx = reloc_cache_index(offset);
-+	if (cache_idx >= rsec->nr_cache_windows)
-+		return NULL;
-+
-+	/* The index gives a lower bound, scan on from there. */
-+	for (pos = rsec->reloc_cache[cache_idx]; pos < rsec->nr_indexed; pos++) {
-+		struct reloc *reloc = reloc_at(rsec, pos);
-+
-+		if (reloc_offset(reloc) >= offset)
-+			return reloc_in_range(reloc, offset, len) ? reloc : NULL;
- 	}
- 
--	return r;
-+	return NULL;
- }
- 
- struct reloc *find_reloc_by_dest(const struct elf *elf, struct section *sec, unsigned long offset)
-@@ -352,11 +537,6 @@ struct reloc *find_reloc_by_dest(const struct elf *elf, struct section *sec, uns
- 	return find_reloc_by_dest_range(elf, sec, offset, 1);
- }
- 
--static bool is_dwarf_section(struct section *sec)
--{
--	return !strncmp(sec->name, ".debug_", 7);
--}
+-			insn = &insns[idx];
+-			insn->idx = idx;
 -
- static int read_sections(struct elf *elf)
+-			INIT_LIST_HEAD(&insn->call_node);
+-			insn->sec = sec;
+-			insn->offset = offset;
+-			insn->prev_len = prev_len;
++		if (add_decode_ranges(sec, range_size))
++			return -1;
++	}
+ 
+-			if (arch_decode_instruction(file, sec, offset, sec_size(sec) - offset, insn))
+-				return -1;
++	if (run_insn_ranges(file, decode_range))
++		return -1;
+ 
+-			prev_len = insn->len;
++	for (i = 0; i < nr_decode_ranges; i++)
++		nr_insns += decode_ranges[i].nr_insns;
++	link_decode_ranges();
+ 
+-			/*
+-			 * By default, "ud2" is a dead end unless otherwise
+-			 * annotated, because GCC 7 inserts it for certain
+-			 * divide-by-zero cases.
+-			 */
+-			if (insn->type == INSN_BUG)
+-				insn->dead_end = true;
+-
+-			hlist_add_head(&insn->hash, insn_hash_head(file, sec, insn->offset));
+-			nr_insns++;
+-		}
++	for_each_sec(file->elf, sec) {
++		if (!is_text_sec(sec))
++			continue;
+ 
+ 		sec_for_each_sym(sec, func) {
+ 			if (!is_notype_sym(func) && !is_func_sym(func))
+@@ -1571,133 +1885,147 @@ static bool is_first_func_insn(struct objtool_file *file,
+ /*
+  * Find the destination instructions for all jumps.
+  */
+-static int add_jump_destinations(struct objtool_file *file)
++static int add_jump_destination(struct objtool_file *file, struct instruction *insn)
  {
- 	Elf_Scn *s = NULL;
-@@ -1071,8 +1251,10 @@ struct reloc *elf_init_reloc(struct elf *elf, struct section *rsec,
- 	set_reloc_type(elf, reloc, type);
- 	set_reloc_addend(elf, reloc, addend);
- 
--	if (!is_dwarf_section(rsec->base))
--		elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
-+	if (rsec->reloc_order)
-+		reloc_cache_free(rsec);
-+	else if (rsec->sorted && reloc_cache_add(rsec, reloc_idx))
-+		return NULL;
- 	set_sym_next_reloc(reloc, sym->relocs);
- 	sym->relocs = reloc;
- 
-@@ -1126,12 +1308,11 @@ struct reloc *elf_init_reloc_data_sym(struct elf *elf, struct section *sec,
- 
- static int read_relocs(struct elf *elf)
- {
--	unsigned long nr_reloc, max_reloc = 0, nr_hashed = 0;
-+	unsigned long nr_reloc, max_reloc = 0;
- 	struct section *rsec;
+-	struct instruction *insn;
  	struct reloc *reloc;
- 	unsigned int symndx;
- 	struct symbol *sym;
--	bool hashed;
- 	int i;
++	struct symbol *func = insn_func(insn);
++	struct instruction *dest_insn;
++	struct section *dest_sec;
++	struct symbol *dest_sym;
++	unsigned long dest_off;
  
- 	list_for_each_entry(rsec, &elf->sections, list) {
-@@ -1146,23 +1327,6 @@ static int read_relocs(struct elf *elf)
+-	for_each_insn(file, insn) {
+-		struct symbol *func = insn_func(insn);
+-		struct instruction *dest_insn;
+-		struct section *dest_sec;
+-		struct symbol *dest_sym;
+-		unsigned long dest_off;
++	if (!is_static_jump(insn))
++		return 0;
  
- 		rsec->base->rsec = rsec;
+-		if (!is_static_jump(insn))
+-			continue;
++	if (insn->jump_dest) {
++		/*
++		 * handle_group_alt() may have previously set
++		 * 'jump_dest' for some alternatives.
++		 */
++		return 0;
++	}
+ 
+-		if (insn->jump_dest) {
+-			/*
+-			 * handle_group_alt() may have previously set
+-			 * 'jump_dest' for some alternatives.
+-			 */
+-			continue;
+-		}
++	reloc = insn_reloc(file, insn);
++	if (!reloc) {
++		dest_sec = insn->sec;
++		dest_off = arch_jump_destination(insn);
++		dest_sym = dest_sec->sym;
++	} else {
++		dest_sym = reloc->sym;
++		if (is_undef_sym(dest_sym)) {
++			if (dest_sym->retpoline_thunk) {
++				if (add_retpoline_call(file, insn))
++					return -1;
++				return 0;
++			}
+ 
+-		reloc = insn_reloc(file, insn);
+-		if (!reloc) {
+-			dest_sec = insn->sec;
+-			dest_off = arch_jump_destination(insn);
+-			dest_sym = dest_sec->sym;
+-		} else {
+-			dest_sym = reloc->sym;
+-			if (is_undef_sym(dest_sym)) {
+-				if (dest_sym->retpoline_thunk) {
+-					if (add_retpoline_call(file, insn))
+-						return -1;
+-					continue;
+-				}
++			if (dest_sym->return_thunk) {
++				add_return_call(file, insn, true);
++				return 0;
++			}
+ 
+-				if (dest_sym->return_thunk) {
+-					add_return_call(file, insn, true);
+-					continue;
+-				}
++			/* External symbol */
++			if (func) {
++				/* External sibling call */
++				if (add_call_dest(file, insn, dest_sym, true))
++					return -1;
++				return 0;
++			}
+ 
+-				/* External symbol */
+-				if (func) {
+-					/* External sibling call */
+-					if (add_call_dest(file, insn, dest_sym, true))
+-						return -1;
+-					continue;
+-				}
++			/* Non-func asm code jumping to external symbol */
++			return 0;
++		}
+ 
+-				/* Non-func asm code jumping to external symbol */
+-				continue;
+-			}
++		dest_sec = dest_sym->sec;
++		dest_off = dest_sym->offset + arch_insn_adjusted_addend(insn, reloc);
++	}
+ 
+-			dest_sec = dest_sym->sec;
+-			dest_off = dest_sym->offset + arch_insn_adjusted_addend(insn, reloc);
++	dest_insn = find_insn(file, dest_sec, dest_off);
++	if (!dest_insn) {
++		struct symbol *sym = find_symbol_by_offset(dest_sec, dest_off);
++
++		/*
++		 * retbleed_untrain_ret() jumps to
++		 * __x86_return_thunk(), but objtool can't find
++		 * the thunk's starting RET instruction,
++		 * because the RET is also in the middle of
++		 * another instruction.  Objtool only knows
++		 * about the outer instruction.
++		 */
++		if (sym && sym->embedded_insn) {
++			add_return_call(file, insn, false);
++			return 0;
+ 		}
+ 
+-		dest_insn = find_insn(file, dest_sec, dest_off);
+-		if (!dest_insn) {
+-			struct symbol *sym = find_symbol_by_offset(dest_sec, dest_off);
++		/*
++		 * GCOV/KCOV dead code can jump to the end of
++		 * the function/section.
++		 */
++		if (file->ignore_unreachables && func &&
++		    dest_sec == insn->sec &&
++		    dest_off == func->offset + func->len)
++			return 0;
+ 
+-			/*
+-			 * retbleed_untrain_ret() jumps to
+-			 * __x86_return_thunk(), but objtool can't find
+-			 * the thunk's starting RET instruction,
+-			 * because the RET is also in the middle of
+-			 * another instruction.  Objtool only knows
+-			 * about the outer instruction.
+-			 */
+-			if (sym && sym->embedded_insn) {
+-				add_return_call(file, insn, false);
+-				continue;
+-			}
++		ERROR_INSN(insn, "can't find jump dest instruction at %s",
++			   offstr(dest_sec, dest_off));
++		return -1;
++	}
+ 
+-			/*
+-			 * GCOV/KCOV dead code can jump to the end of
+-			 * the function/section.
+-			 */
+-			if (file->ignore_unreachables && func &&
+-			    dest_sec == insn->sec &&
+-			    dest_off == func->offset + func->len)
+-				continue;
++	if (!dest_sym || is_sec_sym(dest_sym)) {
++		dest_sym = insn_sym(dest_insn);
++		if (!dest_sym)
++			goto set_jump_dest;
++	}
+ 
+-			ERROR_INSN(insn, "can't find jump dest instruction at %s",
+-				   offstr(dest_sec, dest_off));
++	if (dest_sym->retpoline_thunk && dest_insn->offset == dest_sym->offset) {
++		if (add_retpoline_call(file, insn))
+ 			return -1;
+-		}
++		return 0;
++	}
+ 
+-		if (!dest_sym || is_sec_sym(dest_sym)) {
+-			dest_sym = insn_sym(dest_insn);
+-			if (!dest_sym)
+-				goto set_jump_dest;
+-		}
++	if (dest_sym->return_thunk && dest_insn->offset == dest_sym->offset) {
++		add_return_call(file, insn, true);
++		return 0;
++	}
+ 
+-		if (dest_sym->retpoline_thunk && dest_insn->offset == dest_sym->offset) {
+-			if (add_retpoline_call(file, insn))
+-				return -1;
+-			continue;
+-		}
++	if (!insn_sym(insn) || insn_sym(insn)->pfunc == dest_sym->pfunc)
++		goto set_jump_dest;
+ 
+-		if (dest_sym->return_thunk && dest_insn->offset == dest_sym->offset) {
+-			add_return_call(file, insn, true);
+-			continue;
+-		}
++	/*
++	 * Internal cross-function jump.
++	 */
+ 
+-		if (!insn_sym(insn) || insn_sym(insn)->pfunc == dest_sym->pfunc)
+-			goto set_jump_dest;
++	if (is_first_func_insn(file, dest_insn)) {
++		/* Internal sibling call */
++		if (add_call_dest(file, insn, dest_sym, true))
++			return -1;
++		return 0;
++	}
  
 -		/*
--		 * DWARF relocations are never looked up by destination, they
--		 * only need to be on their symbol's list.
+-		 * Internal cross-function jump.
 -		 */
--		if (!is_dwarf_section(rsec->base))
--			nr_hashed += sec_num_entries(rsec);
--	}
--
--	if (!elf_alloc_hash(reloc, nr_hashed))
--		return -1;
--
--	list_for_each_entry(rsec, &elf->sections, list) {
--		if (!is_reloc_sec(rsec))
++set_jump_dest:
++	insn->jump_dest = dest_insn;
+ 
+-		if (is_first_func_insn(file, dest_insn)) {
+-			/* Internal sibling call */
+-			if (add_call_dest(file, insn, dest_sym, true))
+-				return -1;
 -			continue;
--
--		hashed = !is_dwarf_section(rsec->base);
--
- 		/* nr_alloc_relocs=0: libelf owns d_buf */
- 		rsec->nr_alloc_relocs = 0;
+-		}
++	return 0;
++}
  
-@@ -1184,21 +1348,24 @@ static int read_relocs(struct elf *elf)
- 				return -1;
- 			}
- 
--			if (hashed)
--				elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
- 			set_sym_next_reloc(reloc, sym->relocs);
- 			sym->relocs = reloc;
- 
- 			nr_reloc++;
- 		}
- 		max_reloc = max(max_reloc, nr_reloc);
+-set_jump_dest:
+-		insn->jump_dest = dest_insn;
++static int add_jump_destinations_range(struct objtool_file *file,
++				       struct insn_range *range)
++{
++	struct instruction *insn;
 +
-+		/* DWARF relocs are never looked up, so are not worth indexing. */
-+		if (is_dwarf_section(rsec->base))
-+			continue;
-+		if (init_reloc_cache(rsec))
++	range_for_each_insn(file, range, insn) {
++		if (add_jump_destination(file, insn))
 +			return -1;
- 	}
- 
- 	if (opts.stats) {
- 		printf("max_reloc: %lu\n", max_reloc);
- 		printf("num_relocs: %lu\n", elf->num_relocs);
--		printf("num_relocs_hashed: %lu\n", nr_hashed);
--		printf("reloc_bits: %d\n", elf->reloc_bits);
-+		printf("num_relocs_sorted: %lu\n", num_relocs_sorted);
  	}
  
  	return 0;
-@@ -1345,8 +1512,7 @@ struct elf *elf_create_file(GElf_Ehdr *ehdr, const char *name)
- 	if (!elf_alloc_hash(section,		1000) ||
- 	    !elf_alloc_hash(section_name,	1000) ||
- 	    !elf_alloc_hash(symbol,		10000) ||
--	    !elf_alloc_hash(symbol_name,	10000) ||
--	    !elf_alloc_hash(reloc,		100000))
-+	    !elf_alloc_hash(symbol_name,	10000))
- 		return NULL;
- 
- 	null		= elf_create_section(elf, NULL, 0, 0, SHT_NULL, 0, 0);
-@@ -1526,6 +1692,8 @@ struct section *elf_create_section(struct elf *elf, const char *name,
- 	sec->sh.sh_type = type;
- 	sec->sh.sh_addralign = align;
- 	sec->sh.sh_flags = flags;
-+	/* Relocations objtool adds are indexed as they come. */
-+	sec->sorted = type == SHT_RELA;
- 
- 	if (name) {
- 		sec->name = strdup(name);
-@@ -1651,16 +1819,6 @@ static int elf_alloc_reloc(struct elf *elf, struct section *rsec)
- 	}
- 
- 	memcpy(new_relocs, old_relocs, nr_relocs_old * sizeof(struct reloc));
--
--	for (int i = 0; i < nr_relocs_old && !is_dwarf_section(rsec->base); i++) {
--		struct reloc *old = &old_relocs[i];
--		struct reloc *new = &new_relocs[i];
--		u32 key = reloc_hash(old);
--
--		elf_hash_del(reloc, &old->hash, key);
--		elf_hash_add(reloc, &new->hash, key);
--	}
--
- 	free(old_relocs);
- done:
- 	rsec->relocs = new_relocs;
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index a82517a76a0f..baa4f76b1800 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -59,6 +59,8 @@ struct section {
- 	const char *name;
- 	int idx;
- 	bool _changed, text, rodata, noinstr, init, truncate;
-+	bool sorted;
-+	unsigned int *reloc_cache, *reloc_order, nr_cache_windows, nr_indexed;
- 	struct reloc *relocs;
- 	unsigned long nr_alloc_relocs;
- 	struct section *twin;
-@@ -106,7 +108,6 @@ struct symbol {
- };
- 
- struct reloc {
--	struct elf_hash_node hash;
- 	struct section *sec;
- 	struct symbol *sym;
- 	unsigned long _sym_next_reloc;
-@@ -127,13 +128,11 @@ struct elf {
- 	int symbol_name_bits;
- 	int section_bits;
- 	int section_name_bits;
--	int reloc_bits;
- 
- 	struct elf_hash_node **symbol_hash;
- 	struct elf_hash_node **symbol_name_hash;
- 	struct elf_hash_node **section_hash;
- 	struct elf_hash_node **section_name_hash;
--	struct elf_hash_node **reloc_hash;
- 
- 	struct section *section_data;
- 	struct symbol *symbol_data;
-@@ -575,9 +574,4 @@ static inline u32 sec_offset_hash(struct section *sec, unsigned long offset)
- 	return ol;
  }
  
--static inline u32 reloc_hash(struct reloc *reloc)
--{
--	return sec_offset_hash(reloc->sec, reloc_offset(reloc));
--}
--
- #endif /* _OBJTOOL_ELF_H */
++static int add_jump_destinations(struct objtool_file *file)
++{
++	return run_insn_ranges(file, add_jump_destinations_range);
++}
++
+ static struct symbol *find_call_destination(struct section *sec, unsigned long offset)
+ {
+ 	struct symbol *call_dest;
+@@ -1712,59 +2040,82 @@ static struct symbol *find_call_destination(struct section *sec, unsigned long o
+ /*
+  * Find the destination instructions for all calls.
+  */
+-static int add_call_destinations(struct objtool_file *file)
++static int add_call_destination(struct objtool_file *file, struct instruction *insn)
+ {
+-	struct instruction *insn;
+ 	unsigned long dest_off;
+ 	struct symbol *dest;
+ 	struct reloc *reloc;
++	struct symbol *func = insn_func(insn);
+ 
+-	for_each_insn(file, insn) {
+-		struct symbol *func = insn_func(insn);
+-		if (insn->type != INSN_CALL)
+-			continue;
++	if (insn->type != INSN_CALL)
++		return 0;
+ 
+-		reloc = insn_reloc(file, insn);
+-		if (!reloc) {
+-			dest_off = arch_jump_destination(insn);
+-			dest = find_call_destination(insn->sec, dest_off);
++	reloc = insn_reloc(file, insn);
++	if (!reloc) {
++		dest_off = arch_jump_destination(insn);
++		dest = find_call_destination(insn->sec, dest_off);
+ 
+-			if (add_call_dest(file, insn, dest, false))
+-				return -1;
++		if (add_call_dest(file, insn, dest, false))
++			return -1;
+ 
+-			if (func && func->ignore)
+-				continue;
++		if (func && func->ignore)
++			return 0;
+ 
+-			if (!insn_call_dest(insn)) {
+-				ERROR_INSN(insn, "unannotated intra-function call");
+-				return -1;
+-			}
++		if (!insn_call_dest(insn)) {
++			ERROR_INSN(insn, "unannotated intra-function call");
++			return -1;
++		}
+ 
+-			if (func && !is_func_sym(insn_call_dest(insn))) {
+-				ERROR_INSN(insn, "unsupported call to non-function");
+-				return -1;
+-			}
++		if (func && !is_func_sym(insn_call_dest(insn))) {
++			ERROR_INSN(insn, "unsupported call to non-function");
++			return -1;
++		}
+ 
+-		} else if (is_sec_sym(reloc->sym)) {
+-			dest_off = arch_insn_adjusted_addend(insn, reloc);
+-			dest = find_call_destination(reloc->sym->sec, dest_off);
+-			if (!dest) {
+-				ERROR_INSN(insn, "can't find call dest symbol at %s+0x%lx",
+-					   reloc->sym->sec->name, dest_off);
+-				return -1;
+-			}
++	} else if (is_sec_sym(reloc->sym)) {
++		dest_off = arch_insn_adjusted_addend(insn, reloc);
++		dest = find_call_destination(reloc->sym->sec, dest_off);
++		if (!dest) {
++			ERROR_INSN(insn, "can't find call dest symbol at %s+0x%lx",
++				   reloc->sym->sec->name, dest_off);
++			return -1;
++		}
+ 
+-			if (add_call_dest(file, insn, dest, false))
+-				return -1;
++		if (add_call_dest(file, insn, dest, false))
++			return -1;
+ 
+-		} else if (reloc->sym->retpoline_thunk) {
+-			if (add_retpoline_call(file, insn))
+-				return -1;
++	} else if (reloc->sym->retpoline_thunk) {
++		if (add_retpoline_call(file, insn))
++			return -1;
+ 
+-		} else {
+-			if (add_call_dest(file, insn, reloc->sym, false))
+-				return -1;
+-		}
++	} else {
++		if (add_call_dest(file, insn, reloc->sym, false))
++			return -1;
++	}
++
++	return 0;
++}
++
++static int add_call_destinations_range(struct objtool_file *file,
++				       struct insn_range *range)
++{
++	struct instruction *insn;
++
++	range_for_each_insn(file, range, insn) {
++		if (add_call_destination(file, insn))
++			return -1;
++	}
++
++	return 0;
++}
++
++/* Serial: annotating a call site rewrites instructions the dead end walks read. */
++static int add_call_destinations(struct objtool_file *file)
++{
++	unsigned int i;
++
++	for (i = 0; i < nr_decode_ranges; i++) {
++		if (add_call_destinations_range(file, &decode_ranges[i]))
++			return -1;
+ 	}
+ 
+ 	return 0;
+@@ -2733,6 +3084,8 @@ int decode_file(struct objtool_file *file)
+ 	if (read_annotate(file, __annotate_late))
+ 		return -1;
+ 
++	free_decode_ranges();
++
+ 	return 0;
+ }
+ 
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index bd463b5df38c..308877df6ad6 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -16,6 +16,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <errno.h>
++#include <pthread.h>
+ #include <ctype.h>
+ #include <linux/align.h>
+ #include <linux/kernel.h>
+@@ -475,6 +476,7 @@ static int reloc_cache_add(struct section *rsec, unsigned int pos)
+ }
+ 
+ static unsigned long num_relocs_sorted;
++static pthread_mutex_t reloc_cache_lock = PTHREAD_MUTEX_INITIALIZER;
+ 
+ static int init_reloc_cache(struct section *rsec)
+ {
+@@ -514,8 +516,17 @@ struct reloc *find_reloc_by_dest_range(const struct elf *elf, struct section *se
+ 	if (!rsec)
+ 		return NULL;
+ 
+-	if (!rsec->sorted && init_reloc_cache(rsec))
+-		exit(1);
++	/* Decoding looks up from several threads, rebuild an index once. */
++	if (!rsec->sorted) {
++		int ret = 0;
++
++		pthread_mutex_lock(&reloc_cache_lock);
++		if (!rsec->sorted)
++			ret = init_reloc_cache(rsec);
++		pthread_mutex_unlock(&reloc_cache_lock);
++		if (ret)
++			exit(1);
++	}
+ 
+ 	cache_idx = reloc_cache_index(offset);
+ 	if (cache_idx >= rsec->nr_cache_windows)
+diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
+index 71e048f8582a..f472dfe7a773 100644
+--- a/tools/objtool/objtool.c
++++ b/tools/objtool/objtool.c
+@@ -8,6 +8,7 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include <pthread.h>
+ #include <subcmd/exec-cmd.h>
+ #include <subcmd/pager.h>
+ #include <linux/kernel.h>
+@@ -41,6 +42,8 @@ struct objtool_file *objtool_open_read(const char *filename)
+ 	return &file;
+ }
+ 
++static pthread_mutex_t pv_ops_lock = PTHREAD_MUTEX_INITIALIZER;
++
+ int objtool_pv_add(struct objtool_file *f, int idx, struct symbol *func)
+ {
+ 	if (!opts.noinstr)
+@@ -59,12 +62,15 @@ int objtool_pv_add(struct objtool_file *f, int idx, struct symbol *func)
+ 	    !strcmp(func->name, "_paravirt_ident_64"))
+ 		return 0;
+ 
++	pthread_mutex_lock(&pv_ops_lock);
++
+ 	/* already added this function */
+-	if (!list_empty(&func->pv_target))
+-		return 0;
++	if (list_empty(&func->pv_target)) {
++		list_add(&func->pv_target, &f->pv_ops[idx].targets);
++		f->pv_ops[idx].clean = false;
++	}
+ 
+-	list_add(&func->pv_target, &f->pv_ops[idx].targets);
+-	f->pv_ops[idx].clean = false;
++	pthread_mutex_unlock(&pv_ops_lock);
+ 	return 0;
+ }
+ 
 
 -- 
 2.56.0
