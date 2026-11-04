@@ -1,57 +1,109 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793811255;
-	b=jsbAnvzcW3dM2tbzVzYQG4d1GDwGLCAhD9qVT/3zmckyN2SMe0sDXjZ1LzJgipsbn2S+
-	 8MR8RPTStlKsQNU0893NzT4jqoenzJ/SGqClWdYsdQmhrK+XIbr2dSJEFTJODZYGyzTgN
-	 AaUj0rQmqTweBIV4MGF2L921guhD9OYMqoDrWmuj5jZmhyLS6y5knJGa4rfoBr+EqdBKY
-	 9uOtHKMwr5XqOOznb1ttahq2vzbCdod2i0V2sBNprUl9e+rfYHkkgINVUdyO/Yk+4bTDv
-	 R1/y9XlxLVzRVy6zapn8CE3hiDT47NEX0dHCkWwIRibkHQKd6A3JXIirzqOvYtImLCg==
+	t=1793813235;
+	b=VT+CHFjcvPEAgNJ6+VqvZusDNtCjBnBGgwpv4f0cJK+pdQN3vof5C7ILJ9reT9wAiQwU
+	 +vO1gnWTBrg3VD5nlPisj15euTKml7sU997i0ReM6UB5HTUA83QaVC02/1xcrLCOwUHDq
+	 RJPC0bS70e1YyHRhKj0ZPeVbmbFlJB3r/fAqO3HeEObW69Y4S/y4uk8xXlgXbVpLwjamN
+	 6RXntyvIwEwdtfdQd72Wu3LmS83BnUpfIJKse+sYCl+a3J+TpZl3jY4O/358SPSuXrj/F
+	 xi+umOGvddyKs17GSj9y8dPToeuEW6MjTUhfgUxGhuDlGxXRIJoM09nkvWS/EoPKQEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793811255;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=CScKELz5SKzseYYXZSgcmYAKi8+4UxQJUKYYxamqLTo=;
-	b=2yuwP7QcqXeDrZzv8eVCapUzMSb670gCMctEl7eVM8SpD+szpYLcDnOIPzmtUqEqF8k+
-	 EBOsDhgdLYKX813JSf8t3ZSjFqLZqK2Jv7S+D9sR7CMWm491hQa2pR8OtCGAlK/LaF8tP
-	 +/NPeN6fhTlp+hcSaNfbrr/pj8bK+cp2XNxvkY+usHbUBw00ar+mljx+TaGxLVrIf/E3m
-	 GmJcM3UjY7ddH1niMYV/9tkFzE51D5bPfNW53+GpVdFU9+7BiWGjljmoy6zNP9HI/nDnx
-	 YVwzx63kcgbxg5g2pHYt+jIsf/PKgVb2Z2Gf8aaggT4o6fys3phw+66MjawVbJNKb9Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793813235;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Type:X-Developer-Signature:X-Developer-Key:
+	 Content-Transfer-Encoding;
+	bh=lAdqJZq7DckAfewXRPAVCUONZuQAofOCOPOWHFZTOPQ=;
+	b=fIb3GrfxEMAb3J/TzQgMWEuqnTwJve6bWH10eKuv5MqyXyYRZQr76yC+ok+64mA1ndL0
+	 l3WZzVQYkB6SAS2NIhuuEQ8eH0mfseAieh3DkOHgxfUTSL4b5PVCsljQ8fk5pmILOz7su
+	 JJ8GyKRk8pgO6+W9ZcnFp6m7/lNOozjAJW/hkNfREyU4TmBmTSJkvhvUD+Ei/tJZgLGj6
+	 XOQQEcnhQLa5JCF1y1RcxAv/S10jf5lw/10/4hNdp75bC39qL4LI1Ba+3hrP+gkLZQRbJ
+	 VancSZ4eBI2GoUNnoNMTyiNUwh+Oaxh3yTPHwJxMFBqh0c2OImeH2+TGCiHrg1qgfMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gbe4PHAt;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QnqKLYh2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B422606A328
-	for <linux-modules@vger.kernel.org>; Wed,  4 Nov 2026 16:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07F6606A31B;
+	Wed,  4 Nov 2026 17:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gbe4PHAt
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6ACB1F0093A;
-	Wed,  4 Nov 2026 16:54:14 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QnqKLYh2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F031F00A02;
+	Wed,  4 Nov 2026 17:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793811255;
-	bh=CScKELz5SKzseYYXZSgcmYAKi8+4UxQJUKYYxamqLTo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gbe4PHAtNtqURzu6jUi82uH+VWN2KwXZ+CxMV8rfX6Z3JmvABWj4F4mCdAYF98U6h
-	 9CFRQ5xlm2j0MvQNlrF00Wxh5vaGoQBWEsEnhhhCmj7XIkxs2w88T0YL0nmG6hLlva
-	 acIhDheFQ5VazZ9uZyoelQnUD7FZYxqrLtsW9x5yQizbcWm6Ao1lHZgiulbupYWAgl
-	 7Vi8CTleylDck90wiWckAlQIlr2Yid3TjlM7TSrD5htE5M/k+fqNU29bOvo0gNqO70
-	 atzeRK/SmXgLG+1ukQUD4XabkDBzXqMqoPlV9E4j565JU4DpjJLEGecRhor94i9I3N
-	 OXVytrKcaqsSg==
-Message-ID: <sashiko-outbox-197697@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v13 2/3] module: Extend module_blacklist parameter to
- built-in modules
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Aaron Tomlin" <atomlin@atomlin.com>
-Cc: linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>, ojeda@kernel.org, gary@garyguo.net
-In-Reply-To: <20261104154003.43313-3-atomlin@atomlin.com>
-References: <20261104154003.43313-1-atomlin@atomlin.com>
- <20261104154003.43313-3-atomlin@atomlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Nov 2026 16:54:14 +0000
+	s=k20260515; t=1793813234;
+	bh=lAdqJZq7DckAfewXRPAVCUONZuQAofOCOPOWHFZTOPQ=;
+	h=From:To:Cc:Subject:Date;
+	b=QnqKLYh2fAMD+U5HTXeOnACd1cOBaWr2au0sexyO6Tega8pNFvJ3KwBqyWlewJUso
+	 MIi2fzXRHEQROZC9gLvS1bZZ/9/KcmfDhERzkLaXXdIl+Qf8wPegziV2OdOn/5z79r
+	 3iTqL/OK9DAdbhv97um4MytPwotOejrYkLFgVhoshHzNg842ittp+lNu4zRCpPsoG2
+	 KqhP8Ng8p49cNRXsXj5NGkMfzBM+kKXiniguFgYtTFtMwPvnenK73TWNMd887NGQbI
+	 1pG3OChIWDhqEolCKBiLCVppfrBMevoWgaGWalA6fc1c1Jt43H5RxZZPnk2L1SezgW
+	 Bq+TYnLLsbzyA==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jann Horn <jannh@google.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Chris Mason <mason@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Christoph Hellwig <hch@lst.de>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	Joel Granados <joel.granados@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jan Kara <jack@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org,
+	coreteam@netfilter.org,
+	kexec@lists.infradead.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	ibm-acpi-devel@lists.sourceforge.net,
+	jfs-discussion@lists.sourceforge.net,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-cifs@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-sh@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	sparclinux@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-doc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Takashi Iwai <tiwai@suse.de>,
+	linux-input@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-debuggers@vger.kernel.org
+Subject: [PATCH v2 0/7] proc: move procfs to what kernfs does
+Date: Wed,  4 Nov 2026 18:26:54 +0100
+Message-ID: <20261104-trompete-gejagt-raddampfer-9fb5640a6102@brauner>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -60,131 +112,142 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6699; i=brauner@kernel.org; h=from:subject:message-id; bh=vwrWu4QhJtoloSbOepgjr6FTno3vPTd4Ym/VDTikOkw=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS9zrofyGH5UuGlf8QM041zGftlZmtyqi7/2jv5suCKX cadvXNTOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACaSkMjI8PXT/ahLzms2tG95 p/y6Wd4h+MQHNf/VL1dGn7i1utyl/SQjw+WcTXp/Xn+/v4hxooZnZYRWmPKsDU2ur9N2RKRMsj5 7gh0A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] init: klp-diff failure on __modname_<fn> with LTO and PREL32 rel=
-ocations
---
+This series aims to get rid of copying to and from userspace while pinning
+procfs entries allowing userspace to delay removal as long as it wants.
 
-commit 4ae71df0c31c4118e7804e6488565c6666998f3a
-Author: Aaron Tomlin <atomlin@atomlin.com>
+In essence, it aligns procfs with what kernfs is already doing. That
+gets rid of a big attack surface and a whole bug class in one go. The
+bounce buffer will come with some costs but luckily some codepaths (like
+readdir) have been so criminally slow and buggy that massaging them ends
+up speeding things up or at least leaving them on par with mainline even
+with a bounce buffer in the mix.
 
-module: Extend module_blacklist parameter to built-in modules
+There was a hackish and very narrow AI solution to a small part of this
+bug class which was sent off-list. In essence, it used a second
+buffering mechanism on top of seqfiles which was really nasty. It also
+didn't address any of the non-seqfile users.
 
-This patch extends the module_blacklist=3D command-line parameter to built-=
-in
-modules by recording each module_init() function pointer and its
-KBUILD_MODNAME in a new .initcall.modnames section. During boot,
-do_one_initcall_builtin() checks this table and skips initcalls for
-blacklisted built-in modules.
+If we want to get rid of the this whole bug class we need a bigger
+hammer. That means reworking how procfs handles data. So I tried to work
+through all of that. The series is now in a decent shape (I'm not saying
+"glorious" as there's so so many warts. If they were ironed out it could
+be a lot nicer but that's for another day.).
 
-> diff --git a/include/linux/init.h b/include/linux/init.h
-> index 6326c61e2332d..08cb8a2943758 100644
-> --- a/include/linux/init.h
-> +++ b/include/linux/init.h
-[ ... ]
-> @@ -252,6 +257,7 @@ extern struct module __this_module;
->  #endif
-> =20
->  #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-> +#define __initcall_fn_ptr(fn, __iid, id)	__initcall_stub(fn, __iid, id)
->  #define ____define_initcall(fn, __stub, __name, __sec)		\
->  	__define_initcall_stub(__stub, fn)			\
->  	asm(".section	\"" __sec "\", \"a\"		\n"	\
-> @@ -260,6 +266,7 @@ extern struct module __this_module;
->  	    ".previous					\n");	\
->  	static_assert(__same_type(initcall_t, &fn));
->  #else
-> +#define __initcall_fn_ptr(fn, __iid, id)	fn
->  #define ____define_initcall(fn, __unused, __name, __sec)	\
->  	static initcall_t __name __used 			\
->  		__attribute__((__section__(__sec))) =3D fn;
-> @@ -271,7 +278,23 @@ extern struct module __this_module;
->  		__initcall_name(initcall, __iid, id),		\
->  		__initcall_section(__sec, __iid))
-> =20
-> -#define ___define_initcall(fn, id, __sec)			\
-> +#define ____define_initcall_modname(fn, id, __sec, __iid)		\
-> +	__unique_initcall(fn, id, __sec, __iid)				\
-> +	static const char __initstr_##fn[] __used __aligned(1)		\
-> +		__section(".init.rodata") =3D KBUILD_MODNAME;		\
-> +	static const struct initcall_modname __modname_##fn __used	\
-> +		__section(".initcall.modnames")				\
-> +		__aligned(__alignof__(struct initcall_modname)) =3D {	\
-> +			.initcall_fn =3D __initcall_fn_ptr(fn, __iid, id),\
-> +			.modname =3D __initstr_##fn			\
-> +		};
+I understand it's big but I think it is nicer to be able to look at the
+end result since we have some transitory states that are gone at the end
+of the series.
 
-[Severity: Medium]
-Can this break livepatch builds with objtool klp diff when
-CONFIG_HAVE_ARCH_PREL32_RELOCATIONS=3Dy, CONFIG_LTO_CLANG=3Dy, and
-CONFIG_KLP_BUILD=3Dy are enabled?
+I have polished this a bit more and have sorted out a few more bugs and
+tried to clean up some codepaths given the current constraints. Again, I
+think we could go a lot further there if we wanted to but I think that
+blows this out of proportion and at some point it becomes difficult to
+grasp the scope.
 
-Under those options, ____define_initcall_modname() initializes
-__modname_<fn>.initcall_fn to __initcall_fn_ptr(fn, __iid, id), which expan=
-ds
-to __initcall_stub(fn, __iid, id). Because __iid is generated by
-__initcall_id(fn), the stub symbol name embeds both __COUNTER__ and __LINE_=
-_:
+So, remove_proc_entry() waits until every call into the procfs entry has
+returned. Most of those calls copy to or from userspace with the entry
+pinned.
 
-include/linux/init.h:
-    #define __initcall_id(fn)                                   \
-            __PASTE(kmod_,                                      \
-            __PASTE(__KBUILD_MODNAME,                           \
-            __PASTE(__,                                         \
-            __PASTE(__COUNTER__,                                \
-            __PASTE(_,                                          \
-            __PASTE(__LINE__,                                   \
-            __PASTE(_, fn)))))))
+A reader or writer can induce a page fault in that copy take as long as
+it wants. For example, with userfaultfd or by punching holes into a
+memfd over and over. Plus, the callers of remove_proc_entry() like to
+hold locks while they wait. For example, addrconf holds RTNL when it
+removes /proc/net/dev_snmp6/<dev> and xt_hashlimit holds a mutex that
+all network namespaces share.
 
-During objtool klp checksum, calculate_checksums() -> checksum_update_objec=
-t()
-hashes target->demangled_name for each relocation on the __modname_<fn>
-object:
+So every network device with IPv6 gets a /proc/net/dev_snmp6/<dev> that
+everyone can read, and addrconf_ifdown() removes it with RTNL held. So
+any local user can keep RTNL for as long as their read stays stalled.
+Until then no device can be registered, removed or renamed and no
+network namespace can be created or torn down.
 
-tools/objtool/klp-checksum.c:checksum_update_object() {
-    ...
-                __checksum_update_object(sym, sym_offset, "reloc name",
-                                         target->demangled_name,
-                                         strlen(target->demangled_name));
-    ...
-}
+If the caller lacks privileges for userfaultfd a FUSE mount in a user
+namespace whose daemon never answers is enough to stall the copy.
+Killing the reader ends it, but until then whoever removes the file sits
+in D state.
 
-Because demangle_name() in tools/objtool/elf.c does not strip the embedded
-__COUNTER__ and __LINE__ tokens from __initstub__kmod_*, any patch to a
-translation unit containing a built-in module_init() that shifts __COUNTER__
-(for example by adding or removing min(), max(), guard(), WARN_ON(), or
-__UNIQUE_ID()) or __LINE__ before module_init() changes the stub name and
-alters the checksum of __modname_<fn>.
+xt_hashlimit removes the proc file of a table with hashlimit_mutex
+held. Every rule insert in every network namespace takes that mutex and
+so does network namespace cleanup. cleanup_net() runs on a single
+workqueue with pernet_ops_rwsem held, so a stalled reader also stops
+every later network namespace teardown and every module load that
+registers pernet operations. xt_recent does the same with recent_mutex.
 
-In tools/objtool/klp-diff.c, dont_correlate() -> is_initcall_sym() skips
-__initcall__ and __initstub__ symbols, but does not skip __modname_:
+And of course, it's not specific to networking. remove_proc_entry(),
+proc_remove() and remove_proc_subtree() have over 200 callers and plenty
+of them hold locks. For example, a stalled reader of
+/proc/fs/ext4/<dev>/options holds up the unmount of that filesystem with
+s_umount held, and every sync(2) with it. The same goes for PCI
+hot-removal, for freeing IRQ descriptors, which CPU bring-up waits on,
+and for unplugging a USB sound card.
 
-tools/objtool/klp-diff.c:is_initcall_sym() {
-        return strstarts(sym->name, "__initcall__") ||
-               strstarts(sym->name, "__initstub__");
-}
+And btw, syzbot has hit removal under locks before (cf. [1]), and the
+xt_recent deadlock fixed in (1) below is another one.
 
-When correlate_symbols() pairs __modname_<fn> between the original and
-patched objects, mark_changed_functions() sees the differing checksum on the
-non-function symbol and aborts the build:
+Stalling the kernel in a copy to or from userspace is a well-known
+exploitation primitive. It's why unprivileged userfaultfd can't do it
+by default anymore since v5.11 (d0d4730ac2e4), and FUSE has been used
+the same way.
 
-tools/objtool/klp-diff.c:mark_changed_functions() {
-    ...
-                if (orig_sym->csum.checksum !=3D patched_sym->csum.checksum=
-) {
-                        if (!is_func_sym(orig_sym)) {
-                                ERROR("changed data: %s", orig_sym->name);
-                                return -1;
-                        }
-    ...
-}
+This series touches just about every ->proc_read(), ->proc_write() and
+->proc_ioctl() in the tree, so I've split it up into seven series. They
+go out as replies to this mail:
 
-Should is_initcall_sym() in tools/objtool/klp-diff.c also exclude
-__modname_ symbols (or should __modname_<fn> avoid referencing the
-__COUNTER__- and __LINE__-dependent stub name)?
+Part 1/7: proc: fix a few old bugs in /proc handlers (51 patches)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104154003.4331=
-3-1-atomlin@atomlin.com?part=3D2
+    Bugs in the handlers and in procfs itself that are a lot older than
+    the conversion and that reviewing it turned up. Most of them are for
+    stable. They come first so they can go there on their own and the
+    conversion doesn't have to bother with that crap.
+
+Part 2/7: proc: let procfs own the data path (23 patches)
+
+    The procfs side. procfs owns the seq_file of an entry, copies in
+    writes, copies out reads and copies ioctl arguments in and out, and
+    only calls into an entry with it pinned. The open files procfs has
+    to know and the wait queue a pollable entry is polled on live in an
+    open node that only those entries get, the entry is pinned around
+    the vm_operations of its mappings, and lockdep checks the pin.
+    proc_create_seq() and friends and the plain seq_file users are
+    switched over here too.
+
+Part 3/7: proc: convert the arch and platform entries (23 patches)
+Part 4/7: proc: convert the driver entries (26 patches)
+Part 5/7: proc: convert the fs, kernel and mm entries (30 patches)
+Part 6/7: proc: convert the net entries and the kfifo samples (13 patches)
+
+Part 7/7: proc: drop the __user methods (6 patches)
+
+    Drops the old methods. kcore, kmsg and the kpage files, which are
+    never removed and keep reading straight into userspace, get
+    file_operations of their own, so nothing in struct proc_ops takes a
+    __user pointer anymore, and the new methods get the names kernfs
+    uses, ->proc_read(), ->proc_write() and ->proc_ioctl(). The last
+    patch takes the poll_table away from ->proc_poll(). This needs all
+    four conversion series.
+
+Parts 1 and 2 are the base. Parts 3 to 6 go on top of part 2 in any
+order and don't depend on each other. Part 7 needs all four.
+
+The series should all indicate cleanly what dependencies they have so b4
+should be able to pull it for review.
+
+With all of it on a KASAN and lockdep kernel the removal selftests of
+every part pass, the proc, pktgen and allocinfo selftests behave like
+without it and the bugs from (1) that reproduce in a VM are gone. Every
+patch builds on its own on x86_64 and i386, and with W=1 on the
+architectures it touches.
+
+[1]: https://lore.kernel.org/r/000000000000f24f4705b6988f3e@google.com
+[2]: https://lore.kernel.org/r/20231109212251.213873-7-johannes@sipsolutions.net
+
+---
+Link to v1: https://patch.msgid.link/20261102-defizit-jobaussicht-kurios-7016c6e67442@brauner
+
+-- 
+Christian Brauner <brauner@kernel.org>
