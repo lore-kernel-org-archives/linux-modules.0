@@ -1,49 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793816456;
-	b=v1BLTNpwjo4hrbZxYu6LGcGxq6nEmYRnfpSB58ZDOADyc95c30rv0W6qhbVgbt+WtGbT
-	 GYdtag2L2ouipNgU4ShCnByFSJtQEhuxKVe5teLNODrhS1fcKH92ggyBsYtjTKSYVuA0u
-	 qi9jyh9HUEF/jx/cg/Trzq4Ce7zXP08/f5OWql3TKUXIzdYexO0YQylITPMBDDVDGH6Ua
-	 x0xDisGLKsrxSQ9E1gPW+4DbVy7oh0Zvkb4K9xhH/eE7p4gRUirFwdNwUvVjW8h3/pL4W
-	 wJjGV0f0U+A1r3aaaPs79cBVlLezysErLIotx2XpmN5bElx0dlXehm1Un8atMp5+JkA==
+	t=1793816465;
+	b=UnxRa4D/ZCiZAdtUCX1J+ld3UjoSLokKh/OPJ49++kLofiSgf9bBts/dJsHoUhqquIkx
+	 0Yvttl+2D65JjlNhA5Sv8oXzQ/MZrf8+ra2n0lhP5vkW9SHnASJNEqPY2qd8ahxbmul9u
+	 n9Po3iO3g1OIn5i8wTlQWIzIhIKQ39A3vnFphzyw9Nl2X2u7RcXo3DYNU3Nl2zK0kwAm4
+	 EifAQuWnDig9Jde30ESXsAmCl/3rdalv3hmVDGRZvaScaCQmW1qGq+sN4vkknkKFghxH/
+	 ergwnP8acOBC4SUhvZNVZIBM3qaAgTEcMiwSupaEguTsB2ZKQiuaUSe2WrAoxgXdBuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793816456;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793816465;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=0DqDoIx7lRhfuNKq589wr+C2KWJLT5p+lz0slHKi9n4=;
-	b=0bNwk2GP2QW15HdZH4yqMXcUVFtHKsLqQkn8JkSwE4dLhUev9SxYBTkyRJ2fntpCVAvT
-	 OfUYZmo3nwU69lLee+R6QyjEs+goZlO/Md4rRm7SzqGp2djnaJT2MznzBz/shlXMh0el9
-	 jUt/MgKvkT/2pc1ku9Kk5JnZuyfgtuuAWT0uk2HxJYBIkNfh8EGAXwUBTjNvd/fia1lNm
-	 j323gfZrm/JaVa3c6nAc+CJRXxyK0VTgl4r2ZR34LH4SCzrInhnSIxfIeTHxPlrt+uusC
-	 vZlsGWQ62DE9MtQld/AdxSSNed3VEO81XxPplNPCffGJhw7WpFUATltufwOKlJ7toTg==
+	bh=k23jnzEAH2UILXVsfgxxO7I2t5cymKKqXKa+Py+jLNQ=;
+	b=I9fxS4B/cybsZeevAagxwpLWqfuE7toInteEblN4fhggVNj91yFnkgRpmvnLaWNOnVYy
+	 /g31d58Zl1vP1rVcqlRLBXGtBjxv6I/N31dofZMUFjfs1fRTXxWC4eTm46RVMqpUhAdlu
+	 UKI+kiembz5VyIqukIyL1DJLqHSq1nX1OqhooqavkEBFMHObmejbCwe+pyAHYCf99Uh/N
+	 SJ4KAyn4jRfHARA+f9ndAQVvkSzZRLq9tkOBxkd6Ug4njLiZ/Q72sWpc15xacMNlNJVUW
+	 2gaywlly8dSZ1Nkc4hGaJrGfx1nz7TXcbAAOo0N0ZNjeEp8kAhBVdNOsOADRc+q79sQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JsAmcxVx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EKGvCxUn;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC02606A333;
-	Wed,  4 Nov 2026 18:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB232606A326;
+	Wed,  4 Nov 2026 18:21:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JsAmcxVx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578651F00A25;
-	Wed,  4 Nov 2026 18:20:48 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EKGvCxUn
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7801F00A16;
+	Wed,  4 Nov 2026 18:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793816456;
-	bh=0DqDoIx7lRhfuNKq589wr+C2KWJLT5p+lz0slHKi9n4=;
+	s=k20260515; t=1793816464;
+	bh=k23jnzEAH2UILXVsfgxxO7I2t5cymKKqXKa+Py+jLNQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=JsAmcxVxWpC0Z5LukTe4dd9iFFOqaJsHrI+KisrlVV+A10rxDP2AJXSeDF8GyoIRW
-	 ag2lbD0qpD2JEwF2QB9Qcm6Pr7APy18BEoiyQO+WWHosAJzry1cdXJn21/rejXzkDw
-	 DlC49II9epm+Ux7SxxsjGV6hD7fgru6LLJGl7zHRvTyI+OVUB4Ajqw25lOKuOQksbq
-	 tj0mZ+SZxA30rCGSbpm/UmsLiY7e1hCID8Xb6aMIqfNtlkBSVOhg88lQ3zBhVZUju/
-	 mhnwIgga5UBZWvfCzYsIu+aVC9t36YPBRwIyfZcPTSn08Z6vjQ4CzonVCWXJIWe8uB
-	 SwGV9OD23XFyg==
+	b=EKGvCxUnpWYjM/xDVbe5TrdjkdrFwalBGkCcDE4pEKVicVzlgiRQQyTg6zNq2v1uB
+	 WnbPljRtNGOWEtnFDnLj4XrbfY986LuIt4fF+rqhT0D2p70XDDTa2bjCz4PTaMAamb
+	 kvq6w4llCVjm/9HK9z08R/wBdpjYPWrxCCSu6QGJaLWMIuhYiwOdXFbxpXD5FVIFnL
+	 qMP+njD6VP09kktsRRhdhqBwx8hLVL5ya8l3AzeKfxhX/eL/eX0w8yAhS3OgiSUzMc
+	 kBe7tE9XlhUuhHb90RJ49objFBmAD0IbVtKVk3IDbLBwxYjk4P5h3tkdYn1ea4eD5/
+	 63JM9OrxmzQNg==
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Wed, 04 Nov 2026 18:20:20 +0000
-Subject: [PATCH v5 02/11] kbuild: implement and use depcheck to check
- dependency timestamps
+Date: Wed, 04 Nov 2026 18:20:21 +0000
+Subject: [PATCH v5 03/11] modpost: cache section relocation mismatch state
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -55,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261104-build-speedup-v5-2-0f6018be8dae@kernel.org>
+Message-Id: <20261104-build-speedup-v5-3-0f6018be8dae@kernel.org>
 References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
 In-Reply-To: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
 To: Linus Torvalds <torvalds@linux-foundation.org>, 
@@ -81,617 +80,176 @@ Cc: ljs@kernel.org, linux-kbuild@vger.kernel.org,
  linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, 
  rust-for-linux@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17199; i=ljs@kernel.org;
- h=from:subject:message-id; bh=aFDnWuLunNfyD/Ngz8BtRH43v2ft5hULsX2XL76I/9o=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJel+fUb2Dx5lv+vWiCW8iLh7cfHupY6e5SdiEnU26Op
- oOJ1tngjlIWBjEuBlkxRZbnX8T3B4mEzeu84O8GM4eVCWQIAxenAEzkZisjw5JZvzyLD1+Z5vSh
- fcKSYv2TRz4873m6tc2jYe00RsEW1rOMDE/Kb33Os5VskeLasPmzZ8AV/VsXuU6Efc66HPbAauG
- bS7wA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5220; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=zDINJIogk6QGvycSCwNzQWD05voJbxr9kxI5NtLaVCc=;
+ b=kA0DAAoWz53NioHifxQByyZiAGrrd2yjo0pmOmrqxETitsl+57qve3F/oepdB2idVVeTZ34j2
+ Ih1BAAWCgAdFiEE5/QXv1IUVp6J0E9Gz53NioHifxQFAmrrd2wACgkQz53NioHifxROyAD8D6bA
+ 8au8a5BN9l6h4Pa6FJTK0zT4q8MlxZBEb2oJWgIBAJjrZ60U1zn0ORrNSJdbtnV0VRh7UFRtIAY
+ +Kef9f5cK
 X-Developer-Key: i=ljs@kernel.org; a=openpgp;
  fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-Each object's .cmd file lists its header dependencies, which often
-consists of over a thousand dependencies.
+For every relocation modpost invokes check_section_mismatch() to determine
+whether there is any kind of mismatch between the source and destination,
+and if so which classification applies.
 
-When little has changed in the tree, this is what make spends most of its
-time doing, spending over a second, single-threaded when parsing larger
-directory trees.
+Each time it does this it invokes section_mismatch() which iterates
+through the sectioncheck[] array every time it's called.
 
-It performs considerably more work that is actually necessary to get the
-job done.
+When walked a relocation section the source is fixed and there aren't many
+targets, so the same names are looked up over and over again.
 
-This can be done faster in C, so implement scripts/basic/depcheck to do so.
+Therefore cache not only mismatch categorisation but also whether a
+mismatch even exists for a given section and look up the sections in the
+cache.
 
-It does as little work as possible, reading the .cmd files from a
-directory's targets and running stat on each dependency only a single time.
+Special indices (undefined, absolute, common) take the uncached path as
+before.
 
-It generates a fragment holding only the saved command line for a target
-whose dependencies all exist and are older than it, and the entire .cmd
-file for any other.
+This results in very significant speed ups for allmodconfig incremental
+builds.
 
-A dependency that is also a target of the same directory (e.g. header
-generated by an if_changed rule) may get remade later in the same make run,
-so do not treat a target as fresh.
-
-That way, Makefile.build simply includes the fragment and the amount of
-work make has to do is significantly reduced when there is not much work to
-do.
-
-If the operation fails, kbuild falls back to using .cmd files.
-
-The result is exactly the same as before.
-
-For drivers/gpu/drm/amd/amdgpu in an allmodconfig tree the fragment is a
-fifth of the size of the .cmd files, make reads it in 10ms instead of
-380ms, and the instance goes from 2.2s to 0.4s.
+modpost is on the serial tail of every build that links vmlinux.
 
 Whole build, 128-thread Threadripper 9980X, best of N runs:
 
                                          before   after     delta
                                          -------------------------------
-  x86 defconfig, no-op make, gcc            1.1s    0.78s    -0.30s (-28%)
-  x86 defconfig, no-op make, clang          1.3s    0.94s    -0.34s (-27%)
-  x86 allmodconfig, no-op make, gcc        14.5s    12.9s     -1.6s (-11%)
-  x86 allmodconfig, no-op make, clang      15.5s    14.2s     -1.3s (-9%)
-  x86 allmodconfig, touch mm/vma.c, gcc    34.3s    33.9s    -0.33s (-1%)
-  x86 allmodconfig, touch mm/vma.c, clang  33.2s    32.2s    -0.98s (-3%)
+  x86 defconfig, touch mm/vma.c, gcc        8.5s     8.3s    -0.14s (-2%)
+  x86 defconfig, touch mm/vma.c, clang      7.7s     7.6s    -0.13s (-2%)
+  x86 allmodconfig, touch mm/vma.c, gcc    33.9s    29.4s     -4.5s (-13%)
+  x86 allmodconfig, touch mm/vma.c, clang  31.9s    27.9s     -4.0s (-13%)
 
 Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 ---
- Makefile                 |   1 +
- scripts/Makefile.build   |  15 +-
- scripts/basic/.gitignore |   1 +
- scripts/basic/Makefile   |   2 +-
- scripts/basic/depcheck.c | 481 +++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 498 insertions(+), 2 deletions(-)
+ scripts/mod/modpost.c | 61 +++++++++++++++++++++++++++++++++++++++++++++++++--
+ scripts/mod/modpost.h |  8 +++++++
+ 2 files changed, 67 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index f895752d4b05..d92a5d78b465 100644
---- a/Makefile
-+++ b/Makefile
-@@ -2252,6 +2252,7 @@ clean: $(clean-dirs)
- 	$(call cmd,rmfiles)
- 	@find . $(RCS_FIND_IGNORE) \
- 		\( -name '*.[aios]' -o -name '*.rsi' -o -name '*.ko' -o -name '.*.cmd' \
-+		-o -name '.depcheck.mk' -o -name '.depcheck.mk.tmp' \
- 		-o -name '*.ko.*' -o -name '*.o.thinlto.bc' \
- 		-o -name '*.dtb' -o -name '*.dtbo' \
- 		-o -name '*.dtb.S' -o -name '*.dtbo.S' \
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index bbe9555c47a8..7b652f169a8f 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -613,7 +613,20 @@ $(obj)/: $(if $(KBUILD_BUILTIN), $(targets-for-builtin)) \
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 75374c64b8cc..83caf29b4bf2 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1155,12 +1155,62 @@ static void check_export_symbol(struct module *mod, struct elf_info *elf,
+ 			 name);
+ }
  
- existing-targets := $(wildcard $(sort $(targets)))
- 
---include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
-+cmd-files := $(wildcard $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd))
-+
-+# depcheck checks timestamps first and outputs only saved command lines of
-+# up-to-date targets, falling back to .cmd files if it fails. A directory
-+# whose targets all lie elsewhere may not exist in the output tree.
-+depcheck := $(wildcard $(objtree)/scripts/basic/depcheck)
-+
-+ifneq ($(and $(depcheck),$(cmd-files),$(wildcard $(obj))),)
-+ifeq ($(shell $(depcheck) $(obj)/.depcheck.mk $(cmd-files) && echo ok),ok)
-+cmd-files := $(obj)/.depcheck.mk
-+endif
-+endif
-+
-+-include $(cmd-files)
- 
- # Create directories for object files if they do not exist
- obj-dirs := $(sort $(patsubst %/,%, $(dir $(targets))))
-diff --git a/scripts/basic/.gitignore b/scripts/basic/.gitignore
-index 07c195f605a1..761ee14f9477 100644
---- a/scripts/basic/.gitignore
-+++ b/scripts/basic/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+/depcheck
- /fixdep
- /randstruct.seed
-diff --git a/scripts/basic/Makefile b/scripts/basic/Makefile
-index fb8e2c38fbc7..ff98780e474d 100644
---- a/scripts/basic/Makefile
-+++ b/scripts/basic/Makefile
-@@ -2,7 +2,7 @@
- #
- # fixdep: used to generate dependency information during build process
- 
--hostprogs-always-y	+= fixdep
-+hostprogs-always-y	+= fixdep depcheck
- 
- # randstruct: the seed is needed before building the gcc-plugin or
- # before running a Clang kernel build.
-diff --git a/scripts/basic/depcheck.c b/scripts/basic/depcheck.c
-new file mode 100644
-index 000000000000..119075353f3b
---- /dev/null
-+++ b/scripts/basic/depcheck.c
-@@ -0,0 +1,481 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * depcheck - check the dependency timestamps of a directory's targets so that
-+ * make reads only what it needs from their .cmd files.
-+ *
-+ * fixdep writes a .cmd file as:
-+ *
-+ *	savedcmd_dir/foo.o := <command line>
-+ *
-+ *	source_dir/foo.o := dir/foo.c
-+ *
-+ *	deps_dir/foo.o := \
-+ *	  include/linux/bar.h \
-+ *	    $(wildcard include/config/BAZ) \
-+ *
-+ *	dir/foo.o: $(deps_dir/foo.o)
-+ *
-+ *	$(deps_dir/foo.o):
-+ *
-+ * and kbuild may append rules of its own after that, such as one making the
-+ * target depend on objtool.
-+ *
-+ * For a target that exists and is newer than every dependency listed, make can
-+ * have nothing to do with the list, so it is left out and only what precedes
-+ * and follows it is passed on; for anything else the .cmd file is passed on in
-+ * full.
-+ *
-+ * Usage: depcheck <output> <.cmd files...>
-+ *
-+ * The output is a makefile fragment to include in place of the .cmd files; a
-+ * non-zero exit status means the caller should include those instead.
-+ */
-+#include <limits.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <time.h>
-+#include <unistd.h>
-+
-+#include <hash.h>
-+#include <hashtable.h>
-+#include <xalloc.h>
-+
-+/* What fixdep writes, see above. */
-+#define DEPS_PREFIX		"deps_"
-+#define DEPS_RULE_PREFIX	"$(" DEPS_PREFIX
-+#define RULE_SUFFIX		":"
-+#define LINE_CONTINUATION	" \\"
-+#define WILDCARD_OPEN		"$(wildcard "
-+#define WILDCARD_CLOSE		")"
-+#define CMD_SUFFIX		".cmd"
-+
-+/* A line of a .cmd file, without its newline. */
-+struct line {
-+	const char *text;
-+	size_t len;
-+};
-+
-+static bool is_blank(char chr)
++static void init_mismatch_cache(struct elf_info *elf)
 +{
-+	return chr == ' ' || chr == '\t';
++	elf->mismatch_cache = xcalloc(elf->num_sections,
++				      sizeof(*elf->mismatch_cache));
 +}
 +
-+static bool str_ends_with(const char *str, const char *suffix)
++static void reset_mismatch_cache(struct elf_info *elf)
 +{
-+	const size_t len = strlen(str), suffix_len = strlen(suffix);
-+
-+	return len >= suffix_len && !strcmp(str + len - suffix_len, suffix);
++	memset(elf->mismatch_cache, 0,
++	       elf->num_sections * sizeof(*elf->mismatch_cache));
 +}
 +
-+static bool line_starts_with(const struct line *line, const char *prefix)
++static void free_mismatch_cache(struct elf_info *elf)
 +{
-+	const size_t len = strlen(prefix);
-+
-+	return line->len >= len && !memcmp(line->text, prefix, len);
++	free(elf->mismatch_cache);
++	elf->mismatch_cache = NULL;
 +}
 +
-+static bool line_ends_with(const struct line *line, const char *suffix)
++static const struct sectioncheck
++*cache_mismatch(const struct elf_info *elf, unsigned int to_secndx,
++		const struct sectioncheck *mismatch)
 +{
-+	const size_t len = strlen(suffix);
-+
-+	return line->len >= len &&
-+	       !memcmp(line->text + line->len - len, suffix, len);
-+}
-+
-+static bool line_is_blank(const struct line *line)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < line->len; i++)
-+		if (!is_blank(line->text[i]))
-+			return false;
-+
-+	return true;
-+}
-+
-+/* Whether the line ends in " \", continuing the list on the next line. */
-+static bool line_is_continued(const struct line *line)
-+{
-+	return line_ends_with(line, LINE_CONTINUATION);
-+}
-+
-+static void line_strip_continuation(struct line *line)
-+{
-+	if (line_is_continued(line))
-+		line->len -= strlen(LINE_CONTINUATION);
-+}
-+
-+static void line_trim(struct line *line)
-+{
-+	while (line->len && is_blank(line->text[0])) {
-+		line->text++;
-+		line->len--;
-+	}
-+	while (line->len && is_blank(line->text[line->len - 1]))
-+		line->len--;
-+}
-+
-+/* Take the next line out of [*pos, end); false once there are none left. */
-+static bool next_line(const char **pos, const char *end, struct line *line)
-+{
-+	const char *newline;
-+
-+	if (*pos >= end)
-+		return false;
-+
-+	newline = memchr(*pos, '\n', end - *pos);
-+	line->text = *pos;
-+	line->len = (newline ? newline : end) - *pos;
-+	*pos = newline ? newline + 1 : end;
-+
-+	return true;
-+}
-+
-+/* Describes a dependency file. */
-+struct dep {
-+	struct hlist_node hnode;
-+	struct timespec mtime;
-+	bool exists;
-+	char path[];
-+};
-+
-+static HASHTABLE_DEFINE(dep_table, 1U << 16);
-+
-+/* The targets of this run's .cmd files: anything make may remake this time. */
-+struct target {
-+	struct hlist_node hnode;
-+	char path[];
-+};
-+
-+static HASHTABLE_DEFINE(target_table, 1U << 12);
-+
-+static void add_target(const char *path)
-+{
-+	struct target *target = xmalloc(sizeof(*target) + strlen(path) + 1);
-+
-+	strcpy(target->path, path);
-+	hash_add(target_table, &target->hnode, hash_str(path));
-+}
-+
-+static bool is_target(const char *path)
-+{
-+	const unsigned int key = hash_str(path);
-+	struct target *target;
-+
-+	hash_for_each_possible(target_table, target, hnode, key) {
-+		if (!strcmp(target->path, path))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static const struct dep *lookup_dep(const char *path)
-+{
-+	const unsigned int key = hash_str(path);
-+	struct dep *dep;
-+	struct stat st;
-+
-+	hash_for_each_possible(dep_table, dep, hnode, key) {
-+		if (!strcmp(dep->path, path))
-+			return dep;
-+	}
-+
-+	dep = xcalloc(1, sizeof(*dep) + strlen(path) + 1);
-+	strcpy(dep->path, path);
-+	dep->exists = !stat(path, &st);
-+	if (dep->exists)
-+		dep->mtime = st.st_mtim;
-+	hash_add(dep_table, &dep->hnode, key);
-+
-+	return dep;
-+}
-+
-+/* Strictly newer, as make compares timestamps. */
-+static bool newer(const struct timespec *time_a, const struct timespec *time_b)
-+{
-+	if (time_a->tv_sec != time_b->tv_sec)
-+		return time_a->tv_sec > time_b->tv_sec;
-+
-+	return time_a->tv_nsec > time_b->tv_nsec;
-+}
-+
-+/*
-+ * $(wildcard include/config/FOO) is a prerequisite only while FOO is set:
-+ * unwrap it and say that it is optional.
-+ */
-+static bool line_unwrap_wildcard(struct line *line)
-+{
-+	if (!line_starts_with(line, WILDCARD_OPEN) ||
-+	    !line_ends_with(line, WILDCARD_CLOSE))
-+		return false;
-+
-+	line->text += strlen(WILDCARD_OPEN);
-+	line->len -= strlen(WILDCARD_OPEN) + strlen(WILDCARD_CLOSE);
-+
-+	return true;
-+}
-+
-+/* fixdep doubles '$' and escapes '#' in a path: undo that into path[]. */
-+static bool unescape_path(const struct line *line, char *path, size_t size)
-+{
-+	size_t i, out_len = 0;
-+
-+	if (line->len >= size)
-+		return false;
-+
-+	for (i = 0; i < line->len; i++) {
-+		const char chr = line->text[i];
-+		const char next_chr = i + 1 < line->len ? line->text[i + 1] : '\0';
-+
-+		if ((chr == '$' && next_chr == '$') || (chr == '\\' && next_chr == '#'))
-+			i++;
-+		path[out_len++] = line->text[i];
-+	}
-+	path[out_len] = '\0';
-+
-+	return true;
-+}
-+
-+/* Is the path contained in line older than the target? */
-+static bool dep_is_fresh(struct line line, const struct timespec *target)
-+{
-+	char path[PATH_MAX];
-+	const struct dep *dep;
-+	bool optional;
-+
-+	line_strip_continuation(&line);
-+	line_trim(&line);
-+	if (!line.len)
-+		return false;
-+
-+	optional = line_unwrap_wildcard(&line);
-+	if (!line.len || !unescape_path(&line, path, sizeof(path)))
-+		return false;
-+
-+	/* A target can get 'remade' so its timestamp is meaningless. */
-+	if (is_target(path))
-+		return false;
-+
-+	dep = lookup_dep(path);
-+	if (!dep->exists)
-+		return optional;
-+
-+	return !newer(&dep->mtime, target);
-+}
-+
-+/*
-+ * Parse a dependency list which consists of one file per line and determine if
-+ * all dependencies are 'fresh', i.e. older than the target.
-+ */
-+static bool deps_are_fresh(const char *pos, const char *end,
-+			   const struct timespec *target)
-+{
-+	struct line line;
-+
-+	while (next_line(&pos, end, &line)) {
-+		if (line_is_blank(&line))
-+			return true;
-+		if (!dep_is_fresh(line, target))
-+			return false;
-+		if (!line_is_continued(&line))
-+			return true;
-+	}
-+
-+	return true;
-+}
-+
-+/*
-+ * Find the "deps_" line in the input.
-+ *
-+ * On success returns true and *deps_off is set to its offset and *list is set
-+ * to the list's own lines start or NULL if the line is not continued.
-+ *
-+ * Otherwise returns false if the prefix cannot be found.
-+ */
-+static bool find_deps(const char *buf, size_t len, size_t *deps_off,
-+		      const char **list)
-+{
-+	const char *pos = buf, *end = buf + len;
-+	struct line line;
-+
-+	while (next_line(&pos, end, &line)) {
-+		if (!line_starts_with(&line, DEPS_PREFIX))
-+			continue;
-+
-+		*deps_off = line.text - buf;
-+		*list = line_is_continued(&line) ? pos : NULL;
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+/*
-+ * Is this the target of a .cmd file, i.e. 'dir/.name.cmd names dir/name.'?
-+ */
-+static bool target_of(const char *cmd_path, char *target, size_t size)
-+{
-+	const char *slash = strrchr(cmd_path, '/');
-+	const char *base = slash ? slash + 1 : cmd_path;
-+	const size_t dir_len = base - cmd_path;
-+	const size_t affix_len = strlen(".") + strlen(CMD_SUFFIX);
-+	const size_t base_len = strlen(base);
-+
-+	if (base[0] != '.' || !str_ends_with(base, CMD_SUFFIX) ||
-+	    base_len <= affix_len)
-+		return false;
-+
-+	return snprintf(target, size, "%.*s%.*s", (int)dir_len, cmd_path,
-+			(int)(base_len - affix_len), base + 1) < (int)size;
-+}
-+
-+/*
-+ * Does the .cmd file's target exists and is it newer than everything in its
-+ * dependency list?
-+ *
-+ * Returns true if so and sets *deps_off to the start of the list, otherwise
-+ * returns false.
-+ */
-+static bool target_is_fresh(const char *cmd_path, const char *buf, size_t len,
-+			    size_t *deps_off)
-+{
-+	char target[PATH_MAX];
-+	struct stat st;
-+	const char *list;
-+
-+	if (!target_of(cmd_path, target, sizeof(target)) || stat(target, &st))
-+		return false;
-+	if (!find_deps(buf, len, deps_off, &list))
-+		return false;
-+	if (!list)
-+		return true;
-+
-+	return deps_are_fresh(list, buf + len, &st.st_mtim);
-+}
-+
-+static char *read_file(const char *path, size_t *len)
-+{
-+	FILE *file = fopen(path, "r");
-+	struct stat st;
-+	char *buf;
-+	size_t nr_read = 0;
-+
-+	if (!file)
-+		return NULL;
-+	if (fstat(fileno(file), &st)) {
-+		fclose(file);
++	if (!mismatch) {
++		elf->mismatch_cache[to_secndx] = -1;
 +		return NULL;
 +	}
 +
-+	buf = xmalloc(st.st_size + 1);
-+	while (nr_read < (size_t)st.st_size) {
-+		const size_t chunk = fread(buf + nr_read, 1, st.st_size - nr_read, file);
-+
-+		if (!chunk)
-+			break;
-+		nr_read += chunk;
-+	}
-+	fclose(file);
-+
-+	buf[nr_read] = '\0';
-+	*len = nr_read;
-+	return buf;
++	elf->mismatch_cache[to_secndx] = (mismatch - sectioncheck) + 1;
++	return mismatch;
 +}
 +
-+/*
-+ * Find the end of the dependency block: the offset just past its closing
-+ * "$(deps_x):" line. Anything after that was appended by kbuild and is not for
-+ * us to judge. Returns len if the line cannot be found.
-+ */
-+static size_t deps_block_end(const char *buf, size_t len, size_t deps_off)
++static const struct sectioncheck *get_section_mismatch(const struct elf_info *elf,
++		const char *fromsec, unsigned int to_secndx)
 +{
-+	const char *pos = buf + deps_off, *end = buf + len;
-+	struct line line;
++	int cached;
 +
-+	while (next_line(&pos, end, &line)) {
-+		if (line_starts_with(&line, DEPS_RULE_PREFIX) &&
-+		    line_ends_with(&line, RULE_SUFFIX))
-+			return pos - buf;
-+	}
++	if (to_secndx >= elf->num_sections)
++		return section_mismatch(fromsec, sec_name(elf, to_secndx));
 +
-+	return len;
++	cached = elf->mismatch_cache[to_secndx];
++	if (cached < 0)
++		return NULL;
++	if (cached > 0)
++		return &sectioncheck[cached - 1];
++
++	return cache_mismatch(elf, to_secndx,
++			      section_mismatch(fromsec, sec_name(elf, to_secndx)));
 +}
 +
-+/* The target is fresh: pass on everything but the dependency block. */
-+static void write_without_deps(FILE *out, const char *buf, size_t len,
-+			       size_t deps_off)
-+{
-+	const size_t tail_off = deps_block_end(buf, len, deps_off);
+ static void check_section_mismatch(struct module *mod, struct elf_info *elf,
+ 				   Elf_Sym *sym,
+ 				   unsigned int fsecndx, const char *fromsec,
+ 				   Elf_Addr faddr, Elf_Addr taddr)
+ {
+-	const char *tosec = sec_name(elf, get_secindex(elf, sym));
++	unsigned int to_secndx = get_secindex(elf, sym);
++	const char *tosec = sec_name(elf, to_secndx);
+ 	const struct sectioncheck *mismatch;
+ 
+ 	if (module_enabled && elf->export_symbol_secndx == fsecndx) {
+@@ -1168,7 +1218,7 @@ static void check_section_mismatch(struct module *mod, struct elf_info *elf,
+ 		return;
+ 	}
+ 
+-	mismatch = section_mismatch(fromsec, tosec);
++	mismatch = get_section_mismatch(elf, fromsec, to_secndx);
+ 	if (!mismatch)
+ 		return;
+ 
+@@ -1445,6 +1495,8 @@ static void check_sec_ref(struct module *mod, struct elf_info *elf)
+ {
+ 	int i;
+ 
++	init_mismatch_cache(elf);
 +
-+	fwrite(buf, 1, deps_off, out);
-+	fputc('\n', out);
-+	fwrite(buf + tail_off, 1, len - tail_off, out);
-+}
+ 	/* Walk through all sections */
+ 	for (i = 0; i < elf->num_sections; i++) {
+ 		Elf_Shdr *sechdr = &elf->sechdrs[i];
+@@ -1461,6 +1513,9 @@ static void check_sec_ref(struct module *mod, struct elf_info *elf)
+ 			if (match(secname, section_white_list))
+ 				continue;
+ 
++			/* Reset cache per-section. */
++			reset_mismatch_cache(elf);
 +
-+/*
-+ * Generate a fragment for make from one .cmd file - without the dependency
-+ * block if the target is fresh, otherwise all of it.
-+ */
-+static void process(FILE *out, const char *cmd_path)
-+{
-+	size_t len, deps_off;
-+	char *buf;
+ 			start = sym_get_data_by_offset(elf, i, 0);
+ 			stop = start + sechdr->sh_size;
+ 
+@@ -1472,6 +1527,8 @@ static void check_sec_ref(struct module *mod, struct elf_info *elf)
+ 					    start, stop);
+ 		}
+ 	}
 +
-+	buf = read_file(cmd_path, &len);
-+	if (!buf)
-+		return;
++	free_mismatch_cache(elf);
+ }
+ 
+ static char *remove_dot(char *s)
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 666beca685e4..7ba64fd894ef 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -160,6 +160,14 @@ struct elf_info {
+ 	Elf32_Word   *symtab_shndx_stop;
+ 
+ 	struct symsearch *symsearch;
 +
-+	if (target_is_fresh(cmd_path, buf, len, &deps_off))
-+		write_without_deps(out, buf, len, deps_off);
-+	else
-+		fwrite(buf, 1, len, out);
-+
-+	free(buf);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	char tmp_path[PATH_MAX];
-+	FILE *out;
-+	int i;
-+
-+	if (argc < 2) {
-+		fprintf(stderr, "usage: %s <output> <.cmd files...>\n", argv[0]);
-+		return 1;
-+	}
-+
-+	if (snprintf(tmp_path, sizeof(tmp_path), "%s.tmp", argv[1]) >=
-+	    (int)sizeof(tmp_path)) {
-+		fprintf(stderr, "%s: path too long\n", argv[1]);
-+		return 1;
-+	}
-+
-+	out = fopen(tmp_path, "w");
-+	if (!out) {
-+		perror(tmp_path);
-+		return 1;
-+	}
-+
-+	for (i = 2; i < argc; i++) {
-+		char target[PATH_MAX];
-+
-+		if (target_of(argv[i], target, sizeof(target)))
-+			add_target(target);
-+	}
-+
-+	for (i = 2; i < argc; i++)
-+		process(out, argv[i]);
-+
-+	/* Write errors are latched in the stream, so one check at the end covers them all. */
-+	if (ferror(out) || fclose(out) || rename(tmp_path, argv[1])) {
-+		perror(argv[1]);
-+		unlink(tmp_path);
-+		return 1;
-+	}
-+
-+	return 0;
-+}
++	/*
++	 * Section mismatch cache, indexed by destination section:
++	 *   0 - uncached.
++	 *  -1 - no mismatch.
++	 *  >0 - mismatch index + 1.
++	 */
++	int *mismatch_cache;
+ };
+ 
+ /* Accessor for sym->st_shndx, hides ugliness of "64k sections" */
 
 -- 
 2.56.0
