@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793816482;
-	b=mgjBOiVL3zdmZ9r2HaeZg9Q99DuomnvJWhqcHQd/YkM6iMqhto6QB5dafUQNQ4iH7Vxm
-	 rdw4L+obgYj5V2AY6k028puJ2XtjNHEVoSiaQ6SQspNAMI7TU8LcKU+tHAFmr15WMi3Pk
-	 41pB1XZUi7ltyk5KFJwLa4xXHSS/qyC71Vy9xK39dW/B45KUGLbjr4PR1KxELRY8vGcVD
-	 8Eh+IqANBkEizPYi4+3fT/fBDnj63iLQ6qaZmhNJztlQjyAveian5bpCKYvrrYeIpaupP
-	 QLjs86r8cxveyMeVEBEQH82II7Gh0hKr8SmR8A+uk9vpzEJM/Q0opw3yIFzAVPRBeQg==
+	t=1793816491;
+	b=IHms1WddoTOiCToBkkN0dO9U7vWjqXLl7tyEMerJ03G6dcseziJxxrZB7/w6R6kWGog4
+	 0+MWKmv4bFP0SXiLtsiaDO0izCY7ChCoJVYbsv+JFbWWLCZoviEjIN5lR0ZUn0V0zRXx0
+	 o4b1FLkbMc6UOBEHjXV3lJyLyr9RUSue7REQLULnVSMAah757d0vPGWZHKXzpRz8C90Cr
+	 8ecSNdt+x8+iSWYjrVnb7NaUC6H2J9x0byDiX6/hoedfmowfxM4orgRlNj2ndnbvm6Lf4
+	 H2TM9O9yHj40bgG7dnBHUDPsvyII3BbLHImabRF3REMyp29J+dVgDCr5zmKm8g/9PyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793816482;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793816491;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=BJaT7K8KaiJhcjDqbR1lXPJHNEkhTK+tqSjAnuCcFOQ=;
-	b=j4iuJ5wdvEO6QeDU4g+9szq7XESuW9YzFRQk2+96ilNNoOSDUXg9P1haQLPOFLUfY8mN
-	 UJdBvarpT8CGJYYYuBkbyu/Ct8q0Sur15fDoI3ATx4qiIF2QDeFyTbZhPNqdyE7NCvyn9
-	 +lQ+/YFFRYtJIBrQ5fG+AMn0CBozM/UCoFjkMb8DUaTSmBWdUL4IwWrjjM8djeimXhNvj
-	 J1Yn8n8VveIclanO203VXp/R0tPxsYDxoaj2AKGcOOsKkfKJPLpyddH6wB6+eO/nMn0m8
-	 jSpiBBIFF6B5KMYU9yNRlqstfoKsUz6dEPLn0yHKYQ0ACNsG032CIXmQ42hXzI5m6Mg==
+	bh=JePMCfKku9pEUDTHsAhZnlP/cQPhOTSidIJ9IlFtxng=;
+	b=cGhm0u3f3Sgqa/bE6haUqBQAr+yXRh2UldRFhr8bYBBwcIOCvUXVeUoXs0b4hatoY4Sp
+	 iztkB/YjAciYcjLHLB8dNb6+cezpwh3ahehc4WIsq8hrTiakRHkpVzxvJh/3kZ4ZurSGy
+	 Do9YZS4/+rSZMPcjTWpbU47u7g0oRZyq0Kh82ufvHpU0xfSgC512oJb2cVYIlvFQXRUzv
+	 z9IHQaKUL0ADAaBFq+V7+SS10CSB1S4fW4fyPVt7P9AJGVBmWbF1Y/vf+L4KiZ3ANvQuT
+	 Al9AiQI3s+Z0z/HSMEMbGJP/tF2yELqejWdsEEzSnn3XUy559y0izWYfeNNELk/RPCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D0WYxQsg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oEqSqtuf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466116083626;
-	Wed,  4 Nov 2026 18:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BFF607BCA5;
+	Wed,  4 Nov 2026 18:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D0WYxQsg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 572BE1F00A21;
-	Wed,  4 Nov 2026 18:21:13 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oEqSqtuf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B831F0180E;
+	Wed,  4 Nov 2026 18:21:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793816481;
-	bh=BJaT7K8KaiJhcjDqbR1lXPJHNEkhTK+tqSjAnuCcFOQ=;
+	s=k20260515; t=1793816490;
+	bh=JePMCfKku9pEUDTHsAhZnlP/cQPhOTSidIJ9IlFtxng=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=D0WYxQsgU5wwYyL7i8yv4iGPaEIWRIKFUIuR107iFvpxmU5mLezX6sYtxMur6SFZO
-	 xyqP3tWN+lAs3q8BvxWsNeNugJQTYiqORHGhOY0LohR5tOMUhrTg8WRfs8MBcduQEn
-	 WK1mzwba7TKQJlX8JeTI1BseuzDeMmS8NYnWhzNvSmaf/OZI7K4BYBhx9eUQJOPUjW
-	 AQ5ccqdrXTdKYJxSElg2BBiE3nprYkFWV1b6RAmStqcoDYXopeEPqhWwCCry9F7Kzd
-	 X7PTBXXJzdvZon/j4g0t3ADKMoXkYXWM7Ul2mWPXRTeQezUormWf6QCsJhWRe27+m0
-	 rinVEQZ2CcCCw==
+	b=oEqSqtuf3dQOGOF8fH7u936/F2G7Cgctm+FulpT4YWeG09bwZMpVbHKheBVML2qCg
+	 CivgxtItI//tYy8SEMWoJz13mF7ZxJHSJaxvF7x6p8g3eRk2rIy6D+URLkeRCQnNkR
+	 KNkIvppr4B6Y6UoYda6BbXkVlBDgmKM4EgJ7M5RTQGKCoUmHvoiHF2vFE5vee/JZTM
+	 3PTMNnOt6qNHDgCFQ7Zr3oUtwP+PAcE/N1arv3UrAqW+sZbVQNEdj3pvZVZlatjjIX
+	 8ExZfQDbyCr4pqUuyYfLvjjIQ5Gfi/wktxj6IxLJJFj9xR/XVZ3Xm4nHywmI0Z0K5v
+	 puqwUOgEprupA==
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Wed, 04 Nov 2026 18:20:23 +0000
-Subject: [PATCH v5 05/11] kbuild: batch module finalisation
+Date: Wed, 04 Nov 2026 18:20:24 +0000
+Subject: [PATCH v5 06/11] objtool: do not hash DWARF relocations
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -54,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261104-build-speedup-v5-5-0f6018be8dae@kernel.org>
+Message-Id: <20261104-build-speedup-v5-6-0f6018be8dae@kernel.org>
 References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
 In-Reply-To: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
 To: Linus Torvalds <torvalds@linux-foundation.org>, 
@@ -78,144 +78,120 @@ To: Linus Torvalds <torvalds@linux-foundation.org>,
 Cc: ljs@kernel.org, linux-kbuild@vger.kernel.org, 
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
  linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, Kees Cook <kees@kernel.org>
+ rust-for-linux@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4985; i=ljs@kernel.org;
- h=from:subject:message-id; bh=HpLpT9Gs9oe3UrzigFy9kl5OJUqyWCNjPtAocROtEf8=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJel+cGth5hynVJ271A9BMDR0DU/K2uOQ9/cAW2SZV+n
- Hy0Y3VpRykLgxgXg6yYIsvzL+L7g0TC5nVe8HeDmcPKBDKEgYtTACbCcJWRoUVrQtuvZqMF0zNt
- 2F/bz7HY5d70cUFRve6EF8sMAro1RRj+8Ldu0Pr5JP571GmlR25PzKYGhO0MmBfxcsI9+SmHA70
- S+QE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3375; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=aMXclC3dToXuPw8amRZ/vPdHrAbL7HmKgomYoAoiYOU=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJel+fKZkToeSc89FulWqB6tlet4LVrj7hVydopnVH+b
+ +OmfLfvKGVhEONikBVTZHn+RXx/kEjYvM4L/m4wc1iZQIYwcHEKwETYpBj+adX5apU++huh8eDQ
+ idrntcIa/cu3vHJkNNJsz3c5Ocv7GMP/QMe9nRIMtzVqfX6XnSuI5wtkNp++UMq5sm6vqNjZzIv
+ cAA==
 X-Developer-Key: i=ljs@kernel.org; a=openpgp;
  fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-With the .mod.S change in place, module finalisation on allmodconfig builds
-consists of a large number of very short-lived jobs.
+objtool hashes the relocation of each section so it can find them by
+destination, but DWARF sections are never looked up this way, so there is
+no reason to hash them.
 
-For allmodconfig x86-64 this can be on the order of ~22,000 jobs of a few
-milliseconds in duration each.
+With CONFIG_DEBUG_INFO_DWARF5 set a defconfig vmlinux.o has ~22 million
+relocations, 20.5 million of which are .debug_* sections.
 
-Each job entails processing ~22k .cmd files, so the combination of heavy
-overhead and small individual job results in a lot of unnecessary and
-repeated work even with all cores being utilised.
+Therefore, don't hash these.
 
-The solution is to batch by a number of jobs. Determining which value makes
-sense was done empirically.
+With the same configuration the objtool vmlinux.o link-time run takes ~.5s
+less to complete (2.63s -> 2.14s) and ~130 MiB memory to do it.
 
-On a 128-thread threadripper box doing an allmodconfig build, best of
-2, *.ko, *.mod.o deleted each time:
+The output remains unchanged.
 
-    modules per chunk    instances    wall
-    -----------------    ---------    ------
-                    1        11171    10.22s
-                    2         5586     6.72s
-                    4         2793     4.97s
-                    8         1397     4.26s
-                   16          699     4.05s
-                   32          350     4.05s
-                   64          175     4.07s
-                  128           88     4.05s
-                  256           44     4.03s
-                  512           22     4.18s
-
-Wall time flattens for 16-256 module batches.
-
-A slower/lower core machine will do better with fewer modules-per-batch, a
-faster/higher core machine will do better with more modules-per-batch.
-
-Therefore, take the midpoint which works in the most margin in either
-direction - 128 modules per batch.
-
-This naturally scales with module count too as the optimum gains are
-obtained with higher module count, so fewer batches in this case costs less
-overhead.
-
-Each instance holds only its own modules' variables and the top-level one
-reads no per-module .cmd files at all, the same rules serve both levels,
-and an instance is told its chunk with modfinal-first=<index>.
-
-Only the top-level instance builds .module-common.o, to the chunks it is a
-plain prerequisite, so no two instances ever write it.
-
-"make modules" with every *.mod.o and *.ko deleted goes from 28.9s to 15.9s
-with clang 22. No-op "make modules" goes from 5.6s to 4.8s, as checking the
-22,000 targets is spread over the chunks too.
-
-Whole build, 128-thread Threadripper 9980X, best of N runs:
-
-                                         before   after     delta
-                                         -------------------------------
-  x86 allmodconfig, no-op make, gcc         2.3s     1.4s    -0.85s (-38%)
-  x86 allmodconfig, no-op make, clang       2.8s     1.8s    -0.94s (-34%)
-  x86 allmodconfig, clean, gcc            306.6s   294.1s     -12.6s (-4%)
-  x86 allmodconfig, clean, clang          290.2s   283.9s     -6.4s (-2%)
-
-Reviewed-by: Kees Cook <kees@kernel.org>
 Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 ---
- scripts/Makefile.modfinal | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+ tools/objtool/elf.c | 32 +++++++++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 7 deletions(-)
 
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 75e9effdf02c..4d5e6e1a0ff9 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -13,9 +13,30 @@ include $(srctree)/scripts/Makefile.lib
- # find all modules listed in modules.order
- modules := $(call read-file, modules.order)
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index a791f4ea6ec1..98a110e3e8f5 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -1071,7 +1071,8 @@ struct reloc *elf_init_reloc(struct elf *elf, struct section *rsec,
+ 	set_reloc_type(elf, reloc, type);
+ 	set_reloc_addend(elf, reloc, addend);
  
-+modfinal-chunk-size := 128
-+
-+ifdef modfinal-first
-+
-+# this instance handles the chunk of modules.order starting at $(modfinal-first)
-+modules := $(wordlist $(modfinal-first), $(words $(modules)), $(modules))
-+modules := $(wordlist 1, $(modfinal-chunk-size), $(modules))
-+
- __modfinal: $(modules:%.o=%.ko)
- 	@:
+-	elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
++	if (!is_dwarf_section(rsec->base))
++		elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
+ 	set_sym_next_reloc(reloc, sym->relocs);
+ 	sym->relocs = reloc;
  
-+else
-+
-+modfinal-chunks := $(addprefix chunk-, $(shell seq 1 $(modfinal-chunk-size) $(words $(modules))))
-+
-+PHONY += $(modfinal-chunks)
-+$(modfinal-chunks): .module-common.o
-+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal modfinal-first=$(@:chunk-%=%)
-+
-+__modfinal: $(modfinal-chunks)
-+	@:
-+
-+endif
-+
- # modname and part-of-module are set to make c_flags define proper module flags
- modname = $(notdir $(@:.mod.o=))
- part-of-module = y
-@@ -29,8 +50,11 @@ quiet_cmd_as_mod_o = AS [M]  $@
- %.mod.o: %.mod.S FORCE
- 	$(call if_changed,as_mod_o)
+@@ -1125,16 +1126,14 @@ struct reloc *elf_init_reloc_data_sym(struct elf *elf, struct section *sec,
  
-+# Built by the top-level instance alone, the chunks take it as a plain file.
-+ifndef modfinal-first
- .module-common.o: $(srctree)/scripts/module-common.c FORCE
- 	$(call if_changed_rule,cc_o_c)
-+endif
+ static int read_relocs(struct elf *elf)
+ {
+-	unsigned long nr_reloc, max_reloc = 0;
++	unsigned long nr_reloc, max_reloc = 0, nr_hashed = 0;
+ 	struct section *rsec;
+ 	struct reloc *reloc;
+ 	unsigned int symndx;
+ 	struct symbol *sym;
++	bool hashed;
+ 	int i;
  
- ifneq ($(WARN_ON_UNUSED_TRACEPOINTS),)
- cmd_check_tracepoint = $(objtree)/scripts/tracepoint-update --module $<;
-@@ -58,7 +82,11 @@ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- endif
- 	+$(call cmd,check_tracepoint)
+-	if (!elf_alloc_hash(reloc, elf->num_relocs))
+-		return -1;
+-
+ 	list_for_each_entry(rsec, &elf->sections, list) {
+ 		if (!is_reloc_sec(rsec))
+ 			continue;
+@@ -1147,6 +1146,23 @@ static int read_relocs(struct elf *elf)
  
--targets += $(modules:%.o=%.ko) $(modules:%.o=%.mod.o) .module-common.o
-+ifdef modfinal-first
-+targets += $(modules:%.o=%.ko) $(modules:%.o=%.mod.o)
-+else
-+targets += .module-common.o
-+endif
+ 		rsec->base->rsec = rsec;
  
- # Add FORCE to the prerequisites of a target to force it to be always rebuilt.
- # ---------------------------------------------------------------------------
++		/*
++		 * DWARF relocations are never looked up by destination, they
++		 * only need to be on their symbol's list.
++		 */
++		if (!is_dwarf_section(rsec->base))
++			nr_hashed += sec_num_entries(rsec);
++	}
++
++	if (!elf_alloc_hash(reloc, nr_hashed))
++		return -1;
++
++	list_for_each_entry(rsec, &elf->sections, list) {
++		if (!is_reloc_sec(rsec))
++			continue;
++
++		hashed = !is_dwarf_section(rsec->base);
++
+ 		/* nr_alloc_relocs=0: libelf owns d_buf */
+ 		rsec->nr_alloc_relocs = 0;
+ 
+@@ -1168,7 +1184,8 @@ static int read_relocs(struct elf *elf)
+ 				return -1;
+ 			}
+ 
+-			elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
++			if (hashed)
++				elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
+ 			set_sym_next_reloc(reloc, sym->relocs);
+ 			sym->relocs = reloc;
+ 
+@@ -1180,6 +1197,7 @@ static int read_relocs(struct elf *elf)
+ 	if (opts.stats) {
+ 		printf("max_reloc: %lu\n", max_reloc);
+ 		printf("num_relocs: %lu\n", elf->num_relocs);
++		printf("num_relocs_hashed: %lu\n", nr_hashed);
+ 		printf("reloc_bits: %d\n", elf->reloc_bits);
+ 	}
+ 
+@@ -1634,7 +1652,7 @@ static int elf_alloc_reloc(struct elf *elf, struct section *rsec)
+ 
+ 	memcpy(new_relocs, old_relocs, nr_relocs_old * sizeof(struct reloc));
+ 
+-	for (int i = 0; i < nr_relocs_old; i++) {
++	for (int i = 0; i < nr_relocs_old && !is_dwarf_section(rsec->base); i++) {
+ 		struct reloc *old = &old_relocs[i];
+ 		struct reloc *new = &new_relocs[i];
+ 		u32 key = reloc_hash(old);
 
 -- 
 2.56.0
