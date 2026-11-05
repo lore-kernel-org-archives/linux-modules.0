@@ -1,48 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793902942;
-	b=isWSTViiAyWCfkUnV9tw4cmNms9UPlObGCzA8z5MsmQQvE4nl45Vm/qxK4v7CaFU5snN
-	 iVuPtqI4QdxsLqldG6h9IGDZBZ55Ux7ZUT9n0jPJ2OIXyq/rcRHIdNEDoJte6FiaY/ruN
-	 9PentIX/oyyHSNg2rF1uXueGFcTvMW0Rn+6NNU+2iTEof71T8xXY8eZmDUJoRZsarpVBZ
-	 xFemAief5sbBOuJArU/WPkgE+1lH9N+Mvl4lrR9a3qt/Rmxwa512eO3rQ4K3ayWzx3oOS
-	 B0nJixV45kaiXsNDCdBInelyfrh6tw8nz/atcqZ71SVMF6frYg1Ff/hpU/7OUM4Tagw==
+	t=1793902946;
+	b=MUZt0d4B9Tp0wz7KK9OWQuCM/2+YfLQEC+Gontts5iVzfbw4OVKo1SmKlArfTHSZi/0L
+	 E1rYdK5umfexmQD9vt3ytdVJcGALPwt5PmF1zXJsyrLqYB/fFyhDAO2CvSdcZpxMVLHTe
+	 fir6MeBoJEv0jG3tbjpOOi6Nn/lgTUuZXfUnJi3Gewd8ODQ+DxvRyugq9uryhl510fNhZ
+	 ssWP7INOIBQNV/2Ye+bPEQtEq5AAHK4VbYIiAHex9RKXA48kEYa1Hb5vXYBhZe68hQqIO
+	 UFVZq+F/7RBLGLaAgJsRrVxsKLwACe+/GFJHWZlh6bJ8/GQrXQyoN7OE3rCfmgoFNqQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793902942;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793902946;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=+9sUIDbNvshIjQqNuwUL4QpX4Yb1SSwe6eGpxFYy7JY=;
-	b=xo724XFCQmy7T2W/CDwvRGfKwn2pwrpi2xQo2YsxuUr4YWNZf9lrgzEZ9kpkyhrYmCdH
-	 ThrypR4D5HTNbqZ79lZHeswghQ9MI+5E0msr+nT38VgKTNidhuEJGUd4r8A7crmsyHJ+a
-	 Q85LI5tTlDW5/fmmRigJ76UzIaToZ6gxpgMWabCVz3A1pUsUWk1JUHxvTgbkiZDvZs6O2
-	 uhmhmdertU6eZQ80lDG1OYhD+4DrVvRpFXzPEmxthkqpqk8HdjMPnSb+zQc5B6nMNPCS6
-	 V801BFmzuWrZGM891pZEG5cYImUVhlF3HW2+f1bg3u1RhI6k2Kn2UQ6LaxO1dGmJaAA==
+	bh=OWrwl37cFLJjEpx7NnVtWwuGNit4+A7xxvc5vOIZJ/4=;
+	b=x+qapPStVgFG9ISmGlmeuSwlOmNCrxc0vXjyMmKO41rb/jPsdlcQ7w57vjUWF9GKwYYS
+	 ZbLLRj87ItxpoiFv8yZRxzaTc3wbVWtgigN6Zm54nIYAvS0IsSuQ6icMPku5ha9oKpPOH
+	 tKgOR105xLRKUifSFu5ILlL47Z0/ZPNRi/4megCU2Yxe6xRypAxgaLjko9Ivwsu2sH80D
+	 iQPIxPgurgqsYhHhvTBsyrPPi0G/E+bXZ/mDUFXEKC9ISA/Bi5qFboT6RCTvzqJg5EVPE
+	 JQHK9GxM2lVefzR8jFKJubAGFsr7aiQeurNDMzAufHjEsWjCBKOX5JC353IJirhRCWQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=No8bXYa8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cUuOzXMz;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB994606A32C;
-	Thu,  5 Nov 2026 18:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20F7606A326;
+	Thu,  5 Nov 2026 18:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=No8bXYa8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2916C1F000C1;
-	Thu,  5 Nov 2026 18:22:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cUuOzXMz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01DC41F0093A;
+	Thu,  5 Nov 2026 18:22:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793902941;
-	bh=+9sUIDbNvshIjQqNuwUL4QpX4Yb1SSwe6eGpxFYy7JY=;
+	s=k20260515; t=1793902945;
+	bh=OWrwl37cFLJjEpx7NnVtWwuGNit4+A7xxvc5vOIZJ/4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=No8bXYa8bSpobc76HbXi25IE8BNIKh5igOIIhXUUxQlCHHgcWaje1QvQ+oTivdzcq
-	 1bDi+LXpxsqV2zR9kjWlCYMFC7duLQLbBfumN6HMyOGglT7CpVvnSYIQv2JWrTveBt
-	 OhAmcUsXXnO37VTTxAaiPlUCVXUxFhxLsdvM1SMvtXPDQFUwAyxOm9KbQyVMu8mOht
-	 vlvy42B+mPYCc778hdpMK0Qp+LgYk4uGaJgcVDBdXp+yataOpcZ1GW+7m4T/TbWwW1
-	 xPjyddQofCHJEAk42uk2hzt7SUkuscGKGHR7u739uoy+3U6aFGCOuYTHbMKGEkmb2C
-	 mKFKhUqn2a4Jw==
-Message-ID: <sashiko-outbox-199744@kernel.org>
+	b=cUuOzXMzuHRXA284XH0ntuGqd139PcG77eQ6VN66a2WqcloXRcseupIarLDuLUUX6
+	 A83QR0tuYS9dKEUdSLircRMiryflYEWib4fc70oiY8hrynd9ulJ9oHP208NTsbH8dn
+	 ZhsX+ir8P/EKHqmNk9b79LGBPe9qVrFNrrslOjOAH1wEXg9wAyf5B0YgehlPzFpZYj
+	 wZDaro3mzXUTh7fj8zeNfSmNhlDhkfFly017z+iFizqNPoK/Zi6zbxv5M7/zxyHWnS
+	 oMLFqZvMYwtG0rozhLK/o54q0IiqP19kBatpZYy80LXvg1trfPVN89vxX7bW3nVf1e
+	 81ufpHZtmCIMA==
+Message-ID: <sashiko-outbox-199750@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 02/11] kbuild: implement and use depcheck to check
- dependency timestamps
+Subject: Re: [PATCH v5 08/11] objtool: size the instruction hash to the text
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>, "Linus
  Torvalds" <torvalds@linux-foundation.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
@@ -60,12 +59,12 @@ To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>, "Linus
  Duberstein" <tamird@kernel.org>, "Alexandre Courbot" <acourbot@nvidia.com>,
  =?utf-8?b?T251ciDDlnprYW4=?= <work@onurozkan.dev>
 Cc: linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org
-In-Reply-To: <20261104-build-speedup-v5-2-0f6018be8dae@kernel.org>
+In-Reply-To: <20261104-build-speedup-v5-8-0f6018be8dae@kernel.org>
 References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
- <20261104-build-speedup-v5-2-0f6018be8dae@kernel.org>
+ <20261104-build-speedup-v5-8-0f6018be8dae@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 18:22:19 +0000
+Date: Thu, 05 Nov 2026 18:22:23 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -75,210 +74,91 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] kbuild: missing fixdep prerequisite for depcheck in scripts/basi=
-c/Makefile
-- [Medium] kbuild: concurrent Makefile.build runs race on .depcheck.mk.tmp =
-and .depcheck.mk
-- [Low] kbuild: install-extmod-build leaves .depcheck.mk files in packaged =
-trees
+- [Medium] objtool: unguarded NULL file->insn_hash dereference in find_insn=
+()
 --
 
-commit f2af2ee8757f13fb26fb18de8c51c7a2f612cd46
+commit 213d34d383fb04e85ef5c721bf77b5b42b0870d5
 Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-kbuild: implement and use depcheck to check dependency timestamps
+objtool: size the instruction hash to the text
 
-This commit introduces scripts/basic/depcheck to check header dependency
-timestamps in C and emit a condensed .depcheck.mk fragment containing only
-saved command lines for up-to-date targets. scripts/Makefile.build runs
-depcheck before including .cmd files, falling back to the original .cmd
-files if depcheck fails.
+This commit replaces the fixed-size instruction hash table in
+struct objtool_file with a dynamically allocated hash table sized
+according to the total text section size in decode_instructions().
 
-> diff --git a/Makefile b/Makefile
-> index f895752d4b05f..d92a5d78b4659 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -2252,6 +2252,7 @@ clean: $(clean-dirs)
->  	$(call cmd,rmfiles)
->  	@find . $(RCS_FIND_IGNORE) \
->  		\( -name '*.[aios]' -o -name '*.rsi' -o -name '*.ko' -o -name '.*.cmd'=
- \
-> +		-o -name '.depcheck.mk' -o -name '.depcheck.mk.tmp' \
->  		-o -name '*.ko.*' -o -name '*.o.thinlto.bc' \
->  		-o -name '*.dtb' -o -name '*.dtbo' \
->  		-o -name '*.dtb.S' -o -name '*.dtbo.S' \
-
-[Severity: Low]
-While the top-level clean target removes .depcheck.mk and .depcheck.mk.tmp
-alongside .*.cmd, scripts/package/install-extmod-build only deletes .*.cmd
-and *.o after copying and rebuilding scripts/ for external module packaging:
-
-scripts/package/install-extmod-build:
-	find "${destdir}" \( -name '.*.cmd' -o -name '*.o' \) -delete
-
-When modules_prepare or the cross-compilation step in install-extmod-build
-invokes $(MAKE) $(build)=3Dscripts, depcheck generates .depcheck.mk files
-under scripts/. Should scripts/package/install-extmod-build also remove
-.depcheck.mk and .depcheck.mk.tmp so those build artifacts are not left in
-packaged kernel-devel and linux-headers trees?
-
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index bbe9555c47a8b..7b652f169a8fd 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -613,7 +613,20 @@ $(obj)/: $(if $(KBUILD_BUILTIN), $(targets-for-built=
-in)) \
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 931c5c412f15d..97250aa361009 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -38,12 +38,22 @@ struct disas_context *objtool_disas_ctx;
 > =20
->  existing-targets :=3D $(wildcard $(sort $(targets)))
+>  size_t sym_name_max_len;
 > =20
-> --include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
-> +cmd-files :=3D $(wildcard $(foreach f,$(existing-targets),$(dir $(f)).$(=
-notdir $(f)).cmd))
-> +
-> +# depcheck checks timestamps first and outputs only saved command lines =
-of
-> +# up-to-date targets, falling back to .cmd files if it fails. A directory
-> +# whose targets all lie elsewhere may not exist in the output tree.
-> +depcheck :=3D $(wildcard $(objtree)/scripts/basic/depcheck)
-> +
-> +ifneq ($(and $(depcheck),$(cmd-files),$(wildcard $(obj))),)
-> +ifeq ($(shell $(depcheck) $(obj)/.depcheck.mk $(cmd-files) && echo ok),o=
-k)
-> +cmd-files :=3D $(obj)/.depcheck.mk
-> +endif
-> +endif
-> +
-> +-include $(cmd-files)
-
-[ ... ]
-
-> diff --git a/scripts/basic/Makefile b/scripts/basic/Makefile
-> index fb8e2c38fbc78..ff98780e474d9 100644
-> --- a/scripts/basic/Makefile
-> +++ b/scripts/basic/Makefile
-> @@ -2,7 +2,7 @@
->  #
->  # fixdep: used to generate dependency information during build process
-> =20
-> -hostprogs-always-y	+=3D fixdep
-> +hostprogs-always-y	+=3D fixdep depcheck
-
-[Severity: Medium]
-Can a parallel build from a clean tree fail when building depcheck before
-fixdep is ready?
-
-Both fixdep and depcheck are single-file host programs built by the
-host-csingle rule in scripts/Makefile.host:
-
-$(host-csingle): $(obj)/%: $(obj)/%.c FORCE
-	$(call if_changed_dep,host-csingle)
-
-which expands cmd_and_fixdep in scripts/Kbuild.include:
-
-cmd_and_fixdep =3D                                                         =
-    \
-	$(cmd);                                                              \
-	$(objtree)/scripts/basic/fixdep $(depfile) $@ '$(make-cmd)' > $(dot-target=
-).cmd;\
-	rm -f $(depfile)
-
-Without an explicit prerequisite ordering $(obj)/depcheck after
-$(obj)/fixdep, make -jN can compile fixdep and depcheck concurrently during
-scripts_basic. If depcheck finishes compiling before fixdep has finished
-linking, cmd_and_fixdep will attempt to execute scripts/basic/fixdep while
-it does not yet exist or is still open for writing.
-
-Should scripts/basic/Makefile declare that $(obj)/depcheck depends on
-$(obj)/fixdep?
-
-> diff --git a/scripts/basic/depcheck.c b/scripts/basic/depcheck.c
-> new file mode 100644
-> index 0000000000000..119075353f3bc
-> --- /dev/null
-> +++ b/scripts/basic/depcheck.c
-
-[ ... ]
-
-> +int main(int argc, char **argv)
+> +static struct hlist_head *insn_hash_head(struct objtool_file *file,
+> +					 struct section *sec, unsigned long offset)
 > +{
-> +	char tmp_path[PATH_MAX];
-> +	FILE *out;
-> +	int i;
+> +	/* Determine instruction hash based on section index and offset. */
+> +	const u32 sec_hash =3D sec_offset_hash(sec, offset);
+> +	const u32 hash =3D hash_min(sec_hash, file->insn_hash_bits);
 > +
-> +	if (argc < 2) {
-> +		fprintf(stderr, "usage: %s <output> <.cmd files...>\n", argv[0]);
-> +		return 1;
-> +	}
-> +
-> +	if (snprintf(tmp_path, sizeof(tmp_path), "%s.tmp", argv[1]) >=3D
-> +	    (int)sizeof(tmp_path)) {
-> +		fprintf(stderr, "%s: path too long\n", argv[1]);
-> +		return 1;
-> +	}
-> +
-> +	out =3D fopen(tmp_path, "w");
-> +	if (!out) {
-> +		perror(tmp_path);
-> +		return 1;
-> +	}
-> +
-> +	for (i =3D 2; i < argc; i++) {
-> +		char target[PATH_MAX];
-> +
-> +		if (target_of(argv[i], target, sizeof(target)))
-> +			add_target(target);
-> +	}
-> +
-> +	for (i =3D 2; i < argc; i++)
-> +		process(out, argv[i]);
-> +
-> +	/* Write errors are latched in the stream, so one check at the end cove=
-rs them all. */
-> +	if (ferror(out) || fclose(out) || rename(tmp_path, argv[1])) {
-> +		perror(argv[1]);
-> +		unlink(tmp_path);
-> +		return 1;
-> +	}
-> +
-> +	return 0;
+> +	return &file->insn_hash[hash];
 > +}
+> +
+>  struct instruction *find_insn(struct objtool_file *file,
+>  			      struct section *sec, unsigned long offset)
+>  {
+>  	struct instruction *insn;
+> =20
+> -	hash_for_each_possible(file->insn_hash, insn, hash, sec_offset_hash(sec=
+, offset)) {
+> +	hlist_for_each_entry(insn, insn_hash_head(file, sec, offset), hash) {
+>  		if (insn->sec =3D=3D sec && insn->offset =3D=3D offset)
+>  			return insn;
+>  	}
 
 [Severity: Medium]
-What happens if two concurrent sub-makes enter the same directory during a
-parallel build?
+As reported by Sashiko on v4 [1], can find_insn() dereference a NULL
+file->insn_hash pointer if decode_file() fails before reaching
+decode_instructions()?
 
-For example, when CONFIG_HEADERS_INSTALL=3Dy (such as in allmodconfig), the
-prepare target depends on both prepare0 -> archprepare -> scripts and
-headers -> scripts_unifdef without an ordering dependency between them:
+With this change, file->insn_hash is NULL and file->insn_hash_bits is 0
+until decode_instructions() calls alloc_insn_hash(). However, in
+decode_file(), init_pv_ops() runs before decode_instructions():
 
-Makefile:
-scripts: scripts_basic scripts_dtc
-	$(Q)$(MAKE) $(build)=3D$(@)
-...
-scripts_unifdef: scripts_basic
-	$(Q)$(MAKE) $(build)=3Dscripts scripts/unifdef
+tools/objtool/check.c:decode_file() {
+	if (init_pv_ops(file))
+		return -1;
 
-Similarly, on microblaze with CONFIG_OF_EARLY_FLATTREE=3Dy, the default bui=
-ld
-enters arch/microblaze/boot/dts via both vmlinux (with need-builtin=3D1) and
-dtbs (with need-dtbslist=3D1) in parallel.
+	/*
+	 * Must be before add_{jump_call}_destination.
+	 */
+	if (classify_symbols(file))
+		return -1;
 
-When both sub-makes parse scripts/Makefile.build for the same $(obj)
-directory concurrently, two depcheck processes open the same
-$(obj)/.depcheck.mk.tmp path with fopen(tmp_path, "w"). One process can
-truncate and overwrite the shared .depcheck.mk.tmp file while the other is
-writing to it, and the first process to finish will rename the truncated or
-interleaved file to $(obj)/.depcheck.mk and return 0 (causing make to
-include a corrupted makefile fragment), while the second process fails in
-rename() with ENOENT and prints an error via perror(argv[1]). In addition,
-when the two sub-makes have different $(targets) sets, one sub-make can
-overwrite $(obj)/.depcheck.mk before the other sub-make includes it.
+	if (decode_instructions(file))
+		return -1;
+}
 
-Could this race corrupt the generated makefile fragment during parallel
-incremental or no-op builds?
+If init_pv_ops() -> add_pv_ops() returns -1 (for instance, when
+find_symbol_by_offset() returns NULL for a pv_ops table relocation),
+check() and cmd_klp_checksum() jump to out: and unconditionally call
+free_insns(file) (as well as disas_funcs() when opts.disas is set).
+
+free_insns() then walks all sections via for_each_insn() ->
+sec_for_each_insn() -> find_insn(), calling insn_hash_head() with
+file->insn_hash =3D=3D NULL and file->insn_hash_bits =3D=3D 0, which perfor=
+ms a
+32-bit shift by 32 in hash_32() and dereferences NULL in find_insn().
+
+Should find_insn() (or free_insns()) check if (!file->insn_hash) before
+looking up instructions?
+
+[1] https://lore.kernel.org/r/20260923-build-speedup-v4-18-73128809a4a4@ker=
+nel.org
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-build-spee=
-dup-v5-0-0f6018be8dae@kernel.org?part=3D2
+dup-v5-0-0f6018be8dae@kernel.org?part=3D8
