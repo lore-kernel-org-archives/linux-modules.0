@@ -1,68 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793908698;
-	b=C/S2IS8f93iGDzJpsuOwOOF3JrcNjY3s+ktiigixRUKHV7XT3JDum2WuBjyZ2F2NnD8B
-	 U4QuEYtwixTImktkmDp5+0k6y6VB8P729SMAAnLrAV5q4/TEHoSL9SVhlpc57Sa0TwMC5
-	 1JVCvRINRkBCF16eLbXoxaFfOunfl6lWdP7q1DiIpmeF/cUA4EOTHsrCfo+V4wWebegL8
-	 i8Vlaem6/7/MaRrXMIDRJqMBO1L4+2qcm46DZhgpyb5xL+su6KjcB7oY5NBzeW6vFqKBL
-	 ssclA0HhQu2B8+d2HLuedU9lDth01Y99fC0Hv9u7MW2sbs9JFOlXVGrG8w27kCAXxkQ==
+	t=1793909914;
+	b=UQp7snAaY+2iMMbYqDRR+RHefg9BcLdl833pISlo7mvMH1d7WHkijJj6mO3Gw0/24JI/
+	 K9HeWYjaTpscRQ9QYU1FS5lJif8yZSwzTdIHYY4VdrRyKef4Hy3Ss23+UKYbv2OUXoCHr
+	 uQe8f2em/DPrVsJeFGIYmnh6iQ6g83j3JsQGT/B27YThq1VoYZWqGIA7Ss5fJVYhIgd+m
+	 x9kZxIJqLxVg/VO3AHHZUf22/ng4fbXvhF1HGwdKlMy7xPeDyVQLe0gKka5G3az6bOEYK
+	 NP/eBXwO3mmntC2l2xoq+KDGvsk0bs7pYYgIcah6wA6k7oymjhNIwsDXYG1Rq4zCXgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793908698;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Di4Zv2+bgkX+HhZmCpdKbhvfGlZoAaFGwpTTtNZDf1w=;
-	b=i5tzjQcgsuqMsSCQTJHoFpbqLoNVVO74kdGqgDtWP8l4sHNpGkcNVRKtU44uz9qgdsks
-	 vWah2q0RtiHy+cPTIAkkABT8FxSuPgdZNzz1UGVBa4ZxqXb/VbzkIr8lV3T+FWpf59gis
-	 uUSlNz8UbVBB2j4xjj81OaLcHiI914spWBwDRbhrVLZqAEYhRUxQN5KmxLBrPdYxb66u3
-	 D4s5Kr0WdtJ3N7kNo7uY7/J2tu617I3Qh/N2O5ott1xCJnCSOBmf1cntMcZLEyFJ6t+y4
-	 hTOQrWEbdqG1GusB6tHlo/hO/GuSuFV2WgeqFyZ4DqQr0tYW5AXdcFtFpkibWVC05Pg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793909914;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=phgScYuIuJgj5n9+MHknZ2SxB6ErMi0YKuc3fUy/UDk=;
+	b=ITtjQ6PJH90Up6m8KZsGe5JXo8FclAR4r194c8Z1xteWq91/NXI8hZBgG+brSQ4oB5pZ
+	 26NXeFwDD9ssOg2KT1G6Djb566mg5R+NO6j6ybTyMjh6+fIyDx2rygMLCwrAvZ/DrDgTE
+	 9gY1Z4N55jAn+YY0XisPUF1JgNX7V+7IcB7Tl3pZoIrQ8li1sWDJBi5cyoVqP0M2dcJZw
+	 P7iF4wmh2u/KSwIjdQK1VMbeOm49xCJmUokWfWl/uYihJ+o1oGqpibmLCz+VtsY9Yxs8w
+	 0m0T6dL6Fk9omF/F2XPCPW6FZG0XI0FxPmf4zy1UABpt8jo5EOA9oGK1P5B4yP8GveQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PS7EuTM4;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MLRaOpga;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6997606A6D9;
-	Thu,  5 Nov 2026 19:58:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F64606A33C;
+	Thu,  5 Nov 2026 20:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PS7EuTM4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E4B01F008A2;
-	Thu,  5 Nov 2026 19:58:15 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MLRaOpga
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB9A1F008A4;
+	Thu,  5 Nov 2026 20:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793908697;
-	bh=Di4Zv2+bgkX+HhZmCpdKbhvfGlZoAaFGwpTTtNZDf1w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PS7EuTM4dqldTrwdAR0onQbkCjogqgjpUy8oBN5Oi/jsHPd1HPHlgSGbxScX7TULM
-	 hRB6vR+pRSsaVGMqkA0T2yAO/9EP8dfTHiI3smO+XSdOQTs0WaU0CSspRWwNIygWmH
-	 xxyaJ/jl5nVv4oGCeueAnyoM+i/SNOz1yePgzX6SBUyU7ID4QMKKDqnCau9Fzxv22l
-	 9yUUQnAUlAQfxJYnkuFIsPSnTWbDHjOSLzPYjAQnKTCY8vnyzOnX2r4MnJUC80Xsxq
-	 9G6Oxyszcx5C+PQB+DFxzoyTPD+CIGBL43AvNqSOHfSpIHjw0LBt6ISDjfycxH6Ryo
-	 K9q3hUiMFf+cA==
-Message-ID: <sashiko-outbox-200057@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND v2 23/30] dyndbg: let procfs copy in writes to
- /proc/dynamic_debug/control
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Brauner" <brauner@kernel.org>
-Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
- Bacik" <josef@toxicpanda.com>, "Chris Mason" <mason@kernel.org>, "Jeff
- Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>, "Eric Dumazet" <edumazet@kernel.org>, "Thomas
- Gleixner" <tglx@kernel.org>, "Al Viro" <viro@zeniv.linux.org.uk>, "Jonathan
- Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>, "Greg
- Kroah-Hartman" <gregkh@suse.de>, "Joel Granados" <joel.granados@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
- Iwai" <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, "Chuck
- Lever" <cel@kernel.org>, tytso@mit.edu, dmitry.torokhov@gmail.com, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Anna Schumaker" <anna@kernel.org>, yukuai@fygo.io, "Heiko
- Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
- Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261104-work-procfs-fs-v2-23-319e0f9a8aae@kernel.org>
-References: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
- <20261104-work-procfs-fs-v2-23-319e0f9a8aae@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 19:58:14 +0000
+	s=k20260515; t=1793909913;
+	bh=phgScYuIuJgj5n9+MHknZ2SxB6ErMi0YKuc3fUy/UDk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=MLRaOpgaZqO3RNQv6fizNW54BkuXpjaavNoZ5A7+L+g0F/8yvL9UfNX8N9wXhh756
+	 5hib3YJf7xpxsAEYlqgM7rvPbShw+0R1jrD3jsjfs3WTSDpWIqcs/h/Z/xZcUCUpZw
+	 dPfFaOSYEUYzPfVtbRHMtuOOCCw4OLvFze4IXNx4XHCSIKgqZ6q0JTg0i83Oj9eVoz
+	 A5CEjCFQfw7s/gHfb2kvo90aOReWYIIhmcYYa/PipBcWDFDIakIJ7xgpUfQWP6IwJK
+	 Wnf040jZQ4GLov6T2eqWXBk5rlHdDb+RVPZL3+btrg2T4RjPKroFvt3vROILI09Dwq
+	 GJSE3GIEWQFmA==
+From: Sasha Levin <sashal@kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-kbuild@vger.kernel.org,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH v10 1/4] kallsyms: embed source file:line info in kernel stack traces
+Date: Thu,  5 Nov 2026 15:18:32 -0500
+Message-ID: <20261105201832.3238538-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <sashiko-outbox-195130@kernel.org>
+References: <20261102111455.919102-1-sashal@kernel.org> <20261102111455.919102-2-sashal@kernel.org> <sashiko-outbox-195130@kernel.org>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -71,71 +57,32 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] dyndbg: split declaration and assignment of __free() in ddebug_proc=
-_write()
+On Tue, Nov 03, 2026 at 11:15:24AM +0000, sashiko-bot@kernel.org wrote:
+[...]
+>In elfutils, libdw.pc lists libelf under Requires.private rather than
+>Requires.
+
+It's under Requires, so pkg-config prints "-ldw -lelf".
+
+[...]
+>Can unfiltered ELF symbols in collect_symbol_starts() in
+>scripts/gen_lineinfo.c corrupt the symbol extents in text_starts[]?
+
+No. Filtering them changes nothing on x86, arm64, riscv or powerpc. On
+arm it drops three $a symbols that start line-program sequences with no
+named symbol, and those addresses lose their annotation.
+
+[...]
+>Additionally, why does collect_symbol_starts() exclude STT_NOTYPE and
+>unsized symbols from sym_starts[]?
+
+Without a size there is no way to check that a covering row belongs to
+the symbol. Untyped labels that start code are almost all in assembly,
+which gets a row per instruction anyway.
+
 --
-
-commit 1bfaabab91de2989a4d10ae03eef349ab77809d6
-Author: Christian Brauner <brauner@kernel.org>
-
-dyndbg: let procfs copy in writes to /proc/dynamic_debug/control
-
-This commit factors the query execution logic out of ddebug_proc_write() in=
-to
-ddebug_proc_write_buf() and switches proc_fops to use .proc_write_buf and
-.proc_write_size so procfs copies in the user buffer before pinning the ent=
-ry.
-
-> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> index 64a2112908725..1d6012c9eb41f 100644
-> --- a/lib/dynamic_debug.c
-> +++ b/lib/dynamic_debug.c
-> @@ -1002,11 +1002,28 @@ __setup("dyndbg=3D", dyndbg_setup);
-
-[ ... ]
-
->  static ssize_t ddebug_proc_write(struct file *file, const char __user *u=
-buf,
->  				  size_t len, loff_t *offp)
->  {
-> -	char *tmpbuf;
-> -	int ret;
-> +	char *tmpbuf __free(kfree) =3D NULL;
-> =20
->  	if (len =3D=3D 0)
->  		return 0;
-> @@ -1017,15 +1034,7 @@ static ssize_t ddebug_proc_write(struct file *file=
-, const char __user *ubuf,
->  	tmpbuf =3D memdup_user_nul(ubuf, len);
->  	if (IS_ERR(tmpbuf))
->  		return PTR_ERR(tmpbuf);
-> -	v2pr_info("read %zu bytes from userspace\n", len);
-> -
-> -	ret =3D ddebug_exec_queries(tmpbuf, NULL);
-> -	kfree(tmpbuf);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	*offp +=3D len;
-> -	return len;
-> +	return ddebug_proc_write_buf(file, tmpbuf, len, offp);
->  }
-
-[Severity: Low]
-In ddebug_proc_write(), tmpbuf is declared with __free(kfree) =3D NULL at t=
-he
-top of the function before the early length checks and then assigned later =
-via
-memdup_user_nul().
-
-Per the cleanup.h guidelines, could tmpbuf be defined and initialized in a
-single statement at the allocation site instead:
-
-	char *tmpbuf __free(kfree) =3D memdup_user_nul(ubuf, len);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
-s-fs-v2-0-319e0f9a8aae@kernel.org?part=3D23
+Thanks,
+Sasha
