@@ -1,71 +1,68 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793902944;
-	b=n/1ScwM9YUxBj50c8U0P2n2EhUp9+O8WOKcUkW8ezp0Tmv5CrzVtJly+tAqGn5pZUMkn
-	 wLeqr3QzyHtKjM/GvWSm8SearklhabgG8DLG47ncyCzBz4TIxA7rljIL2x/D+/KX9xqqO
-	 DZY0dGxpn1W0r2GFG1VqLHh9YGv3wuZw4xrw3tdfEBmm8hxQdC9jKTM/WEVFySQKMh2zt
-	 brR28T5lR/N6SvU/AVDkeCAEl8Qy6id4+12MKUAAQQkfS6ME0hdctkWBQgjCXxltpdTsx
-	 AxnLW+h4BxYl/NuVMNzfql783v7kMXIYhi1G0vYNDFSAGpl0naHPinrFHQNj4Vjo8SA==
+	t=1793906930;
+	b=dM3Ob315+huGezSffZQusx2JRpZ0VB6D68IQ9usQaoZNTR/pgovcR1R3rxFO0b/3At8n
+	 FFoUIlX12qLHQjOvs+n7fg5qRpIBhK4xtPrCnTxhu6FBvy27vtriDKCPc+/dsu6k5acVr
+	 yPAYA1YlLJg9uRuReDTdFohJekuqLnT9b/m6LK7DRUayZAzoVqwfwo8bhbYq1Upec4BbV
+	 ptwRMdjQiInB8MWQ3oCoIKvYk92UA3hQukMeI3XcyhuQUG4IBuCJRDlljkDgnVqtrpO77
+	 ijtu+m7bZXB8zL1mFNv4Eqf4J3x9ng7Zq1m67HA6rNpNFcBriNa3Y4qs/fuVUsr+xlw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793902944;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793906930;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=A0VI0BTJB4UVZNUMZsyN7d1nXZKDspAXHLx+O5KEapU=;
-	b=wtBmH+xmXELZMvMOGcDxYVPcBbFVpw253/OPOWT6PbiL5WtTG7b8oPjl9v/z3DWs0D7x
-	 Ga++PRUijTbms0JqkEZSISAL6zy8PXdtwPD1P6oRGAKui3+gifheVijRWrYlPWpXS2kQM
-	 8SrJvy4MS85IKqP1wYgo47TZ/aqxvPW/mAS3UUY+AQu7URKNMg5uvP6zugaUFeAX/5vcK
-	 2W0AOV5W5FAcD/Ebw/P59OdGmj4BmtuK8UD1T1MJQFnJU5mi0rOykndaVZBll8Aj5d/h7
-	 xY7PAjAO/yaAfVXxbtQWlNKi/O3EN9ULb5AhIHBv2wDPBqhIycUb6vHl1D+HVN8xy/A==
+	bh=t5ltLRfeO7A4ze3tr9EcZS3s3I93T55/6iRGXRatBcI=;
+	b=PtXNdly4ke+9IphNrzx4KpktNqAQlX+JMHpCeRgDUPF5C5bC7zpa/9E6L8Dv6Nfm0+y8
+	 tSx5UCZlwvbaCK5qFjhVCCwByClP3Qh3BFrXUrpCCCtpFX7MTTUSxhPzf0s6iG5JGlyTP
+	 qxhzFXH278YH4PU+WDAtvlQ52AxARp5ZgVIASxIWQR+bm5ksAHSchGZNa/P1/QJmePcx1
+	 9gPmxBgXY6kGwo2BSDAhaHqgJ8nYV84j5u1Uc5qiZE2z9001kLKEm6MrcfAbMTSNc6nwT
+	 EXEhMeInHHihMX85IhycQpFWzWtCm3QJn/7TIGN2JFX8g8c8K+D5vCgv2O1RxjIJOeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YNKEtQKP;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N8czzOm3;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB24606A337;
-	Thu,  5 Nov 2026 18:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E84E606A33E;
+	Thu,  5 Nov 2026 19:28:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YNKEtQKP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F801F00919;
-	Thu,  5 Nov 2026 18:22:22 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N8czzOm3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F791F00919;
+	Thu,  5 Nov 2026 19:28:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793902943;
-	bh=A0VI0BTJB4UVZNUMZsyN7d1nXZKDspAXHLx+O5KEapU=;
+	s=k20260515; t=1793906929;
+	bh=t5ltLRfeO7A4ze3tr9EcZS3s3I93T55/6iRGXRatBcI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YNKEtQKP2rLGq9IeP4YOJzVu58JkjcYYnL+Q62io9g9WIz3joXkbYQXni1hgFY+H5
-	 llxWbFeE4j2lITTvMs1Yo0Xmm1vfvNwp+Js0H6vi+GRye2LeWNx0vdcsQ9pjxhjf7W
-	 f9RCYGZ+2BLwxcmNNJKYehGUBF1jwFjNJetKfiMkNGFcN0/nBzTY8tb8jhGXVCuurg
-	 kKqZVYf/815rXSrVYPjatxqgO4ndZHK7VhcGXRtYHi6N/xzPInQoL4GONDM+jzxbTG
-	 wY9V9fdhvFoH43sH6wts0zGBv5jxi+0d1kvP9ZrG7wHCUMgt940QUJcH9E5/WILTzw
-	 8sTsSqmfXDmjQ==
-Message-ID: <sashiko-outbox-199749@kernel.org>
+	b=N8czzOm3uss/Nev41wWI2HCgtA/JJ30J5ZI/5HvqHyryejYB/vPH/hBylXVkVGrv6
+	 OielTQZZJsAgzXMX0XY5+ywbGo0mmqbyFRwY2koxZomesAs/TJ9/gk+vP/71ryRjrz
+	 T4vkNotZqPxmBNAvJ14HURgj7iVi6JGCZi7FoFu5UsPJYhvBEXafmV8KZulQt0TLUa
+	 bnhBhsrybsI04J6qaEoTmohzhtxxwuJRWFtL3gmSrI+vhB1bjBR5l4UtjzfZC6c0lO
+	 DCD02LTUhjPPRIlhUjpD4vyOQAhRmKBCDZpyL6ta2I03KLDunRpmQHSavStcgYROjy
+	 RlifknHgKJUtA==
+Message-ID: <sashiko-outbox-199864@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 07/11] objtool: cache relocations, do less work,
- eliminate relocation hash
+Subject: Re: [PATCH RESEND v2 01/51] alloc_tag: don't remove /proc/allocinfo
+ under the codetag module lock
 Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>, "Linus
- Torvalds" <torvalds@linux-foundation.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
- Schier" <nsc@kernel.org>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>, "Geert
- Uytterhoeven" <geert@linux-m68k.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
- Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>, "Josh
- Poimboeuf" <jpoimboe@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?b?QmrDtnJuIFJveSBCYXJvbg==?= <bjorn3_gh@protonmail.com>, "Benno
- Lossin" <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
- Krummrich" <dakr@kernel.org>, "Daniel Almeida" <daniel.almeida@collabora.com>, "Tamir
- Duberstein" <tamird@kernel.org>, "Alexandre Courbot" <acourbot@nvidia.com>,
- =?utf-8?b?T251ciDDlnprYW4=?= <work@onurozkan.dev>
-Cc: linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org
-In-Reply-To: <20261104-build-speedup-v5-7-0f6018be8dae@kernel.org>
-References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
- <20261104-build-speedup-v5-7-0f6018be8dae@kernel.org>
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, "Jann Horn" <jannh@google.com>, "Josef
+ Bacik" <josef@toxicpanda.com>, "Chris Mason" <mason@kernel.org>, "Jeff
+ Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>, "Eric Dumazet" <edumazet@kernel.org>, "Thomas
+ Gleixner" <tglx@kernel.org>, "Al Viro" <viro@zeniv.linux.org.uk>, "Jonathan
+ Corbet" <corbet@lwn.net>, "Christoph Hellwig" <hch@lst.de>, "Greg
+ Kroah-Hartman" <gregkh@suse.de>, "Joel Granados" <joel.granados@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Jan Kara" <jack@suse.cz>, "Jan Kara" <jack@suse.com>, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-serial@vger.kernel.org, "Takashi
+ Iwai" <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, "Chuck
+ Lever" <cel@kernel.org>, tytso@mit.edu, dmitry.torokhov@gmail.com, "Petr
+ Pavlu" <petr.pavlu@suse.com>, "Anna Schumaker" <anna@kernel.org>, yukuai@fygo.io, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
+ Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-1-021c84d852e0@kernel.org>
+References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-1-021c84d852e0@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 18:22:21 +0000
+Date: Thu, 05 Nov 2026 19:28:47 +0000
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -75,244 +72,67 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] objtool: trailing cache windows left at 0 in reloc_cache_resize()
-- [Medium] objtool: repeated cache rebuild and free in elf_create_reloc()
-- [Low] objtool: compare_reloc_order() returns 1 instead of 0 for identical=
- elements
+- [Low] alloc_tag: unused function shutdown_mem_profiling_async() when !CON=
+FIG_MODULES
 --
 
-commit 93b28e01d1c19629db4e088766e42dd4cdfbed56
-Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+commit ec0095b3ecdd2d01651f48bc80cc81d976e06106
+Author: Christian Brauner <brauner@kernel.org>
 
-objtool: cache relocations, do less work, eliminate relocation hash
+alloc_tag: don't remove /proc/allocinfo under the codetag module lock
 
-This commit replaces the global relocation hash table in objtool with a
-per-section relocation cache indexed by 64-byte windows. Out-of-order
-relocation sections are sorted lazily into an index array on lookup.
+This commit defers removing /proc/allocinfo to a work item when
+reserve_module_tags() fails, avoiding a deadlock between remove_proc_entry()
+waiting on active procfs readers and allocinfo_start() waiting on the codet=
+ag
+module lock.
 
-> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-> index 98a110e3e8f57..bd463b5df38cd 100644
-> --- a/tools/objtool/elf.c
-> +++ b/tools/objtool/elf.c
-> @@ -316,35 +316,220 @@ struct symbol *find_global_symbol_by_name(const st=
-ruct elf *elf, const char *nam
+> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+> index 82e2c3448dcf2..7d7ad67049537 100644
+> --- a/mm/alloc_tag.c
+> +++ b/mm/alloc_tag.c
 
 [ ... ]
 
-> +/* qsort() passes no context, so the relocations being sorted live here.=
- */
-> +static struct reloc *sort_relocs;
-> +
-> +static int compare_reloc_order(const void *a, const void *b)
+> @@ -604,6 +605,26 @@ static void shutdown_mem_profiling(bool remove_file)
+>  	mem_profiling_support =3D false;
+>  }
+> =20
+> +static void remove_allocinfo_file(struct work_struct *work)
 > +{
-> +	const unsigned int *idx_a =3D a;
-> +	const unsigned int *idx_b =3D b;
-> +	const unsigned long offset_a =3D reloc_offset(&sort_relocs[*idx_a]);
-> +	const unsigned long offset_b =3D reloc_offset(&sort_relocs[*idx_b]);
+> +	remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
+> +}
+> +static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
 > +
-> +	if (offset_a < offset_b)
-> +		return -1;
-> +	if (offset_a > offset_b)
-> +		return 1;
-> +
-> +	/* Equal offsets stay in file order. */
-> +	if (*idx_a < *idx_b)
-> +		return -1;
-> +	return 1;
+> +/*
+> + * A module's tags are reserved with the codetag module lock held for
+> + * writing, and a reader of /proc/allocinfo takes that lock with the ent=
+ry
+> + * pinned. Removing the entry there would wait for that reader for good,=
+ so
+> + * let a work item do it.
+> + */
+> +static void shutdown_mem_profiling_async(void)
+> +{
+> +	if (!mem_profiling_support)
+> +		return;
+> +	shutdown_mem_profiling(false);
+> +	schedule_work(&remove_allocinfo_work);
 > +}
 
 [Severity: Low]
-As reported by Sashiko on v4 [1], when qsort() compares an element against
-itself (a =3D=3D b, so *idx_a =3D=3D *idx_b), compare_reloc_order() returns=
- 1
-instead of 0.
+All callers of shutdown_mem_profiling_async() are in reserve_module_tags(),
+which is inside the #ifdef CONFIG_MODULES block further down in
+mm/alloc_tag.c.
 
-Does this violate the C standard qsort() comparator contract if the libc
-qsort() implementation compares the pivot element with itself during
-partitioning? Returning (*idx_a > *idx_b) - (*idx_a < *idx_b) or checking
-for *idx_a > *idx_b before returning 0 would ensure a strict total order.
-
-[ ... ]
-
-> +/* Grow the index to cover the base section, new windows start past the =
-end. */
-> +static int reloc_cache_resize(struct section *rsec)
-> +{
-> +	const unsigned int nr_windows =3D reloc_cache_index(sec_size(rsec->base=
-)) + 1;
-> +	unsigned int *cache;
-> +
-> +	if (nr_windows <=3D rsec->nr_cache_windows)
-> +		return 0;
-> +
-> +	cache =3D realloc(rsec->reloc_cache, nr_windows * sizeof(*cache));
-> +	if (!cache) {
-> +		ERROR_GLIBC("realloc");
-> +		return -1;
-> +	}
-> +
-> +	while (rsec->nr_cache_windows < nr_windows)
-> +		cache[rsec->nr_cache_windows++] =3D rsec->nr_indexed;
-> +	rsec->reloc_cache =3D cache;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Index the next relocation. It must follow the previous one in positio=
-n and
-> + * offset, otherwise the index is dropped and the next lookup rebuilds i=
-t.
-> + */
-> +static int reloc_cache_add(struct section *rsec, unsigned int pos)
-> +{
-> +	struct reloc *reloc =3D reloc_at(rsec, pos);
-> +	const unsigned long offset =3D reloc_offset(reloc);
-> +	const unsigned long window =3D reloc_cache_index(offset);
-> +	unsigned long first_window =3D 0;
-> +
-> +	if (pos !=3D rsec->nr_indexed)
-> +		goto unsorted;
-> +
-> +	if (pos) {
-> +		struct reloc *prev =3D reloc_at(rsec, pos - 1);
-> +		const unsigned long prev_offset =3D reloc_offset(prev);
-> +
-> +		if (offset < prev_offset)
-> +			goto unsorted;
-> +		first_window =3D reloc_cache_index(prev_offset) + 1;
-> +	}
-> +
-> +	if (reloc_cache_resize(rsec))
-> +		return -1;
-> +	if (window >=3D rsec->nr_cache_windows)
-> +		goto unsorted;
-> +
-> +	while (first_window <=3D window)
-> +		rsec->reloc_cache[first_window++] =3D pos;
-> +	rsec->nr_indexed =3D pos + 1;
-> +
-> +	return 0;
-> +
-> +unsorted:
-> +	reloc_cache_free(rsec);
-> +	return 0;
-> +}
-
-[ ... ]
-
-> +/* If there are multiple matches, return the first one in the range. */
->  struct reloc *find_reloc_by_dest_range(const struct elf *elf, struct sec=
-tion *sec,
->  				       unsigned long offset, unsigned int len)
->  {
-> -	struct reloc *reloc, *r =3D NULL;
-> -	struct section *rsec;
-> -	unsigned long o;
-> +	struct section *rsec =3D sec->rsec;
-> +	unsigned long cache_idx;
-> +	unsigned int pos;
-> =20
-> -	rsec =3D sec->rsec;
->  	if (!rsec)
->  		return NULL;
-> =20
-> -	for_offset_range(o, offset, offset + len) {
-> -		elf_hash_for_each_possible(elf, reloc, reloc, hash,
-> -					   sec_offset_hash(rsec, o)) {
-> -			if (reloc->sec !=3D rsec)
-> -				continue;
-> +	if (!rsec->sorted && init_reloc_cache(rsec))
-> +		exit(1);
-> =20
-> -			if (reloc_offset(reloc) >=3D offset &&
-> -			    reloc_offset(reloc) < offset + len) {
-> -				if (!r || reloc_offset(reloc) < reloc_offset(r))
-> -					r =3D reloc;
-> -			}
-> -		}
-> -		if (r && (reloc_offset(r) & OFFSET_STRIDE_MASK) =3D=3D o)
-> -			return r;
-> +	cache_idx =3D reloc_cache_index(offset);
-> +	if (cache_idx >=3D rsec->nr_cache_windows)
-> +		return NULL;
-> +
-> +	/* The index gives a lower bound, scan on from there. */
-> +	for (pos =3D rsec->reloc_cache[cache_idx]; pos < rsec->nr_indexed; pos+=
-+) {
-> +		struct reloc *reloc =3D reloc_at(rsec, pos);
-> +
-> +		if (reloc_offset(reloc) >=3D offset)
-> +			return reloc_in_range(reloc, offset, len) ? reloc : NULL;
->  	}
-> =20
-> -	return r;
-> +	return NULL;
->  }
-
-[Severity: Medium]
-As reported by Sashiko on v4 [2], during init_reloc_cache(), the first
-call to reloc_cache_add(rsec, 0) invokes reloc_cache_resize(rsec) while
-rsec->nr_indexed is 0. Because sec_size(rsec->base) is already the full
-size of the base section, reloc_cache_resize() allocates all nr_windows
-entries for the entire section at once and initializes every entry in
-cache[0 .. nr_windows - 1] to 0.
-
-Subsequent calls to reloc_cache_add(rsec, pos) see nr_windows <=3D
-rsec->nr_cache_windows in reloc_cache_resize() and only update
-rsec->reloc_cache[first_window .. window] up to the window of the last
-relocation. Even when a section grows incrementally, reloc_cache_resize()
-runs before rsec->nr_indexed =3D pos + 1 in reloc_cache_add().
-
-Won't any 64-byte window located after the last relocation in a section
-remain set to 0 in rsec->reloc_cache[], causing find_reloc_by_dest_range()
-to linearly scan all rsec->nr_indexed relocations from pos =3D 0 on every
-lookup in the trailing part of the section?
-
-[ ... ]
-
-> @@ -1071,8 +1251,10 @@ struct reloc *elf_init_reloc(struct elf *elf, stru=
-ct section *rsec,
->  	set_reloc_type(elf, reloc, type);
->  	set_reloc_addend(elf, reloc, addend);
-> =20
-> -	if (!is_dwarf_section(rsec->base))
-> -		elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
-> +	if (rsec->reloc_order)
-> +		reloc_cache_free(rsec);
-> +	else if (rsec->sorted && reloc_cache_add(rsec, reloc_idx))
-> +		return NULL;
-
-[Severity: Medium]
-When elf_create_reloc() creates a new relocation, it first calls
-find_reloc_by_dest(), and then calls elf_init_reloc():
-
-elf_create_reloc()
-  find_reloc_by_dest()
-    find_reloc_by_dest_range()
-      if (!rsec->sorted && init_reloc_cache(rsec))
-  elf_init_reloc()
-    if (rsec->reloc_order)
-      reloc_cache_free(rsec);
-
-In tools/objtool/klp-diff.c, clone_reloc() can recursively call
-clone_symbol() on a target symbol in the same output section before
-calling elf_create_reloc() for the caller's relocation, emitting a
-relocation at a lower offset after one at a higher offset.
-
-Once a single out-of-order relocation is added to rsec, won't every
-subsequent elf_create_reloc() call on that section rebuild rsec->reloc_order
-via qsort() and populate rsec->reloc_cache in find_reloc_by_dest(), only for
-elf_init_reloc() to immediately free both via reloc_cache_free(rsec) because
-rsec->reloc_order is non-NULL?
-
-[1] https://lore.kernel.org/r/20260923-build-speedup-v4-17-73128809a4a4@ker=
-nel.org
-[2] https://lore.kernel.org/r/20260923-build-speedup-v4-17-73128809a4a4@ker=
-nel.org
+When building with CONFIG_MEM_ALLOC_PROFILING=3Dy and CONFIG_MODULES=3Dn, w=
+ill
+defining remove_allocinfo_file(), remove_allocinfo_work, and
+shutdown_mem_profiling_async() outside #ifdef CONFIG_MODULES trigger an
+unused-function compiler warning?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-build-spee=
-dup-v5-0-0f6018be8dae@kernel.org?part=3D7
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104-work-procf=
+s-bugfixes-v2-0-021c84d852e0@kernel.org?part=3D1
