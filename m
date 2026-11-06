@@ -1,59 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.227.15.19
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793976757;
-	b=yU0xTkkMRLdT5pn+MR40Go65o+qTWA/XHRpOb3aczbwkIiX5p04Yk4zZncjxh/at8UVm
-	 vyq1ueV6EqcrgM5yEKIVreCjcJR8JGDfqrx+IGZhCWBxzHE0fQ6neQSdTkas9umJ+M39i
-	 tujuZgwdTB4c/YxHZXfXCzjUddeM32UjRwcmFCfUOpWOLwsd9QobUaeDw1c/X+3l/6UTi
-	 yZTrtyiOwSklfX3Vd86SEMZhqvPvO34Ff/wh4W+dvRQ8RwEa9YoLdiwuVTrphygyaDaKC
-	 KDyvmUwiGGuU6/2MFR5XRTtl/LR9c9J3N3O6Jns5wsUcbwz39kixeoGnOkeBlltbGWw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793976757;
-	h=DMARC-Filter:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
-	bh=l9YxZv2Vfzr3V+FeQUpS8Gd+zPlMw1+YkgPLaCOaQTo=;
-	b=JWz/ZdrjIq0MX7j4E4o13YD5jeDSBA3GcxSaqUwYmMcGNRaxcwOHYxmFPiitdWx7RvQP
-	 11sD16VQZQmAsjMyRxichBB59eBfy2I/9JlwDZ84y67kNkGvUx+5GnA9L8tFZ24SLDgnE
-	 RnehlecV7DERR/fnmykQkIL+5SwxFYr+Doh362uuqgcu6ieKIbIGMyUbH4LaxIcn+8hLs
-	 sW6/VpgU0iTEnxKgjhkKGEtifaVreVvEG4Jw2WWJBasDyRXzNTkztGpIWzRDHHLv/mM8K
-	 eOH71p3KzJMcz0rFfyJBq9zuryytndu+M7TdriFyJ2ElWv2C/jlMcHw35+AK0mOyMdA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmx.de;
-	spf=pass smtp.mailfrom=gmx.de;
-	dkim=pass header.d=gmx.de header.i=deller@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=fw92Y32k;
-	arc=none smtp.remote-ip=212.227.15.19
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.95.109
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793981506;
+	b=DyjZw/8ytww9obwXQKpxVa29Bai0Z58UfIKXRwQddU0NWFppXWv3PjweMN26kVxB+/tf
+	 DOLyCuYvvBDFuX39BZL39hVg293d6yRdv+ChE6Q8JgYUsO55b45soYj8KPIAQGKzvXpXp
+	 cmdSauMZVZLTuYvieC62E7UVhYvzNj6HXLSFnxexJuhfBEO3WoHdwJxnJ0NJ5rpJU7m/S
+	 Vk5R3IExCXC0eq16OhjaG4tFMHvunFn1WyDGSZVKLL4cnk9Eg0Kqp2UJ4yol13Bu8gODV
+	 yJ3c+fSt6hK1/5VfS7Lbl5aFMH6OvuC9yx6z7VdKQZkfoyI+nvW7nqllNR/Vg7K775A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793981506;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=/9sCaTbuBAZqxHlwnUmY6HjOC1fugGsa3qeYEnDj5jE=;
+	b=VugRGlXnAMSDSmwFSWILA3TqxyX4KwhAEZKQAxsULJM2IYFayFDeW5Qvl8e5CXf0E9Dw
+	 UR+0EffEomN5ler1SYP3U5QVO/JC2DkgQGwuV2Bu4stgzpX8bbYU70nmDV/EcbBMy0+bt
+	 CQGuWnyszYQV4T7/MRmOuSs9IEry7kRSdqZiRwnsUm0GFWB0M4ZaAWIM+I+R+Ap++MtI5
+	 GJPt2tn7+68Gf7cp4989gs5aEJt+Tu3IDDIVJw2erhiZW3RajiSct/i56cQTBU7QgF/T/
+	 wBu0XY98g+ITrtElgVmpj1wIdDC9OIxZh0M5TibcJ0WELN/Yhl5SYCoKGg3+dblDCVA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=atomlin.com;
+	spf=pass smtp.mailfrom=atomlin.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.95.109
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021109.outbound.protection.outlook.com [52.101.95.109])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0679606A32C;
-	Fri,  6 Nov 2026 14:52:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0679606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmx.de header.i=deller@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=fw92Y32k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1793976740; x=1794581540; i=deller@gmx.de;
-	bh=l9YxZv2Vfzr3V+FeQUpS8Gd+zPlMw1+YkgPLaCOaQTo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=fw92Y32km0pxBcKevSxUCpdTcs+QRMbePffyJ04IxrDf6TMf4Ru+FfSah5OJM4BG
-	 AkXEACGWqEl5+xFdryNHb7BGYS8OLz6qHV9PgmVT3+88wH2AXBxdbCnuOgNdQbDAH
-	 1epuniCFsg93sNlpzpCVXKI5m4BBfuDDvytgb08PUfNJYx9gdEfEn64eAZlcLht6v
-	 d1Vv0bLI2FdfGJo6JLItAgqpyKLmMT+CXGAfkpS51+JVfkWCB7i+O8bTNMl7hgARl
-	 /4zbdg0YNKj/M2sQZTTD4+Ztkgvf/IU8vYtpSd4XS4C/r+gyRvlGo5zV5QDAosenV
-	 H37S4AqcGdP2LlRKGQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfYPi-1wsDPg18AK-00k1dU; Fri, 06
- Nov 2026 15:52:20 +0100
-Message-ID: <3aad6baa-c5e7-49a6-939f-b95b062b6be6@gmx.de>
-Date: Fri, 6 Nov 2026 15:52:12 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F5C606A99F
+	for <linux-modules@vger.kernel.org>; Fri,  6 Nov 2026 16:11:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3F5C606A99F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MnlXT7wJ7gOYKSOa8g1MxqHxMmKSzWAkTMWnhBBNd2RnlydrUIYSNNbODm+1wVcjFA6rf9xlVkcmHjkC2O+K4gWfmocYSKICpMtUeUc6WEJbk5P4NH9hTBmdqjxm2MJA7kqhvBs217mPJ3bX2Y1q/UuP6Bx0niOFZfbSDYSSoDbmF0nS3lghrSm0t+GOfmGDbRws4KQ0QYHICcq3ka8UesppFppPUyiy4cv62eAht/7ttpc4cIP1doWnE/Bo/Zp+TZS5hoHxLJW+eQa7j38lxnAOmta7xqNLQKKATYQXXN7J6AkK5a0sK/8QYOcRFuBYGQvp9FZe7hjrlcdYmrwMyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
+ bh=/9sCaTbuBAZqxHlwnUmY6HjOC1fugGsa3qeYEnDj5jE=;
+ b=ZqCNGRihQflFjgvGBU613ipVnpwmjsRDLoQeUVjUVmcpLAvOYV0668ATBZVrzzkAb4YeXYLL215TYoX5D5t/hTUObeQNXTy4B5yzQpvQ8uffc3XIvfxR9rid71VMrwMDdwYlhlWWYg62ZlSSOIUSi+V1dmLBVNaYVhkGPYkiTYTHIV2KXX4+X2y3u2ThTY3wMy4IdjCQpa8KS4QNS70VSWZtSenvQ648s13/QyDk39OSVxKqLnysOe9rAE2mkizkn+2xgmi0nksIqFa5iFgQDE6Y3BFTNAl/Mrg3O9qBKAU1hgakU2MZngseu40b4vun9EmazfMn62LPszoLQuAd0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:163::8)
+ by LODP123MB499470.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:4df::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.11; Fri, 6 Nov
+ 2026 16:11:41 +0000
+Received: from LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::f71f:a9f:c4de:687a]) by LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::f71f:a9f:c4de:687a%5]) with mapi id 15.21.0592.010; Fri, 6 Nov 2026
+ 16:11:40 +0000
+Date: Fri, 6 Nov 2026 11:11:35 -0500
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: sashiko-reviews@lists.linux.dev, akpm@linux-foundation.org, 
+	mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org, 
+	samitolvanen@google.com
+Cc: linux-modules@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>, 
+	ojeda@kernel.org, gary@garyguo.net
+Subject: Re: [PATCH v13 2/3] module: Extend module_blacklist parameter to
+ built-in modules
+Message-ID: <fg4m7owa7g2dtegwemsmbmsxh5dho2bm4ynrxuyzvfsd43cx46@hpd35p2ulxfu>
+References: <20261104154003.43313-1-atomlin@atomlin.com>
+ <20261104154003.43313-3-atomlin@atomlin.com>
+ <sashiko-outbox-197697@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <sashiko-outbox-197697@kernel.org>
+X-ClientProxiedBy: CH0PR03CA0321.namprd03.prod.outlook.com
+ (2603:10b6:610:118::17) To LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:163::8)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -63,333 +92,203 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 1/4] kallsyms: embed source file:line info in kernel
- stack traces
-To: Sasha Levin <sashal@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Richard Weinberger <richard@nod.at>, Juergen Gross <jgross@suse.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
- Greg KH <gregkh@linuxfoundation.org>, Petr Mladek <pmladek@suse.com>,
- Steven Rostedt <rostedt@goodmis.org>, Kees Cook <kees@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Thorsten Leemhuis <linux@leemhuis.info>, Vlastimil Babka
- <vbabka@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Vivian Wang <wangruikang@iscas.ac.cn>, Zhen Lei
- <thunder.leizhen@huawei.com>, Sami Tolvanen <samitolvanen@google.com>,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20261106132432.248387-1-sashal@kernel.org>
- <20261106132432.248387-2-sashal@kernel.org>
-Content-Language: en-US
-From: Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
-In-Reply-To: <20261106132432.248387-2-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:y7KehjYUehCyt9VUljgwl4RPAr2sMOy4ys0LLqQlvddRqOnXogH
- IFNDAoYMu4HPuMeGnzzYvHk2PgmxqJMU21lWMVVdNhLK0CZDzXKtaOOsEk+RWyvqDYTV5O4
- zoTlBoIBaXCRVxidbE69+iHnpJkut2Nsb8nDuTURlTl1c8o4UNyNSqZSx1Ww1HyYlnM5Qa4
- 20JbQrTU23XE5Uj5rl0mQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:SnUgHtR6Cy8=;w4Wk8EasSrd7nW23W6dm/0ED+d7
- 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
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P123MB4190:EE_|LODP123MB499470:EE_
+X-MS-Office365-Filtering-Correlation-Id: 00a07f0e-888e-4ed9-9912-08df3c20a43f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|23010399003|366016|1800799024|22082099003|18002099003|6133799003|10067099003|4143699003|261102123227099003|261026140227099003|261028144727099003|261026121527099003|261022115727099003|261021130227099003|261021123027099003|261022113327099003|261022105027099003|261022075727099003|261021121427099003|56012099006|261009223027099003;
+X-Microsoft-Antispam-Message-Info:
+	5UtAEhAnBW/MdDlQ9mQiI82R2NgjKj3TomKenfQyoBSXBRaMu/muAoJPZwfZwdsPTSNOiyUOZohqIE0lKm4OZO2AahaF9eKp3DfOQyH2X2IqyKzhUKI9PKePW/1+nGF7BcWllB/m9sJPhohCN95ZtHGb82pPdGjXtAKL7nuwqJVoPSVRY5wzCD30d+3kYEdFpOfnCwQRGVu0i6YvwuFxEFedDkpRs8B2f6jtkXNwzX2puERm/Kk6B20sTsMF5JGjN8k0vynZSwVCfmUa84NDxqijnzyLofRz/tVPkWB9RnbDNT0aNGg3PmTMBwngVpncZfzmAPYPA0z5cRVOAkxFFEgye3mjjg9CoJZ6eXppxmZfUcqXBXprZVyhB0711c9lKr9x3VM8WWXlZ5uZ044319ojUVHHtLP9yFOjycLi7xj18B9Q68YdUJQMQAOyifyjqt/B67raitY/5ApSB9Abgkn7KvDX5nC05KHTx+aBerhHO6z9RY0jM+rnCGywd1bqtXs0baM8HJNMPheeopM4xzwxVPmEE0nvGnfiIExu9tqS94vWNH9YXDn49lAh0TGPX+FvddBt67b/W7ibG276CHfg9EFpWlh/SZKE5wUAShM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(366016)(1800799024)(22082099003)(18002099003)(6133799003)(10067099003)(4143699003)(261102123227099003)(261026140227099003)(261028144727099003)(261026121527099003)(261022115727099003)(261021130227099003)(261021123027099003)(261022113327099003)(261022105027099003)(261022075727099003)(261021121427099003)(56012099006)(261009223027099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZHVzWDVhNXVRdVdiaFNoUXBEdko2U05HM2JUMmFnbVNJNUZxNmVlaDJTOFVV?=
+ =?utf-8?B?NlpTVWNnYkNvZ3h1V3hCMU1lV3Z3YUtyT0Fwd0hxL01GSjh2ak5HQWxmU25z?=
+ =?utf-8?B?TXlCenFIWW1CZFA4RWw5OStoTXJXYnV6ZTFOZDdnVUpNcWZBZy80T3dJVG1k?=
+ =?utf-8?B?YXE3bGZmZjlTM1dqUlBNTG1LNGh6MnJHL3RZdWxsdksrOTdxdlk0ZlVzTndR?=
+ =?utf-8?B?ZHY4Q21oZVZmVHNoK0RGUEpvcHZUSTNlVmF5bDI0RllneUJYZ3MzQnBUT2Fw?=
+ =?utf-8?B?SWl5TmxIN3JHQklGQjFDalIzNmp5MnpVeXpFa2YwWnZtS3NTSnBuUjM0enRv?=
+ =?utf-8?B?SnE5a2YvVmpmOU5DRUs5bEpYc2JmMmFDRlJ0Q2NsL0xsMVRjYTVKRjhrcHVp?=
+ =?utf-8?B?WStweXJaNHlVU0pybTV0WEhkaUE4cVRZSUt0YmpZZDZtQWsyY0I5dWNNaXgz?=
+ =?utf-8?B?a3ZQVDR6WC9BOTN6Y1ZLWmNYcmxzNTROTWFOS2R0MGxMaHlxekF3WWJtQWNt?=
+ =?utf-8?B?N1M2YnliNHFTM0JCckVwblErcllRbkdaQUwrZGZBeHg1RTE2d3NQWHIrU2tZ?=
+ =?utf-8?B?T2MwS1BFOSs1V3lPclJGSk1KRjNPZ3gycGhBMnNLYnNORTJiYkFVeDh0VlE0?=
+ =?utf-8?B?bTFBR2pGSGVYWm1ycHFobXFFbzl5VEZza2d4ZmswUVhqQWhCTmpNcGlHUkE4?=
+ =?utf-8?B?OVU2amtIK3Y4dVRUSVRWR3V6N25WTGxTWHRmb2FIa3J3L0FPTWtvcHBlSENG?=
+ =?utf-8?B?MGRWUlFVTnFqL041UnhMSHhGazg0WGszNWNOOTZYMVkxNkI2cWsvN09FdXVB?=
+ =?utf-8?B?eVVvNlhQUHlSWTZHRTZkVWpRVDUwRVBLRDBBZFcrTmZVUkZ4TEl6TTNrRlJ3?=
+ =?utf-8?B?UTU5MWFLUWdFbVEwaUR1VTA3TEJKc3VRZnJOdlJ0UG5nY0dac3BVZWt4ajQ2?=
+ =?utf-8?B?VHZEQVdrcjQ3OWdPSjJCR2gydXNkbkVmeVlIUjZNSkZ6eG05WTZmMFdLaHk0?=
+ =?utf-8?B?eTFBQUJwcTNQb3NUNTFWNDVRUGYzM1Vtd1NOMW82ME1TUCtndTBQdGs2eEht?=
+ =?utf-8?B?cnJaTFgrUmt3M0kzRE5NVFVlSVdyWmhmU0ZERE9rOXBPbWtVeU5xelpFRzdQ?=
+ =?utf-8?B?Y2cwVGdjdWNwQnFGQ1ZuSTlKaFRGN2xqYndEWWpKME5SRWg4andMcUdsNHA5?=
+ =?utf-8?B?cFBlcXZCcVBHZFVKS1JsMVVmd1dxVjlSL1QrNHBIU3NHTFlYb04rNU51NDdh?=
+ =?utf-8?B?UGE3N0ZZQy9zQmU0U1FESjZZVUR0dTljQ2JycDcweklpcVA2Zk5oUHVTc3cv?=
+ =?utf-8?B?dG1FMXpQanVTdUNNLzJZQ09UUEhlUGJoT1lJZXlTTU83dStpNnNLVkRWSlNs?=
+ =?utf-8?B?RGV5QzI2azVkdllvREI3eXEyR2NlbjBQcUR3SnZrMk5sWGFBOXJTdUo4K2Vm?=
+ =?utf-8?B?QUZydXJvZDFWRlRpOXp5R3UzRE15aVpSZk41SGR4a1ROUGd6bGFvbTc4VUcy?=
+ =?utf-8?B?emdGMTFPNktsZEpHZGo2ODhMN1BMWnVuZ3hLajhkTWpIa01LdGtkNGMwVGpN?=
+ =?utf-8?B?Yng2YmV4aUNoYmJ5bWt6NmQrSEhyQkVZb01XMFcwNGsxRHpnMFIwbzFEbXVF?=
+ =?utf-8?B?RmlLVkxIU0poZXE5K2orbjR2THBqRTV0VXVKSjlidTFGa0NzdlExdVdjcWF6?=
+ =?utf-8?B?ZTFBUzJIdWdMVlhIdmt5ZmI3TFgyb1VLNktNanlicEV4QnpTNFU4dHlnREtP?=
+ =?utf-8?B?V0tvTnh6WnkrbGN0bUJoaWd3azJZZm02ZXJqYzV2alV0WnU5MmNJM3FUM2to?=
+ =?utf-8?B?cjZhd3o0UklyRXpVbWVTbncwcXhnbGZvdG5XcGJQUTRnN3dZQTEwUUN2ZDF1?=
+ =?utf-8?B?bmZuT3dRV2pnTWhpYmdMM2JsRTdoOHI0S2JrWVZYODJvQVhkL21PdFhrdEVQ?=
+ =?utf-8?B?a1FlVDVFQ0lqdWRpV1VoMEpSYUVJZW0vbDNnb21GVDkxOSthblJrYXBYckhu?=
+ =?utf-8?B?QVF4aXZndDErekpRY0FiTWx5VC9qMHJEdThjRXgrbm1RN2xiMUxIWURMUWpY?=
+ =?utf-8?B?U3JxdXRmbm1qOHJKR0tXOC9CbTJJYkRDenBuRllacXRJU2JoTU56ay9zMzI0?=
+ =?utf-8?B?QW5jamZscXlVWVYweXVSeW9HSUVCbXN5Z2t0bW1FVE5taEkzODY0cEIzUW1w?=
+ =?utf-8?B?ajlFcytkY2VWdENiUUpLc2lsVkw0b0h0SXcvdjRlcytieTYwTUtiamR1eE4v?=
+ =?utf-8?B?U0U0bkVFWjFQNjVUNFRsOUk5MVF4RUY1V2VFQ1FzZWJMMWh6Q2pkVncwV2tF?=
+ =?utf-8?B?Z245cTJVZk5wZkk4YU54bVVrREp3dzQxb0dWOGpmZkdONm1lQVhEZz09?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00a07f0e-888e-4ed9-9912-08df3c20a43f
+X-MS-Exchange-CrossTenant-AuthSource: LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2026 16:11:40.5856
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9tn3oi131ZkzlCQQKwH2SSiBgjcJdNvyDAlmdyjsC82hAFIAadfxtNFEIgSUIFs2ivPLJtFD9bnam0Acqpfmug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LODP123MB499470
 
-On 11/6/26 14:24, Sasha Levin wrote:
-> Add CONFIG_KALLSYMS_LINEINFO, which embeds a compact address-to-line
-> lookup table in the kernel image so stack traces directly print source
-> file and line number information:
->=20
->    root@localhost:~# echo c > /proc/sysrq-trigger
->    [   11.201987] sysrq: Trigger a crash
->    [   11.202831] Kernel panic - not syncing: sysrq triggered crash
->    [   11.206218] Call Trace:
->    [   11.206501]  <TASK>
->    [   11.206749]  dump_stack_lvl+0x5d/0x80 (lib/dump_stack.c:94)
->    [   11.207403]  vpanic+0x36e/0x620 (kernel/panic.c:650)
->    [   11.208565]  ? __lock_acquire+0x465/0x2240 (kernel/locking/lockdep=
-.c:4674)
->    [   11.209324]  panic+0xc9/0xd0 (kernel/panic.c:787)
->    [   11.211873]  ? find_held_lock+0x2b/0x80 (kernel/locking/lockdep.c:=
-5350)
->    [   11.212597]  ? lock_release+0xd3/0x300 (kernel/locking/lockdep.c:5=
-535)
->    [   11.213312]  sysrq_handle_crash+0x1a/0x20 (drivers/tty/sysrq.c:154=
-)
->    [   11.214005]  __handle_sysrq.cold+0x66/0x256 (drivers/tty/sysrq.c:6=
-11)
->    [   11.214712]  write_sysrq_trigger+0x65/0x80 (drivers/tty/sysrq.c:12=
-21)
->    [   11.215424]  proc_reg_write+0x1bd/0x3c0 (fs/proc/inode.c:330)
->    [   11.216061]  vfs_write+0x1c6/0xff0 (fs/read_write.c:686)
->    [   11.218848]  ksys_write+0xfa/0x200 (fs/read_write.c:740)
->    [   11.222394]  do_syscall_64+0xf3/0x690 (arch/x86/entry/syscall_64.c=
-:63)
->    [   11.223942]  entry_SYSCALL_64_after_hwframe+0x77/0x7f (arch/x86/en=
-try/entry_64.S:121)
->=20
-> At build time, a new host tool (scripts/gen_lineinfo) reads DWARF
-> .debug_line from vmlinux using libdw (elfutils), extracts all
-> address-to-file:line mappings, and generates an assembly file with
-> sorted parallel arrays (offsets from _text, file IDs, and line
-> numbers). These are linked into vmlinux as .rodata.
->=20
-> At runtime, kallsyms_lookup_lineinfo() does a binary search on the
-> table and __sprint_symbol() appends "(file:line)" to each stack frame.
-> The lookup uses offsets from _text so it works with KASLR, requires no
-> locks or allocations, and is safe in any context including panic.
->=20
-> The suffix is appended for every symbol variant that already prints an
-> offset, so %pS, %pSb and the %pB backtrace forms all carry it: arm64
-> prints frames with %pSb and the generic stack_trace_print() uses %pS.
-> sprint_symbol_no_offset(), which backs lowercase %ps, stays bare
-> because callers suffix it with a literal "()".
->=20
-> A line program emits several rows per address, and every row but the
-> last covers zero bytes, so the generator keeps the last row at each
-> address.  That is the row addr2line reports, and for an inlined call it
-> names the inlined body rather than the call site.
->=20
-> Rows the compiler marks with line 0 declare that no source location
-> applies from there on (DWARF5 6.2.2), and the end of a line program's
-> sequence says the same of the bytes past it.  Both are kept, as entries
-> whose line is zero that the lookup reads as "no annotation", so an
-> address the compiler deliberately left unattributed reports nothing
-> instead of inheriting the line above it.
->=20
-> The feature requires CONFIG_DEBUG_INFO (for DWARF data) and libelf
-> and libdw (from elfutils) on the build host.
->=20
-> Memory footprint, measured with:
->=20
->    make ARCH=3Dx86_64 O=3D$B defconfig
->    ./scripts/config --file $B/.config -e DEBUG_INFO \
->                                       -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFA=
-ULT
->    make ARCH=3Dx86_64 O=3D$B olddefconfig && make ARCH=3Dx86_64 O=3D$B -=
-j$(nproc)
->    strip -g $B/vmlinux -o vmlinux.nodbg && stat -c %s vmlinux.nodbg
->=20
->    Table: 1,657,663 entries from 4,234 source files
->      lineinfo_addrs[]     1,657,663 x u32  =3D  6.3 MiB
->      lineinfo_file_ids[]  1,657,663 x u16  =3D  3.2 MiB
->      lineinfo_lines[]     1,657,663 x u32  =3D  6.3 MiB
->      file_offsets + filenames              =3D  0.1 MiB
->      Total .rodata increase:               =3D 15.9 MiB
->=20
->    vmlinux (stripped):  52.2 MiB -> 68.2 MiB  (+16.0 MiB / +30.6%)
->=20
-> That is the cost of the uncompressed format introduced here; the delta
-> compression added later in this series brings it down to +8.0 MiB
-> (+15.3%) on the same config.
->=20
-> Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Wed, Nov 04, 2026 at 04:54:14PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] init: klp-diff failure on __modname_<fn> with LTO and PREL32 relocations
+> --
+> 
+> commit 4ae71df0c31c4118e7804e6488565c6666998f3a
+> Author: Aaron Tomlin <atomlin@atomlin.com>
+> 
+> module: Extend module_blacklist parameter to built-in modules
+> 
+> This patch extends the module_blacklist= command-line parameter to built-in
+> modules by recording each module_init() function pointer and its
+> KBUILD_MODNAME in a new .initcall.modnames section. During boot,
+> do_one_initcall_builtin() checks this table and skips initcalls for
+> blacklisted built-in modules.
+> 
+> > diff --git a/include/linux/init.h b/include/linux/init.h
+> > index 6326c61e2332d..08cb8a2943758 100644
+> > --- a/include/linux/init.h
+> > +++ b/include/linux/init.h
+> [ ... ]
+> > @@ -252,6 +257,7 @@ extern struct module __this_module;
+> >  #endif
+> >  
+> >  #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+> > +#define __initcall_fn_ptr(fn, __iid, id)	__initcall_stub(fn, __iid, id)
+> >  #define ____define_initcall(fn, __stub, __name, __sec)		\
+> >  	__define_initcall_stub(__stub, fn)			\
+> >  	asm(".section	\"" __sec "\", \"a\"		\n"	\
+> > @@ -260,6 +266,7 @@ extern struct module __this_module;
+> >  	    ".previous					\n");	\
+> >  	static_assert(__same_type(initcall_t, &fn));
+> >  #else
+> > +#define __initcall_fn_ptr(fn, __iid, id)	fn
+> >  #define ____define_initcall(fn, __unused, __name, __sec)	\
+> >  	static initcall_t __name __used 			\
+> >  		__attribute__((__section__(__sec))) = fn;
+> > @@ -271,7 +278,23 @@ extern struct module __this_module;
+> >  		__initcall_name(initcall, __iid, id),		\
+> >  		__initcall_section(__sec, __iid))
+> >  
+> > -#define ___define_initcall(fn, id, __sec)			\
+> > +#define ____define_initcall_modname(fn, id, __sec, __iid)		\
+> > +	__unique_initcall(fn, id, __sec, __iid)				\
+> > +	static const char __initstr_##fn[] __used __aligned(1)		\
+> > +		__section(".init.rodata") = KBUILD_MODNAME;		\
+> > +	static const struct initcall_modname __modname_##fn __used	\
+> > +		__section(".initcall.modnames")				\
+> > +		__aligned(__alignof__(struct initcall_modname)) = {	\
+> > +			.initcall_fn = __initcall_fn_ptr(fn, __iid, id),\
+> > +			.modname = __initstr_##fn			\
+> > +		};
+> 
+> [Severity: Medium]
+> Can this break livepatch builds with objtool klp diff when
+> CONFIG_HAVE_ARCH_PREL32_RELOCATIONS=y, CONFIG_LTO_CLANG=y, and
+> CONFIG_KLP_BUILD=y are enabled?
+> 
+> Under those options, ____define_initcall_modname() initializes
+> __modname_<fn>.initcall_fn to __initcall_fn_ptr(fn, __iid, id), which expands
+> to __initcall_stub(fn, __iid, id). Because __iid is generated by
+> __initcall_id(fn), the stub symbol name embeds both __COUNTER__ and __LINE__:
+> 
+> include/linux/init.h:
+>     #define __initcall_id(fn)                                   \
+>             __PASTE(kmod_,                                      \
+>             __PASTE(__KBUILD_MODNAME,                           \
+>             __PASTE(__,                                         \
+>             __PASTE(__COUNTER__,                                \
+>             __PASTE(_,                                          \
+>             __PASTE(__LINE__,                                   \
+>             __PASTE(_, fn)))))))
+> 
+> During objtool klp checksum, calculate_checksums() -> checksum_update_object()
+> hashes target->demangled_name for each relocation on the __modname_<fn>
+> object:
+> 
+> tools/objtool/klp-checksum.c:checksum_update_object() {
+>     ...
+>                 __checksum_update_object(sym, sym_offset, "reloc name",
+>                                          target->demangled_name,
+>                                          strlen(target->demangled_name));
+>     ...
+> }
+> 
+> Because demangle_name() in tools/objtool/elf.c does not strip the embedded
+> __COUNTER__ and __LINE__ tokens from __initstub__kmod_*, any patch to a
+> translation unit containing a built-in module_init() that shifts __COUNTER__
+> (for example by adding or removing min(), max(), guard(), WARN_ON(), or
+> __UNIQUE_ID()) or __LINE__ before module_init() changes the stub name and
+> alters the checksum of __modname_<fn>.
+> 
+> In tools/objtool/klp-diff.c, dont_correlate() -> is_initcall_sym() skips
+> __initcall__ and __initstub__ symbols, but does not skip __modname_:
+> 
+> tools/objtool/klp-diff.c:is_initcall_sym() {
+>         return strstarts(sym->name, "__initcall__") ||
+>                strstarts(sym->name, "__initstub__");
+> }
+> 
+> When correlate_symbols() pairs __modname_<fn> between the original and
+> patched objects, mark_changed_functions() sees the differing checksum on the
+> non-function symbol and aborts the build:
+> 
+> tools/objtool/klp-diff.c:mark_changed_functions() {
+>     ...
+>                 if (orig_sym->csum.checksum != patched_sym->csum.checksum) {
+>                         if (!is_func_sym(orig_sym)) {
+>                                 ERROR("changed data: %s", orig_sym->name);
+>                                 return -1;
+>                         }
+>     ...
+> }
+> 
+> Should is_initcall_sym() in tools/objtool/klp-diff.c also exclude
+> __modname_ symbols (or should __modname_<fn> avoid referencing the
+> __COUNTER__- and __LINE__-dependent stub name)?
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20261104154003.43313-1-atomlin@atomlin.com?part=2
+
+Acknowledged!
+
+Since __modname_* lives in .initcall.modnames (within INIT_DATA, which is
+freed after boot) and is only traversed via the linker bounds
+__start_initcall_modnames and __stop_initcall_modnames during early boot,
+it should be excluded from livepatch correlation just like __initcall__ and
+__initstub__.
+
+I have updated is_initcall_sym() in tools/objtool/klp-diff.c to also
+exclude "__modname_" symbols for the next revision.
 
 
-Tested-by: Helge Deller <deller@gmx.de>   # parisc
-Acked-by: Helge Deller <deller@gmx.de>
-
-Example:
-
-root@62:/# echo c > /proc/sysrq-trigger
-[   95.740284] sysrq: Trigger a crash
-[   95.745518] Kernel panic - not syncing: sysrq triggered crash
-[   95.746724] CPU: 1 UID: 0 PID: 1 Comm: bash Not tainted 7.4.0-rc1+ #326=
-3 VOLUNTARY
-[   95.746724] Hardware name: 9000/778/B160L
-[   95.746724] Backtrace:
-[   95.746724]  [<1041d778>] show_stack+0x54/0x78 (arch/parisc/kernel/trap=
-s.c:212)
-[   95.746724]  [<10413404>] dump_stack_lvl+0x80/0xc8 (lib/dump_stack.c:12=
-2)
-[   95.746724]  [<10413468>] dump_stack+0x1c/0x2c (lib/dump_stack.c:130)
-[   95.746724]  [<10401288>] vpanic+0x14c/0x340 (kernel/panic.c:561)
-[   95.746724]  [<104014b0>] panic+0x34/0x48 (kernel/panic.c:787)
-[   95.746724]  [<10e6cbcc>] sysrq_handle_crash+0x20/0x34 (drivers/tty/sys=
-rq.c:154)
-[   95.746724]  [<10e6d734>] __handle_sysrq+0xb4/0x1d8 (drivers/tty/sysrq.=
-c:635)
-[   95.746724]  [<10e6e1b4>] write_sysrq_trigger+0x90/0xe0 (drivers/tty/sy=
-srq.c:1220)
-[   95.746724]  [<10977d88>] proc_reg_write+0xd4/0x120 (fs/proc/inode.c:34=
-3)
-[   95.746724]  [<1088c9cc>] vfs_write+0xbc/0x468 (fs/read_write.c:690)
-[   95.746724]  [<1088cf5c>] ksys_write+0x7c/0x12c (fs/read_write.c:740)
-[   95.746724]  [<1088d028>] sys_write+0x1c/0x3c (fs/read_write.c:747)
-[   95.746724]  [<10418334>] syscall_exit+0x0/0x10 (arch/parisc/kernel/ent=
-ry.S:1722)
-[   95.746724]
-[   95.746724] ---[ end Kernel panic - not syncing: sysrq triggered crash =
-]---
-
-
+Kind regards,
+-- 
+Aaron Tomlin
