@@ -1,68 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.157.188.11
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793950249;
-	b=CoX18yUGqKOPuEQg3HnmBdf2WxOYOEYBc+A5Nd7SkdOMpi036z3TVfWwa+2nwyoManJs
-	 RsywV8QVLo/9Li530KBnQf1o3R8oLK2tu06SF/cNCfy5tVOk9oJtSdLk9E4joymEddjvW
-	 EXVNMZKR4dL5TAQDrZrHYFewkgWSGOtN9qbFuML6KEb2XQGZ1HX1rQyj299DEpgYyUSJX
-	 Ycws7/cKxvlPQZgDwq7nZFtvwKv7gfjeT02dIHECBaLk6bACRGZwv9i0LAEncI5NSDuzA
-	 zIuAoOzK3t/dOpEDj6IxPnVx9aWPJPYUII5EmCR3SAQpu8sTQl26m9dPeEoDMasaRww==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793950249;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:Cc:
-	 Date:Subject:In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:X-Infomaniak-Routing;
-	bh=6qwCT3Jvu8lkkM6R8PHy1mSFbjl1ytyEVmTgryXfzvQ=;
-	b=XqkrFgq2dc8xBTDaQ0jJ5/mvE29janY7YIHDlhXwp2osD2qrBMsupN879iQkW7bctBbF
-	 OREXj/K/ryxYTDhVQCglaLWD51ercOCNR5A8sKo8o9QmLP6aHgS0SU9DE29VBdyOoeme1
-	 o0ioULvPaJ0RrtVYcXk6HGM4P9yforT013QdL9i2mGeUnc72xADhkWjcl/rryGhhMaUC6
-	 FA04mlwAPTE/k++1r53bMOB+BuftiLDdYKUifJgHZMenMotKbarSS5W+vnDuN8JOkMdID
-	 fR/+U+gD9sE1KK5UkIUdjIg1GgMAEEgbX1yPpMW1YxGeAZBV//o92SyR6E1MhWS66mw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=daylightlinux.ch;
-	spf=pass smtp.mailfrom=daylightlinux.ch;
-	dkim=pass header.d=daylightlinux.ch header.i=@daylightlinux.ch header.a=rsa-sha256 header.s=20261016 header.b=Jf5ysTyK;
-	arc=none smtp.remote-ip=45.157.188.11
-Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [45.157.188.11])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.160.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793970848;
+	b=03Umpbvvs9qzb3/w3cgfrUH8x+QJR9I50hDp44V+Ck15ReANEBi78KRKyO9iHlNYA1y8
+	 tQrI50H26yS/CLGJkhYOD7jgXxCeQVvez8VKZXHRbzUrT95UqEok1he0mwGITf+fEY5H1
+	 TPqTVXtdJWL5Z+1YU8e3NGhxgJlPUoLXL3lQH9fA6AyBii+xr8RNruKncCxIIlhxOvMQe
+	 EmT/PtJieRYxt0gYKUqC1dYwMo9jgYL/mMC+B5TZiSgMDe6seVTFLtqUwItFxUNWggHAe
+	 SFkNDVbD/1ww0GyxygkImWsmzroTKtVa3MskDBUd3zIqZ/3N+mf+wngTFiUSdpg6/ag==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793970848;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=XDj4Fz5MI5W96I8a8smZZO8uw7M1JDn7fdBwlab3epA=;
+	b=DjEBnakgpo7jXnJ5xyxo2FDS2FSPek3QQeIlGSpxi+dEZYXZfHHZclRDUdFMhi/ze+Jg
+	 YveZVNsCCUuVEX1cgsJlFFJe+bbMBEC437bBCfZSi71/77KR2rn4IAgDhFWW/zVG+jt0V
+	 ganK2LP558Rc4vX1u1gjbd9WRLbJudKy6D7iQmXyW0VpmTe+gdSW8TMZ1zScwY6hfHQes
+	 Id6UILrGRkN58aoTWSVDsQrbDj4moTi1KWb9VzdYVkVZva2oXk2fRv/hVskO0JPYb0HBO
+	 IDIBDwCQS/Di6S+NXx5r2pcUDJzQ1qIJmbFgfWFSx6BkfxyqGrDkyxuut9JnDeAvwhg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rwLt3FRK;
+	arc=fail smtp.remote-ip=209.85.160.51
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30388606A328
-	for <linux-modules@vger.kernel.org>; Fri,  6 Nov 2026 07:30:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 30388606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=daylightlinux.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daylightlinux.ch
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A761606A330
+	for <linux-modules@vger.kernel.org>; Fri,  6 Nov 2026 13:14:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A761606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=daylightlinux.ch header.i=@daylightlinux.ch header.a=rsa-sha256 header.s=20261016 header.b=Jf5ysTyK
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jLW7B1N31zdCg;
-	Fri,  6 Nov 2026 08:30:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=daylightlinux.ch;
-	s=20261016; t=1793950245;
-	bh=6qwCT3Jvu8lkkM6R8PHy1mSFbjl1ytyEVmTgryXfzvQ=;
-	h=From:To:Cc:Date:Subject:In-Reply-To:References:From;
-	b=Jf5ysTyKp+sZFhcUaqaZP/yJR3L9J4ttB5TNtUybjfbNZF/hM9rW+JlYELAyAXsYu
-	 55cRDkfDVNNI1YrBu5Vf0MwaI5j60Ul40sUhtAkFSj6B93vWIAhChFjPGrEkD/amTs
-	 ow8mSwCL/nSYaBnUazdPek2zNct3klAMzGaQf4zij6mp+nFK/oSSgzooMLQ8g9mewO
-	 hx9J6cuuZ9m7avyywWx9sEdLQ/oALXovFg444QgzCX60INvseLCwD8uJKfyWrplYpl
-	 87UiXx9c1CZkL+7boyLLzpn2MnaS4OW6yd1iIEEhNYo2V+MtUQf9ocVH5PGgmmKI7g
-	 OJggACS81f/pA==
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4jLW79134bzWtq;
-	Fri,  6 Nov 2026 08:30:45 +0100 (CET)
-Received: from unknown by raspberrypi with local (Exim 4.96)
-	(envelope-from <info@daylightlinux.ch>)
-	id 1xPEPM-001IFH-2G;
-	Fri, 06 Nov 2026 08:30:44 +0100
-From: Hamdy Abou El Anein <info@daylightlinux.ch>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Fri, 06 Nov 2026 08:30:22 +0100
-Subject: Re: [PATCH] kbuild: detect module name collisions between '-' and '_'
-In-Reply-To: <179393591106.309869.2814629602029032688.b4-review@b4>
-References: <20261103110411.11698-1-info@daylightlinux.ch>
- <179393591106.309869.2814629602029032688.b4-review@b4>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rwLt3FRK
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-4ad5b52f0a7so346163fac.1
+        for <linux-modules@vger.kernel.org>; Fri, 06 Nov 2026 05:14:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793970847; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WJRtwpvSCGYaLFPqfeJeYYEB/PqdAeVW/pKzqbbzTpQ07f5faX2TzI5SBN+heGUarG
+         jtaUeK4deP2JsQ0uglQeZIJJlSdc8RLz1N5L4WaGC7N5Pat571D7hkg5lWVpKpZyyGf+
+         rJvwQu7M/FSZNDia4VZnHAQPwnUtegbVWzPvpINo4AaYD/lWjVO7SX+0ZAPw1krQ04QV
+         byM1Hfhi1YHoGlvcrXUHHiVhjV+DpgGjlHRvEdxFVTiZJV2tIHXgt6FhTpH5U3tWFE5B
+         WZOfSD2GOgz6Pv5zGuSTYm6POZohWyn5xnGnLQt/9u/BvYh/Ug4jlsA3TAF1zggCp1js
+         XfGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=XDj4Fz5MI5W96I8a8smZZO8uw7M1JDn7fdBwlab3epA=;
+        fh=KDeY69KEnlISvyPFoBaBjZQ+WcChpl1tDVa4QGKiQO4=;
+        b=IH5ufTiBzB/v8CnMr+VqejMvpOt05VkGkzJ2bUAmzDJa6J3UXbm8zridMn6xgPSp01
+         fP29z7XBiAsIV8vyFbO31J6wwVpMFAwm8O8ohtj6qVUdsGfQEVGFwiXlhgIGdYIlMbIe
+         NKo6uq6vktdWRPtg6OzwtVuuRJRLlmDxv8Wl4jY8JAltgJtNECDI6kzl3zQWT+SZW8UI
+         9KZ/oOgwTLDixmc7DP42Q8UjnxFjI/CHzzjSG5l5uVsj6+pAZsB/YzU8krP5YAj5xpnJ
+         +qz/qTFms2Lj4WHCA1c67WVer5YNI9+JxfyegMU5BTU+aKN76+aJbOhKEMQBUQvbn3BD
+         rIlg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793970847; x=1794575647; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XDj4Fz5MI5W96I8a8smZZO8uw7M1JDn7fdBwlab3epA=;
+        b=rwLt3FRKaib2TbFpjgr7R2B5jwDhmJgnrUZ42NuQTG2wKLmY+40UGIeF45BD/GISqz
+         BVCDKLRZanqeVQh0U2YPak+Nagm4TNbvzx4lNoku/O3YcapsvfHeuqVgZ8lZ9gA7WlBU
+         FtThgZOryzszqriE/hmExA2KW5x9QEJNz9St9K9EgNa7C5b2xz8EWZ/HwOJoESAGpWfa
+         G0qvPeEMgkiD581SCsW0KtAziRF6vwQLOlO18x/nYsmxifFXTadrIlP6QuDcaf2YDHZc
+         j5T8pVmdZ9jMtoWdLD0DU/h0oyH8GLM73WauVLnljRW4l9KCeSuj1/nKXhsG5Njuho6i
+         iQLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793970847; x=1794575647;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=XDj4Fz5MI5W96I8a8smZZO8uw7M1JDn7fdBwlab3epA=;
+        b=sl6baO3BYB3MSN/BL1aWxMH6a3P+H7y7u5yiOW3zToAikOAqReThX0FlpkyX1Higc2
+         XgltTNU28/WaWFzWNCre87nV2O1JHwD9YOTsYoutnOQHkwI195JMz66jVFZdgOc0q594
+         RPjzdgQwrbqQkYWY1oORDw1KcPKe6JXDsh6vNPVh7pkZXqsQ/pI9ab36VyvXZB+/E9KQ
+         hwh6KWiytXiVDHDGFKBV6x7GecXVcwSz1HD13j6mZXJTZGAVAeDMSewldrZt3azp2l/T
+         TDu+YNPEM+FlhzI8c8irDJVzPanzfNe1lMZ5Sstw3w3eo0CU5qSl5I/ewU2J+ScIFseV
+         bXrw==
+X-Forwarded-Encrypted: i=1; AKwUvByfJgGewr0vViT6siDDhojpJ6urx1KzD68GiaJhlnIo4AbUM5AwjH1FyeWqcEDJt93R4nq+lksj2wAolAQC@vger.kernel.org
+X-Gm-Message-State: APuU4Z8REAogc0eJlWR4xGVZugL/AGxJrFwfz1/raxyRyQlLXxXexNUc
+	LIgd2UizkQGBu403qzLo7wpjK4kH93CL23Pg+DdzescKEKRPeTign2juSCGgoMuZ+zFwmU1TIZd
+	xmdCWsmfZwGlOy+8G025h+/JaZRgVec0=
+X-Gm-Gg: AYBFou2Mj2Xd1yEutZJIJtSarY7bcbq0iUYHsyOP6BT3jdE8Q1B0/sftY9O+DXAgroy
+	bcg6OWyfVZ0TvneoBlcCCIE1I/pBFm6uIjyrGG8V3sFhO6yuVn/erVtydAc7HklpSZlExTpJP1Q
+	lEi7+hDn2GgDsgt3t87U6BKjatVmqVlxCLLwonbrTmh/tc/MPsUj5DTsZvdKO7IFtvu/HaOY9ON
+	I/DxS9X/QI5WzapQIMhGPPopYjWxnN9C5arGtBHoy0BxW41vihckv5eJeR+drbIuDZakd+etNNP
+	KOPemUR3sBkQezqXnhc0XqlXQZ4oh7GJka/1zQmhHUvwGv9TYgsrgMSqnymMhz4TWA/vKJxAxD7
+	uj1z/wXl6LtAPXT9qA3/rUHXfg2exV7If4jiSm78RMHKXWx5MGCKWCVtk1H7Ro9DIFC/B5pnrEg
+	mU79AYiM3puj9G39/giw==
+X-Received: by 2002:a05:6808:4f6a:b0:4f2:ac42:656b with SMTP id
+ 5614622812f47-567e098b95bmr2036164b6e.7.1793970847328; Fri, 06 Nov 2026
+ 05:14:07 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -72,14 +104,37 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <E1xPEPM-001IFH-2G@raspberrypi>
-X-Infomaniak-Routing: alpha
+References: <20261004-ftrace-mod-bsearch-v2-0-c1de73e72e73@gmail.com> <20261004-ftrace-mod-bsearch-v2-2-c1de73e72e73@gmail.com>
+In-Reply-To: <20261004-ftrace-mod-bsearch-v2-2-c1de73e72e73@gmail.com>
+From: Mitch Hen Chez <mitch9654@gmail.com>
+Date: Fri, 6 Nov 2026 14:13:56 +0100
+X-Gm-Features: AclHuK-4pAGkIQBSKZ8F_59E3K5aQv6zvde8cyI5-gaZYBULE-9BuBhH3eqMpKo
+Message-ID: <CALr3rD93RT_=w8VB6aKfuV5crbwXK4Tffq9bLD=eJBj07Tv1=A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ftrace: Drop weak function locations of modules
+ when loading them
+To: deduce@gmail.com
+Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Stanislaw Gruszka <stf_xl@wp.pl>, 
+	David Laight <david.laight.linux@gmail.com>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nathan,
+Hey crew :)
 
-Yes, it appears so. The module-name uniqueness check dates back to 2019 and compared basenames without normalizing '-' and '_', so this case seems to have been missed since its introduction.
+I was also seeing a stall (~2s) on my Fedora 45 machine, and when I
+applied this patch, my userspace startup time dropped from ~4.5s to
+2.4s.
 
-Thanks for reviewing,
-Hamdy
+Hardware: Ryzen 9 5900X CPU, RX 6900 XT GPU
+Kernel (base, as well as patched): 7.2.15-300 (fc45)
+
+Would it be possible to have another review pass on this patch? I
+don't want it to fall between the cracks :)
+
+Thanks,
+Mitch
