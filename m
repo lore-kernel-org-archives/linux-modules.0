@@ -1,88 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794237395;
-	b=rKoIsiCz/bV3WVp3gy1WP4HI11vUiQ3C/y/x0CTtCe15bK/H8uFsLGr829aGpTvj8ZoE
-	 m1oFIwudeMOzl6aMWx/+ZhxhT6LQ1K/WX75/fid/U3xDCtZk3wsEWXKiAIWw5UvZwcmAf
-	 zVRrLdu3mC1gc9v1hrvoOOsDpB0AqsgO2HZppfa/MUhYd0+Ju6H+rEHH7GmSQaLog3vcK
-	 gN0N63z/6MLrgfF2xin3hqJSmZgm3x8oTeeGzpxMVPea7xrFe52jWQ9XPaoN745oreG7u
-	 WpQaP43ep2Zlj8gw3IwWgSt4G1dBnmbBaIAhm0SXYLjD3hL8s2oTUkMHSfVUWnve4jA==
+	t=1794239513;
+	b=B8E7fxvpwcZsXsNg3UAQk6XNBZpGS82VBvry/SW1t3a75rSb4fkz9F7sFY+4iz6o5flO
+	 Bsz7ZI/5SthtKXbxLJdlC7qpCYD5uZ2a6u9QNS/MtVgEv0DYh1IZqbi99fiON6crEACKQ
+	 jFmA0qW2Wf4Qm8JFx6/JO/ic0KmIbiKRyzjSsxBndu1hEF/OiIcVvwlMY9f9z8zkERWdV
+	 WtDFVOkFx6JufOvsqhYv1DfWvBdc+TPe2DaePL0l6pR3oetmG3/w/OqpNdynhmwKK0DD/
+	 B9j3VgbzaNyweqZvVMQZ0Y/YsKd4raV3Dkn1NeQT7ZFRova17J4WoaIcxl6OfCkHbkQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794237395;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794239513;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:Cc:References:
+	 Content-Language:To:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=jkscwoMz/NtwK7adTu7thVWKraeXz1/KWC75TgatP5E=;
-	b=ohvuKFuqn9TabD37NaVcln5vZwnGyO8YAjbmjMvREHtOXT2oecYr2Jl4ROsmqle2YI+4
-	 yT1b1IW43DPGBdDU6cvy+DwNkaJwbeuslIXCkEVMRAbPRPMrd+JBe9SVxq2RUDsRZ7g0u
-	 NWdpPhHbR45AULRgkV1g/6bOjjy6mfHavQxejsriZFIZiUllK1gPct6kw3smo5+ah279U
-	 +uoRekSu17FGj9zkSTah1m5llssWcysyNuvZesyWCBZGiMfIlWSlxv4GqLj/AwGSe5fTk
-	 4I7nZCD6EhTndjbV0XfTVEEXd0Ojyi1DSaFL+fF9x6AHPg98NEzTltoPEbTtldP3a4Q==
+	bh=GqcUVOE8YZm1FPDzDze4+rCKgn8rK0xiBVztztTok30=;
+	b=ApFerg7OUfoFwGZ5WPnigxKXWIk9VIDhWfhfKPyzE73LL1vqGgnUX+N5iBY1Jo6BuU2I
+	 g2lJR6GEXUutm+mm0DJE0/CBs6Mml21BiC8vrbxH5jYMzKPNd0+3OPMpPp6YXsHa9tPKh
+	 KJvHtt5djLOPYjshvJ0fVKACFNHuoGid/XOtBa/UlKjXG07L1t/CErv5H1xZwm0Jhzv+v
+	 JaLux1YF4cre1aa8dMCAX5+MbzWinbLbv9WijasHm1+22QamwyymIXPLDH4c4y56g0KjX
+	 RnOr2qB0195BDBi1/YcxztXE1TyhdZcp51I6b1WAxUiWcb0pPj9gRfOjqmA7IBIelxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=suse.com;
 	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Xs8Oszdy;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=I6Gf+TJ+;
+	arc=none smtp.remote-ip=209.85.221.51
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BF2606A321
-	for <linux-modules@vger.kernel.org>; Mon,  9 Nov 2026 15:16:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72BF2606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1097606A326
+	for <linux-modules@vger.kernel.org>; Mon,  9 Nov 2026 15:51:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1097606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Xs8Oszdy
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a20a37703bso7226455e9.1
-        for <linux-modules@vger.kernel.org>; Mon, 09 Nov 2026 07:16:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=I6Gf+TJ+
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48e3b22e971so563441f8f.0
+        for <linux-modules@vger.kernel.org>; Mon, 09 Nov 2026 07:51:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1794237393; x=1794842193; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jkscwoMz/NtwK7adTu7thVWKraeXz1/KWC75TgatP5E=;
-        b=Xs8OszdyHPnrMpzHZZO6hjZ6A2iLC0CKaCtZnwgj2MHJPWfpJLEAZq/hLIovII0Air
-         kmQU4uSGZLoloyJyht8LaXc5LLx9E4P4zMskHlDWPz5z8UfByygqX2h6E8P6de2bs7GG
-         zCUNfluH6GdU0bYfhCsy0zIiq/k8rL2bg/uzk4iuR/dmSlfuBGkQb4WTisfpuPXCtojt
-         0htC1DRci+FVRlozeA/telQ8BkSTqzKzE+z3VBq8T3Q5P/+XEE18/TfjE1QsXRP+LERx
-         rzWp+zvRamVhjiYE042jAKv/8+gU5ROH0QeKiDf+pCJ13Y0yVXWwEzlUt1V5UCgg84Iq
-         +ljA==
+        d=suse.com; s=google; t=1794239511; x=1794844311; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from:to
+         :content-language:references:cc:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GqcUVOE8YZm1FPDzDze4+rCKgn8rK0xiBVztztTok30=;
+        b=I6Gf+TJ+xx28C6M6wGa7IriJIxP64CATq5xKa5KY4/dVEF70L68u8oNbC3qDhkhEI7
+         7ia14iP5TbkPq0pUWtgTMNnR57unFzAtVelBZ6VlJdQ4CrgVYgxw4RobiXpnUn7hkB+D
+         nzTyACD0+MFjBaqWPAWXlFUgKFrj/LJmZ6fQQvFA0wYX9Z+YdDx7xP/wSzXM8J7jhI3Y
+         cnv1opUi8bNDC5CGiUC5RyhE5sufSwg94ps4g0+w/MIT3GHEM+nHtCTD6yBD+zcjVMzC
+         KM6SnUFC/LBhWAJoh5/3RAr1pEMN+dTTDdPPEWzL92kIaF0QNP3pX9QYFDhi6xIlcLq5
+         xWjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794237393; x=1794842193;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1794239511; x=1794844311;
+        h=content-transfer-encoding:content-type:in-reply-to:from:to
+         :content-language:references:cc:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jkscwoMz/NtwK7adTu7thVWKraeXz1/KWC75TgatP5E=;
-        b=oCbEU7KN1I7OWgqi7U8Ugdl+sBrNh9j5Qd9erTg1yVBsbvv5NMf99Rv7KAEHCpPFTI
-         fBgxsIpAvgJst2S/LInqq8APH+5WCl1xNfkIOTwqawLZLzczGCoH7xFZPiJLK/rRSvOX
-         t12vSpWuN2x6pKoFMtynfdymm8++aiQ/wvKRpi9eNIvDijz0wXkXy9QCkv1mVSRiFFZk
-         cZOr9xAKptDY+UBzxZWjV9C/1tbMBml3qsD36GFFrLkq5q+yx3C1yL58iOf6Gy54cjsn
-         QYJWMmBXQg+cRRmiha7s9isqaOKUdQ2r5n1pyVd9ma9hOsYdG2AKVijggI6g18tCPfg1
-         CfYQ==
-X-Forwarded-Encrypted: i=1; AL+hErFaqjbDV+vcw8x/ZU2UQ586p6ZbZQfaLGiVyKfRTeP0yX1JC9zmQbdaOXDY9PzY3yLGwNmVqxe8wexzm1l4@vger.kernel.org
-X-Gm-Message-State: APuU4Z+0an0tv5ZwQ1SdQ32L8QTRGkaRTZqCD3gQP/y668DLZWLYeJMa
-	u2eWkJH1Ym2xX9GerYs9gF3A/Hl8cr3w+QwundbcTMl77cIm/UzJZ5LRhy20VZdS5+c=
-X-Gm-Gg: AYBFou3LfrsUAEIpvvu95F9mhX8oqcRnp2EhYdvV5IaQineR47Ci9uGRYGozUbB/ArY
-	yknb+rU8hP9ob8ugOeKdpuGmV1PyO3PBIdyG//k6gNoFLMRZkfRbJpsktysmHb/Lxoe/GSINg9m
-	P/yw/P2yN5jlwjOcFibstGojTa5iZyb5Tz+IwS8Gn0PtgxY5R5rP6IRMczWOihug4iLlwt7IDyr
-	BQXjRFo5BGnztal5l6QgWicWUq1FfdEQptsjMYUc/wgN77utd8tIbSo3b0vlbT+GqBUS0SiiIFz
-	TRC1Jx1WT3VWfgDPXD7+idui5tGhtUSMf6Hq8Me+gk4MuBab8WW0BTgMU0Cf5diW6Vhebr4RHYJ
-	0CjPtywjceOChVCFTzBj3u1l4m66SqDEFUP+AfO5odP0VAYZlKUhuXl1wyXbLGHGJhgVzyVotPw
-	7avrm5VVJMA3XOMLooT/mQvTBPl+OaIMntBCxc1hgxEp7eVn3JGrpFufYJDK5+V2LCw7CZDmrkh
-	8xpcSeMhhzpY5mHeoicVF8SP4u0c5o3wX/nsn3U3DeNO9IbIr3stOqjXmIftHWHWcrOXllcu/Bl
-	Y0CpDgJRwFVeRSRDDSNkLT2VRbLSSh0cCq+vCFz01MkTzqaFO8wDmaFZ2G1maS/c
-X-Received: by 2002:a05:600c:818e:b0:4a2:167a:c939 with SMTP id 5b1f17b1804b1-4b963c85687mr70833595e9.21.1794237392747;
-        Mon, 09 Nov 2026 07:16:32 -0800 (PST)
+        bh=GqcUVOE8YZm1FPDzDze4+rCKgn8rK0xiBVztztTok30=;
+        b=pMktxf8oYcP9uuJ+6kqctP9t+lN4nmgTyeu4UWjiad3FYEtvXeZnZJRse2aFOsyqxD
+         9q06cuVeu2Y4MBDrAqK2QV99eRGt9oDsgwD9dw94JDeUpxf67B953S0cnLVEULOSaPNS
+         EcYCZpCmGyM/Isy6BORs0J15ZwiCiPbIzjRSWz6JxUCYplE9mOH3pLBU5gSwBwn+aETl
+         fgE1Ul183sSYbsXteMu1LhQ77MvDGgTmGgCQ49ZQUrWaWmy3b1L5NWJInnSU5U9tqF9Z
+         EJyEblK+Vn4iYg7TKyNXEX9ZNLYyHn8n8A07no0LxCUDh5Krn1x2onCzAoSb3xV5sxQP
+         aawg==
+X-Forwarded-Encrypted: i=1; AL+hErHYgcY1H6yi2lpnXyIwt5XJoJQghcPp3kGIV7KDS7APfE/mLfctU/lf8nCAIbBQhvhDPwW1ETH861gAyien@vger.kernel.org
+X-Gm-Message-State: APuU4Z9F268ILXUkclSkPzgpU/sM0UyKuzuyjWiLxY0Hy5ASAPq8ayvF
+	T8xSiW2MpXDtZtKSE+hNP+sEntLmZQLY1kMe5S2m3OldeK7+t1K4NCb0nQq1AmVsWVA=
+X-Gm-Gg: AYBFou09W95p631mE+KACfB6bdGcyggXVz6LDk4wqwh/0/uwlpH3MVDFxiqYZTVg8bO
+	czDvmwIGAKv1a3Q6Gop/qCmWrjvAfZA0hDTziB8I7mSGHWFzCDuhaEBok7uFz5l2M/f7TyF584O
+	06CmVvD6/hwfmWs8CQjHm/dZZiQunHeKUGbZonYJCzP2Az5iOBINYMnBHnbn/8lnDWoViXAinKw
+	H2wkb/Z2y5Vl3ApoqwBotAPgnXzftsiBmCc6YXu1PeB0yILjmXN/LmQQQou5Om0bhia1KAGjFRP
+	IhKk9gVSOcI+U0n9XfVr80WGCxLXsk4uY1YrtJyyK22ZwA3ooqt2SwlPusU+N6zsOqntc4/KP08
+	fULWZNHHaYQWeQpY5OibQb9nzJFA4ALDnZRAWTbfXDxgfOBHd4Egp2eXBYyUOMkkp2iAB9nIGCl
+	vgVTXHiQtPRsWlP6EPhOm26iFCXyly4r2saYwh3yMrtpS6CMAINgxPjJes50ArXq9SInRXvaxsw
+	5CeqrP3e5SroJPiT/C5GDugtvJ+Tyl+ZorH19W3SPQHl6VISxy+vc5pTCLEQvUwosvKyR5bmrLv
+	L8yUsqIlnfZdOHD+BPH79kk0kUykiK3TpCySsk8yZrCfP6OdingpBYeh8AFcvMYF
+X-Received: by 2002:a05:6000:25f5:b0:492:e1a6:90eb with SMTP id ffacd0b85a97d-49582e8e516mr8245452f8f.10.1794239511204;
+        Mon, 09 Nov 2026 07:51:51 -0800 (PST)
 Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b79502652csm165199245e9.4.2026.11.09.07.16.30
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49597186eb9sm10435718f8f.35.2026.11.09.07.51.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Nov 2026 07:16:31 -0800 (PST)
-Message-ID: <97331297-3f78-4f6d-ab24-61cf329647af@suse.com>
-Date: Mon, 9 Nov 2026 16:16:30 +0100
+        Mon, 09 Nov 2026 07:51:50 -0800 (PST)
+Message-ID: <a190f981-d668-4208-8148-f4e50adb31a6@suse.com>
+Date: Mon, 9 Nov 2026 16:51:48 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -93,98 +92,67 @@ List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module: Fix use-after-free in module_put() tracepoint
-To: Aaron Tomlin <atomlin@atomlin.com>
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
- da.anzani@gmail.com, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261022184517.66438-1-atomlin@atomlin.com>
- <2fd1031c-7a86-45cc-a595-bbd13e102d43@suse.com>
- <zjuuet74suq7dujrlt4pfeoajtksegfrslsmokgvfjg6o6pghk@dbifrqvwrnaw>
+Subject: Re: [PATCH v2 0/3] Remove obsolete __MODULE_STRING()
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>,
+ H Hartley Sweeten <hsweeten@visionengravers.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Rudolf Marek <r.marek@assembler.cz>, Andi Shyti <andi.shyti@kernel.org>,
+ Chris Snook <chris.snook@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat
+ <YehezkelShB@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Duncan Sands <duncan.sands@free.fr>,
+ Chas Williams <3chas3@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
+ <2e88806e-57dd-47e0-a9ef-a8507d22aa3e@suse.com>
 Content-Language: en-US
+To: Petr Pavlu <petr.pavlu@suse.com>
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <zjuuet74suq7dujrlt4pfeoajtksegfrslsmokgvfjg6o6pghk@dbifrqvwrnaw>
+In-Reply-To: <2e88806e-57dd-47e0-a9ef-a8507d22aa3e@suse.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/9/26 3:28 PM, Aaron Tomlin wrote:
-> On Mon, Nov 09, 2026 at 02:47:31PM +0100, Petr Pavlu wrote:
->> On 10/22/26 8:45 PM, Aaron Tomlin wrote:
->>> A use-after-free condition can arise in module_put() should a thread be
->>> preempted immediately after decrementing the module's reference count
->>> while the module is concurrently being unloaded.
->>>
->>> In module_put(), the module's reference count is decremented via
->>> atomic_dec_if_positive() before the module pointer is passed to
->>> trace_module_put(). Consider a scenario where CPU 0 decrements the
->>> reference count without reaching the baseline MODULE_REF_BASE level and
->>> is immediately preempted: it relinquishes its reference while still
->>> retaining a local pointer to the module. If a concurrent CPU 1
->>> subsequently drops the final active reference, the module's reference
->>> count reaches MODULE_REF_BASE. This permits the module unload sequence
->>> (via delete_module() or the initialisation-failure tear-down path) to
->>> proceed and invoke free_module().
->>>
->>> Function free_module() invokes synchronize_rcu() and subsequently
->>> releases the memory backing struct module via free_mod_mem(). Because
->>> CPU 0 was preempted outside an RCU read-side critical section,
->>> synchronize_rcu() does not await CPU 0. When CPU 0 eventually resumes
->>> execution, it passes the dangling module pointer to trace_module_put(),
->>> which dereferences mod->name and mod->refcnt, culminating in a
->>> use-after-free. This sequence of events is illustrated below:
->>>
->>>     CPU 0                                       CPU 1
->>>     -----                                       -----
->>>
->>>     module_put(module)
->>>       atomic_dec_if_positive()
->>>       [preempted]
->>>                                         module_put(module)
->>>                                           atomic_dec_if_positive()
->>>                                           // drops final reference
->>>                                         free_module(module)
->>>                                           synchronize_rcu()
->>>                                           free_mod_mem(module)
->>>       trace_module_put(module, ...)
->>>         mod->name
->>>
->>> Resolve this by moving trace_module_put() prior to
->>> atomic_dec_if_positive(). Because the caller holds an active reference
->>> to the module at this point, the module structure and its name are
->>> guaranteed to remain valid throughout the tracepoint invocation without
->>> requiring preemption disabling or RCU synchronisation.
->>>
->>> Fixes: cb0b50b813f6 ("module: Remove preempt_disable() from module reference counting.")
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
+On 10/14/26 11:36 AM, Petr Pavlu wrote:
+> On 10/2/26 10:31 AM, Petr Pavlu wrote:
+>> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
+>> MODULE_PARM support for older modules" [1] in 2002-12. That change also
+>> moved it to the graveyard section at the end of linux/module.h
 >>
->> This version #2 looks ok to me. I plan to pick it up on the modules
->> tree.
+>> Replace the remaining uses of __MODULE_STRING() with __stringify() and
+>> remove the macro.
 >>
->> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-> 
-> Hi Petr,
-> 
->> The additional version #3 [1] seems unnecessarily complicated to me. It
->> is ok to report the value of module->refcnt before it is decremented. As
->> noted earlier, other code, such as xfs_group_put() and objagg_obj_put(),
->> takes the same approach.
+>> Apologies for the wide distribution. Acked-bys are appreciated.
 >>
->> [1] https://lore.kernel.org/linux-modules/20261103163103.13195-1-atomlin@atomlin.com/
+>> [1] https://git.kernel.org/tglx/history/c/136839a1b4
 > 
-> Thank you.
+> I've queued the second patch ("drivers: Replace __MODULE_STRING() with
+> __stringify()") on modules-next for v7.4-rc1. Thanks for the Acked-byes
+> and reviews.
 > 
-> However, I do prefer the next iteration [1], since the use-after-free is
-> resolved without altering existing tracepoint semantics or introducing an
-> off-by-one discrepancy in the recorded reference count. Finally, the fast
-> code path is fully preserved when the tracepoint is disabled.
-Why is it important to preserve what this tracepoint reports? The value
-isn't off by one, rather the tracepoint would now report the value
-before the decrement.
+> The first patch ("hwmon: Replace __MODULE_STRING() with __stringify()")
+> should go through the hwmon tree. Once these changes are in mainline,
+> I plan to pick up the final patch ("module: Remove obsolete
+> __MODULE_STRING()").
 
-I'm trying to understand why this case matters enough to justify the
-additional complexity in version #3.
+v7.4-rc1 no longer contains any __MODULE_STRING() calls, so I've queued
+the final removal in patch 3 on modules-next for 7.5-rc1.
 
--- 
-Cheers,
-Petr
+-- Petr
