@@ -1,103 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.101.122
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794237254;
-	b=qLb3WdBEqPKEAVIHwbnS411kTuwfCf1Xgk/D0FAOtOAbpxxgwNeNt6VZmM1pS1/sJhCy
-	 JPC/Pa1CoIlCQn3oP30iGVaYrbAhBfaGLqaTNOMYItVWR4jbBa07bgOcdcmD0xy401kjA
-	 L5sjfQmTIc2DPO0x+gBe3rsHIQVfgrZHPyBAdc0cbrDh5jBwtXcbRiCF4HjtvTr5kscCJ
-	 H7WiNT1xRYwhN3htFO+eUMYwxbwsjoFR4eCOaTTQGSHX+n1veBPXhdqP2gGIfDiLaWLEP
-	 bw0iv8c0tUB9YDfvMMvdPVx6NiIbRMlOcU5a2PuyihTZH64h3GELm/qL61cGMjrYfPw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794237254;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:To:Cc:Subject:
-	 From:X-Mailer:References:In-Reply-To:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=mYTPImb9a8pI+pOdyl17cm1+g9Tqr0Ojp2GadnQDhkg=;
-	b=EDFqOXXn12gsj3vd0hdJ1mkjRdw0evAX9HYN03Kb0GoHKP7VZi1oF1Cc6p2YAtiu+WEA
-	 vduzq9mfCHc4MTPVzpCiekhplsbIg0gekN1mKSvJGp81JviiwdMEbt13kXKupQokRIenO
-	 8pVCPyFuC2jd57VeRMhGTKusRyWeFN7c8/HK3dMjgMzLKHGmmCkyGpumyMD720iJvheYz
-	 eEDMWicGq7uirqIy8qw2djSUH11cXJcMkQ6sif/QlaH6FZXnzzAm75jpL7onj7kiaMkX9
-	 scbebl8n3SITZLjEphUkj67AwjItUtsFaFbGCaEH59rW8pnOSWZFGNBjBH/0ZvzT/jw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=garyguo.net;
-	spf=pass smtp.mailfrom=garyguo.net;
-	dkim=pass header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=MsOXq427;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.101.122
-Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022122.outbound.protection.outlook.com [52.101.101.122])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794237395;
+	b=rKoIsiCz/bV3WVp3gy1WP4HI11vUiQ3C/y/x0CTtCe15bK/H8uFsLGr829aGpTvj8ZoE
+	 m1oFIwudeMOzl6aMWx/+ZhxhT6LQ1K/WX75/fid/U3xDCtZk3wsEWXKiAIWw5UvZwcmAf
+	 zVRrLdu3mC1gc9v1hrvoOOsDpB0AqsgO2HZppfa/MUhYd0+Ju6H+rEHH7GmSQaLog3vcK
+	 gN0N63z/6MLrgfF2xin3hqJSmZgm3x8oTeeGzpxMVPea7xrFe52jWQ9XPaoN745oreG7u
+	 WpQaP43ep2Zlj8gw3IwWgSt4G1dBnmbBaIAhm0SXYLjD3hL8s2oTUkMHSfVUWnve4jA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794237395;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=jkscwoMz/NtwK7adTu7thVWKraeXz1/KWC75TgatP5E=;
+	b=ohvuKFuqn9TabD37NaVcln5vZwnGyO8YAjbmjMvREHtOXT2oecYr2Jl4ROsmqle2YI+4
+	 yT1b1IW43DPGBdDU6cvy+DwNkaJwbeuslIXCkEVMRAbPRPMrd+JBe9SVxq2RUDsRZ7g0u
+	 NWdpPhHbR45AULRgkV1g/6bOjjy6mfHavQxejsriZFIZiUllK1gPct6kw3smo5+ah279U
+	 +uoRekSu17FGj9zkSTah1m5llssWcysyNuvZesyWCBZGiMfIlWSlxv4GqLj/AwGSe5fTk
+	 4I7nZCD6EhTndjbV0XfTVEEXd0Ojyi1DSaFL+fF9x6AHPg98NEzTltoPEbTtldP3a4Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Xs8Oszdy;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6163F606A325;
-	Mon,  9 Nov 2026 15:14:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6163F606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BF2606A321
+	for <linux-modules@vger.kernel.org>; Mon,  9 Nov 2026 15:16:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72BF2606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=MsOXq427
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T/hpjZq5rRBL8tDo9IIKj4wD/5jXoV61cWGAvNq/BKYDO7gNZGVdo/5tThP/TnYKpSdeAwXJdb8G5CAqX35vyVsFde5eA6vLD+5qLzLJdOIBHmWgM5v0m11okQbWNA8CK+VQFrvbYvjEjA+AyAdsV8SfY8TZO6tHnqPE9Sz73qC1N5QfO/SpNO+Uiqo7G11BpZ76O4vsBNjBadsla665xMrLd05KHoTpdjrEJbKid51XELSyA9fPwJiMocb6dLc8clQod1OY/G7oemqmMj941vmH504fowJo4pln55JBnMoElxI/r73BFhPIjM36iZXMrd2FQGrHt8SXSM0YELyNpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mYTPImb9a8pI+pOdyl17cm1+g9Tqr0Ojp2GadnQDhkg=;
- b=x8cb/h6gfWFs2/eEJCUtMR9yUN/5sk8VIegw1jZUO6pYFHDRrQzVB91tgmWks7xrPLfh4HyfiVx9MsAr0DupT87XFz1ym4MXnuoc1/Q08oSnURzZWvm57EnegrW+bObgLEv+0rQv8Y/cOTTtLL05F8vPT4SxY1+OBHb94Z3S78iXnpOsa5+1e1YHSATFw1dTctvkCXxS13aaTNazMvKCb3xsaFxhxeFq/JUGPfAsjdT52vPl0M12csoV0UgYgpNtqRx2j62ylQoZlSLNkTOtlJCDM2Yq6LI9S8SzS7uRnkocO9CPGQkNvu8g2uibWtea3h5wFuw6zS/FS69djD1UAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mYTPImb9a8pI+pOdyl17cm1+g9Tqr0Ojp2GadnQDhkg=;
- b=MsOXq427prLzmm+cjJ9Zz7GvcYxwzaD23WjEjGdxW60AXnljXzDLtDGXKKhU1BHpr+O0y3YPnFWMWBM+wWB3wU5mCjFtEJTN67aH+3gDqAH9hRUHcHYoQYcN1h4a06nxUqFt9MOI0ap4gojNG+h0rBfURn0JTLgn1PtgZXtmWUk=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1cb::9)
- by CWLP265MB2481.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:90::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.13; Mon, 9 Nov
- 2026 15:14:09 +0000
-Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- ([fe80::55f6:f98b:7fad:c6e3]) by CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- ([fe80::55f6:f98b:7fad:c6e3%2]) with mapi id 15.21.0592.012; Mon, 9 Nov 2026
- 15:14:08 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 09 Nov 2026 15:14:07 +0000
-Message-Id: <DMQS0SH6975Y.23Z4V64W0HWN5@garyguo.net>
-To: "Giuliano Procida" <gprocida@google.com>, "Miguel Ojeda"
- <miguel.ojeda.sandonis@gmail.com>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, <rust-for-linux@vger.kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Boqun Feng" <boqun@kernel.org>, "Gary
- Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- "Danilo Krummrich" <dakr@kernel.org>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Tamir Duberstein" <tamird@kernel.org>,
- "Alexandre Courbot" <acourbot@nvidia.com>, =?utf-8?q?Onur_=C3=96zkan?=
- <work@onurozkan.dev>, <linux-modules@vger.kernel.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez"
- <da.gomez@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>, "Aaron
- Tomlin" <atomlin@atomlin.com>
-Subject: Re: [PATCH v4 0/2] clean up EXPORT_SYMBOL_RUST_GPL
-From: "Gary Guo" <gary@garyguo.net>
-X-Mailer: aerc 0.22.0
-References: <CAGvU0Hm04LXTywU0eL6KN4=SoOAC+LU3BKqENnLR-WV-sHsuNA@mail.gmail.com> <20261103165833.418845-1-gprocida@google.com>
-In-Reply-To: <20261103165833.418845-1-gprocida@google.com>
-X-ClientProxiedBy: LO4P123CA0144.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:193::23) To CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:400:1cb::9)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Xs8Oszdy
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a20a37703bso7226455e9.1
+        for <linux-modules@vger.kernel.org>; Mon, 09 Nov 2026 07:16:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1794237393; x=1794842193; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jkscwoMz/NtwK7adTu7thVWKraeXz1/KWC75TgatP5E=;
+        b=Xs8OszdyHPnrMpzHZZO6hjZ6A2iLC0CKaCtZnwgj2MHJPWfpJLEAZq/hLIovII0Air
+         kmQU4uSGZLoloyJyht8LaXc5LLx9E4P4zMskHlDWPz5z8UfByygqX2h6E8P6de2bs7GG
+         zCUNfluH6GdU0bYfhCsy0zIiq/k8rL2bg/uzk4iuR/dmSlfuBGkQb4WTisfpuPXCtojt
+         0htC1DRci+FVRlozeA/telQ8BkSTqzKzE+z3VBq8T3Q5P/+XEE18/TfjE1QsXRP+LERx
+         rzWp+zvRamVhjiYE042jAKv/8+gU5ROH0QeKiDf+pCJ13Y0yVXWwEzlUt1V5UCgg84Iq
+         +ljA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794237393; x=1794842193;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jkscwoMz/NtwK7adTu7thVWKraeXz1/KWC75TgatP5E=;
+        b=oCbEU7KN1I7OWgqi7U8Ugdl+sBrNh9j5Qd9erTg1yVBsbvv5NMf99Rv7KAEHCpPFTI
+         fBgxsIpAvgJst2S/LInqq8APH+5WCl1xNfkIOTwqawLZLzczGCoH7xFZPiJLK/rRSvOX
+         t12vSpWuN2x6pKoFMtynfdymm8++aiQ/wvKRpi9eNIvDijz0wXkXy9QCkv1mVSRiFFZk
+         cZOr9xAKptDY+UBzxZWjV9C/1tbMBml3qsD36GFFrLkq5q+yx3C1yL58iOf6Gy54cjsn
+         QYJWMmBXQg+cRRmiha7s9isqaOKUdQ2r5n1pyVd9ma9hOsYdG2AKVijggI6g18tCPfg1
+         CfYQ==
+X-Forwarded-Encrypted: i=1; AL+hErFaqjbDV+vcw8x/ZU2UQ586p6ZbZQfaLGiVyKfRTeP0yX1JC9zmQbdaOXDY9PzY3yLGwNmVqxe8wexzm1l4@vger.kernel.org
+X-Gm-Message-State: APuU4Z+0an0tv5ZwQ1SdQ32L8QTRGkaRTZqCD3gQP/y668DLZWLYeJMa
+	u2eWkJH1Ym2xX9GerYs9gF3A/Hl8cr3w+QwundbcTMl77cIm/UzJZ5LRhy20VZdS5+c=
+X-Gm-Gg: AYBFou3LfrsUAEIpvvu95F9mhX8oqcRnp2EhYdvV5IaQineR47Ci9uGRYGozUbB/ArY
+	yknb+rU8hP9ob8ugOeKdpuGmV1PyO3PBIdyG//k6gNoFLMRZkfRbJpsktysmHb/Lxoe/GSINg9m
+	P/yw/P2yN5jlwjOcFibstGojTa5iZyb5Tz+IwS8Gn0PtgxY5R5rP6IRMczWOihug4iLlwt7IDyr
+	BQXjRFo5BGnztal5l6QgWicWUq1FfdEQptsjMYUc/wgN77utd8tIbSo3b0vlbT+GqBUS0SiiIFz
+	TRC1Jx1WT3VWfgDPXD7+idui5tGhtUSMf6Hq8Me+gk4MuBab8WW0BTgMU0Cf5diW6Vhebr4RHYJ
+	0CjPtywjceOChVCFTzBj3u1l4m66SqDEFUP+AfO5odP0VAYZlKUhuXl1wyXbLGHGJhgVzyVotPw
+	7avrm5VVJMA3XOMLooT/mQvTBPl+OaIMntBCxc1hgxEp7eVn3JGrpFufYJDK5+V2LCw7CZDmrkh
+	8xpcSeMhhzpY5mHeoicVF8SP4u0c5o3wX/nsn3U3DeNO9IbIr3stOqjXmIftHWHWcrOXllcu/Bl
+	Y0CpDgJRwFVeRSRDDSNkLT2VRbLSSh0cCq+vCFz01MkTzqaFO8wDmaFZ2G1maS/c
+X-Received: by 2002:a05:600c:818e:b0:4a2:167a:c939 with SMTP id 5b1f17b1804b1-4b963c85687mr70833595e9.21.1794237392747;
+        Mon, 09 Nov 2026 07:16:32 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b79502652csm165199245e9.4.2026.11.09.07.16.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Nov 2026 07:16:31 -0800 (PST)
+Message-ID: <97331297-3f78-4f6d-ab24-61cf329647af@suse.com>
+Date: Mon, 9 Nov 2026 16:16:30 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -107,134 +92,99 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP265MB6051:EE_|CWLP265MB2481:EE_
-X-MS-Office365-Filtering-Correlation-Id: 378e98cd-4a19-4ef4-5a64-08df3e741a08
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|23010399003|366016|376014|1800799024|7416014|22082099003|18002099003|6133799003|10067099003|4143699003|56012099006|261026121527099003|261102130727099003|261102123227099003|261022075727099003|261021121427099003|261021123027099003|261009223027099003;
-X-Microsoft-Antispam-Message-Info:
-	xwSEuVvkcp/TpOwLGoitkU/oMCAT0+cvRKerJtGl1YAIuBo+ufS9UGdAx0t59Zcp4YVZXz8V3vKAHLZeuemVCMyfStqtuDD/YoulwOJPTB+wWw/oDzPpy33tY115/XsOGfGwt45uYJfER+VF+sL3WcLroj86HLeL9lEODw3TaVuJqMlOe+Cp1O7AfYT2QF4gt0JyP2tDddHiF1OSQ1XM7QoW02A+0f2IH3zE82XTGE3kCOxhZ3pGsM4WPZJeKHc0yATqcNgv6PvpncALL/InL4n198hq4VPOkHp9eBuzFc2Uu7vHDIotfNUhbwapo8YakWU7dMo2RBlXPWWlInojohjCLUSBErBlGxwN5GagndllVLNP+D3aZE+OkjB44PEYkLewv+Cx1k+LSYI2FRQbFMSnnZe+Du3+acffYbhoPM4AfKIhqXfYQmThHzyeAlK8DJGtkrfKO7dlyx4NrtuKcvnYYX6j3Lbzean9m7wj9pr8reuutwt5Th/zrr0+JNm7fogyE2icQSmtkbsY8/J1k6xxGOp64ZmZ6KSNgYzxSvXGUJZ6IkXvGlIjMirRKWy9rNKAgrFaPjmv33BMtbMfUfWj3cRRPpGbqRi1O6VZnzM3Y/fEp9UPJ0nchUMEZ6NGh1iBBrPcpEVmqjHYdrP+GCxm2WNA8q8EuZS6BDFItl8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(23010399003)(366016)(376014)(1800799024)(7416014)(22082099003)(18002099003)(6133799003)(10067099003)(4143699003)(56012099006)(261026121527099003)(261102130727099003)(261102123227099003)(261022075727099003)(261021121427099003)(261021123027099003)(261009223027099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?czliajAwTEZRVUdnQ3hMbTJCT1I1TWxRTHNwRThiYThoTHZsRElCSnlJRit5?=
- =?utf-8?B?OExQN0NhMnIyTU5IQ0FFUHdUaDYxVmtlMGdwMzJhd2lCazU4c1l2bTRZS1U0?=
- =?utf-8?B?dVhFYU10dmhIeFpIV2NJNFFZd0pEQ2t3ZXFTZ1N3OVp5bHQrTktGbm92R0VS?=
- =?utf-8?B?S1VSYTJ2bC9ub3YyM3MxeTEyUjVmRllhMTFDM1hRMVBEckQycHlpZUtWV3BJ?=
- =?utf-8?B?OWNDcmR2NEFMWEp2VzNMWEplZGxhZVpUMmR0QkRrc3g3ZkcvRHFiOXZDQTdR?=
- =?utf-8?B?TmFhay9EdFhoeTFkTExQeGRtbDRpYUlJazVNczFla0o0bnQwVUZYMVFXMHd3?=
- =?utf-8?B?NXZGaUdDdWNBUklYQkZONFJOZDMxQk00cFBDazN1akZ1ZWFWZnU2R1ljeVlS?=
- =?utf-8?B?L0FUOVhzWTNRejJNNWlaazVmU2VFaXNaUVRhd2Y4bFBYMzN4OFNqZ28xbFl2?=
- =?utf-8?B?TGIvdFRkMGNLY0NhNUx5Rjc2QThUQm4wZ3N3ajkxMG5meG51VEhNS3dhMU5q?=
- =?utf-8?B?R2JEeGY2eTlPSndlbm84aFJwVHB2VytwMnorK2l2STEwQVp3cWZjK0NWY3Ry?=
- =?utf-8?B?dkJPOXAxeUs2My9qMisvazZYZ1JhV0xPbWF0SG5Vc0pCM3ArY2hsY2psOHBJ?=
- =?utf-8?B?S3dMTFhKekt1U1pCTlpmb1VZTjd4WER0VmFIODBvbTZwK25GNm1zSWlUNHo3?=
- =?utf-8?B?Z2hSUjdrVHdWck9rOTRRUlRlVFFvb1FQOFFFWTFsb09HSHphcGZlbWM5cS9w?=
- =?utf-8?B?MWZEd3QrMWR5dVFubHNyR0hYaFd3YnVyT2xJd203dnJJNW9jUzJCVVBlamNE?=
- =?utf-8?B?NTZsZTRaSnV1RWxzV0xGdEM1eHZ5T0lvS1ZlSUVISDJVeXNaazV2YVpWYzhT?=
- =?utf-8?B?ZXEvQk9VbUplekg3b1JBWUNvN2ZGbkJ1QnY2MGtUeTlTY0hodSthRzJZTTlF?=
- =?utf-8?B?eWpvcTJJWGVoRTNlQi90aE5kMkFueHhmQzl6NEFub1BMYzBsaG1iQUltTEZI?=
- =?utf-8?B?bEZBdFExYys3NDBOLzRxYVlPaFJudngyeEgvNmpDQnJIdkdJUWpvek1zSTBt?=
- =?utf-8?B?RVdjV05rVnhCU0Vhdnl4eEl6UVA1SkFjd0ZZK3VnZHBkTjM2Rno3aXJEblMz?=
- =?utf-8?B?L3JLb0Urck1MdTZ3RGRoTHVuOGdFZys0S21XUFpUTXloNFM3elJvOVFibW9t?=
- =?utf-8?B?NVZOM1gxcXJQU2lNZ3QwL2NkY2FPNFFVSjVaVTdZbXUvWUpOQ25kNXgyVm9I?=
- =?utf-8?B?ekx1ZDZNbFd4T3ZYZS9VYlJTSXMrT21IcEtlYUdCRDdsUW1aSXEwQnpzdVo0?=
- =?utf-8?B?RHZhc2FsZzJQVDY3VFFsL1Zzdnk3RzBQb2REY2F4TEt2aDQ2TVZiV2pDU3Y1?=
- =?utf-8?B?Umo3bk5xUHF5ZmVsY0VEQkliamFBVGRUeDUrTTBFYUpLV0YvcjhITzJKeDJx?=
- =?utf-8?B?ZzdTcjI3eWpoRXcwWXF3bkg5aW96Sk0waFVyMW9uOGg3VEtoVkFraThjODJO?=
- =?utf-8?B?T1h1MXI3MUJCVmJwVFJ1UThIckVNNWtlZ2ZjMnppZml3NTNoMGNJSXBLeW03?=
- =?utf-8?B?dVFxc1ZTVHl6Vm9Td0kyZDdsTy9YUER5OEZ5VythN3RJU2dMWFFBazFsN3Rh?=
- =?utf-8?B?V1FZZlZGTnNiWmVoUk1DNTJsY3ZtWE9TVDhVVndTWWozbEZxN1d0SmdsNFZx?=
- =?utf-8?B?bXJiNVBVdXR6WXloWVd2eHhXZkhVdkM2NWpKMGhFeHBFemdLalF5emlQYldx?=
- =?utf-8?B?c1JWSlg0OTRDYjc2cXkzeXlRVVJoQ2tPalF0YW13VEtJc3hIMGZEYWJVcFBo?=
- =?utf-8?B?VURma1VDdnB3WDE5YXFza3lGQlN4eThKd3U3cCtLUXdvREtOMWVqZGZqUDB3?=
- =?utf-8?B?YjdiSzBIQjd2VUsyUmF4cWxnUHRRcS9kcnBIMjd3K2x2QVBlZFNOUjkyRUV3?=
- =?utf-8?B?UGRIeitnU2d0ZWRhQ0FQZ09XaHpyUEdzK3Zld3ZqSy9BRCtCTnZLcm9HQ05x?=
- =?utf-8?B?dlN5dEhDRDBMWU9rQjdwbTdPblRXV3FGSkVlcVY4R3E2ZkJXZWhrS29ndmNx?=
- =?utf-8?B?VWZNcXNPMDdvT2hXR3hZWlBoY29nazZuejc2SVplMmRVOXdsMXpDbWl1MUZ1?=
- =?utf-8?B?TGJNSGdDU2tXOUVXSmZLeFZxZkZjY000YlhsMVVpbHYzY0JEeGZpTmNHaytW?=
- =?utf-8?B?STlDSlBPb2VPR3dOU1loZjlpdjZVeXB3SHlHejR3eFE4WnFjREJHQUZ3WTlv?=
- =?utf-8?B?K2NxQytvRTBsZloxaG5oUGV6Yi9lYUR3ZEd4LysrNnprdEYzR0tRaGMxeks1?=
- =?utf-8?B?KzBDNWRodWJrQUdENURpTHQrOExnZTdNUmhUZWpZMDJjb0NOQys4dz09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 378e98cd-4a19-4ef4-5a64-08df3e741a08
-X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2026 15:14:08.6491
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sgfhAH5Wptg/F31+YdlEsoVhaFkZl5TBVs0dW1u+NwnLtK0q/ZqHDa35b9FdNQGNFGxhlI70CZXZv08EhrjXyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB2481
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] module: Fix use-after-free in module_put() tracepoint
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
+ da.anzani@gmail.com, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261022184517.66438-1-atomlin@atomlin.com>
+ <2fd1031c-7a86-45cc-a595-bbd13e102d43@suse.com>
+ <zjuuet74suq7dujrlt4pfeoajtksegfrslsmokgvfjg6o6pghk@dbifrqvwrnaw>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <zjuuet74suq7dujrlt4pfeoajtksegfrslsmokgvfjg6o6pghk@dbifrqvwrnaw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue Nov 3, 2026 at 4:58 PM GMT, Giuliano Procida wrote:
-> Move EXPORT_SYMBOL_RUST_GPL definitions into linux/export.h and
-> prevent the emission of bogus type information for Rust symbols.
->
-> Addressing review comments, the first commit now ensures the moves do
-> not trigger warnings from scripts/misc-check about missing symbol
-> exports by extending regexes to match EXPORT_SYMBOL_RUST_GPL as well.
->
-> Giuliano Procida (2):
->   rust: move EXPORT_SYMBOL_RUST_GPL to include/linux/export.h
->   rust: exports: emit ___EXPORT_SYMBOL without C declarations
->
->  drivers/gpu/Makefile                      |  4 ++--
->  drivers/gpu/nova-core/nova_core_exports.c |  5 ++---
->  include/linux/export.h                    | 14 ++++++++++++++
->  rust/exports.c                            | 12 +-----------
->  scripts/misc-check                        |  4 ++--
->  5 files changed, 21 insertions(+), 18 deletions(-)
+On 11/9/26 3:28 PM, Aaron Tomlin wrote:
+> On Mon, Nov 09, 2026 at 02:47:31PM +0100, Petr Pavlu wrote:
+>> On 10/22/26 8:45 PM, Aaron Tomlin wrote:
+>>> A use-after-free condition can arise in module_put() should a thread be
+>>> preempted immediately after decrementing the module's reference count
+>>> while the module is concurrently being unloaded.
+>>>
+>>> In module_put(), the module's reference count is decremented via
+>>> atomic_dec_if_positive() before the module pointer is passed to
+>>> trace_module_put(). Consider a scenario where CPU 0 decrements the
+>>> reference count without reaching the baseline MODULE_REF_BASE level and
+>>> is immediately preempted: it relinquishes its reference while still
+>>> retaining a local pointer to the module. If a concurrent CPU 1
+>>> subsequently drops the final active reference, the module's reference
+>>> count reaches MODULE_REF_BASE. This permits the module unload sequence
+>>> (via delete_module() or the initialisation-failure tear-down path) to
+>>> proceed and invoke free_module().
+>>>
+>>> Function free_module() invokes synchronize_rcu() and subsequently
+>>> releases the memory backing struct module via free_mod_mem(). Because
+>>> CPU 0 was preempted outside an RCU read-side critical section,
+>>> synchronize_rcu() does not await CPU 0. When CPU 0 eventually resumes
+>>> execution, it passes the dangling module pointer to trace_module_put(),
+>>> which dereferences mod->name and mod->refcnt, culminating in a
+>>> use-after-free. This sequence of events is illustrated below:
+>>>
+>>>     CPU 0                                       CPU 1
+>>>     -----                                       -----
+>>>
+>>>     module_put(module)
+>>>       atomic_dec_if_positive()
+>>>       [preempted]
+>>>                                         module_put(module)
+>>>                                           atomic_dec_if_positive()
+>>>                                           // drops final reference
+>>>                                         free_module(module)
+>>>                                           synchronize_rcu()
+>>>                                           free_mod_mem(module)
+>>>       trace_module_put(module, ...)
+>>>         mod->name
+>>>
+>>> Resolve this by moving trace_module_put() prior to
+>>> atomic_dec_if_positive(). Because the caller holds an active reference
+>>> to the module at this point, the module structure and its name are
+>>> guaranteed to remain valid throughout the tracepoint invocation without
+>>> requiring preemption disabling or RCU synchronisation.
+>>>
+>>> Fixes: cb0b50b813f6 ("module: Remove preempt_disable() from module reference counting.")
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
+>>
+>> This version #2 looks ok to me. I plan to pick it up on the modules
+>> tree.
+>>
+>> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+> 
+> Hi Petr,
+> 
+>> The additional version #3 [1] seems unnecessarily complicated to me. It
+>> is ok to report the value of module->refcnt before it is decremented. As
+>> noted earlier, other code, such as xfs_group_put() and objagg_obj_put(),
+>> takes the same approach.
+>>
+>> [1] https://lore.kernel.org/linux-modules/20261103163103.13195-1-atomlin@atomlin.com/
+> 
+> Thank you.
+> 
+> However, I do prefer the next iteration [1], since the use-after-free is
+> resolved without altering existing tracepoint semantics or introducing an
+> off-by-one discrepancy in the recorded reference count. Finally, the fast
+> code path is fully preserved when the tracepoint is disabled.
+Why is it important to preserve what this tracepoint reports? The value
+isn't off by one, rather the tracepoint would now report the value
+before the decrement.
 
-How about just getting rid of EXPORT_SYMBOL_RUST_GPL completely? The only r=
-eason
-that it exists is because EXPORT_SYMBOL_GPL in C expects the symbol to exis=
-t.
+I'm trying to understand why this case matters enough to justify the
+additional complexity in version #3.
 
-We can simply change change rust/exports.c to rust/exports.S and get rid of
-EXPORT_SYMBOL_RUST_GPL completely (plus saving a C compiler invoocation):
-
-Something like this:
-
-diff --git a/rust/Makefile b/rust/Makefile
-index 0165626decbe..75de47028b60 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -571,7 +571,7 @@ rust_exports =3D $(NM) -p --defined-only $(1) | awk '$$=
-2~/(T|R|D|B)/ && $$3!~/__(p
-=20
- quiet_cmd_exports =3D EXPORTS $@
-       cmd_exports =3D \
--	$(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n") > $@
-+	$(call rust_exports,$<,"EXPORT_SYMBOL_GPL(%s);\n") > $@
-=20
- $(obj)/exports_core_generated.h: $(obj)/core.o FORCE
- 	$(call if_changed,exports)
-diff --git a/rust/exports.c b/rust/exports.S
-similarity index 86%
-rename from rust/exports.c
-rename to rust/exports.S
-index 1b52460b0f4e..efe6bff0f983 100644
---- a/rust/exports.c
-+++ b/rust/exports.S
-@@ -13,8 +13,6 @@
-=20
- #include <linux/export.h>
-=20
--#define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
--
- #include "exports_core_generated.h"
- #include "exports_bindings_generated.h"
- #include "exports_kernel_generated.h"
-@@ -25,5 +23,5 @@
-=20
- // For modules using `rust/build_error.rs`.
- #ifdef CONFIG_RUST_BUILD_ASSERT_ALLOW
--EXPORT_SYMBOL_RUST_GPL(rust_build_error);
-+EXPORT_SYMBOL_GPL(rust_build_error);
- #endif
-
+-- 
+Cheers,
+Petr
