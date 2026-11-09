@@ -1,87 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794239513;
-	b=B8E7fxvpwcZsXsNg3UAQk6XNBZpGS82VBvry/SW1t3a75rSb4fkz9F7sFY+4iz6o5flO
-	 Bsz7ZI/5SthtKXbxLJdlC7qpCYD5uZ2a6u9QNS/MtVgEv0DYh1IZqbi99fiON6crEACKQ
-	 jFmA0qW2Wf4Qm8JFx6/JO/ic0KmIbiKRyzjSsxBndu1hEF/OiIcVvwlMY9f9z8zkERWdV
-	 WtDFVOkFx6JufOvsqhYv1DfWvBdc+TPe2DaePL0l6pR3oetmG3/w/OqpNdynhmwKK0DD/
-	 B9j3VgbzaNyweqZvVMQZ0Y/YsKd4raV3Dkn1NeQT7ZFRova17J4WoaIcxl6OfCkHbkQ==
+	t=1794242593;
+	b=ak27ZEl2ByKcyfHzSSh3gX8T27yI2UtX+cjLNOgjqd/VUv539uQH7ZGEb/QRPCpAxl2V
+	 utQjz7+Zk4knxZ9e/sZQE3zLBZOk+sI8RNx5RQNa5aRNED1m9BtFtQzy5avvFJS4WaFCy
+	 8fXaWbCTRaTOwRoI6J2JTmMD4Q1iUBmvf3NA9MlAYFiILXfbsz9x3RtXi7mBMWpPOqKpY
+	 7Mj4lkK0leHNleMYnn5nPB4C7AlV0+9zac0wLvA6NNz1fAarqKGqJJfGrReANtgpYqHAR
+	 GVZZhxbxRgJxSWaWpFzBcBEC9mU4aJrHj/GFcIMm+f2a38+ZeyayALN30+4hGBeFylw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794239513;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794242593;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:Cc:References:
-	 Content-Language:To:From:In-Reply-To:Content-Type:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=GqcUVOE8YZm1FPDzDze4+rCKgn8rK0xiBVztztTok30=;
-	b=ApFerg7OUfoFwGZ5WPnigxKXWIk9VIDhWfhfKPyzE73LL1vqGgnUX+N5iBY1Jo6BuU2I
-	 g2lJR6GEXUutm+mm0DJE0/CBs6Mml21BiC8vrbxH5jYMzKPNd0+3OPMpPp6YXsHa9tPKh
-	 KJvHtt5djLOPYjshvJ0fVKACFNHuoGid/XOtBa/UlKjXG07L1t/CErv5H1xZwm0Jhzv+v
-	 JaLux1YF4cre1aa8dMCAX5+MbzWinbLbv9WijasHm1+22QamwyymIXPLDH4c4y56g0KjX
-	 RnOr2qB0195BDBi1/YcxztXE1TyhdZcp51I6b1WAxUiWcb0pPj9gRfOjqmA7IBIelxg==
+	bh=HLYen38mKGP677B1oAzbJm7ZesXCZSDjKVwDLOHWtRg=;
+	b=3+5yoEAOrSlohdtb0n68pdSGGX/Blw3gWUzeB4FBZv7NPweGWQD8w2iU6tQ160JcgY2M
+	 DuKLy8+AwMs5nsJE06CKjjzWSySaotD1wlq75+C/fAoUu6ot845j0FnBDBvhOvz4fLos4
+	 WDzXQCO+G//+xgzgXmrjzPPXQylUSUq47I2XMfbh+uoiFXMBcdXI+hbqg6dVku12Jwwvv
+	 oGFkt0SwIuFnvqyQHexDNwTm8dibxFvVlNCMbdN1RHnupUkEClwvRl0P56glxxM6M5sNA
+	 aveUg28J+IAuwZ1OafOimtpffD5FY05zAcet0X5YCUPq93ho1W5q/WCngjSggE71d3w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=suse.com;
 	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=I6Gf+TJ+;
-	arc=none smtp.remote-ip=209.85.221.51
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=YGuhw1oZ;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1097606A326
-	for <linux-modules@vger.kernel.org>; Mon,  9 Nov 2026 15:51:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1097606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3CE606A334
+	for <linux-modules@vger.kernel.org>; Mon,  9 Nov 2026 16:43:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD3CE606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=I6Gf+TJ+
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48e3b22e971so563441f8f.0
-        for <linux-modules@vger.kernel.org>; Mon, 09 Nov 2026 07:51:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=YGuhw1oZ
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a549cd7fd2so10764165e9.0
+        for <linux-modules@vger.kernel.org>; Mon, 09 Nov 2026 08:43:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1794239511; x=1794844311; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from:to
-         :content-language:references:cc:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GqcUVOE8YZm1FPDzDze4+rCKgn8rK0xiBVztztTok30=;
-        b=I6Gf+TJ+xx28C6M6wGa7IriJIxP64CATq5xKa5KY4/dVEF70L68u8oNbC3qDhkhEI7
-         7ia14iP5TbkPq0pUWtgTMNnR57unFzAtVelBZ6VlJdQ4CrgVYgxw4RobiXpnUn7hkB+D
-         nzTyACD0+MFjBaqWPAWXlFUgKFrj/LJmZ6fQQvFA0wYX9Z+YdDx7xP/wSzXM8J7jhI3Y
-         cnv1opUi8bNDC5CGiUC5RyhE5sufSwg94ps4g0+w/MIT3GHEM+nHtCTD6yBD+zcjVMzC
-         KM6SnUFC/LBhWAJoh5/3RAr1pEMN+dTTDdPPEWzL92kIaF0QNP3pX9QYFDhi6xIlcLq5
-         xWjw==
+        d=suse.com; s=google; t=1794242591; x=1794847391; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HLYen38mKGP677B1oAzbJm7ZesXCZSDjKVwDLOHWtRg=;
+        b=YGuhw1oZxUPL/bbx+i0ijosSnISYIbUul/qGq2zAELOacB08dvYDccSx/x9rU6g9gl
+         QyPht0zwbkvD9ejc3WNj6TDVij9KZUrBEQ9Xt5i0q2PMick2I5G7BiPPIhuJ5QsC5cpF
+         Hc9VdS41J2qakEC5kRjP6W1h9qpqNpRyQS76N9UiluO+WrKbrxUc+eHpH3MgwEVU/LBg
+         EKYTjvlmvVcRDnUT5YdBxwyzf6msDAIK2mLzEprKTk57LkQxxSPMwQJzYJo0fRMdPBCc
+         S1EcyuYCyB06Nre1/tH9qJ9dfWqNPjCBc4QnRUd5kWvI+126KhchYL1WWv8hq+Sx8TwT
+         sacg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794239511; x=1794844311;
-        h=content-transfer-encoding:content-type:in-reply-to:from:to
-         :content-language:references:cc:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1794242591; x=1794847391;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GqcUVOE8YZm1FPDzDze4+rCKgn8rK0xiBVztztTok30=;
-        b=pMktxf8oYcP9uuJ+6kqctP9t+lN4nmgTyeu4UWjiad3FYEtvXeZnZJRse2aFOsyqxD
-         9q06cuVeu2Y4MBDrAqK2QV99eRGt9oDsgwD9dw94JDeUpxf67B953S0cnLVEULOSaPNS
-         EcYCZpCmGyM/Isy6BORs0J15ZwiCiPbIzjRSWz6JxUCYplE9mOH3pLBU5gSwBwn+aETl
-         fgE1Ul183sSYbsXteMu1LhQ77MvDGgTmGgCQ49ZQUrWaWmy3b1L5NWJInnSU5U9tqF9Z
-         EJyEblK+Vn4iYg7TKyNXEX9ZNLYyHn8n8A07no0LxCUDh5Krn1x2onCzAoSb3xV5sxQP
-         aawg==
-X-Forwarded-Encrypted: i=1; AL+hErHYgcY1H6yi2lpnXyIwt5XJoJQghcPp3kGIV7KDS7APfE/mLfctU/lf8nCAIbBQhvhDPwW1ETH861gAyien@vger.kernel.org
-X-Gm-Message-State: APuU4Z9F268ILXUkclSkPzgpU/sM0UyKuzuyjWiLxY0Hy5ASAPq8ayvF
-	T8xSiW2MpXDtZtKSE+hNP+sEntLmZQLY1kMe5S2m3OldeK7+t1K4NCb0nQq1AmVsWVA=
-X-Gm-Gg: AYBFou09W95p631mE+KACfB6bdGcyggXVz6LDk4wqwh/0/uwlpH3MVDFxiqYZTVg8bO
-	czDvmwIGAKv1a3Q6Gop/qCmWrjvAfZA0hDTziB8I7mSGHWFzCDuhaEBok7uFz5l2M/f7TyF584O
-	06CmVvD6/hwfmWs8CQjHm/dZZiQunHeKUGbZonYJCzP2Az5iOBINYMnBHnbn/8lnDWoViXAinKw
-	H2wkb/Z2y5Vl3ApoqwBotAPgnXzftsiBmCc6YXu1PeB0yILjmXN/LmQQQou5Om0bhia1KAGjFRP
-	IhKk9gVSOcI+U0n9XfVr80WGCxLXsk4uY1YrtJyyK22ZwA3ooqt2SwlPusU+N6zsOqntc4/KP08
-	fULWZNHHaYQWeQpY5OibQb9nzJFA4ALDnZRAWTbfXDxgfOBHd4Egp2eXBYyUOMkkp2iAB9nIGCl
-	vgVTXHiQtPRsWlP6EPhOm26iFCXyly4r2saYwh3yMrtpS6CMAINgxPjJes50ArXq9SInRXvaxsw
-	5CeqrP3e5SroJPiT/C5GDugtvJ+Tyl+ZorH19W3SPQHl6VISxy+vc5pTCLEQvUwosvKyR5bmrLv
-	L8yUsqIlnfZdOHD+BPH79kk0kUykiK3TpCySsk8yZrCfP6OdingpBYeh8AFcvMYF
-X-Received: by 2002:a05:6000:25f5:b0:492:e1a6:90eb with SMTP id ffacd0b85a97d-49582e8e516mr8245452f8f.10.1794239511204;
-        Mon, 09 Nov 2026 07:51:51 -0800 (PST)
+        bh=HLYen38mKGP677B1oAzbJm7ZesXCZSDjKVwDLOHWtRg=;
+        b=bywSabv7zmUxfTCSAk336QFptUw7ACHGD7+yroNbADv3Rbb/aKrj/DZbHsacebetBi
+         SCa/Vdyz6QqpDvHhfSNtq7whI5TA2Y9VZ8fbNSJS7UqcWLhZSKaPqIgzncO4ERKDXTLa
+         WLdW3xwI3pphrg/dM9D4ckofy3rYqhhI8kxQ5v5Rd4jljCyl//aq+s67u77zuwRL9JVj
+         pSfdyI9nNfRqyloYf25KB8XNT0WrafrL8tc2dpdMOKuQdFIPbRKRm2cTNe+ft+w0Fona
+         BIsRvBO8asDKcXgApxGMDl/zbC26UI/0yfYnCi+kXgB3H4NGTbuspmDGe3VyE+NSx0du
+         oImg==
+X-Forwarded-Encrypted: i=1; AL+hErGkPBGsZJ0GJixBYM0PIGccoF6S+u87vS2ESaXY/iivw0eoTUORQQty2qk1dazJyj0YKUBb/C6+UFHiNNlW@vger.kernel.org
+X-Gm-Message-State: APuU4Z/SSVQLT8V8IQWpBsLjQ03tO2JA56bb7RstLnH5JtZamztacc1l
+	rxZpi9plesN0OoytHIi8jCy/MsHwTesGnup6wgY+B1oIBIeET133l+o/100KJ8FAO80=
+X-Gm-Gg: AYBFou3aFB4jA3K2FsiTuEDY9NpdIgGGFlxGQt5zrGrWmCFjJ7crOCUqVMoNkcCw6/2
+	Be7RQSFeuhMKf9FejTeLE6dG2/gZcTQN065wrIDJH4Jiavib5twqYSwCvCw3MnwkRj+E/1FhrLy
+	oD5LgPzozqXgjPiiu52Qa0TIazV2vF1Z9InegaFO10e/apihKDVVyK8KRE8yTf68RuDCU24vP7K
+	jiu56nf+Qvb66Cdg2NYq3aI/uvl41OBQNYinZYq4UsM3K5BNMRzbjg7PsMX3fLWUnYKFuCrwQ4H
+	97r19hOGmfZPuK0GJsemRwVlQHcZkDszCw7WjNjLT4/kTHUX7R/BvHy44G98guy+lkWaZVFeSVV
+	Llys9F8+uSWIkPVqW/alxplumOF9vK5UhOINhyTGInhs/GkAyRwFUB4KNC3e+iGwDV9Si74gtSF
+	S92bFtkxTUy6das0sJC5OqAd/8ZWRl96H9ZFt7SFCwIrrqDM0GZVt4avjxc2tiq0Zr7Nj45IlfZ
+	HNaCXpLvTSECbdWAx1nSivaZmIkXy2R1qkq2M7f183wtol3Z9ddIFzwV5iT11d/BDVCbN3Fstru
+	F1ywVmPuF0VasLujwEKQYKcb2SLOJBzb8pyE4jNrltbQC9JPWCRI4CkE9HIas6Zz
+X-Received: by 2002:a05:600c:3508:b0:4a2:526b:d40f with SMTP id 5b1f17b1804b1-4ba015b8c6amr1961265e9.0.1794242591012;
+        Mon, 09 Nov 2026 08:43:11 -0800 (PST)
 Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49597186eb9sm10435718f8f.35.2026.11.09.07.51.49
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01d8ae9fsm806785e9.3.2026.11.09.08.43.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Nov 2026 07:51:50 -0800 (PST)
-Message-ID: <a190f981-d668-4208-8148-f4e50adb31a6@suse.com>
-Date: Mon, 9 Nov 2026 16:51:48 +0100
+        Mon, 09 Nov 2026 08:43:10 -0800 (PST)
+Message-ID: <1dddcf29-36a9-4ffd-999f-54b730c9ea27@suse.com>
+Date: Mon, 9 Nov 2026 17:43:09 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -92,67 +93,72 @@ List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] Remove obsolete __MODULE_STRING()
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, Ian Abbott <abbotti@mev.co.uk>,
- H Hartley Sweeten <hsweeten@visionengravers.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rudolf Marek <r.marek@assembler.cz>, Andi Shyti <andi.shyti@kernel.org>,
- Chris Snook <chris.snook@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Andreas Noever <andreas.noever@gmail.com>,
- Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat
- <YehezkelShB@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Duncan Sands <duncan.sands@free.fr>,
- Chas Williams <3chas3@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
- netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261002-module-string-v2-0-fc7438acaf4d@suse.com>
- <2e88806e-57dd-47e0-a9ef-a8507d22aa3e@suse.com>
+Subject: Re: [PATCH v5 03/11] modpost: cache section relocation mismatch state
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
+ <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
+ <20261104-build-speedup-v5-3-0f6018be8dae@kernel.org>
 Content-Language: en-US
-To: Petr Pavlu <petr.pavlu@suse.com>
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <2e88806e-57dd-47e0-a9ef-a8507d22aa3e@suse.com>
+In-Reply-To: <20261104-build-speedup-v5-3-0f6018be8dae@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/14/26 11:36 AM, Petr Pavlu wrote:
-> On 10/2/26 10:31 AM, Petr Pavlu wrote:
->> __MODULE_STRING() has been an alias for __stringify() since "[PATCH]
->> MODULE_PARM support for older modules" [1] in 2002-12. That change also
->> moved it to the graveyard section at the end of linux/module.h
->>
->> Replace the remaining uses of __MODULE_STRING() with __stringify() and
->> remove the macro.
->>
->> Apologies for the wide distribution. Acked-bys are appreciated.
->>
->> [1] https://git.kernel.org/tglx/history/c/136839a1b4
+On 11/4/26 7:20 PM, Lorenzo Stoakes (ARM) wrote:
+> For every relocation modpost invokes check_section_mismatch() to determine
+> whether there is any kind of mismatch between the source and destination,
+> and if so which classification applies.
 > 
-> I've queued the second patch ("drivers: Replace __MODULE_STRING() with
-> __stringify()") on modules-next for v7.4-rc1. Thanks for the Acked-byes
-> and reviews.
+> Each time it does this it invokes section_mismatch() which iterates
+> through the sectioncheck[] array every time it's called.
 > 
-> The first patch ("hwmon: Replace __MODULE_STRING() with __stringify()")
-> should go through the hwmon tree. Once these changes are in mainline,
-> I plan to pick up the final patch ("module: Remove obsolete
-> __MODULE_STRING()").
+> When walked a relocation section the source is fixed and there aren't many
+> targets, so the same names are looked up over and over again.
+> 
+> Therefore cache not only mismatch categorisation but also whether a
+> mismatch even exists for a given section and look up the sections in the
+> cache.
+> 
+> Special indices (undefined, absolute, common) take the uncached path as
+> before.
+> 
+> This results in very significant speed ups for allmodconfig incremental
+> builds.
+> 
+> modpost is on the serial tail of every build that links vmlinux.
+> 
+> Whole build, 128-thread Threadripper 9980X, best of N runs:
+> 
+>                                          before   after     delta
+>                                          -------------------------------
+>   x86 defconfig, touch mm/vma.c, gcc        8.5s     8.3s    -0.14s (-2%)
+>   x86 defconfig, touch mm/vma.c, clang      7.7s     7.6s    -0.13s (-2%)
+>   x86 allmodconfig, touch mm/vma.c, gcc    33.9s    29.4s     -4.5s (-13%)
+>   x86 allmodconfig, touch mm/vma.c, clang  31.9s    27.9s     -4.0s (-13%)
+> 
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Looks reasonable to me.
 
-v7.4-rc1 no longer contains any __MODULE_STRING() calls, so I've queued
-the final removal in patch 3 on modules-next for 7.5-rc1.
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
--- Petr
+-- 
+Thanks,
+Petr
