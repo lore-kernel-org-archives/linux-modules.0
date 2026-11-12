@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794456840;
-	b=ExTFutolGgiOWJbmxfmEP3SxCckMzYrRl3XXibWfTO0RWZ9kSD71J6skBdcZwoo+DBGn
-	 VPfGAZEEbG0qjNKJ2Uv0IM79OB2RgW+HzNosMSDIHl6+haBJ3oMuD5Sqo67fX8ttHlBKP
-	 gg/r9HEPkJxuMKTz1X1sHBDMGwl16u9L3PrH0MG9vmfIGNJ4Hc5TNTvBGk/hQX426MYgc
-	 Q3T8HcxBBvHVIduFi262XbfYeHndc8krVkceU3vigJj0CpfTR2xM3dHGBdROFxQOEXGpQ
-	 AtwQZINMtG5s5xuGQ2PpROnlcrhRnnrtlDp16I+UblT3ICMREcXDBjA3fYRgDXjYqhg==
+	t=1794456847;
+	b=R51i723Q5Mc68LJ8lAGln9wbxQhb2KQEwG9OuWA2Iuhrjc030Rpl+bsP8WlXY6VMbvs2
+	 7UaH8TeHguNsBID+Wk7DNFHUCgjCWEj7Q8g2sKQOu3RPj0GfY/AsdFvBp0J4zr0lv5RJj
+	 duIGT+Z7KI1ktTWePzNGUkUsSfU8/YKco6CnXsYJTQhPytpnJTGcyIwjSjUFeciHao9B3
+	 Do1mfdcUWJOLozS79rOYcYVBEUJT9n3rfyhapOd9PDmndkf5xj3mCy5I59UV7tkGsKltb
+	 pDwkIhqvP898bBK8QLgzGPLh04yoPONt/0bOQgEwMn0q9BLblmvb67fzk8gOBaGNQ7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794456840;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794456847;
 	h=Received:DKIM-Signature:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
 	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=UBnJEnj2MLEvcLRTvWDNC7MDWlj8p0TTPWPE5S8u0Ms=;
-	b=bMEsyRNIqOkKSd5vnMDfTC8wweoL+eP1tLxHzmKBYfIDspZCesVhD5XbYMInO+VIFakV
-	 Zx+v7+hjW+hdO4cysJKlBclv159Oh9qAa6UTofA9Mzp2OPlSHfC+7/+aYm9r0lelQDC31
-	 UgvfNYVSjiTiNs8+5kSI2+pBsuoaYTJn8HlaW+abIlt54hbHXNjgiuksThnEP5eh5aO9D
-	 wOSmnrchn/vB+GuJCOC8F8uXZhR6KeXEjwPJuIaWXudvEsbhT3UrMqFGJ11hokpOl3KY3
-	 WIS9De9JIam9IXQDa+XAdILyxo0sb95qqMPPzx5JY9yHo6CrZ7ndE8BBr7jS3u9abrw==
+	bh=iXAKJg6zY8C69aDtcGRnNYHf2kCXmrJS3Va5RrXUFX4=;
+	b=CAbNsCdrnC5fOSiHOtiJy3vMK4QwGpQsxZLEUvfYsxkS2a8w6Tm6wgUJmxDLIeXCAByG
+	 O5AGRw7np/BZ76NUfbp+UT5l2t5GD6JexW19/UdD/8Pe2iKWArp/aLoncyFoqYXM0+X0C
+	 a76GW85QUKw0CDrdlrigNvRRBEgKpXpSyMt2S6yOS0KC24s6/k5LUyQemrI61IVITSD5N
+	 P8bmCtJn0XBQV0lAbquCbXWB57HHvLEICM0M4X57R4iB6dDMZw8747u+IKCMDmMOLfo/4
+	 HixmbV7BO3hxfWuZGsRbpG1kMJxTnsPb5mNWi8dZWg34kcHBISL7kQZGHplhbAXO/JA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="SZDky/Ne";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WyWvZOdo;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192DD606A321;
-	Thu, 12 Nov 2026 04:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14706606A324;
+	Thu, 12 Nov 2026 04:14:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SZDky/Ne
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4880C1F00A05;
-	Thu, 12 Nov 2026 04:13:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WyWvZOdo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458B01F00A09;
+	Thu, 12 Nov 2026 04:13:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794456839;
-	bh=UBnJEnj2MLEvcLRTvWDNC7MDWlj8p0TTPWPE5S8u0Ms=;
+	s=k20260515; t=1794456846;
+	bh=iXAKJg6zY8C69aDtcGRnNYHf2kCXmrJS3Va5RrXUFX4=;
 	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=SZDky/NeDPlMtdVniTAVj3noRx4JxxuTJZXqFpC/aQVZ6pMZ5Bry1fDoEeuSHWnsy
-	 loiv0zMCwOkxvSX9eWKC8McaJ4a3Xc1NSkqmLFjJKX5mm4ihsjf00jIWhe4luDhLtj
-	 D0un6s9m0PXhjnBuLtROTD2X8FVcLdrh1VXna538pQLedmjXPG8PFHxsLSZtAVKRAk
-	 Mz0DbMft964A47+cezL1AHkJi2khM6Jy/k9Cw8PAvWVmWDWoLGHRP5hWcHEvGxj/Oi
-	 Fd371kU9Bm6ckePJ4HzdLNZV4NnTkmjCJWmCUzNvLTLFQFdXvOx+Q0D5IeWMsQk3o+
-	 eZtnFyDLCHw2A==
+	b=WyWvZOdol6x93YWimGT86hig5kEHkq5TgpTl5onS4zyWVexgrE/0rmrzJ+OHaXGH+
+	 4j2Wx4Bc7rJgrnT81iXeQiS2PS2JwnnPpZsH6bLgAGQVjGSKb2bLF2ToEwMOW2R39f
+	 +I7nC4J5ajm/wFAy24DTjbz267eM9rnvhWqauYSMdY6IMbKH70WSZPQWVdoZQT9alK
+	 3dJ5r4Wb5r9Ww+vY5pA4gA0A9mcJ3BbVNZT3xeR+lAyx9U0Guq7Ongu1nt671VGSan
+	 vQ4Y5+LVJrV9TMAhpPPv7p4qaL3ioP4mYHSnMN3r808IndKb/feSD+2pVHdM4Mamx3
+	 yrd0dlYh1T2Nw==
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -51,8 +51,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v5 03/11] modpost: cache section relocation mismatch
- state
+Subject: Re: [PATCH v5 04/11] modpost: emit module descriptors as assembly
 From: Nathan Chancellor <nathan@kernel.org>
 To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
@@ -76,28 +75,31 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
  linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
  llvm@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
  linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-In-Reply-To: <20261104-build-speedup-v5-3-0f6018be8dae@kernel.org>
+In-Reply-To: <20261104-build-speedup-v5-4-0f6018be8dae@kernel.org>
 References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
- <20261104-build-speedup-v5-3-0f6018be8dae@kernel.org>
+ <20261104-build-speedup-v5-4-0f6018be8dae@kernel.org>
 Date: Wed, 11 Nov 2026 21:13:34 -0700
-Message-Id: <179445681470.2545603.4522535241002496455.b4-review@b4>
+Message-Id: <179445681471.2545603.9087503756678100323.b4-review@b4>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=507; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ESrYONCK7mPGykLSGsAgCNxT8WO1N8h1fu0MOtiXa8Q=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlfbT79UvRYb39r0s4QmR+WFuLKmRbcjcLxp25P+Oa9/
- +a1TD7jjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRgmpGhunzMn5OzP6qvEOh
- Wbz4jdGfffMWvf7d96K6Y0HHoc0bJz9hZLj6fuNkHXvvJzxyBsUevSb7m8/8vO5fav+04/S+hA/
- Vz1gB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=710; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=5zOPsgG3qRcAwVUzP38XzV+fFPN5BZsO2d/rW710CK0=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFlfbT7pznaediB1btKxC0IvMuNbG8qa3sZ9qc59bPtlx
+ 7NZQUJLO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBE9DkZGZbMLdqg55W47cGm
+ IyHP0+UqG4zUZSZd/uB0n7Xmw4OP000ZGU5+mKXDPE9mQXM3k828Xbzsb97b7TI0Sxb7tviW2Tc
+ mK3YA
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Wed, 04 Nov 2026 18:20:21 +0000, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> For every relocation modpost invokes check_section_mismatch() to determine
-> whether there is any kind of mismatch between the source and destination,
-> and if so which classification applies.
+On Wed, 04 Nov 2026 18:20:22 +0000, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
+> modpost generates a descriptor for every module in the form of a
+> <module>.mod.c file with .modinfo strings, the __this_module descriptor,
+> exported symbol tables and (with CONFIG_MODVERSIONS set), the CRC of
+> imported symbols.
 > 
-> Each time it does this it invokes section_mismatch() which iterates
-> through the sectioncheck[] array every time it's called.
+> These files are compiled like any other kernel C file with all of the
+> -include preamble, as well as including linux/module.h, header dependencies
+> generated by fixdep of a few hundred headers, an objtool run and if LTO is
+> being performed, a link is performed to generate native code.
 > 
 > [...]
 
