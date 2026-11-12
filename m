@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794485724;
-	b=lTZ3IxutFW/b/OBON/kSYk+HY+i2+048aV8zg+s4mqrGQCiLBldqNzfnWCHfYuQrYVdC
-	 NzBPjo7Q1xAr0/+q0y/wbTuL+VghG6iB9Lz0aI5+MYgBJRSFfou4GBl2JTgcH8k7wzBSR
-	 kG2DVajx5K6jaTdixjvygDF2rNz4nqtJolUR4bLXwW5U+EJjyGm8qTbucEI5cm0DEZ9FI
-	 VcuwmsP7QFPA9uYL/ed/eiOSJS5F2x+sp32ZOrUd/VVgfAyIJsZovugfgKfEIt8UT7vQI
-	 dEztC8Apt6HJA7rSxTgaWgpPL/kSfPrStBQpNityn8b6tTgXohebU4u4Ve19v9c0EWw==
+	t=1794485726;
+	b=G/MSmSmuC5zdCw/4mea9IZGubqT9LMA0d/umnA4bSyCTukInLr09zswZROL7SlHJ2HMt
+	 f7lb4YN5Hsh6/ou9aJ3rwrO/51T6Cv2PiuHdwh3lxCY4Ul98GLGvFh9tqbiJE7mrxU/YT
+	 hSzmSPwfyZnK1b/Ni5VWPHUt0VUaB9O0LSSKpWQi9B2o0cJS3u4ffTCv0ne4eTEk5yEPN
+	 Qklv6ks7E/Bre7nJcS3i/Gw1/Ygiej4r6pCQ6Hr+P4V6ESCw720yzAcZQwMT5H+T04ZfK
+	 EWjm/kbTYtHDTkbdP3c3JxIx4WH4cY8WoHGO905QSS2R2ebgJ6vQHsGYuflABnvzfZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794485724;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794485726;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=45z5YfrL9I48bRl1PrF4Vt8PvNpnRKDiwkVvBZd1m84=;
-	b=NfPjcWOGWoyI9ODvoXYy57o3xLefbCpkendNiStmd7ehcmcbSaakv5totETAETBM4v/8
-	 aETCdk37tYaxi0r1oUIrsyaJfCNVsejAEymHyDfRWcsaVHCp2t0At4ITDkZBvyoQfCxaj
-	 7FozuAWfoMeTIDsi+TsYzDrUC4v8zWS11kMS1dV/FOgBupfglf1opongkBivoxhafvC3q
-	 R8Uz/s8YnZy9OfXJDz9sSY74xcAbXg95y92azhJRujADUWmbe8aDVSs3RHSaPcqVwTNGo
-	 iAwZlakiSo61Z1ltEMD5aBevO/q0hyQCfgf7iAo97QeA/o5MPpqDBGhMhhvdgfModug==
+	bh=FvB6uUHpvivnG+q2Vm3/jD8POQaqPZwRk2B4zcgonZc=;
+	b=WyfuvYCxHJbJVLSPKFgzeGjnGP7xana/qnAXaCM0YlDKMHLyiHeSvWImnCkp8y3hAMOz
+	 NJQfrAFJl3IiZxaOqQlSiap0ad+jCHhYkhSAcY5BeMRzqktF9YSo0jOC7J86f7Ma4NydZ
+	 h1V+iPrk6Z5Em4LBu4RA5zuEWtR8zO4bZapKoeuaFndf+eu/94nC5hri98A5w83o9E76H
+	 eBsLV1eeKCsQd/4m5oOpGBqK+4TgzkjaBd0D52BL3QxjdFXd1FxPewcWVylY8iKZH6W5T
+	 iZr3rM21OCoSwYONkJ73Z0wDs9FipdjVc9rgTBjoYTc4h4aIkSL3Al3hO+sBMryP6Wg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=X6uVtKQz;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KBdlIXTd;
 	arc=none smtp.remote-ip=209.85.128.70
 Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA680606A321
-	for <linux-modules@vger.kernel.org>; Thu, 12 Nov 2026 12:15:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA680606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEAE606A32E
+	for <linux-modules@vger.kernel.org>; Thu, 12 Nov 2026 12:15:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3EEAE606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=X6uVtKQz
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4a80bd45e1cso23961275e9.3
-        for <linux-modules@vger.kernel.org>; Thu, 12 Nov 2026 04:15:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KBdlIXTd
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4ae2756fa7aso31356925e9.0
+        for <linux-modules@vger.kernel.org>; Thu, 12 Nov 2026 04:15:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794485722; x=1795090522; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794485725; x=1795090525; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=45z5YfrL9I48bRl1PrF4Vt8PvNpnRKDiwkVvBZd1m84=;
-        b=X6uVtKQzS+1TEA+H1VPRtBhwGUEOnSobHUoaHnDHHAsgGYADbViXWqXwUZOVUNsd/W
-         ppWsnVKhWXTlbQjQPtd14r3y0beBTwsWgtSV/E4q48mhImTmnU7LPmYACaEInJXpJBhe
-         Fk+edEZhcHms06RcOQ31NssQBGEyYbJoxFEmziQgN2feVogKnYh2gJccjNolvPdt78po
-         cOSR2uE1KY5SOnItS0Ldj3ER+YWgPA91pX8sz8PSWG9Sdl/jGyWJu+kGvcn8AWtUMFvx
-         AdP6MrhddmRfDqTrPh1+dLV96HYMoqcNyZp+NGSaRvg65VVoxi9mK1YXW5zluSmL2u8p
-         OycQ==
+        bh=FvB6uUHpvivnG+q2Vm3/jD8POQaqPZwRk2B4zcgonZc=;
+        b=KBdlIXTd2dY+RihcsZYPxMUVDOD3qsJDlUJhaGne8+eVD6CRldrzSEcSc3tkN7jP/Q
+         DSFwmw02G6cRAEMKEp1uirvgOSyLnINZ+K9FE0a1m/SzezLomfenOs/EqOyVpLNSqiM8
+         Yw2fgJfK/9pstrW7s2gqezli+t1UVmXLCkSAR9FmMwthBKSDYFnYOFNSZerVk61yow/l
+         s6JyJwDaRNNPUlZ2wKklsFk7dnKMMfGrlWntr23vz1PYfMBY3pdv3CDOzAFqJCgYbJ0+
+         F34xQHoMW3SP4m7dvATKnVrWoncEmBsMUVm/a0lXdG6fNZLHqLtJXitln63i9oYnW7Jo
+         BKnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794485722; x=1795090522;
+        d=1e100.net; s=20260707; t=1794485725; x=1795090525;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=45z5YfrL9I48bRl1PrF4Vt8PvNpnRKDiwkVvBZd1m84=;
-        b=sH/xTaoqro9AZFl/8y8nhcPkKV2wxgcpfII0FQpa8YrmXz5BCScETg9vOs9z9exJcr
-         OHXralIUkG8Ti8uLXlsXBft/2g9cNibHCiKpxrypM3OCLI85H2ZR7zwfEKAiE7IMw+IB
-         rZUcA7Ok0OA8kcjuOhqSBQbRhrBbX4pPMXIR2/Erpb5i1sjmkrSgGu78TtQ5rVaNRG0h
-         Xae6Ip1G+EIey23ZdMSpPu/G85i9yNdA50v+FWRXxt7R3HStV1yuU9Cu0efVPCiQO08K
-         IgJGLYo9N56aIpaFAgfH9abYQnZOSp1jZY5fUn9Mq2YDNfmf8SHBtnUdtfRr7umRAiuO
-         DO0A==
-X-Forwarded-Encrypted: i=1; AL+hErF+fzRr6q032j5N9liSkOi2QmHYRrzkQEbPFAyT5FgO+Vb896Io4VRQbuV4WH3NBZsfUDk5j+XpnS0lVOpS@vger.kernel.org
-X-Gm-Message-State: APuU4Z8dT+YJ0X946xwDP1bHykKa636vwz4Uh6pjfpowD56IQxqwyy0t
-	yeYzex1XAarI965s06+SFpyzSSjciz58q+P10ifbr+swnA8q2JvIYlY060Ko2FgDLpDRMzsSWU4
-	1eqO1YJJvbX0TTA==
-X-Received: from wmbfc17.prod.google.com ([2002:a05:600c:5251:b0:4a3:5d65:cf26])
+        bh=FvB6uUHpvivnG+q2Vm3/jD8POQaqPZwRk2B4zcgonZc=;
+        b=vIzdQmLwvM+nenikxtq32RrZSlT9lvZP+tJp6EYeHxipVHTvyBNGCLHE96EKHM7MMF
+         5j2ph5SgU/muB2kk1E1i9QxvRZrC1Y0g7fMe62zGmWnQ/f0WAbb0zvOnzn2O1rZj4wY7
+         /prbHky1Qj/ORHRQNc4zZlyszuoet5sTTvEm+Nw8zi+uw78AcqcNULHBgKO1eRtzEyQq
+         4pR23nUgT9r9jVA8IoF9Vx89YGk7IH0DKHKS85t0ZbAwo2aw0jPgcaM4/JlG+DI793dW
+         KoYnskgRkHwekA9zzTEw++qox9OKWLuIqeSKnFy2pmlm6AMvutWYu+XLcbmg468UhIZF
+         2HTg==
+X-Forwarded-Encrypted: i=1; AL+hErGkyMlkdxRmJhPFUzSr/vuitsnTPGwLgH4TskShtO0ruHOxqNs6ZO3IR3yXoRbuTfNtcvpMUm7BL4p3o3Iu@vger.kernel.org
+X-Gm-Message-State: APuU4Z8vQLlnWJ4LB9Asvyd1S+wcOi/svmyhkV84A8L4SsKqbXdIpyNI
+	+DD/emZk83o9TzyNPWHKKJrWPUa8yIK4xUI2sYPPdqCWBwycxOur3UINWIRYD6QRvh5UXMkW/IA
+	qp2tNH+oB0F0/+w==
+X-Received: from wmba9.prod.google.com ([2002:a05:600c:6dc9:b0:4a1:b748:caa2])
  (user=gprocida job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4513:b0:4a1:702f:c736 with SMTP id 5b1f17b1804b1-4ba0931d928mr93908205e9.3.1794485721754;
- Thu, 12 Nov 2026 04:15:21 -0800 (PST)
-Date: Thu, 12 Nov 2026 12:15:10 +0000
+ 2002:a05:600c:3554:b0:4a5:e6fd:65e5 with SMTP id 5b1f17b1804b1-4ba0937ded6mr99563065e9.31.1794485724216;
+ Thu, 12 Nov 2026 04:15:24 -0800 (PST)
+Date: Thu, 12 Nov 2026 12:15:11 +0000
 In-Reply-To: <20261112121512.1670347-1-gprocida@google.com>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261112121512.1670347-1-gprocida@google.com>
 X-Mailer: git-send-email 2.56.0.567.gdb80ae8cd5-goog
-Message-ID: <20261112121512.1670347-3-gprocida@google.com>
-Subject: [PATCH v5 2/4] rust: convert exports.c to assembly
+Message-ID: <20261112121512.1670347-4-gprocida@google.com>
+Subject: [PATCH v5 3/4] gpu: nova-core: convert nova_core_exports.c to assembly
 From: Giuliano Procida <gprocida@google.com>
 To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Cc: Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org, 
@@ -97,85 +97,96 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
 	Aaron Tomlin <atomlin@atomlin.com>, Giuliano Procida <gprocida@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Previously, `rust/exports.c` defined `EXPORT_SYMBOL_RUST_GPL(sym)` with
-`extern int sym;` so that it could invoke the C `EXPORT_SYMBOL_GPL(sym)`
-macro, which requires `sym` to be a declared C identifier in scope for
-`typeof(sym)`, `__ADDRESSABLE(sym)` and `__GENDWARFKSYMS_EXPORT(sym)`.
+Like `rust/exports.c` before it, `nova_core_exports.c` defined
+`EXPORT_SYMBOL_RUST_GPL(sym)` with `extern int sym;` so that it could
+invoke the C `EXPORT_SYMBOL_GPL(sym)` macro. This emitted bogus `int`
+DWARF debug information in `nova_core_exports.o` and `nova-core.ko` for
+every exported Rust symbol, conflicting with the DWARF types emitted by
+`rustc`.
 
-This caused the C compiler to emit DWARF debug information in
-`rust/exports.o` describing every exported Rust and helper symbol,
-functions and data alike, as a C `int` variable. Those bogus `int` DWARF
-entries ended up in `vmlinux`, conflicting with the true DWARF types
-emitted by `rustc` and confusing debuggers and ABI analysis tools.
+Convert `nova_core_exports.c` to `nova_core_exports.S`, emit
+`EXPORT_SYMBOL_GPL(sym)` directly in `exports_nova_core_generated.h`
+and switch the include path and `MODVERSIONS` symbol-versioning hook in
+`drivers/gpu/Makefile` from the `.c` rules (`CFLAGS_*` /
+`cmd_gensymtypes_c`) to the `.S` rules (`AFLAGS_*` /
+`cmd_gensymtypes_S`).
 
-Convert `rust/exports.c` to `rust/exports.S` and emit
-`EXPORT_SYMBOL_GPL(sym)` directly. Under `__ASSEMBLY__`,
-`<linux/export.h>` expands `EXPORT_SYMBOL_GPL(sym)` straight to
-`___EXPORT_SYMBOL(sym, "GPL", ...)` without requiring symbol
-declarations or emitting bogus DWARF entries, while also avoiding a C
-compilation step.
+Also set `private cmd_gen_symversions_S = $(call gen_symversions,S)`
+under `CONFIG_MODVERSIONS`. Kbuild normally defines
+`cmd_gen_symversions_S` only under `CONFIG_ASM_MODVERSIONS` (which
+requires `<asm/asm-prototypes.h>` and is not selected on 32-bit `arm`),
+whereas `nova_core_exports.o` generates CRCs directly from `nova_core.o`
+via `gendwarfksyms` without needing `<asm/asm-prototypes.h>`. Although
+`NOVA_CORE` currently depends on `64BIT`, keeping the `MODVERSIONS`
+override self-contained avoids an implicit `CONFIG_ASM_MODVERSIONS`
+dependency if `64BIT` is ever relaxed or the pattern is reused by
+another Rust module.
+
+This removes the last definition and use of `EXPORT_SYMBOL_RUST_GPL`.
 
 Signed-off-by: Giuliano Procida <gprocida@google.com>
 ---
- rust/Makefile                 |  2 +-
- rust/{exports.c => exports.S} | 12 +++++-------
- 2 files changed, 6 insertions(+), 8 deletions(-)
- rename rust/{exports.c => exports.S} (72%)
+ drivers/gpu/Makefile                                  | 11 ++++++-----
+ .../{nova_core_exports.c => nova_core_exports.S}      |  8 +++-----
+ 2 files changed, 9 insertions(+), 10 deletions(-)
+ rename drivers/gpu/nova-core/{nova_core_exports.c => nova_core_exports.S} (62%)
 
-diff --git a/rust/Makefile b/rust/Makefile
-index 0ac9ab28cc2b..2e5f5a84bb24 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -564,7 +564,7 @@ rust_exports = $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D|B)/ && $$3!~/__(p
+diff --git a/drivers/gpu/Makefile b/drivers/gpu/Makefile
+index e372fc02139f..49205525d2a5 100644
+--- a/drivers/gpu/Makefile
++++ b/drivers/gpu/Makefile
+@@ -36,7 +36,7 @@ rust_needed_exports = \
  
  quiet_cmd_exports = EXPORTS $@
        cmd_exports = \
--	$(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n") > $@
-+	$(call rust_exports,$<,"EXPORT_SYMBOL_GPL(%s)\n") > $@
+-	$(call rust_needed_exports,$<,$(nova-core-export-deps),EXPORT_SYMBOL_RUST_GPL(%s);\n) > $@
++	$(call rust_needed_exports,$<,$(nova-core-export-deps),EXPORT_SYMBOL_GPL(%s)\n) > $@
  
- $(obj)/exports_core_generated.h: $(obj)/core.o FORCE
+ $(obj)/nova-core/exports_nova_core_generated.h: $(obj)/nova-core/nova_core.o $(nova-core-export-deps) FORCE
  	$(call if_changed,exports)
-diff --git a/rust/exports.c b/rust/exports.S
-similarity index 72%
-rename from rust/exports.c
-rename to rust/exports.S
-index 1b52460b0f4e..e1a6923081fa 100644
---- a/rust/exports.c
-+++ b/rust/exports.S
-@@ -1,11 +1,11 @@
+@@ -44,12 +44,13 @@ $(obj)/nova-core/exports_nova_core_generated.h: $(obj)/nova-core/nova_core.o $(n
+ targets += nova-core/exports_nova_core_generated.h
+ 
+ $(obj)/nova-core/nova_core_exports.o: $(obj)/nova-core/exports_nova_core_generated.h
+-CFLAGS_nova-core/nova_core_exports.o := -I $(objtree)/$(obj)/nova-core
++AFLAGS_nova-core/nova_core_exports.o := -I $(objtree)/$(obj)/nova-core
+ 
+ ifdef CONFIG_MODVERSIONS
+-# The C export shim declares Rust symbols as `extern int`, so reuse its export
+-# list but generate symbol CRCs from the Rust object instead of the shim's DWARF.
+-$(obj)/nova-core/nova_core_exports.o: private cmd_gensymtypes_c = \
++# The assembly export shim has no DWARF type info for Rust symbols, so reuse
++# its export list but generate symbol CRCs from the Rust object.
++$(obj)/nova-core/nova_core_exports.o: private cmd_gen_symversions_S = $(call gen_symversions,S)
++$(obj)/nova-core/nova_core_exports.o: private cmd_gensymtypes_S = \
+ 	$(call getexportsymbols,\1) | \
+ 	$(objtree)/scripts/gendwarfksyms/gendwarfksyms \
+ 		$(if $(KBUILD_GENDWARFKSYMS_STABLE), --stable) \
+diff --git a/drivers/gpu/nova-core/nova_core_exports.c b/drivers/gpu/nova-core/nova_core_exports.S
+similarity index 62%
+rename from drivers/gpu/nova-core/nova_core_exports.c
+rename to drivers/gpu/nova-core/nova_core_exports.S
+index 6e80ca9792ee..90a9f709ed38 100644
+--- a/drivers/gpu/nova-core/nova_core_exports.c
++++ b/drivers/gpu/nova-core/nova_core_exports.S
+@@ -1,7 +1,7 @@
 -// SPDX-License-Identifier: GPL-2.0
+-// SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+-
 +/* SPDX-License-Identifier: GPL-2.0 */
  /*
-  * A hack to export Rust symbols for loadable modules without having to redo
-  * the entire `include/linux/export.h` logic in Rust.
++ * SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++ *
+  * Exports Rust symbols from the `nova_core` crate for use by dependent modules.
   *
-  * This requires Rust's new/future `v0` mangling scheme because the default one
-- * ("legacy") uses invalid characters for C identifiers (thus we cannot use the
-- * `EXPORT_SYMBOL_*` macros).
-+ * ("legacy") uses invalid characters for C identifiers (thus we could not use
-+ * the `EXPORT_SYMBOL_*` macros).
-  *
-  * All symbols are exported as GPL-only to guarantee no GPL-only feature is
-  * accidentally exposed.
-@@ -13,8 +13,6 @@
+  * This is a workaround until the build system supports Rust cross-module
+@@ -10,6 +10,4 @@
  
  #include <linux/export.h>
  
 -#define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
 -
- #include "exports_core_generated.h"
- #include "exports_bindings_generated.h"
- #include "exports_kernel_generated.h"
-@@ -23,7 +21,7 @@
- #include "exports_helpers_generated.h"
- #endif
- 
--// For modules using `rust/build_error.rs`.
-+/* For modules using `rust/build_error.rs`. */
- #ifdef CONFIG_RUST_BUILD_ASSERT_ALLOW
--EXPORT_SYMBOL_RUST_GPL(rust_build_error);
-+EXPORT_SYMBOL_GPL(rust_build_error)
- #endif
+ #include "exports_nova_core_generated.h"
 -- 
 2.56.0.567.gdb80ae8cd5-goog
 
