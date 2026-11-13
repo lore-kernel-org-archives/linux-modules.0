@@ -1,76 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.62.57.64
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794591509;
-	b=trh4yagNP1x6msQh05T1NrIIvD7wDybEY5DL/UW7R5UVog4niNcEpn7f0qY5YmDC230I
-	 CLoapQMAdb5Nwni3M/Phrjr1jm/0opMd39HxHCz+rRnRoSzONWltCqd7NCB8LD91TCHlX
-	 kPGIdy6/heqj/0fvdcpABh28/aFpm0w/xAglcRyETc8iL7h6oWf0I0FgN8trhoVN6hcM8
-	 jZCNTUcXY/rQQ5xiU162FgVHJwXkeWQKfztjtxC4d6VORkvL7I7ZZP/6mCfXyP/6txk7g
-	 Gya+aKoB3bgZ9RnKhq8V0JZZGawnCp/PSn5MAkC0gE+6MVscEX8lKbpzLWg6aTmG4Xw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794591509;
-	h=DMARC-Filter:DKIM-Signature:Received:X-QQ-mid:Message-ID:
-	 X-QQ-XMAILINFO:X-QQ-XMRINFO:From:To:Cc:Subject:X-OQ-MSGID:References:
-	 Date:Content-Type:Content-Transfer-Encoding:MIME-Version;
-	bh=qTZ9ux48xtnyLLqPljckoZG1ruWNiZxfNGEpJDN1Gho=;
-	b=m6pLbNI5Kw3lFdu1iBgz5pYh1iATJ13Qy4AViwY93R/WRF4jxCaQ5YZza+DQ84LW7cxV
-	 n+UhzS/0PzkoJAg2cphFPW62K6sDKC0NIKWFKUQChOhmkQJVgee+umw1+84PMo4ZoNFNv
-	 3RnByfhfCfobKo+L5Rkl7sZLIdhUeMg+GL++x7AO7QdGFd0HH8hr2n0PMFdy4z7lnvHsh
-	 BFUozp56W24IL7adg7DEaA/NTWLDK/X0DFlEVh3Pklkks8ikdqHVkBiANJ8XyrVUA5U/E
-	 Wn29SQ+nb8wnzeZkovklB1K8VVbbTm6WsaJEFzZ4woXXw4WK/YMZn92e01EPC2Ig4cg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=qq.com;
-	spf=pass smtp.mailfrom=qq.com;
-	dkim=pass header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=I3rXUTSU;
-	arc=none smtp.remote-ip=162.62.57.64
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.170
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794601581;
+	b=1PhLYSRIrDeU1krLZKiZwbpqUNRcj7HzzDpt7FDktvopLdNubKb7eDGGbVJrytpDl0ua
+	 FBqwVePVHUNBugA4Gg5U2YEoWSCeJT+29yAJG4k0smBDg8Sn+gYj1we32CO0Snual1zJ9
+	 cXPhu1I3vqzqg0ShvdS++EWaFVKAsnspKnYsWKwbrxECSeMwWKtjxG9MF2e362QRalmQb
+	 le9WQYOdZoQSlEDGQh3uvZpyD2HFOkvpTknr+3X3ghNGibHQ/Mw9rf+k6/ySbzBKPQFLE
+	 XooDTQFIBfpfQ1/gYnF/b1BCdCbmyQETtcsfNU2YYfzh6HrdnrHqB/k+Nsao1b23xpQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794601581;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=BmaNayS+Wbe5Uay0lJ3vEuq20YAhkZy/1G9M7ssRoVg=;
+	b=Ec+urLr022R1rsmA8VGFQyD7MZuOpH/FIYojqkae+FqMDwZBllCb/9z/S8UWRx4+8Jiy
+	 iUrosoHV7yhUUUteXXzKgFXNSslYil2q3Lm2tHM7mpvQqgejouMww5+wgWaV+cIKBJAXK
+	 JWg9Kc3S+wdp+FVdJpERKJnjOn5GqJa8xo+jZt0ksUBB/lFM7gBilir1aZWdLXSY6rCcM
+	 molyHXHorqwGdo5GBuNyHknBhUk411Kj3sECz0kR7Xtcm23rf9n6AsCnS/qTgEMsAj5pJ
+	 9rSVmuIyz4YoS/phKVGGfgRgP3XRjSifj7uEAX7WXwxsrXKFTEH3i8SmfcgxzLXuVKQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xAWZhUlj;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.170
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833C5607E07B;
-	Fri, 13 Nov 2026 17:38:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 833C5607E07B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B248606A331
+	for <linux-modules@vger.kernel.org>; Fri, 13 Nov 2026 20:26:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B248606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=I3rXUTSU
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1794591497; bh=qTZ9ux48xtnyLLqPljckoZG1ruWNiZxfNGEpJDN1Gho=;
-	h=From:To:Cc:Subject:References:Date;
-	b=I3rXUTSUSjNp43ZLSLjeh609SdERBZew7biK43wUPARBg/P8SxcXdXvZ3rya99d75
-	 stjBjlchmf7tNOcmSJZaaEOx4wIAOSMR1CxHcL5eZIIMHHh2v/EpeAw5ulbYOwh2/8
-	 hf9sFEvx7uBFXJSPFW/GpC3JIUN4FgFxoKoCyUsA=
-Received: from [172.18.4.77] ([202.113.185.209])
-	by newxmesmtplogicsvrszc56-0.qq.com (NewEsmtp) with SMTP
-	id 98F14CB0; Sat, 14 Nov 2026 01:38:15 +0800
-X-QQ-mid: xmsmtpt1794591495tc9pphd19
-Message-ID: <tencent_3923A965DF3923C24E79A60851533EB55108@qq.com>
-X-QQ-XMAILINFO: MqswyhUqVe0CnrQE7U8V6aV5rtQ3O/qx64f5RARQ0Tvu5feQguJz4ppgnIrchZ
-	 /r5UOoZaPK2gm6tEdPEpr9HrgNgT3c6yN65V9HuWgOcqJ+lLGHPtk3Of8GZWIcDZRMMGYMiRcVRt
-	 CiBRoURmHe3Si/GfW4KCb6o/VRETH66D3xDOjT8fK2C8Qtp7RC0frTvTW9XzJA5ZNfg/+zlTSM0k
-	 m4KGey+9j7ljQpR2550GAmp9v1Eg+BparFfoGfzoQ3eXh8Jtfdme1Yaeuz50CvJnUej+aoaYshoH
-	 S05WnWG8I4iT4IApKKYiz0w3UmH1LtSIn4Yf2Wjm4yoQFASmJPBcXHCp9CE1sxye6Rkgg0d+6wAA
-	 7pmVNexJaALrcoCDphDI1qkmUKywqSqOxK6Ig29mfjiLZdEVhg/U4USWr+50SbltppOjzOLLHXir
-	 fBAbVwnLFo+Co9HhzsexXXEY0PgtVqNW1UufP8hqeZDSjcMAOhKJWMiiN6cbveZKB9x+nN2qOX2Y
-	 fNIIsbqLvbxHdrp9HUWjETFIO2NtcxQ/5xrjY1Z95/WQQgKZ9Gsphx6jNoHBzWEgHZMzx0niyqqk
-	 bhQMaRTcGnYLcKDyYUnodzE4qlSfD9jRvZ5oFAASatbUVupl/DjtjAKvg0+IxYyX8yWOrjJgqM2a
-	 TqwPGCpEfX6OYShZ0jYnHjS+2hpNt1mSXTVgK+wCkWPl7F55szDopluUfrbB6WX/GwCSodPH6YeN
-	 9cgLJVBmtRGoKvAUsPG6sHf5X0ojUg2VV6AJtbp3HqoHrsrKqHtzDO6EAbeGZ1lOJLWdVQwxn7Ej
-	 TkNDrHNnpOqF6tMlRwm3Tnp/Z5yCRuQUCVH8HdRwfDrskArrumPM+tPsjE8Bo5Di9Bo6cJ1xMcG8
-	 9LlRdOG/6eJD/YVCKUa8m3/0vH7NGjcxfKgpQSrNjFQQLSWSq1YWLNPi/b1+43tcHfG1TjsPwzYp
-	 ltJRD+4LHHkr1dOaqb1KH105q+O/NASwpmaMDo7dIubexvZjD7cEV1bu+KBVv6wGAnRW033G4hWs
-	 dW1C3V7nr9m+QynxXRHq6FngaVekAG6nM6NaO+qxWi1hyUTPDd
-X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
-From: Guikun Yang <yangguikun19@qq.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- linux-rcu@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: [Bug report] srcu_module_coming() dereferences unvalidated
- ___srcu_struct_ptrs entries - wild kernel-memory write on module load
-X-OQ-MSGID: <srcu-struct-ptrs-wildwrite-20261114@qq.com>
-References: <mod-r-offset-oob-20261113@qq.com>
-Date: Sat, 14 Nov 2026 10:00:00 +0800
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xAWZhUlj
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-943e8d35f74so209187985a.0
+        for <linux-modules@vger.kernel.org>; Fri, 13 Nov 2026 12:26:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794601580; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JMDK+O3Kko7qSF8O5MoJsKzjIWqCaZ2PpvNdzCk53EWwpasIdBgCeA4Uygsw4hBlS2
+         taYS90KsovDElZJxkPMidCbeeYzLP2gMk78e2U93oBWnyjkPI9K7mdU4gwA7dw6k03cy
+         aTAQONZmvGIDwVzaFBCuiChdOSrKgfI4P34RqaiVdh2qgknUeAGVdNAoukiEuxaZnSCY
+         qWIzhtq5dLgVH+tW5lJ3cOeHYSyQLjVoc8pkcH3Zcgc+hXMapc59iCvl9ep2XFDL/7zp
+         /E9YmVuEd3IXT11xGYJRXKfx8r8lkPkk+NM1eBUySI8+TPjUyN3kNJ/NTINDlLQyMpPj
+         QYZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BmaNayS+Wbe5Uay0lJ3vEuq20YAhkZy/1G9M7ssRoVg=;
+        fh=vn0dE4mP/Eb7Ih4CtTG32FuItCOqflvFi1XZP72lXuY=;
+        b=XRFset5hLNuMNERhEbKsacYJoq0FntUTZBACduVKCfjlsDVrUEqUQSYIdzD/VAF+as
+         0KUNeAJFFXe78MZy3VS7aFqrtZ76PfqkVRL2OrBpF9zeDQ4Y9fXRWNvfkejpvVx8VobC
+         AH3U6Ipvz64BLc7F8l9KFw4KzcrbNEHQOm0GGr5KCB1SZq32gCox7EkYJ0ijToEXAxm8
+         Vi/TDQe6gpOoCevuC3Vhworz0oHrNgrqd2NnD+qEpVrf1C2bmH6YG0k6sbZKl9VRRnjc
+         o3CZ5JL613NEpHovGV0rerG75hmCj4XQX3bgnbCBIGxZ9q5kuLydlI1k90Xjewbw2lWz
+         n5Rg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794601580; x=1795206380; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BmaNayS+Wbe5Uay0lJ3vEuq20YAhkZy/1G9M7ssRoVg=;
+        b=xAWZhUljpSj4GwEG5edXxo6lINEjsx85vjIUzWJhw/LQW+vjQFg+VQZpnvBlLnAT0K
+         7t3cmzjH5jUHNzUfWx4PDsIwPZpYxYCA5w1os/pb5TNthu8XeIB0xjgf3B7ZhI5ReVH2
+         bOPigVWTzSjcjbnh/6w2cBFJIdF+tp64QXr9nPDhy/rhIAYlpzNo7oc0HRCGEzg86v3/
+         qxB+Te0DMVATtMQzWt/dJ71BmmiA0GOF072vtHmRm6ujw/2T9eyf8mKPT9EZt4wDhW82
+         /61/dguUNKOHnb5rEdnRfzzyumKudLkEaH90yzaKusaIQYnQzBQC7awjusAsdK9kcM3z
+         7nmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794601580; x=1795206380;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BmaNayS+Wbe5Uay0lJ3vEuq20YAhkZy/1G9M7ssRoVg=;
+        b=FkLfMLJyTvxYrIqGFab3wDKx3hhqBHn+F1mMHgHphITdM0xYh6weG6Athf5XFDfJoN
+         n2JYeXKnrQlsf18iMb5+mqBk3vDWfXYvwvFwIyRhJAE+pkM9cbYT9frGNQ0yMgC3HD6c
+         pcwUNX8zps9JzqTB5/qrTPVLFgM8H+Ju+FNSWTgC/zeX6glf3MfhwlmPIOIJ9WX6FLRv
+         ylnegKfX0jjYS5dOrFUYRN9pMpF8EMp6y25S9/GeIwsTDIBzugDcQuv3zjQk9sp6tfTf
+         WnMNLIuIVOxtHDNxcAYT6TCDb3Pna0HhaC4raLpc4EzfnVGGPorpCgRMfJRSIxKVQrMV
+         MsHw==
+X-Forwarded-Encrypted: i=1; AL+hErEJVy/fWdGWIkxWCGdfDBEec047+pW7vmz302f9EPZ6JRzdgsEBQ/L3It0zyCvUO8QodLtedm7zM/xeQCGE@vger.kernel.org
+X-Gm-Message-State: APuU4Z8g1wsodunRJr3BSdoFnAS1JuHZda9ltTfC8Fj7f/2lhdEWAJEK
+	txWue8DwoQ8luZCcFvcrPYaby7WEIoP+9zGXGrGwH6EYQb7DN4i0Ke7Tc17jedsyB9oPHKgHLfB
+	GBaMyl7Cx5TqKEiOVa2ILYHBkZHtK2IY9PE27zm4=
+X-Gm-Gg: AYBFou29NArtl2kjt/Da65ExrH8IrbGVJHsVrTf/Jdb4m0hycDXzodLYtozW7NlOYDu
+	q/q3GLSKnUp9mCCqC+Q30h4kIlrxVWoUlUuqVQwQlS1CCCs09wACI6qoPNyyY+N14RTJQwR1/Tw
+	9b3Pi7KxlM/AURKz0wwCBBlqCZZJKK4JDViFsKh3WfEhzqypkqtH2ULg4RFihMDmWFtdj2MmUCM
+	dn8wsi7hYSrlQdVszXhVLrz+qQnEVxjHVMzjaAECofr3r/tgnkD6dA+lBGhYIE8ysMCO/pzDfEV
+	742EDzkGQeNjpXWO0GN59KaH3yP7dnlnxgvTuzJCW2PyVoDSxRnWUYkUZnvnkWktC69vASCJf+g
+	DiRfgeA+urCiY7ZTDw8xkuSxxLjPrtCIQWGcZ
+X-Received: by 2002:a05:620a:450b:b0:93c:5f3c:f485 with SMTP id
+ af79cd13be357-9494bc63eabmr628029685a.53.1794601580206; Fri, 13 Nov 2026
+ 12:26:20 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -80,130 +104,83 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261028155005.174417-1-mbkchelofficialdev@gmail.com> <CA+YDrKBAPZ9MHB46wVSsD4Vd-R8L1Kkz=Vp-F32+WyfJ5FDaoQ@mail.gmail.com>
+In-Reply-To: <CA+YDrKBAPZ9MHB46wVSsD4Vd-R8L1Kkz=Vp-F32+WyfJ5FDaoQ@mail.gmail.com>
+From: MBKCHEL <mbkchelofficialdev@gmail.com>
+Date: Fri, 13 Nov 2026 22:26:08 +0200
+X-Gm-Features: AclHuK-nt_pkf71fgXmv9aasF6EhY7Hz67dSrcbsHeSkY4RsXRic0A5k2swbL1c
+Message-ID: <CA+YDrKDyME4fAYMCRvz2Nau78nKJp1H8W4C0yLFp550GwRjvSw@mail.gmail.com>
+Subject: Re: [PATCH] rust: macros: document emit_base in ModInfoBuilder
+To: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Guikun Yang <yangguikun19@qq.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-    linux-rcu@vger.kernel.org, linux-modules@vger.kernel.org,
-    linux-kernel@vger.kernel.org
-Subject: [Bug report] srcu_module_coming() dereferences unvalidated
- ___srcu_struct_ptrs entries - wild kernel-memory write on module load
+Hi,
 
-Hi Paul, Luis,
-
-The module loader hands the contents of the ___srcu_struct_ptrs section
-to SRCU as an array of absolute struct srcu_struct * pointers, with no
-validation of any entry. srcu_module_coming() then writes through each
-one during the MODULE_STATE_COMING notification, inside init_module().
-A crafted module whose synthetic section contains an arbitrary 64-bit
-value therefore gets a kernel-heap pointer written to an
-attacker-chosen address.
-
-  Oops: general protection fault, probably for non-canonical address
-  0xe00006aaa0000021: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN NOPTI
-  KASAN: probably user-memory-access in range
-  [0x0000555500000108-0x000055550000010f]
-  RIP: 0010:srcu_module_notify+0x480/0x610
-  RAX: 0000607f57d191c0   (alloc_percpu return, the value being written)
-  RBX: 0000555500000100   (the section entry, verbatim from the file)
-  RDI: 0000555500000108   (&ssp->sda)
-   notifier_call_chain
-   blocking_notifier_call_chain_robust
-   load_module
-   __do_sys_init_module
-
-## The three pieces
-
-Loader, zero validation (kernel/module/main.c):
-
-  mod->srcu_struct_ptrs = section_objs(info, "___srcu_struct_ptrs",
-                                       sizeof(*mod->srcu_struct_ptrs),
-                                       &mod->num_srcu_structs);
-
-section_objs() counts entries and returns sh_addr; the bytes' validity
-is entirely up to the ELF file.
-
-Generator, absolute pointer (include/linux/srcutree.h):
-
-  struct srcu_struct * const __srcu_struct_##name
-        __section("___srcu_struct_ptrs") = &name
-
-Unlike __tracepoints_ptrs (PREL32 self-relative on x86), this is a
-link-time absolute address. In a hand-built section the bytes are
-whatever the attacker writes, and since no .rela entry targets them,
-apply_relocations() never touches them either.
-
-Consumer, write on load (kernel/rcu/srcutree.c, unchanged from 7.3 to
-mainline 2026-11-14):
-
-  ssp = *(sspp++);
-  ssp->sda = alloc_percpu(struct srcu_data);       /* wild write */
-  if (WARN_ON_ONCE(!ssp->sda))
-          return -ENOMEM;
-  ssp->srcu_ctrp = &ssp->sda->srcu_ctrs[0];        /* second write */
-
-ssp->sda sits at offset 8, so an entry value V makes the kernel write
-a freshly allocated percpu pointer to V+8, and a pointer derived from
-it to V. The unload/rollback path (srcu_module_going()) dereferences
-ssp->srcu_sup and frees ssp->sda through the same unchecked entries.
-
-## Why this is more than a crash
-
-The write value is a kernel heap address and the target is a fully
-attacker-chosen 64-bit address. Pointing the entry at a
-userland-readable mapping leaks the percpu allocation address directly
-to userspace, defeating percpu-base randomization and contributing to
-KASLR defeat. Pointing it at any zero-filled kernel address lands the
-write. A non-canonical target gives the deterministic #GP above
-(reproduced 7.3.0, KASAN inline, DEBUG_PAGEALLOC).
-
-## The fix has an in-tree precedent
-
-jump_label.c validates exactly this class of pointer in the same
-module-notification path (kernel/jump_label.c:716):
-
-  if (within_module((unsigned long)key, mod)) {
-          static_key_set_entries(key, iter);
-          continue;
-  }
-
-The suggested fix mirrors it in srcu_module_coming() and
-srcu_module_going():
-
-  for (i = 0; i < mod->num_srcu_structs; i++) {
-          ssp = *(sspp++);
-+         if (!ssp || !within_module((unsigned long)ssp, mod))
-+                 return -EINVAL;
-          ssp->sda = alloc_percpu(struct srcu_data);
-
-__tracepoints_ptrs and __bpf_raw_tp_map are sibling pointer sections
-with the same exposure; a shared check in find_module_sections()
-would cover the class, but the SRCU entries are the concrete
-write-what-where primitive demonstrated here.
-
-This is the second report in this series: the relocation r_offset
-bounds gap went out as <mod-r-offset-oob-20261113@qq.com> yesterday.
-Both are cases of the module loader consuming section contents that
-its ELF validity layer never checked.
-
-## Reproducer
-
-Carrier is a real xt_mark.ko built from the same tree as the test
-kernel (vermagic, this_module size, 11 undefined symbols all
-matching). A section synthesizer appends an 8-byte
-___srcu_struct_ptrs entry (0x0000555500000100), fixing shstrtab,
-e_shnum and e_shoff. Same boot, three steps:
-
-  1. load original xt_mark.ko   -> 0
-  2. unload                     -> 0
-  3. load synthesized module    -> the Oops above
-
-The A/B pair, the synthesizer and the reproducer are available on
-request.
-
-Tested on 7.3.0; kernel/rcu/srcutree.c and the loader path are
-unchanged in mainline as of 2026-11-14.
+Friendly ping on this patch.
 
 Thanks,
-Guikun Yang
+Ivan
 
+=D1=87=D1=82, 29 =D0=BE=D0=BA=D1=82. 2026=E2=80=AF=D0=B3. =D0=B2 15:33, MBK=
+CHEL <mbkchelofficialdev@gmail.com>:
+>
+> Hi,
+>
+> Please note that I made a typo in my last name in the "From" and
+> "Signed-off-by" lines. My correct name is "Ivan Tverdokhleb".
+>
+> If the patch is accepted, could you please apply it with the corrected na=
+me?
+>
+> Thanks,
+> Ivan
+>
+> =D1=81=D1=80, 28 =D0=BE=D0=BA=D1=82. 2026=E2=80=AF=D0=B3. =D0=B2 17:50, I=
+van Tverdohleb <mbkchelofficialdev@gmail.com>:
+> >
+> > Add documentation for the emit_base method within the ModInfoBuilder
+> > struct. Explain its role in formatting metadata strings, handling the
+> > differentiation between built-in and loadable modules, and managing
+> > linker sections and conditional compilation.
+> >
+> > Signed-off-by: Ivan Tverdohleb <mbkchelofficialdev@gmail.com>
+> > ---
+> >  rust/macros/module.rs | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> > index 0a7b9e24c..6f361013f 100644
+> > --- a/rust/macros/module.rs
+> > +++ b/rust/macros/module.rs
+> > @@ -49,6 +49,16 @@ fn new(module: &'a str) -> Self {
+> >          }
+> >      }
+> >
+> > +    /// Emits a single metadata entry into the module information tabl=
+e.
+> > +    ///
+> > +    /// This method formats a `field=3Dcontent\0` byte string and plac=
+es it into the
+> > +    /// `.modinfo` linker section. For built-in modules (`builtin =3D=
+=3D true`), the string
+> > +    /// is prefixed with the module name (`module.field=3Dcontent\0`) =
+to avoid naming
+> > +    /// collisions in the final monolithic kernel binary.
+> > +    ///
+> > +    /// It automatically generates a unique static identifier using an=
+ internal counter
+> > +    /// and applies appropriate conditional compilation attributes (`#=
+[cfg(MODULE)]` or
+> > +    /// `#[cfg(not(MODULE))]`) based on the target type.
+> >      fn emit_base(&mut self, field: &str, content: &str, builtin: bool,=
+ param: bool) {
+> >          let string =3D if builtin {
+> >              // Built-in modules prefix their modinfo strings by `modul=
+e.`.
+> > --
+> > 2.56.0
+> >
