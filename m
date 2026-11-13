@@ -1,75 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.205.221.149
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794578991;
-	b=i5PpsodkYA+z/TGzwVL1C+vnJTzTnX4inxayhSW0q01iOSXM03dSWa20dRsi9Swyiqp1
-	 N5jk5ZnWO1pBIGHiZ4Dc9NQmugAULEn2AIRMyVpwSAGVW42tkYujOdXzZjHWSNz5yIYnr
-	 2tg95jbQbBsDAwDCdPMnOFWJJcaKgpu8RRo87FNR1ieru9JaZ/PlEu9ru/6/73ce00EXk
-	 fwIfjAY9n7gaQcQ3w5/I2L/1MeO1Zl5tUkxiQ0UDku6ReMoDAto2z+qEY0bqs01YObdmy
-	 GaMyleQW9Yy20vbcD2AfXD6C2Jopzvi36O2/oUC0KhFCVtG++ioz+71wxJZjyf8pDDw==
+	t=1794580577;
+	b=jZ7cWCcmPI/iekvaFLHTY/WGYeTbNdp8pW9W8exRLakStO2JUjmKk15PYwO0Op6+EL2/
+	 EvMCOoyjPU0nOTpdLj6P5OjE8GIxRF0DDv4wzN7/03IDjqX+CP+hVjLgOMRgkWnFx5f73
+	 JXXFq/LLLpY9tCUnfWGigtEynqLwG/EHZDXZ7yCYte9BO93fUkWD9qoQLTN0LcqaavZqd
+	 IXO18ehbtJmYsoEHmX5EcW9RHrSR3U7v7PBWaNctfxRR/mQ79bZHwpdwY7dZfVfz9KjR2
+	 OBcx8tSwwW4wexZUt9ZAdjdpKOQ++ULzIUi5nm5uQVFaN9qgOvo968/8CWwhzTxF6eA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794578991;
-	h=DMARC-Filter:DKIM-Signature:Received:X-QQ-mid:Message-ID:
-	 X-QQ-XMAILINFO:X-QQ-XMRINFO:From:To:Cc:Subject:X-OQ-MSGID:Date:
-	 Content-Type:Content-Transfer-Encoding:MIME-Version;
-	bh=bAL0mG7gDM0Ds4mwj8nZj0AtHGkdJ+5sP2blMTQt1jA=;
-	b=TTHvdmMTnGVEyU6cHUnIIlX7zxkGCe/D40kgm6hF+bGXMFnKmvcdZXr93xOJy+pOryZY
-	 koQlVqQUN8MSaY1lih4PpSqQZKcEr2Ufk9if6qiUVZrc1DDJaCe/ALuHATyS8IVAWXDPK
-	 RTu0xIfs8wflFcnY2bEmVq/N69xDmvTJ1mGPxEM8qyQlPmh7AomZArh7p1Fc+7jrMXJKU
-	 MLi5pTGQP8+FEZyX8mJUdYCiq2E4XGm6RTnmwA2Zsaz2LJwlbYfY6Q2Mu1RJgyLZTeiVX
-	 vRstYd/97UyzOm6YdFSJmLKqfd12Xg5brf/SQCrcYU4n+VX7k4JnJq/1Zv4u20v6cTQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794580577;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=w49hyKAjJNYQc0T0xEVaI68+0oF+m2dcDRcRYzEk8rs=;
+	b=OtwB2aXtZOl+ucpDClDVKDR7uUEqEjuYNerfG4u1kOAqAhopQ4XfofcZyQVUNNtmA4q7
+	 brkJqiBoLRaaYBDufLX9OL2sauWefFNq7hDz4a3DucgEKykUgv/5xSN9zYgUZ8RbjA1qT
+	 k6Xna6VuEQjo5RLTTev5N9tfk3k8VyjHKqZumcYxCWxxs4qS3qiArN+HDKMipLusxYWGq
+	 D3PyRbXGSP2B65jvCrF8LX4SC+DydffFJoGItwEGhbxdgCFh/G8SE3zN3lp7VROF2dRbI
+	 lbkygIl7z57fI5mUAWCKvAIiFF1ZfA7lqwYCPglocO27LO3L5KaSEbM2eFJAw62WouA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=qq.com;
-	spf=pass smtp.mailfrom=qq.com;
-	dkim=pass header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=emFOdmK1;
-	arc=none smtp.remote-ip=203.205.221.149
-Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jDjzVVrU;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23514606A32E;
-	Fri, 13 Nov 2026 14:09:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23514606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EAD0606A327;
+	Fri, 13 Nov 2026 14:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=emFOdmK1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1794578981; bh=bAL0mG7gDM0Ds4mwj8nZj0AtHGkdJ+5sP2blMTQt1jA=;
-	h=From:To:Cc:Subject:Date;
-	b=emFOdmK1wpaeWv4vxDtWixwyL5bqDFRhmA5YbZnPm9cuADLfsUA6QlDmZ7CegpAU5
-	 6mWJ9veZNQ++ZSECnN5VeFh/sFz5hjR7FlEKCo95V80eG7bCAnSOhlrmMgZQEZ/4Kz
-	 FvmjwgnzjtmUq/l3yLxaTf7/qhzB+VGUq/2SNNFI=
-Received: from [172.18.4.77] ([202.113.185.209])
-	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
-	id 2668D40C; Fri, 13 Nov 2026 22:09:38 +0800
-X-QQ-mid: xmsmtpt1794578978tyc0xg9qc
-Message-ID: <tencent_3088A959D4B80F725457EAC737C488ABD306@qq.com>
-X-QQ-XMAILINFO: NC4p7XQIBeahJNh9TIiqCTt1EqrLWJ0DItzm73BWZg/6vMQutgNqMe6pr9wIaL
-	 k9v4f3/nFdZWCSd/DlrAijMOipUCW/jOUIvJNi2yJOEynstjqPf5J2fIRTyeopMj4wk+NTZjAWiM
-	 SqI4Mrow/ldJNVZmBMnFn7OJubsNmZon1uZ/QhVAz30EzS3C5FtRM98Tb2b2wbA0uJqZOZh4Ftg2
-	 8Uh0RMxDWT0yjOP5r+F6/x618B/xdT5MlzPSl/AjgSn1JC6xBsAyBq2K1/oY2EJVzK8oawyxFTDD
-	 w7Tn/FRWWr1lwAdhUbPXIWrQFsLGzqA+7LZUws9BsNUmmZ6jkCiaU+WtVX4fEXD/gQFsZ53Foek0
-	 3NB0ONK7qi5RT92In09HvK4FFpUDSwKfCJ823Oden35I0f/Z8V/96G1AegAYaKWvc5I9s2XjDOnZ
-	 vUTBcQzFOBhCYBm/XKjlJvtRAXqW2yF2mIzU6BBiqFKsuw7irGXx1lyKkKGVv/NdcyUCiAN47RL4
-	 /pTsFOBrRvqgShY8ctDpsOXsubAp7JReasj/gpZCkmM5WNAYT32Cj2Z5vwWpgBZ1g8w5UkyrloE6
-	 TrSvz7nKfRYD+dwBvoL23U1t8mU1e0Is684a7bVVIPrGZG+zkANR8tu0p1JDvN8pzefald/UFIdX
-	 2HrRTMsweTiPkKTG33qP2unMRm+YrVahLb6IfJ+ZXtqc59aDDGiphWhnPW+zgpHlPEaFpaVJbdwU
-	 y2QgutFOV0haWNrneMtI7FqmlAquzxdUhJ9qvZklEIXMq80SxySM4a5KaUESGNgq+ZlQ5h7IO6ot
-	 ZP3/th5MBDwUSp+mfRycTpiZ3Mx50p5E18xEUBlSoh5Pcz3UMCT75UlaNYWHMAAiHWun72WPv+vE
-	 VVrt3hmBd6n6l13uC4A3SuODxZENs8BT4pl9OkBdE0uXYDXT8ePH9ihQTaDF4GLLVKnegt+wldFj
-	 t0JtUgPFiZy3NW0IhIBfly0GeFbdu8cesVL+87CcDMIYwO1+Xkf2JWalCrfGbBHRu2UE+M0k+39R
-	 qZSkQ6k8GfBS1HTVbs5uOBiDksOm0tzLkfiwnXmymgWVODd1gkqMbWKMhRhv/cM8BxiNKKAg==
-X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
-From: Guikun Yang <yangguikun19@qq.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Igor Solodrai <ihor.solodrai@linux.dev>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: [Bug report] x86-64 module loader: relocation r_offset and symbol
- index are used without bounds checks - OOB write on module load
-X-OQ-MSGID: <mod-r-offset-oob-20261113@qq.com>
-Date: Fri, 13 Nov 2026 12:00:00 +0800
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jDjzVVrU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B8A1F000C4;
+	Fri, 13 Nov 2026 14:36:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794580577;
+	bh=w49hyKAjJNYQc0T0xEVaI68+0oF+m2dcDRcRYzEk8rs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=jDjzVVrUjcqqvOcF2zRf/R4D2SkobqauH5sB4E4FWc03X74m4jxFCQSio9YHHHuuR
+	 9Ml4Tlrckfk60OSmZz+hec4p2l9kmjLvQBMrX/YWsRQQvgUFJp0NHQZIrCyw0Gwiek
+	 QZbpgzhogd+cwsY3Nd25gGqUKt3Baw/aKdlCaoUNBkxmn6Z5pyPj2weF8qqKc3/A8M
+	 /Hvf3OTZxfDyyZ1sLXoNdqhyld8LAWFVmEcfNS1X7e6OGeS63NUqhOrnPQq/ZF6Igj
+	 DMtYYds7K9Hh4P0SFcSWYXYIJSddoBhMr/8mdEZ/t7+gx48plf7GD6vYahVdtRVM4l
+	 DMbaEQTybkmNw==
+Message-ID: <3f7af771-87a7-4ae7-9919-bc4c23bd31c9@kernel.org>
+Date: Fri, 13 Nov 2026 15:36:01 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -79,141 +51,135 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v8 11/16] powerpc: extend execmem_params for
+ kprobes allocations
+To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+ "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ "David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>,
+ Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+ Huacai Chen <chenhuacai@kernel.org>,
+ Kent Overstreet <kent.overstreet@linux.dev>, Liviu Dudau
+ <liviu@dudau.co.uk>, Luis Chamberlain <mcgrof@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
+ =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Russell King <linux@armlinux.org.uk>, Sam Ravnborg <sam@ravnborg.org>,
+ Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+References: <20240505160628.2323363-1-rppt@kernel.org>
+ <20240505160628.2323363-12-rppt@kernel.org>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <20240505160628.2323363-12-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Guikun Yang <yangguikun19@qq.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
-    Igor Solodrai <ihor.solodrai@linux.dev>, linux-modules@vger.kernel.org,
-    linux-kernel@vger.kernel.org
-Subject: [Bug report] x86-64 module loader: relocation r_offset and symbol
- index are used without bounds checks - OOB write on module load
+Hi Mike,
 
-Hi Luis, Petr, Igor,
+Looks like I missed this change ...
 
-Loading a crafted x86-64 module where one relocation entry's r_offset
-(or its symbol index) points outside the target section ends in a wild
-read and, for a target that is mapped and zero-filled, a controlled
-out-of-bounds write. Both the ELF validity check and
-__write_relocate_add() itself leave these two fields completely
-unchecked. A/B reproducer below.
+Le 05/05/2024 à 18:06, Mike Rapoport a écrit :
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> powerpc overrides kprobes::alloc_insn_page() to remove writable
+> permissions when STRICT_MODULE_RWX is on.
+> 
+> Add definition of EXECMEM_KRPOBES to execmem_params to allow using the
+> generic kprobes::alloc_insn_page() with the desired permissions.
+> 
+> As powerpc uses breakpoint instructions to inject kprobes, it does not
+> need to constrain kprobe allocations to the modules area and can use the
+> entire vmalloc address space.
 
-  Oops: general protection fault, probably for non-canonical address
-  0xe00013fff8040000: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN NOPTI
-  KASAN: maybe wild-memory-access in range [0x0000bfffc0200000-...]
-  RIP: memcmp+0x67/0x1d0
-  RDI: 0000bfffc0200000
-  Call Trace:
-   apply_relocate_add+0x20e
-   load_module+0x40f7
-   __do_sys_init_module
+Using breakpoint means the segment must still be executable.
+On book3s/32 VMALLOC segment is not executable, while module segment is.
 
-## The gap
+See commit 6ca055322da8 ("powerpc/32s: Use dedicated segment for modules 
+with STRICT_KERNEL_RWX")
 
-__write_relocate_add() (arch/x86/kernel/module.c) takes the target
-address and symbol pointer straight from the relocation entry:
+See report and fix at 
+https://lore.kernel.org/all/ed03d290d440d579a81ae0b7de5243721291d903.1794543909.git.ritesh.list@gmail.com/
 
-  loc = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
-          + rel[i].r_offset;
+Christophe
 
-  sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
-          + ELF64_R_SYM(rel[i].r_info);
 
-  ...
-  if (memcmp(loc, &zero, size))   /* wild read */
-  ...
-  write(loc, &val, size);         /* val = sym->st_value + r_addend */
 
-r_offset is a 64-bit value from the module file, with no check against
-the target section size. r_info's symbol index is likewise unchecked
-against the symbol table entry count. apply_relocations() in
-kernel/module/main.c only verifies infosec < e_shnum and SHF_ALLOC.
-
-The ELF validity layer does not cover these either:
-elf_validity_cache_sechdrs() validates sh_offset/sh_size (file-side,
-via validate_section_offset()), and the recent series added checks for
-section types and the symbol string table - but nothing bounds the
-per-entry r_offset or the symbol index of the relocation entries.
-
-## This is the same pattern that f9d69d5e7b fixed for st_shndx
-
-f9d69d5e7b ("module: Fix kernel panic when a symbol st_shndx is out of
-bounds", December 2025) added a bounds check for st_shndx indexing
-sechdrs[] in simplify_symbols():
-
-  if (sym[i].st_shndx >= info->hdr->e_shnum) { ... return -ENOEXEC; }
-
-That check is in the current tree. The relocation entries in
-__write_relocate_add() index memory the same way (an ELF-controlled
-offset into an array base) and are still unchecked:
-
-  simplify_symbols():   st_shndx -> sechdrs[st_shndx]   /* bounded */
-  __write_relocate_add(): r_offset -> base + r_offset    /* unbounded */
-
-391e982bfa (2022) already accepted that a crafted module file is a
-realistic input ("It is trivial to craft a module to trigger OOB
-access"), and the elf_validity_check() series exists precisely to
-defend against malformed ELF. The relocation entries are the part of
-that input that the validity layer does not reach.
-
-## Impact: more than a crash
-
-The memcmp(loc, &zero, size) / write(loc, &val, size) pair means the
-loader reads the target first and only writes if it is zero. With a
-non-canonical r_offset this is a deterministic #GP (reproduced). With
-a r_offset aimed at a mapped, zero-filled kernel address, the write
-lands - val is sym->st_value + r_addend, both attacker-controlled
-within the module. Since init_module() can be retried with different
-r_offset values, this is a usable probe-and-write primitive against
-kernel memory, not just a crash.
-
-## Reproduction
-
-The carrier module is a real xt_mark.ko built from the same tree as
-the test kernel (vermagic, this_module size, all 11 undefined symbols
-matching), so the only variable is the eight modified bytes
-(.rela.text[0].r_offset at file offset 0x17a0, changed to
-0xc00000000000 so loc lands in the non-canonical range):
-
-  before: init_module -> 0, delete_module -> 0 (module loads, unloads)
-  after:  init_module -> Oops (trace above)
-
-Same-tree build, same boot, single field changed. The A/B pair and
-the init_reloc.c reproducer are available on request.
-
-## Suggested fix
-
-In apply_relocations(), before dispatching to per-arch
-apply_relocate_add(), verify each entry points inside its target
-section and its symbol index inside the symbol table. This covers all
-architectures (arm64, powerpc, riscv, s390, loongarch have the same
-raw `base + rel[i].r_offset` form):
-
-  for (i = 1; i < info->hdr->e_shnum; i++) {
-          ...
-          if (info->sechdrs[i].sh_type == SHT_REL ||
-              info->sechdrs[i].sh_type == SHT_RELA) {
-                  for (j = 0; j < sechdrs[i].sh_size / sizeof(*rel); j++) {
-                          /* bounds per entry, arch-dependent size */
-                          ...
-                  }
-          }
-  }
-
-or, minimally, a per-arch check at the top of each relocation loop:
-
-  loc_off = rel[i].r_offset;
-  if (loc_off > sechdrs[sechdrs[relsec].sh_info].sh_size - sizeof(u64))
-          return -ENOEXEC;
-  if (ELF_R_SYM(rel[i].r_info) >=
-      sechdrs[symindex].sh_size / sizeof(Elf_Sym))
-          return -ENOEXEC;
-
-(The minimal per-arch form matches how f9d69d5e7b added the st_shndx
-bound locally in simplify_symbols().)
-
-Tested on 7.3.0; arch/x86/kernel/module.c is unchanged in mainline as
-of 2026-11-13.
-
-Thanks,
-Guikun Yang
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>   arch/powerpc/kernel/kprobes.c | 20 --------------------
+>   arch/powerpc/kernel/module.c  |  7 +++++++
+>   2 files changed, 7 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
+> index 9fcd01bb2ce6..14c5ddec3056 100644
+> --- a/arch/powerpc/kernel/kprobes.c
+> +++ b/arch/powerpc/kernel/kprobes.c
+> @@ -126,26 +126,6 @@ kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offse
+>   	return (kprobe_opcode_t *)(addr + offset);
+>   }
+>   
+> -void *alloc_insn_page(void)
+> -{
+> -	void *page;
+> -
+> -	page = execmem_alloc(EXECMEM_KPROBES, PAGE_SIZE);
+> -	if (!page)
+> -		return NULL;
+> -
+> -	if (strict_module_rwx_enabled()) {
+> -		int err = set_memory_rox((unsigned long)page, 1);
+> -
+> -		if (err)
+> -			goto error;
+> -	}
+> -	return page;
+> -error:
+> -	execmem_free(page);
+> -	return NULL;
+> -}
+> -
+>   int arch_prepare_kprobe(struct kprobe *p)
+>   {
+>   	int ret = 0;
+> diff --git a/arch/powerpc/kernel/module.c b/arch/powerpc/kernel/module.c
+> index ac80559015a3..2a23cf7e141b 100644
+> --- a/arch/powerpc/kernel/module.c
+> +++ b/arch/powerpc/kernel/module.c
+> @@ -94,6 +94,7 @@ static struct execmem_info execmem_info __ro_after_init;
+>   
+>   struct execmem_info __init *execmem_arch_setup(void)
+>   {
+> +	pgprot_t kprobes_prot = strict_module_rwx_enabled() ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
+>   	pgprot_t prot = strict_module_rwx_enabled() ? PAGE_KERNEL : PAGE_KERNEL_EXEC;
+>   	unsigned long fallback_start = 0, fallback_end = 0;
+>   	unsigned long start, end;
+> @@ -132,6 +133,12 @@ struct execmem_info __init *execmem_arch_setup(void)
+>   				.fallback_start	= fallback_start,
+>   				.fallback_end	= fallback_end,
+>   			},
+> +			[EXECMEM_KPROBES] = {
+> +				.start	= VMALLOC_START,
+> +				.end	= VMALLOC_END,
+> +				.pgprot	= kprobes_prot,
+> +				.alignment = 1,
+> +			},
+>   			[EXECMEM_MODULE_DATA] = {
+>   				.start	= VMALLOC_START,
+>   				.end	= VMALLOC_END,
 
