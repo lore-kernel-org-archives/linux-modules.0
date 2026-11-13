@@ -1,102 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.181
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794493262;
-	b=12vdkmm201uYd+X7nQJimkHg3V192VEnP5MzVj1t4Z3xUtLnLEYsEod9fz1c4hwof9g2
-	 1ZltbiKneSc8cu3OshKxUzK7meE3dpoTINjNqugWbu33CuKYk89fP524suKac/KQ8eKpA
-	 Kn4toq0nb6Dycx1TJl0+5HLbFCFJMBsCIIXdMau2FTahctpN+8r/7Qxw9Vnf+0i6bb0Vz
-	 eRQdoYZ8BRFOBdg64A1/JCL7XLDzLWPk/BYLtPXhLz9ODacDjUGSds2psH+EKVrXfgpOx
-	 b+hvtQr2PgfBS3DZOkg6btDAA7hYUkM/+W4ssnjWIaP/EQP0n0Bf4awkneU23TpjwIQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794493262;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=OupxHyRM+umbW423wKXJxlldk10XI7UdvUQ9Y9tR3mM=;
-	b=boU8hRCSGBIWXHmCIEfE6lpnZQGQpfD0YUdNcjIO6869F3ABrwU3cuw7GbTFFltNGAP2
-	 g9ULunuNe9jftOqDH97FnFR6tIk3maLAVEFxpENVxfHWQvZRAzCQQuxJbqT75BsDCFpRc
-	 wO7iFDDqqcRhj2voVsC/zNL6eMDKOqDujq29rWyIpbybZFlWsFyGVkR/E1Hw5YG8Tlc0D
-	 H5tjN/1Ye2vtKcd3gMuPsH6Xvy1WfKiT8hZrKLguWwezXjNfqw8fXO70B1p/hRQAygFOk
-	 NRNdZR0VuU0ES1k83DEXIcmzNmlUe9rYdpeB23Bu8JM4j4YZ/Z5K33KC0oPmiC2gZMA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RRM5RV3o;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.181
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.205.221.149
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794578991;
+	b=i5PpsodkYA+z/TGzwVL1C+vnJTzTnX4inxayhSW0q01iOSXM03dSWa20dRsi9Swyiqp1
+	 N5jk5ZnWO1pBIGHiZ4Dc9NQmugAULEn2AIRMyVpwSAGVW42tkYujOdXzZjHWSNz5yIYnr
+	 2tg95jbQbBsDAwDCdPMnOFWJJcaKgpu8RRo87FNR1ieru9JaZ/PlEu9ru/6/73ce00EXk
+	 fwIfjAY9n7gaQcQ3w5/I2L/1MeO1Zl5tUkxiQ0UDku6ReMoDAto2z+qEY0bqs01YObdmy
+	 GaMyleQW9Yy20vbcD2AfXD6C2Jopzvi36O2/oUC0KhFCVtG++ioz+71wxJZjyf8pDDw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794578991;
+	h=DMARC-Filter:DKIM-Signature:Received:X-QQ-mid:Message-ID:
+	 X-QQ-XMAILINFO:X-QQ-XMRINFO:From:To:Cc:Subject:X-OQ-MSGID:Date:
+	 Content-Type:Content-Transfer-Encoding:MIME-Version;
+	bh=bAL0mG7gDM0Ds4mwj8nZj0AtHGkdJ+5sP2blMTQt1jA=;
+	b=TTHvdmMTnGVEyU6cHUnIIlX7zxkGCe/D40kgm6hF+bGXMFnKmvcdZXr93xOJy+pOryZY
+	 koQlVqQUN8MSaY1lih4PpSqQZKcEr2Ufk9if6qiUVZrc1DDJaCe/ALuHATyS8IVAWXDPK
+	 RTu0xIfs8wflFcnY2bEmVq/N69xDmvTJ1mGPxEM8qyQlPmh7AomZArh7p1Fc+7jrMXJKU
+	 MLi5pTGQP8+FEZyX8mJUdYCiq2E4XGm6RTnmwA2Zsaz2LJwlbYfY6Q2Mu1RJgyLZTeiVX
+	 vRstYd/97UyzOm6YdFSJmLKqfd12Xg5brf/SQCrcYU4n+VX7k4JnJq/1Zv4u20v6cTQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=qq.com;
+	spf=pass smtp.mailfrom=qq.com;
+	dkim=pass header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=emFOdmK1;
+	arc=none smtp.remote-ip=203.205.221.149
+Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBD1606A8BD
-	for <linux-modules@vger.kernel.org>; Thu, 12 Nov 2026 14:21:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4EBD1606A8BD
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23514606A32E;
+	Fri, 13 Nov 2026 14:09:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23514606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RRM5RV3o
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-33bb5afa736so214217eec.1
-        for <linux-modules@vger.kernel.org>; Thu, 12 Nov 2026 06:21:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794493261; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RqQlhcmVorAgib1hQ5C/mK5ObZfxc6c3smJE59LBBOGWOOxv/99fjy8fskNT5592Y9
-         yCIgBbyk+3lGUBiwwY89iet2j+ad/8JlXk4TniMFewdR4Go1MunWJoAaCjHWcK9DXoPZ
-         XO85Vc+iWhjBNMwlFK1hqJ9A4GKfPef2XyCVmntHnSy+81K1uYbsouLhET+tS0eCB8zY
-         ub5MmkhBhPdfZlPpDklP1oftt89lZynBdISmzPREFDxh5Oz07iQ4BYP2TW8VqGvKP1AT
-         fLEEgRta4l2xYMVroqfqL3ZF0Qt3xNo+AUG2CxhYAVnoPQ4e12Ci4JBnSFHfYM1DPubh
-         +hdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OupxHyRM+umbW423wKXJxlldk10XI7UdvUQ9Y9tR3mM=;
-        fh=LU6iai85fy9IjneWTPq+jdomW6xp5H3qodaefEJrTNw=;
-        b=YIHXrK7g5bQU/okSrBF66xrcKm+Ia0I58ipjAojLvqpPz5zXNtpdl7OOM3VbIgBgDj
-         9myFiBo3kY2waRJPQLxoKlqUeol/d496wS6UKoVEppthDK4KXpi5ggVVHNGRGq4Z9tGC
-         MBDYXneRfPS13l3FEbTKylLuNUzaxCPl27LXMCQpQnAzPCcb5Tz0C7Dqu5wwB/6W8vpD
-         GV6rmq6aIXSSIZJo88Jn2392Hxy4Fdn+1Av1b9cqPV9TVsWqJkgiCZDY53QfJsenA6oz
-         GZXGirKQsNV6bpp/NmxoMPmuSpMC9bEQ+a7f/GpEM4Rsb9evdCTwqAGLPshNBGJhRto1
-         PLUQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794493261; x=1795098061; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OupxHyRM+umbW423wKXJxlldk10XI7UdvUQ9Y9tR3mM=;
-        b=RRM5RV3ojFftw6JfMgFPWgXIRbKkVxR0tRVDIzvlKunec9MNBbvAVocoEqhHyB3B/z
-         ftOmhOdzJKWfq9jaPn8ZdUCn9WyLwYpmtMDxP7Nm7fVmOA+51Da/fgWbu1ZogdW4Qvj1
-         L75YgkvafDPOq6DSGO5je4sjg74Yp4rbHNfmsB8hWdl3YiESJpY94KZ2NjYWKYvezAga
-         eRXi4Fg0+vEa+qHmTXOFSvcO8nd1wf6dxPb60MzpqMipgF9zQOC48mdhAx18itjOK9n8
-         YJHhYTrr2yDyqEt4vLSq/SLOULOv9pRTLgsJsi5kYqcC48tmmrMMfrdFu0ymwKQ1gKiW
-         cbJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794493261; x=1795098061;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OupxHyRM+umbW423wKXJxlldk10XI7UdvUQ9Y9tR3mM=;
-        b=y920W6XvgYXPGgEaxGiPY8COzs44R5JYFzbHcPJhiwokMX9tsRrH2TmAkXx4HGrS5j
-         EXxgtQ7UjJc0FKYhBqdtSk4Yx8u5hGvlxnw2E0rUu+9oYitWjqd5EwuFX8Y/RoaaNq9G
-         4ZKYuzA8B8vc0uc2gTLldhZ2FWD6DgCzHpGXEF1puSZ48VxjicGywWmX6INBdrLucXRg
-         nX4QONTZxOqhbNcD+Iq9sqi+GDjP5Fs0z/lPVb2MkbPp2GciE86yAfDLiszS6vbSXwRs
-         o/PmTBje5/m4cWWS/L60CAYewI/N27YB8UB9Fd7H5VFG1AFlOb76k8Tf7xiivYVCmA98
-         aC1Q==
-X-Forwarded-Encrypted: i=1; AL+hErGwjOVKv5xsd8YtY8BQ9mrfsnvz5dgUf0v+Sy6XCqtic0Bf/AxlnkEfUq4ooPByVzuNaNpzS8STN1495VzC@vger.kernel.org
-X-Gm-Message-State: APuU4Z8z7Br3ZOsKHuMhhdxqW/ReDocOuXYNKyBY8NN6Zyf6Tkb+3rlw
-	dxV/BJG5JgKOyWL2XaO6AsHnQRF/ubjvfNR8S6abyFy/xr2dc1GiCdAD4sE+ZHEXsdyOO+V9YRk
-	xda8cAE/MqE2UfO+BhpM2Alv1+VJvGyM=
-X-Gm-Gg: AYBFou0CzcpcfzMiJgMv0lxKGX63dK8Ltn65YqC+hY3Z8ZfwCzPuL35FcMQQKBXH+zs
-	IJOiqKvhPQaVORIn1Eg5O6KMBI9TRWbSZTqs9cNWtEXvcyg6Yo3Zag8RdbH3ugPNC4+yRLmn/zB
-	7C8BjWTsE2djz9Dz/pXLsAo+uEEzOkV66PdpdSg3N/qm4XntrDTHkxSugaWoYrviG0LqIdiu9ut
-	Jj/xejjy281W3WhmXM1fCGoDICCwBQaP07w4z/vs3oB+UF9BoyacU2CWwZW2xMP/zkWMHS38owL
-	Cnjcv4KcLMqLo1gRSKDCN7lquwPbJyxzMF1eykyZ3hp4ObIVa8msXi307ywvqI20/SHUDYOnjt1
-	PcZathjrLGP0YoF9xI1+r9e3szkNwuftVcNn6DOfIjWxgmUYDrtxetUkOci0QQ/7aOD3wrNqwEg
-	LqYtWKGFb581LrayaawqqUfZAXh81z57JjJk0qLihIFdWWjboJktSaPU6aNA+iSjPHHw9yqtguo
-	BZdXggUZR57TJEsk/iH0ki/0A+fS6gOqRm5o3tEx7UUNpjMjDbL/sidcdSMTNYkxdM/tJs=
-X-Received: by 2002:a05:7300:7aa5:b0:36a:e7a:e89 with SMTP id
- 5a478bee46e88-37685c76d17mr9166936eec.2.1794493260363; Thu, 12 Nov 2026
- 06:21:00 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=emFOdmK1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1794578981; bh=bAL0mG7gDM0Ds4mwj8nZj0AtHGkdJ+5sP2blMTQt1jA=;
+	h=From:To:Cc:Subject:Date;
+	b=emFOdmK1wpaeWv4vxDtWixwyL5bqDFRhmA5YbZnPm9cuADLfsUA6QlDmZ7CegpAU5
+	 6mWJ9veZNQ++ZSECnN5VeFh/sFz5hjR7FlEKCo95V80eG7bCAnSOhlrmMgZQEZ/4Kz
+	 FvmjwgnzjtmUq/l3yLxaTf7/qhzB+VGUq/2SNNFI=
+Received: from [172.18.4.77] ([202.113.185.209])
+	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
+	id 2668D40C; Fri, 13 Nov 2026 22:09:38 +0800
+X-QQ-mid: xmsmtpt1794578978tyc0xg9qc
+Message-ID: <tencent_3088A959D4B80F725457EAC737C488ABD306@qq.com>
+X-QQ-XMAILINFO: NC4p7XQIBeahJNh9TIiqCTt1EqrLWJ0DItzm73BWZg/6vMQutgNqMe6pr9wIaL
+	 k9v4f3/nFdZWCSd/DlrAijMOipUCW/jOUIvJNi2yJOEynstjqPf5J2fIRTyeopMj4wk+NTZjAWiM
+	 SqI4Mrow/ldJNVZmBMnFn7OJubsNmZon1uZ/QhVAz30EzS3C5FtRM98Tb2b2wbA0uJqZOZh4Ftg2
+	 8Uh0RMxDWT0yjOP5r+F6/x618B/xdT5MlzPSl/AjgSn1JC6xBsAyBq2K1/oY2EJVzK8oawyxFTDD
+	 w7Tn/FRWWr1lwAdhUbPXIWrQFsLGzqA+7LZUws9BsNUmmZ6jkCiaU+WtVX4fEXD/gQFsZ53Foek0
+	 3NB0ONK7qi5RT92In09HvK4FFpUDSwKfCJ823Oden35I0f/Z8V/96G1AegAYaKWvc5I9s2XjDOnZ
+	 vUTBcQzFOBhCYBm/XKjlJvtRAXqW2yF2mIzU6BBiqFKsuw7irGXx1lyKkKGVv/NdcyUCiAN47RL4
+	 /pTsFOBrRvqgShY8ctDpsOXsubAp7JReasj/gpZCkmM5WNAYT32Cj2Z5vwWpgBZ1g8w5UkyrloE6
+	 TrSvz7nKfRYD+dwBvoL23U1t8mU1e0Is684a7bVVIPrGZG+zkANR8tu0p1JDvN8pzefald/UFIdX
+	 2HrRTMsweTiPkKTG33qP2unMRm+YrVahLb6IfJ+ZXtqc59aDDGiphWhnPW+zgpHlPEaFpaVJbdwU
+	 y2QgutFOV0haWNrneMtI7FqmlAquzxdUhJ9qvZklEIXMq80SxySM4a5KaUESGNgq+ZlQ5h7IO6ot
+	 ZP3/th5MBDwUSp+mfRycTpiZ3Mx50p5E18xEUBlSoh5Pcz3UMCT75UlaNYWHMAAiHWun72WPv+vE
+	 VVrt3hmBd6n6l13uC4A3SuODxZENs8BT4pl9OkBdE0uXYDXT8ePH9ihQTaDF4GLLVKnegt+wldFj
+	 t0JtUgPFiZy3NW0IhIBfly0GeFbdu8cesVL+87CcDMIYwO1+Xkf2JWalCrfGbBHRu2UE+M0k+39R
+	 qZSkQ6k8GfBS1HTVbs5uOBiDksOm0tzLkfiwnXmymgWVODd1gkqMbWKMhRhv/cM8BxiNKKAg==
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+From: Guikun Yang <yangguikun19@qq.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
+ Igor Solodrai <ihor.solodrai@linux.dev>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: [Bug report] x86-64 module loader: relocation r_offset and symbol
+ index are used without bounds checks - OOB write on module load
+X-OQ-MSGID: <mod-r-offset-oob-20261113@qq.com>
+Date: Fri, 13 Nov 2026 12:00:00 +0800
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -106,51 +79,141 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261112121512.1670347-1-gprocida@google.com> <20261112121512.1670347-3-gprocida@google.com>
-In-Reply-To: <20261112121512.1670347-3-gprocida@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 12 Nov 2026 15:20:46 +0100
-X-Gm-Features: AclHuK8Dsnej4GxSZdQmdf9s-8C89r0Ozx2FMVSaC8sIWGqdgayIjlPcXZdV2eI
-Message-ID: <CANiq72knbS_-8ekPfMbaF9Z2V7=DSCLdbxECb4d8o-vv=CYJMA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] rust: convert exports.c to assembly
-To: Giuliano Procida <gprocida@google.com>, Gary Guo <gary@garyguo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org, 
-	Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun@kernel.org>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 12, 2026 at 1:15=E2=80=AFPM Giuliano Procida <gprocida@google.c=
-om> wrote:
->
-> Previously, `rust/exports.c` defined `EXPORT_SYMBOL_RUST_GPL(sym)` with
-> `extern int sym;` so that it could invoke the C `EXPORT_SYMBOL_GPL(sym)`
-> macro, which requires `sym` to be a declared C identifier in scope for
-> `typeof(sym)`, `__ADDRESSABLE(sym)` and `__GENDWARFKSYMS_EXPORT(sym)`.
->
-> This caused the C compiler to emit DWARF debug information in
-> `rust/exports.o` describing every exported Rust and helper symbol,
-> functions and data alike, as a C `int` variable. Those bogus `int` DWARF
-> entries ended up in `vmlinux`, conflicting with the true DWARF types
-> emitted by `rustc` and confusing debuggers and ABI analysis tools.
->
-> Convert `rust/exports.c` to `rust/exports.S` and emit
-> `EXPORT_SYMBOL_GPL(sym)` directly. Under `__ASSEMBLY__`,
-> `<linux/export.h>` expands `EXPORT_SYMBOL_GPL(sym)` straight to
-> `___EXPORT_SYMBOL(sym, "GPL", ...)` without requiring symbol
-> declarations or emitting bogus DWARF entries, while also avoiding a C
-> compilation step.
->
-> Signed-off-by: Giuliano Procida <gprocida@google.com>
+From: Guikun Yang <yangguikun19@qq.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
+    Igor Solodrai <ihor.solodrai@linux.dev>, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Subject: [Bug report] x86-64 module loader: relocation r_offset and symbol
+ index are used without bounds checks - OOB write on module load
 
-I guess Suggested-by: Gary?
+Hi Luis, Petr, Igor,
 
-Cheers,
-Miguel
+Loading a crafted x86-64 module where one relocation entry's r_offset
+(or its symbol index) points outside the target section ends in a wild
+read and, for a target that is mapped and zero-filled, a controlled
+out-of-bounds write. Both the ELF validity check and
+__write_relocate_add() itself leave these two fields completely
+unchecked. A/B reproducer below.
+
+  Oops: general protection fault, probably for non-canonical address
+  0xe00013fff8040000: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN NOPTI
+  KASAN: maybe wild-memory-access in range [0x0000bfffc0200000-...]
+  RIP: memcmp+0x67/0x1d0
+  RDI: 0000bfffc0200000
+  Call Trace:
+   apply_relocate_add+0x20e
+   load_module+0x40f7
+   __do_sys_init_module
+
+## The gap
+
+__write_relocate_add() (arch/x86/kernel/module.c) takes the target
+address and symbol pointer straight from the relocation entry:
+
+  loc = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+          + rel[i].r_offset;
+
+  sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
+          + ELF64_R_SYM(rel[i].r_info);
+
+  ...
+  if (memcmp(loc, &zero, size))   /* wild read */
+  ...
+  write(loc, &val, size);         /* val = sym->st_value + r_addend */
+
+r_offset is a 64-bit value from the module file, with no check against
+the target section size. r_info's symbol index is likewise unchecked
+against the symbol table entry count. apply_relocations() in
+kernel/module/main.c only verifies infosec < e_shnum and SHF_ALLOC.
+
+The ELF validity layer does not cover these either:
+elf_validity_cache_sechdrs() validates sh_offset/sh_size (file-side,
+via validate_section_offset()), and the recent series added checks for
+section types and the symbol string table - but nothing bounds the
+per-entry r_offset or the symbol index of the relocation entries.
+
+## This is the same pattern that f9d69d5e7b fixed for st_shndx
+
+f9d69d5e7b ("module: Fix kernel panic when a symbol st_shndx is out of
+bounds", December 2025) added a bounds check for st_shndx indexing
+sechdrs[] in simplify_symbols():
+
+  if (sym[i].st_shndx >= info->hdr->e_shnum) { ... return -ENOEXEC; }
+
+That check is in the current tree. The relocation entries in
+__write_relocate_add() index memory the same way (an ELF-controlled
+offset into an array base) and are still unchecked:
+
+  simplify_symbols():   st_shndx -> sechdrs[st_shndx]   /* bounded */
+  __write_relocate_add(): r_offset -> base + r_offset    /* unbounded */
+
+391e982bfa (2022) already accepted that a crafted module file is a
+realistic input ("It is trivial to craft a module to trigger OOB
+access"), and the elf_validity_check() series exists precisely to
+defend against malformed ELF. The relocation entries are the part of
+that input that the validity layer does not reach.
+
+## Impact: more than a crash
+
+The memcmp(loc, &zero, size) / write(loc, &val, size) pair means the
+loader reads the target first and only writes if it is zero. With a
+non-canonical r_offset this is a deterministic #GP (reproduced). With
+a r_offset aimed at a mapped, zero-filled kernel address, the write
+lands - val is sym->st_value + r_addend, both attacker-controlled
+within the module. Since init_module() can be retried with different
+r_offset values, this is a usable probe-and-write primitive against
+kernel memory, not just a crash.
+
+## Reproduction
+
+The carrier module is a real xt_mark.ko built from the same tree as
+the test kernel (vermagic, this_module size, all 11 undefined symbols
+matching), so the only variable is the eight modified bytes
+(.rela.text[0].r_offset at file offset 0x17a0, changed to
+0xc00000000000 so loc lands in the non-canonical range):
+
+  before: init_module -> 0, delete_module -> 0 (module loads, unloads)
+  after:  init_module -> Oops (trace above)
+
+Same-tree build, same boot, single field changed. The A/B pair and
+the init_reloc.c reproducer are available on request.
+
+## Suggested fix
+
+In apply_relocations(), before dispatching to per-arch
+apply_relocate_add(), verify each entry points inside its target
+section and its symbol index inside the symbol table. This covers all
+architectures (arm64, powerpc, riscv, s390, loongarch have the same
+raw `base + rel[i].r_offset` form):
+
+  for (i = 1; i < info->hdr->e_shnum; i++) {
+          ...
+          if (info->sechdrs[i].sh_type == SHT_REL ||
+              info->sechdrs[i].sh_type == SHT_RELA) {
+                  for (j = 0; j < sechdrs[i].sh_size / sizeof(*rel); j++) {
+                          /* bounds per entry, arch-dependent size */
+                          ...
+                  }
+          }
+  }
+
+or, minimally, a per-arch check at the top of each relocation loop:
+
+  loc_off = rel[i].r_offset;
+  if (loc_off > sechdrs[sechdrs[relsec].sh_info].sh_size - sizeof(u64))
+          return -ENOEXEC;
+  if (ELF_R_SYM(rel[i].r_info) >=
+      sechdrs[symindex].sh_size / sizeof(Elf_Sym))
+          return -ENOEXEC;
+
+(The minimal per-arch form matches how f9d69d5e7b added the st_shndx
+bound locally in simplify_symbols().)
+
+Tested on 7.3.0; arch/x86/kernel/module.c is unchanged in mainline as
+of 2026-11-13.
+
+Thanks,
+Guikun Yang
+
