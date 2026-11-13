@@ -1,75 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.29
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794608084;
-	b=OOCSg2JMQx6dgkZuRFM4CpwjDWVq1gi0gLF59N7NeOJKZ8pJwPwgYl5ItbIYa4z72/1/
-	 WFhCoyXgbr4uj2WSBzmOhTNoloMUpXGBe4WkC6DP3WbbwBtao//jYUrSLdvsnUm7sAi4C
-	 Hf6fUBxfUz1wsQ8zWxOpUBjjVBjRGBL1bMrp4a1QHJbt7Lq5JYpIXYskVv94ClSRbwETl
-	 iQ2oQ66nWS0DCtRN8T+PDGnpEvnM2Cz+zPbMvR455khMBVSgomXF5K+ZLMoH6HiZh0m1U
-	 ysDI0GlmAgJmvtHM2pAtadoEb0DKsvAHhRdG2OPjmndR4dq/ymwq4Uh7KP6c7vGEsXA==
+	t=1794608086;
+	b=hmDppb2c6MSrJQ1g+6mLO7ph0EK7IKDRuNKW4/rFLr1WR8EROSIjWM2OQinn9qO+zUUf
+	 dL15/wXbEhpacFEd4NBn4uuzU76IKt1UnDThd5IPeaEkf5vRd39T5z6WDBdJ5U1DrWxLO
+	 2MKWY1tg9C/Lt4mb5Hk9T+PQdGuCMFYl1aQuXVbDwsBj1SYVpZb+wRq8Wc2+TZOXkGdyS
+	 iEE5m1Oad/nCYImZX8xgh/X4WsIET/4NHHT+Y/YM7Vl+5+oMWPvSMJhW17cioOoytbK4x
+	 7YBfNy2P5MsvLGzIrKpLgbx+FBSkIKaF3A2VCGtHr29qFWoU09LPYvB/DyayDlQQFlg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794608084;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=inhYO7njBxxxz63wglLKDs7vlAYadf0cFHKmRlMoUnM=;
-	b=zhjrpScKCzK8pPsO60fxY6fNob8spYkM1IkqDoLGqs2sIIqKgvol2L5gZB1uhiEwYJsE
-	 ySVwE121tkqSwyI3ms4QCofmNdbc5a+I6W+JcgVpoPheAteyCl8R32NWOc91iV45X9OkY
-	 ERQESSfGLcUVezwsy2VMGQ2sSsCoxwxP3ckUeisdMlEDt3Wfv/XX52IsdAH+98uHpp6H2
-	 YKGOK/rkpAnBK9+2kEXr0eKGD/gnwMDIxg+kPR+vWATI3In3eIwYtBcFnLniBluMlwEpA
-	 10FBg7K3EW9zLYOUEU/PNAT2qkciBO6l/mS8KykWjvEOmE3woDCbTySHImGiCPq9v/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794608086;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:CC:Subject:In-Reply-To:
+	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=R9rduGAl1SHAakLebetDlXuPxuUEhf5VdhoiXEwGJSs=;
+	b=tNB7PCyjGipYcOf1fK68CwsDOYurUG9HkdCsCcu8ZoJCnh8HfenlkefnFsBhnR5L2MJR
+	 jpQk8Idfd4B9gWpXWzo2v5vkv7RVujYCVcUrRvopaE9EUXC7mHP3FBlnt/CYRBobZHrNj
+	 2KmbkWhg4+lKbPjGBgUfyK4HYwT6qCUlRwpio0zqxn9WVHNhBJdsaj6vPGDuEKCmW/U6/
+	 EIb3V2tnK+TxlM1cC58X3bHZNjUupjia/55DHHC0IFDbwmjdetk2M2954rHboYgokq7XX
+	 LpTX7qyrP9DkLo5D5axM5yXw9tbLaqZMtVLvMOZnzpkOjH9aFyd/p8aRqivOCy+2Tag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="RldI8/Ss";
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X7DQWJ7C;
+	arc=none smtp.remote-ip=91.218.175.29
+Received: from mta0.migadu.com (out-29.mta0.migadu.com [91.218.175.29])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E0E60A3831
-	for <linux-modules@vger.kernel.org>; Fri, 13 Nov 2026 22:14:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0E0E60A3831
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC61C60A3831
+	for <linux-modules@vger.kernel.org>; Fri, 13 Nov 2026 22:14:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC61C60A3831
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RldI8/Ss
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-30bcb065bfdso1867349eec.0
-        for <linux-modules@vger.kernel.org>; Fri, 13 Nov 2026 14:14:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794608082; x=1795212882; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=inhYO7njBxxxz63wglLKDs7vlAYadf0cFHKmRlMoUnM=;
-        b=RldI8/SsSqY8lw2cvRAiwU7cqvnlV6q0Ztry9wKAhokqvlb76Pt9cdaCLElZ740qHj
-         //Ktdtbj8XJ+zeSCkj7OdC1RnbPKS7jXn1fqqm84tpjmWbrkZXbKtvOQbXvLg2kkdFTa
-         5wIhhBT/dodbhK6Q+Rq4QtxyTR0nzpB+rCwcU0DeVVI+jAKuIp1UoS7V9QSzswdtSJjz
-         hV76Kz5l2w0emhEpHe2qo2Ov1wVEuxQOD1ICntHvPYZZj0/rv5UUCIcM9Ler8/e9/SVy
-         QAYmOx4lTFa59kkP9Qlubitqbz+GYRJ73Wckam2i63LobxIWM4tci6GccKHlZx4w8loE
-         tN3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794608082; x=1795212882;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=inhYO7njBxxxz63wglLKDs7vlAYadf0cFHKmRlMoUnM=;
-        b=tod+00W79FErc3PAIWy9mCWL5gYFK2tJAIHYJMFoha5q4mU4Go9Kgz/61nUPJYHZbo
-         VAaN3H8+mNu7a63PYD33+FZTNUypfsgDDUuvgPSxARrWe4qmMt77A5uXHM+JjW864FOy
-         3IQwH0q9yi/nN1VwCHnM/HsyBejX9R8v3TmbSZOba140fjWk4IS9ktyl2ny3Nu8emxoR
-         Ty55w08A49U6Pmnko8DuagLIyC7De7qBDwR52KSGMC9mzLL9cTvQcAs9hU9QRhnVwpQY
-         PX4Ost0i/8NfVANQgNVDB+qX/G/Q/QOfFcO/cEbdt7cX0Fs8n/tS2xD/JZDJJME4MMv0
-         pldg==
-X-Forwarded-Encrypted: i=1; AL+hErEjBDekTKYYQJyx5oZ2q2SA6ovqVnlOkECdXT874I0974q9JFe6RQcXY7gQbKAOrTDyIbiJOj0LDIg5i701@vger.kernel.org
-X-Gm-Message-State: APuU4Z/qHU3AFtH9K25i2PPcofnGheiO66PJ2orCl3c282X+GF8v+ra+
-	rsmHVfE3u2FBJ0F+12TSCSekPiedb7mtJhFNLjY+AsevVUMlko2AZhYgbgFmG53qZR9mc4CeRUn
-	0KbuGqc6JDlQTew==
-X-Received: from dyrp21.prod.google.com ([2002:a05:693c:69d5:b0:343:520f:7a80])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:d189:b0:36e:e349:f2cb with SMTP id 5a478bee46e88-3796628e28amr3392731eec.19.1794608081264;
- Fri, 13 Nov 2026 14:14:41 -0800 (PST)
-Date: Fri, 13 Nov 2026 14:12:53 -0800
-In-Reply-To: <20261113221248.3535369-11-wusamuel@google.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X7DQWJ7C
+X-Envelope-To: linux-modules@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=B16odCs177cdXLEvKntuWHjttnpyOtVHrFIqeH/UPaQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794608083; v=1; x=1795212883;
+ b=X7DQWJ7Colzn1U8y/9DcSRlM5eTDSn/YSFLFgihWL4YcdLpu2oDm0gRwzC862anvzLOmtRiW
+ K2SJYkKLAZyauLnrtgmVnUylu2XDwp+xpqHrcrj01h57SWhtrG4FqqdiYMI8HWfv20UzHNc0jWm
+ cufP0uEKFF68DDOGSA9e9wbE=
+X-Envelope-To: linux-modules@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 0adfe5a205e05619;
+	Fri, 13 Nov 2026 22:14:42 +0000
+X-Mizu-Trace-ID: 0adfe5a205e05619
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 13 Nov 2026 22:14:43 +0000
+From: Bradley Morgan <bradley.morgan@linux.dev>
+To: pmenzel@molgen.mpg.de
+CC: atomlin@atomlin.com, da.gomez@kernel.org, dsterba@suse.com,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, mcgrof@kernel.org, nathan@kernel.org,
+ nsc@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
+ terrelln@fb.com
+Subject: Re: [PATCH] module: Add LZ4 module compression
+In-Reply-To: <20261113144233.193782-1-pmenzel@molgen.mpg.de>
+Message-ID: <C55315CE-D1F3-487A-B9D6-A0BA457374E5@linux.dev>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -78,174 +65,384 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261113221248.3535369-11-wusamuel@google.com>
-X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261113221248.3535369-19-wusamuel@google.com>
-Subject: [PATCH bpf-next v3 8/9] libbpf: Resolve typeless ksyms via
- KALLSYMS_QUERY_BY_NAME ioctl
-From: Samuel Wu <wusamuel@google.com>
-To: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
-	David Laight <david.laight.linux@gmail.com>, Samuel Wu <wusamuel@google.com>, 
-	kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-libbpf parses all of /proc/kallsyms to resolve typeless ksyms.
+On 13 November 2026 14:42:29 GMT, Paul Menzel <pmenzel@molgen.mpg.de>
+wrote:
+>XZ modules are small but slow to decompress in the kernel. Therefore,
+>support modules compressed in the LZ4 frame format (.ko.lz4), as written
+>by lz4(1). Decode block by block into a scratch buffer and copy into the
+>module pages. Linked blocks keep the last 64 KiB of output in front of
+>the scratch buffer as the dictionary. Verify the header checksum, block
+>checksums, content checksum and content size when the frame has them.
+>Frames with a dictionary ID are rejected.
+>
+>modules_install uses `lz4 -12 -B4 -BD`: 64 KiB linked blocks are as
+>small as 4 MiB blocks (i915.ko: 3587140 vs 3585364 bytes) and keep the
+>scratch buffer at 128 KiB.
+>
+>Userspace needs kmod with LZ4 support for depmod and modprobe [1].
+>
+>On a Dell XPS 13 9310 with an Intel Core i7-1165G7 (Tiger Lake) and an
+>NVMe SSD, decompressing and checking the signatures of the 237 modules
+>loaded during boot takes 624 ms of CPU time with XZ (i915: 91 ms) and
+>131 ms with LZ4 (i915: 12 ms), measured by calling finit_module() again
+>for each loaded module. The LZ4 modules take 20.3 MB instead of 11.0 MB.
+>Both kernels are v7.4-rc1 with the same patches, including pending
+>lib/xz decoder speed-ups. Ten alternating boots of each kernel:
+>
+>  | ms (median)                               |  XZ  | LZ4  | change |
+>  +-------------------------------------------+------+------+--------+
+>  | early-i915 (modprobe i915 + dependencies) |  295 |   90 |   -205 |
+>  | first i915 message                        |  738 |  547 |   -192 |
+>  | GDM autologin                             |  973 |  876 |    -96 |
+>  | GRUB start to autologin                   | 1292 | 1197 |    -94 |
+>
+>QEMU 11.1.2 (KVM, AMD EPYC 7763, 8 vCPUs, module.sig_enforce=1, 10
+>rounds), loading the same 237 modules in dependency order:
+>
+>  | median                   |   XZ    |   LZ4   | uncompressed |
+>  +--------------------------+---------+---------+--------------+
+>  | one at a time            | 2082 ms | 1499 ms |      1461 ms |
+>  | 8 in parallel, like udev |  619 ms |  573 ms |       593 ms |
+>
+>Link: https://github.com/kmod-project/kmod/pull/505 [1]
+>Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>---
+>
+>Notes:
+>    Assisted-by: Claude Opus 5.5 (Claude Code) wrote the decoder and this message. Tests: W=1 compile (GCC 16.2, Debian config); QEMU with module.sig_enforce=1: 11 LZ4 frame variants (64 KiB-4 MiB, linked/independent, block/content checksums, content size, stored blocks) load, 7 corrupt or truncated files are rejected; 237-module boot set loads in QEMU and on a Dell XPS 13 9310 (20 boots).
+>
+> kernel/module/Kconfig      |  13 ++-
+> kernel/module/decompress.c | 227 +++++++++++++++++++++++++++++++++++++
+> scripts/Makefile.modinst   |   6 +
+> 3 files changed, 245 insertions(+), 1 deletion(-)
+>
+>diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+>index 43b1bb01fd273..36f12612c74dd 100644
+>--- a/kernel/module/Kconfig
+>+++ b/kernel/module/Kconfig
+>@@ -344,7 +344,7 @@ config MODULE_COMPRESS
+> 	  This is fully compatible with signed modules.
+> 
+> 	  The tool used to work with modules needs to support the selected
+>-	  compression type. kmod MAY support gzip, xz and zstd. Other tools
+>+	  compression type. kmod MAY support gzip, lz4, xz and zstd. Other tools
+> 	  might have a limited selection of the supported types.
+> 
+> 	  Note that for modules inside an initrd or initramfs, it's more
+>@@ -377,6 +377,15 @@ config MODULE_COMPRESS_ZSTD
+> 	  Support modules compressed with ZSTD. The installed modules are
+> 	  suffixed with .ko.zst.
+> 
+>+config MODULE_COMPRESS_LZ4
+>+	bool "LZ4"
+>+	help
+>+	  Support modules compressed with LZ4. The installed modules are
+>+	  suffixed with .ko.lz4.
+>+
+>+	  LZ4 modules are larger than XZ or ZSTD ones but decompress
+>+	  several times faster.
+>+
+> endchoice
+> 
+> config MODULE_COMPRESS_ALL
+>@@ -394,6 +403,8 @@ config MODULE_DECOMPRESS
+> 	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
+> 	select XZ_DEC if MODULE_COMPRESS_XZ
+> 	select ZSTD_DECOMPRESS if MODULE_COMPRESS_ZSTD
+>+	select LZ4_DECOMPRESS if MODULE_COMPRESS_LZ4
+>+	select XXHASH if MODULE_COMPRESS_LZ4
+> 	help
+> 	  Support for decompressing kernel modules by the kernel itself
+> 	  instead of relying on userspace to perform this task. Useful when
+>diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+>index cce098671be97..5828b7ec9d7b6 100644
+>--- a/kernel/module/decompress.c
+>+++ b/kernel/module/decompress.c
+>@@ -287,6 +287,233 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+> 	kvfree(wksp);
+> 	return retval;
+> }
 
-Use KALLSYMS_QUERY_BY_NAME instead: exact names, plus "<name>.llvm."
-prefix matches. Ambiguous matches at different addresses fail the load.
-A missing strong extern still fails and a missing weak extern is 0,
-without a text scan.
+↓ wont you comment and say what this is?
 
-On any other error (e.g. -ENOTTY on older kernels, or -EPERM), fall back
-to the text parser.
+>+#elif defined(CONFIG_MODULE_COMPRESS_LZ4)
+>+#include <linux/bitfield.h>
+>+#include <linux/lz4.h>
+>+#include <linux/sizes.h>
+>+#include <linux/unaligned.h>
+>+#include <linux/xxhash.h>
+>+#define MODULE_COMPRESSION	lz4
+>+#define MODULE_DECOMPRESS_FN	module_lz4_decompress
+>+
+>+/* LZ4 frame format, as written by lz4(1) */
+>+#define LZ4F_MAGIC		0x184d2204
+>+#define LZ4F_FLG_VERSION_MASK	GENMASK(7, 6)
+>+#define LZ4F_FLG_VERSION	0x40
+>+#define LZ4F_FLG_BLOCK_INDEP	BIT(5)
+>+#define LZ4F_FLG_BLOCK_CSUM	BIT(4)
+>+#define LZ4F_FLG_CONTENT_SIZE	BIT(3)
+>+#define LZ4F_FLG_CONTENT_CSUM	BIT(2)
+>+#define LZ4F_FLG_RESERVED	BIT(1)
+>+#define LZ4F_FLG_DICT_ID	BIT(0)
+>+#define LZ4F_BD_MAX_SIZE	GENMASK(6, 4)
+>+#define LZ4F_BD_RESERVED	(BIT(7) | GENMASK(3, 0))
+>+#define LZ4F_BLOCK_UNCOMPRESSED	BIT(31)
 
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
- tools/lib/bpf/libbpf.c | 99 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 97 insertions(+), 2 deletions(-)
+These define blocks look odd.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 44134421bd7d..f3f3475a64d3 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -59,6 +59,34 @@
- #define BPF_FS_MAGIC		0xcafe4a11
- #endif
- 
-+#ifndef KALLSYMS_QUERY_BY_NAME
-+/* 'f' is PROCFS_IOCTL_MAGIC */
-+#define KALLSYMS_QUERY_BY_NAME	_IOC(_IOC_READ | _IOC_WRITE, 'f', 48, 0)
-+
-+enum kallsyms_query_flags {
-+	KALLSYMS_QUERY_NAME_PREFIX = 0x01,
-+};
-+
-+struct kallsyms_query_sym {
-+	__u64 sym_addr;
-+	__u64 sym_size;
-+	__u64 sym_name;
-+	__u64 sym_name_len;
-+	__u64 sym_module;
-+	__u64 sym_module_len;
-+};
-+
-+struct kallsyms_query_by_name {
-+	__u64 size;
-+	__u64 query_flags;
-+	__u64 query_name;
-+	__u64 module_filter;
-+	__u64 pos;
-+	__u64 sym;
-+	__u64 sym_struct_size;
-+};
-+#endif
-+
- #define MAX_EVENT_NAME_LEN	64
- 
- #define BPF_FS_DEFAULT_PATH "/sys/fs/bpf"
-@@ -9421,8 +9449,75 @@ static int kallsyms_cb(unsigned long long sym_addr, char sym_type,
- 	return 0;
- }
- 
--static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
-+static int query_ksym_by_name(int fd, struct extern_desc *ext, bool lto_prefix)
-+{
-+	struct kallsyms_query_sym sym = {};
-+	struct kallsyms_query_by_name q = {
-+		.size = sizeof(q),
-+		.query_flags = lto_prefix ? KALLSYMS_QUERY_NAME_PREFIX : 0,
-+		.query_name = ptr_to_u64(ext->name),
-+		.sym = ptr_to_u64(&sym),
-+		.sym_struct_size = sizeof(sym),
-+	};
-+	char prefix_buf[512];
-+	int n;
-+
-+	if (lto_prefix) {
-+		n = snprintf(prefix_buf, sizeof(prefix_buf), "%s.llvm.", ext->name);
-+		if (n < 0 || n >= sizeof(prefix_buf))
-+			return 0;
-+		q.query_name = ptr_to_u64(prefix_buf);
-+	}
-+
-+	while (!ioctl(fd, KALLSYMS_QUERY_BY_NAME, &q)) {
-+		if (!ext->is_set) {
-+			ext->is_set = true;
-+			ext->ksym.addr = sym.sym_addr;
-+			pr_debug("extern (ksym) '%s': set to 0x%llx\n",
-+				 ext->name, ext->ksym.addr);
-+		} else if (sym.sym_addr != ext->ksym.addr) {
-+			pr_warn("extern (ksym) '%s': resolution is ambiguous: 0x%llx or 0x%llx\n",
-+				ext->name, ext->ksym.addr,
-+				(unsigned long long)sym.sym_addr);
-+			return -EADDRNOTAVAIL;
-+		}
-+		q.pos++;
-+	}
-+
-+	return errno == ENOENT ? 0 : -errno;
-+}
-+
-+static int bpf_object__resolve_typeless_ksyms(struct bpf_object *obj)
- {
-+	struct extern_desc *ext;
-+	int err = 0;
-+	int fd;
-+	int i;
-+
-+	fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-+	if (fd < 0) {
-+		err = -errno;
-+		pr_warn("failed to open /proc/kallsyms: %s\n", errstr(err));
-+		return err;
-+	}
-+
-+	for (i = 0; i < obj->nr_extern && !err; i++) {
-+		ext = &obj->externs[i];
-+		if (ext->type != EXT_KSYM || ext->ksym.type_id)
-+			continue;
-+
-+		/* Check exact name and then LTO .llvm.<hash> prefix */
-+		err = query_ksym_by_name(fd, ext, false);
-+		if (!err)
-+			err = query_ksym_by_name(fd, ext, true);
-+	}
-+	close(fd);
-+	if (!err || err == -EADDRNOTAVAIL)
-+		return err;
-+
-+	/* Other errors (e.g. -ENOTTY, -EPERM): parse the text file */
-+	pr_debug("KALLSYMS_QUERY_BY_NAME failed (%s), falling back to /proc/kallsyms\n",
-+		 errstr(err));
- 	return libbpf_kallsyms_parse(kallsyms_cb, obj);
- }
- 
-@@ -9699,7 +9794,7 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
- 			return -EINVAL;
- 	}
- 	if (need_kallsyms) {
--		err = bpf_object__read_kallsyms_file(obj);
-+		err = bpf_object__resolve_typeless_ksyms(obj);
- 		if (err)
- 			return -EINVAL;
- 	}
--- 
-2.56.0.679.gc527c65306-goog
+>+/* Linked blocks may reference up to 64 KiB of earlier output. */
+>+#define LZ4F_DICT_SIZE		SZ_64K
 
+I feel this could be better, not got my thinking glasses on, any ideas?
+
+>+
+>+static int module_lz4_copy_out(struct load_info *info, const u8 *src,
+>+			       size_t len, size_t *total)
+>+{
+>+	while (len) {
+>+		size_t offset = *total % PAGE_SIZE;
+>+		size_t chunk = min_t(size_t, len, PAGE_SIZE - offset);
+>+		struct page *page;
+>+
+>+		if (offset)
+>+			page = info->pages[info->used_pages - 1];
+>+		else
+>+			page = module_get_next_page(info);
+>+		if (IS_ERR(page))
+>+			return PTR_ERR(page);
+>+
+>+		memcpy_to_page(page, offset, src, chunk);
+>+		src += chunk;
+>+		len -= chunk;
+>+		*total += chunk;
+>+	}
+>+
+>+	return 0;
+>+}
+>+
+>+static int module_lz4_verify_content(struct load_info *info, size_t total,
+>+				     u32 expected)
+>+{
+>+	void *data;
+>+	u32 csum;
+>+
+>+	data = vmap(info->pages, info->used_pages, VM_MAP, PAGE_KERNEL_RO);
+>+	if (!data)
+>+		return -ENOMEM;
+>+	csum = xxh32(data, total, 0);
+>+	vunmap(data);
+>+
+>+	if (csum != expected) {
+>+		pr_err("LZ4-compressed data is corrupt (content checksum)\n");
+>+		return -EINVAL;
+>+	}
+>+
+>+	return 0;
+>+}
+>+
+>+static ssize_t module_lz4_decompress(struct load_info *info,
+>+				     const void *buf, size_t size)
+>+{
+>+	const u8 *in = buf, *end = in + size, *desc;
+>+	size_t block_max, total = 0, dict_len = 0;
+>+	u64 content_size = 0;
+>+	u8 *scratch, *out;
+>+	bool linked;
+>+	u8 flg, bd;
+>+	int retval;
+>+
+>+	if (size < 7 || get_unaligned_le32(in) != LZ4F_MAGIC) {
+>+		pr_err("not an lz4 compressed module\n");
+>+		return -EINVAL;
+>+	}
+>+
+>+	desc = in + 4;
+>+	flg = desc[0];
+>+	bd = desc[1];
+>+	in = desc + 2;
+>+	if ((flg & LZ4F_FLG_VERSION_MASK) != LZ4F_FLG_VERSION ||
+>+	    (flg & LZ4F_FLG_RESERVED) || (bd & LZ4F_BD_RESERVED) ||
+>+	    FIELD_GET(LZ4F_BD_MAX_SIZE, bd) < 4) {
+>+		pr_err("LZ4-compressed data has an unsupported frame descriptor\n");
+>+		return -EINVAL;
+>+	}
+>+	if (flg & LZ4F_FLG_DICT_ID) {
+>+		pr_err("LZ4-compressed data needs a dictionary\n");
+>+		return -EINVAL;
+>+	}
+>+	if (flg & LZ4F_FLG_CONTENT_SIZE) {
+>+		if (end - in < 8)
+>+			goto truncated_header;
+>+		content_size = get_unaligned_le64(in);
+>+		in += 8;
+>+	}
+>+	if (end - in < 1)
+>+		goto truncated_header;
+>+	if (*in != ((xxh32(desc, in - desc, 0) >> 8) & 0xff)) {
+>+		pr_err("LZ4-compressed data has a corrupt frame descriptor\n");
+>+		return -EINVAL;
+>+	}
+>+	in++;
+>+
+>+	/* 4: 64 KiB, 5: 256 KiB, 6: 1 MiB, 7: 4 MiB */
+
+Id reckon this would need to make sense for a new code reader.
+
+>+	block_max = SZ_64K << (2 * (FIELD_GET(LZ4F_BD_MAX_SIZE, bd) - 4));
+>+	linked = !(flg & LZ4F_FLG_BLOCK_INDEP);
+>+
+>+	scratch = kvmalloc((linked ? LZ4F_DICT_SIZE : 0) + block_max,
+>+			   GFP_KERNEL);
+>+	if (!scratch)
+>+		return -ENOMEM;
+>+	out = scratch + (linked ? LZ4F_DICT_SIZE : 0);
+>+
+>+	for (;;) {
+>+		u32 block_size;
+>+		size_t len;
+>+		int ret;
+>+
+>+		if (end - in < 4)
+>+			goto truncated;
+>+		block_size = get_unaligned_le32(in);
+>+		in += 4;
+>+		if (!block_size)
+>+			break;
+>+
+>+		len = block_size & ~LZ4F_BLOCK_UNCOMPRESSED;
+>+		if (len > block_max) {
+>+			pr_err("LZ4-compressed data has an oversized block\n");
+>+			retval = -EINVAL;
+>+			goto out;
+>+		}
+>+		if ((size_t)(end - in) < len +
+>+		    (flg & LZ4F_FLG_BLOCK_CSUM ? 4 : 0))
+>+			goto truncated;
+>+
+>+		if ((flg & LZ4F_FLG_BLOCK_CSUM) &&
+>+		    xxh32(in, len, 0) != get_unaligned_le32(in + len)) {
+>+			pr_err("LZ4-compressed data is corrupt (block checksum)\n");
+>+			retval = -EINVAL;
+>+			goto out;
+>+		}
+>+
+>+		if (block_size & LZ4F_BLOCK_UNCOMPRESSED) {
+>+			memcpy(out, in, len);
+>+			ret = len;
+>+		} else if (linked) {
+>+			ret = LZ4_decompress_safe_usingDict(in, out, len,
+>+							    block_max,
+>+							    out - dict_len,
+>+							    dict_len);
+>+		} else {
+>+			ret = LZ4_decompress_safe(in, out, len, block_max);
+>+		}
+>+		if (ret < 0) {
+>+			pr_err("LZ4-decompression failed\n");
+>+			retval = -EINVAL;
+>+			goto out;
+>+		}
+>+
+>+		retval = module_lz4_copy_out(info, out, ret, &total);
+>+		if (retval)
+>+			goto out;
+>+
+>+		if (linked) {
+>+			/*
+>+			 * The dictionary ends where the new output starts:
+>+			 * move the last 64 KiB of both in front of the
+>+			 * output area for the next block.
+>+			 */
+
+bit long.
+
+>+			size_t keep = min_t(size_t, dict_len + ret,
+>+					    LZ4F_DICT_SIZE);
+>+
+>+			memmove(out - keep, out + ret - keep, keep);
+>+			dict_len = keep;
+>+		}
+>+
+>+		in += len;
+>+		if (flg & LZ4F_FLG_BLOCK_CSUM)
+>+			in += 4;
+>+	}
+>+
+>+	if (flg & LZ4F_FLG_CONTENT_CSUM) {
+>+		if (end - in < 4)
+>+			goto truncated;
+>+		retval = module_lz4_verify_content(info, total,
+>+						   get_unaligned_le32(in));
+>+		if (retval)
+>+			goto out;
+>+		in += 4;
+>+	}
+>+
+>+	if (in != end) {
+>+		pr_err("LZ4-compressed module has trailing data\n");
+>+		retval = -EINVAL;
+>+		goto out;
+>+	}
+>+
+>+	if ((flg & LZ4F_FLG_CONTENT_SIZE) && content_size != total) {
+>+		pr_err("LZ4-compressed data has a wrong content size\n");
+>+		retval = -EINVAL;
+>+		goto out;
+>+	}
+>+
+>+	retval = total;
+>+	goto out;
+>+
+>+truncated:
+>+	pr_err("LZ4-compressed data is truncated\n");
+>+	retval = -EINVAL;
+>+out:
+>+	kvfree(scratch);
+>+	return retval;
+>+
+>+truncated_header:
+>+	pr_err("LZ4-compressed data is truncated\n");
+>+	return -EINVAL;
+>+}
+> #else
+> #error "Unexpected configuration for CONFIG_MODULE_DECOMPRESS"
+> #endif
+>diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+>index 9ba45e5b32b18..aebc5e89d0e75 100644
+>--- a/scripts/Makefile.modinst
+>+++ b/scripts/Makefile.modinst
+>@@ -57,6 +57,7 @@ ifdef CONFIG_MODULE_COMPRESS_ALL
+> suffix-$(CONFIG_MODULE_COMPRESS_GZIP)	:= .gz
+> suffix-$(CONFIG_MODULE_COMPRESS_XZ)	:= .xz
+> suffix-$(CONFIG_MODULE_COMPRESS_ZSTD)	:= .zst
+>+suffix-$(CONFIG_MODULE_COMPRESS_LZ4)	:= .lz4
+> endif
+> 
+> modules := $(patsubst %.o, $(dst)/%.ko$(suffix-y), $(modules))
+>@@ -151,6 +152,8 @@ quiet_cmd_xz = XZ      $@
+>       cmd_xz = $(XZ) --check=crc32 --lzma2=dict=1MiB -f $<
+> quiet_cmd_zstd = ZSTD    $@
+>       cmd_zstd = $(ZSTD) --rm -f -q $<
+>+quiet_cmd_lz4 = LZ4     $@
+>+      cmd_lz4 = $(LZ4) -12 -B4 -BD --rm -f -q $< $@
+> 
+> $(dst)/%.ko.gz: $(dst)/%.ko FORCE
+> 	$(call cmd,gzip)
+>@@ -161,6 +164,9 @@ $(dst)/%.ko.xz: $(dst)/%.ko FORCE
+> $(dst)/%.ko.zst: $(dst)/%.ko FORCE
+> 	$(call cmd,zstd)
+> 
+>+$(dst)/%.ko.lz4: $(dst)/%.ko FORCE
+>+	$(call cmd,lz4)
+>+
+> PHONY += FORCE
+> FORCE:
+> 
+>
+
+--- Thanks!
