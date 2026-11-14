@@ -1,79 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.205.221.192
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794625914;
-	b=G22XkCUjIcAJfTBtQb5SX0dSNmiarT+xrpQ4pLz/152Xm47MhzBJtXTO405qeJPNAYDn
-	 tfGWd1FUGNVM3x9Cng5TgLvI2ZeSKRIExvFXv/hZl8X17Nu2TjjNR60bJ7FCQyJXmLudJ
-	 IfsVeNpsDFYz5DLjyS38BDdXi+nh88S6Hki6l0NMwSKSm67NceDqkIF9bRWVmvMyXL73+
-	 Id2JUjRkiOxkni6jp3V48FpRmYoXL0crnFwXo7jkWd+dVCi7sFhUCmWJs3980bfGDhp0J
-	 iIVzR8//f7mIaGeuBxtApiRxIs8YwjcikvmIhOpt/VQCFroM4+Ynp0yWyGnkpTclF4g==
+	t=1794637264;
+	b=WBEn6LKGPq2PeSVzUEaQbAGdIAD5irGX1gUAYNX00+3vIwp+6A5e/mDF/c3nJc+K9AAR
+	 /shBMZHpOfROoS+QACjPbUEaQfQSZP/A9yUhPBTpYTAoQoL0CgXwqs5bned7Ae9fhP39r
+	 KMVXNGs71pd1yx8fycfQUXrdEhLh0fSZGtZnqti379IiULp0IcMSrqUfn3Ayr85y7r8dX
+	 DiOtEJJ5PQitQlZ+GAuiU+thsZ6G6Eu+lNdl4WXpfaXTNlUjDPdAioqW0+aOOVH3niSCj
+	 kE13hOgXYgcxB0kpJpaj5iU79RRiKzPbp+UlR9ecrXzdDcF+7022K6gAi2ki55j9DWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794625914;
-	h=DMARC-Filter:DKIM-Signature:Received:X-QQ-mid:Message-ID:
-	 X-QQ-XMAILINFO:X-QQ-XMRINFO:From:To:Cc:Subject:X-OQ-MSGID:References:
-	 Date:Content-Type:Content-Transfer-Encoding:MIME-Version;
-	bh=SKDUjpEKphEQiCe8fX473i9GylzzWA18uPL5w7bJQ5k=;
-	b=yAdpfrDmfTHgVhqFBsEjXPA5UNp+sPBcQ43xCms3LpqcWYKkiKTvM2guoX8v6L+J4N1Z
-	 xqkTn9ZAqRSmaW9+Lam3rsnYxL0mweFScBekZqdwFTWFVnBlq8qC3O87p/GEfTlV9mmOS
-	 mNzNkm2FRUwt8/yLXDIdr6bAKPaJZ1XvWC3E4fgs1AoP7453GUwY44f2yzuAx+loPN/0G
-	 Py7papIa2ZhjLqRs+33gOnp1DWGfgfojxT0h45GBMv/oplaEMFgrLTaaODNUxhAEsL+An
-	 YaOSGiwoczlFTuoEFuHfYbbZwma7AAu4lABSUBRcRb36dVzKLyyFU3Rq+Div2wuJVuw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794637264;
+	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=ARNh6M8BDjbpM7F6J0VTpKzC/Jdg+gIrVCT+UL6skDU=;
+	b=d6e6AtN3TSLDuWA2dUcU2tKieabBgTSWc2y5jRFXa8N4gNQzVQeH7vKdLGZSFXnSS/yL
+	 39YUXBcA2qMXdRUP6oEslZnJflSC347aU/ugTWP9VHkiNMt7ab8z7gO5kjcrcse0RE/rO
+	 9XylQcUArXEXq06GQikkZnajdT71qqRKI6uZV2+404sWRO21LIRxNgadYQMZLp71QLE5S
+	 Fcvw2bjbDkbc+YRHr3jzB2b0YuhjiojlDi4HbzVQs1mFfgvXGtJvTUkJcS+7glTE8kNIk
+	 /3Olu1XFow3eEkthm5cO4B1rPu+M+PGVRxHzU8RowaKH3u49p0KljAIsCrMJ98mgYqw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=qq.com;
-	spf=pass smtp.mailfrom=qq.com;
-	dkim=pass header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=UtceLOQs;
-	arc=none smtp.remote-ip=203.205.221.192
-Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=alien8.de;
+	spf=pass smtp.mailfrom=alien8.de;
+	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=V6T4mpP+;
+	arc=none smtp.remote-ip=65.109.113.108
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAFB606A32D
-	for <linux-modules@vger.kernel.org>; Sat, 14 Nov 2026 03:11:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EAFB606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B100F606A32D;
+	Sat, 14 Nov 2026 06:21:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B100F606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=UtceLOQs
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1794625909; bh=SKDUjpEKphEQiCe8fX473i9GylzzWA18uPL5w7bJQ5k=;
-	h=From:To:Cc:Subject:References:Date;
-	b=UtceLOQsL/mNzmSPJdb/p4/lB0c+vsDoRWHMA41zz2iyNu5pbJDjY+zljrQOiVLxX
-	 ZxYwofMa+2qZlH9NwklVv5pH5l8yXRc0HVGKVx9NooZcc37WklV9BR8HUeuUtWmprq
-	 0Tg9W5fcdQUUestjib0Xox1Zkr8Qt/or4cx10wUc=
-Received: from [172.18.4.77] ([202.113.185.209])
-	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
-	id 2EE05A43; Sat, 14 Nov 2026 11:11:46 +0800
-X-QQ-mid: xmsmtpt1794625906ti2qzbzdq
-Message-ID: <tencent_4AF4D4976F851143A745D39A286A1FC2A807@qq.com>
-X-QQ-XMAILINFO: OPIY/Y5G02yjqnkku2yQD3P32e2mWW0VPdGW0rlHOILM3gfNgU6z/eXWmtDOI7
-	 nxTtoHAaylI+tMTZOh2JEOjvfrCQvVEK3c5aoPmpDHBxpwerBdZ0Kl2gc9Vq22hdO66sxJqsqNjD
-	 VtFXs/QvQBpM1N89ftc6AX/QpUK8v8N/v65nJlAlMLr7Uqll3eT50OW/YN6LcRDA1BIGZKnGnCLO
-	 ikd9qt1w7H9LW5Jkpj4LSe9LRpJzL8NUkWx1JnTlkvdor5Yxa4xQmlZw6NapeLo/zu6MwqdSo/aA
-	 6AWWTrJBd3huUmwM/oP5VX4q5HdN+AEWJFnIshLrXiu2BNSN4kql9vZUu2vsZAY0GwGTEckAmQAW
-	 B+WZODqWGNKdl+QvHmMe7wB1L+gz2BKZdEYyKuHW/IQfSMCuA3ntLlQ9/1QPFs+5UBBR7AS0J8H1
-	 kFO+yWAi9Xwm4wexkDHdqHSG9QMHswLeXTxsJK6yu0k6gxL5Audsy2y54ceLJYBu3g2r+9C6JgS1
-	 2Idrv0dQQuiliIR1IDWLMjwxDl2qzOEbDi1LT5li4dTkrfdLLQJUnfzUBFDj6vrKrmFef7xauhJR
-	 XC0YSCgCBdVCc3rqw6hDcHBskqOYlrtf/n3Q5iKSy7rmp2pHxNe3YWIiGWZ3PKHWH+0yrOvf7Aku
-	 mxHr6chTcTY0Q3ohVXn46XxZx/7WJPxMiH5RimRqMNzNKERKgLgSfVdjOU0g8CStbkKLI5/WR+zh
-	 bbb4WIXKoGBIwAQkNdSPgeyywbTrNPfQ8+Zj9vZtNxb8aU2LrIVH8u9OiLrmVN11Ig1xt1TQHeCJ
-	 BWpHe+7CbeA+mfVhorY/pmN0D3kia71lIUNrWkDgqeTCQK6qQe61ZLswW1e6sT2kslkPoY+M2+sg
-	 Pk58BcFAEOxo3mGcYqiI2eYJ8Z2+xw4bQWcp4LgCQUcoj9NiC68B6XJofmi2NBAXYVRHOqhNVsu2
-	 M+lp9x52LRgojuiocqK7XFOcjLx/WLfkCo6GM333Uz60mO7Vka0UVFPSwVc9SIjT6MB/xqCSyRs/
-	 AVDMoQ3GoP+ls/VfNeI6xyE76bCCDWP/oRtK2ksB0iAt5wLW5MuQUd5BqAKXhzm+/4unJHdA==
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
-From: Guikun Yang <yangguikun19@qq.com>
-To: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [Bug report] x86-64 apply_returns() decodes attacker-controlled
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=V6T4mpP+
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 74D6F40E01DD;
+	Sat, 14 Nov 2026 06:21:01 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id KIGF8vHmzNlh; Sat, 14 Nov 2026 06:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1794637257; bh=ARNh6M8BDjbpM7F6J0VTpKzC/Jdg+gIrVCT+UL6skDU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V6T4mpP+7ZYPikg9hdaHn9RdG/8on/u+gqSnKVYN9I8Gt6n/TluzR2GmXxbfUIY8o
+	 LwFMyyHlNeapq3hNZZunGJ7j0KAzMMWL5KzVolzm/jWgYLWn5BK2fmewGFleEXKWgS
+	 Wghvri2gwjxeg2y7c1SVrbsBh5KiQmZ5WsgKSTeqZwRK6D9hS+5SLQ7hdKAKul8JpA
+	 NuwE/3uHDLlSPdbELnXxGabxJAU6IZNZsVCqVEiwzXO7BVmPf/C6HSx5O8YSQ/SDGB
+	 WkxLnpQ5CCc2RIowjndXzGqaUqwgsuN+HzuJgtZdY7kAoRsWUq2gIqCGmUlGt9cKN8
+	 wwwzTZSR1DGafhCWG8m+nJ4rxEWlOPriwI5L8R+oPejrWf6F0DKHq9T/+xdbSJvKad
+	 Om5JRtkv3dvXiElPAbHWSjMXN1FuLi7es8Kp2epIH4EXQpCbacx3cQCkKh7dwna7z1
+	 YHABN/NBOejo7dORoBDlZypdtFfeE3NCtnEJhwW8CYomzr8f2fodKlK+XZ8ZbwVqwr
+	 YUBipMxCIWTZN0YZ1UDNqcd8p548eJ6PkCW4b2HRmXQMfKJNttYGzNcfBf9UasdF98
+	 KVpR/b6+LWHWOJZkflt8Gi0qHhBRcqfHzK/hH764Fvg4Od+SPDqAUl5AcP6G9q+ilV
+	 Hi8RriNvVPALN4CMbYxl0iPQ=
+Received: from stx.tnic (unknown [209.52.143.85])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1C6CD40E019C;
+	Sat, 14 Nov 2026 06:20:45 +0000 (UTC)
+Date: Fri, 13 Nov 2026 22:20:42 -0800
+From: Borislav Petkov <bp@alien8.de>
+To: Guikun Yang <yangguikun19@qq.com>
+Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Bug report] x86-64 apply_returns() decodes attacker-controlled
  addresses from unvalidated .return_sites entries - wild read on module load
-X-OQ-MSGID: <x86-return-sites-wildread-20261114@qq.com>
+Message-ID: <20261114062042.GAavf9ui9D9bThqdYy@fat_crate.local>
 References: <mod-r-offset-oob-20261113@qq.com>
  <srcu-struct-ptrs-wildwrite-20261114@qq.com>
-Date: Sat, 14 Nov 2026 16:00:00 +0800
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+ <tencent_4AF4D4976F851143A745D39A286A1FC2A807@qq.com>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -83,161 +88,35 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <tencent_4AF4D4976F851143A745D39A286A1FC2A807@qq.com>
 
-From: Guikun Yang <yangguikun19@qq.com>
-To: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-    Ingo Molnar <mingo@redhat.com>,
-    Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-    Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
-    Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-    linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [Bug report] x86-64 apply_returns() decodes attacker-controlled
- addresses from unvalidated .return_sites entries - wild read on module load
+On Sat, Nov 14, 2026 at 04:00:00PM +0800, Guikun Yang wrote:
+> From: Guikun Yang <yangguikun19@qq.com>
+> To: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+>     Ingo Molnar <mingo@redhat.com>,
+>     Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+>     Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
+>     Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+>     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+> Subject: [Bug report] x86-64 apply_returns() decodes attacker-controlled
+>  addresses from unvalidated .return_sites entries - wild read on module load
+> 
+> Hi Peter, Ingo,
+> 
+> The .return_sites section of a module is consumed by apply_returns()
+> without any validation of the computed addresses. Each entry is an s32
+> relative offset whose final value is fully attacker-controlled via the
+> R_X86_64_PC32 relocation addend (that relocation path has no overflow
 
-Hi Peter, Ingo,
+If you can load modules on a system, you've already won.
 
-The .return_sites section of a module is consumed by apply_returns()
-without any validation of the computed addresses. Each entry is an s32
-relative offset whose final value is fully attacker-controlled via the
-R_X86_64_PC32 relocation addend (that relocation path has no overflow
-check either), and the decoder dereferences the resulting address
-byte-by-byte inside init_module() - a wild kernel read, deterministic,
-KASLR-independent.
+Why would you even do some silly exploit like that?
 
-  BUG: unable to handle page fault for address: ffffffff402000e7
-  Oops: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN NOPTI
-  RIP: 0010:insn_get_prefixes.part.0+0xc1/0x14c0
-  RBX: ffffffff402000e7   (the forged site pointer)
-  Call Trace:
-   insn_decode
-   apply_returns
-   module_finalize
-   load_module
-   __do_sys_init_module
+-- 
+Regards/Gruss,
+    Boris.
 
-The faulting address is the module's .return_sites location plus the
-forged s32 - pointing into the unmapped hole below the kernel image.
-
-## The path
-
-module_finalize() hands the section over verbatim
-(arch/x86/kernel/module.c):
-
-  if (returns) {
-          void *rseg = (void *)returns->sh_addr;
-          apply_returns(rseg, rseg + returns->sh_size);
-  }
-
-apply_returns() computes and decodes without any bounds check
-(arch/x86/kernel/alternative.c):
-
-  for (s = start; s < end; s++) {
-          void *dest = NULL, *addr = (void *)s + *s;
-          struct insn insn;
-          ...
-          ret = insn_decode_kernel(&insn, addr);   /* wild read */
-
-insn_decode_kernel() expands to insn_decode(..., MAX_INSN_SIZE,
-INSN_MODE_KERN); the buffer length only bounds the decoder's own
-15-byte window, not the validity of the address. insn_get_prefixes()
-fetches bytes with get_unaligned() one at a time from that address.
-
-## How the s32 becomes attacker-controlled
-
-objtool emits .return_sites as zero bytes plus R_X86_64_PC32
-relocations against .text symbols. __write_relocate_add() handles that
-type as:
-
-  case R_X86_64_PC32:
-  case R_X86_64_PLT32:
-          val -= (u64)loc;
-          size = 4;
-          break;
-
-with no overflow check (R_X86_64_32/32S have one; PC32/PLT32 do not).
-Modifying one r_addend in .rela.return_sites therefore controls the
-s32 that ends up in the section - the write target bytes are already
-zero, so nothing else in the file needs to change.
-
-## Impact: not only a crash
-
-The decode-failure and thunk-mismatch paths both print kernel memory
-from the wild address:
-
-  WARN_ONCE(dest != &__x86_return_thunk,
-            "missing return thunk: %pS-%pS: %*ph",
-            addr, dest, 5, addr);
-
-That %*ph dumps five bytes read from the attacker-chosen address into
-the kernel log. A local user who can read dmesg gets a five-byte
-peek at any address within +/-2GB of the module's .return_sites
-per load attempt - a repeatable kernel-memory disclosure, in addition
-to the deterministic page fault.
-
-## apply_retpolines() is the same pattern
-
-The sibling consumer (arch/x86/kernel/alternative.c) is identical in
-shape:
-
-  for (s = start; s < end; s++) {
-          void *addr = (void *)s + *s;
-          ...
-          ret = insn_decode_kernel(&insn, addr);
-
-and is reachable the same way through .retpoline_sites. Both should
-be fixed together.
-
-## The fix has an in-tree precedent in the same call sequence
-
-callthunks_patch_module_calls() processes .call_sites in the same
-module_finalize() path and already validates exactly this class of
-address (arch/x86/kernel/callthunks.c):
-
-  static __init_or_module void patch_call(void *addr, const struct core_text *ct)
-  {
-          ...
-          if (!within_coretext(ct, addr))
-                  return;
-
-with ct built from mod->mem[MOD_TEXT]. The suggested fix mirrors it
-for .return_sites and .retpoline_sites - reject any computed site
-address outside the module's text before decoding:
-
-  struct core_text ct = {
-          .base = (unsigned long)mod->mem[MOD_TEXT].base,
-          .end  = (unsigned long)mod->mem[MOD_TEXT].base + mod->mem[MOD_TEXT].size,
-  };
-  for (s = start; s < end; s++) {
-          void *addr = (void *)s + *s;
-+         if (!within_coretext(&ct, addr))
-+                 continue;
-
-This is the third report in this series of unvalidated module
-section contents (relocation r_offset <mod-r-offset-oob-20261113@qq.com>,
-SRCU pointer section <srcu-struct-ptrs-wildwrite-20261114@qq.com>);
-callthunks shows the loader already knows how to bound this class of
-address - apply_returns/apply_retpolines are the paths it was never
-applied to.
-
-## Reproducer
-
-Carrier is a real xt_mark.ko built from the same tree as the test
-kernel. A single entry of .rela.return_sites has its r_addend changed
-by 0x80000000; nothing else in the file differs. Same boot:
-
-  1. load original xt_mark.ko    -> init_module returns 0
-  2. unload                      -> 0
-  3. load the modified module    -> the Oops above
-
-The synthesizer (with sanity checks on sh_link/sh_info/entsize/
-relocation type/target-zero), the A/B pair and the serial log are
-available on request.
-
-Tested on 7.3.0; arch/x86/kernel/alternative.c and module.c are
-unchanged in mainline as of 2026-11-14 (both fetched and compared
-byte-for-byte).
-
-Thanks,
-Guikun Yang
-
+https://people.kernel.org/tglx/notes-about-netiquette
