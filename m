@@ -1,54 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.205.221.192
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794622966;
-	b=r/Ifrk3WHVaiUTAlpg/2k+4qE83/DOk71AN6y8Cm5rL2Y+XExkv55w2ml1fUcJKW46+F
-	 fBDp4TeUPETnG2ed2OjAxrmeMZpth4J5+L9EFqEV+SlTsey9kKi24SNi+0hLyC8dZUq+E
-	 hynIwvy/e1AThMdmEFsBPPb5goNi3nJvyRX6BZRjX9qfx10LekqnHgvMW3bCHCYYPvTk8
-	 BenvfnP4XMmYAaFOYR/rP9sFnx9KZy3bUIO6ZAEGlXX+ASOC1m+JTVadUvkCoyVD2zuHq
-	 zRqdoQkV7pO5LQ1fQTrgSJC2jMY55GQMkx0NOM9aaAeyn00b4SEwc9G0XKYdf7FMrfw==
+	t=1794625914;
+	b=G22XkCUjIcAJfTBtQb5SX0dSNmiarT+xrpQ4pLz/152Xm47MhzBJtXTO405qeJPNAYDn
+	 tfGWd1FUGNVM3x9Cng5TgLvI2ZeSKRIExvFXv/hZl8X17Nu2TjjNR60bJ7FCQyJXmLudJ
+	 IfsVeNpsDFYz5DLjyS38BDdXi+nh88S6Hki6l0NMwSKSm67NceDqkIF9bRWVmvMyXL73+
+	 Id2JUjRkiOxkni6jp3V48FpRmYoXL0crnFwXo7jkWd+dVCi7sFhUCmWJs3980bfGDhp0J
+	 iIVzR8//f7mIaGeuBxtApiRxIs8YwjcikvmIhOpt/VQCFroM4+Ynp0yWyGnkpTclF4g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794622966;
-	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=KYH8GK+3gKCbe8AFviicg/gKMInfl4KxsgkMklQwI0I=;
-	b=Nm7SN5UuX0G+dsnNz599PQETxz/3YgPK7jJsRHhk2tgyVn+sn3UP/bff2v1J2ZBNdlxV
-	 5ZtQfdcWo986+K6zs8YWEB7N1b2xxuHOiX5GpOZyRbjFJpjlwNNMbJPYyIbIAMp5HKZqQ
-	 O71xwTnbEAG4Q+PEua5VGcAP4EpyIG8vWb6Q97TUbQ9slSuvnV85KbouykOEcdKdP6QV0
-	 hzbAw86gtuY3fkaMdryo2jKxZK3C6wMYaD8CAF7fan1PZLJuR/qzoQBZZs1QHAnOtXlYV
-	 DeZVrBxwf/M7bup8CZPF4UuTDGCLa2mcVZYmDeo2HCZLniy9psJ/tmkfom+goY2rR0Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794625914;
+	h=DMARC-Filter:DKIM-Signature:Received:X-QQ-mid:Message-ID:
+	 X-QQ-XMAILINFO:X-QQ-XMRINFO:From:To:Cc:Subject:X-OQ-MSGID:References:
+	 Date:Content-Type:Content-Transfer-Encoding:MIME-Version;
+	bh=SKDUjpEKphEQiCe8fX473i9GylzzWA18uPL5w7bJQ5k=;
+	b=yAdpfrDmfTHgVhqFBsEjXPA5UNp+sPBcQ43xCms3LpqcWYKkiKTvM2guoX8v6L+J4N1Z
+	 xqkTn9ZAqRSmaW9+Lam3rsnYxL0mweFScBekZqdwFTWFVnBlq8qC3O87p/GEfTlV9mmOS
+	 mNzNkm2FRUwt8/yLXDIdr6bAKPaJZ1XvWC3E4fgs1AoP7453GUwY44f2yzuAx+loPN/0G
+	 Py7papIa2ZhjLqRs+33gOnp1DWGfgfojxT0h45GBMv/oplaEMFgrLTaaODNUxhAEsL+An
+	 YaOSGiwoczlFTuoEFuHfYbbZwma7AAu4lABSUBRcRb36dVzKLyyFU3Rq+Div2wuJVuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=rMuN7IjH;
-	arc=none smtp.remote-ip=198.137.202.133
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=qq.com;
+	spf=pass smtp.mailfrom=qq.com;
+	dkim=pass header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=UtceLOQs;
+	arc=none smtp.remote-ip=203.205.221.192
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2CB606A323;
-	Sat, 14 Nov 2026 02:22:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F2CB606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAFB606A32D
+	for <linux-modules@vger.kernel.org>; Sat, 14 Nov 2026 03:11:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EAFB606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=rMuN7IjH
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=KYH8GK+3gKCbe8AFviicg/gKMInfl4KxsgkMklQwI0I=; b=rMuN7IjHqau/xc2v+L3+j7J4jB
-	17LlIfCgQ9gZKjdEwR0HXIgEkj3NXbY5xvNTsPXiBiBfWA7YMTlJ7vBYcuHX96ZzfRi0CTxMs86wl
-	szbPVi6oRy0+B+JhKwwaPFbRr0o0r2J9sBRAnfvxJ9HqKtDTT0ekYY8C0ExAavytJEuPy3UAsP/+H
-	jtp3ovKisKoc+9HBVJkeYRwch5zTVe0ensOeH+7US5c+8EmqjHPgOFqeEtk9N0MQMUEAjwUvcWpoB
-	UyCXCYk39aCtWB0QK+nkmZcnkxvlWVz0csE1AnKnDzudY0naphVcLgXLHfs6Kf163UQupHv8uGenu
-	cBJGZsIw==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xS3Pd-0000000F6qc-1hxV;
-	Sat, 14 Nov 2026 02:22:41 +0000
-Message-ID: <43fb0823-e3c7-4946-98f1-7d0b2b0a1f01@infradead.org>
-Date: Fri, 13 Nov 2026 18:22:36 -0800
+	dkim=pass (1024-bit key, unprotected) header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=UtceLOQs
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1794625909; bh=SKDUjpEKphEQiCe8fX473i9GylzzWA18uPL5w7bJQ5k=;
+	h=From:To:Cc:Subject:References:Date;
+	b=UtceLOQsL/mNzmSPJdb/p4/lB0c+vsDoRWHMA41zz2iyNu5pbJDjY+zljrQOiVLxX
+	 ZxYwofMa+2qZlH9NwklVv5pH5l8yXRc0HVGKVx9NooZcc37WklV9BR8HUeuUtWmprq
+	 0Tg9W5fcdQUUestjib0Xox1Zkr8Qt/or4cx10wUc=
+Received: from [172.18.4.77] ([202.113.185.209])
+	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
+	id 2EE05A43; Sat, 14 Nov 2026 11:11:46 +0800
+X-QQ-mid: xmsmtpt1794625906ti2qzbzdq
+Message-ID: <tencent_4AF4D4976F851143A745D39A286A1FC2A807@qq.com>
+X-QQ-XMAILINFO: OPIY/Y5G02yjqnkku2yQD3P32e2mWW0VPdGW0rlHOILM3gfNgU6z/eXWmtDOI7
+	 nxTtoHAaylI+tMTZOh2JEOjvfrCQvVEK3c5aoPmpDHBxpwerBdZ0Kl2gc9Vq22hdO66sxJqsqNjD
+	 VtFXs/QvQBpM1N89ftc6AX/QpUK8v8N/v65nJlAlMLr7Uqll3eT50OW/YN6LcRDA1BIGZKnGnCLO
+	 ikd9qt1w7H9LW5Jkpj4LSe9LRpJzL8NUkWx1JnTlkvdor5Yxa4xQmlZw6NapeLo/zu6MwqdSo/aA
+	 6AWWTrJBd3huUmwM/oP5VX4q5HdN+AEWJFnIshLrXiu2BNSN4kql9vZUu2vsZAY0GwGTEckAmQAW
+	 B+WZODqWGNKdl+QvHmMe7wB1L+gz2BKZdEYyKuHW/IQfSMCuA3ntLlQ9/1QPFs+5UBBR7AS0J8H1
+	 kFO+yWAi9Xwm4wexkDHdqHSG9QMHswLeXTxsJK6yu0k6gxL5Audsy2y54ceLJYBu3g2r+9C6JgS1
+	 2Idrv0dQQuiliIR1IDWLMjwxDl2qzOEbDi1LT5li4dTkrfdLLQJUnfzUBFDj6vrKrmFef7xauhJR
+	 XC0YSCgCBdVCc3rqw6hDcHBskqOYlrtf/n3Q5iKSy7rmp2pHxNe3YWIiGWZ3PKHWH+0yrOvf7Aku
+	 mxHr6chTcTY0Q3ohVXn46XxZx/7WJPxMiH5RimRqMNzNKERKgLgSfVdjOU0g8CStbkKLI5/WR+zh
+	 bbb4WIXKoGBIwAQkNdSPgeyywbTrNPfQ8+Zj9vZtNxb8aU2LrIVH8u9OiLrmVN11Ig1xt1TQHeCJ
+	 BWpHe+7CbeA+mfVhorY/pmN0D3kia71lIUNrWkDgqeTCQK6qQe61ZLswW1e6sT2kslkPoY+M2+sg
+	 Pk58BcFAEOxo3mGcYqiI2eYJ8Z2+xw4bQWcp4LgCQUcoj9NiC68B6XJofmi2NBAXYVRHOqhNVsu2
+	 M+lp9x52LRgojuiocqK7XFOcjLx/WLfkCo6GM333Uz60mO7Vka0UVFPSwVc9SIjT6MB/xqCSyRs/
+	 AVDMoQ3GoP+ls/VfNeI6xyE76bCCDWP/oRtK2ksB0iAt5wLW5MuQUd5BqAKXhzm+/4unJHdA==
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+From: Guikun Yang <yangguikun19@qq.com>
+To: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [Bug report] x86-64 apply_returns() decodes attacker-controlled
+ addresses from unvalidated .return_sites entries - wild read on module load
+X-OQ-MSGID: <x86-return-sites-wildread-20261114@qq.com>
+References: <mod-r-offset-oob-20261113@qq.com>
+ <srcu-struct-ptrs-wildwrite-20261114@qq.com>
+Date: Sat, 14 Nov 2026 16:00:00 +0800
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -58,69 +83,161 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/9] Documentation: ioctl-number: Add
- PROCFS_IOCTL_MAGIC range 0x10-0x11
-To: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek
- <pmladek@suse.com>, David Laight <david.laight.linux@gmail.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-modules@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-12-wusamuel@google.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20261113221248.3535369-12-wusamuel@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
+From: Guikun Yang <yangguikun19@qq.com>
+To: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+    Ingo Molnar <mingo@redhat.com>,
+    Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+    Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
+    Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+    linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [Bug report] x86-64 apply_returns() decodes attacker-controlled
+ addresses from unvalidated .return_sites entries - wild read on module load
 
+Hi Peter, Ingo,
 
-On 11/13/26 2:12 PM, Samuel Wu wrote:
-> PAGEMAP_SCAN (0x10) and PROCMAP_QUERY (0x11) use PROCFS_IOCTL_MAGIC.
-> ext4 uses the same numbers on other files, so mark the row as a
-> conflict.
-> 
-> Suggested-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Samuel Wu <wusamuel@google.com>
+The .return_sites section of a module is consumed by apply_returns()
+without any validation of the computed addresses. Each entry is an s32
+relative offset whose final value is fully attacker-controlled via the
+R_X86_64_PC32 relocation addend (that relocation path has no overflow
+check either), and the decoder dereferences the resulting address
+byte-by-byte inside init_module() - a wild kernel read, deterministic,
+KASLR-independent.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Thanks.
+  BUG: unable to handle page fault for address: ffffffff402000e7
+  Oops: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN NOPTI
+  RIP: 0010:insn_get_prefixes.part.0+0xc1/0x14c0
+  RBX: ffffffff402000e7   (the forged site pointer)
+  Call Trace:
+   insn_decode
+   apply_returns
+   module_finalize
+   load_module
+   __do_sys_init_module
 
-> ---
->  Documentation/userspace-api/ioctl/ioctl-number.rst | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> index dbe462040999..fbc3537fc9ee 100644
-> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> @@ -248,6 +248,7 @@ Code  Seq#    Include File                                             Comments
->  'f'   00-0F  fs/ext4/ext4.h                                            conflict!
->  'f'   00-0F  linux/fs.h                                                conflict!
->  'f'   00-0F  fs/ocfs2/ocfs2_fs.h                                       conflict!
-> +'f'   10-11  linux/fs.h                                                conflict! procfs ioctls (PROCFS_IOCTL_MAGIC)
->  'f'   13-27  linux/fscrypt.h
->  'f'   81-8F  linux/fsverity.h
->  'g'   00-0F  linux/usb/gadgetfs.h
+The faulting address is the module's .return_sites location plus the
+forged s32 - pointing into the unmapped hole below the kernel image.
 
--- 
-~Randy
+## The path
+
+module_finalize() hands the section over verbatim
+(arch/x86/kernel/module.c):
+
+  if (returns) {
+          void *rseg = (void *)returns->sh_addr;
+          apply_returns(rseg, rseg + returns->sh_size);
+  }
+
+apply_returns() computes and decodes without any bounds check
+(arch/x86/kernel/alternative.c):
+
+  for (s = start; s < end; s++) {
+          void *dest = NULL, *addr = (void *)s + *s;
+          struct insn insn;
+          ...
+          ret = insn_decode_kernel(&insn, addr);   /* wild read */
+
+insn_decode_kernel() expands to insn_decode(..., MAX_INSN_SIZE,
+INSN_MODE_KERN); the buffer length only bounds the decoder's own
+15-byte window, not the validity of the address. insn_get_prefixes()
+fetches bytes with get_unaligned() one at a time from that address.
+
+## How the s32 becomes attacker-controlled
+
+objtool emits .return_sites as zero bytes plus R_X86_64_PC32
+relocations against .text symbols. __write_relocate_add() handles that
+type as:
+
+  case R_X86_64_PC32:
+  case R_X86_64_PLT32:
+          val -= (u64)loc;
+          size = 4;
+          break;
+
+with no overflow check (R_X86_64_32/32S have one; PC32/PLT32 do not).
+Modifying one r_addend in .rela.return_sites therefore controls the
+s32 that ends up in the section - the write target bytes are already
+zero, so nothing else in the file needs to change.
+
+## Impact: not only a crash
+
+The decode-failure and thunk-mismatch paths both print kernel memory
+from the wild address:
+
+  WARN_ONCE(dest != &__x86_return_thunk,
+            "missing return thunk: %pS-%pS: %*ph",
+            addr, dest, 5, addr);
+
+That %*ph dumps five bytes read from the attacker-chosen address into
+the kernel log. A local user who can read dmesg gets a five-byte
+peek at any address within +/-2GB of the module's .return_sites
+per load attempt - a repeatable kernel-memory disclosure, in addition
+to the deterministic page fault.
+
+## apply_retpolines() is the same pattern
+
+The sibling consumer (arch/x86/kernel/alternative.c) is identical in
+shape:
+
+  for (s = start; s < end; s++) {
+          void *addr = (void *)s + *s;
+          ...
+          ret = insn_decode_kernel(&insn, addr);
+
+and is reachable the same way through .retpoline_sites. Both should
+be fixed together.
+
+## The fix has an in-tree precedent in the same call sequence
+
+callthunks_patch_module_calls() processes .call_sites in the same
+module_finalize() path and already validates exactly this class of
+address (arch/x86/kernel/callthunks.c):
+
+  static __init_or_module void patch_call(void *addr, const struct core_text *ct)
+  {
+          ...
+          if (!within_coretext(ct, addr))
+                  return;
+
+with ct built from mod->mem[MOD_TEXT]. The suggested fix mirrors it
+for .return_sites and .retpoline_sites - reject any computed site
+address outside the module's text before decoding:
+
+  struct core_text ct = {
+          .base = (unsigned long)mod->mem[MOD_TEXT].base,
+          .end  = (unsigned long)mod->mem[MOD_TEXT].base + mod->mem[MOD_TEXT].size,
+  };
+  for (s = start; s < end; s++) {
+          void *addr = (void *)s + *s;
++         if (!within_coretext(&ct, addr))
++                 continue;
+
+This is the third report in this series of unvalidated module
+section contents (relocation r_offset <mod-r-offset-oob-20261113@qq.com>,
+SRCU pointer section <srcu-struct-ptrs-wildwrite-20261114@qq.com>);
+callthunks shows the loader already knows how to bound this class of
+address - apply_returns/apply_retpolines are the paths it was never
+applied to.
+
+## Reproducer
+
+Carrier is a real xt_mark.ko built from the same tree as the test
+kernel. A single entry of .rela.return_sites has its r_addend changed
+by 0x80000000; nothing else in the file differs. Same boot:
+
+  1. load original xt_mark.ko    -> init_module returns 0
+  2. unload                      -> 0
+  3. load the modified module    -> the Oops above
+
+The synthesizer (with sanity checks on sh_link/sh_info/entsize/
+relocation type/target-zero), the A/B pair and the serial log are
+available on request.
+
+Tested on 7.3.0; arch/x86/kernel/alternative.c and module.c are
+unchanged in mainline as of 2026-11-14 (both fetched and compared
+byte-for-byte).
+
+Thanks,
+Guikun Yang
+
