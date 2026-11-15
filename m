@@ -1,59 +1,89 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794667402;
-	b=hwu+b6qtmgMmLMsC6Jp00Xs8QwTLeWysypshbD7FnHGJfcoMg58fY5Xch/oJZvMZUUwa
-	 ubU0wP8+ZbomgwYGfgd8BOIyfjU3KWQ4yCrVncjeGp0ZT3Lsfr5sUvIaxPA/v5GF3QdMt
-	 ytNZQwIVKG4jx4ewC4HJnWc5I9Pbp2AjzonmOKGesk62tbyqucb4RGD5hbxuT5Ob7SZHS
-	 EOC+22Jka9YvF7eHlZmI04mba/U/S6jw5xMEpUNQSVBoJk6kz9om21jNmFfa0ANlqxtne
-	 s8TzS7Am6jnOmu10PeDqNnboaPb1tl88b87xm34Kdr8hSfeX/ASWNfqd/cZtmuvXqdA==
+	t=1794724744;
+	b=RfPXdTfAIy1ysjOFvtCTRQMxC+F3xOpE4hDmDl8rVT57PkmAljINPwPslLJGny4jBQCt
+	 eJhagj1Ge7cZZe0fxwGj8K8Xu2yazP7Gfpj03cJtkXUI3NBXM/DlB0QLA0IJhixNbBwjB
+	 mZaPefrO03klqZZk3fBQ5lPo3nN4C8/OZbq8axuE0wOyZjJ3FKc2MIgAmoQXCIgJNweNn
+	 Ai5W3gLl1eMXuxRTj3qqwVmVZJ6MQOuNU6uWF5ucCyOTVlfRTTDGD9BIzrMqznQE++/TE
+	 TV39guLR/nF1vFv2UhTy6olzozYW8q9xiOtLodUNl+4WYJAaUAVDKGv6hBkXITKA6dA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794667402;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=DHvb0rX14VD3+BLmmVcyRb1OFLTsx+6h+sMOxp0D5OM=;
-	b=2l+S/6iqD6BqMAfAw6sYO+FFCVlZ5SME8HUFNxtudZXPuMv9KpUARFYkBoUCvFhwuDh9
-	 H3i0Riyvr/eG4UGFrBlcdiG1hYAPrmzH+Be+gdLjg7MfKEEauk9mS9jRANo92h9cDZzXG
-	 7eCAeG/1bkvPYVNu+ld4LHErGpQXksVuNdNEdMIP2esiwMqShCg20ppKLI4dYi1JTra8p
-	 YqMtSCJ2WjMTcEGqokeuCCUsow3s0v7RuXhlP4cgAc1c6XYhxem4qi5pXBGB38lEa9gfy
-	 wkQ3w0cfs4yPX0K5MzwwPJtyfSAf4kSZd51pqS8PiIIZFlhvBFGkkBKuRVjJTrCfYBQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794724744;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=5uzNQjIqKu1Z5H5h4ULFcPsML/9M2qNB6yySUHBpd2Q=;
+	b=h/AP1EZHYqg1tUtXFrQDnze6+q1cmHPahHxpMrVoJED9C10jFUDrV+eTss2V+6e5Txo4
+	 uOtWg177eJ0EYJe3dNwCCMRkmcUdsrobpGfqTlGMbEV4fohtS5UrR9fnNWmDK7yiQKVSo
+	 lvXyluqIVz4JMkc15So0HpwtGomN7fS/5lCGSELj0kYIId9RfS2tDeV6eqBWc5dX+IEW3
+	 vJt/2AI2Tb7/xkrdWLn8j5QdiSbjFlOi02IpXFjszjANEkVaz0SeVJP4qM9YGASjJj+uF
+	 84fasrzTtew0nqHJb1nxrkIZORmmCKztn6nAvhCEDxjWL+1U7gyT/fNoFkBfW5wjJLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HOiv39gM;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XY6g0QDN;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1480606A329;
-	Sat, 14 Nov 2026 14:43:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DB7606A323;
+	Sun, 15 Nov 2026 06:39:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HOiv39gM
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85531F000C4;
-	Sat, 14 Nov 2026 14:43:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XY6g0QDN
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF9C1F000C4;
+	Sun, 15 Nov 2026 06:38:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794667402;
-	bh=DHvb0rX14VD3+BLmmVcyRb1OFLTsx+6h+sMOxp0D5OM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HOiv39gMvRlm/XnJpSgXFc2eC9q5WzQ/JLo8ga+t1+Znyq9yWWiqgtGviU0wt0P1K
-	 NYzT4zu8P4o1tjdMptcjJRUMGiuN92PQIdvi9hOGtYCfSh+3cBVpEReRVQNct1Gf6v
-	 28KLUnaQshKhWghfVCou87ysVfB0Xicz2JUBf5s2KcV9OEXvrwa/IO9xcqtyWL0882
-	 w0VvPPEdgWRa23jN1dBOG6H0Gnh8HeD802jVbtOXYLqaTSo3DgoFdBLB8zFFzD0o7E
-	 +lHWdM5rwVoHrL9sen4rnynN/pBjmCVrxTKqEQlWeiK4XIwwoRqAedx7r4syqs2gQV
-	 AxXGXeHbdjg0w==
-Message-ID: <sashiko-outbox-214645@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] module: Add LZ4 module compression
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Paul Menzel" <pmenzel@molgen.mpg.de>, "Luis Chamberlain" <mcgrof@kernel.org>, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
- Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>, "Nathan
- Chancellor" <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Nick
- Terrell" <terrelln@fb.com>, "David Sterba" <dsterba@suse.com>
-Cc: linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org
-In-Reply-To: <20261113144233.193782-1-pmenzel@molgen.mpg.de>
-References: <20261113144233.193782-1-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 14 Nov 2026 14:43:21 +0000
+	s=k20260515; t=1794724743;
+	bh=5uzNQjIqKu1Z5H5h4ULFcPsML/9M2qNB6yySUHBpd2Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XY6g0QDNlp+U9PsTjMW6Z7U+4AKhATHLs5He0CZN49f2Nu0bcao4bAPuuwEsft6FI
+	 TWnoj+VGBoUPTmb0EJCJXCsTtwSE0k13bv5Te+OZ5Acn6pVLSE5i/fhLT5QGKgwaOk
+	 Ucb2W6afh0Q1yzMIuWl0IoyL1xjTDc8J5WHHCJWlw82oKPLfFptJE13O1Ok9X62IyP
+	 xkoneXTm1OtIXF7WSDiXJH8M/fRN/bG7+qbjc7kJUeud8mWA9cz/xm6XTt15y1BZge
+	 qGkeMJ/mOBJIxREW4t6uml5kStkcI3+UGIwjK5RYkeEIMSPndyRf3R1y4lpuaoL/kN
+	 M2jExDr2sEOLQ==
+Date: Sun, 15 Nov 2026 08:38:46 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Donald Dutile <ddutile@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Liviu Dudau <liviu@dudau.co.uk>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Sam Ravnborg <sam@ravnborg.org>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH RESEND v8 11/16] powerpc: extend execmem_params for
+ kprobes allocations
+Message-ID: <avlTdlK9ErlqVRYl@kernel.org>
+References: <20240505160628.2323363-1-rppt@kernel.org>
+ <20240505160628.2323363-12-rppt@kernel.org>
+ <3f7af771-87a7-4ae7-9919-bc4c23bd31c9@kernel.org>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -62,102 +92,44 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3f7af771-87a7-4ae7-9919-bc4c23bd31c9@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] module: int retval overflow and truncation in
-  module_lz4_decompress()
-- [Low] module: 0-byte LZ4 frame causes vmap() -ENOMEM in
-  module_lz4_decompress()
---
+Hi Christophe,
 
-commit 5ec28e23c9b1ef7c279c61b63187aad310dbdc6c
-Author: Paul Menzel <pmenzel@molgen.mpg.de>
+On Fri, Nov 13, 2026 at 03:36:01PM +0100, Christophe Leroy (CS GROUP) wrote:
+> Hi Mike,
+> 
+> Looks like I missed this change ...
+> 
+> Le 05/05/2024 à 18:06, Mike Rapoport a écrit :
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > 
+> > powerpc overrides kprobes::alloc_insn_page() to remove writable
+> > permissions when STRICT_MODULE_RWX is on.
+> > 
+> > Add definition of EXECMEM_KRPOBES to execmem_params to allow using the
+> > generic kprobes::alloc_insn_page() with the desired permissions.
+> > 
+> > As powerpc uses breakpoint instructions to inject kprobes, it does not
+> > need to constrain kprobe allocations to the modules area and can use the
+> > entire vmalloc address space.
+> 
+> Using breakpoint means the segment must still be executable.
+> On book3s/32 VMALLOC segment is not executable, while module segment is.
+> 
+> See commit 6ca055322da8 ("powerpc/32s: Use dedicated segment for modules
+> with STRICT_KERNEL_RWX")
+> 
+> See report and fix at https://lore.kernel.org/all/ed03d290d440d579a81ae0b7de5243721291d903.1794543909.git.ritesh.list@gmail.com/
 
-module: Add LZ4 module compression
+I'll take a look, thanks!
+ 
+> Christophe
 
-This commit adds build and in-kernel decompression support for LZ4-compress=
-ed
-kernel modules (.ko.lz4).
-
-Link: https://github.com/kmod-project/kmod/pull/505 [1]
-
-> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-> index cce098671be97..5828b7ec9d7b6 100644
-> --- a/kernel/module/decompress.c
-> +++ b/kernel/module/decompress.c
-
-[ ... ]
-
-> +static int module_lz4_verify_content(struct load_info *info, size_t tota=
-l,
-> +				     u32 expected)
-> +{
-> +	void *data;
-> +	u32 csum;
-> +
-> +	data =3D vmap(info->pages, info->used_pages, VM_MAP, PAGE_KERNEL_RO);
-> +	if (!data)
-> +		return -ENOMEM;
-> +	csum =3D xxh32(data, total, 0);
-> +	vunmap(data);
-> +
-> +	if (csum !=3D expected) {
-> +		pr_err("LZ4-compressed data is corrupt (content checksum)\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-
-[Severity: Low]
-What happens here when an LZ4 frame decompresses to 0 bytes?
-
-Unlike the gzip, xz and zstd decompressors, which allocate a page before
-starting the loop, module_lz4_decompress() only calls module_get_next_page()
-inside module_lz4_copy_out() while len is non-zero.  An empty LZ4 frame hits
-the zero block_size end mark with info->used_pages =3D=3D 0, so vmap() in
-module_lz4_verify_content() (and in module_decompress() when content
-checksums are disabled) returns NULL and fails with -ENOMEM instead of
-rejecting the empty module.
-
-> +
-> +static ssize_t module_lz4_decompress(struct load_info *info,
-> +				     const void *buf, size_t size)
-> +{
-> +	const u8 *in =3D buf, *end =3D in + size, *desc;
-> +	size_t block_max, total =3D 0, dict_len =3D 0;
-> +	u64 content_size =3D 0;
-> +	u8 *scratch, *out;
-> +	bool linked;
-> +	u8 flg, bd;
-> +	int retval;
-
-[ ... ]
-
-> +	if ((flg & LZ4F_FLG_CONTENT_SIZE) && content_size !=3D total) {
-> +		pr_err("LZ4-compressed data has a wrong content size\n");
-> +		retval =3D -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	retval =3D total;
-> +	goto out;
-
-[Severity: Medium]
-Can assigning total to int retval overflow or truncate the decompressed siz=
-e?
-
-module_lz4_decompress() returns ssize_t, but retval is declared as int.  If=
- a
-highly compressible LZ4 frame expands to 2 GiB or more, assigning size_t
-total to retval either overflows into a negative non-errno value returned
-from finit_module() or truncates the upper 32 bits on 64-bit systems, leavi=
-ng
-info->len smaller than the vmap()'d pages in info->hdr.  Declaring retval as
-ssize_t (like module_gzip_decompress() and module_xz_decompress()) and
-bounding total would avoid this.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113144233.1937=
-82-1-pmenzel@molgen.mpg.de?part=3D1
+-- 
+Sincerely yours,
+Mike.
