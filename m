@@ -1,113 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=141.14.17.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794752676;
-	b=kAtIsZ6WF6WD2SvCAAEFOif3DDWyP4biYmd+sKamSIOBOY/rQTuBWkXxhQ2a/3116qoO
-	 GDhDUgU766qqkuneHbS8HECL0t2G0Vmq+L1VLdAb2mW7sO7Q22DWDPzfM1Gw4+3G18ktK
-	 XMUVB//f8sO9yEjcFypqZZFF7zithBqoUeWqIloergEi15qsz+RwCRdJ0xwdkc8KKrHoB
-	 vfWJQu5QmsG5Pg7PsqBdVWqIHF8rLD6iNPO/ZE94Bo55DEs776F4pK9UmUx4Yx7siEzSg
-	 j5qFA2K3lpuB7/jld3xmbtyWiYoF//oHbmnb762qeAB3Hs31HThklMYFM9O72u2/bhQ==
+	t=1794754596;
+	b=SySPdBOPmmytziwMzVbZOBCXOYKjoSTP7gm1iH6X/DN9WlbVZBcPeCKhEKGt2tOcLG3k
+	 aR3kSusBgCrLIlIonBu3H9E+PBVlD5TC7hzCoM6lOT7jO/1HoWExzAzJXYuk6kDNnytP0
+	 OTxeejmMNtaHSS24v5QZGnozP+1vvCql9pMnykozQaeIWPvm/EeGWjPZwhCaK9Vw+D7Js
+	 USSNF55Ja7O8Wr51oTqKXSqOGkGSmrMxttk5JMvZLzQLsQZo87TTz2ao2sdGBtiXcvljw
+	 F8+skZhMkPWqgRj05MZEozb7jXW+mFkKpE2zcg+v2rugeRm6pRvMkQrccdfyaTEIhxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794752676;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=7QzzvIBZ5m85jb8a3T2vbOcaHxM8nqWRH2JKBq6oOx8=;
-	b=yiwsztOn47Cp++9cbRO9gO+Q2SfdkbrVOydRLSI70zOwBJGlXzXamRQGY+Ar4llme4fl
-	 UFBEa9i9Ja5GSYKjhFVCkHzLnY7cT68hlDwyi/U2ziOKVN2ba9jeB1TvvrF6hN50uMoFe
-	 O4okOYH3+Z+AWDPIFVDd/5mYRzYvZrEK0qQupFH8RJpL7ZfmnUC3YD0tWnGO7c65a9lkx
-	 bqJPxnuwmoFbgNg3kN6nfZbIbOb1cw1kL6646qtbV5tvPtndPvHgF94oTmEpIIhSflVXH
-	 AmcfkwVxBuEC+Q7mqNHJKlGDJ6Z6PMrAiKDDaVX/R/KlkoCw8CoAUbbhFhACAPyqXPQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794754596;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding:DKIM-Signature;
+	bh=hlQkFYMUmOSzD0lV/MmKoqgoD5EZFAViZ3TfGoz2DyE=;
+	b=wnmvcdlIiW3qduyZhJLbuiqy9IyPkrdbc/09cb/OvebxanHQsfE6UOWJupXu8lBAw+Vz
+	 yYRkZSoEJy12QbupXjhdHorKbuPr8K8WzmZCLKc9R7wgS74QF929KM4mlHKqdXorIrj4l
+	 jN8IyUcDVfuYwX4DQYQsc6qU3Icj7rc/jkrCs8H39QqMFssxvQPauhLjfuEM1nIHn4eZ3
+	 l0zHuSiEntFuZa3sFxpeh9rqvk1UH31r4XDGAiwBgcpORZMN6qDq4r72eMk99BkLmlAib
+	 y1mdFvY7PlZMEJPDZ/1edEOjV1hOuj+7qb41xXF2LryNUUfnldg9+cSqyW+NTh9iF6w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jxVes4fN;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=molgen.mpg.de;
+	spf=pass smtp.mailfrom=molgen.mpg.de;
+	dkim=pass header.d=molgen.mpg.de header.i=@molgen.mpg.de header.a=rsa-sha256 header.s=20260906 header.b=NzkoSdV+;
+	arc=none smtp.remote-ip=141.14.17.11
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92674606A338
-	for <linux-modules@vger.kernel.org>; Sun, 15 Nov 2026 14:24:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92674606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D00606A31D;
+	Sun, 15 Nov 2026 14:56:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66D00606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jxVes4fN
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a210470b49so20251655e9.2
-        for <linux-modules@vger.kernel.org>; Sun, 15 Nov 2026 06:24:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794752674; x=1795357474; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7QzzvIBZ5m85jb8a3T2vbOcaHxM8nqWRH2JKBq6oOx8=;
-        b=jxVes4fNS9TSgGvlHsTT80+9II9XinvC4prossPItwxQmdIh/ly0jdC/cdyT55vVR6
-         dxr87FlrY8HaEzKWL1k6AkuqQTejZzqNuP03IkWn/1QKMcHCGusJm7Uzh90VmKNatLHN
-         /Ur+ln5v7C1S9XPfNu7fKUrI1pDdBwtHp9o72Tv8ddrZYc02/UP04z5Cj9qKvnMUiuBc
-         AKlR1i85YUHuEqLhR+nPnOGxB8gyhi3BmtQiXq42P2XoLdScRFWDqb++9b0P9t/EHP1y
-         PjbWv5kEkbF943EnXhorY4a6wJ2J69Bqn/WcjcubzUA5IRKt9NLekdoBKWqKwl/hWu6c
-         NQpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794752674; x=1795357474;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7QzzvIBZ5m85jb8a3T2vbOcaHxM8nqWRH2JKBq6oOx8=;
-        b=u5fnRw47ZVv2hmkS2lOSCk/nzCWAcbIXga1zglXXWVMqSBa6tZZhVoLtwep6xZjmxK
-         eSWnkGxMt+Thbvej13SeSdYMurZojcsiK+MZWTE0GPA4nwKzYhznoKDBUDI+LIBL4miE
-         P3wShd2bcq3U494Q+13+bMrhXsixfOcejfkMCLZfxtdOg37vcXicDyilkiRj4oI1nMkt
-         nhBBemVDXapn7yCOlRQGdZrlK/lo+gZp63AZE9UDxd2UOlanfxarFJUvjvpfDbEab41X
-         vhAAfk5IeS7MkUudN8lKRp1ycy88Lun/dRbQ2U4QOrIidhygP4LwRFzRz+NfyC6VZnje
-         f++w==
-X-Forwarded-Encrypted: i=1; AL+hErES7o+Q+PvdGLZ85BvfjPAJ9gnJ9Zu30l/SpA+U6QEkBp+G8VwBPnw83+OC79/2aGfji+u+Pa+nFhk61rvY@vger.kernel.org
-X-Gm-Message-State: APuU4Z+bG/y4eRVMpNbdOVBMZGCqRAlE6/K3vh1d7ykpr/UafmTjtwmF
-	WIUrMZjbRHgy89nMWf7hLZeCBpUpRuq5hX7cEOqZWTKXz41X39D4Hu4h
-X-Gm-Gg: AYBFou0mrZFkMveE/+1k5H/SxJi4M0+qT/NN59rYvd73q6RVQwefd6OG+wglSKwOm2I
-	NI9T2NWmpkon6J4oKlBG3Q4rpf3iby/WZox7qYNvbIAIlTiF3QTtlAm0UzjdToBy9ZTWi1RmmFv
-	QERPuMsBAj25HSQe311qXQs5/3F6zyevQWFVNwIlCWvMflnZys5tSlvK60yBvbo5uCBq+vP/wOS
-	mQCGB9RDODWi+UpfGOywiIpbb3YJeWCNvLcvfVu/+s1hQDxO7uicyw5B1c0GMu4wNxILRDoFt7M
-	hX1RRY2ZvHMGMzfTqlPqLk0afUXUaLich8C/Ipb24uJ3rq3DAI9E/3sdcXwUmoUGAYkCBSOsbav
-	KmneuYMdzWPcnWpv3uOmSo1a2BwN8F1OCtBlu18ZBkd3uItyCGdWC3SRoFAJkLamb2ItIt32F3M
-	xKO3LMhdslTB5C/6FZyAUEdpANaQESGmqp3ecp+zK8v/IEO0aLz5r7tbfFRuju6ZM3BTMLvP8Uh
-	FOOKMLE9zXQUIdpD21T29ZW8sjX/4pwLqmBt0aJc7IJZU5uB0znMRKvSQAglC/tr94w5t5O0Enb
-	Mle1CD1MnZ55NGVAm5mAo4s9xG3uE58gACG6ILVuOP2qX3vQxIa51P4tVtwQ7x5d8X7rdy5qk/V
-	RDkAKjJr2Kj8=
-X-Received: by 2002:a05:600c:c0c5:b0:4a1:cef3:fb3a with SMTP id 5b1f17b1804b1-4bb55a6602amr130912825e9.9.1794752673813;
-        Sun, 15 Nov 2026 06:24:33 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb4e2adf53sm318854915e9.15.2026.11.15.06.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 06:24:33 -0800 (PST)
-Date: Sun, 15 Nov 2026 14:24:31 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Luis
- Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
- Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-modules@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 0/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
- and KALLSYMS_QUERY_BY_ADDR ioctls
-Message-ID: <20261115142431.1587690a@pumpkin>
-In-Reply-To: <20261113221248.3535369-11-wusamuel@google.com>
-References: <20261113221248.3535369-11-wusamuel@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key, unprotected) header.d=molgen.mpg.de header.i=@molgen.mpg.de header.a=rsa-sha256 header.s=20260906 header.b=NzkoSdV+
+Received: from abreu (unknown [62.214.191.67])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 454034C442F7F1;
+	Sun, 15 Nov 2026 15:56:07 +0100 (CET)
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Piotr Gorski <lucjan.lucjanov@gmail.com>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] module/decompress: Use ssize_t for the zstd decompressed size
+Date: Sun, 15 Nov 2026 15:55:56 +0100
+Message-ID: <20261115145559.262878-1-pmenzel@molgen.mpg.de>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -117,29 +66,72 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=molgen.mpg.de; s=20260906; 
+	t=1794754568; 
+	h=from:from:subject:date:message-id:mime-version:content-type:content-transfer-encoding; 
+	bh=hlQkFYMUmOSzD0lV/MmKoqgoD5EZFAViZ3TfGoz2DyE=; 
+	b=NzkoSdV+zCaiy/ZONvldJSqu57+w/Bp1BDuyMk++7CJs8IjY4rsQiuns2rjVW3/5JjzFDu0lk4qp
+	GBPKAHlGxn/bKukgr4Sgf75KbBkUDx9NGUoOgMuTG15IFnXAg+V/2tVb1jXArAuvg8fESmLU8tz48/
+	KqNmnfm75LrHx325I8H6utagcmtF6l+XMYnS4s6RO7dX10B01ihTi3Tf4Fq9/7uuHM1JjP1duNQ9bB
+	Qf6zDlYHx4w9K8zNDFhgnPEFhinS/9N9TpvESvmjmesoRLz+XzRm9WeS+8QZN9kVRxkSA8UY9EHxun
+	VQ9Xdei1DxV0WQ3S1wY6R2tGApkM+LCg==
 
-On Fri, 13 Nov 2026 14:12:45 -0800
-Samuel Wu <wusamuel@google.com> wrote:
+module_zstd_decompress() returns ssize_t, but keeps the decompressed
+size in the int retval. Output of 2 GiB or more becomes a negative
+value that is not an errno, and output of 4 GiB or more can also be
+truncated to a positive size smaller than the pages mapped to
+info->hdr. Declare retval as ssize_t like module_gzip_decompress() and
+module_xz_decompress() do, and print it with %zd.
 
-> /proc/kallsyms is the primary interface for userspace to query the kernel
-> symbol table. However, resolving even a handful of symbols or addresses
-> requires reading and parsing the entire text file, which is often several
-> megabytes and takes thousands of read() syscalls.
+The Sashiko AI review found the same bug in the proposed LZ4 decoder,
+which is modelled on the zstd decoder [1].
 
-Separate from this, I've wondered about separating out the /proc/kallsyms
-code from the code that actually handles the symbol table itself.
-The two parts are pretty much separate.
-IIRC it uses a static function to get the symbol type (which does most
-of the work of getting the name - which it also wants) so it isn't
-completely trivial.
+The x86_64 build boots in QEMU/KVM, and finit_module() with
+MODULE_INIT_COMPRESSED_FILE and module.sig_enforce=1 decompresses the
+237 .ko.zst modules without error.
 
-I'm pretty sure all (well almost all) the changes will be lower down
-the file than my changes and won't cause (hard) conflicts.
+Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
+Link: https://sashiko.dev/#/patchset/20261113144233.193782-1-pmenzel@molgen.mpg.de?part=1 [1]
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
 
-I've been compiling kernel/kallsyms.c and kernel_kallsyms_selftests.c
-in userspace for testing both, but had to cut the bottom off kallsyms.c
-to get it to compile with a sane number of definitions.
+Notes:
+    Claude Opus 5.5 (Claude Code) noticed that the zstd decoder has the
+    bug Sashiko reported for the LZ4 patch, and wrote this patch and
+    message. Tests: W=1 compile with GCC 16.2 for x86_64 (Debian config)
+    and i386 (tinyconfig), both with MODULE_COMPRESS_ZSTD. Run time: the
+    x86_64 build boots in QEMU/KVM, and finit_module() with
+    MODULE_INIT_COMPRESSED_FILE and module.sig_enforce=1 decompresses the
+    237 .ko.zst modules of a laptop's boot set without error; 223 load,
+    14 fail in their init for lack of hardware, as with xz. The bug itself
+    is not exercised; it needs a module that decompresses to 2 GiB or more.
 
-David
+ kernel/module/decompress.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index cce098671be97..ac4ff0e04f716 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -216,7 +216,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+ 	ZSTD_DStream *dstream;
+ 	size_t ret;
+ 	size_t new_size = 0;
+-	int retval;
++	ssize_t retval;
+ 
+ 	if (size < sizeof(signature) ||
+ 	    memcmp(buf, signature, sizeof(signature))) {
+@@ -276,7 +276,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+ 	} while (zstd_dec.pos == PAGE_SIZE && ret != 0);
+ 
+ 	if (retval) {
+-		pr_err("ZSTD-decompression failed with status %d\n", retval);
++		pr_err("ZSTD-decompression failed with status %zd\n", retval);
+ 		retval = -EINVAL;
+ 		goto out;
+ 	}
+-- 
+2.54.0
+
