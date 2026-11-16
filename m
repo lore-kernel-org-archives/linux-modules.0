@@ -1,47 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794824895;
-	b=GE+VaeHayM/zR4I9bJ9KTyqA3UNwqI2dlJD++U/027Eah0YprxK5Vjng6K3BEtkjcDq2
-	 +ucDKtaAq+2cW8PGSlgmlfImZL36b4OPbkYaLbV7oR2NzdpZkzNC8CGbZBKhuUsQnVzZC
-	 GhWK0dWPv6PlN7ihRa4j6FC8k1/67IqbpHSaJ/f9AkjNt5N+Lh4YqSkGLN+4OuZbnJgaz
-	 5I+ZlIIGxpvFbP5yCi/GUPboL17GT8sm2l3wW211UO3mwkOSdPXCy4Bi0tYoxtdH9UKZ/
-	 ZuvnOlP1w0lCUWPNHnu+zEWJA0HkajyHDODZulGMKsJBzhUl9cBokxHAThKU4jfBR1A==
+	t=1794852670;
+	b=2PBEq9BKp2ruak70chPwU1tbiPmIJ5NX/1GVdQoFa8AF4fhbMVsKmox4U44p6kVctvwl
+	 J/ww+r3MryUFJRlUiCkBe5wWm92/UQJLs3CSaLwhJzXKra6nj2VHzjM++xWGl81LRxoKm
+	 Q9O0zRvYYgIgAOwa6l8NUZ3tTn6Ze9OTEkWvJRE1AIaZ98o4JYBeq40+kgDOc6yq8Le3/
+	 1iJH+YrTJHwoh9ry+Ly5Y9WcEz19h0puc9u4CGaTleTwN/rbVM7LfVdgy79glQE6qdZko
+	 umfnfCQacydLMowlWNGdKi4EbNSSZNFRRZLq1pa4N4C8/eFolGP7bLctF8Wj1hFAUEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794824895;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=sVi4esArHglEWzxYRalxQKb2a6lwyUrsAlsSlEwiYv4=;
-	b=tR7vvCgudKHtnogqaz9oxP8u1oeeh3mmAGmFeEWF6Klt4NqHKPQqkLgjLQoE/cmFpJUh
-	 04Ks3AuqMS5tHr9K3wAnk24zioLfgvakpr/1dkMDTGn6Ks0RyD1lvxt/eZdNTJdy4GorU
-	 Wg20EP3eGlF78Bqx95qjXsW+xZSirbEje0xW1NSafiKgr9ZJEmmJ1/U0bUj51UAn44IB4
-	 NCWWAFONGZJTBg+Xj0rkOG1LlDmqXKHW7ZFiy8rkedOw+0Jfc4QxW/ehM6LZtPGJP1Ctt
-	 larSxKK6FR3NoOAhswGCOcwAcKafWuQUIyfQ8hVsETcN9nJO5jhdFTEWaVl8xK2nVGg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794852670;
+	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
+	 Reply-To:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=Cw9zGt+6BcAAxGXLKuxEpnFTLz0hNmcrTc0x1UP3Om0=;
+	b=a1h+skjxNkVqhoqZoxGDWxWNln6c7W3rD94ZVYk0Teby5clxTS2yFnJTlLg88GHxzqpK
+	 JkfMWoSukLXQILadIjOZCZTMQgjMrUxPpo8Yh6YBC+13LACEzjxwAzrrY4/MUaDueDQPa
+	 E6JUSJ+nM6F5AYgRgKNdtZikgv4xbjQSp4V0ip7PBYbAgT0rX5tMbVrIc/ODE69e3o6QE
+	 WFhHgXsBr7wL1WFa8ejzMvX9I7RtQs9TY38gzmElJaU5k6M5Lw7Qlu1wumZ35xmSMuZAW
+	 9j//uEd44UnWlLV6Mqc26/xLrg2l97UG0eP3m8ZzyPPnskVHSqA9DmyW2XwpjUaR39w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SI9mkOlK;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oN7MEyFk;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09BE606A31C;
-	Mon, 16 Nov 2026 10:28:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E13E606A322;
+	Mon, 16 Nov 2026 18:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SI9mkOlK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA6C1F000C4;
-	Mon, 16 Nov 2026 10:28:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oN7MEyFk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B791F000C4;
+	Mon, 16 Nov 2026 18:11:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794824894;
-	bh=sVi4esArHglEWzxYRalxQKb2a6lwyUrsAlsSlEwiYv4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SI9mkOlK6Y61WRlnx8lzXKAg71T9d26kA4TgRrhkNuJaKQC3BX9YBepnF8tSyvis3
-	 c0oJSdx6rGVzsTOmrcKscRxx45qiDsZrA4GQpIB6Bk1kSGec2UdxXsxdbUXZh/wemx
-	 SOOAls2W/HQGRhFFinXGvOdntZrZXLvi9bGCPil+GDamvFe5N3ABiBqYDZ2oA45zR8
-	 cJA+2CvVZ2SwXdcTGAM/JEHTtQY6QuRFgjTPBznFLCVnLjvKvBnBR2d5rc068tpK3p
-	 5qnqlr/MPmQAbSY/7XXAV82/KrEvsTwted29gcoMS3QzubjcWIcg9mFWtz2KATCGkZ
-	 D8IMK/1SHrOlA==
-Message-ID: <8398a53a-3c79-424c-bae2-999d5ccfdb5f@kernel.org>
-Date: Mon, 16 Nov 2026 11:28:07 +0100
+	s=k20260515; t=1794852669;
+	bh=Cw9zGt+6BcAAxGXLKuxEpnFTLz0hNmcrTc0x1UP3Om0=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=oN7MEyFkmcArK3z2TUAxOyshqkJz25MvGPIiGf0a4czyOSLZD9y/DBC1EJHVojx6o
+	 v8NT0Sq5e5m/H+NpIcvklduHLyP2XPEdwbIEaeMAW1XeyrqFGSXDTRL5+6lt25rnZX
+	 fnH2BYKwFdFY6ZwKptVYd1NnNrRTn9UKWzdDz9L/2sOd6iDXWgF8qQfuHImENT+VDq
+	 BFyOHyqfUrFqkb5Uoe8QkRGKz57tQ/VxLa3R9QPJFsRAM0Hl9YrKb39oUrsHtOq/7D
+	 9NWMlp3LX/+499UJF935UscbrhGCAFDjaiLCFm2MISnqq1NcRuZBHXV1A3/g2EflJZ
+	 ld8R34R9KAOIA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 85D66CE097D; Mon, 16 Nov 2026 10:11:09 -0800 (PST)
+Date: Mon, 16 Nov 2026 10:11:09 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Guikun Yang <yangguikun19@qq.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	rcu@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [Bug report] srcu_module_coming() dereferences unvalidated
+ ___srcu_struct_ptrs entries - wild kernel-memory write on module load
+Message-ID: <9e56774c-abf3-49bc-b6e8-34ae1db4cf9d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <mod-r-offset-oob-20261113@qq.com>
+ <tencent_0836A27053A7BED946E49CE04D27A31E7D09@qq.com>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -51,431 +63,146 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module: Add LZ4 module compression
-To: Paul Menzel <pmenzel@molgen.mpg.de>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org
-References: <20261115120416.256087-1-pmenzel@molgen.mpg.de>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <20261115120416.256087-1-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_0836A27053A7BED946E49CE04D27A31E7D09@qq.com>
 
-
-
-Le 15/11/2026 à 13:04, Paul Menzel a écrit :
-> XZ modules are small but slow to decompress in the kernel. Therefore,
-> support modules compressed in the LZ4 frame format (.ko.lz4), as written
-> by lz4(1). Decode block by block into a scratch buffer and copy into the
-> module pages. Linked blocks keep the last 64 KiB of output in front of
-> the scratch buffer as the dictionary. Verify the header checksum, block
-> checksums, content checksum and content size when the frame has them.
-> Frames with a dictionary ID are rejected.
-
-You present your patch as if XZ was the only compress method available, 
-but the kernel has:
-
-kernel/module/Kconfig:config MODULE_COMPRESS_GZIP
-kernel/module/Kconfig:config MODULE_COMPRESS_XZ
-kernel/module/Kconfig:config MODULE_COMPRESS_ZSTD
-
-Can you provide a comparison of your new proposed compression method 
-with all three already available methods, especially with ZSTD ?
-
-Christophe
-
+On Sat, Nov 14, 2026 at 09:30:00AM +0800, Guikun Yang wrote:
+> From: Guikun Yang <yangguikun19@qq.com>
+> To: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+>     rcu@vger.kernel.org, linux-modules@vger.kernel.org,
+>     linux-kernel@vger.kernel.org
+> Subject: [Bug report] srcu_module_coming() dereferences unvalidated
+>  ___srcu_struct_ptrs entries - wild kernel-memory write on module load
 > 
-> modules_install uses `lz4 -12 -B4 -BD`: 64 KiB linked blocks are as
-> small as 4 MiB blocks (i915.ko: 3587140 vs 3585364 bytes) and keep the
-> scratch buffer at 128 KiB.
+> Hi Paul, Luis,
 > 
-> Userspace needs kmod with LZ4 support for depmod and modprobe [1].
+> The module loader hands the contents of the ___srcu_struct_ptrs section
+> to SRCU as an array of absolute struct srcu_struct * pointers, with no
+> validation of any entry. srcu_module_coming() then writes through each
+> one during the MODULE_STATE_COMING notification, inside init_module().
+> A crafted module whose synthetic section contains an arbitrary 64-bit
+> value therefore gets a kernel-heap pointer written to an
+> attacker-chosen address.
 > 
-> On a Dell XPS 13 9310 with an Intel Core i7-1165G7 (Tiger Lake) and an
-> NVMe SSD, decompressing and checking the signatures of the 237 modules
-> loaded during boot takes 624 ms of CPU time with XZ (i915: 91 ms) and
-> 131 ms with LZ4 (i915: 12 ms), measured by calling finit_module() again
-> for each loaded module. The LZ4 modules take 20.3 MB instead of 11.0 MB.
-> Both kernels are v7.4-rc1 with the same patches, including pending
-> lib/xz decoder speed-ups. Ten alternating boots of each kernel:
+>   Oops: general protection fault, probably for non-canonical address
+>   0xe00006aaa0000021: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN NOPTI
+>   KASAN: probably user-memory-access in range
+>   [0x0000555500000108-0x000055550000010f]
+>   RIP: 0010:srcu_module_notify+0x480/0x610
+>   RAX: 0000607f57d191c0   (alloc_percpu return, the value being written)
+>   RBX: 0000555500000100   (the section entry, verbatim from the file)
+>   RDI: 0000555500000108   (&ssp->sda)
+>    notifier_call_chain
+>    blocking_notifier_call_chain_robust
+>    load_module
+>    __do_sys_init_module
 > 
->    | ms (median)                               |  XZ  | LZ4  | change |
->    +-------------------------------------------+------+------+--------+
->    | early-i915 (modprobe i915 + dependencies) |  295 |   90 |   -205 |
->    | first i915 message                        |  738 |  547 |   -192 |
->    | GDM autologin                             |  973 |  876 |    -96 |
->    | GRUB start to autologin                   | 1292 | 1197 |    -94 |
+> ## The three pieces
 > 
-> QEMU 11.1.2 (KVM, AMD EPYC 7763, 8 vCPUs, module.sig_enforce=1, 10
-> rounds), loading the same 237 modules in dependency order:
+> Loader, zero validation (kernel/module/main.c):
 > 
->    | median                   |   XZ    |   LZ4   | uncompressed |
->    +--------------------------+---------+---------+--------------+
->    | one at a time            | 2082 ms | 1499 ms |      1461 ms |
->    | 8 in parallel, like udev |  619 ms |  573 ms |       593 ms |
+>   mod->srcu_struct_ptrs = section_objs(info, "___srcu_struct_ptrs",
+>                                        sizeof(*mod->srcu_struct_ptrs),
+>                                        &mod->num_srcu_structs);
 > 
-> Link: https://github.com/kmod-project/kmod/pull/505 [1]
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
+> section_objs() counts entries and returns sh_addr; the bytes' validity
+> is entirely up to the ELF file.
 > 
-> Notes:
->      Changes in v2:
->      - Declare retval as ssize_t, so output of 2 GiB or more is not
->        truncated (Sashiko). The zstd decoder has the same bug, fixed by
->        the separate patch "module/decompress: Use ssize_t for the zstd
->        decompressed size".
->      - Reject empty frames with -EINVAL; v1 failed vmap() of 0 pages with
->        -ENOMEM (Sashiko).
->      - Describe the decoder and link the frame format specification, group
->        the definitions by FLG byte, BD byte and block size field, compare the
->        version with FIELD_GET(), rename LZ4F_DICT_SIZE to LZ4F_WINDOW_SIZE,
->        look up the block maximum size in a table, shorten the dictionary
->        comment (Bradley Morgan).
->      
->      v1: https://lore.kernel.org/all/20261113144233.193782-1-pmenzel@molgen.mpg.de/
->      
->      Claude Opus 5.5 (Claude Code) wrote the decoder, the v2
->      changes and this message. Tests: W=1 compile (GCC 16.2, Debian config
->      for x86_64, tinyconfig for i386); QEMU with module.sig_enforce=1: 11 LZ4
->      frame variants (64 KiB-4 MiB, linked/independent, block/content
->      checksums, content size, stored blocks) load, 9 corrupt, truncated or
->      empty files are rejected with EINVAL or EKEYREJECTED (v1: ENOMEM for the
->      empty ones); the 237-module boot set loads in QEMU. v1 also loaded on a
->      Dell XPS 13 9310 (20 boots); v2 was not booted on hardware.
+> Generator, absolute pointer (include/linux/srcutree.h):
 > 
->   kernel/module/Kconfig      |  13 +-
->   kernel/module/decompress.c | 243 +++++++++++++++++++++++++++++++++++++
->   scripts/Makefile.modinst   |   6 +
->   3 files changed, 261 insertions(+), 1 deletion(-)
+>   struct srcu_struct * const __srcu_struct_##name
+>         __section("___srcu_struct_ptrs") = &name
 > 
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index 43b1bb01fd273..36f12612c74dd 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -344,7 +344,7 @@ config MODULE_COMPRESS
->   	  This is fully compatible with signed modules.
->   
->   	  The tool used to work with modules needs to support the selected
-> -	  compression type. kmod MAY support gzip, xz and zstd. Other tools
-> +	  compression type. kmod MAY support gzip, xz, zstd and lz4. Other tools
->   	  might have a limited selection of the supported types.
->   
->   	  Note that for modules inside an initrd or initramfs, it's more
-> @@ -377,6 +377,15 @@ config MODULE_COMPRESS_ZSTD
->   	  Support modules compressed with ZSTD. The installed modules are
->   	  suffixed with .ko.zst.
->   
-> +config MODULE_COMPRESS_LZ4
-> +	bool "LZ4"
-> +	help
-> +	  Support modules compressed with LZ4. The installed modules are
-> +	  suffixed with .ko.lz4.
-> +
-> +	  LZ4 modules are larger than XZ or ZSTD ones but decompress
-> +	  several times faster.
-> +
->   endchoice
->   
->   config MODULE_COMPRESS_ALL
-> @@ -394,6 +403,8 @@ config MODULE_DECOMPRESS
->   	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
->   	select XZ_DEC if MODULE_COMPRESS_XZ
->   	select ZSTD_DECOMPRESS if MODULE_COMPRESS_ZSTD
-> +	select LZ4_DECOMPRESS if MODULE_COMPRESS_LZ4
-> +	select XXHASH if MODULE_COMPRESS_LZ4
->   	help
->   	  Support for decompressing kernel modules by the kernel itself
->   	  instead of relying on userspace to perform this task. Useful when
-> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-> index cce098671be97..028b411015f21 100644
-> --- a/kernel/module/decompress.c
-> +++ b/kernel/module/decompress.c
-> @@ -287,6 +287,249 @@ static ssize_t module_zstd_decompress(struct load_info *info,
->   	kvfree(wksp);
->   	return retval;
+> Unlike __tracepoints_ptrs (PREL32 self-relative on x86), this is a
+> link-time absolute address. In a hand-built section the bytes are
+> whatever the attacker writes, and since no .rela entry targets them,
+> apply_relocations() never touches them either.
+> 
+> Consumer, write on load (kernel/rcu/srcutree.c, unchanged from 7.3 to
+> mainline 2026-11-14):
+> 
+>   ssp = *(sspp++);
+>   ssp->sda = alloc_percpu(struct srcu_data);       /* wild write */
+>   if (WARN_ON_ONCE(!ssp->sda))
+>           return -ENOMEM;
+>   ssp->srcu_ctrp = &ssp->sda->srcu_ctrs[0];        /* second write */
+> 
+> ssp->sda sits at offset 8, so an entry value V makes the kernel write
+> a freshly allocated percpu pointer to V+8, and a pointer derived from
+> it to V. The unload/rollback path (srcu_module_going()) dereferences
+> ssp->srcu_sup and frees ssp->sda through the same unchecked entries.
+> 
+> ## Why this is more than a crash
+> 
+> The write value is a kernel heap address and the target is a fully
+> attacker-chosen 64-bit address. Pointing the entry at a
+> userland-readable mapping leaks the percpu allocation address directly
+> to userspace, defeating percpu-base randomization and contributing to
+> KASLR defeat. Pointing it at any zero-filled kernel address lands the
+> write. A non-canonical target gives the deterministic #GP above
+> (reproduced 7.3.0, KASAN inline, DEBUG_PAGEALLOC).
+> 
+> ## The fix has an in-tree precedent
+> 
+> jump_label.c validates exactly this class of pointer in the same
+> module-notification path (kernel/jump_label.c:716):
+> 
+>   if (within_module((unsigned long)key, mod)) {
+>           static_key_set_entries(key, iter);
+>           continue;
 >   }
-> +#elif defined(CONFIG_MODULE_COMPRESS_LZ4)
-> +#include <linux/bitfield.h>
-> +#include <linux/lz4.h>
-> +#include <linux/sizes.h>
-> +#include <linux/unaligned.h>
-> +#include <linux/xxhash.h>
-> +#define MODULE_COMPRESSION	lz4
-> +#define MODULE_DECOMPRESS_FN	module_lz4_decompress
-> +
-> +/*
-> + * Decoder for the LZ4 frame format written by lz4(1), see
-> + * https://github.com/lz4/lz4/blob/dev/doc/lz4_Frame_format.md
-> + *
-> + * Each block is decoded into a scratch buffer and copied into the module
-> + * pages. A linked block may reference up to 64 KiB of the output before
-> + * it, so that much output is kept in front of the scratch buffer.
-> + */
-> +#define LZ4F_MAGIC		0x184d2204
-> +
-> +/* Frame descriptor, FLG byte */
-> +#define LZ4F_FLG_VERSION	GENMASK(7, 6)
-> +#define LZ4F_FLG_BLOCK_INDEP	BIT(5)
-> +#define LZ4F_FLG_BLOCK_CSUM	BIT(4)
-> +#define LZ4F_FLG_CONTENT_SIZE	BIT(3)
-> +#define LZ4F_FLG_CONTENT_CSUM	BIT(2)
-> +#define LZ4F_FLG_RESERVED	BIT(1)
-> +#define LZ4F_FLG_DICT_ID	BIT(0)
-> +
-> +/* Frame descriptor, BD byte */
-> +#define LZ4F_BD_BLOCK_MAXSIZE	GENMASK(6, 4)
-> +#define LZ4F_BD_RESERVED	(BIT(7) | GENMASK(3, 0))
-> +
-> +/* Block size field: the top bit marks a block stored uncompressed */
-> +#define LZ4F_BLOCK_UNCOMPRESSED	BIT(31)
-> +
-> +#define LZ4F_WINDOW_SIZE	SZ_64K
-> +
-> +/* Block maximum sizes for the BD byte's Block MaxSize values 4 to 7 */
-> +static const u32 lz4f_block_max[] = { SZ_64K, SZ_256K, SZ_1M, SZ_4M };
-> +
-> +static int module_lz4_copy_out(struct load_info *info, const u8 *src,
-> +			       size_t len, size_t *total)
-> +{
-> +	while (len) {
-> +		size_t offset = *total % PAGE_SIZE;
-> +		size_t chunk = min_t(size_t, len, PAGE_SIZE - offset);
-> +		struct page *page;
-> +
-> +		if (offset)
-> +			page = info->pages[info->used_pages - 1];
-> +		else
-> +			page = module_get_next_page(info);
-> +		if (IS_ERR(page))
-> +			return PTR_ERR(page);
-> +
-> +		memcpy_to_page(page, offset, src, chunk);
-> +		src += chunk;
-> +		len -= chunk;
-> +		*total += chunk;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int module_lz4_verify_content(struct load_info *info, size_t total,
-> +				     u32 expected)
-> +{
-> +	void *data;
-> +	u32 csum;
-> +
-> +	data = vmap(info->pages, info->used_pages, VM_MAP, PAGE_KERNEL_RO);
-> +	if (!data)
-> +		return -ENOMEM;
-> +	csum = xxh32(data, total, 0);
-> +	vunmap(data);
-> +
-> +	if (csum != expected) {
-> +		pr_err("LZ4-compressed data is corrupt (content checksum)\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t module_lz4_decompress(struct load_info *info,
-> +				     const void *buf, size_t size)
-> +{
-> +	const u8 *in = buf, *end = in + size, *desc;
-> +	size_t block_max, total = 0, dict_len = 0;
-> +	u64 content_size = 0;
-> +	u8 *scratch, *out;
-> +	bool linked;
-> +	u8 flg, bd;
-> +	ssize_t retval;
-> +
-> +	if (size < 7 || get_unaligned_le32(in) != LZ4F_MAGIC) {
-> +		pr_err("not an lz4 compressed module\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	desc = in + 4;
-> +	flg = desc[0];
-> +	bd = desc[1];
-> +	in = desc + 2;
-> +	if (FIELD_GET(LZ4F_FLG_VERSION, flg) != 1 ||
-> +	    (flg & LZ4F_FLG_RESERVED) || (bd & LZ4F_BD_RESERVED) ||
-> +	    FIELD_GET(LZ4F_BD_BLOCK_MAXSIZE, bd) < 4) {
-> +		pr_err("LZ4-compressed data has an unsupported frame descriptor\n");
-> +		return -EINVAL;
-> +	}
-> +	if (flg & LZ4F_FLG_DICT_ID) {
-> +		pr_err("LZ4-compressed data needs a dictionary\n");
-> +		return -EINVAL;
-> +	}
-> +	if (flg & LZ4F_FLG_CONTENT_SIZE) {
-> +		if (end - in < 8)
-> +			goto truncated_header;
-> +		content_size = get_unaligned_le64(in);
-> +		in += 8;
-> +	}
-> +	if (end - in < 1)
-> +		goto truncated_header;
-> +	if (*in != ((xxh32(desc, in - desc, 0) >> 8) & 0xff)) {
-> +		pr_err("LZ4-compressed data has a corrupt frame descriptor\n");
-> +		return -EINVAL;
-> +	}
-> +	in++;
-> +
-> +	block_max = lz4f_block_max[FIELD_GET(LZ4F_BD_BLOCK_MAXSIZE, bd) - 4];
-> +	linked = !(flg & LZ4F_FLG_BLOCK_INDEP);
-> +
-> +	scratch = kvmalloc((linked ? LZ4F_WINDOW_SIZE : 0) + block_max,
-> +			   GFP_KERNEL);
-> +	if (!scratch)
-> +		return -ENOMEM;
-> +	out = scratch + (linked ? LZ4F_WINDOW_SIZE : 0);
-> +
-> +	for (;;) {
-> +		u32 block_size;
-> +		size_t len;
-> +		int ret;
-> +
-> +		if (end - in < 4)
-> +			goto truncated;
-> +		block_size = get_unaligned_le32(in);
-> +		in += 4;
-> +		if (!block_size)
-> +			break;
-> +
-> +		len = block_size & ~LZ4F_BLOCK_UNCOMPRESSED;
-> +		if (len > block_max) {
-> +			pr_err("LZ4-compressed data has an oversized block\n");
-> +			retval = -EINVAL;
-> +			goto out;
-> +		}
-> +		if ((size_t)(end - in) < len +
-> +		    (flg & LZ4F_FLG_BLOCK_CSUM ? 4 : 0))
-> +			goto truncated;
-> +
-> +		if ((flg & LZ4F_FLG_BLOCK_CSUM) &&
-> +		    xxh32(in, len, 0) != get_unaligned_le32(in + len)) {
-> +			pr_err("LZ4-compressed data is corrupt (block checksum)\n");
-> +			retval = -EINVAL;
-> +			goto out;
-> +		}
-> +
-> +		if (block_size & LZ4F_BLOCK_UNCOMPRESSED) {
-> +			memcpy(out, in, len);
-> +			ret = len;
-> +		} else if (linked) {
-> +			ret = LZ4_decompress_safe_usingDict(in, out, len,
-> +							    block_max,
-> +							    out - dict_len,
-> +							    dict_len);
-> +		} else {
-> +			ret = LZ4_decompress_safe(in, out, len, block_max);
-> +		}
-> +		if (ret < 0) {
-> +			pr_err("LZ4-decompression failed\n");
-> +			retval = -EINVAL;
-> +			goto out;
-> +		}
-> +
-> +		retval = module_lz4_copy_out(info, out, ret, &total);
-> +		if (retval)
-> +			goto out;
-> +
-> +		if (linked) {
-> +			/* Keep the last 64 KiB as the next block's dictionary. */
-> +			size_t keep = min_t(size_t, dict_len + ret,
-> +					    LZ4F_WINDOW_SIZE);
-> +
-> +			memmove(out - keep, out + ret - keep, keep);
-> +			dict_len = keep;
-> +		}
-> +
-> +		in += len;
-> +		if (flg & LZ4F_FLG_BLOCK_CSUM)
-> +			in += 4;
-> +	}
-> +
-> +	if (!total) {
-> +		pr_err("LZ4-compressed module is empty\n");
-> +		retval = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (flg & LZ4F_FLG_CONTENT_CSUM) {
-> +		if (end - in < 4)
-> +			goto truncated;
-> +		retval = module_lz4_verify_content(info, total,
-> +						   get_unaligned_le32(in));
-> +		if (retval)
-> +			goto out;
-> +		in += 4;
-> +	}
-> +
-> +	if (in != end) {
-> +		pr_err("LZ4-compressed module has trailing data\n");
-> +		retval = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if ((flg & LZ4F_FLG_CONTENT_SIZE) && content_size != total) {
-> +		pr_err("LZ4-compressed data has a wrong content size\n");
-> +		retval = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	retval = total;
-> +	goto out;
-> +
-> +truncated:
-> +	pr_err("LZ4-compressed data is truncated\n");
-> +	retval = -EINVAL;
-> +out:
-> +	kvfree(scratch);
-> +	return retval;
-> +
-> +truncated_header:
-> +	pr_err("LZ4-compressed data is truncated\n");
-> +	return -EINVAL;
-> +}
->   #else
->   #error "Unexpected configuration for CONFIG_MODULE_DECOMPRESS"
->   #endif
-> diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-> index 9ba45e5b32b18..aebc5e89d0e75 100644
-> --- a/scripts/Makefile.modinst
-> +++ b/scripts/Makefile.modinst
-> @@ -57,6 +57,7 @@ ifdef CONFIG_MODULE_COMPRESS_ALL
->   suffix-$(CONFIG_MODULE_COMPRESS_GZIP)	:= .gz
->   suffix-$(CONFIG_MODULE_COMPRESS_XZ)	:= .xz
->   suffix-$(CONFIG_MODULE_COMPRESS_ZSTD)	:= .zst
-> +suffix-$(CONFIG_MODULE_COMPRESS_LZ4)	:= .lz4
->   endif
->   
->   modules := $(patsubst %.o, $(dst)/%.ko$(suffix-y), $(modules))
-> @@ -151,6 +152,8 @@ quiet_cmd_xz = XZ      $@
->         cmd_xz = $(XZ) --check=crc32 --lzma2=dict=1MiB -f $<
->   quiet_cmd_zstd = ZSTD    $@
->         cmd_zstd = $(ZSTD) --rm -f -q $<
-> +quiet_cmd_lz4 = LZ4     $@
-> +      cmd_lz4 = $(LZ4) -12 -B4 -BD --rm -f -q $< $@
->   
->   $(dst)/%.ko.gz: $(dst)/%.ko FORCE
->   	$(call cmd,gzip)
-> @@ -161,6 +164,9 @@ $(dst)/%.ko.xz: $(dst)/%.ko FORCE
->   $(dst)/%.ko.zst: $(dst)/%.ko FORCE
->   	$(call cmd,zstd)
->   
-> +$(dst)/%.ko.lz4: $(dst)/%.ko FORCE
-> +	$(call cmd,lz4)
-> +
->   PHONY += FORCE
->   FORCE:
->   
+> 
+> The suggested fix mirrors it in srcu_module_coming() and
+> srcu_module_going():
+> 
+>   for (i = 0; i < mod->num_srcu_structs; i++) {
+>           ssp = *(sspp++);
+> +         if (!ssp || !within_module((unsigned long)ssp, mod))
+> +                 return -EINVAL;
+>           ssp->sda = alloc_percpu(struct srcu_data);
 
+Good catch, thank you!
+
+I presume that srcu_module_going() would instead do something like this?
+
+> +         if (!ssp || !within_module((unsigned long)ssp, mod))
+> +                 continue;
+
+Either way, would you be willing to send a proper patch?
+
+							Thanx, Paul
+
+> __tracepoints_ptrs and __bpf_raw_tp_map are sibling pointer sections
+> with the same exposure; a shared check in find_module_sections()
+> would cover the class, but the SRCU entries are the concrete
+> write-what-where primitive demonstrated here.
+> 
+> This is the second report in this series: the relocation r_offset
+> bounds gap went out as <mod-r-offset-oob-20261113@qq.com> yesterday.
+> Both are cases of the module loader consuming section contents that
+> its ELF validity layer never checked.
+> 
+> ## Reproducer
+> 
+> Carrier is a real xt_mark.ko built from the same tree as the test
+> kernel (vermagic, this_module size, 11 undefined symbols all
+> matching). A section synthesizer appends an 8-byte
+> ___srcu_struct_ptrs entry (0x0000555500000100), fixing shstrtab,
+> e_shnum and e_shoff. Same boot, three steps:
+> 
+>   1. load original xt_mark.ko   -> 0
+>   2. unload                     -> 0
+>   3. load synthesized module    -> the Oops above
+> 
+> The A/B pair, the synthesizer and the reproducer are available on
+> request.
+> 
+> Tested on 7.3.0; kernel/rcu/srcutree.c and the loader path are
+> unchanged in mainline as of 2026-11-14.
+> 
+> Thanks,
+> Guikun Yang
+> 
+> 
