@@ -1,74 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.77.101.9
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.77.101.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794914282;
-	b=0BfA9lML9XvKj7RtUsRHagJDk1oC2rFbQDh15x4sBsDeFZTNPjMaBDVx4paZ30NMl6sA
-	 JmCyQ1KJ619vozOAKJjOGOzWJoEB3gsFcsLcIN5yj8Do8YiwxwZ0+Rm9dSIOCKxdtgf1x
-	 yGhD2ptHGZPuEEVW+Mo+9eQNVjmXdDrNxhWYt87aBqo150G/Dchm0uvTuxWpGozzf6MC+
-	 nzKQyy566RSz2ciSV1FF7CKIurSSB9cXEYiFzRKNoSxZZstZTqzWZjP0U5GJeCKbFN5+w
-	 kzyLtM+mZIhSgjO/LdIOHhykpb9Pl+cXBhmy9W2VQgBEV4nSD4HYQZ5q/RBI3O+zmrA==
+	t=1794917528;
+	b=T6Xp44515sR8mfG2YgrjnCuYXjQcrC7j+5wiOVDx86HofxXeLi0+nMZO8xZ6MJQ97FJk
+	 enURRxZU6JwzGR8c9/+e4JHeWkANj0jqDOg8CLqQHM12yvw0KRD5s2nR6YgvcPYd6g9Sn
+	 Sni9c5eFbKE3aFDolvkTv3dqqWHN+jI8sobWwrUAYvkpmmpPGOi7BbASHcvWcxNxGj+24
+	 lx85kgmbgAeAKkwbg+3TwjayIy016CfKHLmPt1KXPdLUFhpNINhOOebXFLXZgVk4RVXtd
+	 VhZf8ZWQPIa1hx/lckCnqDIker4qHd3b7wAzO43/4Ab0vO6WDKVs49WG8POCtPC1ghQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794914282;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794917528;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
 	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:X-WP-MailID:
-	 X-WP-AV:X-WP-SPAM;
-	bh=lacrfJAZc9PxSg1vvmhQyROqUQhgxiKoLysqHqcOGXI=;
-	b=4jtu34t0f7nJ+GO2LrG/EfOIroIPNogdd+96B5b11yfylCZcGFTeWPrk52SQP6hP37Fj
-	 SJbrAUNm5O6FJla1zf2e1HfOvfVk5rMghSi0pMc7Y23l0mGTq1mNBtyZAxL6Wda/C2rON
-	 mJJSCx3SZ+R54t3giAS3lNetphFb2JgSdo9CMKGBZgw365TSMRC2iIzD8mDf0r3sToF8U
-	 sDjW42JGtE7YutsoTWLw6YTR2LXoZZ4jpU0bRNmS0vc7NDMS7cIMy/2KQKAHufX9XIc1H
-	 2VVlth2qRwO696tZ0tjE4W++Evxzmn1ZwC0VO47R0sAUi4op98LyYu3VjJi4Zd3J5Rw==
+	 Content-Disposition:In-Reply-To:X-WP-MailID:X-WP-AV:X-WP-SPAM;
+	bh=lj9OagPSRJNvuPdGLWpYCPjIPPY/8eEyHeaFsrygvcA=;
+	b=tYW88A3w72HX49Z3K+A/40iu64B2jkJmaBmvoOXSKhi3J4Y0foQzCOt1Mlw9X+41Pmy5
+	 fHbuqWWZ8eHacu9h44SXxDUCgwjqSSGszsruukhMjMsx4C+KDG4BbjiDBGOL4fySFCZHH
+	 W7VrJv3esVTn4Q7P51NsAu2OlSq5GYbtaEN2bSSAGUDGG7zLwn+WcXQtdSlYsciwLoQnc
+	 0d0tG0JXUVS1sQKOsJ8umG5ScC6uo+wy2+IVc+LT0nvWp30jAZBL1ouCFsb4j9hJYdQlp
+	 eu2WaWr3bM/GqKQi7fMc7cuKhvBLjqdwI/r5svpS3Ac2buu3NqfLLZ3OyPad63iGSGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=wp.pl;
 	spf=pass smtp.mailfrom=wp.pl;
-	dkim=pass header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=krDZcyq4;
-	arc=none smtp.remote-ip=212.77.101.9
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
+	dkim=pass header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=jlgRi2Cz;
+	arc=none smtp.remote-ip=212.77.101.11
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C009B606A323
-	for <linux-modules@vger.kernel.org>; Tue, 17 Nov 2026 11:18:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C009B606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14444606A32C
+	for <linux-modules@vger.kernel.org>; Tue, 17 Nov 2026 12:12:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14444606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=krDZcyq4
-Received: (wp-smtpd smtp.wp.pl 27972 invoked from network); 17 Nov 2026 12:17:53 +0100
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=jlgRi2Cz
+Received: (wp-smtpd smtp.wp.pl 8210 invoked from network); 17 Nov 2026 13:12:05 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=s20261001;
-          t=1794914273; bh=lacrfJAZc9PxSg1vvmhQyROqUQhgxiKoLysqHqcOGXI=;
+          t=1794917525; bh=lj9OagPSRJNvuPdGLWpYCPjIPPY/8eEyHeaFsrygvcA=;
           h=From:To:Cc:Subject;
-          b=krDZcyq4M6w44sq/2G7++7hEuIo+5D8uenjztHEL3QyX5QpiXYR1+QDZTsEbKFx5A
-           zbDQ5lm6rswxursNM2fcLIX7id4AisJV+kPNkF/FOtwwtXPRGuswG3zF47VS7ZUmOt
-           GqygzPVKHffCad7cT5e1lxbat1NzHYjKsyz+8gAobfYm+sS8ZKDNSBjA+DvsPcqKnE
-           DSs95DOZ+X17zBaxfMcjt5vrfSG2LcpyLeM0K0LqDjlMbkUmyLnAHDMjxkrnTypxPy
-           hWYv8Y7QDHdkhyOH55CweX1lYo4P00iFpd31vgm9WKYtE8z3HGQoaHJosdPjy8/h4d
-           qbo6KSG9U52rg==
+          b=jlgRi2Cz/vVIwgREakUwVS49sHWLB7aN7h7CfhjIj8hgRoJdvFDpuemdEJaaQWwiy
+           dv6H+g5JUTUe7bna0U+ZEuLGGD3ivvaHT5aYkCLA37aVE0naYwhKWc+fMGMbJqvn4n
+           OY3PoxhoDsCkSAYYOx9wcabMT+LCqb6fRUmuLcF0bgz7bhUcmZa39D2UcyEuFwKdBj
+           gnKIWHao6SFiQh4sbj97f1n7eF9nY1RfajMxe/2eXHHo4MfMt0g85h6FC4grEYgvBz
+           +MT/z8JqAEQJ7MKF8RGMb5Rb7h/bmkkGJjN+aLVkyklihZhinWd3LFhUgRN4GYKugV
+           GP2gKmLvNH+aw==
 Received: from localhost (77-236-5-223.static.play.pl [77.236.5.223])
           (envelope-sender <stf_xl@wp.pl>)
           by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
-          for <petr.pavlu@suse.com>; 17 Nov 2026 12:17:53 +0100
-Date: Tue, 17 Nov 2026 12:17:52 +0100
+          for <pmladek@suse.com>; 17 Nov 2026 13:12:05 +0100
+Date: Tue, 17 Nov 2026 13:12:04 +0100
 From: Stanislaw Gruszka <stf_xl@wp.pl>
-To: Petr Pavlu <petr.pavlu@suse.com>
+To: Petr Mladek <pmladek@suse.com>
 Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>, linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Aaron Tomlin <atomlin@atomlin.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Jordan Rome <linux@jordanrome.com>,
-	Viktor Malik <vmalik@redhat.com>, Petr Mladek <pmladek@suse.com>
+	Viktor Malik <vmalik@redhat.com>, Miroslav Benes <mbenes@suse.cz>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>
 Subject: Re: [PATCH v2 2/2] module/kallsyms: sort function symbols and use
  binary search
-Message-ID: <avw34F1WLGdyYUkN@wp.pl>
+Message-ID: <avxElFF4GY1Jhk02@wp.pl>
 References: <20260327110005.16499-1-stf_xl@wp.pl>
  <20260327110005.16499-2-stf_xl@wp.pl>
- <11c8e139-f9f3-4b22-863a-4e021a3947e7@suse.com>
- <20260424091330.GA31168@wp.pl>
- <88ae41dc-e5e0-442a-9b95-5125adf31e75@suse.com>
- <20260428082330.GA2757@wp.pl>
+ <afnhidn7K7dZ_cPh@pathway.suse.cz>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -78,93 +77,53 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260428082330.GA2757@wp.pl>
-X-WP-MailID: f9197c6689b43e0d8ad86c0c3de46d46
+In-Reply-To: <afnhidn7K7dZ_cPh@pathway.suse.cz>
+X-WP-MailID: 53ea68bc8316ef981b297076ee5d6f3b
 X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [oaPU]                               
+X-WP-SPAM: NO 000000A [sTNU]                               
 
-Hi,
+Hi
 
-My apologies for the very long delay in responding.
-
-I wanted to understand the livepatch relocation issue before getting
-back to this patch, but I kept struggling with it and putting it off.
-Eventually, I got some help from AI to understand how livepatch
-relocations work and why reordering symtab entries breaks them.
-
-On Tue, Apr 28, 2026 at 10:23:30AM +0200, Stanislaw Gruszka wrote:
-> > >> I'm not sure if it is ok to limit the search only to function symbols
-> > >> when the address lies in MOD_TEXT. The text can theoretically contain
-> > >> non-function symbols.
-> > > 
-> > > Yes, the patch assumes that the only valid symbols in the MOD_TEXT
-> > > are functions. If there are defined OBJECT symbols in .text, the patch
-> > > would break lookup for those.
-> > > 
-> > > While it’s theoretically possible (e.g. hand-written assembly placing
-> > > data in .text ?), I’m not sure this is a practical concern. In general,
-> > > having data in executable segments is discouraged for security reasons. 
-> > > 
-> > >> Could this optimization be adjusted to sort all
-> > >> MOD_TEXT symbols (excluding anonymous and mapping symbols) and move them
-> > >> to the front of the symbol table?
-> > > 
-> > > That’s possible. We could track .text sections indices in
-> > > __layout_sections() and include all valid symbols from those sections,
-> > > and also reorder typetab accordingly.
-> > > 
-> > > However, this adds complexity. I would prefer to first confirm whether
-> > > OBJECT symbols in MOD_TEXT is a real issue before going in that direction.
-
-It turns out that identifying MOD_TEXT symbols is straightforward.
-The section's memory type is already encoded in
-sec->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT, where sec is obtained from
-the symbol's st_shndx.
-
-> > I'm not aware of specific OBJECT symbols that end up in MOD_TEXT.
-> > Nonetheless, it is a valid case and it is preferable that an
-> > optimization doesn't break their lookup by address.
-> >
-> > In general, I'm worried about the several edge cases and inconsistencies
-> > that this optimization introduces. This also includes the fact that it
-> > doesn't work for livepatch modules.
-> > 
-> > An alternative could be to keep the symbol table untouched and have
-> > a separate array with symbol indexes that is sorted by their addresses,
-> > but it requires evaluation if the additional memory usage is worth it.
-
-I've implemented this approach. As a bonus, sorting during module
-loading is actually faster, since only the indexes need to be moved
-instead of entire symbol table entries.
-
-To get a rough estimate of the additional memory usage, I ran the
-following command on my system:
-
-awk 'NF == 4 && ($2 == "T" || $2 == "t")' /proc/kallsyms | wc -l
-
-It reports 83593 symbols, which would correspond to roughly 326kB
-of additional memory for 32-bit indexes across all loaded modules.
-
-For comparison, the total size of loaded modules on this system is:
-
-lsmod | awk 'NR > 1 { sum += $2 } END { printf "%.2f MB\n", sum / 1024 / 1024 }'
-49.74 MB
-
-Thus, the additional index would account for roughly 0.64% of the
-total memory occupied by modules.
-
-> I personally prefer not to over-engineer for cases that may never occur.
-> That said, your concerns about edge cases, consistency, and livepatch 
-> handling are valid.
+On Tue, May 05, 2026 at 02:24:41PM +0200, Petr Mladek wrote:
+> 2. Livepatches _rely on the sorting_ of symbols in the module.
+>    The special relocation symbols might define a symbol position,
+>    see
 > 
-> Let me take some time to think this through and experiment with possible
-> solutions that handle these cases properly. I can’t work on this
-> immediately, but I’ll get back to it.
+> 	.klp.sym.objname.symbol_name,sympos
+> 
+>    in the documentation. It defines the position of the symbol
+>    when there are more symbols of the same name, see
+>    klp_match_callback() in kernel/livepatch/core.c.
+> 
+>    I am afraid that _this patch might break_ this when it moves
+>    function symbols before non-funciton ones. I guess that
+>    the symbols of the same name will not longer be groupped.
 
-I'll post v3 shortly. 
+Thanks for pointing this out. It took me quite a while to understand
+the issue, but I finally got it.
+
+> Idea: Is the shufling really important for the performance, please?
+
+One reason I wanted to shuffle the symbols was to also speed up
+name-based lookups, assuming that most lookups are for function
+symbols. Moving them to the beginning of the table reduces the
+number of entries that need to be scanned in the common case.
+
+In my benchmarks, this reduced the average time spent in
+__find_kallsyms_symbol_value() from 16 us to 6 us. 
+
+>    I would expect that binary search would have a good performance
+>    even without the shuffling. It puts aside half of the symbols in
+>    one cycle. 
+
+I'm now going with a separate sorted index table, leaving the original
+symtab untouched.
+
+I think the name lookup optimization could be revisited later by
+introducing a new function that uses the index table to search only
+text symbols, where appropriate.
 
 Regards
 Stanislaw
