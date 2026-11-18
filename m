@@ -1,52 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.77.101.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.77.101.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795013495;
-	b=g30Ti7WUBuSENho6J1Jhro8Dhna+NFUMlHswTwApUEJggKPIWxZFEypMYFsGVF3/zJKV
-	 XrF1rhXXiF3yuHwl9b89QAEIEY+fbl1QQntS2qWzNR1l+MPyH3LD7qeZEWFeFmbH55f6+
-	 y3Xg33BPOcJC8Yu1EY3sh71CHlBHaDzMmfX6RsStlmY+tLL212/XtJYZPl8SOJAnO8F/y
-	 MlLFOyXNeyIP7qU03XyMF7B5cbZHplFPwfye8mOw5i0QGwwCeKPonrJVh4qLLhniky6n0
-	 BZCyfDerlKMKWD9zeBqZZx+8qFD62g4GzXjVN5J88mSE5ynWr+GD9HJc0uKfhhn4hfw==
+	t=1795013496;
+	b=sFOAQ388Fb6iq+K99yWqQzMowyjrb5rSFkywe+aOvO4zONa+bWObZ5TVrEBmqQj0wqgl
+	 S9f24jsd1a478F52qRGnERtHs64cx2yuovj9gi6pYq/HlFE45o2UJYWPfuDXZXJgjZWGH
+	 +PRBxbHKzDb2jnHOca1WbAfEE5QTcjquk12Zhg1bi1Wls1MRtheUXKyLTlMnlstpvibDD
+	 jU1DVCG4ojr6BRmVv8ZFVEhptu0+J7GRVQuuLObKzlYsDlr7WrLy9QPd5bhtvrAjKdxhj
+	 dFbLeW3uLa8sAjfuj4ewtPTyJ90q60hPzFD8Y6tlM/5LNiyP0pbGTCn6McwgChjBd/g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795013495;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795013496;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-WP-MailID:X-WP-AV:X-WP-SPAM;
-	bh=U6FPJeVp8t/tfRRICPjUoC6PNDNnsdUBwnuvnfAniPQ=;
-	b=1VYtHAEWE5ujqAvX9zKSl6a/zawnFjmKviJoArMu391dz+2uTrVD08nzQomJxcJezZ59
-	 CCogtfA+3yszU7TzF8IHocurMmaTqTLRkwkSdNG36mn/S2rkUTz81y951MO0DnETxD6ON
-	 csDeAza9fqsYAK+d7caHfLd27DcMThp6VbUBHiAKwL3aMGCE7bpqg9uhYomNG87yg4jEt
-	 m5k++qksXaYMY6yDUO/CAsPy2G6Zu1natMdrJwJRDsQl1t5AD3w3igCIjNsBQYIUPGwcf
-	 HdNUaI/Tv+k23tUIfRYxtEEeHIXF2cEyaEBxmypkNEilyoy8DPP6yzA1L6vlvUjJttQ==
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-WP-MailID:X-WP-AV:X-WP-SPAM;
+	bh=4RxBtY9vxc+Kp6wVwu6gxnSGPF/eTmawoe5vFTJzFaQ=;
+	b=khm9hEJywqQxwS6Ig53sy9hDxx3LCnIkqH0U2qObb1erZ0f8VwT8x8yluq6Bgx13SjVu
+	 /9HcPbHcAm1caeJL0UkqLX2nPqkwEbGrTZR3KiiROO0jUKQFRNlituVaMqxOL3AkDoGZE
+	 GFXtTPGvGkGa5kCXHq8K7DTq685DcmceAhtlTdp2iv41KrsJ+ejMH8aoYPO1Bwk/jD+1M
+	 84vaDnekxoewuVuJVZzlML9wTeVuP4yTConWU5RjWtumEeUDRrceuZmjZbKlhec+qAS2S
+	 w5yRd5BFNp4KoYrv1K87v6ALemPGttjPfnBIpWlGXod5vnD2aXBJe8xHpM3Xmbfj9Rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=wp.pl;
 	spf=pass smtp.mailfrom=wp.pl;
-	dkim=pass header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b="di0/IsXl";
-	arc=none smtp.remote-ip=212.77.101.11
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
+	dkim=pass header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=V152Dstj;
+	arc=none smtp.remote-ip=212.77.101.12
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8F8606A331
-	for <linux-modules@vger.kernel.org>; Wed, 18 Nov 2026 14:51:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E8F8606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF91606A32F
+	for <linux-modules@vger.kernel.org>; Wed, 18 Nov 2026 14:51:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EF91606A32F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=di0/IsXl
-Received: (wp-smtpd smtp.wp.pl 40525 invoked from network); 18 Nov 2026 15:51:26 +0100
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=V152Dstj
+Received: (wp-smtpd smtp.wp.pl 21108 invoked from network); 18 Nov 2026 15:51:25 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=s20261001;
-          t=1795013486; bh=U6FPJeVp8t/tfRRICPjUoC6PNDNnsdUBwnuvnfAniPQ=;
+          t=1795013485; bh=4RxBtY9vxc+Kp6wVwu6gxnSGPF/eTmawoe5vFTJzFaQ=;
           h=From:To:Cc:Subject;
-          b=di0/IsXluofWfm0hHiB73a751u+lebaxE2SjivjCmiz3iwLNehq1jhxcj/K3tcP0a
-           w7BxeCqff72LAKUoL7LXouni3ZBdDOpIYsAPCvFL29/8PYovrahgQpystFuacQdvug
-           qL1JrHc/brT4QV+N4hNudjpayTowpGVhZ3jQhJ635QAFb8o4BPVsM/qtjlmFaNMuuD
-           IpKtYSXNcSE8X5ilDnqtEJuruh6VTizrjldwr2yJ/6VqrGl+qZguaf6pJOi4AYazeS
-           pZOSInJbyFe5noVau1zowxG/dxyQHxDTvhCYcojrZh5M14ri2WyL9Wy4B/MxDSfG8k
-           e3n2RxiM3meOQ==
+          b=V152DstjlIjXzLnu8NjZyYwreeWqWXoXKShNNSeIv3bo67RwR+wEVyqN4g9YsFjFI
+           xOmptL4yTOchd1zAlsCZR5W+LyTQf6U65AKe2Ww47a6mQTgWXtAew+s42fK1qnKo7A
+           0Ztcn/8a00QwX2omBLvASgTLVrr4rhA36zEExBxXyGpigEmXrSC7NcPzc24EeIGRvb
+           9Jen104NvxdwGozEgTC0ATVLys69IPg53+uhuDb18aP8EGJtgi6fBrMhS/RItLECac
+           f/JoCv5FsdZaU/JA2zqrsq3gA6Jjzyd9A8PMdpRV8YB8aNR4z60wKnxRbGGydOd74M
+           moEIyAmrEqtmA==
 Received: from localhost (77-236-5-223.static.play.pl [77.236.5.223])
           (envelope-sender <stf_xl@wp.pl>)
           by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
-          for <linux-modules@vger.kernel.org>; 18 Nov 2026 15:51:26 +0100
+          for <linux-modules@vger.kernel.org>; 18 Nov 2026 15:51:25 +0100
 From: Stanislaw Gruszka <stf_xl@wp.pl>
 To: linux-modules@vger.kernel.org,
 	Sami Tolvanen <samitolvanen@google.com>,
@@ -62,12 +62,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Jordan Rome <linux@jordanrome.com>,
 	Viktor Malik <vmalik@redhat.com>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 1/3] module/kallsyms: include empty names in is_ignored_kernel_symbol()
-Date: Wed, 18 Nov 2026 15:51:23 +0100
-Message-ID: <20261118145125.29399-2-stf_xl@wp.pl>
+Subject: [PATCH v3 0/3] module/kallsyms: sort function symbols and use binary search
+Date: Wed, 18 Nov 2026 15:51:22 +0100
+Message-ID: <20261118145125.29399-1-stf_xl@wp.pl>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20261118145125.29399-1-stf_xl@wp.pl>
-References: <20261118145125.29399-1-stf_xl@wp.pl>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -78,75 +76,39 @@ List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 1a637cc0d3fd4a139767f2d741e40bcd
+X-WP-MailID: 113bda48f6e52cef21e1ab72afaf099d
 X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000A [UbNk]                               
+X-WP-SPAM: NO 000000B [0RNE]                               
 
-Both modpost and find_kallsyms_symbol() reject empty symbol names.
-Handle them in the shared helper to avoid duplicating this check.
+This series enables binary search over a separate index of core text
+symbols, preserving symbol-table order and supporting livepatch modules.
 
-This also lets is_core_symbol() reject empty names referenced by a
-nonzero st_name. The reserved ELF null symbol at index 0 is preserved
-before calling the helper.
+v3:
+ - preserve core symtab order by sorting a separate index array
+ - index core text symbols rather than only function symbols
+ - enable indexed text lookup for livepatch modules
+ - rebase and update commit messages and subjects
+ - sort equal-address by descending symbol index so binary search
+   selects the same alias as linear search
 
-Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
----
- include/linux/module_symbol.h | 6 ++++--
- kernel/module/kallsyms.c      | 7 +------
- scripts/mod/modpost.h         | 2 +-
- 3 files changed, 6 insertions(+), 9 deletions(-)
+v2: https://lore.kernel.org/linux-modules/20260327110005.16499-1-stf_xl@wp.pl/
+ - fix searching data symbols for CONFIG_KALLSYMS_ALL
+ - use kallsyms_symbol_value() in elf_sym_cmp()
 
-diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
-index 698d3db2b37e..b93ef616a3f1 100644
---- a/include/linux/module_symbol.h
-+++ b/include/linux/module_symbol.h
-@@ -8,11 +8,13 @@ enum ksym_flags {
- };
- 
- /*
-- * Ignore local labels (.L*, L0*) and mapping symbols ($*). These symbols are
-- * not useful for the kernel, for example, they should not appear in kallsyms.
-+ * Ignore empty names, local labels (.L*, L0*) and mapping symbols ($*).
-+ * These symbols are not useful for the kernel and should not appear in kallsyms.
-  */
- static inline bool is_ignored_kernel_symbol(const char *str)
- {
-+	if (!str[0])
-+		return true;
- 	if (str[0] == '.' && str[1] == 'L')
- 		return true;
- 	if (str[0] == 'L' && str[1] == '0')
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 1ff8ce857d92..5dae0832714a 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -292,12 +292,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 		if (sym->st_shndx == SHN_UNDEF)
- 			continue;
- 
--		/*
--		 * We ignore unnamed symbols: they're uninformative
--		 * and inserted at a whim.
--		 */
--		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
--		    is_ignored_kernel_symbol(kallsyms_symbol_name(kallsyms, i)))
-+		if (is_ignored_kernel_symbol(kallsyms_symbol_name(kallsyms, i)))
- 			continue;
- 
- 		if (thisval <= addr && thisval > bestval) {
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 666beca685e4..eb01108702be 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -196,7 +196,7 @@ static inline bool is_valid_name(struct elf_info *elf, Elf_Sym *sym)
- {
- 	const char *name = elf->strtab + sym->st_name;
- 
--	if (!name || !strlen(name))
-+	if (!name)
- 		return false;
- 	return !is_ignored_kernel_symbol(name);
- }
+v1: https://lore.kernel.org/linux-modules/20260317110423.45481-1-stf_xl@wp.pl/
+
+Stanislaw Gruszka (3):
+  module/kallsyms: include empty names in is_ignored_kernel_symbol()
+  module/kallsyms: sort text symbol indices and use binary search
+  module/kallsyms: enable indexed text lookup for livepatch modules
+
+ include/linux/module.h        |   2 +
+ include/linux/module_symbol.h |   6 +-
+ kernel/module/internal.h      |   2 +
+ kernel/module/kallsyms.c      | 202 +++++++++++++++++++++++++---------
+ scripts/mod/modpost.h         |   2 +-
+ 5 files changed, 161 insertions(+), 53 deletions(-)
+
 -- 
 2.52.0
 
