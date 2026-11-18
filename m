@@ -1,115 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794920416;
-	b=o79Mtw319zRr9PynS6lnLpunPLrsnP4QbPsKDx+8ekf1f/bZBrtBYqqh+pnPjQGi4P6K
-	 ciCD8HF4BSWLTOtxhBOa2rHz1ymkEP5+b7jn+NlY0XtM7OawCRx/xbdT2e+nu2jDw78kY
-	 FUDuXdPOdRXKj6lfR2+3IL75pUCPE+gSVC6I7yRv/OaNQTY8IdqXJKr039eLOaUSK7C6M
-	 A1FPZBKS7AIUvfmj3jTjHz7tI5CSApfiL1FUm26I0zHlbQ7ZKM6TlIuLSZyQUHDdxYfSD
-	 0Zno7w78WbjbJXqj5Jh+69Rpxud9qMaJZHceuKa17z0Y3Tu18iq8bJukd2xxNK6UbHA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794920416;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=ckAIzUV5oWihOIEXseRYjbrEU/6METgnwVW7WGDvtlo=;
-	b=hP5Csy+9NFfLsZW3jztdUhZO6Ipfj36ilfaU7OY3C97CAzRGr7n3/9+Nov3mOhw8CacB
-	 5Z/CKJb6txBg83+GAJ5vXbbqgqHNqaCZHgO+aT8AP8piKIGkLyPwCS1abJ7elE3QeH8/o
-	 9E8lLX9AQH9AJ5PeoESMBkvXEUizi0f3vjlvhkj14+OAheRcHg3luYOX3QtdMM67fBuHN
-	 QUuwOo8ybRbXweNmbKhfQjHWmEkZyym3Dba2TaX+/DFPmzbKGoAynxMYzpd31vbUsH2+8
-	 kcpbsD+nqs4rkYypmnv9LFGx+9w0yXkLCHi9nLqPHWrQzisFhaWeX0QPii5y0hcA0aQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ux9dP6cx;
-	arc=none smtp.remote-ip=209.85.221.47
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794992931;
+	b=IZjG4z2XI1PAdZweugASlUJgdxXMU2lnYLnWoTVbrJoSDoeJyof4bzV0uNcyAoM7aTHd
+	 BmF70eIeipJRYbfxzxWvrIH18Vgc3NCvgEM08w2Oh3NKTQtiTujone79YcRnSr7t7ZLt+
+	 wESSauQooXHF/La0UWzWJ7KEZxwu9+J6DkYekloBAi1Ejt19CEIQt7e5HmxatzTLUEkh8
+	 K90ZtZgBl+kQxcju7xB82SsZ7FwLaIQGaXoB2oNT5OO7KLYxTOMjViZmo78L3u7VEfzYt
+	 zssr36hlH4EBrI+kH4R+M/MEGcPvwAcHVbFiAoYeeI+S+ryqM+8wm0329Xp1BqDhA2g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794992931;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=AL/L8BBoMuh5RxZuA7Vq9fjpLcJFyNh6WrlsR3XYHdU=;
+	b=ShPfl8fW9flgGBLZSB3vymDPMG7oQlFEd5RnIyi9R4+qlQcjMfiLVzc5nVgXh+1M4wXY
+	 glb9w4mMRiCIa+7cCYPqYRT83vwx43AyAbtjBbRYUGB6wh2HWe1LifFmZ/UOGblDmWPlp
+	 Y8MagT1r+efVUhqQNWBkSmNnRLTSZXWy3I333s0tU4dmBMCxFFc+HtKrHanFF9RWhI9c2
+	 MQHiuSCDD5Sk4RLGyKlgc+uji24QNiizzniFxLhgN2FW1ANaquFibtM79Je2g9+jXNIZE
+	 yvL88ZBgG9ioSXzfLhT1Q46UFEPs5jb0Huguj8yNwTZbF8P+AP00oenotTSOiDW7e5w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gzzq4FJF;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF938606A889;
+	Wed, 18 Nov 2026 09:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gzzq4FJF
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794992931;
+	b=tWYt29IW4RVbDmmoGymUh4qrfDoLF8CV/atUldroTrZW8W6D6XSgwEqsZXfakTd9DCe7
+	 Ei7Q7Edi+iW/iScTLS0hVsHefaYrOeeyS0WzFot6rsqdgRFJMw7QpKcfHWtHEbTC9QC7Y
+	 un/zZ/nqBQdp2uIigMpSfE2taAmODB6W8N8ZOBnDozHm9y2aBIeBb2xyBiNsezIxRN8U7
+	 Xn98iC1yHuv8GkSWiLEebxryj7Hu8n4Va27SnMMSrP7OdELKobMJpubxzFzCfhfwzF+5j
+	 Aw7oWvGNKeAJ4Z7pSqce7gvZeKLssFSDnYxHtMP7aWz5bQYMvVcoZqBTP6BNk8FBoxQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794992931;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=AL/L8BBoMuh5RxZuA7Vq9fjpLcJFyNh6WrlsR3XYHdU=;
+	b=g9CLEN24FdMbImEBAUsu1EGNSySnsoO7omSJ184ugYQ6EbsmfgSihkp1eb5ruCdDbA5q
+	 OI7Sy466OmUK6Hzvr/O71g36pFQw2hV6PKTJMzeoLTD/FEeE+a3CHU0COBetPfaQXbUPJ
+	 J4opzKWzvGqNVc/oAIvTnFxwpgAMDcorJcVjdKwzehvmOZT+Ai+6pUzyAa6t+svArm1LD
+	 tjWm+2Q1ARfv3G5isD4mf4PgIoMU1WroTK06qsW8DtLKwrZ/JOXZOCeKUVkR8/N1Y+Dzq
+	 ITtdcNAs+LfThXX5QqjWHKMaDd7worAAAuPDpu57kIMO5JNt8iXu+XUGxsF41cE8eaA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94262606A88D
-	for <linux-modules@vger.kernel.org>; Tue, 17 Nov 2026 13:00:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94262606A88D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ux9dP6cx
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4a3e706b5dfso337895f8f.2
-        for <linux-modules@vger.kernel.org>; Tue, 17 Nov 2026 05:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794920415; x=1795525215; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ckAIzUV5oWihOIEXseRYjbrEU/6METgnwVW7WGDvtlo=;
-        b=ux9dP6cxGHchfy+unLDQ6NmKaVT3R8pW2Zfa/bLFviUfqW7T1JZLWOGkLeMvqz7iUB
-         zLW7dje3QrA7HvFJ9Z2e/BsWN7PkFukCWLlCC2sfZfe4C42kw1BD7+xJ9+K8ykHcfJhN
-         xuB6p0p675+Q+8Ab4VBm/lPttSQUOT9MfXiQdtBTxIq64JfVXTUc/LJnriMOJrmqWlqr
-         pVJv7iS/suULfBRGTO/rXud1wwmWfwrXIjLdPTrqTKyk72/ZF/FYEeTqn8YrQOIG851+
-         XstWyYcmlUsM5ZYhKgaD6JN4csYJsgqj8fKhGxAJTKSZDhJpxLk/Ya/RZa7YSEnQfkFN
-         FNJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794920415; x=1795525215;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ckAIzUV5oWihOIEXseRYjbrEU/6METgnwVW7WGDvtlo=;
-        b=mJTMuLelEC6HPHNYCBkyaVFjc1PeO3bQZyjk82Gb/LiMLZMq/zHJmbFL7XHiUb2IH4
-         hEdfF035ryCpMOq24YRNYTGjkKRYvYEFBr1yKlPcCz1F8gv7wlMuUDQ0B180AG26Hcou
-         wv6Byv9ysc5eAMAnyrHTHj6i6Kxzu4jI8vb9/l8pIK0bEUmAq3bT9LKQyWoXZ/YvMIhX
-         H8B2jxiLQrhtY9L5vEG+kXd8wdOQcLIU3tmputswu1rP7UnXW2riJ/mRboRt/VJPT/u+
-         1LAMItYT8XvmraSU8NtsOKKBNm1Hj/HyOO/R6Q4hMnvo0fvJyHvhOCK/h3cNWOfInJg6
-         +jWg==
-X-Forwarded-Encrypted: i=1; AL+hErGTIiyx1uoSQzLnxH4nMIWituobkT0gqSI/k3Zu9hl+ShPdrEavhQOfGJ28tHukaw/DxijmaDVXfaUhaNlG@vger.kernel.org
-X-Gm-Message-State: APuU4Z823VJfUvB+1z/K+QYOoygt1BR7O9k2OFw9xQX4LwfS0e37jPCN
-	YC6+kZQZli7QPWlk8ZTA8MckDwCr5iZS6ZSm4uCcVJMjpZFP00/YZ9Oz
-X-Gm-Gg: AZFdTZfxuLomZ0FfxwjrjRyXV1r7gffaMivX05ptV8B1q3sv8G8ncvyaqfOMNVpbtBl
-	cqhr3epr0pU7qmkov3EaiNiy/t0Dhyzv7HKgxivJDzHQngQN9TN6YYhp1cLSa42xP+A59OoByxt
-	xjTmPzyZ4BbxCxul7i1Y+4r19WvwGIYvt0rOTHp+Ya5v3pu9zjVHOi3JM4Bjb+CxnRLV98bGXIJ
-	y6OJFcBXOlDoitsTewdVWk887zVM5k47zOV0g4pb4p1c1QUF7aijBoW9NuTuibU/Rd/aih92GBf
-	fMI08OiOjo9D8NcvwLQf2v88Nk3f1zHRj7OSOJuiFvmGMOIUQ1jOrEnjLcGLGu2bYYL97eQdeEO
-	AYL2nkec67NVndobeDHtxj3By9mAuXQooeyuStV1U+4ka2qdMByDltIrer9LQ03pz4VMUybR9fr
-	SWhX1c998TTtDGso8bTE2w0UlmdpbKriQ9O1Aa7ayIRsR3d2uslhN1XXwAORbv15fFtCZSudFcj
-	p3nwIE8+wF+1sjMWeVfglNZYs6/zfNJJztdYMh2Dn/6CjdoNesh1c38h6xU4k4U1zceenWVW38H
-	/RUv3gDIDEfKXdurwzb9W4poieJdtZB3nh1al8W+fmNH/In+MwHIFz3sjAW1Hena5CvX/dMM/iR
-	xb+tSkV6TZfs=
-X-Received: by 2002:a05:6000:46d0:b0:498:2754:6a80 with SMTP id ffacd0b85a97d-49c725e538bmr20536616f8f.28.1794920414596;
-        Tue, 17 Nov 2026 05:00:14 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c5ff2be55sm28207005f8f.28.2026.11.17.05.00.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 05:00:13 -0800 (PST)
-Date: Tue, 17 Nov 2026 13:00:11 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Luis
- Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
- Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-modules@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 0/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
- and KALLSYMS_QUERY_BY_ADDR ioctls
-Message-ID: <20261117130011.05eee0a9@pumpkin>
-In-Reply-To: <CAG2KctpP7QH=tdSB=op703rA=CtjQKAXqOen8JEHg1ygy9sgyg@mail.gmail.com>
-References: <20261113221248.3535369-11-wusamuel@google.com>
-	<20261115142431.1587690a@pumpkin>
-	<CAG2KctpP7QH=tdSB=op703rA=CtjQKAXqOen8JEHg1ygy9sgyg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	by smtp.kernel.org (Postfix) with ESMTPS id 96A8E1F000CA;
+	Wed, 18 Nov 2026 09:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794992931;
+	bh=AL/L8BBoMuh5RxZuA7Vq9fjpLcJFyNh6WrlsR3XYHdU=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=Gzzq4FJFuKfpGAgoHeCJfqnfgVCUUIWV5A4f9TVfDQ9ODtCZghv4sN68iYj47o8Ui
+	 scRkCc4cAqHY+vopWh4aWNPKbl5q/g6hVqs6gnrpvyFyQYSXkI3sj8cchJESa791cT
+	 7QWn2rO/x//GNI409UxIFnmdfMVusFIX35nicB31Sh5GW9ObCZzS+NeHPgyPJ0N5iK
+	 jpYEloFwSDTuXGQH6bJ64LT8XNI8N5eSZTU51cb15xO8rzlF4sAdu6vurxSYD2NOCn
+	 UveJqcNWpZ1F7ptlPp+6kq7zS3pXuZwJZVIW8bTIllsng90uopDx0D04tKqs8XNysw
+	 cqJabqAdVWQpA==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 138E34ACAA;
+	Wed, 18 Nov 2026 09:08:50 +0000 (UTC)
+From: Peder Bergan via B4 Relay <devnull+peder.bergan.gmail.com@kernel.org>
+Date: Wed, 18 Nov 2026 10:08:50 +0100
+Subject: [PATCH] rust: kbuild: generate a symbol version for
+ rust_build_error
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -119,66 +83,93 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261118-fix-rust-build-error-modversions-v1-1-7c1023764f30@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACFr/WoC/yWN2w6CMBBEf4XssxttFaP+ivGhl0VqpJDdlpAQ/
+ t0WH89kzswKQhxI4NGswDQHCWMsoA4NuN7EN2HwhUGf9FUpdcMuLMhZEtocvh6JeWQcRj8TV1f
+ wYrr23JJ3d6uhzExMxdkvnq8/S7Yfcqnu1oY1QmjZRNfXKE+SmMxw3G8iLQm27QeUqHuzqQAAA
+ A==
+X-Change-ID: 20261118-fix-rust-build-error-modversions-4af535edc9b2
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, 
+ Matthew Maurer <mmaurer@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+ Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, rust-for-linux@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ linux-modules@vger.kernel.org
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794992929; l=2134;
+ i=peder.bergan@gmail.com; s=kernel-contributions;
+ h=from:subject:message-id;
+ bh=iwv1qR5QyWs5FUrFMluYyHlgGOi5NpHY1vMGZeZUJRU=;
+ b=NwD6BfBA4WLob4JLWPSWapwm4CZS3A7yc5jvskFd0xanhimNfBdKYJ6oPbN3P2DqnFUHqZ/RS
+ z4EPoyo3A7EC6m2QxLn1urUhN9JCBklyXWBl1CvPG6Yij6lqo4TXdgd
+X-Developer-Key: i=peder.bergan@gmail.com; a=ed25519;
+ pk=39790pn1YZCulHBoUG1uiQI1Hm01EvhBEa2zVrS/yN0=
+X-Endpoint-Received: by B4 Relay for
+ peder.bergan@gmail.com/kernel-contributions with auth_id=1395
+X-Original-From: Peder Bergan <peder.bergan@gmail.com>
+Reply-To: peder.bergan@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On Mon, 16 Nov 2026 19:15:11 -0800
-Samuel Wu <wusamuel@google.com> wrote:
+From: Peder Bergan <peder.bergan@gmail.com>
 
-> On Sun, Nov 15, 2026 at 6:24=E2=80=AFAM David Laight
-> <david.laight.linux@gmail.com> wrote:
-> >
-> > On Fri, 13 Nov 2026 14:12:45 -0800
-> > Samuel Wu <wusamuel@google.com> wrote:
-> > =20
-> > > /proc/kallsyms is the primary interface for userspace to query the ke=
-rnel
-> > > symbol table. However, resolving even a handful of symbols or address=
-es
-> > > requires reading and parsing the entire text file, which is often sev=
-eral
-> > > megabytes and takes thousands of read() syscalls. =20
-> >
-> > Separate from this, I've wondered about separating out the /proc/kallsy=
-ms
-> > code from the code that actually handles the symbol table itself.
-> > The two parts are pretty much separate.
-> > IIRC it uses a static function to get the symbol type (which does most
-> > of the work of getting the name - which it also wants) so it isn't
-> > completely trivial.
-> >
-> > I'm pretty sure all (well almost all) the changes will be lower down
-> > the file than my changes and won't cause (hard) conflicts.
-> >
-> > I've been compiling kernel/kallsyms.c and kernel_kallsyms_selftests.c
-> > in userspace for testing both, but had to cut the bottom off kallsyms.c
-> > to get it to compile with a sane number of definitions.
-> >
-> > David =20
->=20
-> You mean separating the core symbol code (top of file) from the procfs
-> interface (bottom of file) into two separate files, right? If so,
-> seems reasonable to me, especially since the file is approaching 1000
-> lines even before our changes.
->=20
-> And agree, even with both our patches, most functions can remain
-> static in their new homes.
+CONFIG_RUST_BUILD_ASSERT_ALLOW exports rust_build_error to modules.
+When CONFIG_MODVERSIONS is also enabled, modpost warns that the export
+has no symbol version and records a zero CRC because the build_error.o
+rule skips gendwarfksyms.
 
-I just tried it (on 7.4-rc1).
-Only had to make kallsymbols_get_symbol_type(), kallsymbols_expand_symbol()
-and get_symbol_offset() non-static (added to kallsyms_internal.h) and
-split the file before the definition of kallysms_iter.
-Then tidied up a few #includes.
+Generate the checksum from build_error.o with the existing Rust library
+rule. Make build_error.o depend on rust/Makefile when module versioning
+is enabled so incremental builds pick up the change. Kbuild's saved
+rustc command does not include the gendwarfksyms step.
 
-I've found a much bigger problem though.
-All the sprint_symbol() functions do unchecked writes into the caller
-supplied buffer (no length is passed).
-While the buffer is (usually) long enough for the name, there isn't
-guaranteed to be enough space for the "+0xoffset [modulename buildid]"
-that might easily be another 60 characters.
+Fixes: ac61506bf2d1 ("rust: Use gendwarfksyms + extended modversions for CONFIG_MODVERSIONS")
+Reported-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Closes: https://github.com/Rust-for-Linux/linux/issues/1201
+Signed-off-by: Peder Bergan <peder.bergan@gmail.com>
+---
+An incremental x86-64 build with LLVM=1 CLIPPY=1 clears the modpost
+warning. The kernel export and a Rust module that references it both
+record the same nonzero CRC.
 
-Some of the people who have modified that code recently really ought
-to have fixed it.
+OpenAI Codex assisted with coding and testing.
+---
+ rust/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-David
+diff --git a/rust/Makefile b/rust/Makefile
+index 0165626decbe..dd5b0a958d0c 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -773,8 +773,9 @@ $(obj)/pin_init.o: $(src)/pin-init/src/lib.rs $(obj)/compiler_builtins.o \
+ # treated as such so that we pass the same flags. Otherwise, for instance,
+ # `rustc` will complain about missing sanitizer flags causing an ABI mismatch.
+ $(obj)/build_error.o: private is-kernel-object := y
+-$(obj)/build_error.o: private skip_gendwarfksyms = 1
+-$(obj)/build_error.o: $(src)/build_error.rs $(obj)/compiler_builtins.o FORCE
++# Rebuild when the symbol version generation rule changes.
++$(obj)/build_error.o: $(src)/build_error.rs $(obj)/compiler_builtins.o \
++    $(if $(CONFIG_MODVERSIONS),$(src)/Makefile) FORCE
+ 	+$(call if_changed_rule,rustc_library)
+ 
+ $(obj)/ffi.o: private skip_gendwarfksyms = 1
+
+---
+base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+change-id: 20261118-fix-rust-build-error-modversions-4af535edc9b2
+
+Best regards,
+--  
+Peder Bergan <peder.bergan@gmail.com>
+
 
