@@ -1,69 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795170180;
-	b=5kaeaSS62aAoLGXma+D5CuebLCn5aigEGiQ3pcZel+6WFzFc+r4MEV5rz1wzE8e2E0Rp
-	 OoWil3n/es3/ljJ0c4FDXC22YSwlJb9Tzl65xqhDVi7eLSHxTMnlXLe6AaZzYqWHTUH77
-	 G8/lSkVJ2EKI5Y/3qfjVelNPSe/flXpxx0LWL+TU/2q8Rr87MXuAt5HnLzA3HYDfz/HTW
-	 wjMzRHU9JVjBt1FS1mvVkMC/5UdZ2Fvc8802UD5BmokkJ0sYf0hwLwb05cN6V4UCUnqOa
-	 FvZ+xkrrMdxKSZ0tWWogIQfxoAKv5d2g4YL1evE52hgR6sRBtW6xaPy8TuIPYz0nYTw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795170180;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=AfJVh7uFWkG93CcIU6uXtcUN7858JzhFpn/OacUyBUs=;
-	b=JCiApX7FRv5JfJEuCNfPGzgvvNaSLaaGkQzB8YIsHzCKguPOJPyMkpRPRRhth2+S/rAb
-	 yFRKIBo0zHzUPeYlDgV6HT2swDdI4+SAoY5Kf6+56uYgGtzRI96eEKDXkXFEdi73FmSxs
-	 PdAO5yn9JBtmGW7AHc7Tpgs1YeOn3Q+tpd7vCvILJiGBoW/r5AoEOeVVr43hw2DlRYbHu
-	 45H+mNimCOS86ydT0HzJUWb709Fx13n5SB+CnHNXeTx34LtcgSg86QIv83Goj5XgDqleA
-	 eFPYlguXSuf1x8vKohHQt7Mb5lfxiI+c/uS1q85Op/LXEgwlE2b0yqD4+b4rtW1GvLQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TOdGOWDO;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.42
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795171758;
+	b=nqlDZes+Da+1JV+dgqYQ6JHmyw9Ut1B6OHHedwh/Z2Ho/Ue1+/GPF71Ga/q4+IDZypXG
+	 vXf68oDmeS6Y8rE39/69sB50hHjipIBLhHqADj3J2N8/l+tzuwpJ4y7teZEI01KWi8FTk
+	 cmgDE8Qm5btvRPiIswiAxup1TvBhfJFwxpclrQpjlJMKUWEh5DlSq6q/lGm3RocrDAGBa
+	 B4dtxQeOXy7En26szC4FMAZ4bO0J1O86AqABdWEaun+dF12h8Q0QlfHSZUW4eQW2Hikho
+	 9bcX+Hnl8NE3+P/O44/wvF/wfRdU+ZS9T27gW//lMUu5Xd3ibCuQ3Y7JgSjizn4EQlw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795171758;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=dWYxYowsGCBLSnSh6cLqulqT3GbnJrbr+1e6JgGH388=;
+	b=lPpdxtqjSPiVZ9hTXU5cP24xoDNLKu+Q413jEzObXUlUZvdbbhGAvsOoKNgGQTJNqtgW
+	 WpSH6mbrQxGyAxDAxWFGuW/4yJYmOYHnx3w6qH1w/rleTQjLinQxRTBJgBS+3hVfojnAn
+	 Nj3sCArz4Pn8Pk/dE5Ejngxd/E/4NNlaZh65R5aOwXbOGf6mwuJSfzha+XFv5IAMjHn9F
+	 Hv9wyAnTZFmmqyEB54QgMo/WG1+C73pluDPOtMgUFtWL55OLGnyBfDy9JznF4le3Bc6IC
+	 NCn4IaiGmlnUbI7tKD3ku6dp+72JaAF8C4v01W0nIFwiIfn//Ojs9WT0+NCcAcmcTbA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="PEsZh/YA";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.42
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7206D606A320;
-	Fri, 20 Nov 2026 10:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2380F606A333
+	for <linux-modules@vger.kernel.org>; Fri, 20 Nov 2026 10:49:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2380F606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TOdGOWDO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A491F000D2;
-	Fri, 20 Nov 2026 10:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795170180;
-	bh=AfJVh7uFWkG93CcIU6uXtcUN7858JzhFpn/OacUyBUs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=TOdGOWDOE4Q92JqZpqx1GjG7P/VGi6q7lu5iUCneklDKerF+BvgSp3V+hvXV3N6os
-	 H+cURRSLyDj5yTNEiU6aO3tuCgW6cnnCwDxCAcIXfGW2ZxAH0Op0RJ7HclI/Vgd7Np
-	 HSJMJ00npcxaTVlSmNHRpl+6DpyMMc3vK/ovrqQaf1tivc6QU0h4Gtkhke5r1nCwif
-	 jRaHkRM5T13INlz24gEfe9okl2spy+DYQ1SedfUt/ySHtyRXfGSYLd59aF93aRz1uu
-	 D2s+3h+1mi0C0WqpCIFezw0V3ZCEXg/SUOhophL3cuCueGd9MXFceCgFJnzYBFVTTI
-	 +v575icriio8Q==
-Date: Fri, 20 Nov 2026 11:22:49 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Petr Mladek <pmladek@suse.com>, David Laight <david.laight.linux@gmail.com>, 
-	kernel-team@android.com, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 1/9] Documentation: ioctl-number: Add
- PROCFS_IOCTL_MAGIC range 0x10-0x11
-Message-ID: <20261120-antitoxisch-flott-sense-8c2a09fc9679@brauner>
-References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-12-wusamuel@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PEsZh/YA
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5c0ea47f5b8so80459e87.3
+        for <linux-modules@vger.kernel.org>; Fri, 20 Nov 2026 02:49:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795171756; cv=none;
+        d=google.com; s=arc-20260327;
+        b=FBo0sdfp7eHbyX3wMoA9UR63/DM4GlEC5FvVdQLLcUUmncwev7Q3LHdWulpLjBrote
+         mgeeTr2ng/z1mBKWkEj3WByG74hTjkUrch7z4yOzbXMcuSM7Zy98LUOqsDk2mmAao88W
+         pZCIjW52o3DgG0fosjY7f8xtBomo1rHkErJ8tP5lOwk3L5VSSIvxZVKDwsw2L9RC+iH7
+         KY5DooJKPqPB2w/ZzTJ64IJdC5GkDyJMtg/aZSj6k9GnL8RZUHTzMud0/tjIJWDieMT5
+         nOizvrfz92NtZK6dIZy7ZJiLFJ4G0FkVkQizEDy4ReFHjwHq40n8DxPFxLirflaiWgR7
+         A6bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=dWYxYowsGCBLSnSh6cLqulqT3GbnJrbr+1e6JgGH388=;
+        fh=4VrWvpQQjL2HetRkjEGQ6IW2bFbdBa3b+7M29b6pkqg=;
+        b=Ps6hH1rrz9pa+7idSFz1kFO0v3HRsvQuc+wEW8hllX0SfjtCACE0bkWexj6CSqhmIy
+         Hkubd91Fy5egB6lP3M5TsGAhl5+6VLjqSxEyUlNuNy9kYw1gqxgrQKj322cieuvOsryE
+         tFfs8teLFNG+6omeaTcCh4gK8790dLUAHU1vREBRDZ87XepB2yxL0lzbVE8NlSpif6sW
+         O9Qzl3i7/A4HSA4723boKRAoxZszi50zda7fBqT0DCgTgcbqHtbegYr01M4/WM5z5Wim
+         AUco7WnrotZcKuoadX9wJhpzvGpfPk8Yeekzdud2wq25VZWRdynqLjwqu7N7COTpc3GE
+         O2yA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795171756; x=1795776556; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=dWYxYowsGCBLSnSh6cLqulqT3GbnJrbr+1e6JgGH388=;
+        b=PEsZh/YAAYQUmMsoLTE0P4DoaYxjX0K0WOe3frsYoTr8l3r+nSK7sMDRX+LpT5WITu
+         p5da11rIxNERXMD5GQ7vP5rHjtNAiDvJJ1IP3EaCgCiy+uIEDqg/M3B2qWZu33gr9z2H
+         0Ntd3BKnx5dLbi8bNJnC6C/w2cTuMVdfAufG4YrMW6gJs5fkUtJkyKGZOAOEfSGC3URw
+         mPL2nagnait/4H97dChQkWFc9nriIUt48kJnZskAOVjsNDXahY1zXAfCtf4wIzRSv1E2
+         cn8ohWhoG0vQTsgDCFFyQQQuVWTfYzneroC/a9LhzXB34Z6ONgKLPfSMXLK8FB3frR1y
+         T3ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795171756; x=1795776556;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dWYxYowsGCBLSnSh6cLqulqT3GbnJrbr+1e6JgGH388=;
+        b=IBhJDiNxjhSFKTg5Z8UIhMPsEOVHHXuwkjqksF4n/InS4kqtLhT3Q48NCNiDdzM9lI
+         0nvzVPqGcl87PXP7rwHzBimAT0ScVRB2dQEHGIBpOSzpWnlST3GoNpAFKgcBIWKO9fx+
+         lBi/XoKF5EEt+5hmEw4Ha2lKRXdK+U981YALR3+cIVbCfe4S/xXqvu/Smh5/sbeuJKWP
+         tSo+ZwQLVuQUBu52VMoIgl39EPas2iAuurviESe2TxKZeMQ3Eu2UKHrHIlaPM05El3Rd
+         MNzLlZQOCqDxN2oRutEeE8UnD3+eZ0VgjyMua9WQr6BRomYPEGG80fFDpOvZKiQy/m/e
+         6w0w==
+X-Forwarded-Encrypted: i=1; AL+hErE414DCmrgAAJLLmpwN+ZU38QUSUJPxWbTa9F6M8LsXdc30+m5GNbs4/6XGOpGBUzIBvP5UtQ8VDwgErssq@vger.kernel.org
+X-Gm-Message-State: APuU4Z/uMa9y5oyN9Anw5fmoziHcaVF0xqKgyerwW0FDkkO48odfv+rY
+	l8pgJWYV4MlKjZuMUhWcr4jyLPZxQq2vYPynJ+7O6n/NWp8BIBUceyolzFPDkeMUvwZT6Z9Ti6R
+	IlZvXOZ4ueIks3TSSksu8havDkc6rjjs=
+X-Gm-Gg: AZFdTZfeUFHVixLhua+mTu2B0GSGJdYLdDVrqbTEAsrCP3RnTHH/jGxn80wZOAi7107
+	iaCJ8omlWm+JtlpjfNJnDF3TkWpYlt30TkFB7F3YFNyX0/AG2emXKmV7ol2tQzV9+XQAlBr8M8S
+	FQg3lPVcohqaPLmCXiXK+RtdZOSHwNdnQMtsls57gPQL8XTp8eVJEC9iuthBZ10punHiMy9spvZ
+	WdGr/k2XY1MjU6Qnqurhy8KVyGI84O0vh1Ypzb/mSOEPFuN9KES+CcXvrl/98HtCc00Glyb0oaw
+	VobBe3YAxyW95/n4XwZFOt7rL+mifmtTaZJABDOncTpeYqFyysHF4CSr6MDCCYs9Q1ZB906yzgP
+	nuyFlzzUCoEDNd2PcViWHFR0ri2bIL88xfJl4lu4f+IWRKYmr9Xc9FgTdFOaOO6fR0WWYb9LlX2
+	oGG/2L3s7gRKpPSiXBIMZhgC8yBHrs1zhpnfbLnA3Kh3iKKwhz07gqinii+/mpKGxf/GBRyhzxQ
+	t9rGgxAkwNyAAHrEF3PNuyVY5ZFhMihWPCwfg+GN28cARNH58+kSYlUOIH05Vo8GfdXtqGd
+X-Received: by 2002:a05:6512:31c3:b0:5bf:e6a1:3115 with SMTP id
+ 2adb3069b0e04-5c1bc76a33fmr1167983e87.2.1795171756051; Fri, 20 Nov 2026
+ 02:49:16 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -73,14 +106,41 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261113221248.3535369-12-wusamuel@google.com>
+References: <20261119-fix-rust-build-error-modversions-v2-1-1c2271cbcab5@gmail.com>
+In-Reply-To: <20261119-fix-rust-build-error-modversions-v2-1-1c2271cbcab5@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 20 Nov 2026 11:49:04 +0100
+X-Gm-Features: Aa3M54qW6il0gb-hxlX-Nj8ioiKgQABk89cMHbmkyFDNFAXmsl_FtiHnKL79t1w
+Message-ID: <CANiq72=vz2D7XYNEHmAnbh5iTJ6T_qtSV3bosQrB8HOYsBXtzA@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: kbuild: generate a symbol version for rust_build_error
+To: peder.bergan@gmail.com
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Matthew Maurer <mmaurer@google.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 13, 2026 at 02:12:46PM -0800, Samuel Wu wrote:
-> +'f'   10-11  linux/fs.h                                                conflict! procfs ioctls (PROCFS_IOCTL_MAGIC)
+On Thu, Nov 19, 2026 at 11:19=E2=80=AFAM Peder Bergan via B4 Relay
+<devnull+peder.bergan.gmail.com@kernel.org> wrote:
+>
+> - Omit Sami's v1 Reviewed-by because v2 changes incremental rebuild behav=
+ior.
 
-Those are PAGEMAP_SCAN (16) and PROCMAP_QUERY (17) which are already
-in the tree. The two ioctls this series adds are 48 and 49, i.e.,
-'f' 30-31, and they aren't registered here at all. Please add them as
-well.
+I guess Sami is still OK with it, given it is a subset of the previous
+patch and the core part of it.
+
+But I will wait for his confirmation -- this one is not urgent.
+
+Thanks for the patch!
+
+Cheers,
+Miguel
