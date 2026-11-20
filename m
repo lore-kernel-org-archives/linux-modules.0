@@ -1,102 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.42
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795171758;
-	b=nqlDZes+Da+1JV+dgqYQ6JHmyw9Ut1B6OHHedwh/Z2Ho/Ue1+/GPF71Ga/q4+IDZypXG
-	 vXf68oDmeS6Y8rE39/69sB50hHjipIBLhHqADj3J2N8/l+tzuwpJ4y7teZEI01KWi8FTk
-	 cmgDE8Qm5btvRPiIswiAxup1TvBhfJFwxpclrQpjlJMKUWEh5DlSq6q/lGm3RocrDAGBa
-	 B4dtxQeOXy7En26szC4FMAZ4bO0J1O86AqABdWEaun+dF12h8Q0QlfHSZUW4eQW2Hikho
-	 9bcX+Hnl8NE3+P/O44/wvF/wfRdU+ZS9T27gW//lMUu5Xd3ibCuQ3Y7JgSjizn4EQlw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795171758;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=dWYxYowsGCBLSnSh6cLqulqT3GbnJrbr+1e6JgGH388=;
-	b=lPpdxtqjSPiVZ9hTXU5cP24xoDNLKu+Q413jEzObXUlUZvdbbhGAvsOoKNgGQTJNqtgW
-	 WpSH6mbrQxGyAxDAxWFGuW/4yJYmOYHnx3w6qH1w/rleTQjLinQxRTBJgBS+3hVfojnAn
-	 Nj3sCArz4Pn8Pk/dE5Ejngxd/E/4NNlaZh65R5aOwXbOGf6mwuJSfzha+XFv5IAMjHn9F
-	 Hv9wyAnTZFmmqyEB54QgMo/WG1+C73pluDPOtMgUFtWL55OLGnyBfDy9JznF4le3Bc6IC
-	 NCn4IaiGmlnUbI7tKD3ku6dp+72JaAF8C4v01W0nIFwiIfn//Ojs9WT0+NCcAcmcTbA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="PEsZh/YA";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.42
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795175870;
+	b=JyRp+Dla1hiOu2ngyR4vFSantUYCnwxa5tBv9Ritw8I+Le9vcSujp5eNREB5QAQKvSTg
+	 5fj7f5gQQOE/ZOCnkJKAQHVM26w77XtC8ijuPmUMcXTmoXKpkaAKo0aoFUffk7pQT9+ej
+	 t55NAlMQdp30AzJL3s0vb/q2vnWd3DDvcSrz79/reXCR352z/z9ctbY/m1znekHT8156y
+	 TLn/e9ZqdvlCbMb19SUy0cwRnPmCHOYscFlmprzTFwf09X648NmAVQ0DICwggXrm7Agi1
+	 w75foFLng5cyR7styz2db5VV+kbHfM9/eqzhcQep9YJ1Vb8IJgHGKLIiBPu7tIQ94zA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795175870;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=wLp+MxiKos5wcI7ePiP3oh9z2cyJ/ZVCuxwX0/ByaD4=;
+	b=oIuhAl2mHwSTLiqPKj4NK/YVAHDeZeWHLIolA4R4jVutwmBFX+5ACd9k4oHcKQSZPMW4
+	 Q6dToKdfC30iNmLe8zET0kwje5aKkb61I53CBGz01KoI9kO9lpktsYpud1Iv9qy7ma8BR
+	 YoGboiUn3kAK7xWJaf1HBVvupVHTG4sZPx/GIoIibSLTRoOGnUcGbxCmaz8FAbFp3jDN3
+	 AkldGmr+fDoznxP2CfiKz3P5Lf1FAeObQ43/P99zY9qTJ+08XgvEtaP0Gi5b5vgofaNTS
+	 33xNZ2u1Nb3ekDxx8p9QY8hJXryNLj0VVrGnwljFwV+c1JMYK5eNl9rlhD+5q3e6qdQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=bPIR+4US;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2380F606A333
-	for <linux-modules@vger.kernel.org>; Fri, 20 Nov 2026 10:49:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2380F606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F106606A32A;
+	Fri, 20 Nov 2026 11:57:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F106606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PEsZh/YA
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5c0ea47f5b8so80459e87.3
-        for <linux-modules@vger.kernel.org>; Fri, 20 Nov 2026 02:49:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795171756; cv=none;
-        d=google.com; s=arc-20260327;
-        b=FBo0sdfp7eHbyX3wMoA9UR63/DM4GlEC5FvVdQLLcUUmncwev7Q3LHdWulpLjBrote
-         mgeeTr2ng/z1mBKWkEj3WByG74hTjkUrch7z4yOzbXMcuSM7Zy98LUOqsDk2mmAao88W
-         pZCIjW52o3DgG0fosjY7f8xtBomo1rHkErJ8tP5lOwk3L5VSSIvxZVKDwsw2L9RC+iH7
-         KY5DooJKPqPB2w/ZzTJ64IJdC5GkDyJMtg/aZSj6k9GnL8RZUHTzMud0/tjIJWDieMT5
-         nOizvrfz92NtZK6dIZy7ZJiLFJ4G0FkVkQizEDy4ReFHjwHq40n8DxPFxLirflaiWgR7
-         A6bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=dWYxYowsGCBLSnSh6cLqulqT3GbnJrbr+1e6JgGH388=;
-        fh=4VrWvpQQjL2HetRkjEGQ6IW2bFbdBa3b+7M29b6pkqg=;
-        b=Ps6hH1rrz9pa+7idSFz1kFO0v3HRsvQuc+wEW8hllX0SfjtCACE0bkWexj6CSqhmIy
-         Hkubd91Fy5egB6lP3M5TsGAhl5+6VLjqSxEyUlNuNy9kYw1gqxgrQKj322cieuvOsryE
-         tFfs8teLFNG+6omeaTcCh4gK8790dLUAHU1vREBRDZ87XepB2yxL0lzbVE8NlSpif6sW
-         O9Qzl3i7/A4HSA4723boKRAoxZszi50zda7fBqT0DCgTgcbqHtbegYr01M4/WM5z5Wim
-         AUco7WnrotZcKuoadX9wJhpzvGpfPk8Yeekzdud2wq25VZWRdynqLjwqu7N7COTpc3GE
-         O2yA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795171756; x=1795776556; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=dWYxYowsGCBLSnSh6cLqulqT3GbnJrbr+1e6JgGH388=;
-        b=PEsZh/YAAYQUmMsoLTE0P4DoaYxjX0K0WOe3frsYoTr8l3r+nSK7sMDRX+LpT5WITu
-         p5da11rIxNERXMD5GQ7vP5rHjtNAiDvJJ1IP3EaCgCiy+uIEDqg/M3B2qWZu33gr9z2H
-         0Ntd3BKnx5dLbi8bNJnC6C/w2cTuMVdfAufG4YrMW6gJs5fkUtJkyKGZOAOEfSGC3URw
-         mPL2nagnait/4H97dChQkWFc9nriIUt48kJnZskAOVjsNDXahY1zXAfCtf4wIzRSv1E2
-         cn8ohWhoG0vQTsgDCFFyQQQuVWTfYzneroC/a9LhzXB34Z6ONgKLPfSMXLK8FB3frR1y
-         T3ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795171756; x=1795776556;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dWYxYowsGCBLSnSh6cLqulqT3GbnJrbr+1e6JgGH388=;
-        b=IBhJDiNxjhSFKTg5Z8UIhMPsEOVHHXuwkjqksF4n/InS4kqtLhT3Q48NCNiDdzM9lI
-         0nvzVPqGcl87PXP7rwHzBimAT0ScVRB2dQEHGIBpOSzpWnlST3GoNpAFKgcBIWKO9fx+
-         lBi/XoKF5EEt+5hmEw4Ha2lKRXdK+U981YALR3+cIVbCfe4S/xXqvu/Smh5/sbeuJKWP
-         tSo+ZwQLVuQUBu52VMoIgl39EPas2iAuurviESe2TxKZeMQ3Eu2UKHrHIlaPM05El3Rd
-         MNzLlZQOCqDxN2oRutEeE8UnD3+eZ0VgjyMua9WQr6BRomYPEGG80fFDpOvZKiQy/m/e
-         6w0w==
-X-Forwarded-Encrypted: i=1; AL+hErE414DCmrgAAJLLmpwN+ZU38QUSUJPxWbTa9F6M8LsXdc30+m5GNbs4/6XGOpGBUzIBvP5UtQ8VDwgErssq@vger.kernel.org
-X-Gm-Message-State: APuU4Z/uMa9y5oyN9Anw5fmoziHcaVF0xqKgyerwW0FDkkO48odfv+rY
-	l8pgJWYV4MlKjZuMUhWcr4jyLPZxQq2vYPynJ+7O6n/NWp8BIBUceyolzFPDkeMUvwZT6Z9Ti6R
-	IlZvXOZ4ueIks3TSSksu8havDkc6rjjs=
-X-Gm-Gg: AZFdTZfeUFHVixLhua+mTu2B0GSGJdYLdDVrqbTEAsrCP3RnTHH/jGxn80wZOAi7107
-	iaCJ8omlWm+JtlpjfNJnDF3TkWpYlt30TkFB7F3YFNyX0/AG2emXKmV7ol2tQzV9+XQAlBr8M8S
-	FQg3lPVcohqaPLmCXiXK+RtdZOSHwNdnQMtsls57gPQL8XTp8eVJEC9iuthBZ10punHiMy9spvZ
-	WdGr/k2XY1MjU6Qnqurhy8KVyGI84O0vh1Ypzb/mSOEPFuN9KES+CcXvrl/98HtCc00Glyb0oaw
-	VobBe3YAxyW95/n4XwZFOt7rL+mifmtTaZJABDOncTpeYqFyysHF4CSr6MDCCYs9Q1ZB906yzgP
-	nuyFlzzUCoEDNd2PcViWHFR0ri2bIL88xfJl4lu4f+IWRKYmr9Xc9FgTdFOaOO6fR0WWYb9LlX2
-	oGG/2L3s7gRKpPSiXBIMZhgC8yBHrs1zhpnfbLnA3Kh3iKKwhz07gqinii+/mpKGxf/GBRyhzxQ
-	t9rGgxAkwNyAAHrEF3PNuyVY5ZFhMihWPCwfg+GN28cARNH58+kSYlUOIH05Vo8GfdXtqGd
-X-Received: by 2002:a05:6512:31c3:b0:5bf:e6a1:3115 with SMTP id
- 2adb3069b0e04-5c1bc76a33fmr1167983e87.2.1795171756051; Fri, 20 Nov 2026
- 02:49:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=bPIR+4US
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=wLp+MxiKos5wcI7ePiP3oh9z2cyJ/ZVCuxwX0/ByaD4=; b=bPIR+4USXq3inxA5yPeSvwm2mz
+	WKdPklYm/+yxAf7w74YVCTPPbZLz5xNIsbvdBiiF8/XHFuCins+oGC2VHzzbb6yXIxbRWG2BAYETi
+	5CE1bNF2m0IdU94Lx1mzdb5qHlFQngAJ3ndvWac+QQsZu2dCGi6XL3FNWYBnkCq4y77a1lKtiywbT
+	VxKqOi0cRfGTh1pdMz8RZnhmr5oXhfU3ah6drxs44dbiHyDhrqd9zJQf8gK+0x9AF15mi7dnSRvbx
+	uEYpPD9+SwcXResrqa0CQUcLG1mKJYZ4o9AgplvppRk6sJXWe3Cib20AVZtaOoO1e65G3J++hyXJl
+	X54MPC+A==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xUNFS-00000003txx-1rkI;
+	Fri, 20 Nov 2026 11:57:46 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 47FE63008D6; Fri, 20 Nov 2026 12:57:45 +0100 (CET)
+Date: Fri, 20 Nov 2026 12:57:45 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Yael Chemla <ychemla@nvidia.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>, x86@kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
+	"regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>
+Subject: Re: [REGRESSION] x86: Use RCU in all users of,__module_address()
+ slows kTLS+wrk workload on KASAN+PROVE_LOCKING+kmemleak
+Message-ID: <20261120115745.GR2668564@noisy.programming.kicks-ass.net>
+References: <bd2a701b-866c-4d4c-bd0b-37b4410628be@nvidia.com>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -106,41 +72,31 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261119-fix-rust-build-error-modversions-v2-1-1c2271cbcab5@gmail.com>
-In-Reply-To: <20261119-fix-rust-build-error-modversions-v2-1-1c2271cbcab5@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 20 Nov 2026 11:49:04 +0100
-X-Gm-Features: Aa3M54qW6il0gb-hxlX-Nj8ioiKgQABk89cMHbmkyFDNFAXmsl_FtiHnKL79t1w
-Message-ID: <CANiq72=vz2D7XYNEHmAnbh5iTJ6T_qtSV3bosQrB8HOYsBXtzA@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: kbuild: generate a symbol version for rust_build_error
-To: peder.bergan@gmail.com
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Matthew Maurer <mmaurer@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd2a701b-866c-4d4c-bd0b-37b4410628be@nvidia.com>
 
-On Thu, Nov 19, 2026 at 11:19=E2=80=AFAM Peder Bergan via B4 Relay
-<devnull+peder.bergan.gmail.com@kernel.org> wrote:
->
-> - Omit Sami's v1 Reviewed-by because v2 changes incremental rebuild behav=
-ior.
+On Thu, Nov 19, 2026 at 09:54:37PM +0200, Yael Chemla wrote:
+> Hi,
+> 
+> A kTLS stress test started failing in v6.15-rc1 on kernels built with
+> KASAN and PROVE_LOCKING. It was bisected to commit 14daa3bca217 ("x86:
+> Use RCU in all users of __module_address().")
+> 
+> The test runs wrk (1000 connections, 15s, --timeout 5s) against nginx
+> serving a 1 MB file over kTLS, with 1% packet loss. It fails because too
+> few requests complete: wrk reports only timeouts, no connect/read/write
+> errors. With --timeout 10s it passes.
+> 
+> Reverting 14daa3bca217 on top of 01d5b167dc23 (modules-6.15-rc1 merge)
+> or v7.4-rc2 (7475ea8b5861), with the same config, makes the test pass;
+> without the revert it fails on both.
+> 
+> The failing config has KASAN, PROVE_LOCKING, kmemleak and UBSAN enabled.
+> Building without KASAN, or without PROVE_LOCKING, also passes.
+> 
+> I have not looked into where the time goes.
+> 
+> #regzbot introduced: 14daa3bca217
 
-I guess Sami is still OK with it, given it is a subset of the previous
-patch and the core part of it.
-
-But I will wait for his confirmation -- this one is not urgent.
-
-Thanks for the patch!
-
-Cheers,
-Miguel
+Anything *SAN is not a performance target, not a regression.
