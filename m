@@ -1,78 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795195119;
-	b=A3A7MHBLpQ4aPALySdELeveSQ2pCK+piew/BpWtmtRPuBkbZAAqQdsX/zdejRU6O1XjY
-	 o31apYcX1opOj1J9/i8Q+DV96jO+QYBBLkuNYwHJaQbO6wBxbx45lALhp4Y9gSUsmBpjM
-	 nUcS0zDct91H+iGmfvLy98CUuYyk1A52lcYybC+c4LwRczLapVPzKalW/L814cHquT/Ti
-	 Ano7f0azVnl7qsW4wRkwoeaLPujfhhynBg5aYKg7WDU8oAx44hFEg64YvpDJ9WkUpLdkH
-	 4Go7EWakWAVKS9kRQej8f9kgkOHJGrN/4v6u06jzEg18plR59gYb6z3IPBDxhbpQfwA==
+	t=1795203320;
+	b=moac7Yp8ntZmLfai9HgwmAj94le67B/0ld/ZUhfbcOwdP8llpK8ogPgqKU18Z29xlo7+
+	 zAUTO/h7GFcvBw/UIRFQUY5tvTqvedQZOGTkQ4XScqH7ZVU66gx/itSc+iqgoUYvNYFXk
+	 16ME47L5ia+mlvo8H+NI2cfctbMG+BXNfY/mPYOYYuDFanewF3ekU1NaWZu/BVN7Rx+lJ
+	 h2Edyb2TiEK2mzBSGz7oUpZpLJAAmXn8r7x08D98OZZnSY2JWGcd+fUTl9xr3h1nK75hs
+	 7bvOpUYAjJDOqydshSveyYBmAuMB/ZKhBUgAGSCinBSpOL4AxLkmrGwmpTaxuC/3IqQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795195119;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=a1X8OcArTajS0cG5wRxnBcw8qQzAyLSvarhTdGhtG7Y=;
-	b=aDV1Ik8WL+bD4qlPoTd5FTt6v0ZO49AhXuDEzxwLQPjh3atxO44c1JzVsa4ITBu+OyFG
-	 tTHmknbbDnZZjkGKvobOUrykoUeJno5mi4Ro8ysrLaxICNTNhUpTfpzG3ExBwtOrEWVSq
-	 +qqii2C0Yf4/okG6/DHDuq15Ke9YPcigkSgpZTCSz4t0s+uwInLUNo6xspns3MGQBKu+X
-	 9qPvxAHiUeBTHs/b9NDVjMrra884PrOALtGssK0g5u4tVfay+bL528lF/HueLCZUghRD+
-	 BmVwp7svXU0BUtJJxZiuUaU7tFaDen7MoehOudcjmia5kSSrAshbwZUbfnHB6iSrzuQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795203320;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=rVJmHutVQZugQ3dWxOPlJ+2HDsz3aYGVNDsjIuC8ZbE=;
+	b=wxioWkFgSOfc5p3W0toaIkBKCX8U2ML3oite6IzPGLewCzDnn/ikbTftNHYvAWXVzKmr
+	 R6wl7hVmHiHYt8RwkrpqztHJC6FXLhZ1I/F2nOcQU3wPa9HiZN+6inu3IkCJWxHcxfVI7
+	 XN//rv4mMfeSAoY1tiMJ6G8LzZ8zQLwnaDKq+BWUxYo/0Kg9t7Cc6rNazKHWSSz8plOy6
+	 ClWoHa3xOao8lw+sDxzCtLmQaTvOrGAd19fjpIH1pRzIQtpbUujzcqstkn7pqG9kpu7Ev
+	 rLXYWaGNWCfTLyrTumTr4WtfyYXHk22bAmtCa1Zik+P2z4A2+8PMtNgTiVm33fgaM2g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LaDVRy0r;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E57D60A2600;
-	Fri, 20 Nov 2026 17:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LaDVRy0r
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795195119;
-	b=IdNnpW8R2xmxtn0qLk5/b/CH7QCe3FssFAIXaelAz8HG/yunMTnzujjsiJK5hxgiHze9
-	 kVbgcXImmG3HhrMjF3jnmb8W/bxqm62j+hq/1UJ2LMB21rswiuseZrLKDvbxTQ2jU5OLM
-	 u2QJDeK6ZZMQXVxE7GesCAVcWx6LZwj6pfP8TYG1KU50tty2rjVX7l6U5J+NxZ2+AriQa
-	 i8tsPNx7qTGZi/roo6aniNVaYGOBu0rFlvJv0B1Zk3Tc7e1hvMNdyBgDzC5YrBSfCLdb+
-	 9AGusRWl4PuI0B52igDzH2EflkAzM1+GgV+C/bVkBJIlLuxiZ4AgPivx9/C7mfsBwpw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795195119;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=a1X8OcArTajS0cG5wRxnBcw8qQzAyLSvarhTdGhtG7Y=;
-	b=a1MU19Ob8uVDEemjrjyOCRZAW+cWiekYeMnmJqVSOResJySDAGMcfv6ofmFeCVlQISyy
-	 344s8SeV2+Lwp6N6qyOJZ6TxfY8FQsg5ScJlQZcm+t0TFDx9iC8+ZJIctX95gw4+AQD2o
-	 kjfGJMmbn7SqKekG2QgrWEnXb1cxIkVOwvODrZ4A4FcUpuTZsO5wOn6sPbhzfXFH9rHJg
-	 qtYJz6GB6ClncnCw9Jg6V7ZsMtjs2t1G5EdAnPRAxo5PVTcKlqtlfKIrHLRwSO12iYF50
-	 alm99fMIuj5yg/Tj//lmG+OvFlECVGmpIId4ABtQ0xCvCTPuf2pEHrT0+QJmLBk16dw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mEayzNdI;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4571B1F000C4;
-	Fri, 20 Nov 2026 17:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795195119;
-	bh=a1X8OcArTajS0cG5wRxnBcw8qQzAyLSvarhTdGhtG7Y=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=LaDVRy0r8JQyALWEpEzTDGhqF9B0H6b7dtKqfCnVXICM5EH8OhAPqxnWHUjBMg2qC
-	 fejjT1m3rbbB5V6tyRWQILY8s10RXu0y8U8jWVP5JlPNmvoLSQWBXbNelPmRktTdgr
-	 cij+PdaGQ9HHezZbxbVNN90hYNegAy/BcagU4BgYFQR6EyFINKypOy4JJq+0wZvt5J
-	 Cf1B45BJToGrCloc6b9lIflpFfKP9wM7/Rcbq/pZonTziVyD6rQVwVwd5S64N+bkDU
-	 0X/MXf4NGdLCfhQxHh49pmcnNyShjTT4NF3sDnwQZtVrLwrDbbRdLcNY8FZSxNiG+c
-	 zlkODzihFGQlw==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id C9F764B871;
-	Fri, 20 Nov 2026 17:18:32 +0000 (UTC)
-From: Peder Bergan via B4 Relay <devnull+peder.bergan.gmail.com@kernel.org>
-Date: Fri, 20 Nov 2026 18:18:30 +0100
-Subject: [PATCH v2] rust: put C helper exports in a dedicated namespace
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F2F606A6FE
+	for <linux-modules@vger.kernel.org>; Fri, 20 Nov 2026 19:35:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 93F2F606A6FE
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mEayzNdI
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c40e30c26a4so512397266b.0
+        for <linux-modules@vger.kernel.org>; Fri, 20 Nov 2026 11:35:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795203317; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XQBMQiKn/ffNJoD6EC/SnzUekVcRFn7CFRpc4Oh/Cx/TaJB0XYE0RZq3+xdRnFASZC
+         Z2GxcsFaWvxC750M1wtUx/FY+DnM1R3HwbMRP3r6u1em1jeD5WumGruDJb8qRs6ntq5x
+         QTbaKSwiVzrC2hS3CLGPpZR487J3OzFRE31vxbg9evGzyLD8FHnR3J+34TlR9gj805jI
+         Mwa9YXqffUNKsaAtZONyICJBSu/7sGYRTtd6ht9CSoNXcdtEMLeo4mSpLNQub5HPXjLc
+         DZ4wAqmd2yokBLjY05xPA/Cl4BSVLsrOfO54JylPfRZHA11HY8/FKvR2Jh6S0xW0n2xM
+         VDVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rVJmHutVQZugQ3dWxOPlJ+2HDsz3aYGVNDsjIuC8ZbE=;
+        fh=x53NKBOkaS0FLUY5KcC+Xb+JVi1rhKyfcD6MJkPs800=;
+        b=CqhjnDFek5eRPiO98vNTte2xnx3XvlTHqJ5yLS06Dc+Jc6uTrdbZyaNpZVDyzp4WOV
+         oX9n3nZpF5bBxTMmKnUwfUPXsGqv5LuOEBETUwMjjg5tARkg9eM0dQjWuCHtP6UFRw/K
+         yLUfJ2iBnylLWhJ+dlhB8riqGwnEgf5xMnVxYxSbuJxueHNMY0X+Miax1v3jsxVt6dz0
+         +zSXRNC3jOuf/GlrsE8ZQTqtQXtoxfNtLfG9h19uN6fbKRiLD55KVUQc/Cel2Rw8nD71
+         kDmgDm6Q27WZ+S/lacdlKPk6LKBgej96joIZ5y0nEGLc12e/P78SAH0CYuiLbHH272al
+         2RfQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795203317; x=1795808117; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=rVJmHutVQZugQ3dWxOPlJ+2HDsz3aYGVNDsjIuC8ZbE=;
+        b=mEayzNdI3RbBXowLZsBRN9QL9E85SiUM+2Zma239sU2Kh5ksSQzTSY0ziLpiHV59CM
+         7SYo/SGHf9f/BuaQcw7L2iv8PrZbptbwejj5saAaosdugF+c/B6mu2N2VcFs3P0J30Xs
+         iJONriwUSnCKSsvV3YNuTBiMdGh2ko87iKPSXKaspCKEn8Eg4sIKq9PASEMF25S3rqL+
+         ikrtvub/lopTx+V9oIV7ULiuNbYeJREQZANEFrs6J/Ra/Ji6BEJHH9f6CAD3wgAgK2ZV
+         tPPXZ4d3w3MMsU/kZaH+NVG54K7lHkycb/em4YaaXq8r36ZApv2ERWimswbtCLQ2nAOA
+         NkvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795203317; x=1795808117;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rVJmHutVQZugQ3dWxOPlJ+2HDsz3aYGVNDsjIuC8ZbE=;
+        b=jzTOBiWp5Vmg/Gg0yI22eSo1lDaSaWar3qT7cD6HZKBeIyKJXNpUgRDTiH2F2dOZ6O
+         uEAc8gdZvAGvpYPP+FLWTD6wWK8SXi+qEAJk8C5BS1lD4TH5uyVYSqeykxkVAcBIOW56
+         tFr7DAUNSh0NtMftwdfLlRclntgRVCmIWDAPQ9qzQ0+GPYChV79fK6YR8avtmdID4FA6
+         cniJMHX6qlS9PebbU/i5FJZ0o1qvlhX368DpzpjbpoDg7qNy1K7cgR1jc9Gx9EDlF7HO
+         xIWaGaDI/p1tyTYxGNU8JtP0q8S8uTqaNj2NciyAg4WbsuS0EtmI6zYjK4ay27GDaJVJ
+         92HA==
+X-Forwarded-Encrypted: i=1; AL+hErHIVlL0vIygRb+ftXnzowpTkPPWN2LpZEN2aTcD0UcastYyIddBWkFKlv/zSp87DFdsVU/LufrV7oK3L04s@vger.kernel.org
+X-Gm-Message-State: APuU4Z/lS2udPCqIP0dc7B8doi67o+I5DVctl3oPHDd0UUfG28LqIrhL
+	TYUhAcBs8g4Mzv72XSnnovth/skiZeT79ct2pOWrLSibOBW8wX7dTgz3jE5qvKUoNuo7H9Ca1ER
+	LKGVz5ious7Isnf2LjgI/3gSLbzB2Xgz2OH+ArcWH
+X-Gm-Gg: AZFdTZdL3nzcV7pMJ28156dShVuagl3MmuDQ849wE2SUAh9lcj/F/KhXRk+pWmNYvdr
+	/Y8eLJR6UpkUJHZEAIPgzCnLbYweQGjCDu8IHw7pu7TNX5EJi2w8suihoyfnWWwHMpQtDrZLSHL
+	UROZefe0OeYZ9TSZoxI78TYD2BVQO2nxa5VvkwUwgHV7wn7P/yB0tV+qPX4I+oJ7HIqceh61s9g
+	2ppmYreQzIc2SxywFDqP9lHvVdPX1nJ5XYFLbjIo5N04tHTMWxEFnJvUEe5V2wANOTjZXfVpuYf
+	AE09g0CY2lzkg/FtE1J7ygawi71g/4hSokxX25/hyQgCtdL/xnbYgNYQbcXLy9rXteD+MmbtXoF
+	tt3yyiNFPgxeJFWmgNJ3vv7bAm7QyH/VfBdb6CUHOGbxcdIRM/dAC48djaG/LW5tZJEhd
+X-Received: by 2002:a17:907:60ce:b0:c25:5159:6a25 with SMTP id
+ a640c23a62f3a-c51317e322amr590730366b.6.1795203316417; Fri, 20 Nov 2026
+ 11:35:16 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -82,163 +104,54 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261120-rust-helper-namespace-v2-1-14315658f59e@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAOWAAGsC/4WOQQ6DIBREr2JYl1YwaNtV79G4APwITUXCR2Njv
- HvFHqDLN5l5mZUgRAdI7sVKIswO3eh34KeCaCt9D9R1OxNe8poxXtI4YaIW3gEi9XIADFIDFQ1
- cddUANJ0h+zZEMG45vM/2xzipF+iUZbmhJAJVUXptczQFTBHkcDn8HpaUS9ZhGuPneDezLPt3Z
- GaU0UrdZCmEqIypH/0g3fusx4G027Z9ATJI7VTxAAAA
-X-Change-ID: 20261120-rust-helper-namespace-57e8c37ee7df
-To: Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
- Miguel Ojeda <ojeda@kernel.org>
-Cc: Alexander Potapenko <glider@google.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- Aaron Tomlin <atomlin@atomlin.com>, kasan-dev@googlegroups.com, 
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
- Wedson Almeida Filho <wedsonaf@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795195112; l=4679;
- i=peder.bergan@gmail.com; s=kernel-contributions;
- h=from:subject:message-id;
- bh=nX0YbO/vtt47+6y4IylipSM71r9O+9xEUx60Z3g64FY=;
- b=qTCg26Oq8Pjxp/oLQvY8MWSA8T9mQh94rZWp9HfgwSRh9oxjB4DdefYwAxmyYbkzevUK6a5Yn
- ivpi0EOBirtC6JIIrzz2MXAZX8yIJdIqYu1XBXqFFK89EROXaU6uqD3
-X-Developer-Key: i=peder.bergan@gmail.com; a=ed25519;
- pk=39790pn1YZCulHBoUG1uiQI1Hm01EvhBEa2zVrS/yN0=
-X-Endpoint-Received: by B4 Relay for
- peder.bergan@gmail.com/kernel-contributions with auth_id=1395
-X-Original-From: Peder Bergan <peder.bergan@gmail.com>
-Reply-To: peder.bergan@gmail.com
-Content-Transfer-Encoding: 7bit
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-12-wusamuel@google.com> <20261120-antitoxisch-flott-sense-8c2a09fc9679@brauner>
+In-Reply-To: <20261120-antitoxisch-flott-sense-8c2a09fc9679@brauner>
+From: Samuel Wu <wusamuel@google.com>
+Date: Fri, 20 Nov 2026 11:35:05 -0800
+X-Gm-Features: Aa3M54pZ23SffgU83N8qfNlS7foyPp12zk6Rc2qBKf5ucMmFiR6202xmw20UsI0
+Message-ID: <CAG2Kctri9R6b-_OiKcsabdBmLdeWGVY_zmpqqFgDHLKKCDDezA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/9] Documentation: ioctl-number: Add
+ PROCFS_IOCTL_MAGIC range 0x10-0x11
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
+	David Laight <david.laight.linux@gmail.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Peder Bergan <peder.bergan@gmail.com>
+On Fri, Nov 20, 2026 at 2:23=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> On Fri, Nov 13, 2026 at 02:12:46PM -0800, Samuel Wu wrote:
+> > +'f'   10-11  linux/fs.h                                               =
+ conflict! procfs ioctls (PROCFS_IOCTL_MAGIC)
+>
+> Those are PAGEMAP_SCAN (16) and PROCMAP_QUERY (17) which are already
+> in the tree. The two ioctls this series adds are 48 and 49, i.e.,
+> 'f' 30-31, and they aren't registered here at all. Please add them as
+> well.
 
-The rust_helper_ prefix marks these C wrappers as Rust implementation
-details. Their exports use the default namespace, so GPL-compatible
-modules can link against them without an explicit import.
+Patch 1/9 here only backfills the existing PAGEMAP_SCAN (16) and
+PROCMAP_QUERY (17) entries. 'f' 30-31 for 48 and 49 are respectively
+in patches 3/9 and 4/9, where their functionalities are added.
 
-Export the wrappers in RUST_HELPERS so modpost can detect accidental
-dependencies at build time by flagging a missing namespace import.
-Have module! supply the import when the helpers are exported, since
-inlining and generic instantiation can introduce calls through ordinary
-Rust abstractions.
+Patch 1/9 is standalone, so it can be picked up independently (or I
+can resend it separately).
 
-The KASAN test links its Rust object into a module whose C object
-supplies the metadata. Import the namespace in that C file when
-building the test as a module with out-of-line Rust helpers. External
-modules that call these helpers without module! also need an explicit
-import.
-
-Suggested-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-Link: https://github.com/Rust-for-Linux/linux/issues/216
-Signed-off-by: Peder Bergan <peder.bergan@gmail.com>
----
-The modular x86-64 KASAN build failed at modpost on v1 and now passes
-with strict namespace checks. With CONFIG_MODVERSIONS enabled, the
-test module and kernel export record the same checksum for the helper.
-
-OpenAI Codex assisted with coding and testing.
----
-Changes in v2:
-- Import RUST_HELPERS in the C metadata for the modular KASAN test
-  when using out-of-line Rust helpers.
-  https://lore.kernel.org/linux-modules/sashiko-outbox-225583@kernel.org/
-- Link to v1: https://patch.msgid.link/20261120-rust-helper-namespace-v1-1-3b9a05553ff6@gmail.com
----
- mm/kasan/kasan_test_c.c | 3 +++
- rust/Makefile           | 4 +++-
- rust/exports.c          | 2 ++
- rust/macros/module.rs   | 5 +++++
- 4 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/mm/kasan/kasan_test_c.c b/mm/kasan/kasan_test_c.c
-index b9e167ed5be32..f8e96c1194e02 100644
---- a/mm/kasan/kasan_test_c.c
-+++ b/mm/kasan/kasan_test_c.c
-@@ -34,6 +34,9 @@
- #define OOB_TAG_OFF (IS_ENABLED(CONFIG_KASAN_GENERIC) ? 0 : KASAN_GRANULE_SIZE)
- 
- MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
-+#if defined(MODULE) && defined(CONFIG_RUST) && !defined(CONFIG_RUST_INLINE_HELPERS)
-+MODULE_IMPORT_NS("RUST_HELPERS");
-+#endif
- 
- static bool multishot;
- 
-diff --git a/rust/Makefile b/rust/Makefile
-index 0165626decbe7..17c559052e936 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -569,9 +569,10 @@ $(obj)/helpers/helpers.bc $(obj)/helpers/helpers_module.bc: $(src)/helpers/helpe
- 
- rust_exports = $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D|B)/ && $$3!~/__(pfx|cfi|odr_asan)/ { printf $(2),$$3 }'
- 
-+rust_export_macro = EXPORT_SYMBOL_RUST_GPL
- quiet_cmd_exports = EXPORTS $@
-       cmd_exports = \
--	$(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n") > $@
-+	$(call rust_exports,$<,"$(rust_export_macro)(%s);\n") > $@
- 
- $(obj)/exports_core_generated.h: $(obj)/core.o FORCE
- 	$(call if_changed,exports)
-@@ -585,6 +586,7 @@ $(obj)/exports_core_generated.h: $(obj)/core.o FORCE
- # function either. Therefore, we export all symbols from helpers and bindings.
- # In the future, this may be revisited to reduce the number of exports after
- # the compiler is informed about the places codegen is required.
-+$(obj)/exports_helpers_generated.h: private rust_export_macro = EXPORT_SYMBOL_RUST_HELPER_GPL
- $(obj)/exports_helpers_generated.h: $(obj)/helpers/helpers.o FORCE
- 	$(call if_changed,exports)
- 
-diff --git a/rust/exports.c b/rust/exports.c
-index 1b52460b0f4ee..fde2a52d2a1ae 100644
---- a/rust/exports.c
-+++ b/rust/exports.c
-@@ -14,6 +14,8 @@
- #include <linux/export.h>
- 
- #define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
-+#define EXPORT_SYMBOL_RUST_HELPER_GPL(sym) \
-+	extern int sym; EXPORT_SYMBOL_NS_GPL(sym, "RUST_HELPERS")
- 
- #include "exports_core_generated.h"
- #include "exports_bindings_generated.h"
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 0a7b9e24c9600..ac3376fa8fb85 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -467,6 +467,11 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
-         }
-     }
- 
-+    // Inlined kernel code can introduce calls to C helpers in any Rust module.
-+    if !cfg!(CONFIG_RUST_INLINE_HELPERS) {
-+        modinfo.emit_only_loadable("import_ns", "RUST_HELPERS", false);
-+    }
-+
-     // Built-in modules also export the `file` modinfo string.
-     let file =
-         std::env::var("RUST_MODFILE").expect("Unable to fetch RUST_MODFILE environmental variable");
-
----
-base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
-change-id: 20261120-rust-helper-namespace-57e8c37ee7df
-
-Best regards,
---  
-Peder Bergan <peder.bergan@gmail.com>
-
-
+Thanks!
+Sam
