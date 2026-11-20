@@ -1,55 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795193164;
-	b=HOm4hQPH1Pqae5wh67vJvcDCFVwRRi7UNZSg1XgYA4QenOeiIYm1F1hveSdPC+WK2ZF9
-	 1oqquKJQDdJ4GwRo2YcCUTmCMmDmN4zp+uKihfzVE1MFip8phqLt76is2np7ucK23TCrA
-	 g2pWY+aykGT9/rhUIXPMw5jMc1JwFibSzFLK5cSYbpl9PsgWWs821/vbib1Pg4vtbFBLZ
-	 I4juhZK+F8bUmkM7d6EOe63d0fNy1QA8vNJOg3xJyc7Se1kou7Z9fO1zPDP3z/2nyaEqL
-	 4NAFjsD0AFMqAG6CNtoFtQPh4wF3EDa9k6sSMq/CS5quqFe5oOuRznlBpBlcffIo6qQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795193164;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Dkt10jA1AvCeLN1Vsm4v6pu6zl5kGUaCE7PhhGL0p7U=;
-	b=LHpFWIYW4kK7fbR9ytYmi1odznITD5OdOCEJozwrxDLUQh8C5ocEUZSrlhtJA25kBjPa
-	 aehhDZuEs/0JHU/uVw2ddNNyP605BJyO8Hso4fb0VpcpRjKWZBmUsvoeorpBgfPW493ID
-	 F4GZ4KU+Z+23E6tnt5DTPYzu9Bhd8R/q7kdM3fWFTELsQg+THVOlVO5KckX1Nm5jyerJI
-	 kDFq0ARXb0KXo1aKfXheTNCK1d8Q1a+dEg7yqgk4YyDcDm8oCoiC+Qg7BxM+SCIkZ0ZBE
-	 gvLAjyRvw0AyPe66zyWUE/nY8MmMlKCwBRVlSfQtTf/yEtyl2Hqo0qhTPnnWoN6EZgA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LaWQvPPS;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795195119;
+	b=A3A7MHBLpQ4aPALySdELeveSQ2pCK+piew/BpWtmtRPuBkbZAAqQdsX/zdejRU6O1XjY
+	 o31apYcX1opOj1J9/i8Q+DV96jO+QYBBLkuNYwHJaQbO6wBxbx45lALhp4Y9gSUsmBpjM
+	 nUcS0zDct91H+iGmfvLy98CUuYyk1A52lcYybC+c4LwRczLapVPzKalW/L814cHquT/Ti
+	 Ano7f0azVnl7qsW4wRkwoeaLPujfhhynBg5aYKg7WDU8oAx44hFEg64YvpDJ9WkUpLdkH
+	 4Go7EWakWAVKS9kRQej8f9kgkOHJGrN/4v6u06jzEg18plR59gYb6z3IPBDxhbpQfwA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795195119;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=a1X8OcArTajS0cG5wRxnBcw8qQzAyLSvarhTdGhtG7Y=;
+	b=aDV1Ik8WL+bD4qlPoTd5FTt6v0ZO49AhXuDEzxwLQPjh3atxO44c1JzVsa4ITBu+OyFG
+	 tTHmknbbDnZZjkGKvobOUrykoUeJno5mi4Ro8ysrLaxICNTNhUpTfpzG3ExBwtOrEWVSq
+	 +qqii2C0Yf4/okG6/DHDuq15Ke9YPcigkSgpZTCSz4t0s+uwInLUNo6xspns3MGQBKu+X
+	 9qPvxAHiUeBTHs/b9NDVjMrra884PrOALtGssK0g5u4tVfay+bL528lF/HueLCZUghRD+
+	 BmVwp7svXU0BUtJJxZiuUaU7tFaDen7MoehOudcjmia5kSSrAshbwZUbfnHB6iSrzuQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LaDVRy0r;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F15B606A610
-	for <linux-modules@vger.kernel.org>; Fri, 20 Nov 2026 16:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E57D60A2600;
+	Fri, 20 Nov 2026 17:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LaWQvPPS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04AB91F000C4;
-	Fri, 20 Nov 2026 16:46:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LaDVRy0r
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795195119;
+	b=IdNnpW8R2xmxtn0qLk5/b/CH7QCe3FssFAIXaelAz8HG/yunMTnzujjsiJK5hxgiHze9
+	 kVbgcXImmG3HhrMjF3jnmb8W/bxqm62j+hq/1UJ2LMB21rswiuseZrLKDvbxTQ2jU5OLM
+	 u2QJDeK6ZZMQXVxE7GesCAVcWx6LZwj6pfP8TYG1KU50tty2rjVX7l6U5J+NxZ2+AriQa
+	 i8tsPNx7qTGZi/roo6aniNVaYGOBu0rFlvJv0B1Zk3Tc7e1hvMNdyBgDzC5YrBSfCLdb+
+	 9AGusRWl4PuI0B52igDzH2EflkAzM1+GgV+C/bVkBJIlLuxiZ4AgPivx9/C7mfsBwpw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795195119;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=a1X8OcArTajS0cG5wRxnBcw8qQzAyLSvarhTdGhtG7Y=;
+	b=a1MU19Ob8uVDEemjrjyOCRZAW+cWiekYeMnmJqVSOResJySDAGMcfv6ofmFeCVlQISyy
+	 344s8SeV2+Lwp6N6qyOJZ6TxfY8FQsg5ScJlQZcm+t0TFDx9iC8+ZJIctX95gw4+AQD2o
+	 kjfGJMmbn7SqKekG2QgrWEnXb1cxIkVOwvODrZ4A4FcUpuTZsO5wOn6sPbhzfXFH9rHJg
+	 qtYJz6GB6ClncnCw9Jg6V7ZsMtjs2t1G5EdAnPRAxo5PVTcKlqtlfKIrHLRwSO12iYF50
+	 alm99fMIuj5yg/Tj//lmG+OvFlECVGmpIId4ABtQ0xCvCTPuf2pEHrT0+QJmLBk16dw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 4571B1F000C4;
+	Fri, 20 Nov 2026 17:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795193163;
-	bh=Dkt10jA1AvCeLN1Vsm4v6pu6zl5kGUaCE7PhhGL0p7U=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LaWQvPPSf4Cy/v1y0LmKZS74djWoPn/LsnKbpTBfkjMuhS1kzGOMACUdgnRG4TEos
-	 W1H7tgQQUhOydgN2XUUh7bZFxWnS0YX5qZ1Ktb4tUva9OoZUKowmzjyrfYAmCJ7WBI
-	 ReAbWAuCR24KNsgRwnFY+gMo1d7uxv9a7TZ6BDtswYNj/ZHKWOE9OZZ72Y8jVlJgAE
-	 djlO6zVE+aZfmJiEoufQ3SEyKGqIoDY0fp135lDtSJ4tP/rENOZndVJJ7qbOPqOvG+
-	 okjhIWOs/+ng9OtpfE0ZLaANcAzIAwxNPBmyU87hcy7mA8U1iMP92hNIU1Uy8nTx3w
-	 ad+2V7i8MXwNw==
-Message-ID: <sashiko-outbox-225583@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] rust: put C helper exports in a dedicated namespace
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Peder Bergan" <peder.bergan@gmail.com>
-Cc: linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>, ojeda@kernel.org, gary@garyguo.net
-In-Reply-To: <20261120-rust-helper-namespace-v1-1-3b9a05553ff6@gmail.com>
-References: <20261120-rust-helper-namespace-v1-1-3b9a05553ff6@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 20 Nov 2026 16:46:02 +0000
+	s=k20260515; t=1795195119;
+	bh=a1X8OcArTajS0cG5wRxnBcw8qQzAyLSvarhTdGhtG7Y=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=LaDVRy0r8JQyALWEpEzTDGhqF9B0H6b7dtKqfCnVXICM5EH8OhAPqxnWHUjBMg2qC
+	 fejjT1m3rbbB5V6tyRWQILY8s10RXu0y8U8jWVP5JlPNmvoLSQWBXbNelPmRktTdgr
+	 cij+PdaGQ9HHezZbxbVNN90hYNegAy/BcagU4BgYFQR6EyFINKypOy4JJq+0wZvt5J
+	 Cf1B45BJToGrCloc6b9lIflpFfKP9wM7/Rcbq/pZonTziVyD6rQVwVwd5S64N+bkDU
+	 0X/MXf4NGdLCfhQxHh49pmcnNyShjTT4NF3sDnwQZtVrLwrDbbRdLcNY8FZSxNiG+c
+	 zlkODzihFGQlw==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id C9F764B871;
+	Fri, 20 Nov 2026 17:18:32 +0000 (UTC)
+From: Peder Bergan via B4 Relay <devnull+peder.bergan.gmail.com@kernel.org>
+Date: Fri, 20 Nov 2026 18:18:30 +0100
+Subject: [PATCH v2] rust: put C helper exports in a dedicated namespace
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -58,58 +81,164 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261120-rust-helper-namespace-v2-1-14315658f59e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAOWAAGsC/4WOQQ6DIBREr2JYl1YwaNtV79G4APwITUXCR2Njv
+ HvFHqDLN5l5mZUgRAdI7sVKIswO3eh34KeCaCt9D9R1OxNe8poxXtI4YaIW3gEi9XIADFIDFQ1
+ cddUANJ0h+zZEMG45vM/2xzipF+iUZbmhJAJVUXptczQFTBHkcDn8HpaUS9ZhGuPneDezLPt3Z
+ GaU0UrdZCmEqIypH/0g3fusx4G027Z9ATJI7VTxAAAA
+X-Change-ID: 20261120-rust-helper-namespace-57e8c37ee7df
+To: Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+ Miguel Ojeda <ojeda@kernel.org>
+Cc: Alexander Potapenko <glider@google.com>, 
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, kasan-dev@googlegroups.com, 
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+ Wedson Almeida Filho <wedsonaf@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795195112; l=4679;
+ i=peder.bergan@gmail.com; s=kernel-contributions;
+ h=from:subject:message-id;
+ bh=nX0YbO/vtt47+6y4IylipSM71r9O+9xEUx60Z3g64FY=;
+ b=qTCg26Oq8Pjxp/oLQvY8MWSA8T9mQh94rZWp9HfgwSRh9oxjB4DdefYwAxmyYbkzevUK6a5Yn
+ ivpi0EOBirtC6JIIrzz2MXAZX8yIJdIqYu1XBXqFFK89EROXaU6uqD3
+X-Developer-Key: i=peder.bergan@gmail.com; a=ed25519;
+ pk=39790pn1YZCulHBoUG1uiQI1Hm01EvhBEa2zVrS/yN0=
+X-Endpoint-Received: by B4 Relay for
+ peder.bergan@gmail.com/kernel-contributions with auth_id=1395
+X-Original-From: Peder Bergan <peder.bergan@gmail.com>
+Reply-To: peder.bergan@gmail.com
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] rust: missing RUST_HELPERS namespace import in kasan_test
-  module
---
+From: Peder Bergan <peder.bergan@gmail.com>
 
-commit 42a51ff367154ba548e8d27e3154503fd972371b
-Author: Peder Bergan <peder.bergan@gmail.com>
+The rust_helper_ prefix marks these C wrappers as Rust implementation
+details. Their exports use the default namespace, so GPL-compatible
+modules can link against them without an explicit import.
 
-rust: put C helper exports in a dedicated namespace
+Export the wrappers in RUST_HELPERS so modpost can detect accidental
+dependencies at build time by flagging a missing namespace import.
+Have module! supply the import when the helpers are exported, since
+inlining and generic instantiation can introduce calls through ordinary
+Rust abstractions.
 
-This commit moves exported Rust C helpers into the RUST_HELPERS symbol
-namespace and makes the Rust module! macro import that namespace when
-helper inlining is disabled.
+The KASAN test links its Rust object into a module whose C object
+supplies the metadata. Import the namespace in that C file when
+building the test as a module with out-of-line Rust helpers. External
+modules that call these helpers without module! also need an explicit
+import.
 
+Suggested-by: Wedson Almeida Filho <wedsonaf@gmail.com>
 Link: https://github.com/Rust-for-Linux/linux/issues/216
+Signed-off-by: Peder Bergan <peder.bergan@gmail.com>
+---
+The modular x86-64 KASAN build failed at modpost on v1 and now passes
+with strict namespace checks. With CONFIG_MODVERSIONS enabled, the
+test module and kernel export record the same checksum for the helper.
 
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index 0a7b9e24c9600..ac3376fa8fb85 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -467,6 +467,11 @@ pub(crate) fn module(info: ModuleInfo) -> Result<Tok=
-enStream> {
->          }
->      }
-> =20
-> +    // Inlined kernel code can introduce calls to C helpers in any Rust =
-module.
-> +    if !cfg!(CONFIG_RUST_INLINE_HELPERS) {
-> +        modinfo.emit_only_loadable("import_ns", "RUST_HELPERS", false);
-> +    }
-> +
->      // Built-in modules also export the `file` modinfo string.
->      let file =3D
->          std::env::var("RUST_MODFILE").expect("Unable to fetch RUST_MODFI=
-LE environmental variable");
+OpenAI Codex assisted with coding and testing.
+---
+Changes in v2:
+- Import RUST_HELPERS in the C metadata for the modular KASAN test
+  when using out-of-line Rust helpers.
+  https://lore.kernel.org/linux-modules/sashiko-outbox-225583@kernel.org/
+- Link to v1: https://patch.msgid.link/20261120-rust-helper-namespace-v1-1-3b9a05553ff6@gmail.com
+---
+ mm/kasan/kasan_test_c.c | 3 +++
+ rust/Makefile           | 4 +++-
+ rust/exports.c          | 2 ++
+ rust/macros/module.rs   | 5 +++++
+ 4 files changed, 13 insertions(+), 1 deletion(-)
 
-[Severity: Medium]
-Does this break the build of kasan_test.ko when CONFIG_KASAN_KUNIT_TEST=3Dm,
-CONFIG_RUST=3Dy, and CONFIG_RUST_INLINE_HELPERS=3Dn?
+diff --git a/mm/kasan/kasan_test_c.c b/mm/kasan/kasan_test_c.c
+index b9e167ed5be32..f8e96c1194e02 100644
+--- a/mm/kasan/kasan_test_c.c
++++ b/mm/kasan/kasan_test_c.c
+@@ -34,6 +34,9 @@
+ #define OOB_TAG_OFF (IS_ENABLED(CONFIG_KASAN_GENERIC) ? 0 : KASAN_GRANULE_SIZE)
+ 
+ MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
++#if defined(MODULE) && defined(CONFIG_RUST) && !defined(CONFIG_RUST_INLINE_HELPERS)
++MODULE_IMPORT_NS("RUST_HELPERS");
++#endif
+ 
+ static bool multishot;
+ 
+diff --git a/rust/Makefile b/rust/Makefile
+index 0165626decbe7..17c559052e936 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -569,9 +569,10 @@ $(obj)/helpers/helpers.bc $(obj)/helpers/helpers_module.bc: $(src)/helpers/helpe
+ 
+ rust_exports = $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D|B)/ && $$3!~/__(pfx|cfi|odr_asan)/ { printf $(2),$$3 }'
+ 
++rust_export_macro = EXPORT_SYMBOL_RUST_GPL
+ quiet_cmd_exports = EXPORTS $@
+       cmd_exports = \
+-	$(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n") > $@
++	$(call rust_exports,$<,"$(rust_export_macro)(%s);\n") > $@
+ 
+ $(obj)/exports_core_generated.h: $(obj)/core.o FORCE
+ 	$(call if_changed,exports)
+@@ -585,6 +586,7 @@ $(obj)/exports_core_generated.h: $(obj)/core.o FORCE
+ # function either. Therefore, we export all symbols from helpers and bindings.
+ # In the future, this may be revisited to reduce the number of exports after
+ # the compiler is informed about the places codegen is required.
++$(obj)/exports_helpers_generated.h: private rust_export_macro = EXPORT_SYMBOL_RUST_HELPER_GPL
+ $(obj)/exports_helpers_generated.h: $(obj)/helpers/helpers.o FORCE
+ 	$(call if_changed,exports)
+ 
+diff --git a/rust/exports.c b/rust/exports.c
+index 1b52460b0f4ee..fde2a52d2a1ae 100644
+--- a/rust/exports.c
++++ b/rust/exports.c
+@@ -14,6 +14,8 @@
+ #include <linux/export.h>
+ 
+ #define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
++#define EXPORT_SYMBOL_RUST_HELPER_GPL(sym) \
++	extern int sym; EXPORT_SYMBOL_NS_GPL(sym, "RUST_HELPERS")
+ 
+ #include "exports_core_generated.h"
+ #include "exports_bindings_generated.h"
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 0a7b9e24c9600..ac3376fa8fb85 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -467,6 +467,11 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+         }
+     }
+ 
++    // Inlined kernel code can introduce calls to C helpers in any Rust module.
++    if !cfg!(CONFIG_RUST_INLINE_HELPERS) {
++        modinfo.emit_only_loadable("import_ns", "RUST_HELPERS", false);
++    }
++
+     // Built-in modules also export the `file` modinfo string.
+     let file =
+         std::env::var("RUST_MODFILE").expect("Unable to fetch RUST_MODFILE environmental variable");
 
-kasan_test is a composite C and Rust module (kasan_test_c.o and
-kasan_test_rust.o in mm/kasan/Makefile) that defines its module metadata
-in mm/kasan/kasan_test_c.c rather than with module!.
-kasan_test_rust_uaf() in mm/kasan/kasan_test_rust.rs uses KVec::push() and
-drops the vector, which inline into calls to
-rust_helper_krealloc_node_align.  Because neither mm/kasan/kasan_test_c.c
-nor mm/kasan/kasan_test_rust.rs imports RUST_HELPERS, modpost rejects
-kasan_test.ko for using a symbol from RUST_HELPERS without importing the
-namespace.
+---
+base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+change-id: 20261120-rust-helper-namespace-57e8c37ee7df
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261120-rust-helpe=
-r-namespace-v1-1-3b9a05553ff6@gmail.com?part=3D1
+Best regards,
+--  
+Peder Bergan <peder.bergan@gmail.com>
+
+
