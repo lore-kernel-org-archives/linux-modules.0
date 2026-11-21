@@ -1,67 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.77.101.10
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795248816;
-	b=ByvGwKk387qTQ3r7R94JvdV2mHAj00mSgHyrADt0vyF19CRDHGmuiLkMA6WkW/ufSenJ
-	 wDh97dZEW43UY02+EUDDeb+eHar2imSKUmli+JjWUzP71WOYzykj/T3brLLpOgacSdzAj
-	 3fKKl8FmQxestI8PhEzlSc24AmmMyBGt4H0K2u5trc/CHlN78sSxKnvdd4/TaWiG4zyGa
-	 BmuwMmq/mWKEEsCbKR6MHnXyRh+BTVnnAjUqzuL9rzXJHj416iWHgetUTwyUEKNZ3L2Vl
-	 aSUkTUsZENgyoWYlzs4NN2BN8lqBwALQ3+Qzh58BMna2/fMjQ6jK8ci/zkvT/jsR3Cw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795248816;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-WP-MailID:X-WP-AV:X-WP-SPAM;
-	bh=VCAf6mQ3Fl2AXCxBuPjWpObFsYWR0l3vlQX61gKFzsY=;
-	b=H22fe+7W0qzLqfzT4kgDOIydFTpM2vxLecEFaPCReW2WvW/tWsazRepv3Q9P1rXJiPtI
-	 V6YJFx6sRIasGgqbkDsGgCwSbom5dp3uHzlgG+vicClkhgoVv73BGEOQle706zWiY2zXT
-	 GjdTImKXFYetwJJe9kjbTdpmoXz5wIi92fcsoH/cnl2FHg5i/EeCYJ5dxdQNyZq6bxHov
-	 cjOf+OSZpnedEjTRG9R49dOHxZH1w3Dv7E4j2+pKgDe8SamD6RJ9+64L4dEtgkOqr9QSp
-	 gqauzkbITDdJwiItX4M0gI/nyQ7WlQEp3v3I8YfNDmOIHBoGOL6sE4D4LUesx4+j4nQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=wp.pl;
-	spf=pass smtp.mailfrom=wp.pl;
-	dkim=pass header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=HwrMwpic;
-	arc=none smtp.remote-ip=212.77.101.10
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.171
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795283427;
+	b=n5iXy7RB6Ta25UkrLSBFJfVTlbb0IquYWHZwmo8N8WKqtlkYpCC/h8i0XWN6OK/7xq1H
+	 X9hbXKsBdV/Do4vIzR79hELMGq4DhXiiTKm9vHM7tfNptvJnrjutwZzlnMvYdDxP9GP2J
+	 N0MjzZs6nej4n+lQQ6mLrLYLvApKry5R2e9KyPHjtbCQ8NY3bS2Udc4HpwZyvVp3PXDyL
+	 1NibKfs3NHTwULnLgeM+1YuqymX3qFbFSDqRdWmPKnHpikFq3N0WB7kJ6RtNQYa3tckPq
+	 8NXIYqKChquFBhDH0mbCEgVuDHx+hUxLEMMLbw5tM0KCuMFWdiYGsLOviVZJ9eHQFpw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795283427;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 MIME-Version:From:In-Reply-To:References:X-Google-Nh-Sender:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Xu4M4Rq3wV8DgH+HqoVMbKaQd8J/D8bo49jgEyUz/XE=;
+	b=brTmyJES4VF4SzC0qvuYTWfCF8EmHhr9/pKdbGZQTJe3vMTdVmYlO1XpsGT57YYDvBwH
+	 /yanB2R8HMFlBfE5v/633YvsooF/XGc2Bndg0mYTla0A/K4BYDZbqpvZbPagVFztTsgpa
+	 ACuygxnzir4V2oFFyqkQ9S1s/K7aJRsjcvUcMe9BMDtigfZddgroBOKQAkHfB5HVxbeP4
+	 V7SxQU+o99sswOcTaqbn6kyxud/ACocn6m9fHrdWY8FXec734e2AnHbXNpDK9yAhqgzeE
+	 aGdfjext21tTIwnng4/YjjvEIIbFTheadKdKTAQg66k5AVQCVR8T9GlzK6xfwHpeg8w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iLk6aNgl;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.171
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BAA606A325
-	for <linux-modules@vger.kernel.org>; Sat, 21 Nov 2026 08:13:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0BAA606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EAA606A32A
+	for <linux-modules@vger.kernel.org>; Sat, 21 Nov 2026 17:50:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8EAA606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=HwrMwpic
-Received: (wp-smtpd smtp.wp.pl 35891 invoked from network); 21 Nov 2026 09:13:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=s20261001;
-          t=1795248804; bh=VCAf6mQ3Fl2AXCxBuPjWpObFsYWR0l3vlQX61gKFzsY=;
-          h=From:To:Cc:Subject;
-          b=HwrMwpiceZkYmzcQXq8hrrt6UMdviEezRgpHHrNgRerhZ2Qyapr4L6q37rEEQBbQ1
-           6b288xzm7lgQL0ClOWac/2aW6Tvi/YDvDEURiS6RoG+ceFfnJvu//YM3xOPdrKrcPO
-           pMKHno468qwBNrYkC2y9G9e7KKDIK9h21UZJ3L9R3RCBNpY1wCHauhJrAOPbvHWiVJ
-           WWKlrUjTd238WwWtyoOj2WPAMUuMf9F5b5J3L7RJAgnRML4ca+gES0igGUrU/BPBYo
-           XQCHRxJBoMzGf7YoFJbpiF1lApMZYUlMiOIpr29/FAXRURu+OKE1KLCQn+nz/7bvmh
-           n6wHbdSgJ4uVA==
-Received: from localhost (77-236-5-223.static.play.pl [77.236.5.223])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
-          for <deduce@gmail.com>; 21 Nov 2026 09:13:24 +0100
-Date: Sat, 21 Nov 2026 09:13:24 +0100
-From: Stanislaw Gruszka <stf_xl@wp.pl>
-To: Lawrence Lin <deduce@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Petr Pavlu <petr.pavlu@suse.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] ftrace: Avoid quadratic symbol lookups in
- ftrace_module_enable()
-Message-ID: <awFSpF86nx3t1g07@wp.pl>
-References: <20261003-ftrace-mod-bsearch-v1-1-92e2fd2d80ff@gmail.com>
- <20261004050904.06a5ecab@fedora>
- <20261004170600.1541723-1-deduce@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iLk6aNgl
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8b10d24345dso17634167b3.3
+        for <linux-modules@vger.kernel.org>; Sat, 21 Nov 2026 09:50:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795283426; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OzgOCWlZVJWMNcSf81SB/VnIggw0IGw2wO/1fcoEEVrcgGzjmJs1ewMYr3ss7G8Zes
+         VOUan8Z0xCyBVfPXgBkdj/5GQjBVheSaImobEugEvdCaXMlztJofDbMTtEibhxCvysHY
+         yz/NghbI2jRVNXq+e40a4SV1IkW0JlPycfcWsgyNWQ9gzit6c2l8uyW9vdcOMDxYvDd2
+         TJDzagGDC7V/5fAXmKq+1N34+rAuwtL0lwQxmlA/zoy2IsKDV04At8NzkL41RWt4cdBL
+         mKWpeb+w6C7n6yGGnqUDOhpd+SraIdUdkf3iSvkc5whm2E4fkMa7Rbn4gBY1Tuzbl1Bi
+         rvBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:references
+         :in-reply-to:from:mime-version:dkim-signature;
+        bh=Xu4M4Rq3wV8DgH+HqoVMbKaQd8J/D8bo49jgEyUz/XE=;
+        fh=Fi2etbLE+6zYnWaLPMSb5vzAuYdpR5Qd5mNjOpHG4TE=;
+        b=RzjDWvfTfXjnwMKxpRSBLiuaHLy9AXeA67CZcW0svudih+owKgm3sImMTN/n9QW+Iu
+         /+5G/GHv5pt953tiHh3jLLiDwzxOTF3oJNH+Is2gAwACUzhB8C5s3sv5CPoOHbBu07dh
+         KIMGfF8738q966J1qOLj7VefUscja/j1hcRavg927TNTn+RepruPkZ0kAhtRJb6XRwBm
+         E7HCXu+FEbC5xkeZWqg5RupqAKS44dlDA8+BUdC82iZlk+pmTlIMOUaw6KxN0zpEGLIw
+         0zwkQwE/DRfFEiIU1BezZtPLhca3I+9fO5Z3U4CP8pyz+VwIRpy0VbIOUzvHW7UpdnYw
+         oi/Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795283426; x=1795888226; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:references:in-reply-to:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Xu4M4Rq3wV8DgH+HqoVMbKaQd8J/D8bo49jgEyUz/XE=;
+        b=iLk6aNglaHLSfejsdDCsnc7RX/dVGHcxO+3s4wAzV4vM9SNB+fdAI0/vrzVTvqc6wc
+         Svla8+8t3JiJp43AkfHtiCef+rSVtiUNXCNiNnDXv0Dx04IxY9NLHX1ExCHffschAOCp
+         zy9jJomDn1DUzt7yRUM0A1XYpKDHMS4SKU7rqS7KN91edKs9iqJeydIhuhyr1Om2NmdV
+         lRkMFCB0dne8OaN3X19CagYPJxfBZpEhA+ywtlMj6Y2hGUQw8E3//KydV1ur0kiFCzYP
+         oBOPzz4qB5+Klf1SFq2yHbYTX/p3M1ScQrrPlf53r3/tBT4Cy0VAnnSsIel3030+r89S
+         czUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795283426; x=1795888226;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:references:in-reply-to:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Xu4M4Rq3wV8DgH+HqoVMbKaQd8J/D8bo49jgEyUz/XE=;
+        b=Iy+dTQqWQOIpXwVnvhgL2ht5Rpg0VbfhZm0EIsbTb1c0IOxrODPYj8vAxtmL5O6Bzd
+         FMdXAkroFnfyyzy9CGXK0zqkBHd1My0qKRVmvpJWMejWGmNgoU2Nj///JEh0QG8HjNdY
+         GzNYoNBzHsw/mYD3QUN4wVwGsxdDe8F0Bht8rIP58ZJiETPBnUBbSFmKnxwJhsyaDcqQ
+         j+MMril9O3RxlWFOHqffzlTCf5w1VAs8uveyLfQp0R0AU+HE3qp6TA5K0l76xWE/4MTv
+         PBf5qGxMo6R5b53y3wAPP5SX6u4Ik8OQvanij4ja6Mc+JqZIbbUJlycszszLd8i5H/sB
+         nQpA==
+X-Forwarded-Encrypted: i=1; AL+hErFclKR9IsUNgeURWjjot8dPK5ZTUyEkYTIrrayEEB0W/41t9EqeU/qv0ANFvniRi3NyZx8UqsG0XC7RolQt@vger.kernel.org
+X-Gm-Message-State: APuU4Z8WlAslpIj5+C8sjo8ilzxncBBSylVisL4uawIsZeMbRZZFwsEl
+	i15Ehwpsh+Mc3WZ2IyQLQTPAXx66hxxiNBZt836Xqy1N1L+aQxdw+pWyBpxikmRc3/2dz2nPgmM
+	+lzaGmTrI1VJiuuqzsiR47lJ6BQD7bnY=
+X-Gm-Gg: AZFdTZewg1amw3fLHxlvSd+mMBYwoOM1h3aQyeXDdyJ4oP0QByLtumkldUr2s9ZWlwy
+	Tt2OyVkaJreS0sPLBQsOh9Jit4lTPcEECtMGal0UXpf039A6sQbzdguipbKpXFXKPBvr5YPycOR
+	Seh99OJ5qPHj7v0Z534X0NRHEm1ND2aLg4Y/iE8mf9/zMfPD+EMmPYGUzfbZtVLSOl8YfaV79sd
+	ahFjYjrLcW8h53nEjhDHKHoWvFEdssBPt+AZPHOL/SqcH5LOYSBmEWyWH7Y7fbWle7tOC27rIFU
+	7w2vTCtTC5XQYtx06Q+kSySXOJenHJj2f7IrGnb6E3WvV3TsZwcQRNk3FpEaM/mSDaKswJbPufY
+	tNj832KpnlRUjQRc2FF9QcPg8gdb7f/vJI1ozAii5k8WpsrEvDMhZo/v6r6lKCNtltdxRtQi7hq
+	b/l3oVWX7jix8Xb1wm59ZTm3vJT1NUiNzA6Yg8+4waVvHidcW1CemYLlyHF8d5STUlmFqccIEfE
+	kwNqWpoYBqihvi4lluZGnRVlBI=
+X-Received: by 2002:a05:690c:b86:b0:8b3:4911:2dc1 with SMTP id
+ 00721157ae682-8b5204ae0e7mr30662797b3.39.1795283425537; Sat, 21 Nov 2026
+ 09:50:25 -0800 (PST)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Sat, 21 Nov 2026 12:50:24 -0500
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -71,424 +109,78 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261004170600.1541723-1-deduce@gmail.com>
-X-WP-MailID: b6f216805e4b1c6aceebbf956d6fa592
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000A [cQOU]                               
+From: peder.bergan@gmail.com
+In-Reply-To: <CANiq72kWXzP1SWUvhOT2k-rNjopnySXeBkjwrx63V2QUaLpnGQ@mail.gmail.com>
+References: <20261120-rust-helper-namespace-v1-1-3b9a05553ff6@gmail.com> <CANiq72kWXzP1SWUvhOT2k-rNjopnySXeBkjwrx63V2QUaLpnGQ@mail.gmail.com>
+X-Google-Nh-Sender: AW_J_UoEym23HGvNQ5zzCr2fkBwchbIS39LY0o3smkAVD0qDlNYdj5QfaNo8KarZLsYzQWlSiaO47uwNu7Ha77BLqJukKxnb1c3zQq1IDN7OFCWayb3yR_WclseoF6OW9P26WFQRXvNRjHgOWmoGpPAk7z_ifQH_LJgp626YEFxxIOIOhhyVgfEATPSFauhLyvCp9Dpd-VJp0i-FFJ0ot5roV2PTcyNx46IlCqKQGMzHu-SbF6WUbJBJ4C6Us7wCCwDfy5Nx
+Date: Sat, 21 Nov 2026 12:50:24 -0500
+X-Gm-Features: Aa3M54oiSweFMBwEnXr8v5RhNblmDh0i71sIY4AU6gHF4PbmUFHsoRQyMcHMRfA
+Message-ID: <nh-eaa5d67e-6d05-468f-9f19-273bc5b23ad0@google.com>
+Subject: Re: [PATCH] rust: put C helper exports in a dedicated namespace
+To: miguel.ojeda.sandonis@gmail.com
+Cc: ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
+	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, 
+	daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com, 
+	work@onurozkan.dev, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	da.gomez@kernel.org, samitolvanen@google.com, atomlin@atomlin.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, wedsonaf@gmail.com, gprocida@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 04, 2026 at 12:05:58PM -0500, Lawrence Lin wrote:
-> On Sun, 4 Oct 2026 05:09:04 -0400, Steven Rostedt wrote:
-> > It would be interesting if it actually triggers (finds something). If
-> > it doesn't, then I think we should just remove that code instead of
-> > adding more complexity to it.
-> 
-> It does trigger, but only for modules. On x86_64 v7.2.5 with kvm loaded,
-> available_filter_functions has 18 __ftrace_invalid_address___ entries,
-> all of them in [kvm] and none in vmlinux. Each one is a __weak default
-> from virt/kvm/ (kvm_arch_vm_compat_ioctl, kvm_arch_shutdown,
-> kvm_arch_dy_runnable, ...) that arch/x86/kvm/ overrides inside the same
-> kvm.ko. In kvm.ko, no symbol covers any of the 18 addresses, and each
-> body is a stub that returns, returns a constant, or tail calls.
-> 
-> ef378c3b823385 fixed this for vmlinux at build time, but sorttable only
-> runs on vmlinux, so modules still depend on the check. In its changelog
-> you wrote that "the real solution is to not add a weak function into
-> the ftrace table in the first place". For modules, that can be done at
-> load time, and it would make this patch much smaller.
+Hi Miguel,
 
-I think the best way to handle this would be to simply mark weak
-functions as notrace. While this is considered a hack that we cannot
-rely on [1], it should still be acceptable for modules.
+Thanks for the review. The export formats are literals, so I'll use
+:=3D for both. V2 already added the namespace import to KASAN's C
+metadata.
+https://patch.msgid.link/20261120-rust-helper-namespace-v2-1-14315658f59e@g=
+mail.com
 
-As a safeguard, __weak can remain undefined for modules, and checkpatch
-already warns about __atribute__((weak)). This should prevent any new
-traceable weak functions from being added to modules.
+For v3, I'll build on Giuliano's assembly conversion and generate
+EXPORT_SYMBOL_NS_GPL() directly for the helper list.
 
-The change is relatively small and prevents introducing additional
-complexity at either build time or module load time. The full patch is
-below (without removing ftrace test_for_valid_rec()).
+1. Would you prefer I wait for Giuliano's series to land or send v3
+   with it listed as a prerequisite?
+2. Should I keep the KASAN import for v3 or move automatic imports
+   into modpost in this series?
+3. If you prefer modpost, should it add the import only when a module
+   contains a Rust object and references a RUST_HELPERS export?
 
-The list of weak functions in modules was generated with the help of AI.
-If missed any, hopefully the kernel test robot (Inel 0-day CI) will catch
-the resulting build failures once the patch is posted.
+Cheers,
+Peder
 
-[1] https://lore.kernel.org/all/CAADnVQKi+4oBt2C__qz7QoHqTtXYLUjaqwTNFoSE=up9c9k4cA@mail.gmail.com/
 
-Regards
-Stanislaw
-
- drivers/acpi/nfit/core.c                                 |    2 +-
- drivers/acpi/processor_driver.c                          |    2 +-
- drivers/acpi/processor_idle.c                            |    4 ++--
- drivers/dax/bus.c                                        |    4 ++--
- drivers/firmware/efi/capsule-loader.c                    |    4 ++--
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c |    2 +-
- drivers/nvdimm/pmem.c                                    |    6 +++---
- drivers/virtio/virtio_rtc_ptp.c                          |    2 +-
- include/linux/compiler_attributes.h                      |    6 ------
- include/linux/compiler_types.h                           |   13 +++++++++++++
- virt/kvm/dirty_ring.c                                    |    2 +-
- virt/kvm/eventfd.c                                       |   24 ++++++++++--------------
- virt/kvm/guest_memfd.c                                   |    2 +-
- virt/kvm/irqchip.c                                       |    2 +-
- virt/kvm/kvm_main.c                                      |   29 +++++++++++++----------------
- 15 files changed, 52 insertions(+), 52 deletions(-)
-
-diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-index 476c4c560d17..d716f7c2978b 100644
---- a/include/linux/compiler_attributes.h
-+++ b/include/linux/compiler_attributes.h
-@@ -416,12 +416,6 @@
- # define __noipa
- #endif
- 
--/*
-- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-weak-function-attribute
-- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-weak-variable-attribute
-- */
--#define __weak                          __attribute__((__weak__))
--
- /*
-  * Used by functions that use '__builtin_return_address'. These function
-  * don't want to be splited or made inline, which can make
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index c5921f139007..33f0623befa5 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -217,6 +217,19 @@ struct ftrace_likely_data {
- #define notrace			__attribute__((__no_instrument_function__))
- #endif
- 
-+/*
-+ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-weak-function-attribute
-+ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-weak-variable-attribute
-+ */
-+#ifdef MODULE
-+#define __weak_func		__attribute__((__weak__)) notrace
-+#else
-+#define __weak_func		__attribute__((__weak__))
-+#define __weak			__attribute__((__weak__))
-+#endif
-+
-+#define __weak_data		__attribute__((__weak__))
-+
- /*
-  * it doesn't make sense on ARM (currently the only user of __naked)
-  * to trace naked functions because then mcount is called without
-diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
-index cb771d9cadb2..9a8f63ab3997 100644
---- a/drivers/acpi/nfit/core.c
-+++ b/drivers/acpi/nfit/core.c
-@@ -1733,7 +1733,7 @@ static bool acpi_nvdimm_has_method(struct acpi_device *adev, char *method)
- 	return false;
- }
- 
--__weak void nfit_intel_shutdown_status(struct nfit_mem *nfit_mem)
-+__weak_func void nfit_intel_shutdown_status(struct nfit_mem *nfit_mem)
- {
- 	struct device *dev = &nfit_mem->adev->dev;
- 	struct nd_intel_smart smart = { 0 };
-diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
-index bdd1529d79f0..b6494c6bba7e 100644
---- a/drivers/acpi/processor_driver.c
-+++ b/drivers/acpi/processor_driver.c
-@@ -230,7 +230,7 @@ static struct notifier_block acpi_processor_notifier_block = {
- 	.notifier_call = acpi_processor_notifier,
- };
- 
--void __weak acpi_processor_init_invariance_cppc(void)
-+__weak_func void acpi_processor_init_invariance_cppc(void)
- { }
- 
- /*
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index e113bcbbb882..8b5d37bd8955 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -853,7 +853,7 @@ static int acpi_processor_setup_cstates(struct acpi_processor *pr)
- 
- #endif /* CONFIG_ACPI_PROCESSOR_CSTATE */
- 
--int __weak acpi_processor_ffh_lpi_probe(unsigned int cpu)
-+int __weak_func acpi_processor_ffh_lpi_probe(unsigned int cpu)
- {
- 	return -EOPNOTSUPP;
- }
-@@ -878,7 +878,7 @@ static int acpi_processor_get_lpi_info(struct acpi_processor *pr)
- 	return 0;
- }
- 
--int __weak __cpuidle acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
-+int __weak_func __cpuidle acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
- {
- 	return -ENODEV;
- }
-diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-index b809e1a264af..9bf8fc9ab61c 100644
---- a/drivers/dax/bus.c
-+++ b/drivers/dax/bus.c
-@@ -1430,8 +1430,8 @@ static const struct device_type dev_dax_type = {
- };
- 
- /* see "strong" declaration in tools/testing/nvdimm/dax-dev.c */
--__weak phys_addr_t dax_pgoff_to_phys(struct dev_dax *dev_dax, pgoff_t pgoff,
--			      unsigned long size)
-+__weak_func phys_addr_t dax_pgoff_to_phys(struct dev_dax *dev_dax, pgoff_t pgoff,
-+					  unsigned long size)
- {
- 	for (int i = 0; i < dev_dax->nr_range; i++) {
- 		struct dev_dax_range *dax_range = &dev_dax->ranges[i];
-diff --git a/drivers/firmware/efi/capsule-loader.c b/drivers/firmware/efi/capsule-loader.c
-index 8e8f81f0a5a0..e28c9cc28917 100644
---- a/drivers/firmware/efi/capsule-loader.c
-+++ b/drivers/firmware/efi/capsule-loader.c
-@@ -88,8 +88,8 @@ int __efi_capsule_setup_info(struct capsule_info *cap_info)
-  * this __weak function so they can perform any required capsule
-  * image munging. See quark_quirk_function() for an example.
-  **/
--int __weak efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
--				  size_t hdr_bytes)
-+int __weak_func efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
-+				       size_t hdr_bytes)
- {
- 	/* Only process data block that is larger than efi header size */
- 	if (hdr_bytes < sizeof(efi_capsule_header_t))
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 4e418c7456b7..95c2b770cdbe 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -2094,7 +2094,7 @@ int otx2_set_hw_capabilities(struct otx2_nic *pfvf)
- }
- 
- #define M(_name, _id, _fn_name, _req_type, _rsp_type)			\
--int __weak								\
-+int __weak_func								\
- otx2_mbox_up_handler_ ## _fn_name(struct otx2_nic *pfvf,		\
- 				struct _req_type *req,			\
- 				struct _rsp_type *rsp)			\
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index 30a51c365ce8..e8564000cff0 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -254,9 +254,9 @@ static void pmem_submit_bio(struct bio *bio)
- }
- 
- /* see "strong" declaration in tools/testing/nvdimm/pmem-dax.c */
--__weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
--		long nr_pages, enum dax_access_mode mode, void **kaddr,
--		unsigned long *pfn)
-+__weak_func long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
-+				      long nr_pages, enum dax_access_mode mode, void **kaddr,
-+				      unsigned long *pfn)
- {
- 	resource_size_t offset = PFN_PHYS(pgoff) + pmem->data_offset;
- 	sector_t sector = PFN_PHYS(pgoff) >> SECTOR_SHIFT;
-diff --git a/drivers/virtio/virtio_rtc_ptp.c b/drivers/virtio/virtio_rtc_ptp.c
-index ff8d834493dc..b93d86dd8c86 100644
---- a/drivers/virtio/virtio_rtc_ptp.c
-+++ b/drivers/virtio/virtio_rtc_ptp.c
-@@ -48,7 +48,7 @@ struct viortc_ptp_cross_ctx {
- };
- 
- /* Weak function in case get_device_system_crosststamp() is not supported */
--int __weak viortc_hw_xtstamp_params(u8 *hw_counter, enum clocksource_ids *cs_id)
-+int __weak_func viortc_hw_xtstamp_params(u8 *hw_counter, enum clocksource_ids *cs_id)
- {
- 	return -EOPNOTSUPP;
- }
-diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-index 572b854edf74..74979851fb5c 100644
---- a/virt/kvm/dirty_ring.c
-+++ b/virt/kvm/dirty_ring.c
-@@ -11,7 +11,7 @@
- #include <trace/events/kvm.h>
- #include "kvm_mm.h"
- 
--int __weak kvm_cpu_dirty_log_size(struct kvm *kvm)
-+int __weak_func kvm_cpu_dirty_log_size(struct kvm *kvm)
- {
- 	return 0;
- }
-diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
-index 93ad2ebc963f..95db366e6804 100644
---- a/virt/kvm/eventfd.c
-+++ b/virt/kvm/eventfd.c
-@@ -33,8 +33,7 @@
- 
- static struct workqueue_struct *irqfd_cleanup_wq;
- 
--bool __attribute__((weak))
--kvm_arch_irqfd_allowed(struct kvm *kvm, struct kvm_irqfd *args)
-+bool __weak_func kvm_arch_irqfd_allowed(struct kvm *kvm, struct kvm_irqfd *args)
- {
- 	return true;
- }
-@@ -187,11 +186,9 @@ static void irqfd_deactivate(struct kvm_kernel_irqfd *irqfd)
- 	queue_work(irqfd_cleanup_wq, &irqfd->shutdown);
- }
- 
--int __attribute__((weak)) kvm_arch_set_irq_inatomic(
--				struct kvm_kernel_irq_routing_entry *irq,
--				struct kvm *kvm, int irq_source_id,
--				int level,
--				bool line_status)
-+int __weak_func kvm_arch_set_irq_inatomic(
-+	struct kvm_kernel_irq_routing_entry *irq, struct kvm *kvm,
-+	int irq_source_id, int level, bool line_status)
- {
- 	return -EWOULDBLOCK;
- }
-@@ -349,19 +346,18 @@ static void kvm_irqfd_register(struct file *file, wait_queue_head_t *wqh,
- }
- 
- #if IS_ENABLED(CONFIG_HAVE_KVM_IRQ_BYPASS)
--void __attribute__((weak)) kvm_arch_irq_bypass_stop(
--				struct irq_bypass_consumer *cons)
-+void __weak_func kvm_arch_irq_bypass_stop(struct irq_bypass_consumer *cons)
- {
- }
- 
--void __attribute__((weak)) kvm_arch_irq_bypass_start(
--				struct irq_bypass_consumer *cons)
-+void __weak_func kvm_arch_irq_bypass_start(struct irq_bypass_consumer *cons)
- {
- }
- 
--void __weak kvm_arch_update_irqfd_routing(struct kvm_kernel_irqfd *irqfd,
--					  struct kvm_kernel_irq_routing_entry *old,
--					  struct kvm_kernel_irq_routing_entry *new)
-+void __weak_func
-+kvm_arch_update_irqfd_routing(struct kvm_kernel_irqfd *irqfd,
-+			      struct kvm_kernel_irq_routing_entry *old,
-+			      struct kvm_kernel_irq_routing_entry *new)
- {
- 
- }
-diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index 5c084d5393a6..ed49d2f59cf3 100644
---- a/virt/kvm/guest_memfd.c
-+++ b/virt/kvm/guest_memfd.c
-@@ -515,7 +515,7 @@ static const struct inode_operations kvm_gmem_iops = {
- 	.setattr	= kvm_gmem_setattr,
- };
- 
--bool __weak kvm_arch_supports_gmem_init_shared(struct kvm *kvm)
-+bool __weak_func kvm_arch_supports_gmem_init_shared(struct kvm *kvm)
- {
- 	return true;
- }
-diff --git a/virt/kvm/irqchip.c b/virt/kvm/irqchip.c
-index 462c70621247..4e521bf3f4a3 100644
---- a/virt/kvm/irqchip.c
-+++ b/virt/kvm/irqchip.c
-@@ -160,7 +160,7 @@ void __attribute__((weak)) kvm_arch_irq_routing_update(struct kvm *kvm)
- {
- }
- 
--bool __weak kvm_arch_can_set_irq_routing(struct kvm *kvm)
-+__weak_func bool kvm_arch_can_set_irq_routing(struct kvm *kvm)
- {
- 	return true;
- }
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 5a782849521c..d3a5c0918029 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -155,7 +155,7 @@ static unsigned long long kvm_active_vms;
- 
- static DEFINE_PER_CPU(cpumask_var_t, cpu_kick_mask);
- 
--__weak void kvm_arch_guest_memory_reclaimed(struct kvm *kvm)
-+__weak_func void kvm_arch_guest_memory_reclaimed(struct kvm *kvm)
- {
- }
- 
-@@ -1071,7 +1071,7 @@ static int kvm_create_vm_debugfs(struct kvm *kvm, const char *fdname)
-  * Called just after removing the VM from the vm_list, but before doing any
-  * other destruction.
-  */
--void __weak kvm_arch_pre_destroy_vm(struct kvm *kvm)
-+void __weak_func kvm_arch_pre_destroy_vm(struct kvm *kvm)
- {
- }
- 
-@@ -1081,7 +1081,7 @@ void __weak kvm_arch_pre_destroy_vm(struct kvm *kvm)
-  * Cleanup should be automatic done in kvm_destroy_vm_debugfs() recursively, so
-  * a per-arch destroy interface is not needed.
-  */
--void __weak kvm_arch_create_vm_debugfs(struct kvm *kvm)
-+void __weak_func kvm_arch_create_vm_debugfs(struct kvm *kvm)
- {
- }
- 
-@@ -3955,7 +3955,7 @@ static bool kvm_vcpu_eligible_for_directed_yield(struct kvm_vcpu *vcpu)
-  * a vcpu_load/vcpu_put pair.  However, for most architectures
-  * kvm_arch_vcpu_runnable does not require vcpu_load.
-  */
--bool __weak kvm_arch_dy_runnable(struct kvm_vcpu *vcpu)
-+bool __weak_func kvm_arch_dy_runnable(struct kvm_vcpu *vcpu)
- {
- 	return kvm_arch_vcpu_runnable(vcpu);
- }
-@@ -3980,12 +3980,12 @@ static bool vcpu_dy_runnable(struct kvm_vcpu *vcpu)
-  * mode even if the vCPU is NOT loaded, i.e. using kvm_arch_vcpu_in_kernel()
-  * directly for cross-vCPU checks is functionally correct and accurate.
-  */
--bool __weak kvm_arch_vcpu_preempted_in_kernel(struct kvm_vcpu *vcpu)
-+bool __weak_func kvm_arch_vcpu_preempted_in_kernel(struct kvm_vcpu *vcpu)
- {
- 	return kvm_arch_vcpu_in_kernel(vcpu);
- }
- 
--bool __weak kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu)
-+bool __weak_func kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu)
- {
- 	return false;
- }
-@@ -5030,8 +5030,8 @@ static int kvm_vm_ioctl_reset_dirty_pages(struct kvm *kvm)
- 	return cleared;
- }
- 
--int __attribute__((weak)) kvm_vm_ioctl_enable_cap(struct kvm *kvm,
--						  struct kvm_enable_cap *cap)
-+int __weak_func kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-+					struct kvm_enable_cap *cap)
- {
- 	return -EINVAL;
- }
-@@ -5433,8 +5433,8 @@ struct compat_kvm_clear_dirty_log {
- 	};
- };
- 
--long __weak kvm_arch_vm_compat_ioctl(struct file *filp, unsigned int ioctl,
--				     unsigned long arg)
-+long __weak_func kvm_arch_vm_compat_ioctl(struct file *filp, unsigned int ioctl,
-+					  unsigned long arg)
- {
- 	return -ENOTTY;
- }
-@@ -5605,19 +5605,16 @@ static DEFINE_PER_CPU(bool, virtualization_enabled);
- static DEFINE_MUTEX(kvm_usage_lock);
- static int kvm_usage_count;
- 
--__weak void kvm_arch_shutdown(void)
-+__weak_func void kvm_arch_shutdown(void)
- {
--
- }
- 
--__weak void kvm_arch_enable_virtualization(void)
-+__weak_func void kvm_arch_enable_virtualization(void)
- {
--
- }
- 
--__weak void kvm_arch_disable_virtualization(void)
-+__weak_func void kvm_arch_disable_virtualization(void)
- {
--
- }
- 
- static int kvm_enable_virtualization_cpu(void)
+On Fri, 20 Nov 2026 22:34:24 +0100, Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+> On Fri, Nov 20, 2026 at 5:32=E2=80=AFPM Peder Bergan via B4 Relay
+> <devnull+peder.bergan.gmail.com@kernel.org> wrote:
+> >
+> > Suggested-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> > Link: https://github.com/Rust-for-Linux/linux/issues/216
+>
+> Nice, thanks for going through these old issues! :)
+>
+> > +rust_export_macro =3D EXPORT_SYMBOL_RUST_GPL
+>
+> Do we need a recursively expanded variable?
+>
+> > +++ b/rust/exports.c
+>
+> Conflicts ahead; this file happens to be going away with:
+>
+>   https://lore.kernel.org/rust-for-linux/20261112121512.1670347-3-gprocid=
+a@google.com/
+>
+> Cc'ing Giuliano.
+>
+> Also, what Sashiko says seems reasonable: if we do it this way, then
+> we may need manual `MODULE_IMPORT_NS()`s in some places, which may
+> become a bit annoying, even if there aren't that many mixed language
+> modules so far.
+>
+> Actually, perhaps we could just import it in modpost if a Rust module
+> has any Rust translation unit in it...
+>
+> Cheers,
+> Miguel
