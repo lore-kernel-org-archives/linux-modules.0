@@ -1,105 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.100.114
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795283427;
-	b=n5iXy7RB6Ta25UkrLSBFJfVTlbb0IquYWHZwmo8N8WKqtlkYpCC/h8i0XWN6OK/7xq1H
-	 X9hbXKsBdV/Do4vIzR79hELMGq4DhXiiTKm9vHM7tfNptvJnrjutwZzlnMvYdDxP9GP2J
-	 N0MjzZs6nej4n+lQQ6mLrLYLvApKry5R2e9KyPHjtbCQ8NY3bS2Udc4HpwZyvVp3PXDyL
-	 1NibKfs3NHTwULnLgeM+1YuqymX3qFbFSDqRdWmPKnHpikFq3N0WB7kJ6RtNQYa3tckPq
-	 8NXIYqKChquFBhDH0mbCEgVuDHx+hUxLEMMLbw5tM0KCuMFWdiYGsLOviVZJ9eHQFpw==
+	t=1795288034;
+	b=BLYCJ1w2xoyQNlGG9ZOeSMgio+FBN8lLKc5QyfBwawAXXFbV014CjrA/SsYdCllszqTS
+	 SZIDEIOCVRjDBLgUmhZmRtMXijPGhzrVJz9GrXLX26m+7NAzgT+xhfqEzkaE0z597YRQu
+	 L7NLZe3hkQ7DMYyhAbO1TirtbmDWiv3ub/ux2DrMF+ZNLTsrlyRVa+cg8uOh4NDb1xwtw
+	 XWexEUd9bD2i3N6mDGDyEeS1t+xhu7atnHTyv+IZEtxRHBsfVqyybu+7MCgEP5spjGcpA
+	 XpYXI6VC1oxJf2H+bxA9UZcyCTBpU2SfjRfRuRjFkJEiI72RX1bIUHXp43o7nLY9/2A==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795283427;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 MIME-Version:From:In-Reply-To:References:X-Google-Nh-Sender:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=Xu4M4Rq3wV8DgH+HqoVMbKaQd8J/D8bo49jgEyUz/XE=;
-	b=brTmyJES4VF4SzC0qvuYTWfCF8EmHhr9/pKdbGZQTJe3vMTdVmYlO1XpsGT57YYDvBwH
-	 /yanB2R8HMFlBfE5v/633YvsooF/XGc2Bndg0mYTla0A/K4BYDZbqpvZbPagVFztTsgpa
-	 ACuygxnzir4V2oFFyqkQ9S1s/K7aJRsjcvUcMe9BMDtigfZddgroBOKQAkHfB5HVxbeP4
-	 V7SxQU+o99sswOcTaqbn6kyxud/ACocn6m9fHrdWY8FXec734e2AnHbXNpDK9yAhqgzeE
-	 aGdfjext21tTIwnng4/YjjvEIIbFTheadKdKTAQg66k5AVQCVR8T9GlzK6xfwHpeg8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795288034;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:Content-Type:Content-Disposition:In-Reply-To:
+	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=utccSXcUx3nMfrBMSzeVls7K0JPx57k8P3PqldUHswA=;
+	b=WIaII+mQ1bXtdS7CCAnrhDwCO82E7faUd1cvrfhFhhJSZRbsIBBDVn5FASKXBwh0wRMD
+	 5RvUlELhMRPqiiPhZ5WWVN5VcEaJhSsyi5YEaOWKNfyBL8bY/gFi8tA++Ej5RQZ81acHW
+	 Be7gNXRDlXOMBTTzOS5xncAy1fKpiqAOv4xicbo8FoWYNEl6kxFfMl1pvEtNOXDde3JRR
+	 aER6QfC6f4okN+vVunVfp6rBpylr4jTWO78BVw74EkLtNIwr4InQja32tkehs06YmVem/
+	 OyTEPqH71b7FqHDcoud9sLHeCjMF/UNcpwWWFg6iPNdu1kht5rrJHoiSeKHFgQYXqag==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iLk6aNgl;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.171
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=none header.from=atomlin.com;
+	spf=pass smtp.mailfrom=atomlin.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.100.114
+Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021114.outbound.protection.outlook.com [52.101.100.114])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EAA606A32A
-	for <linux-modules@vger.kernel.org>; Sat, 21 Nov 2026 17:50:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8EAA606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iLk6aNgl
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8b10d24345dso17634167b3.3
-        for <linux-modules@vger.kernel.org>; Sat, 21 Nov 2026 09:50:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795283426; cv=none;
-        d=google.com; s=arc-20260327;
-        b=OzgOCWlZVJWMNcSf81SB/VnIggw0IGw2wO/1fcoEEVrcgGzjmJs1ewMYr3ss7G8Zes
-         VOUan8Z0xCyBVfPXgBkdj/5GQjBVheSaImobEugEvdCaXMlztJofDbMTtEibhxCvysHY
-         yz/NghbI2jRVNXq+e40a4SV1IkW0JlPycfcWsgyNWQ9gzit6c2l8uyW9vdcOMDxYvDd2
-         TJDzagGDC7V/5fAXmKq+1N34+rAuwtL0lwQxmlA/zoy2IsKDV04At8NzkL41RWt4cdBL
-         mKWpeb+w6C7n6yGGnqUDOhpd+SraIdUdkf3iSvkc5whm2E4fkMa7Rbn4gBY1Tuzbl1Bi
-         rvBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :in-reply-to:from:mime-version:dkim-signature;
-        bh=Xu4M4Rq3wV8DgH+HqoVMbKaQd8J/D8bo49jgEyUz/XE=;
-        fh=Fi2etbLE+6zYnWaLPMSb5vzAuYdpR5Qd5mNjOpHG4TE=;
-        b=RzjDWvfTfXjnwMKxpRSBLiuaHLy9AXeA67CZcW0svudih+owKgm3sImMTN/n9QW+Iu
-         /+5G/GHv5pt953tiHh3jLLiDwzxOTF3oJNH+Is2gAwACUzhB8C5s3sv5CPoOHbBu07dh
-         KIMGfF8738q966J1qOLj7VefUscja/j1hcRavg927TNTn+RepruPkZ0kAhtRJb6XRwBm
-         E7HCXu+FEbC5xkeZWqg5RupqAKS44dlDA8+BUdC82iZlk+pmTlIMOUaw6KxN0zpEGLIw
-         0zwkQwE/DRfFEiIU1BezZtPLhca3I+9fO5Z3U4CP8pyz+VwIRpy0VbIOUzvHW7UpdnYw
-         oi/Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795283426; x=1795888226; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:references:in-reply-to:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Xu4M4Rq3wV8DgH+HqoVMbKaQd8J/D8bo49jgEyUz/XE=;
-        b=iLk6aNglaHLSfejsdDCsnc7RX/dVGHcxO+3s4wAzV4vM9SNB+fdAI0/vrzVTvqc6wc
-         Svla8+8t3JiJp43AkfHtiCef+rSVtiUNXCNiNnDXv0Dx04IxY9NLHX1ExCHffschAOCp
-         zy9jJomDn1DUzt7yRUM0A1XYpKDHMS4SKU7rqS7KN91edKs9iqJeydIhuhyr1Om2NmdV
-         lRkMFCB0dne8OaN3X19CagYPJxfBZpEhA+ywtlMj6Y2hGUQw8E3//KydV1ur0kiFCzYP
-         oBOPzz4qB5+Klf1SFq2yHbYTX/p3M1ScQrrPlf53r3/tBT4Cy0VAnnSsIel3030+r89S
-         czUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795283426; x=1795888226;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:references:in-reply-to:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Xu4M4Rq3wV8DgH+HqoVMbKaQd8J/D8bo49jgEyUz/XE=;
-        b=Iy+dTQqWQOIpXwVnvhgL2ht5Rpg0VbfhZm0EIsbTb1c0IOxrODPYj8vAxtmL5O6Bzd
-         FMdXAkroFnfyyzy9CGXK0zqkBHd1My0qKRVmvpJWMejWGmNgoU2Nj///JEh0QG8HjNdY
-         GzNYoNBzHsw/mYD3QUN4wVwGsxdDe8F0Bht8rIP58ZJiETPBnUBbSFmKnxwJhsyaDcqQ
-         j+MMril9O3RxlWFOHqffzlTCf5w1VAs8uveyLfQp0R0AU+HE3qp6TA5K0l76xWE/4MTv
-         PBf5qGxMo6R5b53y3wAPP5SX6u4Ik8OQvanij4ja6Mc+JqZIbbUJlycszszLd8i5H/sB
-         nQpA==
-X-Forwarded-Encrypted: i=1; AL+hErFclKR9IsUNgeURWjjot8dPK5ZTUyEkYTIrrayEEB0W/41t9EqeU/qv0ANFvniRi3NyZx8UqsG0XC7RolQt@vger.kernel.org
-X-Gm-Message-State: APuU4Z8WlAslpIj5+C8sjo8ilzxncBBSylVisL4uawIsZeMbRZZFwsEl
-	i15Ehwpsh+Mc3WZ2IyQLQTPAXx66hxxiNBZt836Xqy1N1L+aQxdw+pWyBpxikmRc3/2dz2nPgmM
-	+lzaGmTrI1VJiuuqzsiR47lJ6BQD7bnY=
-X-Gm-Gg: AZFdTZewg1amw3fLHxlvSd+mMBYwoOM1h3aQyeXDdyJ4oP0QByLtumkldUr2s9ZWlwy
-	Tt2OyVkaJreS0sPLBQsOh9Jit4lTPcEECtMGal0UXpf039A6sQbzdguipbKpXFXKPBvr5YPycOR
-	Seh99OJ5qPHj7v0Z534X0NRHEm1ND2aLg4Y/iE8mf9/zMfPD+EMmPYGUzfbZtVLSOl8YfaV79sd
-	ahFjYjrLcW8h53nEjhDHKHoWvFEdssBPt+AZPHOL/SqcH5LOYSBmEWyWH7Y7fbWle7tOC27rIFU
-	7w2vTCtTC5XQYtx06Q+kSySXOJenHJj2f7IrGnb6E3WvV3TsZwcQRNk3FpEaM/mSDaKswJbPufY
-	tNj832KpnlRUjQRc2FF9QcPg8gdb7f/vJI1ozAii5k8WpsrEvDMhZo/v6r6lKCNtltdxRtQi7hq
-	b/l3oVWX7jix8Xb1wm59ZTm3vJT1NUiNzA6Yg8+4waVvHidcW1CemYLlyHF8d5STUlmFqccIEfE
-	kwNqWpoYBqihvi4lluZGnRVlBI=
-X-Received: by 2002:a05:690c:b86:b0:8b3:4911:2dc1 with SMTP id
- 00721157ae682-8b5204ae0e7mr30662797b3.39.1795283425537; Sat, 21 Nov 2026
- 09:50:25 -0800 (PST)
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Sat, 21 Nov 2026 12:50:24 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC6B606A320;
+	Sat, 21 Nov 2026 19:07:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BC6B606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NOmUMBqqf85cgrMRsPcTU0y6cuszTCudNBtAcpV1BcTUYIH8aZKwby3NfAOFwqhIMFsvujnpH/m+fHvThUssRZS9tA2n81PDgR1NquF/X3lfKr1AsU5VeRz/tBuKyEKRNE8SdY0CQ4vVrGMsYPUXt6lkJGnSGWfb0JIl1pqGL56EcYTCX847B3p91+gaz33WNchqwxPLyF09kP7f12Q8YMQU4+vS7VUuYOvnPwn1CvgyKKDaa0OkhMGLEqeW6hqpt2TnWwv7//ZcLQLTwbc7Vr0pSPRitmmJMVhPaBtqvEbYrTseS2oF2/gADFL+1RLp6g5EOAEDUYjM2cjhfFgfpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
+ bh=utccSXcUx3nMfrBMSzeVls7K0JPx57k8P3PqldUHswA=;
+ b=sXbG0sY0QVguLmSU02S2mAGogoiz59GgCQ9BvO7tTrfee4j7CYkLZYtDwPW0uxGNMMYnylhcJ1gdKIX3ykVoSI1yQrCsiN0mhtwpUELKXH7J3WPS6kep+iYc2NmkOuTS/dzXK2j45fVlUdswxdKn4OTbCBRsFbwgW1jO7YXyBWhpVF1Eiist1W1j+X5fnrJ6v0yx99tmUBE2ca5V2VSGh8VjmZeG8o1vzor9uWWcOqyua/CyNgLp50V8UTpSsi+Xp0+7pSnUEYKfl95AZ6ESU8al3KHyqy2u3Q7dgiVyQQBxgoNIgXFeXXmvmsT7aR2gnHiudAJdlhNmehv8pQVMcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:163::8)
+ by LNXP123MB3817.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:132::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Sat, 21 Nov
+ 2026 19:07:09 +0000
+Received: from LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::f71f:a9f:c4de:687a]) by LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::f71f:a9f:c4de:687a%5]) with mapi id 15.21.0639.012; Sat, 21 Nov 2026
+ 19:07:09 +0000
+Date: Sat, 21 Nov 2026 14:07:05 -0500
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: Clarify purpose and description of
+ elf_validity_cache_copy()
+Message-ID: <zbu6fisnk6c27aixpcmy267fukgk3t2ss3tfyp2nlabxqi2kfm@6zchi53y42ee>
+References: <20261119-module-elf-validation-v1-1-69a74a84552c@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261119-module-elf-validation-v1-1-69a74a84552c@suse.com>
+X-ClientProxiedBy: BN9PR03CA0500.namprd03.prod.outlook.com
+ (2603:10b6:408:130::25) To LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:163::8)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -109,78 +88,153 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: peder.bergan@gmail.com
-In-Reply-To: <CANiq72kWXzP1SWUvhOT2k-rNjopnySXeBkjwrx63V2QUaLpnGQ@mail.gmail.com>
-References: <20261120-rust-helper-namespace-v1-1-3b9a05553ff6@gmail.com> <CANiq72kWXzP1SWUvhOT2k-rNjopnySXeBkjwrx63V2QUaLpnGQ@mail.gmail.com>
-X-Google-Nh-Sender: AW_J_UoEym23HGvNQ5zzCr2fkBwchbIS39LY0o3smkAVD0qDlNYdj5QfaNo8KarZLsYzQWlSiaO47uwNu7Ha77BLqJukKxnb1c3zQq1IDN7OFCWayb3yR_WclseoF6OW9P26WFQRXvNRjHgOWmoGpPAk7z_ifQH_LJgp626YEFxxIOIOhhyVgfEATPSFauhLyvCp9Dpd-VJp0i-FFJ0ot5roV2PTcyNx46IlCqKQGMzHu-SbF6WUbJBJ4C6Us7wCCwDfy5Nx
-Date: Sat, 21 Nov 2026 12:50:24 -0500
-X-Gm-Features: Aa3M54oiSweFMBwEnXr8v5RhNblmDh0i71sIY4AU6gHF4PbmUFHsoRQyMcHMRfA
-Message-ID: <nh-eaa5d67e-6d05-468f-9f19-273bc5b23ad0@google.com>
-Subject: Re: [PATCH] rust: put C helper exports in a dedicated namespace
-To: miguel.ojeda.sandonis@gmail.com
-Cc: ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, 
-	daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com, 
-	work@onurozkan.dev, mcgrof@kernel.org, petr.pavlu@suse.com, 
-	da.gomez@kernel.org, samitolvanen@google.com, atomlin@atomlin.com, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, wedsonaf@gmail.com, gprocida@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P123MB4190:EE_|LNXP123MB3817:EE_
+X-MS-Office365-Filtering-Correlation-Id: da2a62ef-756d-42dd-d53c-08df4802a413
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|23010399003|261028144727099003|10067099003|261022105027099003|261026140227099003|261009223027099003|261021123027099003|261022075727099003|261021121427099003|261102123227099003|56012099006|261026121527099003|18002099003|22082099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	hjW3UNFciBbHlfdvfthzY9+tv9P2kssnVbwfUCEjysMjOF6M2Uw9H7iWWLSt82AmSabAbk7suHxlCUiAJyoYcMfe+zz4TD91Hdiwu7Ih8ba2GXF35lzD+QnZ8azInQgD+vmZTtBs1WW9nFYeNODtTK34BjGUFU8bvjleGsGG1eYC2l2aV8SerBfbyqz2fOOTswQlEwdaHUJ3yUlnRxuQpEzHZ8OmV6xHeinCvLPOZ1MAP/TbBIRAQynxv3nHArpRWcdZRbDhyrl6M7dJkSK6NewIM3dxFdHZI0r/1lsz50dahf3t6DrptvKuIevYoI7Jq36+Cvt9sxzLTm7RHGnoRZP0nDZ3p33UgU9bprSlbPIWxdGoxpbdsTAvIDfaKbrQTUqs3tjWv8lFEaDLsDKD+ULQNJ07y5BzyLHJx28MqFBOHyw9IZ7duGUqevqsjEBRgU5g4uF7UWyGl7NSgy/YwMy2SwINT0cKqvJ93PQW89Pc10TXHCOLfx23ImNVc/thiG99ytWbp29DtnGpbI4lTvb0eKXzD0Rh9gFkeijsEpdQc1t40aRJjsTC6f0xjiaQLRMdWdhw3Sfb/rx5aBYMnzhNUjYbLzpA27ZJCS4bH+UuavKDt94JqSx9wZJ6fN2M5a9C6nctpCpaz9U9LQHQ/iShCbLVO00+62hUEWWNQqo=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(23010399003)(261028144727099003)(10067099003)(261022105027099003)(261026140227099003)(261009223027099003)(261021123027099003)(261022075727099003)(261021121427099003)(261102123227099003)(56012099006)(261026121527099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YkhCNklDV1pSeDMwWGRONDUrRGJ2emVRdVhyUE01L3BHOG1GNERpZ2ZFV05v?=
+ =?utf-8?B?WEcwb2ozSmcyM1FpN29FZWhxYmhmc3ljMXdlODI1V2U5OEs1MWVMblIrN0xR?=
+ =?utf-8?B?TFRCVitFUjRlZlYxM1JpWU1JVTN0V1hsWjVCWkZuUmFXMnIwbGNabjRHQm1H?=
+ =?utf-8?B?WnlnMjYyUEk0SWp0TnFhMWFLQldNMUpsMys5S28zOUd6L1JMVmFPUENEeUVy?=
+ =?utf-8?B?R0tmeHVLcDdFVFlPZ1VLS0lPQUtFTzFIM2tEQXVyRjhsWm5yTGRDY283b3Fa?=
+ =?utf-8?B?U1hwVDZZdXcybW5kRFRiNldJVnJuVkZSOUt4RER6VmRUV2VVRVkzS09LbnNE?=
+ =?utf-8?B?cWlVTitER3M5dVlKQStQM3J3QWFkWFIvbXJkTVVRMzBMdEJMSmxGbG1IYi9j?=
+ =?utf-8?B?MEl5U01KeFB1aWJFQlB4MGxSNXgvblNTVFN3OElEQTRUbk9xZFUzejFoTjZC?=
+ =?utf-8?B?QlgybVAwTklibnVTUGE5N0hLV2RDMUFIOVZpUHNGM3YrcDRFeTRlOTlmM2I5?=
+ =?utf-8?B?RWlrc2p5dkRKVjdiTWxHQURaanRvVk1tSEhBMEZIMlNnVjYxalBrbTREeEZJ?=
+ =?utf-8?B?cHJsMFF1ZXlWS3lJb0k0YngwekdiVVhQVnExUWxaY3ZxWk1LNksrcDQxK2Jn?=
+ =?utf-8?B?enV0QXFkZUtwc2dCelFFNDVGTENzTElVcy9wVXFoVWoxbkQwYWhmd2JydGZJ?=
+ =?utf-8?B?QnBMMER6UmNlUElJeTB4YlJXNzZhUzdaVjAzZXQxKzFKUWI2b1B6VmJjTEsy?=
+ =?utf-8?B?ZVZMK0E4aEpPU2NJUTFndEw5eitRZERBSWpJdmlEWkJBVHMvTTRnTHMvWTN2?=
+ =?utf-8?B?TG1zdjNmU2M2dGJJcTdKTGtZcVBYU0Rwb1FvT3lYSTJiM1gydTgyQmhIeTQv?=
+ =?utf-8?B?TUV4K3Q3U1NxV2RieWNHUTVBRGZMZTJWLzhMNlJmWE9EYTFXWnVYUDJQT1JL?=
+ =?utf-8?B?eEFrK1RteDMxd2daZllNZXllczkzRjdtUnQrekhORlJGVGM5Q04yY0NHUHha?=
+ =?utf-8?B?TnZJWE5iRGt0elZvd053aEtKK3ZQWWtmQWtjMjdrK20zYTZPSVAzQUNIMU5I?=
+ =?utf-8?B?dU9NUlBtZ2pqdGhDNE1GSS9MNkVIS1hpZjFkMURsRXFEeXV4VE9VdWE5Mk83?=
+ =?utf-8?B?SUNFK0ovZFRnKytDdDZYWGZocWNaeldnbEtVaG5pRnhpRHl5TUVNbkd3WGdL?=
+ =?utf-8?B?Z1pNZ3I2R2tmMkVJb1VSd0lTbFJqL01IODZjOGE1VDFNRng4alpxdjNKT3R5?=
+ =?utf-8?B?UWhaRHRvY0luYVI1dEo3aUJhdVQ0cjBxOGllaEduNVJWd3pta1FiUm56S2tq?=
+ =?utf-8?B?TnhGVkZoMGJiaFRnQTcyNjFBMXVnOVBIZWpCSU5Pb0pGeWJ0SURpMHJRWVBX?=
+ =?utf-8?B?NTB2NWY5Nk92SzhMc0J4MG9WcEJrQW5vKzVZTjhCVlFONWR6VWZJYVdaaTNY?=
+ =?utf-8?B?VVh1RUZhSE14em5PV2RtTExOZzV6TEJPY0p6NmZBbWZhK2RXMkQ3aE1xZUJl?=
+ =?utf-8?B?UDc2WktjdE9ZaWJqR3JnbHB6dC9URkxUVmhFODN1bzFLSUxqZFVzTUg1eTQ1?=
+ =?utf-8?B?OVg4WUlkU3VJdXZEQlorQi9Vbks1MlRWNEhVY0RuSUJwQU8xRDlIeGJpK2NH?=
+ =?utf-8?B?eG91VnlkalhTTEF5ZHNMalB6eko5azY5Mm1ESHRxRTFRQTIyR3E0S0JQQzh6?=
+ =?utf-8?B?RTdIZDdLejVZK0VLekUwY3FMaEUrR1RieFFIdERLaEtGRnJaL3VaTU50aVRa?=
+ =?utf-8?B?OWszeW5OUE1zYVd2dU1DVFRCM2VBa1J2eXF0dk5uN2t4L2FOWWdobmFMRVJi?=
+ =?utf-8?B?eC93d3RHbC9mUDJCbGNJSDQ1VDErS3VYdTNXbDBpTThqNkdXOFFWdkVoQUpz?=
+ =?utf-8?B?dVZLVUxkeFNodWQwYlVoSzJINmhyMGIwTHJXNGhkTys5bmdxalN3QnFPbHlB?=
+ =?utf-8?B?UUdaVjBlTlhSL2U5ek5TQTFzRkpGVHVEaFNGRVlSZDNTdnNXSVAzZWV5NDd4?=
+ =?utf-8?B?T3ppc2FGS0hkUEcrdUZ3cTJLRkxqU0dwRVgyL1doRnNjRm1ld3BTSTZzM1BN?=
+ =?utf-8?B?QktESzlDSjJpUjA3aUwwME1vWGNlYWRmMy9zZSs3RGk2allWYW5COGYweXdV?=
+ =?utf-8?B?NEhrQmF5R2dCckI2cE5uNzJJUmJsUmpvN3R2ZXpnNVdqaDUyREg3eEI1T2pC?=
+ =?utf-8?B?OVNaYjQxMVdGWEQ4c1h3U2RiWmoyVEpJQ2ZJNUNzdGZYZVZCNjE3eE0ySFps?=
+ =?utf-8?B?NEJWSnBXTm4vR3hPV0ZaK05GS0tLNWUwSlZEZVlJUnBKTTY0QndJRTVnU1VR?=
+ =?utf-8?B?MzJGNGRIWURvVjBUdjR4RDhsaGxjK25HNmZTMVAvdXBOOWVVYzYydz09?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da2a62ef-756d-42dd-d53c-08df4802a413
+X-MS-Exchange-CrossTenant-AuthSource: LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2026 19:07:09.2598
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OpXgxjI2BbOPKbTxmjt4YGRPgJ5CudP1mFHui6aludkmx5npHREgiKg2BkBWkmNgW/jHSUjerMSMuSB5lQUEJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LNXP123MB3817
 
-Hi Miguel,
+On Thu, Nov 19, 2026 at 05:25:27PM +0100, Petr Pavlu wrote:
+> With the advent of LLM agents, a number of recent patches and bug reports
+> for the module loader focus on its validation of module ELF metadata.
+> However, many of them are misguided.
+> 
+> Loading a module is a privileged operation. The ELF metadata can normally
+> be trusted, just as the module code itself is expected to be correct. The
+> checks in elf_validity_cache_copy() are intended to catch accidental
+> corruption and basic violations of the ELF format, rather than to provide
+> exhaustive validation. The only requirement is that enough of the ELF data
+> is validated for the module loader to safely reach the blacklist check
+> without crashing on a corrupted module file. This allows a broken module to
+> be blacklisted and prevented from loading.
+> 
+> Clarify the purpose of elf_validity_cache_copy() and otherwise clean up its
+> description. Hopefully, LLM agents will take this into account and the
+> number of validation-related reports will decrease.
+> 
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>  kernel/module/main.c | 37 +++++++++++++++++++++++--------------
+>  1 file changed, 23 insertions(+), 14 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 34e0204ea37c..0c204f07ca68 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2421,24 +2421,33 @@ static int elf_validity_cache_strtab(struct load_info *info)
+>  }
+>  
+>  /*
+> - * Check userspace passed ELF module against our expectations, and cache
+> - * useful variables for further processing as we go.
+> + * Check the ELF module passed in from userspace against our expectations, and
+> + * cache useful variables for further processing as we go.
+>   *
+> - * This does basic validity checks against section offsets and sizes, the
+> - * section name string table, and the indices used for it (sh_name).
+> + * Loading a module is a privileged operation. The ELF metadata can normally be
+> + * trusted, just as the module code itself is expected to be correct. These
+> + * checks are intended to catch accidental corruption and basic violations of
+> + * the ELF format, rather than to provide exhaustive validation. The only
+> + * requirement is that enough of the ELF data is validated for the module loader
+> + * to safely reach the blacklist check without crashing on a corrupted module
+> + * file. This allows a broken module to be blacklisted and prevented from
+> + * loading.
+>   *
+> - * As a last step, since we're already checking the ELF sections we cache
+> - * useful variables which will be used later for our convenience:
+> + * The checks cover the ELF header, section offsets and sizes, section-name and
+> + * symbol string tables, offsets into those tables, and selected
+> + * section-specific constraints.
+>   *
+> - * 	o pointers to section headers
+> - * 	o cache the modinfo symbol section
+> - * 	o cache the string symbol section
+> - * 	o cache the module section
+> + * While validating, cache the following for later use:
+>   *
+> - * As a last step we set info->mod to the temporary copy of the module in
+> - * info->hdr. The final one will be allocated in move_module(). Any
+> - * modifications we make to our copy of the module will be carried over
+> - * to the final minted module.
+> + * * pointers to the section headers and section-name string table
+> + * * indices of relevant sections, including .modinfo, the symbol table, the
+> + *   symbol string table, the module section, and version sections
+> + * * a pointer to the symbol string table
+> + *
+> + * Finally, set info->mod to point to the temporary module struct within
+> + * info->hdr. The final copy of the module struct will be allocated in
+> + * move_module(). Any modifications to the temporary copy will be carried over
+> + * to the final one.
+>   */
+>  static int elf_validity_cache_copy(struct load_info *info, int flags)
+>  {
+> 
+> ---
+> base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+> change-id: 20261119-module-elf-validation-a5a0e28e6dcb
 
-Thanks for the review. The export formats are literals, so I'll use
-:=3D for both. V2 already added the namespace import to KASAN's C
-metadata.
-https://patch.msgid.link/20261120-rust-helper-namespace-v2-1-14315658f59e@g=
-mail.com
+Thank you.
 
-For v3, I'll build on Giuliano's assembly conversion and generate
-EXPORT_SYMBOL_NS_GPL() directly for the helper list.
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
 
-1. Would you prefer I wait for Giuliano's series to land or send v3
-   with it listed as a prerequisite?
-2. Should I keep the KASAN import for v3 or move automatic imports
-   into modpost in this series?
-3. If you prefer modpost, should it add the import only when a module
-   contains a Rust object and references a RUST_HELPERS export?
-
-Cheers,
-Peder
-
-
-On Fri, 20 Nov 2026 22:34:24 +0100, Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
-> On Fri, Nov 20, 2026 at 5:32=E2=80=AFPM Peder Bergan via B4 Relay
-> <devnull+peder.bergan.gmail.com@kernel.org> wrote:
-> >
-> > Suggested-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> > Link: https://github.com/Rust-for-Linux/linux/issues/216
->
-> Nice, thanks for going through these old issues! :)
->
-> > +rust_export_macro =3D EXPORT_SYMBOL_RUST_GPL
->
-> Do we need a recursively expanded variable?
->
-> > +++ b/rust/exports.c
->
-> Conflicts ahead; this file happens to be going away with:
->
->   https://lore.kernel.org/rust-for-linux/20261112121512.1670347-3-gprocid=
-a@google.com/
->
-> Cc'ing Giuliano.
->
-> Also, what Sashiko says seems reasonable: if we do it this way, then
-> we may need manual `MODULE_IMPORT_NS()`s in some places, which may
-> become a bit annoying, even if there aren't that many mixed language
-> modules so far.
->
-> Actually, perhaps we could just import it in modpost if a Rust module
-> has any Rust translation unit in it...
->
-> Cheers,
-> Miguel
+-- 
+Aaron Tomlin
