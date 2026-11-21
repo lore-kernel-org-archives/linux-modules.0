@@ -1,84 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.100.114
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795288034;
-	b=BLYCJ1w2xoyQNlGG9ZOeSMgio+FBN8lLKc5QyfBwawAXXFbV014CjrA/SsYdCllszqTS
-	 SZIDEIOCVRjDBLgUmhZmRtMXijPGhzrVJz9GrXLX26m+7NAzgT+xhfqEzkaE0z597YRQu
-	 L7NLZe3hkQ7DMYyhAbO1TirtbmDWiv3ub/ux2DrMF+ZNLTsrlyRVa+cg8uOh4NDb1xwtw
-	 XWexEUd9bD2i3N6mDGDyEeS1t+xhu7atnHTyv+IZEtxRHBsfVqyybu+7MCgEP5spjGcpA
-	 XpYXI6VC1oxJf2H+bxA9UZcyCTBpU2SfjRfRuRjFkJEiI72RX1bIUHXp43o7nLY9/2A==
+	t=1795301377;
+	b=yznK5CZ5DB6KKPKwzR/Yg2q6M61mCx41aqbE4RgN2eFWRLtTsCebqeSK4mME3W0dPW1m
+	 MLp9fEXv/YHxxdFHwitxU0JcVstJMEpZFLr24CUn/KoLFvqIdEpNOFEgS4JNEXNzISsao
+	 kKNzIxGmDTezf92SRadewwfWkH9riGkGs0VLFVNTWap4Ule8lNtwtnqo1zvvfWnU2sMhs
+	 7RY8i9s/gofXdiczq+pKgb4e0EuI4OnfSZjL4/cp2TvH9hVP433GOtwMIOA+Y4T9uAwMC
+	 QR4/bNzzLwHO3JkRr71muqCVk/tfGxyy/aTKtkaTLjw3z63NRAilX4ZGRhhfS03DDrg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795288034;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:Content-Type:Content-Disposition:In-Reply-To:
-	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=utccSXcUx3nMfrBMSzeVls7K0JPx57k8P3PqldUHswA=;
-	b=WIaII+mQ1bXtdS7CCAnrhDwCO82E7faUd1cvrfhFhhJSZRbsIBBDVn5FASKXBwh0wRMD
-	 5RvUlELhMRPqiiPhZ5WWVN5VcEaJhSsyi5YEaOWKNfyBL8bY/gFi8tA++Ej5RQZ81acHW
-	 Be7gNXRDlXOMBTTzOS5xncAy1fKpiqAOv4xicbo8FoWYNEl6kxFfMl1pvEtNOXDde3JRR
-	 aER6QfC6f4okN+vVunVfp6rBpylr4jTWO78BVw74EkLtNIwr4InQja32tkehs06YmVem/
-	 OyTEPqH71b7FqHDcoud9sLHeCjMF/UNcpwWWFg6iPNdu1kht5rrJHoiSeKHFgQYXqag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795301377;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=Aoiu4YgCXwBVcBKUOr7OdOpxOZVgC9Rnn+3RJ75AsfA=;
+	b=vEYzxWlP3uaoRCu7SmTjgp6ZY9fe6pVuhBhzQ48VKZYIvovuSAT8BzRBsTsr55jIQTR+
+	 K7OYwMY4GHJi+8VnrkrlyDuyoCaC6k86XN5o8GaHEO5+uol5aGumge4leLZi6/KD34Jc7
+	 7qK2lGM7oUj+A11pe40gJQpFHcpvlnTxt3XThbBi2PDpjwZmLnu+2+MRR4Z2D00j4UpVV
+	 m1qW2yRv95m6uXoucWvzWe9tvpcGjU1zwUVySZcAQLkXfhBqAZhHgSCznL7/JA0of45Vp
+	 mFY1PyKFgn1mFfNHG9sPQSwc62/uxqPW0oREsnWtwzdrZvj9yY4s2ZgNGwoMEXVbD3g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=atomlin.com;
-	spf=pass smtp.mailfrom=atomlin.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.100.114
-Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021114.outbound.protection.outlook.com [52.101.100.114])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UiN+x13g;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC6B606A320;
-	Sat, 21 Nov 2026 19:07:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BC6B606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NOmUMBqqf85cgrMRsPcTU0y6cuszTCudNBtAcpV1BcTUYIH8aZKwby3NfAOFwqhIMFsvujnpH/m+fHvThUssRZS9tA2n81PDgR1NquF/X3lfKr1AsU5VeRz/tBuKyEKRNE8SdY0CQ4vVrGMsYPUXt6lkJGnSGWfb0JIl1pqGL56EcYTCX847B3p91+gaz33WNchqwxPLyF09kP7f12Q8YMQU4+vS7VUuYOvnPwn1CvgyKKDaa0OkhMGLEqeW6hqpt2TnWwv7//ZcLQLTwbc7Vr0pSPRitmmJMVhPaBtqvEbYrTseS2oF2/gADFL+1RLp6g5EOAEDUYjM2cjhfFgfpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=utccSXcUx3nMfrBMSzeVls7K0JPx57k8P3PqldUHswA=;
- b=sXbG0sY0QVguLmSU02S2mAGogoiz59GgCQ9BvO7tTrfee4j7CYkLZYtDwPW0uxGNMMYnylhcJ1gdKIX3ykVoSI1yQrCsiN0mhtwpUELKXH7J3WPS6kep+iYc2NmkOuTS/dzXK2j45fVlUdswxdKn4OTbCBRsFbwgW1jO7YXyBWhpVF1Eiist1W1j+X5fnrJ6v0yx99tmUBE2ca5V2VSGh8VjmZeG8o1vzor9uWWcOqyua/CyNgLp50V8UTpSsi+Xp0+7pSnUEYKfl95AZ6ESU8al3KHyqy2u3Q7dgiVyQQBxgoNIgXFeXXmvmsT7aR2gnHiudAJdlhNmehv8pQVMcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:163::8)
- by LNXP123MB3817.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:132::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Sat, 21 Nov
- 2026 19:07:09 +0000
-Received: from LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
- ([fe80::f71f:a9f:c4de:687a]) by LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
- ([fe80::f71f:a9f:c4de:687a%5]) with mapi id 15.21.0639.012; Sat, 21 Nov 2026
- 19:07:09 +0000
-Date: Sat, 21 Nov 2026 14:07:05 -0500
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: Clarify purpose and description of
- elf_validity_cache_copy()
-Message-ID: <zbu6fisnk6c27aixpcmy267fukgk3t2ss3tfyp2nlabxqi2kfm@6zchi53y42ee>
-References: <20261119-module-elf-validation-v1-1-69a74a84552c@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261119-module-elf-validation-v1-1-69a74a84552c@suse.com>
-X-ClientProxiedBy: BN9PR03CA0500.namprd03.prod.outlook.com
- (2603:10b6:408:130::25) To LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:163::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4EC9606A320;
+	Sat, 21 Nov 2026 22:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UiN+x13g
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795301377;
+	b=oduiiZIm6Ru5QD0ulQbQ1Os1MaI4OBYeGVNXuO0sLOIIXhLu5HgF6+GLzWcOI0dH0rFk
+	 NQo+/N8Q55qYlzrVegXv4gKIJ7L4Rpxdd4x9GCDThtKziPUzreHDIZbn7l7mUXJwTvRB9
+	 KM0tRcjjC4FxHHTtlM32XCkB2+HeQPJ89BSL8uyOSu4b0VEZ1JYJwH/qEviXDTYae6fo8
+	 Bl20vxUVD6ucr0uRKa75ToFCMGEcRirD35Pt6TYB6Yh/vetlX1Kx/KY9Vh1QX51M+J1+I
+	 r0bq8Nb2ueSk5XckKzLsLbgV2jsDOitwRXASvRcmF9+OxjenWh9/GF8zUUPtThm0ECw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795301377;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=Aoiu4YgCXwBVcBKUOr7OdOpxOZVgC9Rnn+3RJ75AsfA=;
+	b=S6eFeZrxT0b3GOWcOrcdn5NEWqJAS/LinxCrce2+oL2mV0E7H7AGK0TrgG9p9hZiw1Zk
+	 AJw+IgHGuFMTyz9yqFAl8P4hSoeo6wMMBkAx4S6Uj9zWZBfhOSjqbhc95K98l3syvbyMk
+	 G0IyZEZ9P8iR0+yUVkOutcG5PoImFB03Qukhcxu+8WCNfTQq+Q0QHsmzn9/ohJt3FScV2
+	 ENl4QDstk8dQt4rpqsYKGG2cmJgt9jVSamF7yA2/pPcmOto4agPvtn+pjeMOoWTP5oLCe
+	 5RJ7v4BU8JK4VbiLCN3kDQkoNZiXJqXRStWJW+L8T2FGtSDGu6/5OT8BpxKIAhMU0Og==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0E4921F000C0;
+	Sat, 21 Nov 2026 22:49:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795301377;
+	bh=Aoiu4YgCXwBVcBKUOr7OdOpxOZVgC9Rnn+3RJ75AsfA=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=UiN+x13g9SK91jI5iOvwBstLG2KX8iXC9Uly0/1ygHIZ+Du1zH0xnFLMCn+bj0cm5
+	 I88xyAfMjXH6GlE0WoSNt02MgW2SoAKaZ6OSQlnJKS5IesVF93tAsQPagZ1M2z/25H
+	 yp1Ezvt2U+WPl+2803cxoMpy5WybiGneafDesiT8AZ2qR155nro1FenLgP7Rx2JfpQ
+	 Zt9/xH42jj/BEEA7qERddZY3bRux9qfErhJpJGjYPQE7/5bi2KfCP/tXgiq29qtLeX
+	 iUyZqJG2tbHtVU+aJl5zjGpmAvfs2tnndQOtldDgDvvLROX57UYj1cwe70OGVSzQy5
+	 pmlgWyQ/a8Z5A==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 651DE4BE3E;
+	Sat, 21 Nov 2026 22:49:36 +0000 (UTC)
+From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
+Subject: [PATCH 0/6] dyndbg,vmlinux.lds.h: fix i386 section alignment in
+ BOUNDED_SECTION macros
+Date: Sat, 21 Nov 2026 15:49:18 -0700
+Message-Id: <20261121-vmlinux-lds-v1-0-49818f3f5cc0@gmail.com>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -88,153 +84,87 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P123MB4190:EE_|LNXP123MB3817:EE_
-X-MS-Office365-Filtering-Correlation-Id: da2a62ef-756d-42dd-d53c-08df4802a413
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|23010399003|261028144727099003|10067099003|261022105027099003|261026140227099003|261009223027099003|261021123027099003|261022075727099003|261021121427099003|261102123227099003|56012099006|261026121527099003|18002099003|22082099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	hjW3UNFciBbHlfdvfthzY9+tv9P2kssnVbwfUCEjysMjOF6M2Uw9H7iWWLSt82AmSabAbk7suHxlCUiAJyoYcMfe+zz4TD91Hdiwu7Ih8ba2GXF35lzD+QnZ8azInQgD+vmZTtBs1WW9nFYeNODtTK34BjGUFU8bvjleGsGG1eYC2l2aV8SerBfbyqz2fOOTswQlEwdaHUJ3yUlnRxuQpEzHZ8OmV6xHeinCvLPOZ1MAP/TbBIRAQynxv3nHArpRWcdZRbDhyrl6M7dJkSK6NewIM3dxFdHZI0r/1lsz50dahf3t6DrptvKuIevYoI7Jq36+Cvt9sxzLTm7RHGnoRZP0nDZ3p33UgU9bprSlbPIWxdGoxpbdsTAvIDfaKbrQTUqs3tjWv8lFEaDLsDKD+ULQNJ07y5BzyLHJx28MqFBOHyw9IZ7duGUqevqsjEBRgU5g4uF7UWyGl7NSgy/YwMy2SwINT0cKqvJ93PQW89Pc10TXHCOLfx23ImNVc/thiG99ytWbp29DtnGpbI4lTvb0eKXzD0Rh9gFkeijsEpdQc1t40aRJjsTC6f0xjiaQLRMdWdhw3Sfb/rx5aBYMnzhNUjYbLzpA27ZJCS4bH+UuavKDt94JqSx9wZJ6fN2M5a9C6nctpCpaz9U9LQHQ/iShCbLVO00+62hUEWWNQqo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(23010399003)(261028144727099003)(10067099003)(261022105027099003)(261026140227099003)(261009223027099003)(261021123027099003)(261022075727099003)(261021121427099003)(261102123227099003)(56012099006)(261026121527099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YkhCNklDV1pSeDMwWGRONDUrRGJ2emVRdVhyUE01L3BHOG1GNERpZ2ZFV05v?=
- =?utf-8?B?WEcwb2ozSmcyM1FpN29FZWhxYmhmc3ljMXdlODI1V2U5OEs1MWVMblIrN0xR?=
- =?utf-8?B?TFRCVitFUjRlZlYxM1JpWU1JVTN0V1hsWjVCWkZuUmFXMnIwbGNabjRHQm1H?=
- =?utf-8?B?WnlnMjYyUEk0SWp0TnFhMWFLQldNMUpsMys5S28zOUd6L1JMVmFPUENEeUVy?=
- =?utf-8?B?R0tmeHVLcDdFVFlPZ1VLS0lPQUtFTzFIM2tEQXVyRjhsWm5yTGRDY283b3Fa?=
- =?utf-8?B?U1hwVDZZdXcybW5kRFRiNldJVnJuVkZSOUt4RER6VmRUV2VVRVkzS09LbnNE?=
- =?utf-8?B?cWlVTitER3M5dVlKQStQM3J3QWFkWFIvbXJkTVVRMzBMdEJMSmxGbG1IYi9j?=
- =?utf-8?B?MEl5U01KeFB1aWJFQlB4MGxSNXgvblNTVFN3OElEQTRUbk9xZFUzejFoTjZC?=
- =?utf-8?B?QlgybVAwTklibnVTUGE5N0hLV2RDMUFIOVZpUHNGM3YrcDRFeTRlOTlmM2I5?=
- =?utf-8?B?RWlrc2p5dkRKVjdiTWxHQURaanRvVk1tSEhBMEZIMlNnVjYxalBrbTREeEZJ?=
- =?utf-8?B?cHJsMFF1ZXlWS3lJb0k0YngwekdiVVhQVnExUWxaY3ZxWk1LNksrcDQxK2Jn?=
- =?utf-8?B?enV0QXFkZUtwc2dCelFFNDVGTENzTElVcy9wVXFoVWoxbkQwYWhmd2JydGZJ?=
- =?utf-8?B?QnBMMER6UmNlUElJeTB4YlJXNzZhUzdaVjAzZXQxKzFKUWI2b1B6VmJjTEsy?=
- =?utf-8?B?ZVZMK0E4aEpPU2NJUTFndEw5eitRZERBSWpJdmlEWkJBVHMvTTRnTHMvWTN2?=
- =?utf-8?B?TG1zdjNmU2M2dGJJcTdKTGtZcVBYU0Rwb1FvT3lYSTJiM1gydTgyQmhIeTQv?=
- =?utf-8?B?TUV4K3Q3U1NxV2RieWNHUTVBRGZMZTJWLzhMNlJmWE9EYTFXWnVYUDJQT1JL?=
- =?utf-8?B?eEFrK1RteDMxd2daZllNZXllczkzRjdtUnQrekhORlJGVGM5Q04yY0NHUHha?=
- =?utf-8?B?TnZJWE5iRGt0elZvd053aEtKK3ZQWWtmQWtjMjdrK20zYTZPSVAzQUNIMU5I?=
- =?utf-8?B?dU9NUlBtZ2pqdGhDNE1GSS9MNkVIS1hpZjFkMURsRXFEeXV4VE9VdWE5Mk83?=
- =?utf-8?B?SUNFK0ovZFRnKytDdDZYWGZocWNaeldnbEtVaG5pRnhpRHl5TUVNbkd3WGdL?=
- =?utf-8?B?Z1pNZ3I2R2tmMkVJb1VSd0lTbFJqL01IODZjOGE1VDFNRng4alpxdjNKT3R5?=
- =?utf-8?B?UWhaRHRvY0luYVI1dEo3aUJhdVQ0cjBxOGllaEduNVJWd3pta1FiUm56S2tq?=
- =?utf-8?B?TnhGVkZoMGJiaFRnQTcyNjFBMXVnOVBIZWpCSU5Pb0pGeWJ0SURpMHJRWVBX?=
- =?utf-8?B?NTB2NWY5Nk92SzhMc0J4MG9WcEJrQW5vKzVZTjhCVlFONWR6VWZJYVdaaTNY?=
- =?utf-8?B?VVh1RUZhSE14em5PV2RtTExOZzV6TEJPY0p6NmZBbWZhK2RXMkQ3aE1xZUJl?=
- =?utf-8?B?UDc2WktjdE9ZaWJqR3JnbHB6dC9URkxUVmhFODN1bzFLSUxqZFVzTUg1eTQ1?=
- =?utf-8?B?OVg4WUlkU3VJdXZEQlorQi9Vbks1MlRWNEhVY0RuSUJwQU8xRDlIeGJpK2NH?=
- =?utf-8?B?eG91VnlkalhTTEF5ZHNMalB6eko5azY5Mm1ESHRxRTFRQTIyR3E0S0JQQzh6?=
- =?utf-8?B?RTdIZDdLejVZK0VLekUwY3FMaEUrR1RieFFIdERLaEtGRnJaL3VaTU50aVRa?=
- =?utf-8?B?OWszeW5OUE1zYVd2dU1DVFRCM2VBa1J2eXF0dk5uN2t4L2FOWWdobmFMRVJi?=
- =?utf-8?B?eC93d3RHbC9mUDJCbGNJSDQ1VDErS3VYdTNXbDBpTThqNkdXOFFWdkVoQUpz?=
- =?utf-8?B?dVZLVUxkeFNodWQwYlVoSzJINmhyMGIwTHJXNGhkTys5bmdxalN3QnFPbHlB?=
- =?utf-8?B?UUdaVjBlTlhSL2U5ek5TQTFzRkpGVHVEaFNGRVlSZDNTdnNXSVAzZWV5NDd4?=
- =?utf-8?B?T3ppc2FGS0hkUEcrdUZ3cTJLRkxqU0dwRVgyL1doRnNjRm1ld3BTSTZzM1BN?=
- =?utf-8?B?QktESzlDSjJpUjA3aUwwME1vWGNlYWRmMy9zZSs3RGk2allWYW5COGYweXdV?=
- =?utf-8?B?NEhrQmF5R2dCckI2cE5uNzJJUmJsUmpvN3R2ZXpnNVdqaDUyREg3eEI1T2pC?=
- =?utf-8?B?OVNaYjQxMVdGWEQ4c1h3U2RiWmoyVEpJQ2ZJNUNzdGZYZVZCNjE3eE0ySFps?=
- =?utf-8?B?NEJWSnBXTm4vR3hPV0ZaK05GS0tLNWUwSlZEZVlJUnBKTTY0QndJRTVnU1VR?=
- =?utf-8?B?MzJGNGRIWURvVjBUdjR4RDhsaGxjK25HNmZTMVAvdXBOOWVVYzYydz09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da2a62ef-756d-42dd-d53c-08df4802a413
-X-MS-Exchange-CrossTenant-AuthSource: LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2026 19:07:09.2598
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OpXgxjI2BbOPKbTxmjt4YGRPgJ5CudP1mFHui6aludkmx5npHREgiKg2BkBWkmNgW/jHSUjerMSMuSB5lQUEJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LNXP123MB3817
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/x3M3QpAQBAG0FeZvmtbZkPsq8iFn8EUS7vZlLy7c
+ h7gPIgSVCIcPQiSNOrh4Ygzwrj2fhGjExzB5rZitmzSvqm/brNN0QxlU3DORVXXJTLCGWTW+9/
+ a7n0/HYCNLV0AAAA=
+X-Change-ID: 20261121-vmlinux-lds-b59410146885
+To: Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-modules@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795301375; l=2466;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=InmaDXtqg+/ahjVrbCn9lEk8jOf8zxExCbI82ydIsZw=;
+ b=Sf2U1Fv6tD3GNRvKetfdqrqq6Lle3eJzJPocyk3wSnGWKzNm3t5q6lF4H62eVd+rRfUiiwlLR
+ LlWgl5loBYOCdW0Eb97rHq1Fo2nHdILm6Wsn3J80brn9VpViuJ1gDzm
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
+X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
+ auth_id=958
+X-Original-From: Jim Cromie <jim.cromie@gmail.com>
+Reply-To: jim.cromie@gmail.com
 
-On Thu, Nov 19, 2026 at 05:25:27PM +0100, Petr Pavlu wrote:
-> With the advent of LLM agents, a number of recent patches and bug reports
-> for the module loader focus on its validation of module ELF metadata.
-> However, many of them are misguided.
-> 
-> Loading a module is a privileged operation. The ELF metadata can normally
-> be trusted, just as the module code itself is expected to be correct. The
-> checks in elf_validity_cache_copy() are intended to catch accidental
-> corruption and basic violations of the ELF format, rather than to provide
-> exhaustive validation. The only requirement is that enough of the ELF data
-> is validated for the module loader to safely reach the blacklist check
-> without crashing on a corrupted module file. This allows a broken module to
-> be blacklisted and prevented from loading.
-> 
-> Clarify the purpose of elf_validity_cache_copy() and otherwise clean up its
-> description. Hopefully, LLM agents will take this into account and the
-> number of validation-related reports will decrease.
-> 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->  kernel/module/main.c | 37 +++++++++++++++++++++++--------------
->  1 file changed, 23 insertions(+), 14 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 34e0204ea37c..0c204f07ca68 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2421,24 +2421,33 @@ static int elf_validity_cache_strtab(struct load_info *info)
->  }
->  
->  /*
-> - * Check userspace passed ELF module against our expectations, and cache
-> - * useful variables for further processing as we go.
-> + * Check the ELF module passed in from userspace against our expectations, and
-> + * cache useful variables for further processing as we go.
->   *
-> - * This does basic validity checks against section offsets and sizes, the
-> - * section name string table, and the indices used for it (sh_name).
-> + * Loading a module is a privileged operation. The ELF metadata can normally be
-> + * trusted, just as the module code itself is expected to be correct. These
-> + * checks are intended to catch accidental corruption and basic violations of
-> + * the ELF format, rather than to provide exhaustive validation. The only
-> + * requirement is that enough of the ELF data is validated for the module loader
-> + * to safely reach the blacklist check without crashing on a corrupted module
-> + * file. This allows a broken module to be blacklisted and prevented from
-> + * loading.
->   *
-> - * As a last step, since we're already checking the ELF sections we cache
-> - * useful variables which will be used later for our convenience:
-> + * The checks cover the ELF header, section offsets and sizes, section-name and
-> + * symbol string tables, offsets into those tables, and selected
-> + * section-specific constraints.
->   *
-> - * 	o pointers to section headers
-> - * 	o cache the modinfo symbol section
-> - * 	o cache the string symbol section
-> - * 	o cache the module section
-> + * While validating, cache the following for later use:
->   *
-> - * As a last step we set info->mod to the temporary copy of the module in
-> - * info->hdr. The final one will be allocated in move_module(). Any
-> - * modifications we make to our copy of the module will be carried over
-> - * to the final minted module.
-> + * * pointers to the section headers and section-name string table
-> + * * indices of relevant sections, including .modinfo, the symbol table, the
-> + *   symbol string table, the module section, and version sections
-> + * * a pointer to the symbol string table
-> + *
-> + * Finally, set info->mod to point to the temporary module struct within
-> + * info->hdr. The final copy of the module struct will be allocated in
-> + * move_module(). Any modifications to the temporary copy will be carried over
-> + * to the final one.
->   */
->  static int elf_validity_cache_copy(struct load_info *info, int flags)
->  {
-> 
-> ---
-> base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
-> change-id: 20261119-module-elf-validation-a5a0e28e6dcb
+This series fixes a latent i386 section-alignment bug, by adding
+explicit alignments into the BOUNDED_SECTION_* linker script macros.
+The misalignment appears once __dyndbg_classes is split in 2, and the
+1st section has just 1 entry; the 2nd section implicitly gets ALIGN(4).
 
-Thank you.
+1. Refactor BOUNDED_SECTION_* (and HEADERED_SECTION_*) macros from
+   vmlinux.lds.h into include/asm-generic/bounded_sections.lds.h for
+   reuse.
 
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+2. Drop the unused HEADERED_SECTION* macros from bounded_sections.lds.h.
 
+3. Add explicit ALIGN(8) defaults to BOUNDED_SECTION_* (with _ALIGNED
+   variants for non-8-byte tables like ORC_UNWIND_TABLE,
+   EXCEPTION_TABLE, TRACEDATA, INIT_SETUP, and NOTES), fixing an i386
+   NULL deref in dynamic_debug_init() caused by 28-byte
+   __dyndbg_classes misaligning the following __dyndbg section.
+
+4. Remove now-redundant outer `. = ALIGN(8);` directives preceding 
+   BOUNDED_SECTION* uses in vmlinux.lds.h.
+
+5. Add include/asm-generic/dyndbg.lds.h with DYNDBG_SECTIONS() for 
+   vmlinux.lds.h and MOD_DYNDBG_SECTIONS() (`0 : ALIGN(8)` + `KEEP`) for
+   scripts/module.lds.S, fixing lost __dyndbg* sections in DRM modules 
+   under CONFIG_DRM_USE_DYNAMIC_DEBUG=y.
+
+6. fix checkpatch to skip macro-rules checks on any *.lds.h, in 3
+   places where only vmlinux.lds.h is currently skipped.
+
+NB: most of this patchset was split out of larger series fixing
+dyndbg-classmaps.
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+Jim Cromie (6):
+      vmlinux.lds.h: refactor BOUNDED_SECTION_* macros into bounded_sections.lds.h
+      vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+      vmlinux.lds.h: Fix ALIGN(8) omission causing NULL ptr on i386
+      vmlinux.lds.h: remove redundant ALIGN(8) directives
+      dyndbg.lds.S: fix lost dyndbg sections in modules
+      checkpatch.pl: generalize linker script macro exceptions
+
+ MAINTAINERS                                |  1 +
+ include/asm-generic/bounded_sections.lds.h | 32 ++++++++++++++
+ include/asm-generic/dyndbg.lds.h           | 18 ++++++++
+ include/asm-generic/vmlinux.lds.h          | 68 ++++++------------------------
+ scripts/checkpatch.pl                      |  6 +--
+ scripts/module.lds.S                       |  2 +
+ 6 files changed, 69 insertions(+), 58 deletions(-)
+---
+base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+change-id: 20261121-vmlinux-lds-b59410146885
+
+Best regards,
 -- 
-Aaron Tomlin
+Jim Cromie <jim.cromie@gmail.com>
+
+
