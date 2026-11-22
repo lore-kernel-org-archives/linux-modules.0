@@ -1,60 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795314478;
-	b=VpGiOc+TryVR8KKsGSvZbgCDFWMQFKbhmfDURo1FksMFR7YIIw9/docIqYfWuy7yYRc8
-	 wuw1ZfhbzR4UkqT62uHUbTpMbSLLNq3+rQbH1fgvdqPvDflbSoE8r8Cbo4sNawsqzKbeA
-	 lYfU1XzpZFOLzTE9qVeTlMTE0GxkByIeJkVtqs0fZB3Kel8JhMC0yKsUd7pWajuLKoJZ+
-	 Q5TbtutSPDDApNicbkIK/RE4mVmIIq7tjFkxDLn5aPOjSeA893DpD7MzEkcXTfM6/NARb
-	 PRz6fpPz/jfabSYoEnhRLtzCxxho6kl/HgYulrNW6oxX3F4MGZg1rhtwVV+i7O1T59g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795314478;
-	h=DMARC-Filter:Received:Received:Message-ID:Subject:From:To:Cc:Date:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:
-	 User-Agent:MIME-Version:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:X-HE-Tag:
-	 X-HE-Meta;
-	bh=4D2SPdXvFzhHtU/rKx2XeIymvmhTCDRiJ+HnEGRijwk=;
-	b=A/wAYii1xhyfKiB4w76P+K9rGjI1/j+q3bzWJjDXFod9KrgT0U30entMeTpzqpEgDYUR
-	 h4FkfBUInP5APBxUW6xe1+N++G1hAAypQA8UemvQB+Mjpg0nxTJOCQgRjw7dVxYkcu2nL
-	 4W6tfyjDlJdl5wCEcbs/jSHNSVxnwS6GvcqE+v3UDAV0b1YvPcLIn1MoM67GhUXfiMQ/X
-	 2o4gL/kOD1xIkl1y7TqXaNUmRSbmoTk3/v5e1dEcyyKonXpDKi55OJPzDKAQniOaRQoSy
-	 OkviplfonBa2WVFCBJXRpqBX6xFJeIlgXn50N6npdYT93aRQ9X9zcqzg/MW0JvYZ2jQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=perches.com;
-	spf=pass smtp.mailfrom=perches.com;
-	arc=none smtp.remote-ip=216.40.44.15
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.171
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795347516;
+	b=ZVXS7QY0DSyP3RGKPZGhqOtCDtgfXBtjaFquzrXdFwzOOn+kwcDTg21dlICsa57MatOs
+	 1ym7La2Bkv5nwKinas+iV0g4NsaVFaIyfYFrUfCM1DhrfyrdRHsWgEVmAgadfX2jMxuxP
+	 BWbpta6F4Z2mz6yhovIwhtm3d3RrXvtcWLh0+T3fUiEYCVcUzFcLAq6lF1J4ZK5wkIGfe
+	 YmEI96hF0kiywDxKVYkzWjDHOTZHVZAoyu9HCDQfSF5LktYUpD1bLWpxFKhc+Ezu1+YrB
+	 PprKgRs1kQU799RyqKNiZXaQrcI66bTDYoKC2P672BE3iaMPl4zVq0lpUUndbMpME8Q==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795347516;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=YVm0atOhjR9nDOLlJ4gPFa6rcD+/4hLxU/xQnQlbIes=;
+	b=YvQxshiQfqBQkC9a2ZcoYqr0HeMmaIY8pvD9iVmMBeAyxECm1zXSdAyHiFGxml6nCJQ0
+	 bYjf2ajDcnI1Cs/hUY33lexsPbf1KrjbDWrrlWkqnrtPs27ar5i2OfzW17b23pzH+8toS
+	 Ku40pevUVguiM1dt813XS8DKWdQRBOvpCmkRtjj0ietw1hjgBIGq20j3v3GlqGScWQdU2
+	 aVrN4cVDHoU1fo/ZlitrwUfV1H5uMAcEXF5UKpz0kT/i3G6AaDX2KgyHo5C4nNqstI1Fc
+	 YW2GQXLJTEScchVwxUc1AvUK0PzGr2osnDnidyAXoPjS3OfmLnknVyyIp5LTJoh2wZg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xHLwRXTv;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.171
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7513606A320;
-	Sun, 22 Nov 2026 02:27:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7513606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
-Received: from omf10.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 667CE80616;
-	Sun, 22 Nov 2026 02:27:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id 26EE035;
-	Sun, 22 Nov 2026 02:27:46 +0000 (UTC)
-Message-ID: <a6fdcd6d4bce5ace3b4e34d1393f5cfe58e17c0d.camel@perches.com>
-Subject: Re: [PATCH 6/6] checkpatch.pl: generalize linker script macro
- exceptions
-From: Joe Perches <joe@perches.com>
-To: jim.cromie@gmail.com, Arnd Bergmann <arnd@arndb.de>, Jason Baron	
- <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu	
- <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen	
- <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Andrew
- Morton	 <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org
-Date: Sat, 21 Nov 2026 18:27:45 -0800
-In-Reply-To: <20261121-vmlinux-lds-v1-6-49818f3f5cc0@gmail.com>
-References: <20261121-vmlinux-lds-v1-0-49818f3f5cc0@gmail.com>
-	 <20261121-vmlinux-lds-v1-6-49818f3f5cc0@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-3.fc44) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6974C606A32C
+	for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 11:38:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6974C606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xHLwRXTv
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3adfe7a31dfso1674301fa.3
+        for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 03:38:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795347514; cv=none;
+        d=google.com; s=arc-20260327;
+        b=tAAUfjMIRpKQ6zccAACWEndHqFFkrzX3lNsScthArOTusufxQTciZ6xFeEMCIKmqW4
+         0+6JaEi3JJ3615GvDqAsftQS7Gvrws04D5C3Q4Qnmj6pbpxIahrqzLuJJPUs5fSqVkKg
+         XLZkoI4kqMjuhH4rG38A1E3eObOc2G8WVSSM6W8H9++TkPj1ak4Q7dIZDGqZNszPDBJI
+         QQT5KfOrfk2X6DmKMAZhl6NpoHt2UZztewCilzvhw6B+8T4cTImfspduJ3h0qzmFPtdZ
+         dGzvZD33RfL3lpUU24m7OublD7ZESSv5JJpp7kW7sgeuJ1C67ttWyYYPLKWHfiOgcVZ/
+         Z40Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=YVm0atOhjR9nDOLlJ4gPFa6rcD+/4hLxU/xQnQlbIes=;
+        fh=6YuLpIQGX7sDCBFrasjBpJjxRc3jAPC2BmRr31K+hl4=;
+        b=R4DrVTB6rQoHImlxsT+NkNV5/0g2KbtbZ2D928p0PS34VPbj5V5/sowa9jQxhdmdz+
+         LVPMBpaCTV9d5M+OO9q02/k4RFFgmYTr5NqPyaeYlgHP93TJaQeesGuxxlcRV6HO7hHq
+         ExEcFi6QaU7Kn72BdIB3xpFPDVVXi0QGb2lNltSYPr1bfnw9LEoSAnyVdj6+RCT++Zz2
+         nHuJ8ITxt9zuM0F58nGCD66DT0tw9nc1SVulH1fmluI7d3GdtgVZuPkya9j4Eqep+Dzl
+         NB3aRFX1LnSKWUvEBPOShSEZpT9WlFFRQPzz4NJlte8YeoACH+PtiliulD9sVz9QImUt
+         ybuw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795347514; x=1795952314; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=YVm0atOhjR9nDOLlJ4gPFa6rcD+/4hLxU/xQnQlbIes=;
+        b=xHLwRXTvIHOPiGdyOWAJZFVHXZ2zx9COFpOESqj/4DrI4UR32A5Zd1mLYswGv75WZ4
+         nsZ4hYcHsCj4EfnxB3iaxLBSBkZ1VZBYmwH5S7Cq73q8HtBoCDQc1jiQvkYzTX+AGfRg
+         NnlAYleyKH3HGWTnph7hRYGbt5khCdOYTPo0kq+QI9jzCS1ACJlhjphZBlhukDCnVoRC
+         cWUTw77cC5R/+S9cvmguAITuS6HRxDofpAYoWWWoMr98EvtAAVSpiElztF5iOBmPdUGy
+         XpoQweGZXljH0GjAwvN4cg+iFcqOPrLJIKwcSUqSOUvci9zXjj562KDDIrdqwEQtrPKg
+         37Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795347514; x=1795952314;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YVm0atOhjR9nDOLlJ4gPFa6rcD+/4hLxU/xQnQlbIes=;
+        b=ciaRx5oxsj1xC6IveIdEsRRsG/wZ0OdJlEtIIZEZ/fL59d7uZQeIRt/yNKRObrxvXE
+         IwntowqTmThMldsTvDEbQnmCHl85ZlqHnfUttd8D+gT4NfEG+7elc6ZLBQcONlTaJ8Xk
+         Fq4opKzgHh3IIxejgI3395Xnl9mlkcKVjdnEm3p1/ox/fIRC5SDlVwaWYthdN4mFMyuS
+         xz+4DnoZWRbv9KX1moMT59FyinVmlgbVEX87leEj4wyQwzgLcIkk3uV4TUUybGPU09lN
+         QhagSOY9HA5ejz70BnZ4ZqDy2sdfCzVUPVY77BDaBftsQmPm/JpqFZIRn8/jQvazhee7
+         87mA==
+X-Forwarded-Encrypted: i=1; AL+hErHkXxwXT/v1wS4DeFlFE/ZsIAPrMLWAEK4Y4pPzq/+ZZGIEzPocqTp2YZuS2wtWe6Y5scdiflTPdUkueTLD@vger.kernel.org
+X-Gm-Message-State: APuU4Z+3frJW0OUHSfY8XwboCl1sjz1Sv3bxNcJT0ZBI+HP27mBmZI/A
+	ox5vs7ZdD+0r/VfbCOsxbue5D9oVTSXnwMF12MzGl3b35e714Tl69zuaS1iHP74//SgCnfMLulp
+	MGTPFEhmgsPUFCegxkt3gQlMQ8UAvKq8=
+X-Gm-Gg: AZFdTZdSmKzpD+Y+5vu/mu68iF0HTTWASeZ74WMYtjnG7bV688dCbpXQVBVhae32/9c
+	z+VAbacCBMBMh88R2iorTbCJrcpKwbXSbRjeoSSgKvK0CWesZFCD1+rS69qeFUvhJjykJNDeM3R
+	L5fzaTTLWoZ+rD4i6txwWaP0lXpFOZdAQM/yM46itM75GFHvqSLDzOp8PvanxoYXymuQY01+vPE
+	6YMhx/+RsnO5+YFdvUEi9ic6xsSyVIHIpf60bcBPrx8RQQwvVT4paqhI7voKyv1rB4dhS4Kq5uf
+	ktpc9at4Pn2BiuPhufstdkEkoy94cu6P07qzUVHfcuP3SCdF904Ylk0OLI3tsdhF++bXTPWf8Dv
+	p2Z7jkVQ0JWaGNoJZuSy6e/pke1kHqynT4QdGxqu/P8q3b1XS7wvSpa0YDwdsvavqzXTS3zCzE/
+	Pryv7YfSv5jZ4r0RNvS/8LipT/6cN37rIF4Z39cKpo3DtbVPxn6UuqwQQjNvZvcAvCQki3wZ3wU
+	L4SLL5Q0SFQe0cEmNWPz3rYu9DiJ4+jQnNpt8U7BQsvKHAUlf/va2hZFoHPxN6zAojJN5+W
+X-Received: by 2002:a05:6512:31c3:b0:5bf:e6a1:3115 with SMTP id
+ 2adb3069b0e04-5c1bc76a33fmr3371052e87.2.1795347514504; Sun, 22 Nov 2026
+ 03:38:34 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -64,67 +106,46 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 26EE035
-X-Stat-Signature: w9zuxpnagi9dspiupreitz8xoeruuc7b
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19bfFqUuKiZmAtCFwr4IryfXNqQgCZjjIc=
-X-HE-Tag: 1795314466-571539
-X-HE-Meta: U2FsdGVkX1+TL4uTOyKpyV6pwBJ0urHG1vnQh3W3saL5ZFCEvzZASaRQhBGSEQeqk8C0XM4A3iHQc9oWMr4YTV3YtX4M7Vdj7l3eBxXIsWKok+ChOVdfvJ8xPEndkoJd7Py6oFVluYn1kKbak+nV5lsSwG+VZPHOQVGyB+FTL4bKCFTOmi93HdmalaQlMctudFb3neaIfTFg1RLsAnNUtf+MZZI9T493SUGB3fx2BnNLgcLwb8fJ9feZa0ONoaYPSlzWuVzrzFCiRR1EN9ZhaGhZ9xT6g81SU4MsQZgBC8m+xNSS2TuVWPAw5trzOU4/jfc7B3x8bzfUfdUQXx+Tojyt2BCtCWuC
+References: <20261120-rust-helper-namespace-v1-1-3b9a05553ff6@gmail.com>
+ <CANiq72kWXzP1SWUvhOT2k-rNjopnySXeBkjwrx63V2QUaLpnGQ@mail.gmail.com> <nh-eaa5d67e-6d05-468f-9f19-273bc5b23ad0@google.com>
+In-Reply-To: <nh-eaa5d67e-6d05-468f-9f19-273bc5b23ad0@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 22 Nov 2026 12:38:22 +0100
+X-Gm-Features: Aa3M54ofQVSiRzi-fgoVKnLP0jYbT_Rm3zSkFfSi2xtBRiBz58W07aP7BMXi-VY
+Message-ID: <CANiq72mTs=_4wSHAjCJNdOcmODHzPf0ELY6t6vqCNt2E--XYaw@mail.gmail.com>
+Subject: Re: [PATCH] rust: put C helper exports in a dedicated namespace
+To: peder.bergan@gmail.com
+Cc: ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
+	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, 
+	daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com, 
+	work@onurozkan.dev, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	da.gomez@kernel.org, samitolvanen@google.com, atomlin@atomlin.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, wedsonaf@gmail.com, gprocida@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 2026-11-21 at 15:49 -0700, Jim Cromie via B4 Relay wrote:
-> From: Jim Cromie <jim.cromie@gmail.com>
->=20
-> checkpatch skips macro-rule checks in linker scripts; 3 of them
-> explicitly check for vmlinux.lds.h, and 1 (the 1st) skips on any
-> *.lds.h.  Generalize the 3 to match the 1st, including the escapes on
-> the dots, so they're literal checks for '.'
+On Sat, Nov 21, 2026 at 6:50=E2=80=AFPM <peder.bergan@gmail.com> wrote:
+>
+> 1. Would you prefer I wait for Giuliano's series to land or send v3
+>    with it listed as a prerequisite?
 
-Please remember to email the checkpatch maintainer too.
+Either way is fine, i.e. in general you can send patches that are
+conditional to other patches (within reason, of course).
 
->=20
-> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-> ---
->  scripts/checkpatch.pl | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index b8b64f720191..318e1f2577fd 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -6016,7 +6016,7 @@ sub process {
->  # Usually multi-statement macros should be enclosed in a do {} while
->  # (0) loop.  Grab the first statement and ensure its the whole macro
->  # if its not enclosed in a known good container
-> -		if ($realfile !~ m@/vmlinux.lds.h$@ &&
-> +		if ($realfile !~ m@/\.lds\.h$@ &&
+> 2. Should I keep the KASAN import for v3 or move automatic imports
+>    into modpost in this series?
+> 3. If you prefer modpost, should it add the import only when a module
+>    contains a Rust object and references a RUST_HELPERS export?
 
-Probably better to have something like
-my $is_linker_file =3D '\.lds\.h$';
-or maybe
-my $is_linker_file =3D '\Q.lds.h\E$';
+If the `modpost` approach (or similar) works, then I was thinking it
+may not need the manual imports, i.e. the idea is to avoid having to
+write those manual annotations if the automatic way can figure it out
+when to add it. But I didn't actually try it -- maybe I am missing
+something.
 
-and use that everywhere
+Thanks!
 
-> @@ -6175,7 +6175,7 @@ sub process {
-> =20
->  # check for line continuations outside of #defines, preprocessor #, and =
-asm
-> =20
-> -		} elsif ($realfile =3D~ m@/vmlinux.lds.h$@) {
-> +		} elsif ($realfile =3D~ m@/\.lds\.h$@) {
-
->  		    $line =3D~ s/(\w+)/$maybe_linker_symbol{$1}++/ge;
->  		    #print "REAL: $realfile\nln: $line\nkeys:", sort keys %maybe_linke=
-r_symbol;
->  		} else {
-> @@ -6192,7 +6192,7 @@ sub process {
->  # single-statement macros do not need to be enclosed in do while (0) loo=
-p,
->  # macro should not end with a semicolon
->  		if ($perl_version_ok &&
-> -		    $realfile !~ m@/vmlinux.lds.h$@ &&
-> +		    $realfile !~ m@/\.lds\.h$@ &&
->  		    $line =3D~ /^.\s*\#\s*define\s+$Ident(\()?/) {
->  			my $ln =3D $linenr;
->  			my $cnt =3D $realcnt;
+Cheers,
+Miguel
