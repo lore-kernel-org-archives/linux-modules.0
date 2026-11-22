@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795348502;
-	b=moNgLfmOch4FyluvoSy9v/6zRdqt8+rr8zInAJCpWMvSBk1Sto+1ZnUcgpg72UQvGXlY
-	 caor7b0BH2i+Ck1gUwSpS60wWvkpn5lGlG33J0KYjSoQgRjN90D/VtrBscBPK9uv0SI3U
-	 guZKG3+lt4KK4TMyilf77MD8BqzNW5KnmKzzx9mXlOvoP2wYrtyfq+bvG5UUJTYpNV7qv
-	 VEeUueHbQ4TsjMdkE36FP2EX/e1lhlD4pAoZQ/Retf5B3ZLNFkN3rasHVcd7K/oLZY47S
-	 dM6p7P/kC9C0AdFhPAGKUKXNqEW5Nj2PCi7qkovbn/hhorpkowImuJZiW4NNq36KyaA==
+	t=1795348936;
+	b=jh/4hO2ygUrA6bIbvjL/bBKCmDJM328dZWST3XzXlM7GX+n36VgHf3ROzgUj4yrUQzB/
+	 RB9MORCjT1FZKiGBNZyQbNY/V49+B64qCtzsycLfwKboktWh2mthqJiBtomphLgQFZ7zq
+	 vreFXJdtmBOz2Hynu8rz72bjvdHieKu3gWYgXELLbngH1CQAJkeQWCLRynXqQVmEcBVGY
+	 bs1KQYm21YJYRCcsGOX2WR4Kb9g1mAGtnoHYndVi599qvYNLPXT8LXin8W54iX/5jtR4N
+	 5T1eXsWxZCqV0qczRe1tYx+kFx8seTGMaBgYTm2buuh39SU0xVQ1FF4h9YfbdId6DoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795348502;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795348936;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=8c6qVyqNZ0SqHcZpSnANumyjBAiFjdYDHk+HUxi2Enk=;
-	b=mnqar5EaBxQQ/X6XueOo1UbKGCRCEkM/59cDFO2Jp0Z8j7FgKIRnErMA00jFZFY0kS+p
-	 QR+QZ86ecpNyORMYv3qcIqQT1l37FOisxMeOpmLC6mtbV4Rq/t0h1E4wIisEsSXCxc2CH
-	 IiFGjp5gXnVmNPP7rdEKzyy1Za8jMU7a/uXZlI7twI3jK6bEoWyUFmDPfnrZEjReZlQGV
-	 HlVUcRtJi7XNMK01e+N77VJgqh1/IjuWPHXIAfHrdrIpa75ECpwrIRmKSguYKU4aqQP04
-	 ufNZzrbyMxFDRpS5/blB6A7vCA+jfHOrq8k+n6L6SC4tTblOCD2lhcMZy78xl2KGolg==
+	bh=mnbTDI36WLghMGaT+HXY/CzkNS4R4z0S9ISRupt5aH0=;
+	b=AI7l3pBSAd9peqzBEwDW3W2U6tYTXCk3SAEePe5U97xd5yVCSV546iUS2ftGydg5eFAa
+	 nHZksPUE2uuXGynfaaGwI2AT8d42bBB9hyZU/3p+9/ZkNFvjSA5FiddBOGySKGSsVAjm4
+	 0oU8nRmMiauiKWGBFU3XjzbQGdNNb9s4t+FvzLwt+bH2z3BYXun/EVEc+qIyq5KPdZPbK
+	 9TWPH02xbtZ5sgAVGWuZEx9GRpKK5P/7CYNm7CiUi8qTKTS6lUxfibKcBiecnrK2UYcf7
+	 PdVB5hrx5Z+JfkPUvJZB0yy2NFyL8FGRYlPSPNTtDZV2PevIfIyFTLqtwhDDfe+slvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Zdk7RKsm;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PnOpkNxN;
+	arc=none smtp.remote-ip=209.85.128.50
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC181606A32C
-	for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 11:55:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC181606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37DB606A331
+	for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 12:02:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D37DB606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Zdk7RKsm
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4b467581b98so21222845e9.0
-        for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 03:55:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PnOpkNxN
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4bb6adaf0f1so19801725e9.0
+        for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 04:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795348500; x=1795953300; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795348934; x=1795953734; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=8c6qVyqNZ0SqHcZpSnANumyjBAiFjdYDHk+HUxi2Enk=;
-        b=Zdk7RKsmohrx5k/Al/SkovQbicu1EKXI37wI5NynMo18Bejrr9QqTge3LQUQFo4NaJ
-         QShG2NRTlhn/pNf25M0pWVJck94Kex/RP6CnG8t+3Kzl7yc2Jo89ONSbSqPw/K2XgINc
-         kyGcGB48KSKmJjUd+3HnNauJKhZJtQscJM2p+uPICSuBOQscn0vA3DS2YqdDXgnCIlXf
-         eD3TL9LlSjCG1+MPO/RUF8otTJL1Dq7lCfFelnFxSHd9+ijeDWBdCouZxwAD/Wbqp7cD
-         35PLtNOXBbDyWokVwrcgFG7sYlGWvNZtD9Hj7BblPU1I7FakYLUJ1YuJ52qDUVZUY7ha
-         YMrg==
+        bh=mnbTDI36WLghMGaT+HXY/CzkNS4R4z0S9ISRupt5aH0=;
+        b=PnOpkNxNDof9KYKwZQJxnSwAs2aa0+BlbghaZSdAaX0NpKtkUrzeKxKoLdFP6lUcp/
+         AHsw2JRqRLMMwekZUZ7SkmZ56tJJ68q+/EsfIRG1Z0wWEp950hffo/Tn9Zqf7yZzqLg5
+         rs3LDTyx3yswYxxQx64tAsJthNV8YnqxYhKJfyLmdMpQnI5PVjNXzSyE2u6kR9goWxgg
+         oKySfBnD+C/CNB3AMVD6uHwbpdBarmwNKN6kIXIl1zAvQQDrg+zYs/rRI9eKyahHarZX
+         ELIbAqumN2v+YTeXsmmmeYOfCH0c3Fa8hoFEwRkVFDmz0BW/6Z+S0wN76KZtwP40JuTL
+         dDzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795348500; x=1795953300;
+        d=1e100.net; s=20260707; t=1795348934; x=1795953734;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8c6qVyqNZ0SqHcZpSnANumyjBAiFjdYDHk+HUxi2Enk=;
-        b=r5tfTX1wm6kZvSUEPuLy2qHBbiVmTVFFUhAE0P/SoAb0ui1cegbuAh96LbKXQ+N1YX
-         fCdkz6Y7bg3F0xdQIaoBEIwjM0UPwcUDVmRPyZzUAy5Ljl6N/yLUUdzeW0AfoQ285YRk
-         Al1J96yCPiG6djsRsYa1iV834BtgRYjKx1IMUApUjERa5at8CXO9aJdunJXv1/Ud/NZt
-         0JS1JUVXaxZq9/de2RiRuCHAyEhISRt/6FTxJqmKpWAHZeuVodVTN7TpsVrjq/D4txO9
-         c4FfSnu6AVuw7axrYhbATZlAh+fpUSC3bptkEsgzc6BwxicxmlAD/goT1gV3JveQu5vN
-         i/ew==
-X-Forwarded-Encrypted: i=1; AL+hErGpU7rsj0TwcszGBbQTnMqSoX8Qb6AznJiewORTGoO604TSSPIcUNgKVP5SxWjqUwA+gAU+5km0+oCpoe3A@vger.kernel.org
-X-Gm-Message-State: APuU4Z/nVxizW2ow059vtCLYwb8pLh807pZjIR8EkUEtEmGaSGD2lIkc
-	Oi8ZUHf4QnsnUQHnTzwl5Ns8VJD+184tbiFQ5BcKMvPdtYknxR9MY17L
-X-Gm-Gg: AZFdTZeIpOEGwnybJ2tt3TC1pULlQwg/ayiiug1uSXoCa7Z7AnM1P4mIke2baCVPhhC
-	WjSlk92pXbYLLQkQgo6kwanGImhwoBN5IhEcjzpUG/JxtaK9xDzDHtyDER49AVs3tw1BWAtlLhn
-	IuuygSsp1fbjZQdWGWEXTgISsP2vpKnNgLk6DpltF+HhjvDBjcecusfTHUM9hLVwj06/T8xzhT6
-	fq0RvetmHGVfe3qVOvPCQ94RkNm6oiQbqcR8bcsdoQes8l9v0qAQGVN23xwWmhTOLsAuBQ/weUh
-	v0SdAbhEjbv/Y/TPZXaQDv5GhFBFtSZzS7igZr5m8uGktBEMyGDDpIbXzTiqbl6mPVLKp48ItL0
-	6w2FBjvkytkV1C2Qd1AZ80slrY+g7Nqxx0EAB0WmnzOm7LMzaH2MxYOlwu6xURkzs2d1K8Ytlk/
-	cWxtOEmuTsG6jqJ3NHQ9/edgR2VCtmHV7ZE3X09Ha1FWIktymfpF1fJysMn7Df9cVMPoyy/7UQf
-	VOIhlubOUjn0D4pS8I6/nnWKqQYgbZu7UNAYDWAtPf/KKEn9uat+qzJKDoY72VIe+FYO2gKZ8rG
-	6X63JwnCMfimO3UzBNd8wknsgLFSrlsSab3RpeeV21bfsxgBIknxePHgrrzoX1QwQg==
-X-Received: by 2002:a05:600c:6092:b0:4a1:d537:1c8d with SMTP id 5b1f17b1804b1-4bb8892bb67mr166647795e9.19.1795348500044;
-        Sun, 22 Nov 2026 03:55:00 -0800 (PST)
+        bh=mnbTDI36WLghMGaT+HXY/CzkNS4R4z0S9ISRupt5aH0=;
+        b=fLS1b9YBrT+MD80/btxWeAoK0Ppem1+/+mIVysJLVAzm1+XRE3n/Xfdig3kGM1mzhP
+         QDPFhDmeCKvnTOFco04AX9Nq9rJNmZil8YEJ/+Kmf5WQjIeluR/xZr8ZDzIwOhepj+WI
+         WhVmch/XX5kMM7AUexbSmc7RDrwrL1VSMvE+4DxLCTiI2M3OC18YPVU8ggglZsI4xF6k
+         wOL1xqlOkXMCSQKnqAsegcs/oteGpRQmlXv7+qfyEGTVCnjJz2NK3nNUYu50KNClVWh4
+         4KQIsf51+CFIT0dvxRTwSObQtflqHNSg9sZsOdRgWGPLTNDBhd30ixzQpzvou8bErrDA
+         KlRw==
+X-Forwarded-Encrypted: i=1; AL+hErGT2mCmTio8AQ6FCEYGKv/glhNFLXwHGXzFSgjoS5fTjijL5oUmrdeImKKs8MFoYtVTMqcthB2ct7lNzpQY@vger.kernel.org
+X-Gm-Message-State: APuU4Z9MVSaKTyCs0Ey2vAQWCD7VR+44c5RYexXWkGnxrDKJIqZVdVPH
+	6GVTe8O5+6qN8SfDbcUFNUtd8yTEqKVoZjTywg3JfR1Y9sOEZzEn0HZ0
+X-Gm-Gg: AZFdTZcjm0bC0Z9D5ZRvjLfh06CKtD2Lv6iMeyyvwSesuedxMx1lF7sNjtgRLAmgdYo
+	lLjiFOc7du5JWH+7HFuW5vsGUkMW+tWFEr5nGJ6KaovTGWFLvsyvMOt7gWXV5bLjbBH+rAig9b9
+	nxokfgwzwh8taJuiAFAcotyBUy0mlfHvvoVL4Xuvh7M6jVzoNjS5mkYDDebOwivZ/mq75J+Y2hL
+	2oxXBKf6dwghFh4WgoGIXwsSnSCtG3nCeXyYbvOfVf7CPETEnTJjSNG/uoWVSepoP8FQvOKe3LF
+	fJHkhfNtJ7gquypeWS3ia2Ceh43hL2N3CbaeE/BKyqY10SKlXP+/Wn/l1BJ2H+poz/Fsl6+lOx0
+	lDhh7y4M3gGs4mlVGCBiKWanWDpYuzTNfINQOJxNFWVOEEUtvxWJoHPD8eI9jA7ZolpAM0hRx/T
+	i2w31GzTnYT9vzn7UpXK1bbLmRrPsepDmATiCjFOOuxwvuVN30Q2QlzcqTFYu8e+CjStqUA7JTB
+	JSGldjqd01D0EKEQhiOItE/w6Wrj5nysmAKkaYTkr2A3R6wkFNt51B4E7k1KLjqEHoQX4SGsKpG
+	+u4lthwcRJxlsQyBW2prSjvhkuXNImHftNjdMTBlPsWvmsN/6QD57wGj/qcXWe2LFQ==
+X-Received: by 2002:a05:600c:1d8c:b0:4bb:5345:606b with SMTP id 5b1f17b1804b1-4bb8882358dmr176469865e9.31.1795348934167;
+        Sun, 22 Nov 2026 04:02:14 -0800 (PST)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb90660cb4sm168516455e9.2.2026.11.22.03.54.59
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb9066e34esm120387095e9.3.2026.11.22.04.02.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2026 03:54:59 -0800 (PST)
-Date: Sun, 22 Nov 2026 11:54:58 +0000
+        Sun, 22 Nov 2026 04:02:13 -0800 (PST)
+Date: Sun, 22 Nov 2026 12:02:12 +0000
 From: David Laight <david.laight.linux@gmail.com>
 To: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
 Cc: jim.cromie@gmail.com, Arnd Bergmann <arnd@arndb.de>, Jason Baron
@@ -87,12 +87,13 @@ Cc: jim.cromie@gmail.com, Arnd Bergmann <arnd@arndb.de>, Jason Baron
  <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
  <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Andrew
  Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/6] vmlinux.lds.h: drop unused HEADERED_SECTION* macros
-Message-ID: <20261122115458.1da4b8e9@pumpkin>
-In-Reply-To: <20261121-vmlinux-lds-v1-2-49818f3f5cc0@gmail.com>
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, Louis Chauvet
+ <louis.chauvet@bootlin.com>
+Subject: Re: [PATCH 0/6] dyndbg,vmlinux.lds.h: fix i386 section alignment in
+ BOUNDED_SECTION macros
+Message-ID: <20261122120212.0dda7532@pumpkin>
+In-Reply-To: <20261121-vmlinux-lds-v1-0-49818f3f5cc0@gmail.com>
 References: <20261121-vmlinux-lds-v1-0-49818f3f5cc0@gmail.com>
-	<20261121-vmlinux-lds-v1-2-49818f3f5cc0@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -106,50 +107,69 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sat, 21 Nov 2026 15:49:20 -0700
+On Sat, 21 Nov 2026 15:49:18 -0700
 Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org> wrote:
 
-> From: Jim Cromie <jim.cromie@gmail.com>
-> 
-> These macros are unused, no point in carrying them any more.
-> 
-> NB: these macros were just moved to bounded_sections.lds.h, from
-> vmlinux.lds.h, which is the known entity, and therefore more
-> meaningful in the 1-line summary, so thats what I used as the topic.
+> This series fixes a latent i386 section-alignment bug, by adding
+> explicit alignments into the BOUNDED_SECTION_* linker script macros.
+> The misalignment appears once __dyndbg_classes is split in 2, and the
+> 1st section has just 1 entry; the 2nd section implicitly gets ALIGN(4).
 
-Maybe remove them first?
+Would everything work if all these sections got an ALIGN(8)?
+It would simplify everything and only cost a few bytes of memory
+that no one is really going to notice.
+
+(Apart from BTF which seems to be page aligned.)
 
 David
 
 > 
+> 1. Refactor BOUNDED_SECTION_* (and HEADERED_SECTION_*) macros from
+>    vmlinux.lds.h into include/asm-generic/bounded_sections.lds.h for
+>    reuse.
+> 
+> 2. Drop the unused HEADERED_SECTION* macros from bounded_sections.lds.h.
+> 
+> 3. Add explicit ALIGN(8) defaults to BOUNDED_SECTION_* (with _ALIGNED
+>    variants for non-8-byte tables like ORC_UNWIND_TABLE,
+>    EXCEPTION_TABLE, TRACEDATA, INIT_SETUP, and NOTES), fixing an i386
+>    NULL deref in dynamic_debug_init() caused by 28-byte
+>    __dyndbg_classes misaligning the following __dyndbg section.
+> 
+> 4. Remove now-redundant outer `. = ALIGN(8);` directives preceding 
+>    BOUNDED_SECTION* uses in vmlinux.lds.h.
+> 
+> 5. Add include/asm-generic/dyndbg.lds.h with DYNDBG_SECTIONS() for 
+>    vmlinux.lds.h and MOD_DYNDBG_SECTIONS() (`0 : ALIGN(8)` + `KEEP`) for
+>    scripts/module.lds.S, fixing lost __dyndbg* sections in DRM modules 
+>    under CONFIG_DRM_USE_DYNAMIC_DEBUG=y.
+> 
+> 6. fix checkpatch to skip macro-rules checks on any *.lds.h, in 3
+>    places where only vmlinux.lds.h is currently skipped.
+> 
+> NB: most of this patchset was split out of larger series fixing
+> dyndbg-classmaps.
+> 
 > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 > ---
->  include/asm-generic/bounded_sections.lds.h | 15 ---------------
->  1 file changed, 15 deletions(-)
+> Jim Cromie (6):
+>       vmlinux.lds.h: refactor BOUNDED_SECTION_* macros into bounded_sections.lds.h
+>       vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+>       vmlinux.lds.h: Fix ALIGN(8) omission causing NULL ptr on i386
+>       vmlinux.lds.h: remove redundant ALIGN(8) directives
+>       dyndbg.lds.S: fix lost dyndbg sections in modules
+>       checkpatch.pl: generalize linker script macro exceptions
 > 
-> diff --git a/include/asm-generic/bounded_sections.lds.h b/include/asm-generic/bounded_sections.lds.h
-> index 8c29293ca7fb..268cdc34389b 100644
-> --- a/include/asm-generic/bounded_sections.lds.h
-> +++ b/include/asm-generic/bounded_sections.lds.h
-> @@ -18,19 +18,4 @@
->  
->  #define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
->  
-> -#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
-> -	_HDR_##_label_	= .;						\
-> -	KEEP(*(.gnu.linkonce.##_sec_))					\
-> -	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
-> -
-> -#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
-> -	_label_##_HDR_ = .;						\
-> -	KEEP(*(.gnu.linkonce.##_sec_))					\
-> -	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
-> -
-> -#define HEADERED_SECTION_BY(_sec_, _label_)				\
-> -	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
-> -
-> -#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
-> -
->  #endif /* _ASM_GENERIC_BOUNDED_SECTIONS_H */
+>  MAINTAINERS                                |  1 +
+>  include/asm-generic/bounded_sections.lds.h | 32 ++++++++++++++
+>  include/asm-generic/dyndbg.lds.h           | 18 ++++++++
+>  include/asm-generic/vmlinux.lds.h          | 68 ++++++------------------------
+>  scripts/checkpatch.pl                      |  6 +--
+>  scripts/module.lds.S                       |  2 +
+>  6 files changed, 69 insertions(+), 58 deletions(-)
+> ---
+> base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+> change-id: 20261121-vmlinux-lds-b59410146885
 > 
+> Best regards,
 
