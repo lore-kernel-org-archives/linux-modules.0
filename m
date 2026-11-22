@@ -1,102 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.171
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795347516;
-	b=ZVXS7QY0DSyP3RGKPZGhqOtCDtgfXBtjaFquzrXdFwzOOn+kwcDTg21dlICsa57MatOs
-	 1ym7La2Bkv5nwKinas+iV0g4NsaVFaIyfYFrUfCM1DhrfyrdRHsWgEVmAgadfX2jMxuxP
-	 BWbpta6F4Z2mz6yhovIwhtm3d3RrXvtcWLh0+T3fUiEYCVcUzFcLAq6lF1J4ZK5wkIGfe
-	 YmEI96hF0kiywDxKVYkzWjDHOTZHVZAoyu9HCDQfSF5LktYUpD1bLWpxFKhc+Ezu1+YrB
-	 PprKgRs1kQU799RyqKNiZXaQrcI66bTDYoKC2P672BE3iaMPl4zVq0lpUUndbMpME8Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795347516;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795348502;
+	b=moNgLfmOch4FyluvoSy9v/6zRdqt8+rr8zInAJCpWMvSBk1Sto+1ZnUcgpg72UQvGXlY
+	 caor7b0BH2i+Ck1gUwSpS60wWvkpn5lGlG33J0KYjSoQgRjN90D/VtrBscBPK9uv0SI3U
+	 guZKG3+lt4KK4TMyilf77MD8BqzNW5KnmKzzx9mXlOvoP2wYrtyfq+bvG5UUJTYpNV7qv
+	 VEeUueHbQ4TsjMdkE36FP2EX/e1lhlD4pAoZQ/Retf5B3ZLNFkN3rasHVcd7K/oLZY47S
+	 dM6p7P/kC9C0AdFhPAGKUKXNqEW5Nj2PCi7qkovbn/hhorpkowImuJZiW4NNq36KyaA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795348502;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=YVm0atOhjR9nDOLlJ4gPFa6rcD+/4hLxU/xQnQlbIes=;
-	b=YvQxshiQfqBQkC9a2ZcoYqr0HeMmaIY8pvD9iVmMBeAyxECm1zXSdAyHiFGxml6nCJQ0
-	 bYjf2ajDcnI1Cs/hUY33lexsPbf1KrjbDWrrlWkqnrtPs27ar5i2OfzW17b23pzH+8toS
-	 Ku40pevUVguiM1dt813XS8DKWdQRBOvpCmkRtjj0ietw1hjgBIGq20j3v3GlqGScWQdU2
-	 aVrN4cVDHoU1fo/ZlitrwUfV1H5uMAcEXF5UKpz0kT/i3G6AaDX2KgyHo5C4nNqstI1Fc
-	 YW2GQXLJTEScchVwxUc1AvUK0PzGr2osnDnidyAXoPjS3OfmLnknVyyIp5LTJoh2wZg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=8c6qVyqNZ0SqHcZpSnANumyjBAiFjdYDHk+HUxi2Enk=;
+	b=mnqar5EaBxQQ/X6XueOo1UbKGCRCEkM/59cDFO2Jp0Z8j7FgKIRnErMA00jFZFY0kS+p
+	 QR+QZ86ecpNyORMYv3qcIqQT1l37FOisxMeOpmLC6mtbV4Rq/t0h1E4wIisEsSXCxc2CH
+	 IiFGjp5gXnVmNPP7rdEKzyy1Za8jMU7a/uXZlI7twI3jK6bEoWyUFmDPfnrZEjReZlQGV
+	 HlVUcRtJi7XNMK01e+N77VJgqh1/IjuWPHXIAfHrdrIpa75ECpwrIRmKSguYKU4aqQP04
+	 ufNZzrbyMxFDRpS5/blB6A7vCA+jfHOrq8k+n6L6SC4tTblOCD2lhcMZy78xl2KGolg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xHLwRXTv;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.171
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Zdk7RKsm;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6974C606A32C
-	for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 11:38:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6974C606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC181606A32C
+	for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 11:55:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC181606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xHLwRXTv
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3adfe7a31dfso1674301fa.3
-        for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 03:38:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795347514; cv=none;
-        d=google.com; s=arc-20260327;
-        b=tAAUfjMIRpKQ6zccAACWEndHqFFkrzX3lNsScthArOTusufxQTciZ6xFeEMCIKmqW4
-         0+6JaEi3JJ3615GvDqAsftQS7Gvrws04D5C3Q4Qnmj6pbpxIahrqzLuJJPUs5fSqVkKg
-         XLZkoI4kqMjuhH4rG38A1E3eObOc2G8WVSSM6W8H9++TkPj1ak4Q7dIZDGqZNszPDBJI
-         QQT5KfOrfk2X6DmKMAZhl6NpoHt2UZztewCilzvhw6B+8T4cTImfspduJ3h0qzmFPtdZ
-         dGzvZD33RfL3lpUU24m7OublD7ZESSv5JJpp7kW7sgeuJ1C67ttWyYYPLKWHfiOgcVZ/
-         Z40Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=YVm0atOhjR9nDOLlJ4gPFa6rcD+/4hLxU/xQnQlbIes=;
-        fh=6YuLpIQGX7sDCBFrasjBpJjxRc3jAPC2BmRr31K+hl4=;
-        b=R4DrVTB6rQoHImlxsT+NkNV5/0g2KbtbZ2D928p0PS34VPbj5V5/sowa9jQxhdmdz+
-         LVPMBpaCTV9d5M+OO9q02/k4RFFgmYTr5NqPyaeYlgHP93TJaQeesGuxxlcRV6HO7hHq
-         ExEcFi6QaU7Kn72BdIB3xpFPDVVXi0QGb2lNltSYPr1bfnw9LEoSAnyVdj6+RCT++Zz2
-         nHuJ8ITxt9zuM0F58nGCD66DT0tw9nc1SVulH1fmluI7d3GdtgVZuPkya9j4Eqep+Dzl
-         NB3aRFX1LnSKWUvEBPOShSEZpT9WlFFRQPzz4NJlte8YeoACH+PtiliulD9sVz9QImUt
-         ybuw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Zdk7RKsm
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4b467581b98so21222845e9.0
+        for <linux-modules@vger.kernel.org>; Sun, 22 Nov 2026 03:55:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795347514; x=1795952314; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1795348500; x=1795953300; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=YVm0atOhjR9nDOLlJ4gPFa6rcD+/4hLxU/xQnQlbIes=;
-        b=xHLwRXTvIHOPiGdyOWAJZFVHXZ2zx9COFpOESqj/4DrI4UR32A5Zd1mLYswGv75WZ4
-         nsZ4hYcHsCj4EfnxB3iaxLBSBkZ1VZBYmwH5S7Cq73q8HtBoCDQc1jiQvkYzTX+AGfRg
-         NnlAYleyKH3HGWTnph7hRYGbt5khCdOYTPo0kq+QI9jzCS1ACJlhjphZBlhukDCnVoRC
-         cWUTw77cC5R/+S9cvmguAITuS6HRxDofpAYoWWWoMr98EvtAAVSpiElztF5iOBmPdUGy
-         XpoQweGZXljH0GjAwvN4cg+iFcqOPrLJIKwcSUqSOUvci9zXjj562KDDIrdqwEQtrPKg
-         37Ng==
+        bh=8c6qVyqNZ0SqHcZpSnANumyjBAiFjdYDHk+HUxi2Enk=;
+        b=Zdk7RKsmohrx5k/Al/SkovQbicu1EKXI37wI5NynMo18Bejrr9QqTge3LQUQFo4NaJ
+         QShG2NRTlhn/pNf25M0pWVJck94Kex/RP6CnG8t+3Kzl7yc2Jo89ONSbSqPw/K2XgINc
+         kyGcGB48KSKmJjUd+3HnNauJKhZJtQscJM2p+uPICSuBOQscn0vA3DS2YqdDXgnCIlXf
+         eD3TL9LlSjCG1+MPO/RUF8otTJL1Dq7lCfFelnFxSHd9+ijeDWBdCouZxwAD/Wbqp7cD
+         35PLtNOXBbDyWokVwrcgFG7sYlGWvNZtD9Hj7BblPU1I7FakYLUJ1YuJ52qDUVZUY7ha
+         YMrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795347514; x=1795952314;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1795348500; x=1795953300;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YVm0atOhjR9nDOLlJ4gPFa6rcD+/4hLxU/xQnQlbIes=;
-        b=ciaRx5oxsj1xC6IveIdEsRRsG/wZ0OdJlEtIIZEZ/fL59d7uZQeIRt/yNKRObrxvXE
-         IwntowqTmThMldsTvDEbQnmCHl85ZlqHnfUttd8D+gT4NfEG+7elc6ZLBQcONlTaJ8Xk
-         Fq4opKzgHh3IIxejgI3395Xnl9mlkcKVjdnEm3p1/ox/fIRC5SDlVwaWYthdN4mFMyuS
-         xz+4DnoZWRbv9KX1moMT59FyinVmlgbVEX87leEj4wyQwzgLcIkk3uV4TUUybGPU09lN
-         QhagSOY9HA5ejz70BnZ4ZqDy2sdfCzVUPVY77BDaBftsQmPm/JpqFZIRn8/jQvazhee7
-         87mA==
-X-Forwarded-Encrypted: i=1; AL+hErHkXxwXT/v1wS4DeFlFE/ZsIAPrMLWAEK4Y4pPzq/+ZZGIEzPocqTp2YZuS2wtWe6Y5scdiflTPdUkueTLD@vger.kernel.org
-X-Gm-Message-State: APuU4Z+3frJW0OUHSfY8XwboCl1sjz1Sv3bxNcJT0ZBI+HP27mBmZI/A
-	ox5vs7ZdD+0r/VfbCOsxbue5D9oVTSXnwMF12MzGl3b35e714Tl69zuaS1iHP74//SgCnfMLulp
-	MGTPFEhmgsPUFCegxkt3gQlMQ8UAvKq8=
-X-Gm-Gg: AZFdTZdSmKzpD+Y+5vu/mu68iF0HTTWASeZ74WMYtjnG7bV688dCbpXQVBVhae32/9c
-	z+VAbacCBMBMh88R2iorTbCJrcpKwbXSbRjeoSSgKvK0CWesZFCD1+rS69qeFUvhJjykJNDeM3R
-	L5fzaTTLWoZ+rD4i6txwWaP0lXpFOZdAQM/yM46itM75GFHvqSLDzOp8PvanxoYXymuQY01+vPE
-	6YMhx/+RsnO5+YFdvUEi9ic6xsSyVIHIpf60bcBPrx8RQQwvVT4paqhI7voKyv1rB4dhS4Kq5uf
-	ktpc9at4Pn2BiuPhufstdkEkoy94cu6P07qzUVHfcuP3SCdF904Ylk0OLI3tsdhF++bXTPWf8Dv
-	p2Z7jkVQ0JWaGNoJZuSy6e/pke1kHqynT4QdGxqu/P8q3b1XS7wvSpa0YDwdsvavqzXTS3zCzE/
-	Pryv7YfSv5jZ4r0RNvS/8LipT/6cN37rIF4Z39cKpo3DtbVPxn6UuqwQQjNvZvcAvCQki3wZ3wU
-	L4SLL5Q0SFQe0cEmNWPz3rYu9DiJ4+jQnNpt8U7BQsvKHAUlf/va2hZFoHPxN6zAojJN5+W
-X-Received: by 2002:a05:6512:31c3:b0:5bf:e6a1:3115 with SMTP id
- 2adb3069b0e04-5c1bc76a33fmr3371052e87.2.1795347514504; Sun, 22 Nov 2026
- 03:38:34 -0800 (PST)
+        bh=8c6qVyqNZ0SqHcZpSnANumyjBAiFjdYDHk+HUxi2Enk=;
+        b=r5tfTX1wm6kZvSUEPuLy2qHBbiVmTVFFUhAE0P/SoAb0ui1cegbuAh96LbKXQ+N1YX
+         fCdkz6Y7bg3F0xdQIaoBEIwjM0UPwcUDVmRPyZzUAy5Ljl6N/yLUUdzeW0AfoQ285YRk
+         Al1J96yCPiG6djsRsYa1iV834BtgRYjKx1IMUApUjERa5at8CXO9aJdunJXv1/Ud/NZt
+         0JS1JUVXaxZq9/de2RiRuCHAyEhISRt/6FTxJqmKpWAHZeuVodVTN7TpsVrjq/D4txO9
+         c4FfSnu6AVuw7axrYhbATZlAh+fpUSC3bptkEsgzc6BwxicxmlAD/goT1gV3JveQu5vN
+         i/ew==
+X-Forwarded-Encrypted: i=1; AL+hErGpU7rsj0TwcszGBbQTnMqSoX8Qb6AznJiewORTGoO604TSSPIcUNgKVP5SxWjqUwA+gAU+5km0+oCpoe3A@vger.kernel.org
+X-Gm-Message-State: APuU4Z/nVxizW2ow059vtCLYwb8pLh807pZjIR8EkUEtEmGaSGD2lIkc
+	Oi8ZUHf4QnsnUQHnTzwl5Ns8VJD+184tbiFQ5BcKMvPdtYknxR9MY17L
+X-Gm-Gg: AZFdTZeIpOEGwnybJ2tt3TC1pULlQwg/ayiiug1uSXoCa7Z7AnM1P4mIke2baCVPhhC
+	WjSlk92pXbYLLQkQgo6kwanGImhwoBN5IhEcjzpUG/JxtaK9xDzDHtyDER49AVs3tw1BWAtlLhn
+	IuuygSsp1fbjZQdWGWEXTgISsP2vpKnNgLk6DpltF+HhjvDBjcecusfTHUM9hLVwj06/T8xzhT6
+	fq0RvetmHGVfe3qVOvPCQ94RkNm6oiQbqcR8bcsdoQes8l9v0qAQGVN23xwWmhTOLsAuBQ/weUh
+	v0SdAbhEjbv/Y/TPZXaQDv5GhFBFtSZzS7igZr5m8uGktBEMyGDDpIbXzTiqbl6mPVLKp48ItL0
+	6w2FBjvkytkV1C2Qd1AZ80slrY+g7Nqxx0EAB0WmnzOm7LMzaH2MxYOlwu6xURkzs2d1K8Ytlk/
+	cWxtOEmuTsG6jqJ3NHQ9/edgR2VCtmHV7ZE3X09Ha1FWIktymfpF1fJysMn7Df9cVMPoyy/7UQf
+	VOIhlubOUjn0D4pS8I6/nnWKqQYgbZu7UNAYDWAtPf/KKEn9uat+qzJKDoY72VIe+FYO2gKZ8rG
+	6X63JwnCMfimO3UzBNd8wknsgLFSrlsSab3RpeeV21bfsxgBIknxePHgrrzoX1QwQg==
+X-Received: by 2002:a05:600c:6092:b0:4a1:d537:1c8d with SMTP id 5b1f17b1804b1-4bb8892bb67mr166647795e9.19.1795348500044;
+        Sun, 22 Nov 2026 03:55:00 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb90660cb4sm168516455e9.2.2026.11.22.03.54.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Nov 2026 03:54:59 -0800 (PST)
+Date: Sun, 22 Nov 2026 11:54:58 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
+Cc: jim.cromie@gmail.com, Arnd Bergmann <arnd@arndb.de>, Jason Baron
+ <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
+ <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Andrew
+ Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH 2/6] vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+Message-ID: <20261122115458.1da4b8e9@pumpkin>
+In-Reply-To: <20261121-vmlinux-lds-v1-2-49818f3f5cc0@gmail.com>
+References: <20261121-vmlinux-lds-v1-0-49818f3f5cc0@gmail.com>
+	<20261121-vmlinux-lds-v1-2-49818f3f5cc0@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -106,46 +103,53 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261120-rust-helper-namespace-v1-1-3b9a05553ff6@gmail.com>
- <CANiq72kWXzP1SWUvhOT2k-rNjopnySXeBkjwrx63V2QUaLpnGQ@mail.gmail.com> <nh-eaa5d67e-6d05-468f-9f19-273bc5b23ad0@google.com>
-In-Reply-To: <nh-eaa5d67e-6d05-468f-9f19-273bc5b23ad0@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 22 Nov 2026 12:38:22 +0100
-X-Gm-Features: Aa3M54ofQVSiRzi-fgoVKnLP0jYbT_Rm3zSkFfSi2xtBRiBz58W07aP7BMXi-VY
-Message-ID: <CANiq72mTs=_4wSHAjCJNdOcmODHzPf0ELY6t6vqCNt2E--XYaw@mail.gmail.com>
-Subject: Re: [PATCH] rust: put C helper exports in a dedicated namespace
-To: peder.bergan@gmail.com
-Cc: ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, 
-	daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com, 
-	work@onurozkan.dev, mcgrof@kernel.org, petr.pavlu@suse.com, 
-	da.gomez@kernel.org, samitolvanen@google.com, atomlin@atomlin.com, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, wedsonaf@gmail.com, gprocida@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Nov 21, 2026 at 6:50=E2=80=AFPM <peder.bergan@gmail.com> wrote:
->
-> 1. Would you prefer I wait for Giuliano's series to land or send v3
->    with it listed as a prerequisite?
+On Sat, 21 Nov 2026 15:49:20 -0700
+Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org> wrote:
 
-Either way is fine, i.e. in general you can send patches that are
-conditional to other patches (within reason, of course).
+> From: Jim Cromie <jim.cromie@gmail.com>
+> 
+> These macros are unused, no point in carrying them any more.
+> 
+> NB: these macros were just moved to bounded_sections.lds.h, from
+> vmlinux.lds.h, which is the known entity, and therefore more
+> meaningful in the 1-line summary, so thats what I used as the topic.
 
-> 2. Should I keep the KASAN import for v3 or move automatic imports
->    into modpost in this series?
-> 3. If you prefer modpost, should it add the import only when a module
->    contains a Rust object and references a RUST_HELPERS export?
+Maybe remove them first?
 
-If the `modpost` approach (or similar) works, then I was thinking it
-may not need the manual imports, i.e. the idea is to avoid having to
-write those manual annotations if the automatic way can figure it out
-when to add it. But I didn't actually try it -- maybe I am missing
-something.
+David
 
-Thanks!
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> ---
+>  include/asm-generic/bounded_sections.lds.h | 15 ---------------
+>  1 file changed, 15 deletions(-)
+> 
+> diff --git a/include/asm-generic/bounded_sections.lds.h b/include/asm-generic/bounded_sections.lds.h
+> index 8c29293ca7fb..268cdc34389b 100644
+> --- a/include/asm-generic/bounded_sections.lds.h
+> +++ b/include/asm-generic/bounded_sections.lds.h
+> @@ -18,19 +18,4 @@
+>  
+>  #define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
+>  
+> -#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
+> -	_HDR_##_label_	= .;						\
+> -	KEEP(*(.gnu.linkonce.##_sec_))					\
+> -	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
+> -
+> -#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
+> -	_label_##_HDR_ = .;						\
+> -	KEEP(*(.gnu.linkonce.##_sec_))					\
+> -	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
+> -
+> -#define HEADERED_SECTION_BY(_sec_, _label_)				\
+> -	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
+> -
+> -#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
+> -
+>  #endif /* _ASM_GENERIC_BOUNDED_SECTIONS_H */
+> 
 
-Cheers,
-Miguel
