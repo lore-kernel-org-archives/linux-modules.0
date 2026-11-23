@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.169
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795457561;
-	b=lFHEO2+mN7tuMSkzHPGooIW6Z7lD/D+YWTzcOZM+ZjECPj1EcXd3xazJZnMxXDBtk5iy
-	 ZYgzB5g25MAU80RQdKivmwhpHCW3gMQEoOGOqFUmTB5fetuWFRwOcgqkDo9j2Uvv30JMM
-	 TT62qAvb4WRc4+j65Y+ABHLD8a8cei93eTs8RJEFTOxc99qGvU7hpGkqWG8bpN4/5zbWF
-	 eeiTEXtwmynUfFyYep2/6uUzlSF4v9hB9qdRZ2TZffvG0Fu2gp7KY3bIoW/RvQ1jyMysj
-	 bRYOjch4zQHwaJblnfEPvY0EqyqgpQiQjDodZVUX19BVv8CUaLqWuSgkrYNyZQyo1tg==
+	t=1795457748;
+	b=FnEqOHZK0n+khCxF8IU/EG0GuCXFzBGVSQUCezvaaARqghLDaxb+r9Vt0Sxu18Bp4Ski
+	 vGWcBlCusM9JMkKvaVSKkYGU+e9tzWJIhHbACsJVZt7N9wTfo/ewVv65TLlhajoyjnZ+F
+	 2VMAjLrLV1Hyv1O3PoRlL9UBj/3V8Sd3cMpYLt9pwMAQnGs/NMKxZSBQ3axHT6e/ik+qe
+	 WCkmr1ceQUmSm6/Wj7IC2F1U0CyarGS5t9kOIm+A2GU18X2Jz1zOUY0mXsWWQtd6hMq0r
+	 v12o8nGxwCIphPBLlmgplI5E3DmfhDGbphhloTyZ+Ub8UnHBgQu/baMXght8FGb+KmA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795457561;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795457748;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=HP8VBm9AwBGBl3fsWmTi0HJKAowy+01FlMfGnwz4/xQ=;
-	b=UPNTw7GsPqWiW02yxNPApn80GHPVrhx36dqkQvkAhQjcmzDpmG3ZVzAMn5j7H2dipgAR
-	 r51qHW40H2teEj/ryNw1FXvcXMsBpLXcwwZW7lTKyJL4FWn8Or7It52FNmr6Cqf+EWqWn
-	 +DRQSf8nkvVkEBFnRBk5ncKDr3TgvW+e5fI+OsDFNgDFLP/22gxYEpjKftb1wVndPnzLR
-	 OIhfVh1VL87SfR0qbrpavlnZUTMs43PmKnbwhaPfXCMSTuKNPED5bx5VoYm1QzZdxwcDc
-	 RPB7J75ko9mvuBMf5SGQNcVu8dnclaXY03zmz9bVal67r6EjKEd04kH/hGQ1BZ65A4Q==
+	bh=nMsBK5JZkeseYTz3X1TgvJ2SrDeEmSZ7YqTTt41Yzdk=;
+	b=Wj+c8SM9RfKCHD2CfnyluYod1+nhlAhX0flhpYINHe1eQoVFxC23PjRwJIhmkizssC5Q
+	 tXgmprBp2fNlTH+PcqZq0HA92AQVGVmGF01kslWdP6pGBrdBCKapRo1le3a4X9eEqwUz1
+	 yOXB/tX+hCxgwMDvZdDqW1VzdN1qOycU9RQAciIDIGaALunxjoKpI2l49ndugOBRN33VD
+	 RDrVnGJ+PN+8/wvRAzW6n6UDI71pca4V/872t3w7JD7bisWsjz674+JyMtYo9gmz+jOMQ
+	 JFUZhyzYcRL6IvYiGs6FligD5Yq8iMmSj5s4b4/F2KxdgMDkDjHGvlnAVcriQmmVzBg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZvLZA2pc;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.173
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QAvQ0XWo;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.169
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4F9606A321
-	for <linux-modules@vger.kernel.org>; Mon, 23 Nov 2026 18:12:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E4F9606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FFA606A31A
+	for <linux-modules@vger.kernel.org>; Mon, 23 Nov 2026 18:15:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2FFA606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZvLZA2pc
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-8b2d14968c9so34159657b3.0
-        for <linux-modules@vger.kernel.org>; Mon, 23 Nov 2026 10:12:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795457559; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QAvQ0XWo
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-8b4eab91bcaso19426217b3.2
+        for <linux-modules@vger.kernel.org>; Mon, 23 Nov 2026 10:15:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795457747; cv=none;
         d=google.com; s=arc-20260327;
-        b=YbbFOadt2fFXh+OKaZken7WLKBM9vhYtr74Y1RLDPMH+Vn0x3iJOe/MGMpame7zHHS
-         CM0xrqeh1muAJ454y2qHEQ+fr1Is5LSGRYOPxJXXyiarpU8jrYLzKYXkEoRgro4p79Ey
-         WjS6q6AL3LoxzCiQNGwaNK936/8KiaeGG4EUuZ7Th+b7oVatjyn30rKU0IXLP1gSuV0u
-         6mtPLIvVQ+VFXHSt7LHSQs8Ye9lK8sYYoRWIFugaWux5hbzk42xlNSoPprXa/YghDZQI
-         dm902SaQtwOQaBZiHYz/ealzL97x7VvgRQBelds1l9EFUCbpA7gABIquGYQ0sHDgvrgR
-         UDVA==
+        b=gfjgjrU8L5KW7qBFVBOCyCUWnaVeJMo4DzET87cXYeO2UG7WYLizmNzqMmYUwhXcS4
+         h8UkiPdgE1WxYruwbeg2eoJxJwCqVYnN3kl6OdXQ+8nUEBOp7VR+aF/m8dmz6NELHUus
+         hy1O982RlC5CwKaYR/Uxd9Px+jY7PdCY1nkhV8mhFGqU37DFvhONR9DDtjMg2kz6Z+Vr
+         Q9nMvYsU2shYyYp+rZGSgKEpEeUks8+Iywtd0OHggkf9HWzgMorqtfyWE0YO+95i34lT
+         NdDEPEBQ0yXgfUF24/aoxxRPxXheW5M2l41GhnHDa5WsSwD83w2YG0t6P+I/Wn4kx3BB
+         GL1w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=HP8VBm9AwBGBl3fsWmTi0HJKAowy+01FlMfGnwz4/xQ=;
-        fh=pSyxXGOzHClcX6IOiOK9vjnC/BbP4Vt9cl6gCICQItg=;
-        b=d2yR19f9MJtahlqbsSpEoHEVp58fMj7iBw21tNB7BYjSA+VE5TKr9HgNFwmCdof4tN
-         Om7AzVUFqEQtc5OajcxPxWD+3g7jFY55qwzHvYh+hCANec9ZnG7ZSVV0NaWOwhCl4mza
-         H9AAXCzvTAewB8RiAGT63Wa9gMrO93IsqMzD0IvQc/423iZMj8SQqqUyTCeyRkv12HBO
-         eg4dKLHRKWEzcmreQL3WwX4YeeyluLRHE+nYKh6eSkhQ6IUaxsmnVLJWVVZmyzecr19e
-         m8wQB3Y9Adig7mi9A9oFFSGIwrxzZzQ30i9ifxbSjNxbDrYY4JQ7c55DaycB46bBexWW
-         G4CA==;
+        bh=nMsBK5JZkeseYTz3X1TgvJ2SrDeEmSZ7YqTTt41Yzdk=;
+        fh=7xSH+MjWaHCyIWmGi7Zu8TACPGhCN7HSn42ChGPyNPw=;
+        b=Q3Uxh5DONmkkWhniQVvmOllposMoesYdEgrWeih3CzMQLlZ9Zhnn+whbMiYmjP1LLv
+         GIUWFupBQujz5VYdEmeeTo78ViC7G98J1BVHTYL2tzhPm2goVm3RGTGqRNWXFIgOKIOY
+         t4nDFL4o1r+CQ6ptuJAgETyeWsVJ3Aa+kdOnogPcYJi2gzxRt84M/rwYRmbaBGBlgNSb
+         h9VxGguktlSHNzg8dW0J9eHH6TV+pJ8XEjMi4MY2Q9O1UL3dsizktQKrF3cPKhcVpvvR
+         /6yUE2TJbYFy4YP5RYte8eVjU9UH/6QSc2I8/IsZ8cd5kZ7tjVZrBPfQYRGnfmkeuWUt
+         Ru7Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795457559; x=1796062359; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795457747; x=1796062547; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=HP8VBm9AwBGBl3fsWmTi0HJKAowy+01FlMfGnwz4/xQ=;
-        b=ZvLZA2pcD9FH9HECe7LfubP1g4r7DtXRTfLw+a0fSCVHRJ58hcWDYhSRacl6iWIhx1
-         vem+3JyEz4vOLSZ+IkUJHfzXgIjCFVthSNx3d4mzu9P79SfAolAw4Jt4yzHmEPZftFFs
-         rR44xHk1UdKlXpN4nsj8cuw28Pu4f7r8OoDysRubVnO2x1wYTvw4Cv7a++edFCAgU7xv
-         FwyOp8/bmeVoA8845IWW+N0pphOdNNyL2IUTX1caZ67sYL7dqc3DVPzzaQ1OhL8UsU0T
-         ppHemCUM2GWad10r+4RYwS/DZlVBqx2dNyPjbDasXB+7Kxeyd98kKRzbZqgwtR86cUL7
-         YuGg==
+        bh=nMsBK5JZkeseYTz3X1TgvJ2SrDeEmSZ7YqTTt41Yzdk=;
+        b=QAvQ0XWo0tcExbNOFzJESQZNbHYBLhpD32HKNvni4HEhtOqZEL5GCt+suncaWlBUiO
+         FZtlYyNOqn9GHma1eRgPcYdd0NoljW9zR1Rc3Q6xInR6kvJqQNoPNRRrvYNNLbRwErFT
+         C5Xb2wcOQSFScBdI2yQWvbeXEHGwhJMNY699xitU3dlCIUs7wu1tGJEo+Yar4GHnXN0U
+         wLc//ydgb6yiwdJhE/yc8kHeO5YrOdlZnMqS9IH1XC7S+sN200e2Re8+RSKxq2UlZI6C
+         C4TtJme+P2FM5uP3jC74YS73mzHG34FPYNDILJ0QBlMq6nWOwr9hYQ0pZ6Zj3bui1vtz
+         H+nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795457559; x=1796062359;
+        d=1e100.net; s=20260707; t=1795457747; x=1796062547;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HP8VBm9AwBGBl3fsWmTi0HJKAowy+01FlMfGnwz4/xQ=;
-        b=qdAsR1yVx45j0d7utZtUaZRcD3IPi/f66Bmk2eUv8sZzAXwhFsO0LLJZhx0PrXO4AV
-         Xws7NyA54aneytrFu7BzEEbM6J6F0SqGhr9utBXs7yBzf7H+QD+s/e6SjHBgw2wMtjk/
-         3ULGoNzGVy+FjWUtXhF1mJYl9A7pRrI11g8EjBSfrt2zvIMMTMI3l/0WNevE0x0sbjPC
-         Hu5BBmKwL6hgox2hg4GRSFHVqJYsTIg8YiltY1UZgkJ8ew1iGdvOkdzQoHi/qeqFamZN
-         hsGP5Yi3x+kuAsCW32KH/PXR7HL2EXsvyi52dlyf9KPLek6tom7OevD1IXEIwr/t8+u1
-         8J0w==
-X-Forwarded-Encrypted: i=1; AL+hErE4u6hM3x14r+Q5BXQuDZuzWaR7z4bK2nBrV3wYKq2Ef6BA7uDutTSMoYDouhQsvmVDwjH4BfR951lPR+Y6@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Aat090ZtLkis06MyzQ85v+ov9AOAME8xnTCe5zrZpz7T6Sl6P
-	UPOX8TseEXL3nzeoCSS8ySrwBlUYxqrWjAGE72/pLBEztdUkKkHps9j03H/7zRzLdOdQbzlOlM9
-	RKPUFwKUbMwEN834b+kstPCn5WD5i8rg=
-X-Gm-Gg: AZFdTZfsPYnRCCYSKyXXQSIQn72rVZ8ZCsoC0bd8Bs9g6No3uI1bjLBZLOj3mhatx2O
-	WceQ3wiNm3siEuDq/6H263+yOZFJmbUturWSqedXMOKq1vha8WEFHALLB4DyOpzdMddEQtJW6pF
-	hRlDzf5fQ5jTUSmLQ9LeS0wkMW58H1oRQ0rINfNvPzo2kDBoldzevpuVvGoB2MY+Cch7SIXE3S0
-	QPW6EFw8WWMChkxm7GZ1Di3In5MDf8T3PtsdOcb11nbaLld1sMw36wU+rT/fOJvAVvbdWXRM6p0
-	XwbmgS5rK4GvJ9rTN52XkfXHisIJ2cNQSE2KLjgRIkNCaorkQJR2NtevuDKw+OuBzukmzE9rodC
-	iUFwhppma0KeYyiPD1KusGyVi03/ibnumKZRWceEqtZzddFyzELYygkSUQ20BERsOLxTCh0aEGE
-	KTZLKlDRYyrj3K/iyeHd/3HKXbhMhHVtN2pYR6
-X-Received: by 2002:a05:690c:c96:b0:8b3:4b5d:b26c with SMTP id
- 00721157ae682-8b520435e51mr43853877b3.13.1795457559039; Mon, 23 Nov 2026
- 10:12:39 -0800 (PST)
+        bh=nMsBK5JZkeseYTz3X1TgvJ2SrDeEmSZ7YqTTt41Yzdk=;
+        b=0jqOweakU3Jq4dYVaQNnH3uFR9QiPloUoQVYGphQ3TRcfSOxmO8BKrsppA0xj0vX+U
+         YqCMb9dzy53Vfdn7LDNGd8PAIBj4rDwDAHb07b6gdqF45O/0K0tnWn2lMzkCW5ng9X8E
+         Ifo5pNNeXfsv4kVEoX6gbRwbSgs/VGpY0O4XmTxYlDxtGUF0RHc8zB2gG8sciaAdf7JN
+         +SIQGkk/pjUSLXcGyeRSae6HAsAAQD1a+M2p2GkTC7H7qI5onCl7MGBBoaJKaRZuXbRP
+         PJwnxjvxU63RQX0JScr0pfTHO8QrzyEF0KhTEuVj4miX5YFGHBFFPREzcXbAciL5/tpG
+         4Ucg==
+X-Forwarded-Encrypted: i=1; AL+hErG8oS83ta7eSMuaBvBzmX6DvkmOVDlmkhIlVr4oy4OGvu2LBPMjRWyrBngbeyLcRtun7XC5qybuxmkt0yKS@vger.kernel.org
+X-Gm-Message-State: APuU4Z85bY6Zx5J20VuJ1v83KWtCktinOH9MkaJadHWlf1w96JYy1wVQ
+	n2ZWbkpLBZrYu+6tBuhw+tOWWjNUT++dTnQ4RwFOuSfYPzCJ+pnOVPEzf7rE0oHdozDOLVxHqQR
+	t4EkS9dowALezSrmDyvJeIaiYxDW7d24=
+X-Gm-Gg: AZFdTZccyhw/cKvIz/P2l8OHZ7OnjjB70AbfTVXLu3SxbqEl4pbdB6/47YolK7BaIug
+	z+eo8XWpVyYSutxC+7/Ia1fzaYNtzZaBUq0o/S/YkBE45naCf914uKqn13HdUOTqVl0M9AKnrvO
+	hRet96yQlvO0uyaMc2cKKbXXMKSt8MRva2F8za2WRynoPWUvW0J3T1DHrucnHLhASHr93KeTS5q
+	+/gWZPX6J1NCSA621Wgr+YhXUmTriHbCxKDySK3iAGymXS6xII2cV/UcD5gTWmyY45SZJbvGvn/
+	BmpT2+jk5vEL/mDI9PMcqrYQRl4/SfI/EeFLwkCvzpLpkv3Yx/TgEhR9g8XZiLhhvw7Dw/OVcMi
+	YoNKlXifiH2mWp4+MqBCswoIFKSgsfq+47zDUdxr6fLw7Df7LKvwdwRPC7/NHcfgtohNy/wa3PK
+	G4yS2GruwK0Cw+24k=
+X-Received: by 2002:a05:690c:797:b0:8ae:87e7:9ab8 with SMTP id
+ 00721157ae682-8b5205437abmr48277337b3.67.1795457746844; Mon, 23 Nov 2026
+ 10:15:46 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -106,16 +106,16 @@ List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 References: <20261121-vmlinux-lds-v1-0-49818f3f5cc0@gmail.com>
- <20261121-vmlinux-lds-v1-2-49818f3f5cc0@gmail.com> <20261122115458.1da4b8e9@pumpkin>
-In-Reply-To: <20261122115458.1da4b8e9@pumpkin>
+ <20261121-vmlinux-lds-v1-6-49818f3f5cc0@gmail.com> <a6fdcd6d4bce5ace3b4e34d1393f5cfe58e17c0d.camel@perches.com>
+In-Reply-To: <a6fdcd6d4bce5ace3b4e34d1393f5cfe58e17c0d.camel@perches.com>
 From: jim.cromie@gmail.com
-Date: Mon, 23 Nov 2026 11:12:12 -0700
-X-Gm-Features: Aa3M54p7oziKjc6uiBqsKJw-wMOKZwA0vwboFiGz1_X4unEm3KI8bOmikp-yLOk
-Message-ID: <CAJfuBxyxu6FgcX-0yr3QaYOyDH0VZwvtaSU7HpqBU7_AV8qCVg@mail.gmail.com>
-Subject: Re: [PATCH 2/6] vmlinux.lds.h: drop unused HEADERED_SECTION* macros
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Jason Baron <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+Date: Mon, 23 Nov 2026 11:15:20 -0700
+X-Gm-Features: Aa3M54oFOAYf6UTkbI4OQkVdZIf4cCrnHVvp22FVwZTxOnodSxK6PbkkLux5L8g
+Message-ID: <CAJfuBxxJMwrBKTrwC8RoLKRs7uBBPrgfWmPom_r49JmnOPvMvQ@mail.gmail.com>
+Subject: Re: [PATCH 6/6] checkpatch.pl: generalize linker script macro exceptions
+To: Joe Perches <joe@perches.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
 	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
 	Aaron Tomlin <atomlin@atomlin.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
@@ -123,62 +123,69 @@ Cc: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>, Arnd Berg
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 22, 2026 at 4:55=E2=80=AFAM David Laight
-<david.laight.linux@gmail.com> wrote:
+On Sat, Nov 21, 2026 at 7:27=E2=80=AFPM Joe Perches <joe@perches.com> wrote=
+:
 >
-> On Sat, 21 Nov 2026 15:49:20 -0700
-> Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org> wrote:
->
+> On Sat, 2026-11-21 at 15:49 -0700, Jim Cromie via B4 Relay wrote:
 > > From: Jim Cromie <jim.cromie@gmail.com>
 > >
-> > These macros are unused, no point in carrying them any more.
-> >
-> > NB: these macros were just moved to bounded_sections.lds.h, from
-> > vmlinux.lds.h, which is the known entity, and therefore more
-> > meaningful in the 1-line summary, so thats what I used as the topic.
+> > checkpatch skips macro-rule checks in linker scripts; 3 of them
+> > explicitly check for vmlinux.lds.h, and 1 (the 1st) skips on any
+> > *.lds.h.  Generalize the 3 to match the 1st, including the escapes on
+> > the dots, so they're literal checks for '.'
 >
-> Maybe remove them first?
->
+> Please remember to email the checkpatch maintainer too.
 
-yea, I'll do that.
-thanks
+ack.
+I missed that b4 prep -c didnt add you.
 
-> David
 >
 > >
 > > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 > > ---
-> >  include/asm-generic/bounded_sections.lds.h | 15 ---------------
-> >  1 file changed, 15 deletions(-)
+> >  scripts/checkpatch.pl | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
 > >
-> > diff --git a/include/asm-generic/bounded_sections.lds.h b/include/asm-g=
-eneric/bounded_sections.lds.h
-> > index 8c29293ca7fb..268cdc34389b 100644
-> > --- a/include/asm-generic/bounded_sections.lds.h
-> > +++ b/include/asm-generic/bounded_sections.lds.h
-> > @@ -18,19 +18,4 @@
-> >
-> >  #define BOUNDED_SECTION(_sec)         BOUNDED_SECTION_BY(_sec, _sec)
-> >
-> > -#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HD=
-R_) \
-> > -     _HDR_##_label_  =3D .;                                           =
- \
-> > -     KEEP(*(.gnu.linkonce.##_sec_))                                  \
-> > -     BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
-> > -
-> > -#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _H=
-DR_) \
-> > -     _label_##_HDR_ =3D .;                                            =
- \
-> > -     KEEP(*(.gnu.linkonce.##_sec_))                                  \
-> > -     BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
-> > -
-> > -#define HEADERED_SECTION_BY(_sec_, _label_)                          \
-> > -     HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
-> > -
-> > -#define HEADERED_SECTION(_sec)        HEADERED_SECTION_BY(_sec, _sec)
-> > -
-> >  #endif /* _ASM_GENERIC_BOUNDED_SECTIONS_H */
-> >
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > index b8b64f720191..318e1f2577fd 100755
+> > --- a/scripts/checkpatch.pl
+> > +++ b/scripts/checkpatch.pl
+> > @@ -6016,7 +6016,7 @@ sub process {
+> >  # Usually multi-statement macros should be enclosed in a do {} while
+> >  # (0) loop.  Grab the first statement and ensure its the whole macro
+> >  # if its not enclosed in a known good container
+> > -             if ($realfile !~ m@/vmlinux.lds.h$@ &&
+> > +             if ($realfile !~ m@/\.lds\.h$@ &&
 >
+> Probably better to have something like
+> my $is_linker_file =3D '\.lds\.h$';
+> or maybe
+> my $is_linker_file =3D '\Q.lds.h\E$';
+>
+> and use that everywhere
+
+yup.
+
+>
+> > @@ -6175,7 +6175,7 @@ sub process {
+> >
+> >  # check for line continuations outside of #defines, preprocessor #, an=
+d asm
+> >
+> > -             } elsif ($realfile =3D~ m@/vmlinux.lds.h$@) {
+> > +             } elsif ($realfile =3D~ m@/\.lds\.h$@) {
+>
+> >                   $line =3D~ s/(\w+)/$maybe_linker_symbol{$1}++/ge;
+> >                   #print "REAL: $realfile\nln: $line\nkeys:", sort keys=
+ %maybe_linker_symbol;
+> >               } else {
+> > @@ -6192,7 +6192,7 @@ sub process {
+> >  # single-statement macros do not need to be enclosed in do while (0) l=
+oop,
+> >  # macro should not end with a semicolon
+> >               if ($perl_version_ok &&
+> > -                 $realfile !~ m@/vmlinux.lds.h$@ &&
+> > +                 $realfile !~ m@/\.lds\.h$@ &&
+> >                   $line =3D~ /^.\s*\#\s*define\s+$Ident(\()?/) {
+> >                       my $ln =3D $linenr;
+> >                       my $cnt =3D $realcnt;
