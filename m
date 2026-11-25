@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.42
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795638304;
-	b=YzoAzf3uxBctkjoad3mh2D6VsPQBHCdDvSjVcPn8I0hTaWmvKzdUnNXIyp/huh5s7XQW
-	 Zvqfk38HnYie3hOSbem+bf9kVa/P+dFOPPTW+1OKdUr3T4QjaQH8PSNsYl9rFUYKbFnfa
-	 1tQhQ4XIyUvDVTskJytYAC09AsBHlVRmIz0wKA7vf3+iVPz8A/iV6tdII6B5+yBxS2BSx
-	 bSwA+QDkhhEaNzahEBg6R+pV2kKjIgs3/fXG8vsqGol9uhu+1sNuUeEWoxJNVIQC0mh3z
-	 diCc6O/6NE+QPjJdW4OdexQbGjnPR8KKOgetZUrMnprOfzaBvDOd6T5MrDsMh6LMALg==
+	t=1795638315;
+	b=nD8tkqllm4aPRsnApR2oYi/rlWWts6fivyEKi2xvrlOhRhBkKLIyAtxK0wI8xME8E4Fo
+	 o90NNUX+XTW6G3h0xvzACinTv6GxQJ9gxffQshTDIPN0N/cyijocVjJbXDJ2DWzCyKrvL
+	 Kgy3/NcWrTiqFigkkOkgsqtfpfq3NBzR4DPG6rwNsQnx3IfDFJXYseiQ7SOJsQ2UnKM5A
+	 m1HhnmxKq0/ZH06XpsuBDkOBml1iCtV9PPgCfO7rCzKcg1Xc2rQCedAbM4KtepMFRHcmm
+	 +jmV8wh83XOmSV9ygDoa8oviH+NCZhgtcaaZ9zlxIosH0TydF31X1MHcOJGl4jgVhGQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795638304;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795638315;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
-	b=qMpD7CFAV577ViP/xN3d6iLpNnRZKNEmBmUaltifSfcFJFEeOyXr7ID+OJiX9n6NVEBZ
-	 YbhvBhAUyy1kkWK9dSnr3NFQ25+V6wicxFMXQJnhBG2+hYlETcq65xYoytyLoSWqSr+Ru
-	 OU2iTYX+9VoFFtfWo9923YqAVSwy/wJSca45bQzs+UgHfSHdQ0aXnz0Oi6wWks1aj3y0a
-	 XRdxdndGqo8VwPottntjIl+dseZ4sD6M2aqASytUofVicABSFctP529vBy5oHc+TS5kAE
-	 wPler97pU0RGdUJhYZHgLErca3HheQeE9z6fwQqfKwajneQ+esolJwEK/5SoRr9Ly8w==
+	bh=tNTrkUuaHlHdlSJ9SFhPuXAnSzxCe+1wYBLFF6dY6Vo=;
+	b=QmF4C/tw+gCcnk9IQmSvMk0UNMuaOf7PmCo96EEBEc58g/llfoMJ9hscV7isg6anktpx
+	 FuXiVYkMm0kJusvYz5gcXkkYnqxdfO9dWjkCfgOEPINu+PkOPwXaaQJLFvliHuD/DImuv
+	 xk0UmrakrtMPwOGpBC2Bc3U6+gEVy6qhghaX6DQv7Wbk2b8Lt0ibbLPCV+ymvPt/dFOuo
+	 lD7I5dDfomcN+ipkT8AVgXIKyKFUqmfirECFeDD8qf2bG8l4SXCcW66/jk/jkHRyu97+y
+	 Vr1+S6RhG71ZQWfmPLh/sAHzvNnJQwNotFp7lFDTKRIu76ZBqm+nNSRkK930rescjIQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qxpVsnDh;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FsVUFq4K;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.42
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDF1606A337
-	for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 20:25:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BDF1606A337
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0426606A338
+	for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 20:25:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0426606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qxpVsnDh
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4b467581b98so61115085e9.0
-        for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 12:25:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795638303; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FsVUFq4K
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48e09aa5264so3638449f8f.2
+        for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 12:25:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795638313; cv=none;
         d=google.com; s=arc-20260327;
-        b=P9OHNeVFCpyhlJwzLcNN1PeNrwMiE1xuUdLtk05m/OLFEwxowHQitP5GjtPZy7ltDN
-         0pI1lZf3+n2NlWl9bmSK6fT7JeXsudyOA/B/E+0shb9W1AArZANo+LePKX067oTSmr4M
-         +2ok78LL10PDA4QzoespwT7ZxLn7H5praDfDcECbsrDfRmg3bHxnEk0aGS2LdlU8mp44
-         H4mT6poDq1FqXMVxmeqxNXb6FjO/zFKho+I03wC1aEeDhrGUxGSuyAOdoxiEDawLZDk6
-         9RoJy/Qa0H5nRbAGoVrPA3pfqMpuwxYOC1JUk6fW2XIocoiI5o3XYa50LtI3MMDjZGSP
-         k5MA==
+        b=TeRqgGh5KVWOMyKg/HW8cf6UTQXnb4Inf7k+Ixt2Ulrdo61kQj5MuQ2BicgnI74vYj
+         C16q8W4q0926EnZsq77M8OdsyfnCpvngW6EwxQYiUNnHuTkv0ibOUlTKdVhbdCTpkTtc
+         LUUGDqu/6zRncVllsJ5bP5bqpVp9Pq1nVKJQAyIa3ms54lB1ZBCqRPi7lfhBEMsimlvv
+         9ntsUvFTNjB74X7sldBOUjDnE76yM43gS8XlZ66CCtf+cdmjebUoS49AzckkCXZkxQF8
+         wkXV1H8CeoULkDIuMiJ1aWF8AhrpB3UI4fwG9nt0VCNNYvSRnY0plUKV+xh0UbxVR1W5
+         YifQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
-        fh=bMgn65d0zoYaD22aAZuT2NjVE9eRtgcJU1MDSYQMCQg=;
-        b=P6FyPALjp6Zxj+adKBopE3CHjyqJiUNAwwNxInUmVrqbpib1SZ2qMeSdnNv9VfWvHR
-         4rw3WQEErUPbK+1WGMI1m1A6RRopvDb33J57CQCHSOQbgaW1qwQRtCZwWNtamOXn/t00
-         xuMqIOErpJnfxEmRT5SLYucGUDmmCQX+MCCc2yentSsTa/91aDFcD9ah1cyPnwUsIlyE
-         GyYqtIMLTmggUMCygZVjcORRf4VqCxxH+MfG9Kf09op8m+H8S/F4+pFR5P29XN7/JCk8
-         GkcuACFUiPz7AUSFVNSLVxURCNM2KacTrYvMr4db26WVux32MJkp3YfTNG/ufUEfhqUZ
-         FMzA==;
+        bh=tNTrkUuaHlHdlSJ9SFhPuXAnSzxCe+1wYBLFF6dY6Vo=;
+        fh=JFbEB9QcAGH7bvx3qeg5A39AfivdoOMFeEGblW/PpBw=;
+        b=ibPSLNPPHQkUgpxguxQBIz3aJhVl5FmRW/MKBFmr8lDscmUMHJM4fNkeq7WfyO/zOh
+         Kn2s8de2i8jB/Nv1/Ob71MjD7qAJGYqerWZCQd3J7k7gFUtqRg10bX4/5kPFGXkWGEUO
+         D8Op8eWcuVyo/CnHbxhx+FysY6PBjMwLmrUXEPgw6jdTMnT6KpC3Aj6P7LZOYfcuB4zc
+         yBB4KRSS3GjSJiXIYK/MENsq8efkkd7fZMOce8r/z3chi+xZp3/rWEgVgJ18OtDZSYIH
+         zD7kkaigf5YoWxodNA9vxxpifmR3zkARr0mn4Rg73dR6Z1S1c7ceWmy3/p7lemXltTml
+         gq+A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795638303; x=1796243103; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795638313; x=1796243113; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
-        b=qxpVsnDhKpASGf9nC11h7i3rrzbhgE1Ei3PO9P37aCNXYSI78K7dE3d/HkpdwHszrk
-         LY2ewZzhpWyuiXGJ9Y/kVXRgwoqcZjc+AjjGTm6sKWOe26uegothRZycWdOMEmeKaehQ
-         rcee0VmCBD9LHFqBMRGKRgu5+yxn/QVPc8+S1f0ZhA8k/QuPVe7lO4kH9kZ7PLYaSPsZ
-         UOhEiycW2Hi29WbdqTe9JB7fMqfgVwt5DLrziudwFU1jlESg26yCSYwEh1zt9b/mn3Al
-         7ZA2LJwSY/mdKqaAvIEdHaHjwDhtcY5fLQiXuVbUxvNBi+V1wIvq+poIXwdOZVw4io/Q
-         3/tQ==
+        bh=tNTrkUuaHlHdlSJ9SFhPuXAnSzxCe+1wYBLFF6dY6Vo=;
+        b=FsVUFq4Kxydr5a/GRpviIjKPXJDEjD+WqAdPZ1XWo1WKh6FISDbmtggw9Zb9JFW3df
+         my0mKvhcR7rXcURvxIiyLaU0x8G53jEG3RdWyadxD5Sjrd3S3bRm9m2X9eRmHdgcwpBt
+         kJEx19iUSOYIvPsz94vQNgXJI2BVbCnizYEbhclF+Ay+piUCPYbizA3IKKECYAyth31c
+         1cycvaj0oJ30o2SFzRwfoCqCkfAxS5IRdiXE6Aygof4B197kFd92a26XgWumaMHu5NwL
+         j2GNWzFlP3MDK3hmVarn2zbz/A34WRbObbIdjkRH2C2OpDhJyhYRxAmTFIj0Zm516Hlh
+         0Dhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795638303; x=1796243103;
+        d=1e100.net; s=20260707; t=1795638313; x=1796243113;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
-        b=ELT4JlmAaSmk+AZuGHQqgToxotZKZ93//uZuB/k0umiQQwTBYD+DotvEtrGEMbMPY0
-         2wKG+kfXYJ0PnDyLF85/zj4YpGHA+PO3FfpFQOBxx73AigV74bShWS8dCEDAkFPMZGdE
-         8WffR1ymSaLyRc5myzSraTTIect9nn+mcE27lO5Qo77Yy9EFsVYmSK3Vz12xBPGcb8fl
-         CxEO54hvgtDStv08Z+cvFWSdPdV3jFlUGIr7zBzCPP/WbdV0I8CGEOLI2AoJ+t36dEy4
-         94HggOvQCprwxAft4gFkALPZb+vwkr5MJsKX5Kym/fRGlyOdTgcSq1Y0gnruexznilZs
-         mSkg==
-X-Forwarded-Encrypted: i=1; AL+hErG/9yuiAGCEeZjtFK1zatVndAeQp2EnHcH+WrCmvJztPk58Gk8PWcJDOQlmHatWTzlpiI0uyrgEHxc1qySN@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Rt8AZl2t8ERCtXSyFn+x1cb/INdDSt/aCYn0r6QoMI6EKgeXN
-	1lwytiRrPVMeyKLMko7g05gxUJcIDkGf+/gogtVv6Ga1HRz6vKmPG72SAgHpGCygiCF/XfITojm
-	Sxgb1/6UDw24V/NqD9/dqqJqUFrabsok=
-X-Gm-Gg: AZFdTZdLy3e9XeO2yS0lroY1y4qemo2R2uqhJmt12uDA3FQo1If0aChdtPJAfkmDQvk
-	bPIsPcEm6/RRE3pSZTf3GJprlfxbNqWMrbisD3orq7qutFDZWFF/OzXQ6nAm5aqJ+aVlwjZuqDu
-	NKEYdlUO64XJflq3+D16mt5Mk8SI6UNtYst5Fnp3CfRzyKfdRPlHifShyNrpdsjNYkBomK1LA05
-	g/+F2vjN7D5pD8lfHaIp9hoSt2kSPAGL8SoEj2GQdpSTGq13Ha5zOwsTRRYdZBmrihGqbg6BxGh
-	ix8fkO59C2yCzQlKlcu/KWxkXavwfY/LHoeoMC1K60Bi6jrAV2FxjGedY+MJUhyXO41v3M9fQO/
-	0YdFcKPvoOUAzV60k9YoMAW307Ueq5rqOjTQ2HcAMaecbM+7oBSbImercflCuzw6LrnqUpTNeWG
-	2CjeIEfsvY0JiHkZsoFA==
-X-Received: by 2002:a05:600c:4ec9:b0:4bb:6a5a:782d with SMTP id
- 5b1f17b1804b1-4bb88925fcdmr394635895e9.17.1795638302754; Wed, 25 Nov 2026
- 12:25:02 -0800 (PST)
+        bh=tNTrkUuaHlHdlSJ9SFhPuXAnSzxCe+1wYBLFF6dY6Vo=;
+        b=vgYmFvHSHTcQw8hywN3vzSWk1zXlU27exwgDiyLJ4KawbjeJeR2rPYMT6bU81IFM0M
+         4r0qQIraNIjvcB9likFhMDhNKZ8Puo9EzZT/dfX4lyz1PqKS2RA7YbU0KmggArdm3zOz
+         9L00880g5f32SecDmFOPjxjiydGYNgcUh39Wf1fydQ8nSo/7Ff+HpbZqFUmMWSmJykSW
+         evB+X6LTO+jSFl5LpJVET2Eej6yDOsylakMa284Zs5tDvLb4mB2LxphMWGuqvGFnAXA3
+         DKGzPEu7RfCbzOQQq8Ht6AyXPZbC0deR/7gjoIhfWsGBNzFQp1iZUM8nyEZoVvA5WyDr
+         X0dw==
+X-Forwarded-Encrypted: i=1; AL+hErE/cfoiRGi/2mi1j5l5CE9ldp4oOJn+NI0t2MW7e86GEJ5395TLjwnFDe5OxJo/Fwtydnm5GW0+9Yl1eOYr@vger.kernel.org
+X-Gm-Message-State: APuU4Z+V/mlfoHx14rmuBKQBBK34b5cEwbOPelU1zHhkUka+QpYtiEt6
+	eeePq2oW8+DWUdFrWaOZ4aW2IXf9a++KprMc9T/qeezo1VM+wbOyiipKh1SS96Fph2y6sujsquI
+	LYmztFk46aG4k5fsGGLzWZKprnMSnQXc=
+X-Gm-Gg: AZFdTZe8oTIR0NYLEB7aMhA7xHB5fNMGfmEfgmb5WfS+gBpCs1gnbdDgpke0DbjdIkc
+	Xe1oU9i0IaA0iY+2+96h0J0PnLf/ORHwEEZLUzvMnq7VUkNG92lXb6VP26sE8J+ygxfpr1iXgbp
+	mnk6P6B71OufoAsqcYFtG7TNK+F9urdyQtPO9BWzRw46JosXdjAU11RyBdYL9FB6gsmcWcBoqVg
+	evamiewZYv/ahd12duOSqodnYrVMCQqqC0FA6I213dFqH2epVztR/Lk9OZKI9EIFoCuczP2A2ol
+	iSPdeWmyKyApNKg/5dJTRByeEYsTC+HVoAhGgPXHHRtY1Qtuxrndm9PM1ylSVcXLyDvPpSfr5Ca
+	CUUns1Ju+yynHdKY7bLjXKxM8RWOmIPOBYGsShBCxpAp6iY4OMFSxHvbqgfTBueLjE4qSd0FTR7
+	hUrIVEfdyzzCDs4ZcKUk3PYaLlBKfz0f/GdNkaQ1o=
+X-Received: by 2002:adf:e010:0:10b0:4a7:518f:bea6 with SMTP id
+ ffacd0b85a97d-4abb3a4d2b1mr26580561f8f.28.1795638312899; Wed, 25 Nov 2026
+ 12:25:12 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -105,13 +105,14 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261113221248.3535369-11-wusamuel@google.com> <20261113221248.3535369-13-wusamuel@google.com>
-In-Reply-To: <20261113221248.3535369-13-wusamuel@google.com>
+References: <20261113221248.3535369-11-wusamuel@google.com> <20261113221248.3535369-14-wusamuel@google.com>
+In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 25 Nov 2026 12:24:51 -0800
-X-Gm-Features: Aa3M54paGFwRi6x8xvkBaed95VaPlmoDIEKWnad49yMfBgn6GjtOde1UijdiQkw
-Message-ID: <CAEf4Bzb6LQmHHkvB8WBezU6YRtggycRvvA3L03mQHDr3WQM6mA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+Date: Wed, 25 Nov 2026 12:25:01 -0800
+X-Gm-Features: Aa3M54pvd_ufUhqcRiZwrOrjoyqqBDQhM2r6c2QuhvkGt5RO4ZEh7lWEiXzteDk
+Message-ID: <CAEf4BzYLqCCwxSAfuzB-wZiae_tgf0yxAVsFc_wzfRAdeqjDtw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
+ ioctl to /proc/kallsyms
 To: Samuel Wu <wusamuel@google.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
@@ -136,43 +137,170 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Nov 13, 2026 at 2:14=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
 te:
 >
-> KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
-> symbol name or prefix across module symbols in one pass.
-> module_get_kallsym() walks the module list from the head and runs an
-> export bsearch() for every symbol index.
+> To find a few kernel symbols, users such as libbpf parse all of
+> /proc/kallsyms, which is several MB and text based.
 >
-> Add module_kallsyms_find_name(), and put the shared query struct in
-> linux/kallsyms.h, so we have a more efficient linear walk.
+> Add the KALLSYMS_QUERY_BY_NAME ioctl. It finds a symbol by exact name or
+> by prefix in the entries of /proc/kallsyms, with vmlinux matches first,
+> and optionally in a single module with module_filter, or all modules by
+> default. Each call returns one match and its position; pos + 1 continues
+> the search, until -ENOENT. The output returns the address, the size, and
+> optional name and module buffers. A buffer that is too small gives
+> -ENAMETOOLONG and the required size.
 >
+> vmlinux symbols are found with a lower-bound binary search on the sorted
+> names, module symbols in one pass, and ftrace, BPF, and kprobe symbols
+> with the per-index getters that read() uses.
+>
+> For versioning, the struct carries their sizes, so the command does not
+> change when the struct grows.
+>
+> The command uses 'f' 0x30; register 0x30 in ioctl-number.rst.
+>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 > Signed-off-by: Samuel Wu <wusamuel@google.com>
 > ---
->  include/linux/kallsyms.h |  7 +++++
->  include/linux/module.h   | 13 +++++++++
->  kernel/module/kallsyms.c | 57 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 77 insertions(+)
+>  .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+>  include/uapi/linux/fs.h                       |  43 +++
+>  kernel/kallsyms.c                             | 319 ++++++++++++++++++
+>  3 files changed, 363 insertions(+)
 >
-> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-> index d5dd54c53ace..d31f2f436159 100644
-> --- a/include/linux/kallsyms.h
-> +++ b/include/linux/kallsyms.h
-> @@ -24,6 +24,13 @@
->  struct cred;
->  struct module;
+> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documen=
+tation/userspace-api/ioctl/ioctl-number.rst
+> index fbc3537fc9ee..f5dbb597257a 100644
+> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> @@ -250,6 +250,7 @@ Code  Seq#    Include File                           =
+                  Comments
+>  'f'   00-0F  fs/ocfs2/ocfs2_fs.h                                       c=
+onflict!
+>  'f'   10-11  linux/fs.h                                                c=
+onflict! procfs ioctls (PROCFS_IOCTL_MAGIC)
+>  'f'   13-27  linux/fscrypt.h
+> +'f'   30     linux/fs.h                                                p=
+rocfs kallsyms ioctls (PROCFS_IOCTL_MAGIC)
+>  'f'   81-8F  linux/fsverity.h
+>  'g'   00-0F  linux/usb/gadgetfs.h
+>  'g'   20-2F  linux/usb/g_printer.h
+> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> index a46c33692aa2..987569dcdbea 100644
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -674,6 +674,49 @@ struct procmap_query {
+>         __u64 build_id_addr;            /* in */
+>  };
 >
-> +/* Exact or prefix name query, optionally in one module. */
-> +struct kallsyms_name_query {
-> +       const char *name;
-> +       size_t cmp_len;         /* bytes to compare; includes NUL if exac=
-t */
-> +       const char *modname;    /* NULL matches any module */
-
-will "vmlinux" match just vmlinux? or how can one express "I only need
-symbols from vmlinux image" with this?
-
+> +/* /proc/kallsyms ioctls. -EPERM if the opener cannot see kernel address=
+es. */
+> +#define KALLSYMS_QUERY_BY_NAME _IOC(_IOC_READ | _IOC_WRITE, PROCFS_IOCTL=
+_MAGIC, 48, 0)
+> +
+> +enum kallsyms_query_flags {
+> +       /* Match query_name as a prefix. */
+> +       KALLSYMS_QUERY_NAME_PREFIX =3D 0x01,
 > +};
 > +
->  static inline int is_kernel_text(unsigned long addr)
->  {
->         if (__is_kernel_text(addr))
+> +/*
+> + * Symbol returned by a query. Each buffer pointer and its *_len must bo=
+th be
+> + * set or both be 0. When set, the kernel sets *_len to the string size
+> + * including the NUL, even if the buffer is too small and the ioctl fail=
+s with
+> + * -ENAMETOOLONG. The module name of a vmlinux symbol is "".
+> + */
+> +struct kallsyms_query_sym {
+> +       __u64 sym_addr;         /* out - start address */
+> +       __u64 sym_size;         /* out - bytes to next symbol, 0 if unkno=
+wn */
+> +       __u64 sym_name;         /* in - user ptr to name buffer, or 0 */
+> +       __u64 sym_name_len;     /* in/out - buffer size / string size */
+> +       __u64 sym_module;       /* in - user ptr to module name buffer, o=
+r 0 */
+> +       __u64 sym_module_len;   /* in/out - buffer size / string size */
+> +};
+> +
+> +/*
+> + * Find a symbol by exact name, or by prefix with KALLSYMS_QUERY_NAME_PR=
+EFIX,
+> + * in the entries of /proc/kallsyms, except undefined module symbols. vm=
+linux
+> + * matches come first. A module_filter of "vmlinux" selects the core ker=
+nel.
+> + *
+> + * Each call returns one match and sets pos to its position, even on
+> + * -ENAMETOOLONG. Start with pos 0 and use pos + 1 for the next match, u=
+ntil
+> + * -ENOENT. Use pos only with the same query. Matches can be skipped or
+> + * repeated if symbols change between calls.
+> + */
+> +struct kallsyms_query_by_name {
+> +       __u64 size;             /* in - sizeof(struct kallsyms_query_by_n=
+ame) */
+> +       __u64 query_flags;      /* in - enum kallsyms_query_flags */
+> +       __u64 query_name;       /* in - user ptr to name or prefix */
+> +       __u64 module_filter;    /* in - user ptr to loaded module name, o=
+r 0 */
+
+similar to the comment on the previous patch, how does the user
+express that it only wants to search vmlinux image and not consult
+module?
+
+and naming nit: query_module to be consistent with "query_name"?
+
+> +       __u64 pos;              /* in/out - start position / match positi=
+on */
+> +       __u64 sym;              /* in - user ptr to struct kallsyms_query=
+_sym */
+> +       __u64 sym_struct_size;  /* in - sizeof(struct kallsyms_query_sym)=
+ */
+
+I'd name it "sym_size" for consistency with "sym" naming, and the
+comment/doc here is unambiguous about what that is (struct size, not
+the symbol's recorded size). seems fine as far as UX goes
+
+
+other than nits, this API looks great
+
+[...]
+
+> +/* On -ENAMETOOLONG, *ksym is still copied, to return the required sizes=
+. */
+> +static int kallsyms_copy_sym_to_user(u64 usym, u64 usym_size,
+> +                                    struct kallsyms_query_sym *ksym,
+> +                                    const struct kallsyms_sym_match *m)
+> +{
+> +       size_t copy_sz =3D min_t(size_t, usym_size, sizeof(*ksym));
+> +       bool too_long =3D false;
+> +       int err;
+> +
+> +       ksym->sym_addr =3D m->addr;
+> +       ksym->sym_size =3D m->size;
+> +       err =3D kallsyms_copy_str_to_user(ksym->sym_name, &ksym->sym_name=
+_len,
+> +                                       m->name);
+> +       if (err =3D=3D -EFAULT)
+> +               return -EFAULT;
+> +       too_long |=3D (err =3D=3D -ENAMETOOLONG);
+
+nit: if (err =3D=3D -ENAMETOOLONG) too_long =3D true; is just as short
+
+but also you are eating any other error, maybe write it so that
+original err is preserved as is, not special-casing ENAMETOOLONG? if
+you get EFAULT later, original error still takes precedence
+
+> +
+> +       err =3D kallsyms_copy_str_to_user(ksym->sym_module, &ksym->sym_mo=
+dule_len,
+> +                                       m->modname);
+> +       if (err =3D=3D -EFAULT)
+> +               return -EFAULT;
+> +       too_long |=3D (err =3D=3D -ENAMETOOLONG);
+> +
+> +       if (copy_to_user(u64_to_user_ptr(usym), ksym, copy_sz))
+> +               return -EFAULT;
+> +
+> +       return too_long ? -ENAMETOOLONG : 0;
+> +}
+> +
 
 [...]
