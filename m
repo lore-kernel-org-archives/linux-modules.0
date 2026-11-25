@@ -1,53 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795629336;
-	b=0YvsPeY4kP/t1daR5MkXo11C3bOy0KOrd+l+2zyAJ+JlVwCowA917UZBACPKPNYSUVdF
-	 K4Y98rpYcXom6d01aqEskNsC1xW7rqKpek6nfSBoSs9nwYhepgYIigsqFYpNbulit5kQJ
-	 cnQGMHW/++gTb1zBdZFsqUiu9EykQhfFGg5UmMwuPG9WdVuo6b6sq+cOZCdWWlalbYRLW
-	 NwXUXBbkdEz4FLA04aV7wsVc8EAIM5LAH3DpKKZaWjA8zKuH6JEU/MnEf6YmhwRyfUPeq
-	 /jHjM1615iH2ip2zSFQ+y6uUk15zW2mfJeAeqB0V8VNdOLPu6nCBezy78Fldy7qTrgg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795629336;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:X-Mailer:
-	 MIME-Version:Content-Type:Content-Disposition;
-	bh=45G5FKYAm90nC2vUcbo/zkLyGhVdA6IvWN0opRQkGRs=;
-	b=1/IbueLff8x0QJnVJ2fFNXbJX9z+xK5R4nW3QFBy//3NyglbqyGqvcDH+djmazhxEQE6
-	 bxK/3sMVPj/KOuRpEJUoxidg8iPRRiNZD0BO1y8ErLhXOWRVqV/tRzY9MGdTlmuiDANR1
-	 /whkYK/dz0jPqyMuO8fw6O2fGe5uN4I4ycUlTO/4yOB5QsNrOj1X4u0eX9Nc1+q5jgSNT
-	 pHOkuRRmsdTHsPrMBcfl1mds5Yni/8aWIqKaUKyfdpGfRhMwhkCzhg1bCMZsFHnJ+Fvty
-	 5Cqek0OAs4/laG64F4DWlqfv6PrmmbafQ/VYYe4rZDa/UVXOCvChQBX+a9qkAyO0LIA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Uhd3kpc2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795638304;
+	b=YzoAzf3uxBctkjoad3mh2D6VsPQBHCdDvSjVcPn8I0hTaWmvKzdUnNXIyp/huh5s7XQW
+	 Zvqfk38HnYie3hOSbem+bf9kVa/P+dFOPPTW+1OKdUr3T4QjaQH8PSNsYl9rFUYKbFnfa
+	 1tQhQ4XIyUvDVTskJytYAC09AsBHlVRmIz0wKA7vf3+iVPz8A/iV6tdII6B5+yBxS2BSx
+	 bSwA+QDkhhEaNzahEBg6R+pV2kKjIgs3/fXG8vsqGol9uhu+1sNuUeEWoxJNVIQC0mh3z
+	 diCc6O/6NE+QPjJdW4OdexQbGjnPR8KKOgetZUrMnprOfzaBvDOd6T5MrDsMh6LMALg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795638304;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
+	b=qMpD7CFAV577ViP/xN3d6iLpNnRZKNEmBmUaltifSfcFJFEeOyXr7ID+OJiX9n6NVEBZ
+	 YbhvBhAUyy1kkWK9dSnr3NFQ25+V6wicxFMXQJnhBG2+hYlETcq65xYoytyLoSWqSr+Ru
+	 OU2iTYX+9VoFFtfWo9923YqAVSwy/wJSca45bQzs+UgHfSHdQ0aXnz0Oi6wWks1aj3y0a
+	 XRdxdndGqo8VwPottntjIl+dseZ4sD6M2aqASytUofVicABSFctP529vBy5oHc+TS5kAE
+	 wPler97pU0RGdUJhYZHgLErca3HheQeE9z6fwQqfKwajneQ+esolJwEK/5SoRr9Ly8w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qxpVsnDh;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385E8606A323
-	for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 17:55:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDF1606A337
+	for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 20:25:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BDF1606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Uhd3kpc2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973871F000D4;
-	Wed, 25 Nov 2026 17:55:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795629335;
-	bh=45G5FKYAm90nC2vUcbo/zkLyGhVdA6IvWN0opRQkGRs=;
-	h=Date:From:To:Cc:Subject;
-	b=Uhd3kpc2uIBoPDAIv74gGEjeYxZx89RBD5Fg2WhIprocgckg/JkjraZLcVEorw7Tm
-	 whgvAVZLtw/ZxGz4JRHq+GLjRrCFJ8MetHsJ/GjQU9+8M7U0CT3JMhCDHybAFOD2PV
-	 Y8uqC1lQc/MW2DkLCieE7KE1R77BGsH8DhEcn+ltlNV81zHY+vmCCnozjHYQoi/jSr
-	 wCrH8to2w/BdvXrK7svo/B6XQEXh7gUa6JCHtwuP/Dw7yLDBPbNkkwhIM8eqP/GLBZ
-	 PVI24f5F3s0qujFZ9f9fzhgB5c+EN6sYhetNWLZDYzrzkmvT5YjYLLR3QgPnVsfBdo
-	 UcSp+xCFTBdFw==
-Date: Wed, 25 Nov 2026 18:55:31 +0100
-From: Alejandro Colomar <alx@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
-Cc: Alejandro Colomar <alx@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	linux-modules@vger.kernel.org
-Subject: [PATCH] module/kallsyms: Add missing const
-Message-ID: <20c798e8dd466896b3302b1de8b838b037d0b22d.1795629256.git.alx@kernel.org>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qxpVsnDh
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4b467581b98so61115085e9.0
+        for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 12:25:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795638303; cv=none;
+        d=google.com; s=arc-20260327;
+        b=P9OHNeVFCpyhlJwzLcNN1PeNrwMiE1xuUdLtk05m/OLFEwxowHQitP5GjtPZy7ltDN
+         0pI1lZf3+n2NlWl9bmSK6fT7JeXsudyOA/B/E+0shb9W1AArZANo+LePKX067oTSmr4M
+         +2ok78LL10PDA4QzoespwT7ZxLn7H5praDfDcECbsrDfRmg3bHxnEk0aGS2LdlU8mp44
+         H4mT6poDq1FqXMVxmeqxNXb6FjO/zFKho+I03wC1aEeDhrGUxGSuyAOdoxiEDawLZDk6
+         9RoJy/Qa0H5nRbAGoVrPA3pfqMpuwxYOC1JUk6fW2XIocoiI5o3XYa50LtI3MMDjZGSP
+         k5MA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
+        fh=bMgn65d0zoYaD22aAZuT2NjVE9eRtgcJU1MDSYQMCQg=;
+        b=P6FyPALjp6Zxj+adKBopE3CHjyqJiUNAwwNxInUmVrqbpib1SZ2qMeSdnNv9VfWvHR
+         4rw3WQEErUPbK+1WGMI1m1A6RRopvDb33J57CQCHSOQbgaW1qwQRtCZwWNtamOXn/t00
+         xuMqIOErpJnfxEmRT5SLYucGUDmmCQX+MCCc2yentSsTa/91aDFcD9ah1cyPnwUsIlyE
+         GyYqtIMLTmggUMCygZVjcORRf4VqCxxH+MfG9Kf09op8m+H8S/F4+pFR5P29XN7/JCk8
+         GkcuACFUiPz7AUSFVNSLVxURCNM2KacTrYvMr4db26WVux32MJkp3YfTNG/ufUEfhqUZ
+         FMzA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795638303; x=1796243103; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
+        b=qxpVsnDhKpASGf9nC11h7i3rrzbhgE1Ei3PO9P37aCNXYSI78K7dE3d/HkpdwHszrk
+         LY2ewZzhpWyuiXGJ9Y/kVXRgwoqcZjc+AjjGTm6sKWOe26uegothRZycWdOMEmeKaehQ
+         rcee0VmCBD9LHFqBMRGKRgu5+yxn/QVPc8+S1f0ZhA8k/QuPVe7lO4kH9kZ7PLYaSPsZ
+         UOhEiycW2Hi29WbdqTe9JB7fMqfgVwt5DLrziudwFU1jlESg26yCSYwEh1zt9b/mn3Al
+         7ZA2LJwSY/mdKqaAvIEdHaHjwDhtcY5fLQiXuVbUxvNBi+V1wIvq+poIXwdOZVw4io/Q
+         3/tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795638303; x=1796243103;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
+        b=ELT4JlmAaSmk+AZuGHQqgToxotZKZ93//uZuB/k0umiQQwTBYD+DotvEtrGEMbMPY0
+         2wKG+kfXYJ0PnDyLF85/zj4YpGHA+PO3FfpFQOBxx73AigV74bShWS8dCEDAkFPMZGdE
+         8WffR1ymSaLyRc5myzSraTTIect9nn+mcE27lO5Qo77Yy9EFsVYmSK3Vz12xBPGcb8fl
+         CxEO54hvgtDStv08Z+cvFWSdPdV3jFlUGIr7zBzCPP/WbdV0I8CGEOLI2AoJ+t36dEy4
+         94HggOvQCprwxAft4gFkALPZb+vwkr5MJsKX5Kym/fRGlyOdTgcSq1Y0gnruexznilZs
+         mSkg==
+X-Forwarded-Encrypted: i=1; AL+hErG/9yuiAGCEeZjtFK1zatVndAeQp2EnHcH+WrCmvJztPk58Gk8PWcJDOQlmHatWTzlpiI0uyrgEHxc1qySN@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Rt8AZl2t8ERCtXSyFn+x1cb/INdDSt/aCYn0r6QoMI6EKgeXN
+	1lwytiRrPVMeyKLMko7g05gxUJcIDkGf+/gogtVv6Ga1HRz6vKmPG72SAgHpGCygiCF/XfITojm
+	Sxgb1/6UDw24V/NqD9/dqqJqUFrabsok=
+X-Gm-Gg: AZFdTZdLy3e9XeO2yS0lroY1y4qemo2R2uqhJmt12uDA3FQo1If0aChdtPJAfkmDQvk
+	bPIsPcEm6/RRE3pSZTf3GJprlfxbNqWMrbisD3orq7qutFDZWFF/OzXQ6nAm5aqJ+aVlwjZuqDu
+	NKEYdlUO64XJflq3+D16mt5Mk8SI6UNtYst5Fnp3CfRzyKfdRPlHifShyNrpdsjNYkBomK1LA05
+	g/+F2vjN7D5pD8lfHaIp9hoSt2kSPAGL8SoEj2GQdpSTGq13Ha5zOwsTRRYdZBmrihGqbg6BxGh
+	ix8fkO59C2yCzQlKlcu/KWxkXavwfY/LHoeoMC1K60Bi6jrAV2FxjGedY+MJUhyXO41v3M9fQO/
+	0YdFcKPvoOUAzV60k9YoMAW307Ueq5rqOjTQ2HcAMaecbM+7oBSbImercflCuzw6LrnqUpTNeWG
+	2CjeIEfsvY0JiHkZsoFA==
+X-Received: by 2002:a05:600c:4ec9:b0:4bb:6a5a:782d with SMTP id
+ 5b1f17b1804b1-4bb88925fcdmr394635895e9.17.1795638302754; Wed, 25 Nov 2026
+ 12:25:02 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -57,77 +105,74 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ke7rco3dau73eqdd"
-Content-Disposition: inline
-
-
---ke7rco3dau73eqdd
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+References: <20261113221248.3535369-11-wusamuel@google.com> <20261113221248.3535369-13-wusamuel@google.com>
+In-Reply-To: <20261113221248.3535369-13-wusamuel@google.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 25 Nov 2026 12:24:51 -0800
+X-Gm-Features: Aa3M54paGFwRi6x8xvkBaed95VaPlmoDIEKWnad49yMfBgn6GjtOde1UijdiQkw
+Message-ID: <CAEf4Bzb6LQmHHkvB8WBezU6YRtggycRvvA3L03mQHDr3WQM6mA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
+	David Laight <david.laight.linux@gmail.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-From: Alejandro Colomar <alx@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
-Cc: Alejandro Colomar <alx@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	linux-modules@vger.kernel.org
-Subject: [PATCH] module/kallsyms: Add missing const
-Message-ID: <20c798e8dd466896b3302b1de8b838b037d0b22d.1795629256.git.alx@kernel.org>
-MIME-Version: 1.0
 
-This pointer is derived from other const pointers.
+On Fri, Nov 13, 2026 at 2:14=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
+te:
+>
+> KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
+> symbol name or prefix across module symbols in one pass.
+> module_get_kallsym() walks the module list from the head and runs an
+> export bsearch() for every symbol index.
+>
+> Add module_kallsyms_find_name(), and put the shared query struct in
+> linux/kallsyms.h, so we have a more efficient linear walk.
+>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+>  include/linux/kallsyms.h |  7 +++++
+>  include/linux/module.h   | 13 +++++++++
+>  kernel/module/kallsyms.c | 57 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 77 insertions(+)
+>
+> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+> index d5dd54c53ace..d31f2f436159 100644
+> --- a/include/linux/kallsyms.h
+> +++ b/include/linux/kallsyms.h
+> @@ -24,6 +24,13 @@
+>  struct cred;
+>  struct module;
+>
+> +/* Exact or prefix name query, optionally in one module. */
+> +struct kallsyms_name_query {
+> +       const char *name;
+> +       size_t cmp_len;         /* bytes to compare; includes NUL if exac=
+t */
+> +       const char *modname;    /* NULL matches any module */
 
-Signed-off-by: Alejandro Colomar <alx@kernel.org>
----
+will "vmlinux" match just vmlinux? or how can one express "I only need
+symbols from vmlinux image" with this?
 
-Hi,
+> +};
+> +
+>  static inline int is_kernel_text(unsigned long addr)
+>  {
+>         if (__is_kernel_text(addr))
 
-This was found when changing some <linux/string.h> APIs to preserve the
-const qualifier in the return type.
-
-
-Have a lovely night!
-Alex
-
- kernel/module/kallsyms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 1ff8ce857d92..65537faeb2df 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -425,7 +425,7 @@ static unsigned long __find_kallsyms_symbol_value(struc=
-t module *mod, const char
- static unsigned long __module_kallsyms_lookup_name(const char *name)
- {
- 	struct module *mod;
--	char *colon;
-+	const char *colon;
-=20
- 	colon =3D strnchr(name, MODULE_NAME_LEN, ':');
- 	if (colon) {
---=20
-2.55.0
-
-
---ke7rco3dau73eqdd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEES7Jt9u9GbmlWADAi64mZXMKQwqkFAmsHIRMACgkQ64mZXMKQ
-wqkP9w//ROW/GrwDNkhlv9rJX1RtJrUJXCpl1V0A4bN36rrtraJQPr7jLkm1gkWI
-6nGiL7Ix91mefOJvOXJPij+l/Kr5hoG6KaqYNWnchFitJBGIV6F/d9ufAuHpEv3j
-1E4QES1HSZju65ebSJ89hQVkgaNiXvqOg+jg0QtMlikwMMtejn0V338WGw6ZSh+/
-1Nci8zyTUx35vFGwjuwfBrlhq5zXIm0qjz7gXkD4xWwKECsNT3hcoBnU0Yk2Kv9U
-AhFCTEVv0Ve/HFt/DZWRHw27hZzo30j7I/Q09KhJ2WbTA+cGn5NobApZLwuT6QGh
-ikic4AQ6zSCw87y3KkVjqC/owGRWFzlav6ITOg29bJOr/m+5SIy3qP0unMHE05sj
-5GpNa1RMdBy6pJ3NuvknH6fhBsD9JcTEa+Kne40O/+S/ALXWWevPyg2a10yfsHy7
-af8xqLb8goOThJzcEMTWwMoYbrT+RtdvlmH2VEmD+u60KBi2fVvDaUdYF7YCjpyl
-Ds4NDmVrKLvVB136PPH7ccOZIR1E/asLTUx+BU+UFwrTOr9nPlcdfdQrEP9kzCGi
-JD2j22IMdQldWF2YfSTxejfcT0SyN2R1yxLd2tAvbCVzFv27s/h4k1btcFJzgvBF
-Xf0lI+wmU5gSFO/owCeBh4fbGdHbDcuocJW1fO/WAhbb7AHBufs=
-=6BS9
------END PGP SIGNATURE-----
-
---ke7rco3dau73eqdd--
+[...]
