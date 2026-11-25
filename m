@@ -1,61 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.42.244.120
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795600604;
-	b=AyVDzcFaDEbPohtIppnjEXRKOOEE6L1COHGLoJZAbQf3j858Dax/o02nClj/IkJ+bsI6
-	 78DQGWOih5fShb/t1suC3h/iq45+mbucQqhQfpbmec0Eh4JelBw4t6NA3mK21L+0tPKW4
-	 JarMpwGh7/cmqStH97KMIJ6gszFLQPVf6se56UFbpix1ymf0caeqxGyg6RWxTUiaQKJp1
-	 ZN4zOuJhjm96viBpLTyPYlw8gkUshHfKtaRp0Ga7lvl1ogyFxw/OvuzpPcuNNlRpqLF8x
-	 uSZ2xRamxFPRGO+OM9tlTpL+tXiynXzjilZkxfXhCEenAuMJ/paTFPT7DVQsKaOAIcQ==
+	t=1795600986;
+	b=SyL5XgmrjesRTGPOyqLlVu7Mk5KqbLJNGC+LzaARyByinq6M151FWeXRAKJ/nvvRefE9
+	 a6jXISObp8bmwfh5fLJ76AJaH+5impVplzvklnZOp4rWCFGEP+d+J+YMJSy2X2Hs/IgAH
+	 s6czXH5wBuOWHgOF4t6GbvlQ8P25v0vCrTjJF5Nws9zSq2kx/5ZeeO/2EY9yKp8uJOVFC
+	 gNhdAMiAfQ5dwl8Y9EasuPvvgAmR1a5h3ygWmSoSOCcgaFScinR2M2Fu0Z9cGPvV/b3HD
+	 /Zb6BCLyiMBobu2CaDoKUcmuWVGhUoCBIvpdGiZyiOW8y5jzJMgDuJvkWPvvHy92Dog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795600604;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:Organization:x-ms-reactions:
-	 X-purgate-ID:X-purgate-type:X-purgate-size:X-Notice:X-purgate:
-	 X-purgate:X-pfmilter;
-	bh=o9V35QWmnxkcGDaXqhjxiPIy0R24gUWruywCyvkZf9g=;
-	b=m50LyulA/iCwMBAodkD9bXvCZ/Iiwn9pOyk+sv040VDQ2yBIXJHZ0CZqULi1jOD9hmHv
-	 NzVh4nuaS8ijzzd3FKmHF2Be8UpGL5fqMyj6ALkSMM2KXX6MmJK6ETIriF+O+EnVeuqCQ
-	 QbZo0WQzPpXXc094oe2C/wOvMsmVPUb6lWYEpS0Hj9eyYrV/s8/g6Qx/3uSR2T9RFdsQB
-	 goSbqmUBl9u78kRordGfuc3NekPppNAqEUgfZav+IBrmvt24wVlf/4QDyE/Nzt3q0O6CJ
-	 h+HP+vj+C6wCYGs366xJjsnWFYrwFObk5I/JDDzL1JcxK/iLKjaujfSI6NYpLt0K2Pg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795600986;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=O13UsNDL/bH4zWwx+DfiJHWknsxleVix5d+Kxzd1OWY=;
+	b=sAHm8Fu+ZGgy3dAch1lEiQ01bzNHiyWyZzK+wQakBAe7KkTncrVfZrLRcDxF61f39ccm
+	 VFwGIVl+vDTnQc4NLFJcbSoXJtngYad9e7yK+tF8nCOUPhu+i3H0BD374fxzAw/xIiaBQ
+	 NVcOKNd7ToGkRw+74EAfmrBrmAPEEi8ubvVYaSNM2ZTzbp2nEVwR5ZFYE6FY3VbnE+CMs
+	 rbwJWbZmrlBjdIX0v0HJ6ldS3NQFfLK6Dk7o63Yj9GtgX85uED0aMc4P2x16eH2+P06I0
+	 JaHF570GnGtFoQcUSc+7ywmkKZ0FnzCYyJWtwdBVJHajkdGVQEUE1RMT9XXHD4v91Jw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=fritz.com;
-	spf=pass smtp.mailfrom=fritz.com;
-	dkim=pass header.d=fritz.com header.i=@fritz.com header.a=rsa-sha256 header.s=mail header.b=OvOVK9ai;
-	arc=none smtp.remote-ip=212.42.244.120
-Received: from mail.avm.de (mail.avm.de [212.42.244.120])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="InI/35eW";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EBF606A329;
-	Wed, 25 Nov 2026 09:56:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10EBF606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 83E7D606A323;
+	Wed, 25 Nov 2026 10:03:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.a=rsa-sha256 header.s=mail header.b=OvOVK9ai
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
-	t=1795600592; bh=pZNseUamYF/NcBCWp2XFZ917wokQkwCmyXEupzEFfo0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OvOVK9aiHm8AT8ElIOf0mHmcxUZqwvb9/Usx9TkHvu+FLOLBysBfDif3qHokFDPEe
-	 nlzMytPtB80W+7JR1u9lNTK7rMmuJQhpwqyTN6A7oifJLbZbukMFQuMWk/alMlt7Vz
-	 709n2l4yfmtdMnlpyL7Sz1aW77eKlBu86HvbUzwnDQs5u30YYG/+tvXeEs95Gk8Mk2
-	 Vm9cM/0CQj/vpLQiMGoal3nPkHzq25SNIMrakcmlahLSPSgMUAH7pa87hTS7S6j619
-	 S5FDwDQnzFvw0BuXbAIJFVQnuzcNaxH+3WwOWAwuMk038+czYJ0r/x5Bpu8bwCAXQe
-	 cYRcdz8PZrcSg==
-Received: from [212.42.244.78] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
-	(envelope-from <n.schier@fritz.com>)
-	id 6b06b0d0-045b-7f0000032729-7f000001912c-1
-	for <multiple-recipients>; Wed, 25 Nov 2026 10:56:32 +0100
-Received: from mail-auth.fritz.com (unknown [212.42.244.78])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Wed, 25 Nov 2026 10:56:32 +0100 (CET)
-Date: Wed, 25 Nov 2026 10:56:32 +0100
-From: Nicolas Schier <n.schier@fritz.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=InI/35eW
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 645291F000C0;
+	Wed, 25 Nov 2026 10:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795600986;
+	bh=O13UsNDL/bH4zWwx+DfiJHWknsxleVix5d+Kxzd1OWY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=InI/35eWuYB+ucgg71M3f6aPF8ims5sfg7vm4vHs+tKA/kGD1EhYahM6PohlTEXOM
+	 KSuOJFvMgd3UGH79fBGuikXd7XcjRp9hfwqD9e2+qRNB3BiOrlITQpW9O8EGrMNQJO
+	 mYzpirZVSsEDKNkFZRq0YSFEXmZDA1OLGni3xQPh4pdiXlqjkEFfqjUlXZKhC8ye70
+	 PHJ2ojeXxj/3tOn8pf7KlZjxYfVc4fLXD4kMCpbXXnLz9XXW/GBk98lX0czfZ85NUQ
+	 RyQsWlnk+OTGR29+ZoPIMhQ2oZUOumI8CpcBuqmAFYQdC2H/x+8iV70QnYcBL26tRv
+	 FsSpPxihE1/zQ==
+From: Nicolas Schier <nsc@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
@@ -68,25 +54,35 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	Aaron Tomlin <atomlin@atomlin.com>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
 	Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
 	Benno Lossin <lossin@kernel.org>,
 	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
 	Danilo Krummrich <dakr@kernel.org>,
 	Daniel Almeida <daniel.almeida@collabora.com>,
 	Tamir Duberstein <tamird@kernel.org>,
 	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>,
-	Kees Cook <kees@kernel.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
+	Nicolas Schier <n.schier@fritz.com>,
+	Kees Cook <kees@kernel.org>,
+	"Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Nicolas Schier <nsc@kernel.org>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-modules@vger.kernel.org,
 	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v6 5/7] kbuild: batch module finalisation
-Message-ID: <20261125-bald-mushroom-of-development-7b2288@l-nschier-z2>
+Subject: Re: [PATCH v6 0/7] kbuild: significantly speed up kernel builds
+Date: Wed, 25 Nov 2026 11:02:54 +0100
+Message-ID: <179560086157.3880976.7669895635153146949.b4-ty@b4>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261124-build-speedup-v6-0-141a4f861c67@kernel.org>
 References: <20261124-build-speedup-v6-0-141a4f861c67@kernel.org>
- <20261124-build-speedup-v6-5-141a4f861c67@kernel.org>
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -96,125 +92,42 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261124-build-speedup-v6-5-141a4f861c67@kernel.org>
-Organization: FRITZ! Technology GmbH
-x-ms-reactions: disallow
-X-purgate-ID: 149429::1795600592-22FEB977-6F71B524/0/0
-X-purgate-type: clean
-X-purgate-size: 4480
-X-Notice: Whitelisted
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
-X-pfmilter: host: postfix-mx-01  mail-id: D1F4DA0233  external: no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 24, 2026 at 12:20:15PM +0000, Lorenzo Stoakes (ARM) wrote:
-> With the .mod.S change in place, module finalisation on allmodconfig builds
-> consists of a large number of very short-lived jobs.
+On Tue, 24 Nov 2026 12:20:10 +0000, Lorenzo Stoakes (ARM) wrote:
+> A typical kernel build consists of a frustratingly large amount of time
+> spent stuck in single-threaded bottlenecks.
 > 
-> For allmodconfig x86-64 this can be on the order of ~22,000 jobs of a few
-> milliseconds in duration each.
+> It turns out that there's a lot we can do about this and doing so
+> significantly impacts kernel build times.
 > 
-> Each job entails processing ~22k .cmd files, so the combination of heavy
-> overhead and small individual job results in a lot of unnecessary and
-> repeated work even with all cores being utilised.
+> This series makes allmodconfig builds up to 36% faster, incremental builds
+> up to ~70% faster, and noop builds up to ~90% faster.
 > 
-> The solution is to batch by a number of jobs. Determining which value makes
-> sense was done empirically.
-> 
-> On a 128-thread threadripper box doing an allmodconfig build, best of
-> 2, *.ko, *.mod.o deleted each time:
-> 
->     modules per chunk    instances    wall
->     -----------------    ---------    ------
->                     1        11171    10.22s
->                     2         5586     6.72s
->                     4         2793     4.97s
->                     8         1397     4.26s
->                    16          699     4.05s
->                    32          350     4.05s
->                    64          175     4.07s
->                   128           88     4.05s
->                   256           44     4.03s
->                   512           22     4.18s
-> 
-> Wall time flattens for 16-256 module batches.
-> 
-> A slower/lower core machine will do better with fewer modules-per-batch, a
-> faster/higher core machine will do better with more modules-per-batch.
-> 
-> Therefore, take the midpoint which works in the most margin in either
-> direction - 128 modules per batch.
-> 
-> This naturally scales with module count too as the optimum gains are
-> obtained with higher module count, so fewer batches in this case costs less
-> overhead.
-> 
-> Each instance holds only its own modules' variables and the top-level one
-> reads no per-module .cmd files at all, the same rules serve both levels,
-> and an instance is told its chunk with modfinal-first=<index>.
-> 
-> Only the top-level instance builds .module-common.o, to the chunks it is a
-> plain prerequisite, so no two instances ever write it.
-> 
-> "make modules" with every *.mod.o and *.ko deleted goes from 28.9s to 15.9s
-> with clang 22. No-op "make modules" goes from 5.6s to 4.8s, as checking the
-> 22,000 targets is spread over the chunks too.
-> 
-> Whole build, 128-thread Threadripper 9980X, best of N runs:
-> 
->                                          before   after     delta
->                                          -------------------------------
->   x86 allmodconfig, no-op make, gcc         2.3s     1.4s    -0.85s (-38%)
->   x86 allmodconfig, no-op make, clang       2.8s     1.8s    -0.94s (-34%)
->   x86 allmodconfig, clean, gcc            306.6s   294.1s     -12.6s (-4%)
->   x86 allmodconfig, clean, clang          290.2s   283.9s     -6.4s (-2%)
-> 
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  scripts/Makefile.modfinal | 30 +++++++++++++++++++++++++++++-
->  1 file changed, 29 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index 75e9effdf02c..4d5e6e1a0ff9 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -13,9 +13,30 @@ include $(srctree)/scripts/Makefile.lib
->  # find all modules listed in modules.order
->  modules := $(call read-file, modules.order)
->  
-> +modfinal-chunk-size := 128
-> +
-> +ifdef modfinal-first
-> +
-> +# this instance handles the chunk of modules.order starting at $(modfinal-first)
-> +modules := $(wordlist $(modfinal-first), $(words $(modules)), $(modules))
-> +modules := $(wordlist 1, $(modfinal-chunk-size), $(modules))
-> +
->  __modfinal: $(modules:%.o=%.ko)
->  	@:
->  
-> +else
-> +
-> +modfinal-chunks := $(addprefix chunk-, $(shell seq 1 $(modfinal-chunk-size) $(words $(modules))))
-> +
-> +PHONY += $(modfinal-chunks)
-> +$(modfinal-chunks): .module-common.o
-> +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal modfinal-first=$(@:chunk-%=%)
+> [...]
 
-Thanks!
+Patches 1 and 3-5 applied to kbuild/linux.git (kbuild-next-unstable), thanks!
 
-Reviewed-by: Nicolas Schier <n.schier@fritz.com>
+[1/7] kbuild: calculate list, composite object state per object
+      https://git.kernel.org/kbuild/c/d3c49492
+[3/7] modpost: cache section relocation mismatch state
+      https://git.kernel.org/kbuild/c/db57178f
+[4/7] modpost: emit module descriptors as assembly
+      https://git.kernel.org/kbuild/c/4894ced3
+[5/7] kbuild: batch module finalisation
+      https://git.kernel.org/kbuild/c/81593e2e
 
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped,
+reverted or modified (e.g. trailers).
 
-(bike-shedding) For readability, I'd favourised the use of pattern 
-matching stem:
+Patches applied to the kbuild-next-unstable branch are accepted pending
+wider testing in linux-next and any post-commit review; they will
+generally be moved to the kbuild-next branch in about a week if no
+issues are found.
 
-$(modfinal-chunks): chunk-%: .module-common.o
-	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal modfinal-first=$*
-
+Best regards,
 -- 
 Nicolas
+
