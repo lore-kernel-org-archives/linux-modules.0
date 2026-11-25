@@ -1,68 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795609702;
-	b=KJHhsFQDEUZQn+KJSwBVPIGx8Ypg11WXmcp1iZPATATUnSuyvqYLdi3LoiivNfiX4ARq
-	 2D98cUeYds/lMumo3TY5OgBcySohxJWufk19apFaLp9RdBIXUauxiURwPsF8PFrVxcCb4
-	 jxyPNAkAwb0s3oEHu2Hm47T49mThR6rrlSri5ibl1qL8hU+8Klpaomt4e6lkvKJymJxXk
-	 gMdBC0jCFdSX81P4gCE6SvH0thS8CE1eLtTJZWRQNrvaGrsABoG57GivH9iujKwywPWU5
-	 FuP2+Sy05FIbRiYc3j0SafkpWKk6Xug12ZWoU0IoOkovKS5AhOTjaYQwGy6tuJCyCjg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795609702;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=hpvurHXKOGNZ9gnVI9/HzwEjSAtsSaCAYF1pwCYTtaQ=;
-	b=BpFWrWUPDWCuX3bM8nWgrBm9n03MpJsm3SyGK5e7HcjpFnZ0i4UYHPhLjpD0api7l3yN
-	 ZtCOVFYFW+5LbA9Iy/BTscbgn2lb0ZTVh0HvVmA7izl6BXFJNwRCqih7A5eVNpuoHC20w
-	 0SvmVOScwuqSfqD6V5V5pshq4xvOl+LAvTAyiUBiHYu2oglmxkS7rO+ffMl4FLPBgDFx+
-	 RVE0z5vaD4XpIrfiFYnGheh5/ZimS9h7CzE3SapM1HZ6JEW1eMCzi2Q5rHskwlmQcx7pf
-	 ijpPkLYIwBsLIcO/OvR8fiL8vwAfEMBms+xMqvfyigbDzu6fALH2fXawlnkoBPbZ2sw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GI8ATaNy;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.50
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795620837;
+	b=d3CY8FLpIwU2ctrZkGcVEe2F9Iv7v3tWaoLho9r/kBSeeS2xqzNoBgrudbLuH+YdupGJ
+	 b0ujxxNydWQ+ny3MSQC57UWmgo458OePv5O6CL/sgkAs9TfLNziuVCe6eDc3YkLeNJcwr
+	 YV4B5kHlh8DrsaRlbFxr6Lce6YYgjPJ32QzGY/3lof1wkVfivhIj1jER24yU70AXPsDzq
+	 j9iYLxheBbmxIxFqSCN8776S8XuTt7Bz26Mgs0ZTcRL2rpbLxp4sQR/7uLf0OyMbbbkg4
+	 yeIfpXGemaPP8SkgXlJIE4Rt4345kz9CbX1JU9/WndoAKo83mIX07e9GHjoWadWi6WQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795620837;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=wKqdQvSAuRnmEmZrQT2+mDn5yykXvIjFQspA9QZyZuU=;
+	b=UYpJv2/4djReLoPvMxzPAGj8yOHMAVfQrObXNxXt1BBHoOkkBgKakM5JaecfVSo8KC4Z
+	 hp1k3i3h6JQdujXk73FvTAYYjLfW/FYWtWY/kLH+XLNRyxoU9K0FOFMB5B4HPXLgUjcJh
+	 A37GzsIyl9dpAVB91TU5QRnXODG2PRoOPhjyu8+81G+Ge1hnyu6ap3so1rTlp1Mhar49C
+	 4ox1KxiqGxf1l61B4++GxC0/DmbYk9gj6gorsmrMdx8ltnUwMKJTxrIKADaFa26supGwD
+	 UjyYRJPV66xMe8RuqdrRrEth+egqUPwmOw9BHEKtqzZzdngE84ac2/VCQlUNcK5dO+g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=buKUYa8n;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.50
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF7C606A321;
-	Wed, 25 Nov 2026 12:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D3E606A32E
+	for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 15:33:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 26D3E606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GI8ATaNy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C2F1F000D1;
-	Wed, 25 Nov 2026 12:28:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795609701;
-	bh=hpvurHXKOGNZ9gnVI9/HzwEjSAtsSaCAYF1pwCYTtaQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=GI8ATaNyTMyEXxgfjz+oenZ1X6CmViRKww60LktsKeuQ38vALYgH+CM3Hbv/jYM35
-	 6SKWl6rpruUqfXlO0AG1stUNmKN7XrAjBIYeBI7FSve7iYj6dKkMutVcq1AJ+X2xR2
-	 19kiUTCSOs+OaCbJWc5BS7yA8mHNWfv6EtVTsS3fBWIhaG6wRSLGO9mkAekgzlNi+2
-	 hA+94fmfPzfiS6+tCDRvjGixzW51m9J71z0Srxx3OhG8sP50OmQoHRVeSkjB50vTlA
-	 3dbrKrkC173/KfGhf+zpcI2ujyaPDFOcosjmorvdgBOq0+5ZCcnSiODTggIeuPP4vi
-	 sCC2aqMMVMLVg==
-Date: Wed, 25 Nov 2026 12:28:11 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Nicolas Schier <n.schier@fritz.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, 
-	Kees Cook <kees@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v6 5/7] kbuild: batch module finalisation
-Message-ID: <awbUJuLahIbbL7vi@gremlin>
-References: <20261124-build-speedup-v6-0-141a4f861c67@kernel.org>
- <20261124-build-speedup-v6-5-141a4f861c67@kernel.org>
- <20261125-bald-mushroom-of-development-7b2288@l-nschier-z2>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=buKUYa8n
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5c0f0e04628so484842e87.1
+        for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 07:33:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795620835; cv=none;
+        d=google.com; s=arc-20260327;
+        b=n0lUFHiKihBtAuH4rAgudQ9ICH+B5pLwBwMWGj9M0qPpz9NBSsOE1nzp901Hq71cTY
+         5QwJmvq/Yu70s94CvoyXZgwmtbuPthqg14rpxj/utXQvFqxX6QdNzeb3DcyH7jzHibgA
+         wXVy/QQBKZHZYZqhWu0EDAnOb87B4I2KenwgU5VtCuzdsZk7oNvNT8FBNSEsjfzip+BH
+         HtYK2heEW+lB7EG7GwEt43g6jMCvnTnZA/hQO+Y5hLrj4PITjaQOweGbzQ7bFikAWaaZ
+         uY0nTmflEwrU97jwxOQO740FeRKWrI6MDHABZieUxh/5YiFTtaNrFRErwLx449wdIzSs
+         EHhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=wKqdQvSAuRnmEmZrQT2+mDn5yykXvIjFQspA9QZyZuU=;
+        fh=C0m/XLiDSlBTSnKlUsJvGavZB29cLLTDLxi0N2SprPU=;
+        b=kFgKv8bfSMZg/uGq5FVNan+B/li8EpW99oydfJGJSEVVKWpc7rGqpHc8ObeMLZr1CL
+         E3x29qVfZrfJpzZ9R5MypVlvqNdrrQ/LCpiUDgz1DYITWX3f6+X/faMNRlEKzOfLjAOJ
+         HPExhbYyDdtaZuaLVI4pzqS7v1FcyK2fWx+R+I6cZpAWmqQlPT4H+X4YaUNNX2nAPN1h
+         TAOY2kHNCMybkBj6MiV5D3sMddwksx3Pmm3Ulv3OAdSRPmI6l5XBBQOFicRAfLyNuNsU
+         AmTPudcUq8sv7PsKtINniD6WyCpRbwrXX6wbUrO6IGF70aPQTVjaMlzqoX61H4cshLrU
+         eYMA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795620835; x=1796225635; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=wKqdQvSAuRnmEmZrQT2+mDn5yykXvIjFQspA9QZyZuU=;
+        b=buKUYa8n/c+VXe6APnpgpXA6FOrq+FpjqfwIVQgo23FhWgtM2lNC3OswV9rT/1j1St
+         s7iH62UZ9fSmbTJmNmOe1wusd6iKi7MKlpK7OQEZEeZVEAn1tcE9gW5483bhuLeVVlZX
+         tGZhQYHe59rb/eOybw083v6sewKrRTARw8BaOX0EixFJjcVTURpw2ruRgQaNIr2d12TB
+         1eAlRqX28isVPYAIbEdIx9S2DjhCtfSLFhVd4UQuba+fFbGKhnhcP1QT20dQyldgF5cO
+         j9MrI9ffEitabU7NvGkF5I5XmQ7HGSV3Mvyua2JTeZmuW2ZM50kod9BFAcntFma3EQ+0
+         sgAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795620835; x=1796225635;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wKqdQvSAuRnmEmZrQT2+mDn5yykXvIjFQspA9QZyZuU=;
+        b=Xsyt9w1SpYKbCQnktP48z5tWsib5h92q0/woJCcKe4AypQ1lKanC78iZFCxX05rpoi
+         z2yFfEC2KnDp9q1YJRR6O7LvJr75EXqyNj1GxPr7t3/QnTs80R+7wzO9mP053u2YW/R6
+         I6i51ovikmcyqBqqudNFnUIFz1BEHHb2TBFIx96vC6H1Coo2igmQue1wjeaPQDsNlflK
+         XmhV5blQVqqba3ieHPkGecjuPRdNLKksTNAhcpC4kE5SB2YRS9HaeSyYSjWy658Ozil3
+         QHGm1S00yRK8/LwqSbgByMhlXksc15X8n5rOzCI+NywkM+ISbDMva2TszYyFBcL0sjJw
+         yE6A==
+X-Forwarded-Encrypted: i=1; AL+hErGX8Kd6n7rzJOLHSG6MNMyRO/H8MImNbLdNZs7lL8daZc6rsAmmjYPLcdPEGsBeRRJwaSSOdLWGD9nSKQFI@vger.kernel.org
+X-Gm-Message-State: APuU4Z/NIM0HBQ0Tdm+8SJftpMfPTWT5b/coNVGiJqLH0mkaRepbY/7I
+	tWQhaE6jQoncA8xK/5afENn+IirC4c0LhoQBivuEfcDAY8MaUwFVBZWwEoSm4dUETp+lwRTFjDw
+	Wviwv78RCRktDQMkLwxcSEI0QKgBxxzY=
+X-Gm-Gg: AZFdTZeT+xDxjl3MKsTNw8heUP6rvR2LYFj0LafqnGKIoDeR9tgU+DqqO3aj/ol8k10
+	SBtHKJoACxpB/prUkGM7L0RF0EkWzBenRd5YhHcEXSrU6XeuGSyRoLpyweH/aWOFtmJf7nqTd/3
+	IHnfDT+dlW3Wosl7Q+34Rc++IHFOK6nPZ8xdDaNduPZFJoBEWGkL4T/aZrgELQX6z1H8R7IPufB
+	t2RHqYFITx3YtK+8Lmf5eY5IBnANl/vjrgb/tQLdmiUtmc/3Y2JNgKWbzlXZrM1tAcPrXMNcHBZ
+	f1STNUgn4ogkE/Rd/chHqjE5ThN8fvnjE+Z7LK9AyitUsptCG7wPupbP5npIupFgmAbDVQ/BNXN
+	mFeRivHWSKeLPL29j9lDwhKFPhM++c69lUTkzYccV5v4q9JHMI8feZgZJmGUr806AvrEo66CeUQ
+	W5/eM+hu+/bmHkq9bzbHzK7SeuP36w6qYhLfcPikKIutfAl/fEGVUmPKcs3RthlbexFPE0eXOWA
+	3y+bnzPeyPdOOT9owLH8bIVZtF+HXMo33FAC0HM35bA+EWDB0vwp3m1bzo1PDaqTh/Xvzw4
+X-Received: by 2002:a05:6512:6c3:b0:5c1:4a47:b86b with SMTP id
+ 2adb3069b0e04-5c1bc785b7amr6221022e87.3.1795620835046; Wed, 25 Nov 2026
+ 07:33:55 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -72,126 +106,57 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125-bald-mushroom-of-development-7b2288@l-nschier-z2>
+References: <20261124-build-speedup-v6-0-141a4f861c67@kernel.org> <20261124-build-speedup-v6-2-141a4f861c67@kernel.org>
+In-Reply-To: <20261124-build-speedup-v6-2-141a4f861c67@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 25 Nov 2026 16:33:42 +0100
+X-Gm-Features: Aa3M54rAUhOIl7nJAGzRxUt_IUS4JYfamPQ_n0qFr3V4ZOsnZoEMWuF3JwFrbDg
+Message-ID: <CANiq72kdpY_tr0Gg16b24J1J-Duj3YS4rJ0CgNYVWQqmQv=nxg@mail.gmail.com>
+Subject: Re: [PATCH v6 2/7] kbuild: implement and use depcheck to check
+ dependency timestamps
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Nicolas Schier <n.schier@fritz.com>, Kees Cook <kees@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 25, 2026 at 10:56:32AM +0100, Nicolas Schier wrote:
-> On Tue, Nov 24, 2026 at 12:20:15PM +0000, Lorenzo Stoakes (ARM) wrote:
-> > With the .mod.S change in place, module finalisation on allmodconfig builds
-> > consists of a large number of very short-lived jobs.
-> >
-> > For allmodconfig x86-64 this can be on the order of ~22,000 jobs of a few
-> > milliseconds in duration each.
-> >
-> > Each job entails processing ~22k .cmd files, so the combination of heavy
-> > overhead and small individual job results in a lot of unnecessary and
-> > repeated work even with all cores being utilised.
-> >
-> > The solution is to batch by a number of jobs. Determining which value makes
-> > sense was done empirically.
-> >
-> > On a 128-thread threadripper box doing an allmodconfig build, best of
-> > 2, *.ko, *.mod.o deleted each time:
-> >
-> >     modules per chunk    instances    wall
-> >     -----------------    ---------    ------
-> >                     1        11171    10.22s
-> >                     2         5586     6.72s
-> >                     4         2793     4.97s
-> >                     8         1397     4.26s
-> >                    16          699     4.05s
-> >                    32          350     4.05s
-> >                    64          175     4.07s
-> >                   128           88     4.05s
-> >                   256           44     4.03s
-> >                   512           22     4.18s
-> >
-> > Wall time flattens for 16-256 module batches.
-> >
-> > A slower/lower core machine will do better with fewer modules-per-batch, a
-> > faster/higher core machine will do better with more modules-per-batch.
-> >
-> > Therefore, take the midpoint which works in the most margin in either
-> > direction - 128 modules per batch.
-> >
-> > This naturally scales with module count too as the optimum gains are
-> > obtained with higher module count, so fewer batches in this case costs less
-> > overhead.
-> >
-> > Each instance holds only its own modules' variables and the top-level one
-> > reads no per-module .cmd files at all, the same rules serve both levels,
-> > and an instance is told its chunk with modfinal-first=<index>.
-> >
-> > Only the top-level instance builds .module-common.o, to the chunks it is a
-> > plain prerequisite, so no two instances ever write it.
-> >
-> > "make modules" with every *.mod.o and *.ko deleted goes from 28.9s to 15.9s
-> > with clang 22. No-op "make modules" goes from 5.6s to 4.8s, as checking the
-> > 22,000 targets is spread over the chunks too.
-> >
-> > Whole build, 128-thread Threadripper 9980X, best of N runs:
-> >
-> >                                          before   after     delta
-> >                                          -------------------------------
-> >   x86 allmodconfig, no-op make, gcc         2.3s     1.4s    -0.85s (-38%)
-> >   x86 allmodconfig, no-op make, clang       2.8s     1.8s    -0.94s (-34%)
-> >   x86 allmodconfig, clean, gcc            306.6s   294.1s     -12.6s (-4%)
-> >   x86 allmodconfig, clean, clang          290.2s   283.9s     -6.4s (-2%)
-> >
-> > Reviewed-by: Kees Cook <kees@kernel.org>
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > ---
-> >  scripts/Makefile.modfinal | 30 +++++++++++++++++++++++++++++-
-> >  1 file changed, 29 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> > index 75e9effdf02c..4d5e6e1a0ff9 100644
-> > --- a/scripts/Makefile.modfinal
-> > +++ b/scripts/Makefile.modfinal
-> > @@ -13,9 +13,30 @@ include $(srctree)/scripts/Makefile.lib
-> >  # find all modules listed in modules.order
-> >  modules := $(call read-file, modules.order)
-> >
-> > +modfinal-chunk-size := 128
-> > +
-> > +ifdef modfinal-first
-> > +
-> > +# this instance handles the chunk of modules.order starting at $(modfinal-first)
-> > +modules := $(wordlist $(modfinal-first), $(words $(modules)), $(modules))
-> > +modules := $(wordlist 1, $(modfinal-chunk-size), $(modules))
-> > +
-> >  __modfinal: $(modules:%.o=%.ko)
-> >  	@:
-> >
-> > +else
-> > +
-> > +modfinal-chunks := $(addprefix chunk-, $(shell seq 1 $(modfinal-chunk-size) $(words $(modules))))
-> > +
-> > +PHONY += $(modfinal-chunks)
-> > +$(modfinal-chunks): .module-common.o
-> > +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal modfinal-first=$(@:chunk-%=%)
+On Tue, Nov 24, 2026 at 1:20=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kernel.o=
+rg> wrote:
 >
-> Thanks!
->
-> Reviewed-by: Nicolas Schier <n.schier@fritz.com>
+> A dependency that is also a target of the same directory (e.g. header
+> generated by an if_changed rule) may get remade later in the same make ru=
+n,
+> so do not treat a target as fresh.
 
-Thanks!
+One more thing I noticed: a header generated with `filechk` does not
+have a `.cmd` file, so it is not covered by this.
 
->
->
-> (bike-shedding) For readability, I'd favourised the use of pattern
-> matching stem:
->
-> $(modfinal-chunks): chunk-%: .module-common.o
-> 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal modfinal-first=$*
+It matters for targets that reach such a header through their `.cmd`
+file alone, e.g. single targets like `.s`. For instance, after
+building `arch/x86/kvm/`:
 
-Ack, will fix that up on next respin if needed :)
+    make arch/x86/kvm/vmx/vmenter.s
+    # Change an offset in `kvm-asm-offsets.c`.
+    make arch/x86/kvm/vmx/vmenter.s
 
->
-> --
-> Nicolas
+In mainline, the second one regenerates `kvm-asm-offsets.h` and then
+`vmenter.s`. With this patch, nothing is rebuilt.
 
---
-Cheers, Lorenzo
+Cheers,
+Miguel
