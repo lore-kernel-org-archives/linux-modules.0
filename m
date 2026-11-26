@@ -1,100 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.46
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795653751;
-	b=odi0N8UYA8PSqtIsncCHqssCtMW8czMsiKPEISoFtfZ69sgd4Ke9I7ayThoxEXQ5IdV+
-	 d7QAtuULyMtlyHInXehQPtgZYx3o32CrXPPoUsyMKE1mZU1hPDOjIAV/qqQkCX+sqyotP
-	 +YvWBKV/PQMGQ+DWdwPAdn4amgOXCOBgsbo3ZJm43+KwkHc667+ESZtAUSGaCbysByUmx
-	 eNPSPUOVUMb83U5jhvSakMjjamErWy+CXXEQ15LRII/8GEKUbijki3sDcbgvgNLt+6oFL
-	 2381omyfVwXcTezN+ovZ4x9RAV4Odo1m7Xfun4kAYkGEUXsyhWrm0Vb032huJkCpprw==
+	t=1795653870;
+	b=0zjN7XKtXbRJ8c51zJ1lEAL39VH0Ft3FQIuzyxmD1g1D2B7dKVJOcrLzD1oNZLk//XxK
+	 GJU9eMV5EYjjaZytQzDuw/VuxTkSM5QBRFjjCj3SiT2CK+0uzlu75NTvpPgKvGDnW5JmS
+	 RG8pfcTLIs6JOxlJnOsJeT8nnzZ/lbA+mIn5Sy3xMgbJEA945NCfYIxqxq8srVpI3m0Tc
+	 RLKaFcLSY/YVCbBmmVCoYz13c8YV6oxIOUHey9tAySqPb0krvS54dNEt47XW8JEamulaS
+	 UQya18YLC6uJg22IXmcZ6Ek515X0wvVOMk6ni1NshZtF++VJdiOZ28sdqks04GaqUzw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795653751;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795653870;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
-	b=WXeYZwQ3Sn4HvlX7NqwlohqiKdBRpLyJPxc3VEtl24HIxRgJy/e2X1+b054IHL0umbl5
-	 pfZQPI9VxoKW8FVH6rPsuCrHTcvNogeUo8QxapA2k7mfeHPCliYhPtpzwvcMGLtBCyQKl
-	 A7U4DC2PEnKT3jmCm1Ask/SIzkUQNQsAwewHzZl0/WugfYFUMh0U0iMCQmQIyjPwJN0hn
-	 yxT99rUEr/7BwcLbiAWLRP56NXC5C9RT5idgna0n06UWsHzZyeEjZQ0RbWm2hJ68ndCAn
-	 fHutxwwfW0DjhYyRTP+4ioSWZALgVrZ2VI8SbvHvFutQHACHtWdp1kBHxHafBn6QxUQ==
+	bh=iVFnQD3imnTlv+9jxnHkNU96izoDIFXplUev078ijIQ=;
+	b=gU5lp/fhchDNdeB+4imiZX2/uk7wRyUltdTm0oUzDDEQR9F4El1B9ROtbsL+jkI64phk
+	 gXC5fBAttIYDqzRbIMiN5xh5PnjlDuV1jlrZYW/5UVaSFW9oXJtbHXPnif0InivjkXM0b
+	 j5HfYVvhQztdPItKuPt+BshR8TG7LGCZZKhABsvVt3QAzRPCKP3yTYbLawV4tlwGRsnF0
+	 vMBSCesMj7dhMtYnRo0d9Ni0GcBjKXRjjM8oe8ThQ4AEBf1BaNMXT0tIj2ubrBvf7RuLs
+	 v7w+o3Ca5ae3dK5xQBfRfSlQAiDf7cGWn5/v/Y03giS/dQatdyppvi4kW21Uly1l67g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LpN49+az;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.42
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TFVWM1nN;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.46
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6AE7606A32A
-	for <linux-modules@vger.kernel.org>; Thu, 26 Nov 2026 00:42:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6AE7606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E82606A31E
+	for <linux-modules@vger.kernel.org>; Thu, 26 Nov 2026 00:44:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83E82606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LpN49+az
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c4322d310e7so109261066b.0
-        for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 16:42:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795653749; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TFVWM1nN
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c50aaad19fbso710160366b.0
+        for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 16:44:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795653869; cv=none;
         d=google.com; s=arc-20260327;
-        b=M45A9ZBkOqYQ++d2P2FwWxdp1XBWm7eyjvMK6C9MdACUislCfiFQSQ5OhSwKmUKgvm
-         e9ukJF4sbEE9oVII4Sz85MTAX3tUgFbEoNhr86EhPypPqdj33s0izCNeTzPCqGFcn+iM
-         RlCzNnNnBtVa2tHw1JVb5ywohfkcsau+M7Wizn5bTgi894Bp7BpgWtCvyoPzNpBuDa0g
-         a3APqSGCEkgOkpCNsPhRzaSifDMCt0EmiwMDMKEuCgdiKpnxYygDkajJiqSj6QpgyOKW
-         Iyn8lgCiZUvBh/D5llkP6s3GrHHam/q2LEOh/I/pybxHj7Nl4uQASEEZqd5wxcfkicun
-         HyWQ==
+        b=crLbwIRD9TddlkYrUiIfpQOXmcFUi7tqHqM2opsDHL1WussiLwDFo66iiU3vgCn5qD
+         CzgG9R9suBBm84FZq0A+/rkv1L1TNsoIMHLD7019OomF50kmmqzmiAglM0riTSAlZDbK
+         GTtjY1yqRBdrA8Kyef+8Lak0R9srnnHdT+w4jxQQA73hKasFe2RZKdfOTdfSZSuAv32U
+         c6NJNOzY/ZT6n6PA5Lz8ZPpv6Sr3D/SRb/mmIDHZtyd+XazFz28+4t/zE0cUezmxnm9o
+         Vzm3qEXM7lIzcuTuzrN3djleALYWoOplVPaT1NheldP3JiZl5/Q+zX76+JoiX44OczTY
+         Nz9A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
-        fh=1I96IkGpBqqck9iRtJlwZLO0ejayhRAylMspb/WP92Q=;
-        b=ibpgRIWjIzK+CUZioXXQrjg6vegKJYxajXViTqCG8976BPD2yuMtSSpouyCteBQAbq
-         ISr77ef78P3Man5m7QaV2lS+SZB4d0LoJnzvXNbTvRA+SyJb+bqAdGccCqzBHDCvcaLx
-         bESdwwkiteCUgZv05mQYHHa7/6Nuqv40EcG7nzVFlR1h4LU4Ac8yHA211dBAoaVnB5nB
-         FJBBIgH4kiDx0/9AQ1thZcm71cVcMnn4bxteTk3d0mUgB9h+wUKgM6+BZx5VPpfZwn+6
-         tm0nWYC8/ncR8ceaAh0K1HoqBF+Ul+ILH5UIHVVd2obfXYoOGZYHvGMc03fWZ74dqznQ
-         cAzA==;
+        bh=iVFnQD3imnTlv+9jxnHkNU96izoDIFXplUev078ijIQ=;
+        fh=ExoX5t9esrm8jccfgChlLbR7FMD948kvTY0TGPqer7A=;
+        b=Og18BNcSe+RnJEl9PRVqipab2GwF7aNzMlxdF755gSPbZP7BLhemZHP0JuMQIf3xE3
+         1MyXWGwyR74TmLN/HqSL0ptUF+IrehRoD5aJ8nwNG82vTFU4kUXXY/U0YHqpeVLaeeBo
+         JDIMq8VfWW0561K3lv8wnILewtuDz0/AwYGytkXfmTHFKpgamA+vQemtPv6q06kg/DuL
+         WdsoSC7RHRXMFIZoBuwVcGUi+EEg/jVLTB1ou9dL1fOAcsVL+LwkGj+r+f4KW5wpytnK
+         n1vSwHGxFMJjxtjgENw2bXIBb0lnGpy4kIx3tsn9V+FC+GSc7pxQk8wCjP2VPiataZ65
+         DJdA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795653749; x=1796258549; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795653869; x=1796258669; darn=vger.kernel.org;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
-        b=LpN49+azCIrNLot1wWdZkbi4Wt9+5r7MX19ZP740YGH95NjHPkEZ3J8iTn5nZs2aU0
-         YtfDizzXcozDLpMOLK52IGL19BDPPkZBwwaARaxU027w//2VU6VirePpo9PC6B6/Gvyf
-         w2GVoXFxRvXbXsOKb1KJ+C3LWAAUbXNTn5yq/DRtNMB33KVLBN+E7CMg2n3o0WEACasU
-         2Rm6jn9HoFPOXbo7vWifWbukhD/T5j5US9xUFhxajKYt4rvNrF1rO1KNwomR3ZLuXZ6w
-         QUOmuxgTXoYSvlHBVpUm9Y0LfNn1TpJbekKTAn/WwvKBAhjn4jwfG9HFJEBd61cyDiFr
-         AG6w==
+        bh=iVFnQD3imnTlv+9jxnHkNU96izoDIFXplUev078ijIQ=;
+        b=TFVWM1nNu5gApS+aRUNGAO2b47beOviKXKAUtZcibEAeTqBUzqYaxbl/Ez5VQvaHiJ
+         TXrTwu8x0jRe4t5Qky6cuxp9+qXTOVpIHPYaRTuFvweUNvzRuyVro3GhlyImE69z5l6h
+         8+10BUgXaVnSQdQJL56ogVd0eoghwHYtJzCo3zCbsQwT+vD3SGCXtB3FiXNUreuGXelJ
+         f7VR1BO5S+hnTUr9vyAHKXMc2Z8rg1qIpqzDfb7vnBqg8zVirP17bCZUWs0HZkfhTJwL
+         aGZZfKvpUl1Z4/v5oLfuk517qMaRDnLShKckyF1bvlHNxOJLhAHLt0pu9I70jGnqlzcF
+         ZJeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795653749; x=1796258549;
+        d=1e100.net; s=20260707; t=1795653869; x=1796258669;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
-        b=qr2XYa8P8MXBVgWB1d9LGyRRIDF2n4IZpcf/ruVf9Dv5wjMvBE09hB61wbaVvE/QRj
-         QcE/K2JiAxfVtJWxiMDGNBIa3cVp9hKzP0YejicOFjknJ2sJ+jzErSnhnwJDb+ORujKE
-         QBOBzY9HsdX68LthBVmhRLxX/8e2ZY5RB4TNZYPUc4JTuLLYOqbN4JilqeKfDscsrg3i
-         +Sr7S+Xy/Yem8Jmq1fw4LLnQ7nrmvHR+mcO/K7DJKu2oGCvGTQ7tlW7+lnVNOUxG9r3I
-         Q2+BpTZgmAQOn5ugxlGakbK0/FkxveH2nCGIaL964afCPWtJbevpG8hpcBYM4e1wwl3K
-         58kw==
-X-Forwarded-Encrypted: i=1; AL+hErGR9rKZQTGW8XZM/2CoJknIvBfDJxfJtaXytxk2vdhKpLB4vBJNunp+vfG7f/QnLdZdjKFiU3ecpjKi3ny1@vger.kernel.org
-X-Gm-Message-State: APuU4Z8tFAmwnDvrr8aBOch/uGqJGOfVqcrBi0xFMXMzU3Xtf5nxLbLr
-	mVkgiLwIdDnNReLaESy5i82wsbrk5MZEhIr1r6VHuWwJUPneLSNguaBj0AZZmX65cd0i1C6s/cQ
-	1lH6aI6ypiLA+xwGSy5GK0jvi02uaeX+AiBjBKV22
-X-Gm-Gg: AZFdTZdfOaSF5grehVuZhBJ/k8cWVwUnN/t4VSLKZP6YGFoyY4c33lXJ4VuxLAeGcrb
-	NZG85oe3Uk42Iu/s3JxxyTQMBb0FeXpzfGMgcHAM6iQiPyydEiVceTkYv2cOFCOodg9t9PPvCuo
-	WH11w1PJT1xG6h8fDnTOJ5LJIm1oIPuF5f/odD/l2/EnTUJW9kTotOFYOifRoGSFgZWb0gYY4ek
-	eGlNoKG0hYXZFwmUw7sEz0gbxarsbYAN7aBRRpzzDf6Y91MozZ3v/oJDpw+k4QcOi+uEpgzkCXc
-	gQTRZHbSEfn+PXmFJPAXkSpR9qd0QdnYbGBzTu/irKeCFvf7rv1FsB/s4jD+8QAbiTBlj7pk3LK
-	s35ANGtCZOgYjjubWJM9nZ85MD77K5NRTZELY49mtQEzD0G4CgYlbxdL7VD4lwoVrWbhwSwCKCD
-	huKHZgvp2yvFwb
-X-Received: by 2002:a17:907:da1:b0:c50:5275:fb97 with SMTP id
- a640c23a62f3a-c513acb5e2emr1626085466b.47.1795653748662; Wed, 25 Nov 2026
- 16:42:28 -0800 (PST)
+        bh=iVFnQD3imnTlv+9jxnHkNU96izoDIFXplUev078ijIQ=;
+        b=0WUrAooKKXIj0wiczSpq+eHHx9GCHMIBLz4eoOwiVXfvsm0ws6lI86X7SuwdkubBUS
+         3BOc6sfonCIKrehZuHp1OjuCZ+hMldflz3TTTy52ONnMkWob4Br+JASDMkHbwPyCcG5A
+         RpeeO+JEIich388GkTDKhBkCoQ9pYwckB2trqMBMcjJs9UaEyMhlur/CvgR7ltx4O19a
+         R/GkmZBcPCMS3MIP2jE0EEFdJlOOIOfWZ8SyvQ3leIdoy12w8H2JrlQqoePbMPo2fwc2
+         0c7R+waav731PtI/ZB6W9o7/FY7m0Tkv38q4AT6983zsA8NaR51P2LX6BnvEx7B2mPTs
+         tUxw==
+X-Forwarded-Encrypted: i=1; AL+hErH6qOnyzw/T7Qa/VtVel5qPzCSSS29elADwkloxUfcK8fDaSKpeSBpIauzJsZx3kXn7Ug+JF2vRL12MfxKg@vger.kernel.org
+X-Gm-Message-State: APuU4Z/HNxaZctqMUy/tHCw6mQL4924TsRX8QIcon3K+Bt6/V/dGiii7
+	BQV+fMe29jd70s1P7Jg6rgKPbyrXV5TE+ZCANiOE3gGCC1d9/YO4gZh8bfE3vfgZsQV/G4SXF5Y
+	8NOoKN5JwVV7+EznIiHKEBFfKGW3WhMYcCC7OsVN8
+X-Gm-Gg: AZFdTZc3/1COJnAvIe+RgB3jCDrvSeBTmaouuN7VakCI30cG/zYDUyS0XNmNJBRVP2X
+	WwRVbzvnMMOFxczozWCq1adoEmlraDo/gQqS210p8Z5iyrfWWHsIGZJUFbgbTjMAlCsnXFsMB4w
+	lnMdgvM1/1SxpOP3l6QRft7/KAiUsODD138saFwsYcSywYyR9Wm7JHl74FQh0w72O3yTH8E0lSK
+	0WVf9jDYX8Vuu1h/yOysWhY/EFHDwWL6Gz55EPjw+7LVTb6su3SoN/5DVPEKKmO0N9X/jP4x6yL
+	437Y9t6lCKWElLjdy//XBC9B2bwWFJhTElq/kNUid8SeKBWnCi4df2wKLbWVnWWpxMSTqcEFPzb
+	OeTL9dy63DpmPPn86SCNvS0De/Ygh2cExl95wPwQHnvJ4x++NEPrE+qTeZLYaxKX0abk=
+X-Received: by 2002:a17:906:6412:b0:c51:24eb:e5ed with SMTP id
+ a640c23a62f3a-c513aabb094mr1147878466b.42.1795653868573; Wed, 25 Nov 2026
+ 16:44:28 -0800 (PST)
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -105,22 +104,22 @@ List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-13-wusamuel@google.com> <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
-In-Reply-To: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+ <20261113221248.3535369-13-wusamuel@google.com> <CAEf4Bzb6LQmHHkvB8WBezU6YRtggycRvvA3L03mQHDr3WQM6mA@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb6LQmHHkvB8WBezU6YRtggycRvvA3L03mQHDr3WQM6mA@mail.gmail.com>
 From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 25 Nov 2026 16:42:17 -0800
-X-Gm-Features: Aa3M54rYVczs2SqMo55_UQYl-QiaJqAFTx0CS_STMdfssfUbqw_TSopd5IfB7RE
-Message-ID: <CAG2KctrMMo0j9Mnbg8fdNsSc-eQaaaW51dO4mqwVNn3hfSdx_Q@mail.gmail.com>
+Date: Wed, 25 Nov 2026 16:44:16 -0800
+X-Gm-Features: Aa3M54p3EatRpTsPAm_mcmxJ6hPDpQs1114Xl7F84nCmfTvZhGsQScuZoJFkxmI
+Message-ID: <CAG2Kctr+6-EESkYn+Dspg0FxTOMFRoj8269UZaNNDFNf3d+bHw@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
-To: Petr Pavlu <petr.pavlu@suse.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
 	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
 	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
@@ -133,29 +132,23 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
 Content-Type: text/plain; charset="UTF-8"
 
 [...]
-> > + */
-> > +int module_kallsyms_find_name(unsigned int *symnum,
-> > +                           const struct kallsyms_name_query *q,
-> > +                           unsigned long *value, char *name,
-> > +                           char *module_name)
->
-> Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
-> with similar names. Adding module_kallsyms_find_name() adds more to the
-> confusion, being similar to module_kallsyms_lookup_name() and
-> find_kallsyms_symbol_value().
->
-> I suggest calling it module_kallsyms_query_name() to match the
-> kallsyms_name_query parameter and to express that this is a structured
-> query, as opposed to a simple by-name lookup. It might be a good idea to
-> similarly stick to "query" instead of "find" in kernel/kallsyms.c.
->
-> Otherwise, this looks ok to me from the modules perspective. Feel free
-> to add:
->
-> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
->
-> --
-> Thanks,
-> Petr
 
-Sounds good, will apply s/find/query/ in v4. Thanks for the review Petr!
+> > --- a/include/linux/kallsyms.h
+> > +++ b/include/linux/kallsyms.h
+> > @@ -24,6 +24,13 @@
+> >  struct cred;
+> >  struct module;
+> >
+> > +/* Exact or prefix name query, optionally in one module. */
+> > +struct kallsyms_name_query {
+> > +       const char *name;
+> > +       size_t cmp_len;         /* bytes to compare; includes NUL if exact */
+> > +       const char *modname;    /* NULL matches any module */
+>
+> will "vmlinux" match just vmlinux? or how can one express "I only need
+> symbols from vmlinux image" with this?
+
+At the ioctl layer (patch 3/9), passing "vmlinux" in query_module
+restricts the search to vmlinux without calling
+module_kallsyms_query_name(). I will clarify the comments in both
+patches in v4.
