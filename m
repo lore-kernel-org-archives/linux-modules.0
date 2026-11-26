@@ -1,100 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.51
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795654409;
-	b=F4nmEK7KP+grrddhSRB+CF7XQwGH81cg0wGUXLjBX8rLgX2wtr46swww3aeGDxc+C/Bw
-	 /7cPdKqBw383p8xX03kFTuSik7Jc8P84DSShM2KxkDjQHuS2VDhHoTha2jdbjURutMu5K
-	 lOfEyNikZJsf8Cs/lYg0e8dkvp5hUPjmoFu+b8oIl7DFTswbBOiNXFdnxb4pOIfQ/Z1wo
-	 nxSAYIW2pv0CEi9Dm8bnDKdfIMuwbTpm/eK74OJ8HpJT+HqOuKR9yjqnhJi1oHmbMzZhQ
-	 QJviqEn7ge1BG58J5iIK3rj1v2Xwa+vNkgjdR7I2xvMnoy2mhMEnyokYeotQx9KZSsg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795654409;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795689925;
+	b=1MoIb5UyWy8S53+cvSxLg/rKhidb1APhqMTjAsJU24+wwRA38CZBYXtn3i3PMYkrBcW5
+	 1yXW/s+5aoEikPr93FNrqYlw4CvdOXpJ4j67FOwd0JIsI2ZL8KtQ2dVa3EMi6KFye1zd+
+	 DAoE0AG5Jt0e2TSacf0Sa4q/7zuqZfniOk7c3ZLVw+y9FIcguVakp/vpVKvSvzDoLXfU1
+	 3YiXY/54fnZuwRZDFitXDyWrC1quABc1ybFFhxtbqHAUp1vgULZkO3AYICkqG6bhcjr/g
+	 7slgZhoCWG4TmrcwS026nWoz6M2BanFdZyopKvIcGrSJh6jHwNsP9ar577s6Q6NuS0w==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795689925;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
-	b=UpPVQNvYNUMMuTjHuKeUcz9T9iqnUyChBm53DOUcnQmSUbqPDexO1Uu7aP5DUDma+R8b
-	 JZvdp7Ztb7sEVuIc7vt881YgiKsrgd+4J57QwWlhW0x2hfOE1R9BVxwKf3W7m5hBO5NeH
-	 oIegN3QL8ZtjXmfLbb1DaBCndPbF1OE4Pyo+BlZWEYfOkDcNDZt7jUBSfpwDvsPCJlkb8
-	 1OicXdIUw01/9Nw590MWka/GMC7a7wz5eAonPWIBiSvKFrtb/A3FEJTE6UNAiaXqcrI0Y
-	 UfH3z61u3RWcAmMwSTTga295sD6b1dQq5MDTUHHb25q/mRjxjbFOr1yEtEXDXz9iVpw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OMbLOmTg;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.51
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+	b=n0OaUGfUdhATWXTRcj8mxpukqgxTxLA5UnOPOSIpm3e+A6rNNQERPMrCsHbij0t9TIgc
+	 Uyu6b6VBTiPmQO4mt/zUCb4URsehWUOocW4RFUVLFX/jyb24QOLryWM8h1n8qQixg+Z2v
+	 xk+T4GfQL0cqAAOsfxNdj7tkh+iRd8OTW2FAe4LOaHcR8yG/zyx52jNSwy6kCL8Fiez7o
+	 wZZjlRZdosuA6dehTWg7xwemwsBE3Ixj9zoQpBf0iRtXN6YUlFyFYvz9pmNDsbmC32XL3
+	 4HrnFjPJqor1spvYQ/u+9+sUhfRUbPgglioQk96qiwEv/rL55+Q3LTS33RCt3bKPK0Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="fb/AnGuu";
+	arc=none smtp.remote-ip=209.85.221.44
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F741606A335
-	for <linux-modules@vger.kernel.org>; Thu, 26 Nov 2026 00:53:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F741606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F90606A31E
+	for <linux-modules@vger.kernel.org>; Thu, 26 Nov 2026 10:45:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7F90606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OMbLOmTg
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c5127c7abd5so1003665566b.3
-        for <linux-modules@vger.kernel.org>; Wed, 25 Nov 2026 16:53:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795654408; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZMvWV0iAANDjfAIWQFX8SbJ6O81DupXIQ2NQNjc+Ve0XgOD39yRbLYWecmn3ed27eD
-         6OH2jvagkwQdtnaBWeDQREX7zOECsQbmIIWF2PPmPd9Pm6hQ5bthDGCGJdSxjynxuLgI
-         SkejR0WoTiM/dc/uyoDx3vmW07r/M0J6iVR9teaPgyCewPooFtGR/gFSe4+LtkDkIlTO
-         MK9ebMDv5PyKiGmHbNQl5sLnZi0Htu7KRFv45Q0J14NBt/9K+2XCcoYSL/E1iERfjSVw
-         YH0lf6veQS4N2oPQYIxmXu3HnFiJgstBaaNNh5+v3Gzp6nfQmXOVkPSRdndhf/6JFgb4
-         cqrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
-        fh=BcBfyiR5M4zJzMQFuhZ0JM5XNbKNpomONvYa3zbarSA=;
-        b=lukcN0WeIZflRHu+iApi3U4GjUuLdyjjwTpaVblxclgSXGJOeHyvp35IotydjrJxO3
-         AfTLQTcKdTSsFbzoqh88cPTD0adtbXqjrzrk6wmdvDW1sirkoRjyAMD2rIma08hkG2Vj
-         i7/mmnYhU0bcq60+PU+cXUCr2zXe5J/nTE/9HobG5g+073Vm8OcY2luEIl3SROoKpaX+
-         iUGBJF69j0yf+ur789afJ8+gC7QXYgkHqzVq4qOOdSgS3xMpKuHQX+w6LxNXIDBv2Ntx
-         FSgdm8qsCycK5PfeoBoHYRKEsmlXOSGTXXDYQ+Twv70zU+jvjIIXMGRZ1qJAaTSQJQY9
-         F6Ow==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=fb/AnGuu
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48e09aa5264so3982787f8f.2
+        for <linux-modules@vger.kernel.org>; Thu, 26 Nov 2026 02:45:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795654408; x=1796259208; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
-        b=OMbLOmTgwkBLdVF5EdkYSC2XrgccLIkkqOXgyFgiuHmBsv8YiKTp9E0NEIyhirgYwo
-         BZ+ApH53YZ2KTVkaJNbDjcMue9DCSXid0Du4+70qfpSn/U6BPQcaO0rTHvaEKiMrhjq+
-         cgrO6KnCn2xh6qE6NyajQBDq/7N3cmFb2502QyBeGyuN0J8TZ8STFtPa+xPXpE5PEied
-         9EIDboORco4TC6wv1vXi5MBxzHo/qEkcV1RPpsCU6P4rl7yl2ijcQhep5KTjor4bMPiQ
-         FloIu+x3tOotka6vXyHSWrSW9RsgR8EkvzFkVBto/arghTtNsJHfG3gnYoPBAaEQS9BY
-         49RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795654408; x=1796259208;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=suse.com; s=google; t=1795689923; x=1796294723; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
-        b=a2Zq7JeKBYLAw8gJjX8oVoXuGcohcC/YOl3ftPlNvBRCIV/5ozuLCG7Z4ygUILwpDv
-         7dNjHDOISljaZOnwUbabaxYntIlYh6jeKG0VykA3jdEV9EfL/pPNlu8HRvXsqbgtXIPV
-         LZSwvyHDGXYuCb+r6ytDV+9JJZGFxZDOTuTplCTW7314adXSnslu3CpHGwBuPEQtYJ3S
-         tD5o7RWn6J7fBcqVV8BlSHiqQ0CwV8DujC/70wZ4iJkJlKdQq+O8zFftlFyGdzwR4pFc
-         /2gOfVtHd/fjTHfVENm51anF7lvnaSXYkk6C2jVrQbyll01Pm9XxKcFUUjWSFIyX/ru+
-         23LA==
-X-Forwarded-Encrypted: i=1; AL+hErFHFlz4Zl2D1+9oecVOAry6e9JhG9G5WzMcTNgDO7XgTr2Sgo+/ms8oNHEhU5CDNU4BEk0D5RGXmuladXNe@vger.kernel.org
-X-Gm-Message-State: APuU4Z8mQIFnWspcnfpnzkj9riWEZuFf40QD+W1IiJQL8AZIpErqI1d2
-	AZTpR1sNfCFSzYAP5aIvpjY7zWABr/Gm+wWUtVgSEGzUTOhQ1ez9eZzjX2GvILJBeqgcEB7xzJD
-	EAWBvf9pDfcNLVjec32/JZ7dARMigur9gFDuT9OPW
-X-Gm-Gg: AZFdTZeHFK9B4BHcu8ok1zUk1KoXBNMAk1uLNXEYEvNAVRYfzadUfKkkoBgPk85rcUx
-	XRYIwQIagvB35/hdi3GbCZIOdpYnErgwA0nimtgnjImYxxCuSbvo5AFeydCvxDn3VC4bJGpzBk7
-	4zdyXTeH9IDI2A5IqaqZwKOn3n3+2kPKpoXnuTjCSFDKcxHc6fCEvtdOd6UhMw8E/7mheDq7ItU
-	Gwssia/GrRrham4Mel5xfrpPYVnjMk/skBQ9IAYO72PsvdYKadbId6/rhXEqyzaTqnyBzH+tsEe
-	f6nONxtTyz5MNmEuFsCzRGiCOceBC+lxfLcnhdxWWrv8oKPY1l9oAVJvHWkGVzTk+m1sX6Dj7nq
-	nwrDqu8ttTL4okb8FCvBn7jwe0m8lJFZBMXmmg2ilDrukSr9i/33hPZnGItXSdoDvJPw=
-X-Received: by 2002:a17:907:c643:10b0:c2e:4292:d27e with SMTP id
- a640c23a62f3a-c513a816d3amr1138026566b.22.1795654407168; Wed, 25 Nov 2026
- 16:53:27 -0800 (PST)
+        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+        b=fb/AnGuufRVSuumZI6EQLA6cj75+M3xYaDzd0Gy6RIfFD9vTufZ0ocvqMKbKkCMuJU
+         HCBXLOxx8vgikybvFGaP8kOTEPC96KRwXnjjGdmpRLIAP3v7/cEX49ZmqXzavqZRuij3
+         yAgWXhNLnFWVkhqNg9FhZPzLqKHj3vih4TQBrzWrYFpbfSQ4U8bI/qVviCwdNFG1GKRg
+         Hxn6CMjZT5DpBlzV5e6WnYlgdhQXs2yNA/UJVS7jWkPiOHnO8ZNEWlUFaREDrgmI9OpC
+         SZzobCPy89LxilfHUkDRa5QJboD//JYUx9AJLoSKPUrVgXCRpyowQ5xPdH3/qHs9I8jV
+         3Rpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795689923; x=1796294723;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+        b=GhSoNd6VSJatWE1YjugGZjVr9cySEzYLpV8r19MHXA+9Wv7eQrHsNDM1RphqHw0h5J
+         wC3cslHtHp4/zAs2z2uXbyq/HkOwNXM/DNxe87JsFH75NyAYoTEVrXw7gJVjdrJ0503K
+         wJf/FgXvFFgL11vZzCDf463P271jzr9qS+x4t4HJMhjMPKSpDyAyKcHNnGF2ubGbzGfF
+         ioRB94BubtFBvb41YkWDJcw0Fllp40VhmSGUQiMSEmvcHKzd9Xta9x5lQtdaYSrBQo08
+         x2FZzzxAJR3ARet1WhGOJEyiCygOuwtTq5fLvP45yV/AsOPS7JcLaA1CyGvPkq/zG9c6
+         I6Gg==
+X-Forwarded-Encrypted: i=1; AL+hErF1H26B4b8ACOTx3zuJqFWDzkV4zpk8wUfNRteMhNHrOnPmlcJ3lJpm8TULuYv0QUfmlys6lpXMWoRzvahz@vger.kernel.org
+X-Gm-Message-State: APuU4Z9+4+AThsPVRemEIUMZ7+6eBLweKx1nN8ULLbo9bDpz692+5mta
+	rbI6dBRSr5PMVYY+E3Rz0Pn1Q+wYREnwEkmdpBhUoeI8U5BYaLnOSkFqjNZYZLkegH4=
+X-Gm-Gg: AZFdTZcVGZk3woUByoCY7VNtzXMKKAxhRVTFuMO+1iM9FXHJ1BaACgoCfsjfjsBl/zC
+	gvBX5iSS5Y87tLLUfIbxL8ji0/50V1natGkpFaCvqOHPA3PIXx7OXdD3VO/XTOrVSiYVqa1DobS
+	WWb4Bd00L05ctPoJtVVzXydIAEhZfgrUFY54toKNBEDbXW7zmrXgMcZvau0akh5Wu/KyguIUszl
+	+7cvPNWMszPrz+lqXOWEZGRGFlgtYlxcUGoItaeA7S4ywDQRwS/8/XuRH2ci8wg1v9YDoduypkh
+	+xVv0ey/BrqOn5t+UhcLKJIXxtBqSKrHJOwDT6BAIAkdiSBWBNR79brsaUpZhBC/gmjQXWEjGCv
+	UHLAECJ9uDFEUiJ+HzKAb1SxmADh0J1dwHYaB99vdZC6sTH6ZAy550y8wZtRjWU5aPR2N7L6vp0
+	5FMAe08vTUtSVOyGLJTsDKeZoTqpXqoqQFovfgc2O6LBx3IocmyX0TWd6L/DDYSauPsvSdRJiJz
+	wuKOX1ofgdtfT9x5LbqOXe+aTIK6rggMpj/SgCrrr4s3IXMQ//JbGbc38WBWnnGHlHYytu5vu3A
+	i+ZsLoTi3up60URN/9Kjkelmyh0jZDT9Fc9Uu+WvHcb1E6oLnPYi285hp9Q9oBNt2w==
+X-Received: by 2002:a05:6000:248a:b0:487:b50:101c with SMTP id ffacd0b85a97d-4abaa97702bmr38359967f8f.5.1795689923186;
+        Thu, 26 Nov 2026 02:45:23 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb98b4dsm40416103f8f.53.2026.11.26.02.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Nov 2026 02:45:22 -0800 (PST)
+Message-ID: <a40ad738-cb7b-469e-b67b-353b64622dbd@suse.com>
+Date: Thu, 26 Nov 2026 11:45:21 +0100
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -104,128 +92,57 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
+ ioctl to /proc/kallsyms
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
+ David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-19-wusamuel@google.com> <CAEf4Bza48tGhcUhFRhSSv3qijV0uF8YrAQcLM6Qv9az-8zvK_Q@mail.gmail.com>
-In-Reply-To: <CAEf4Bza48tGhcUhFRhSSv3qijV0uF8YrAQcLM6Qv9az-8zvK_Q@mail.gmail.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 25 Nov 2026 16:53:16 -0800
-X-Gm-Features: Aa3M54rfuKAHSB0QMI506grzDhwAStyJm9gAvy8QXVpNXfEJd-B8LId_HiOPEPc
-Message-ID: <CAG2Kctq98pvyV=jmN0Di+p7m0AWQKg8+QF5YBvdLi79kTJaKoQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 8/9] libbpf: Resolve typeless ksyms via
- KALLSYMS_QUERY_BY_NAME ioctl
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Petr Mladek <pmladek@suse.com>, David Laight <david.laight.linux@gmail.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <20261113221248.3535369-14-wusamuel@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 25, 2026 at 12:25=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Nov 13, 2026 at 2:14=E2=80=AFPM Samuel Wu <wusamuel@google.com> w=
-rote:
-> >
-> > libbpf parses all of /proc/kallsyms to resolve typeless ksyms.
-> >
-> > Use KALLSYMS_QUERY_BY_NAME instead: exact names, plus "<name>.llvm."
-> > prefix matches. Ambiguous matches at different addresses fail the load.
-> > A missing strong extern still fails and a missing weak extern is 0,
-> > without a text scan.
-> >
-> > On any other error (e.g. -ENOTTY on older kernels, or -EPERM), fall bac=
-k
-> > to the text parser.
-> >
-> > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 99 +++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 97 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 44134421bd7d..f3f3475a64d3 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -59,6 +59,34 @@
-> >  #define BPF_FS_MAGIC           0xcafe4a11
-> >  #endif
-> >
-> > +#ifndef KALLSYMS_QUERY_BY_NAME
-> > +/* 'f' is PROCFS_IOCTL_MAGIC */
-> > +#define KALLSYMS_QUERY_BY_NAME _IOC(_IOC_READ | _IOC_WRITE, 'f', 48, 0=
-)
-> > +
-> > +enum kallsyms_query_flags {
-> > +       KALLSYMS_QUERY_NAME_PREFIX =3D 0x01,
-> > +};
-> > +
-> > +struct kallsyms_query_sym {
-> > +       __u64 sym_addr;
-> > +       __u64 sym_size;
-> > +       __u64 sym_name;
-> > +       __u64 sym_name_len;
-> > +       __u64 sym_module;
-> > +       __u64 sym_module_len;
-> > +};
-> > +
-> > +struct kallsyms_query_by_name {
-> > +       __u64 size;
-> > +       __u64 query_flags;
-> > +       __u64 query_name;
-> > +       __u64 module_filter;
-> > +       __u64 pos;
-> > +       __u64 sym;
-> > +       __u64 sym_struct_size;
-> > +};
-> > +#endif
-> > +
->
-> there is no need for this, libbpf in kernel can use kernels' most up
-> to date UAPI headers directly, and on Github we sync necessary UAPI
-> headers into include/ directory, so libbpf source code can be built
-> with latest definitions of kernel UAPI. So you can drop this part
+On 11/13/26 11:12 PM, Samuel Wu wrote:
+> To find a few kernel symbols, users such as libbpf parse all of
+> /proc/kallsyms, which is several MB and text based.
+> 
+> Add the KALLSYMS_QUERY_BY_NAME ioctl. It finds a symbol by exact name or
+> by prefix in the entries of /proc/kallsyms, with vmlinux matches first,
+> and optionally in a single module with module_filter, or all modules by
+> default. Each call returns one match and its position; pos + 1 continues
+> the search, until -ENOENT. The output returns the address, the size, and
+> optional name and module buffers. A buffer that is too small gives
+> -ENAMETOOLONG and the required size.
 
-Ack, will drop entire #ifndef block
-[...]
+The kallsyms data in the kernel can change between two
+KALLSYMS_QUERY_BY_NAME calls, for instance, when a new module is loaded.
+Should the mechanism provide a way to detect such changes, likely by
+tracking and exposing some kind of generation number, or is it
+unnecessary?
 
-> > +
-> > +       while (!ioctl(fd, KALLSYMS_QUERY_BY_NAME, &q)) {
-> > +               if (!ext->is_set) {
-> > +                       ext->is_set =3D true;
-> > +                       ext->ksym.addr =3D sym.sym_addr;
-> > +                       pr_debug("extern (ksym) '%s': set to 0x%llx\n",
-> > +                                ext->name, ext->ksym.addr);
-> > +               } else if (sym.sym_addr !=3D ext->ksym.addr) {
-> > +                       pr_warn("extern (ksym) '%s': resolution is ambi=
-guous: 0x%llx or 0x%llx\n",
-> > +                               ext->name, ext->ksym.addr,
-> > +                               (unsigned long long)sym.sym_addr);
-> > +                       return -EADDRNOTAVAIL;
->
-> I think there is ENOTUNIQ which we can utilize here
-
-Ack
-[...]
-
-> > +               /* Check exact name and then LTO .llvm.<hash> prefix */
-> > +               err =3D query_ksym_by_name(fd, ext, false);
-> > +               if (!err)
-> > +                       err =3D query_ksym_by_name(fd, ext, true);
->
-> err =3D err ?: query_ksym_by_name(fd, ext, true /* lto_prefix */);
-
-Ack- will update in v4. Thanks for the thoughtful review!
+-- 
+Thanks,
+Petr
