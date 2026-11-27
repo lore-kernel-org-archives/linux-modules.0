@@ -1,88 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795783813;
-	b=dFTf1mvqoKHABNufXbURKDxt39JsLniho3CSyWT3NI8l9Z5I0X4r6QwXgEsN46nv2r0F
-	 MuFXsLn7DqAkp/m+RivwkvzXbX2n7M1U+96xe8wYQQL0UfqnlMzVddR3AIEt/+XMNIoMX
-	 fcyeKQZODQ+Mk4VWJroGKR9a3y4SIojuuvUqge1Xp6J/mqFC0ZZh0GW+E34CsufNsmfLf
-	 cHkwX2YwFku2O8C9ZCNJJ7+RPBSomK/OhRG32C2/LtT7L3x5Fuag+6CLqaMGBJ8lHw3s3
-	 ebJsjZ/pM2yPVNwwU5URSHo++/RHCANVHg9pL5UVQ65qFI0yBfVnV8uo3ByW8xrEn3w==
+	t=1795798222;
+	b=yhzy+FTmj2745pxgyXKlt+D5/l0N5NydU7Cmzs9THNqYBJjoVXJqhjn8/kqMCYbUrE09
+	 4KMnCszp8qsov6Z8863ZMhH1Ru/U5w1hJWPdAwiG6ilWoW2KChe5/OK1j3dUB3ntsRxlR
+	 wcO1Op/fqZQMRIF9h4H6s8FGlLGJmNNPMwD9w0VAHnFsOY2tfsL5AcVVBZZT9SJalaEOC
+	 4zeXl1f5soOBmIh4N7eTiDAxi/YGlkP2OJUGd9eocnEUCNzpKJaUm8X6+M4dPqkL9H8am
+	 7go6paJ+36bkUPzf7zPpRgf/vbO7iNVQY3fa4iXrubqTxyceLLTcIbjczYWRnWhymlw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795783813;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Sender:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:In-Reply-To:Content-Type;
-	bh=FnO1x2d+/C83Q2nzhrZlov1274fH/sTNuAJTsOOpadI=;
-	b=u+lf9QBzBIdfQEDHxklTJCzIODyKugIX5QE36pu/obQYJSCE0C3G6n7SWOVa2Z9NgD6I
-	 miVAZMzXnucCnCKRfX5P1cC4sKnznoicuYY4BqAjLBgCfEUly1H65dZ1OGDN/mPc2pLYV
-	 /BC4d4dkOv3Te0mXxwsqj2E0xG2c4CcXOgOQFr8E5Iu28b6z0hn2mITIZjrR5oPl3CKtm
-	 k/Sx3ijjGscdIpl5dqOyvVFNktewXzTGK1PRWguBXUNt1zDmgT34xHg9A65q8Nz5VYnm7
-	 6vnnDOcGLSb/ceo2gs3Q9kGB2Oe+0qAGBXziGTZuSq32P3+yem63jx+GZ1ALLyEbENg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795798222;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:From:To:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-Spam-Flag:
+	 X-Spam-Level:X-Spamd-Result:X-Spam-Score;
+	bh=CtZ3Cz1JVzHYFe/52gRFW/Y/fmMQcF+9xc7z8JxnkWw=;
+	b=sW8nV+6XslWBD7P7xAjdHQg2Bic+irwsn2RtEoE/zQ1pkF68x/0YuxEkr04Cqif3p/Zn
+	 htYfe5jjEFjR0rmajZhc5yCW6DmZjKSVGy+4jOf5nWmYeaE6MCL/BNfyJ4tq8FQsgNtnF
+	 b+4le1eGi4ILd7GQTfaQ3vZ8oBLc10iqgiG5IXERPCLkv9duCDwmov6lo42lIjr5Kt0oQ
+	 7U5rOa9Cr/2D5bf64mecOD+4KKh5rCoeV02grm443G6YMmVLpDrmkYTisJZqrAUutRqLI
+	 MrKb03S5r3pZ5UStTjLqlg05rJyQo/RbociEMJsDtNpaI/v5ExYGUytoG6cf3ZltHFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e9ZhQYbE;
-	arc=none smtp.remote-ip=209.85.221.53
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XDYgHEBs;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=oSmgFGfU;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XDYgHEBs;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=oSmgFGfU;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E53606A31E
-	for <linux-modules@vger.kernel.org>; Fri, 27 Nov 2026 12:50:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85E53606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9129D606A329
+	for <linux-modules@vger.kernel.org>; Fri, 27 Nov 2026 16:50:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9129D606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e9ZhQYbE
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-497614c95f0so4603619f8f.1
-        for <linux-modules@vger.kernel.org>; Fri, 27 Nov 2026 04:50:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795783812; x=1796388612; darn=vger.kernel.org;
-        h=content-type:in-reply-to:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=FnO1x2d+/C83Q2nzhrZlov1274fH/sTNuAJTsOOpadI=;
-        b=e9ZhQYbE6j7PdWndI6E/2lrL2HAR+5o3DKCqdxs+8QL88rGptmUYZUjO3wQoUmxHp2
-         veL+isNGvrK0WolaksoAQX4UHCAOGcet8/S3f12ygEWaEUmFPMNBdUhl3TZp3WAEGqf3
-         4JT/Ef0JQEMP4Oe+fJBC0GH5e7tP42q+y8WCvFT+61J0p9Q9z3xO55YzUId+Pxj6K19T
-         zx7Vr0wDZVwA57cWGopIVIqQ7y4uI+eAr0pS5Ht7IXmXMtfPzr9WE/niv/XqviILKLo7
-         7sNEuxs7jD+uDSpbiduWphjj9Cgkl4SrtM8rQjSZJ7JL/mrssShWA0D4c/n94T9oWNSh
-         /6ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795783812; x=1796388612;
-        h=content-type:in-reply-to:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FnO1x2d+/C83Q2nzhrZlov1274fH/sTNuAJTsOOpadI=;
-        b=hiSUNCCN0lSc6fmlRsP0LJiNhPU2agu/bqEA3l5HjHz6J2c56wHZ5AHwTehJTGNdWL
-         /V0ZTOfSKSZ+6HgRYdwGdfJC/ik8aXv0GT7zw+7qT0bCrI8QQAMINXGpJKy+njvPLjuq
-         IQNpyCMXmnPgAhqTa/5ofIT8pMQOvo0ZBfaxl/lNZexFrS0YMyEqMlA5Y+NvNSzW7JVw
-         QT+7yS2wHrIzmgJRf7iQ+qenWOqQusJMIQRrHiFtN8P6tDXCuK/mMRbSEvjqa1U6R03Q
-         PVwfEH+NTVOKKaB89oRBP9VYNzd11w6tR1vVwc+CpJdqsPutzPlqXMBo3BBQHKyXtd4E
-         dHmQ==
-X-Forwarded-Encrypted: i=1; AL+hErEybepwNTTJhuGv+f/EMju/dH/ZO6CPZlt1pyK+aS4iXF+/D8u2b6vD93rKNuqQL+mcMU0UNocbggBYn55V@vger.kernel.org
-X-Gm-Message-State: APuU4Z+uC8kESxNHAy1bijW6mKUgSfdeBr6+5V7l8CcUg2d78pJJRbsH
-	we6LOlmsUdyizJH4GFr0+4CkD1UQ8gNshqZIoDllzmYZced2lH3jK1Ys
-X-Gm-Gg: AZFdTZe1nX+bDT4WTP+3ZMtM4akTpYhCl2v3ek7gGWSzHIJTrp/aD1Pw90JtWq7CVzP
-	ukb9rVEYrqUxk8LBZ4HgldRstBMxPxQCy6+jrOHqPWxK2zeopfgOOr7oYvvPAwHE54z2uxgDoPj
-	te2tqNnHDcsgiqpbovaU48GfHXY8GSoHjIuWXLhOegoY3TOU9VXQoJpEdSl6+WvvjRhwbxteBwc
-	DutCE5e0G/LwB+F98BoLQeKHdy8x4ifLCxzy7ehxnPMHY9xv1JPMz6AcWxEXmZIJOE+d1neYLx3
-	r/XhTQAE17sCIxkDmS3bmEJ5zkRf9xSomWcp7IjOpnHIPGc11QLbC7X3WxMOnTLXM0D182PlAEo
-	fQqL4/QljNgwbQI3nUZMBIXdA0IjOQ/deMqm6xI9KmrmL7xznz0uMfABiNAnQfhZCfuU1RCjX1h
-	aP03pUcmhKhlxMqjtF30zy/1tVUQ0NQ7n3rahob3UVbOdIY3/sNG0a8bCK5w8ZWxEz2/yiFjn4l
-	YIkDN0y1g6edZ+elOdrIxxOeqNup/Mk8x/qdFmERSxU65coBczqCGttFFNSdVSrZz8wdQgFFvJV
-	zu621EmWu/95JBguXD3t/fBwk8P5cGXiZEq0hf8RCQtZoc2X9dof40ape/o0PzXsY+W+bcjpDlH
-	R5l0SBCeO/KJmTLD/OQ==
-X-Received: by 2002:a05:6000:41d3:b0:48e:d36:77 with SMTP id ffacd0b85a97d-4abaa97737emr47215381f8f.4.1795783811629;
-        Fri, 27 Nov 2026 04:50:11 -0800 (PST)
-Received: from [192.168.0.41] (bl22-190-205.dsl.telepac.pt. [2.83.190.205])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab69bf630esm47852629f8f.16.2026.11.27.04.50.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 04:50:10 -0800 (PST)
-Sender: Julian Braha <julian.braha@gmail.com>
-Message-ID: <d9151015-1316-42fc-89b1-d93cb0249d6e@gmail.com>
-Date: Fri, 27 Nov 2026 12:50:08 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XDYgHEBs;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=oSmgFGfU;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XDYgHEBs;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=oSmgFGfU
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6B4BF229AF;
+	Fri, 27 Nov 2026 16:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1795798219; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=CtZ3Cz1JVzHYFe/52gRFW/Y/fmMQcF+9xc7z8JxnkWw=;
+	b=XDYgHEBsRJTckAueqI84rE0fhPYn/zo79SoZqsdnzkcXYqdKG+NSZEYdqRQFzyjnr3tzoJ
+	v8yfBD+iAc8x7j/tjdjDKl+c1W+4+3Gc59xfLaMlUyMNUnHFBbUooUU4PAmxxaYxq8N18P
+	vXWZT/d6qHPljs+QOOU09j78zLbSNik=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1795798219;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=CtZ3Cz1JVzHYFe/52gRFW/Y/fmMQcF+9xc7z8JxnkWw=;
+	b=oSmgFGfU2xvChgq96IaFaFedPBVS1GMexxEfHddBc4UfLweAYQyhmYcdYJWPzRDQ6bdMuh
+	J7C3RVduNjHaXEAQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1795798219; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=CtZ3Cz1JVzHYFe/52gRFW/Y/fmMQcF+9xc7z8JxnkWw=;
+	b=XDYgHEBsRJTckAueqI84rE0fhPYn/zo79SoZqsdnzkcXYqdKG+NSZEYdqRQFzyjnr3tzoJ
+	v8yfBD+iAc8x7j/tjdjDKl+c1W+4+3Gc59xfLaMlUyMNUnHFBbUooUU4PAmxxaYxq8N18P
+	vXWZT/d6qHPljs+QOOU09j78zLbSNik=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1795798219;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=CtZ3Cz1JVzHYFe/52gRFW/Y/fmMQcF+9xc7z8JxnkWw=;
+	b=oSmgFGfU2xvChgq96IaFaFedPBVS1GMexxEfHddBc4UfLweAYQyhmYcdYJWPzRDQ6bdMuh
+	J7C3RVduNjHaXEAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 33BDF13432;
+	Fri, 27 Nov 2026 16:50:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id onUAA8u0CWsQZQAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 27 Nov 2026 16:50:19 +0000
+From: Takashi Iwai <tiwai@suse.de>
+To: linux-modules@vger.kernel.org
+Subject: [PATCH] libkmod: elf: Support extended modversions
+Date: Fri, 27 Nov 2026 17:50:03 +0100
+Message-ID: <20261127165012.87004-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Post: <mailto:linux-modules@vger.kernel.org>
@@ -92,130 +101,184 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-modules+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] scripts: add bit count parameter back to host hash
- functions
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: nathan@kernel.org, nsc@kernel.org, samitolvanen@google.com,
- ljs@kernel.org, david.laight.linux@gmail.com, sashal@kernel.org,
- lzsx618@gmail.com, zuoan.penguin@gmail.com, petr.pavlu@suse.com,
- jani.nikula@intel.com, xur@google.com, sidnayyar@google.com,
- robertusdchris@gmail.com, acourbot@nvidia.com,
- linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261127000015.3662267-1-julianbraha@gmail.com>
- <20261127000015.3662267-2-julianbraha@gmail.com>
- <CAHk-=wjcmmgrJy6rknMOTJ76O92QSAMSUaUPKC6N=pASPsxPmA@mail.gmail.com>
-Content-Language: en-US
-From: Julian Braha <julianbraha@gmail.com>
-In-Reply-To: <CAHk-=wjcmmgrJy6rknMOTJ76O92QSAMSUaUPKC6N=pASPsxPmA@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------jQ00QMhwmgorNfZxtX025rYx"
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spamd-Result: default: False [-11.80 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:url,suse.de:email,imap1.dmz-prg2.suse.org:helo];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Score: -11.80
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------jQ00QMhwmgorNfZxtX025rYx
-Content-Type: multipart/mixed; boundary="------------OtdfgwIauxllpYjoIU7uHsIu";
- protected-headers="v1"; hp="clear"
-Message-ID: <d9151015-1316-42fc-89b1-d93cb0249d6e@gmail.com>
-Date: Fri, 27 Nov 2026 12:50:08 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] scripts: add bit count parameter back to host hash
- functions
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: nathan@kernel.org, nsc@kernel.org, samitolvanen@google.com,
- ljs@kernel.org, david.laight.linux@gmail.com, sashal@kernel.org,
- lzsx618@gmail.com, zuoan.penguin@gmail.com, petr.pavlu@suse.com,
- jani.nikula@intel.com, xur@google.com, sidnayyar@google.com,
- robertusdchris@gmail.com, acourbot@nvidia.com,
- linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261127000015.3662267-1-julianbraha@gmail.com>
- <20261127000015.3662267-2-julianbraha@gmail.com>
- <CAHk-=wjcmmgrJy6rknMOTJ76O92QSAMSUaUPKC6N=pASPsxPmA@mail.gmail.com>
-Content-Language: en-US
-From: Julian Braha <julianbraha@gmail.com>
-In-Reply-To: <CAHk-=wjcmmgrJy6rknMOTJ76O92QSAMSUaUPKC6N=pASPsxPmA@mail.gmail.com>
+Kernels with CONFIG_EXTENDED_MODVERSIONS (which Rust support selects)
+put the CRCs of all undefined symbols into the __version_ext_crcs and
+__version_ext_names sections.  Symbols whose names don't fit into the
+fixed size __versions entries (MODULE_NAME_LEN) appear only there,
+hence most Rust of symbols are gone there.
 
---------------OtdfgwIauxllpYjoIU7uHsIu
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Currently libkmod looked only at __versions, so it reported CRC 0 for
+such symbols, and "depmod -e -E Module.symvers" printed false warnings
+like:
+  depmod: WARNING: .../rnull_mod.ko.zst disagrees about version of symbol _RNvXs0_NtCs8SrOILYbo5E_6kernel5errorNtB5_5ErrorNtNtCs7o82oapQthI_4core3fmt5Debug3fmt
 
-On 11/27/26 01:16, Linus Torvalds wrote:
-> On Thu, 26 Nov 2026 at 16:00, Julian Braha <julianbraha@gmail.com> wrot=
-e:
->> Accordingly, adjust the callers of 'hash_32()' and 'hash_ptr()' to use=
+Look up the extended tables when a symbol is not found in __versions.
+Also clear SHF_ALLOC on the extended sections when the user forces
+modversions, since the kernel prefers them over __versions when they
+are present.
 
->> the additional parameter. This is a pure refactor (no functional chang=
-es),
->> so pass 32 to preserve the existing behavior.
-> I think this is the wrong approach.
->=20
-> I'd suggest hiding the size of the hash table in the table itself, sinc=
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1290766
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ libkmod/libkmod-elf.c | 81 +++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 79 insertions(+), 2 deletions(-)
 
-> ethey are all constant sizes.
->=20
-> You can do it with some typedef tricks - not exactly pretty macros, but=
+diff --git a/libkmod/libkmod-elf.c b/libkmod/libkmod-elf.c
+index c13e11430d17..a56469c3dd74 100644
+--- a/libkmod/libkmod-elf.c
++++ b/libkmod/libkmod-elf.c
+@@ -33,6 +33,8 @@ enum kmod_elf_section {
+ 	KMOD_ELF_SECTION_SYMTAB,
+ 	KMOD_ELF_SECTION_VERSIONS,
+ 	KMOD_ELF_SECTION_BUILD_ID,
++	KMOD_ELF_SECTION_VERSION_EXT_CRCS,
++	KMOD_ELF_SECTION_VERSION_EXT_NAMES,
+ 	KMOD_ELF_SECTION_MAX,
+ };
+ 
+@@ -43,6 +45,8 @@ static const char *const section_name_map[] = {
+ 	[KMOD_ELF_SECTION_SYMTAB] = ".symtab",
+ 	[KMOD_ELF_SECTION_VERSIONS] = "__versions",
+ 	[KMOD_ELF_SECTION_BUILD_ID] = ".note.gnu.build-id",
++	[KMOD_ELF_SECTION_VERSION_EXT_CRCS] = "__version_ext_crcs",
++	[KMOD_ELF_SECTION_VERSION_EXT_NAMES] = "__version_ext_names",
+ };
+ 
+ struct kmod_elf {
+@@ -581,12 +585,13 @@ int kmod_elf_get_modversions(const struct kmod_elf *elf, struct kmod_modversion
+ 	return count;
+ }
+ 
+-static int elf_strip_versions_section(const struct kmod_elf *elf, uint8_t *changed)
++static int elf_strip_section(const struct kmod_elf *elf, const char *section,
++			     uint8_t *changed)
+ {
+ 	uint64_t off, size;
+ 	const void *buf;
+ 	/* the off and size values are not used, supply them as dummies */
+-	int idx = kmod_elf_get_section(elf, "__versions", &off, &size);
++	int idx = kmod_elf_get_section(elf, section, &off, &size);
+ 	uint64_t val;
+ 
+ 	if (idx < 0)
+@@ -608,6 +613,25 @@ static int elf_strip_versions_section(const struct kmod_elf *elf, uint8_t *chang
+ 	return elf_set_uint(elf, off, size, val, changed);
+ }
+ 
++static int elf_strip_versions_section(const struct kmod_elf *elf, uint8_t *changed)
++{
++	static const char *const sections[] = {
++		"__versions",
++		"__version_ext_crcs",
++		"__version_ext_names",
++	};
++	size_t i;
++	int err;
++
++	for (i = 0; i < ARRAY_SIZE(sections); i++) {
++		err = elf_strip_section(elf, sections[i], changed);
++		if (err < 0)
++			return err;
++	}
++
++	return 0;
++}
++
+ static int elf_strip_vermagic(const struct kmod_elf *elf, uint8_t *changed)
+ {
+ 	uint64_t i, sec_off, size;
+@@ -955,6 +979,57 @@ static int kmod_elf_crc_find(const struct kmod_elf *elf, uint64_t off,
+ 	return -1;
+ }
+ 
++/*
++ * Look up the CRC of a symbol in the extended modversions tables
++ * (__version_ext_crcs / __version_ext_names). Kernels built with
++ * CONFIG_EXTENDED_MODVERSIONS record all symbol CRCs there, including
++ * those whose names are too long for __versions, e.g. Rust symbols.
++ */
++static int kmod_elf_ext_crc_find(const struct kmod_elf *elf, const char *name,
++				 uint64_t *crc)
++{
++	uint64_t crc_off, crc_size, name_off, name_size, i, count;
++	const char *names;
++
++	crc_off = elf->sections[KMOD_ELF_SECTION_VERSION_EXT_CRCS].offset;
++	crc_size = elf->sections[KMOD_ELF_SECTION_VERSION_EXT_CRCS].size;
++	name_off = elf->sections[KMOD_ELF_SECTION_VERSION_EXT_NAMES].offset;
++	name_size = elf->sections[KMOD_ELF_SECTION_VERSION_EXT_NAMES].size;
++	if (crc_off == 0 || name_off == 0)
++		return -1;
++
++	if (crc_size % sizeof(uint32_t) != 0) {
++		ELFDBG(elf,
++		       "unexpected __version_ext_crcs of length %" PRIu64
++		       ", not multiple of %zu as expected.\n",
++		       crc_size, sizeof(uint32_t));
++		return -1;
++	}
++
++	count = crc_size / sizeof(uint32_t);
++	names = elf_get_mem(elf, name_off);
++
++	for (i = 0; i < count; i++) {
++		size_t len = strnlen(names, name_size);
++
++		if (len == name_size) {
++			ELFDBG(elf, "more extended version crcs than names\n");
++			return -1;
++		}
++
++		if (streq(name, names)) {
++			*crc = elf_get_uint(elf, crc_off + i * sizeof(uint32_t),
++					    sizeof(uint32_t));
++			return i;
++		}
++
++		names += len + 1;
++		name_size -= len + 1;
++	}
++
++	return -1;
++}
++
+ /* from module-init-tools:elfops_core.c */
+ #ifndef STT_REGISTER
+ #define STT_REGISTER 13 /* Global register reserved to app. */
+@@ -1107,6 +1182,8 @@ int kmod_elf_get_dependency_symbols(const struct kmod_elf *elf,
+ 		idx = kmod_elf_crc_find(elf, ver_off, versionslen, name, &crc);
+ 		if (idx >= 0 && visited_versions != NULL)
+ 			visited_versions[idx] = 1;
++		else if (idx < 0 && kmod_elf_ext_crc_find(elf, name, &crc) < 0)
++			crc = 0;
+ 		symcrcs[i] = crc;
+ 	}
+ 
+-- 
+2.53.0
 
-> the end result ends up pretty nice from a user standpoint.
->=20
-> Something like the appended TOTALLY UNTESTED patch.  It builds, but it'=
-s
-> literally a quick hack.
->=20
-> What it does is to turn each hashtable into a 'union' type that has the=
-
-> hashtable head array (as 'hlist[]'), and then a special 'hash_bits[]'
-> array.
->=20
-> And the 'hash_bits[]' array isn't actually used as an array, it's
-> literally just used for its size: it's the number of bits the hash tabl=
-e
-> has.
->=20
-> So now you can take such a hashtable type, and always turn it into the
-> number of bits with just
->=20
->    sizeof(hashtable.hash_bits)
->=20
-> so now the hash table itself inherently carries its size in bits with i=
-t
-> - no need for 'ilog2()' or any other crap to calculate the bits.
->=20
-> And at that point, you can now just use the high bits of the hased
-> value, and you don't need to pass in any hash table sizes.
->=20
-> You can actually even pass pointers to these things around, but you hav=
-e
-> to do it with that original named type, because the size is carried in
-> the *type* itself, and it's not just an anonymous array.  Nothing in th=
-e
-> tree does that
->=20
-> We can't use this trick in the kernel, because the kernel hash tables
-> aren't all fixed sizes.  But for the scripting code, this should make
-> the hashing really syntactically simple because the size is always
-> there.
-It's a fair point - I see why it was simplified in the first place.
-
-Will take a close look at your code. Thanks!
-
-- Julian Braha
-
---------------OtdfgwIauxllpYjoIU7uHsIu--
-
---------------jQ00QMhwmgorNfZxtX025rYx
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wnsEABYIACMWIQT6qjll++tIFxF8TUPElYPCBXNxIAUCawl8gQUDAAAAAAAKCRDElYPCBXNxILMM
-AQCI30PiL/2psxDIoyOwHOQ9RY6h7g5E5tfq+Gq63YwniQEAhEr91ZFvAJF3tQJGNDhi8qqDWe5b
-5WTY6N2nBSYumAg=
-=nk8c
------END PGP SIGNATURE-----
-
---------------jQ00QMhwmgorNfZxtX025rYx--
